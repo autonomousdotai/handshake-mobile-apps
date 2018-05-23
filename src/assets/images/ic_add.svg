@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="45px" height="45px" viewBox="0 0 45 45" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 3</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M23.25,21 L31.6875,21 C32.4123737,21 33,21.5036797 33,22.125 C33,22.7463203 32.4123737,23.25 31.6875,23.25 L23.25,23.25 L23.25,31.6875 C23.25,32.4123737 22.7463203,33 22.125,33 C21.5036797,33 21,32.4123737 21,31.6875 L21,23.25 L13.3125,23.25 C12.5876263,23.25 12,22.7463203 12,22.125 C12,21.5036797 12.5876263,21 13.3125,21 L21,21 L21,13.3125 C21,12.5876263 21.5036797,12 22.125,12 C22.7463203,12 23.25,12.5876263 23.25,13.3125 L23.25,21 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-2" transform="translate(-185.000000, -682.000000)">
+            <g id="Group-5-Copy" transform="translate(0.000000, 675.000000)">
+                <g id="Group-4" transform="translate(37.000000, 7.000000)">
+                    <g id="Group-3" transform="translate(148.000000, 0.000000)">
+                        <circle id="Oval-5" fill="#1E4EFF" cx="22.5" cy="22.5" r="22.5"></circle>
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <use id="Combined-Shape" fill="#FFFFFF" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

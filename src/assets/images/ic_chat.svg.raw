@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="24px" viewBox="0 0 23 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-facebook_messenger</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-Copy-5" transform="translate(-280.000000, -689.000000)" fill="#979797" fill-rule="nonzero">
+            <g id="Group-7-Copy-2" transform="translate(0.000000, 675.000000)">
+                <g id="Group-5-Copy">
+                    <g id="Group-4" transform="translate(37.000000, 7.000000)">
+                        <g id="icons8-facebook_messenger" transform="translate(243.000000, 7.000000)">
+                            <path d="M11.5,0 C5.173828,0 0,4.798828 0,10.75 C0,14.0039065 1.5664065,16.892578 4,18.859375 L4,23.328125 L4.734375,22.9375 L8.34375,21.0625 C9.3515625,21.3320315 10.4003905,21.5 11.5,21.5 C17.826172,21.5 23,16.701172 23,10.75 C23,4.798828 17.826172,0 11.5,0 Z M11.5,1 C17.3222655,1 22,5.3789065 22,10.75 C22,16.121094 17.3222655,20.5 11.5,20.5 C10.417969,20.5 9.371094,20.34375 8.390625,20.0625 L8.203125,20.015625 L8.03125,20.109375 L5,21.6875 L5,18.40625 L4.8125,18.265625 C2.480469,16.470703 1,13.7695315 1,10.75 C1,5.3789065 5.6777345,1 11.5,1 Z" id="Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
