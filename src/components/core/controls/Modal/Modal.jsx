@@ -7,7 +7,7 @@ import loading from '@/assets/images/icon/loading.svg.raw';
 // style
 import './Button.scss';
 
-class Button extends React.PureComponent {
+class Button extends React.Component {
   static propTypes = {
     children: PropTypes.any.isRequired,
     className: PropTypes.string,
@@ -28,10 +28,6 @@ class Button extends React.PureComponent {
     switch (type) {
       case 'primary': return 'btn-primary';
       case 'secondary': return 'btn-secondary';
-      case 'success': return 'btn-success';
-      case 'danger': return 'btn-danger';
-      case 'warning': return 'btn-warning';
-      case 'info': return 'btn-info';
       default: return 'btn-primary';
     }
   }
@@ -46,6 +42,7 @@ class Button extends React.PureComponent {
         to={to || ''}
         className={cn(
           'btn',
+          'button',
           typeClass,
           className,
           `${block ? 'block' : ''}`,
@@ -57,11 +54,10 @@ class Button extends React.PureComponent {
         onClick={onClick}
         disabled={this.props.app.isCalling || disabled}
       >
-        {
-          this.props.app.isCalling && !immunity && (
-            <span dangerouslySetInnerHTML={{ __html: loading }} />
-          )
-        }
+        <span
+          className={`${this.props.app.isCalling && !immunity ? '': 'hidden'}`}
+          dangerouslySetInnerHTML={{ __html: loading }}
+        />
         {this.props.app.isCalling && ! immunity ? '' : children}
       </Tag>
     );

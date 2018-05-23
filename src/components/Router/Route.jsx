@@ -5,8 +5,8 @@ import Loading from './Loading';
 
 class AppRoute extends React.Component {
   static propTypes = {
-    path: PropTypes.string,
-    component: PropTypes.func,
+    path: PropTypes.string.isRequired,
+    component: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -18,7 +18,7 @@ class AppRoute extends React.Component {
     this.fetch(this.props.component);
   }
 
-  componentWillReceiveProps(nextProps, nextContext) {
+  componentWillReceiveProps(nextProps) {
     if (nextProps.path !== this.props.path) {
       this.fetch(nextProps.component);
     }

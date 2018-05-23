@@ -2,7 +2,7 @@ import axios from 'axios';
 import { HANDSHAKE_API } from '@/config';
 
 const $http = (api, data, token = '', id) => {
-  let headers = {
+  const headers = {
     'Content-Type': 'application/json',
   };
   if (token) {
@@ -13,7 +13,7 @@ const $http = (api, data, token = '', id) => {
     timeout: HANDSHAKE_API.TIMEOUT,
     withCredentials: true,
     headers,
-  })[api.method](`${api.path}${id ? `${id}/`: ''}`, data);
+  })[api.method](`${api.path}${id ? `${id}/` : ''}`, data);
 };
 
 export default $http;

@@ -29,7 +29,7 @@ yarn start
 
 ### Enforce component methods order (react/sort-comp)
 
-https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/sort-comp.md
+s/sort-comp.md
 
 ### ECMAScript This-Binding Syntax
 

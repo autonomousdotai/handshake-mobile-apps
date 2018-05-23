@@ -5,10 +5,10 @@ class Loading extends React.PureComponent {
     return (
       <div className="content-loading">
         <div className="content-header-container">
-          <h1 className="content-header"><span></span></h1>
+          <h1 className="content-header"><span /></h1>
         </div>
-        <p></p>
-        <p className="last"></p>
+        <p />
+        <p className="last" />
       </div>
     );
   }

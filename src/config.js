@@ -8,11 +8,6 @@ export const HANDSHAKE_API = {
     INIT: { path: 'handshake/init', method: 'post' },
     SHAKE: { path: 'handshake/shake', method: 'post' },
     INDUSTRIES: { path: 'handshake/industries', method: 'post' },
-    // CANCEL: { path: 'handshake/cancel', method: 'post' },
-    // INIT: { path: 'handshake/reject', method: 'post' },
-    // INIT: { path: 'handshake/accept', method: 'post' },
-    // INIT: { path: 'handshake/deliver', method: 'post' },
-    // INIT: { path: 'handshake/withdraw', method: 'post' },
   },
 };
 
@@ -29,6 +24,7 @@ export const URL = {
 
   HANDSHAKE_DISCOVER: '/discover',
   HANDSHAKE_DISCOVER_INDEX: '/discover',
+  HANDSHAKE_DISCOVER_DETAIL: '/discover/:id',
 
   HANDSHAKE_CHAT: '/chat',
   HANDSHAKE_CHAT_INDEX: '/chat',

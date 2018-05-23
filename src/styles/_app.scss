@@ -1,0 +1,28 @@
+$headerHeight: 45px;
+$appWidth: 414px;
+
+.app {
+  max-width: $appWidth;
+  margin: 0 auto;
+  background-color: $white;
+  min-height: 100vh;
+  position: relative;
+  padding-top: $headerHeight;
+}
+
+.header {
+  max-width: $appWidth;
+  height: $headerHeight;
+  background-color: rgba(248, 248, 248, 0.82);
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  .title {
+    line-height: $headerHeight;
+    text-align: center;
+    font-size: 24px;
+    color: $text-black;
+  }
+}

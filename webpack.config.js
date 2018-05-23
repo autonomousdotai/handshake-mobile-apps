@@ -1,6 +1,6 @@
-// Nodejs
 const path = require('path');
-const xPath = (filepath) => path.resolve(__dirname, filepath);
+
+const xPath = filepath => path.resolve(__dirname, filepath);
 
 // Webpack
 const webpack = require('webpack');
@@ -120,7 +120,7 @@ const production = {
   performance: { hints: false },
 };
 
-module.exports = function(env, argv) {
+module.exports = function webpackConfig(env, argv) {
   const isProduction = argv.mode === 'production';
 
   if (!isProduction) {
@@ -150,10 +150,10 @@ module.exports = function(env, argv) {
         new HtmlWebpackPlugin({
           minify: isProduction
             ? {
-                collapseWhitespace: true,
-                preserveLineBreaks: true,
-                removeComments: true,
-              }
+              collapseWhitespace: true,
+              preserveLineBreaks: true,
+              removeComments: true,
+            }
             : null,
           filename: 'index.html',
           template: xPath('src/templates/main.html'),
@@ -213,6 +213,6 @@ module.exports = function(env, argv) {
       },
       stats,
     },
-    isProduction ? production : development
+    isProduction ? production : development,
   );
 };

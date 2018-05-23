@@ -1,20 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// style
+import './Error.scss';
 
-class Error extends React.PureComponent {
-  static propTypes = {
-    error: PropTypes.string,
-    className: PropTypes.string,
-    show: PropTypes.bool.isRequired,
-  }
+class ErrorBox extends React.PureComponent {
 
   render() {
+    const { message, className, isShow, ...props } = this.props;
     return (
-      <span className={`error ${this.props.className || ''}`}>
-        {this.props.show ? this.props.error : ''}
+      <span className={`error ${className || ''}`} {...props}>
+        {isShow ? message : ''}
       </span>
     );
   }
 }
 
-export default Error;
+ErrorBox.propTypes = {
+  message: PropTypes.string,
+  className: PropTypes.string,
+  isShow: PropTypes.bool.isRequired,
+};
+
+ErrorBox.defaultProps = {
+  isShow: true
+};
+
+export default ErrorBox;

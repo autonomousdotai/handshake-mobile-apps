@@ -1,29 +1,14 @@
 @import "../../node_modules/bootstrap/dist/css/bootstrap.css";
-// @import "../assets/css/flags/sass/flag-icon.scss";
 
 @import "var";
-@import "bs-custom";
 @import "responsive";
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: motiva-sans, sans-serif;
+  font-style: normal;
+  font-weight: 200;
   color: $black;
-  overflow-y: scroll;
+  background-color: $bg-gray;
 }
 
-@import "components/form";
-@import "components/input";
-@import "components/radio";
-@import "components/button";
-@import "components/checkbox";
-@import "components/collapse";
-@import "components/field";
-@import "components/business-table";
-@import "pattern/heading";
-@import "pattern/footer";
-@import "pattern/loading";
-@import "pattern/app";
-@import "pattern/app-header";
-@import "pattern/app-sidebar";
-@import "page";
-@import "pages/business";
+@import "app";

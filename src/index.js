@@ -4,5 +4,5 @@ import App from '@/components/App/App';
 
 ReactDOM.render(
   <App />,
-  document.getElementById(`${process.env.ROOT}`)
+  document.getElementById(`${process.env.ROOT}`),
 );

@@ -6,10 +6,7 @@ import Router from '@/components/Router/Router';
 import store from '@/stores';
 import history from '@/services/history';
 
-import 'rc-collapse/assets/index.css';
 import '@/styles/main';
-import 'weui';
-import 'react-weui/build/packages/react-weui.css';
 
 class App extends React.Component {
   render() {

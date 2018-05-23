@@ -1,3 +1,4 @@
+import CONSTANTS from '@/constants';
 import { APP_ACTION } from './action';
 
 const close = {
@@ -21,9 +22,16 @@ function appReducter(state = {
   isError: false,
   isWarning: false,
   overlay: false,
+  headerTitle: CONSTANTS.APP.HEADER_DEFAULT,
 
 }, action) {
   switch (action.type) {
+    case APP_ACTION.SET_HEADER_TITLE:
+      return {
+        ...state,
+        headerTitle: action.payload,
+      };
+
     case APP_ACTION.NETWORK_ERROR:
       return {
         ...state,
@@ -81,6 +89,7 @@ function appReducter(state = {
         showModal: true,
         modalContent: action.modalContent || null,
       };
+
     case APP_ACTION.CLOSE_MODAL:
       return {
         ...state,
