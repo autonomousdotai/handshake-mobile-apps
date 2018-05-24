@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-search</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" opacity="0.299999982">
+        <g id="Artboard-Copy-2" transform="translate(-29.000000, -53.000000)" fill="#000000" fill-rule="nonzero">
+            <g id="Group-5" transform="translate(6.000000, 6.000000)">
+                <g id="Group-13-Copy">
+                    <g id="Group-10">
+                        <g id="Group-8" transform="translate(9.000000, 38.000000)">
+                            <g id="icons8-search" transform="translate(21.000000, 16.000000) scale(-1, 1) translate(-21.000000, -16.000000) translate(14.000000, 9.000000)">
+                                <path d="M8.61538462,0 C5.64753592,0 3.23076923,2.41676669 3.23076923,5.38461538 C3.23076923,6.67397823 3.68299292,7.85606985 4.44230769,8.78365385 L0.151442308,13.0745192 L0.925480769,13.8485577 L5.21634615,9.55769231 C6.14393015,10.3170071 7.32602177,10.7692308 8.61538462,10.7692308 C11.5832333,10.7692308 14,8.35246408 14,5.38461538 C14,2.41676669 11.5832333,0 8.61538462,0 Z M8.61538462,1.07692308 C11.0006012,1.07692308 12.9230769,2.99939931 12.9230769,5.38461538 C12.9230769,7.769832 11.0006012,9.69230769 8.61538462,9.69230769 C6.23016854,9.69230769 4.30769231,7.769832 4.30769231,5.38461538 C4.30769231,2.99939931 6.23016854,1.07692308 8.61538462,1.07692308 Z" id="Shape"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

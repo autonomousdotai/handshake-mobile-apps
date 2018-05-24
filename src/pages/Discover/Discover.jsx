@@ -7,10 +7,12 @@ import { load } from '@/reducers/discover/action';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Button from '@/components/core/controls/Button';
 import Feed from '@/components/core/presentation/Feed';
+import Modal from '@/components/core/controls/Modal';
+import Searchbar from '@/components/core/controls/Searchbar';
+import SearchBarContainer from '@/components/core/controls/SearchBarContainer';
 import { handShakeList } from '@/data/shake.js';
 // style
 import './Discover.scss';
-
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -29,12 +31,24 @@ class Dashboard extends React.Component {
     ));
   }
 
+  get searchBar() {
+    return (
+      <Col md={12} xs={12}>
+        <SearchBarContainer />
+      </Col>
+    );
+  }
+
+  get categoryBar() {
+    return null;
+  }
+
   render() {
     return (
       <Grid>
-        <Row>
-          {this.feedHtml}
-        </Row>
+        <Row>{this.searchBar}</Row>
+        <Row>{this.categoryBar}</Row>
+        <Row>{this.feedHtml}</Row>
       </Grid>
     );
   }
@@ -42,15 +56,17 @@ class Dashboard extends React.Component {
 
 Dashboard.propTypes = {
   discover: PropTypes.object,
-  load: PropTypes.func
+  load: PropTypes.func,
 };
 
-const mapState = (state) => ({
+const mapState = state => ({
   discover: state.discover,
 });
 
-const mapDispatch = ({
-  load
-});
+const mapDispatch = {
+  load,
+};
 
+// export default Dashboard;
+// export default connect(null, ({ load }))(Dashboard);
 export default connect(mapState, mapDispatch)(Dashboard);

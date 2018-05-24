@@ -1,0 +1,72 @@
+/**
+ * SearchBarContainer Component.
+*/
+// @import "../../variables.css";
+// @mixin textField;
+// @mixin textBody;
+
+.root {
+  max-width: 320px;
+  position: absolute;
+}
+
+.textField {
+  background: #ffffff;
+  border: 1px solid #c6c6c6;
+  border-radius: 5px;
+  width: 210px !important;
+  height: 37px;
+  text-align: left;
+  padding-left: 35px;
+}
+
+.fixWidthInput {
+  width: 210px !important;
+  max-width: 280px;
+}
+
+.listGroup {
+  border: 1px solid #ddd;
+  position: relative;
+  z-index: 12;
+}
+
+.listGroupItem {
+  border: none;
+
+  &:first-child {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.icon {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  width: 15px;
+  height: 15px;
+}
+
+.suggestionHighlighted {
+  cursor: pointer;
+  background-color: #ff0;
+}
+
+.inputFocused {
+  outline: none;
+}
+
+.containerOpen {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.inputOpen {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
