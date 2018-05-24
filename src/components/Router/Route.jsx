@@ -11,16 +11,17 @@ class AppRoute extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { Component: Loading };
+    this.state = { Component: Loading, path: this.props.path };
   }
 
   componentDidMount() {
     this.fetch(this.props.component);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.path !== this.props.path) {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.path !== prevState.path) {
       this.fetch(nextProps.component);
+      return { path: nextProps.path };
     }
   }
 

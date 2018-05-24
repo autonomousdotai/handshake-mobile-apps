@@ -19,6 +19,7 @@
     "final-form": "^4.4.0",
     "final-form-focus": "^1.0.0",
     "flag-icon-css": "^3.0.0",
+    "formik": "^0.11.11",
     "history": "^4.7.2",
     "immutable": "^3.8.2",
     "ionicons": "^3.0.0",
