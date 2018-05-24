@@ -174,7 +174,11 @@ class SearchBarContainer extends React.PureComponent {
   renderInputComponent = inputProps => (
     <div className="inputContainer">
       <img className="icon" src={SEARCH_ICON_SVG} />
-      <input onClick={this.onInputClick} {...inputProps} />
+      <input
+        className="searchInput"
+        onClick={this.onInputClick}
+        {...inputProps}
+      />
     </div>
   );
   // render() {
@@ -206,8 +210,10 @@ class SearchBarContainer extends React.PureComponent {
     const inputProps = {
       placeholder: 'Search',
       value,
+      className: 'searchInput',
       onChange: this._handleInputSearchChange,
     };
+
     const theme = {
       container: `${s.root} hidden-sm`,
       input: `${s.textField} ${user.status > 0 && s.fixWidthInput} text-left`,
