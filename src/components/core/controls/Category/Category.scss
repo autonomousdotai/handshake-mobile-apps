@@ -1,0 +1,25 @@
+// style
+@import './src/styles/style';
+.category {
+  width: 100%;
+  .slick-track {
+    padding: 10px 0;
+  }
+  .category-item {
+    display: flex !important;
+    padding: rem-calc(6px 11px);
+    background: $white;
+    box-shadow: rem-calc(0 2px 4px 0) rgba(203, 203, 203, 0.50);
+    border-radius: 6px;
+    &:hover {
+      cursor: pointer;
+    }
+    img {
+      width: 22px;
+      margin-right: rem-calc(8px);
+    }
+    span {
+      font-size: rem-calc(14px);
+    }
+  }
+}

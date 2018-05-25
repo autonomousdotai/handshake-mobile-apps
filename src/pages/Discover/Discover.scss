@@ -1,6 +1,6 @@
 @import './src/styles/style';
 
-.feedWrapper {
+.feed-wrapper {
   margin-bottom: 23px;
   &:last-child {
     margin-bottom: 0;
@@ -25,4 +25,8 @@
     letter-spacing: 0;
     text-align: left;
   }
+}
+
+.category-wrapper {
+  margin-bottom: rem-calc(42px);
 }
