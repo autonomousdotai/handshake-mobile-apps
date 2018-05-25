@@ -8,7 +8,7 @@ import { Grid, Row, Col } from 'react-bootstrap';
 import Button from '@/components/core/controls/Button';
 import Feed from '@/components/core/presentation/Feed';
 import SearchBarContainer from '@/components/core/controls/SearchBarContainer';
-import Searchbar from '@/components/core/controls/Searchbar';
+import Category from '@/components/core/controls/Category';
 import { handShakeList } from '@/data/shake.js';
 // style
 import './Discover.scss';
@@ -39,7 +39,9 @@ class Dashboard extends React.Component {
   }
 
   get categoryBar() {
-    return null;
+    return  <Col md={12} xs={12}>
+    <Category className="category-wrapper" />
+      </Col>;
   }
 
   render() {
@@ -47,7 +49,7 @@ class Dashboard extends React.Component {
       <Grid>
         <Row>{this.searchBar}</Row>
         <Row>
-          <Category className="category-wrapper" />
+          {this.categoryBar}
         </Row>
         <Row>{this.feedHtml}</Row>
       </Grid>
