@@ -5,26 +5,6 @@
   &:last-child {
     margin-bottom: 0;
   }
-  .feed {
-    margin-bottom: 7px;
-    padding: rem-calc(40px 25px 20px 25px);
-  }
-  .description {
-    font-size: rem-calc(32px);
-    color: $white;
-    letter-spacing: 0;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
-  }
-  .email {
-    margin: 0;
-    font-size: rem-calc(16px);
-    color: $white;
-    letter-spacing: 0;
-    text-align: left;
-  }
 }
 
 .category-wrapper {

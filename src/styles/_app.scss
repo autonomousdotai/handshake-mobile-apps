@@ -5,6 +5,7 @@
   min-height: 100vh;
   position: relative;
   padding-top: $header-height;
+  padding-bottom: $footer-height;
 }
 
 .header {
@@ -43,7 +44,7 @@
 
 
 .footer {
-  height: 60px;
+  height: $footer-height;
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -62,7 +63,7 @@
       width: 20%;
       a {
         display: block;
-        height: 60px;
+        height: $footer-height;
         position: relative;
         color: $text-gray;
         > div {

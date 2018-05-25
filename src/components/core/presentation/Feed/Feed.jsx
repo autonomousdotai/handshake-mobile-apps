@@ -11,7 +11,7 @@ class Feed extends React.PureComponent {
   }
 
   render() {
-    const { className, background, children, ...props } = this.props;
+    const { className, background, children, handshakeId, ...props } = this.props;
     const styleCss = {
       background: this.backgroundCss(background)
     };

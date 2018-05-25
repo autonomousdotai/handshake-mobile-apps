@@ -5,29 +5,32 @@ import {Formik} from 'formik';
 import Button from '@/components/core/controls/Button';
 
 
-import './css/BettingShake.scss';
+import './Shake.scss';
+
 const defaultAmount = 1;
 class BetingShake extends React.Component {
     static propTypes = {
-        remaining: PropTypes.number.isRequired,
-        odd: PropTypes.number.isRequired,
-        onSubmitClick: PropTypes.func,
-        onCancelClick: PropTypes.func,
-      }
+      remaining: PropTypes.number.isRequired,
+      odd: PropTypes.number.isRequired,
+      onSubmitClick: PropTypes.func,
+      onCancelClick: PropTypes.func,
+    }
+
     static defaultProps = {
         remaining: 10
     }
-    constructor(props) {
-        super(props);
-        const {odd} = props;
-        this.state = {
-            total: defaultAmount * odd,
-        };
 
-        this.onSubmit = this.onSubmit.bind(this);
-        this.onCancel = this.onCancel.bind(this);
-        this.validateForm = this.validateForm.bind(this);
-        this.renderForm = this.renderForm.bind(this);
+    constructor(props) {
+      super(props);
+      const { odd } = props;
+      this.state = {
+        total: defaultAmount * odd,
+      };
+
+      this.onSubmit = this.onSubmit.bind(this);
+      this.onCancel = this.onCancel.bind(this);
+      this.validateForm = this.validateForm.bind(this);
+      this.renderForm = this.renderForm.bind(this);
     }
     onSubmit(values, {setSubmitting, setErrors /* setValues and other goodies */}) {
         console.log("Submit");
@@ -37,7 +40,7 @@ class BetingShake extends React.Component {
       console.log('Cancel')
       this.props.onCancelClick();
     }
-    
+
     validateForm(values) {
         // same as above, but feel free to move this into a class method now.
         let errors = {};

@@ -23,6 +23,7 @@ module.exports = {
     "react/prefer-stateless-function": "off",
     "react/forbid-prop-types": "off",
     "jsx-a11y/anchor-is-valid": "off",
+    "class-methods-use-this": "off",
     "import/no-unresolved": "off", // TODO[1]:
     "import/extensions": "off" // TODO[1]:
   },

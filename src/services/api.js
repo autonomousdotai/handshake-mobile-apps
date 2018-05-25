@@ -1,14 +1,18 @@
 import axios from 'axios';
-import { HANDSHAKE_API } from '@/config';
 import qs from 'qs';
 import { isEmpty, merge } from 'lodash';
+import local from '@/services/localStore';
+import { APP } from '@/constants';
+import { BASE_API } from '@/config';
 
-const $http = (api, data, token = '', id, qsObject, headersMore) => {
+const $http = (url, data, id, qsObject, headersMore, method = 'GET') => {
   let QS = '';
 
   if (!isEmpty(qsObject)) {
     QS = qs.stringify(qsObject);
   }
+
+  const token = local.get(APP.TOKEN);
 
   let headers = {
     'Content-Type': 'application/json',
@@ -21,12 +25,12 @@ const $http = (api, data, token = '', id, qsObject, headersMore) => {
   if (token) {
     headers.Authorization = `JWT ${token}`;
   }
+
   return axios.create({
-    baseURL: HANDSHAKE_API.BASE_URL,
-    timeout: HANDSHAKE_API.TIMEOUT,
+    timeout: BASE_API.TIMEOUT,
     withCredentials: true,
     headers,
-  })[api.method](`${api.path}${id ? `${id}/` : ''}${QS ? `?${QS}` : ''}`, data);
+  })[method.toLocaleLowerCase()](`${url}${id ? `${id}/` : ''}${QS ? `?${QS}` : ''}`, data);
 };
 
 export default $http;
