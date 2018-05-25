@@ -23,6 +23,7 @@ class Dashboard extends React.Component {
     super(props);
   }
 
+
   get feedHtml() {
     return handShakeList.data.map(handShake => (
       <Col md={12} xs={12} key={handShake.id} className="feed-wrapper">
