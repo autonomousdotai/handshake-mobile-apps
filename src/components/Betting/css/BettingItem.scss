@@ -1,0 +1,25 @@
+@import './src/styles/var';
+
+.description {
+    font-size: 32px;
+    color: $white;
+    letter-spacing: 0;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+  .bottomWrapper{
+      flex-direction: 'row';
+      justify-content: 'space-between';
+      display: flex;
+  }
+
+  .email {
+    margin: 0;
+    font-size: 16px;
+    color: $white;
+    letter-spacing: 0;
+    text-align: left;
+  }
+  
