@@ -1,6 +1,5 @@
 import Web3 from 'web3';
-
-const configs = require('../../configs');
+import configs from '../../configs';
 
 export default class Handshake {
   constructor(_neuron) {
@@ -117,7 +116,7 @@ export default class Handshake {
       toAddress: configs.handshakeAddress,
     });
   };
-  withdraw = (address, privateKey, amount, hid) => {
+  withdraw = (address, privateKey, amount, hid, offchain) => {
     console.log(
       'eth-contract-service withdraw',
       address,

@@ -1,3 +1,4 @@
+const TAG = 'neuron-token';
 export default class Token {
   constructor(_neuron) {
     this.neuron = _neuron;
@@ -55,6 +56,7 @@ export default class Token {
         privateKey,
         contractData,
       );
+      console.log(`${TAG} deloy hash = ${hash}`);
       const receipt = await this.neuron.getTransactionReceipt(hash);
       return {
         contractAddress: receipt.contractAddress,
@@ -89,7 +91,7 @@ export default class Token {
     const hash = this.neuron.makeRawTransaction(
       address,
       privateKey,
-      contractData,
+      payloadData,
       {
         toAddress: tokenAddress,
       },
@@ -117,7 +119,7 @@ export default class Token {
     const hash = await this.neuron.makeRawTransaction(
       address,
       privateKey,
-      contractData,
+      payloadData,
       {
         toAddress: tokenAddress,
       },

@@ -1,4 +1,3 @@
-// const configs = require('../../configs');
 import configs from '../../configs';
 import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
