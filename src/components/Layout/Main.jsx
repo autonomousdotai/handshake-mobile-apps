@@ -6,6 +6,7 @@ import Navigation from '@/components/core/controls/Navigation/Navigation';
 class MainLayout extends React.Component {
   static propTypes = {
     children: PropTypes.any.isRequired,
+    location: PropTypes.object.isRequired,
   }
 
   render() {
@@ -15,7 +16,7 @@ class MainLayout extends React.Component {
         <div className="content">
           {this.props.children}
         </div>
-        <Navigation />
+        <Navigation location={this.props.location} />
       </div>
     );
   }

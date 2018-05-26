@@ -3,8 +3,8 @@ import $http from '@/services/api';
 import { BASE_API } from '@/config';
 
 
-export const createAPI = (INIT) => ({
-  BASE_URL = BASE_API.BASE_URL, PATH_URL, data, id, more, successFn, errorFn, qs, headers, METHOD
+export const createAPI = INIT => ({
+  BASE_URL = BASE_API.BASE_URL, PATH_URL, data, id, more, successFn, errorFn, qs, headers, METHOD,
 }) => (dispatch) => {
   //
   dispatch({ type: APP_ACTION.CALLING });
@@ -12,10 +12,9 @@ export const createAPI = (INIT) => ({
   //
   dispatch({ type: INIT });
 
-  let url = `${BASE_URL}/${PATH_URL}`;
+  const url = `${BASE_URL}/${PATH_URL}`;
 
   $http(url, data, id, qs, headers, METHOD).then((response) => {
-
     //
     dispatch({ type: APP_ACTION.CALLED });
 

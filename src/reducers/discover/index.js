@@ -1,62 +1,55 @@
-import { ACTIONS } from './action';
-import localStore from '@/services/localStore';
 import Handshake from '@/models/Handshake';
+import { ACTIONS } from './action';
 
-const handleListPayload = (payload) => {
-  return payload.data.map(handshake => {
-    return Handshake.handshake(handshake);
-  });
-}
+const handleListPayload = payload => payload.data.map(handshake => Handshake.handshake(handshake));
 
-const handleDetailPayload = (payload) => {
-  return Handshake.handshake(payload.data);
-}
+const handleDetailPayload = payload => Handshake.handshake(payload.data);
 
 const discoverReducter = (state = {
   list: [],
   detail: {},
-  isFetching: false
+  isFetching: false,
 }, action) => {
   switch (action.type) {
     // List
     case ACTIONS.LOAD_DISCOVER:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
       };
     case `${ACTIONS.LOAD_DISCOVER}_SUCCESS`:
       return {
         ...state,
         isFetching: false,
-        list: handleListPayload(action.payload)
+        list: handleListPayload(action.payload),
       };
     case `${ACTIONS.LOAD_DISCOVER}_FAILED`:
       return {
         ...state,
-        isFetching: false
+        isFetching: false,
       };
 
     // Detail
     case ACTIONS.LOAD_DETAIL:
       return {
         ...state,
-        isFetching: true
+        isFetching: true,
       };
     case `${ACTIONS.LOAD_DISCOVER_DETAIL}_SUCCESS`:
       return {
         ...state,
         isFetching: false,
-        detail: handleDetailPayload(action.payload)
+        detail: handleDetailPayload(action.payload),
       };
-    case`${ACTIONS.LOAD_DISCOVER_DETAIL}_FAILED`:
+    case `${ACTIONS.LOAD_DISCOVER_DETAIL}_FAILED`:
       return {
         ...state,
-        isFetching: false
+        isFetching: false,
       };
 
     default:
       return state;
   }
-}
+};
 
 export default discoverReducter;

@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import DynamicImport from '@/components/App/DynamicImport';
-import Loading from '@/pages/Loading';
+import Loading from '@/components/core/presentation/Loading';
 import { URL } from '@/config';
 import { setHeaderTitle, setHeaderCanBack } from '@/reducers/app/action';
 
 const Create = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Create/Create')}>{Component => <Component {...props} />}</DynamicImport>);
-const Page404 = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Error/Page404')}>{Component => <Component {...props} />}</DynamicImport>);
+const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() => import('@/pages/Error/Page404')}>{Component => <Component {...props} />}</DynamicImport>);
 
 const routerMap = [
   { path: URL.HANDSHAKE_CREATE_INDEX, component: Create },

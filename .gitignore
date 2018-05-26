@@ -3,6 +3,8 @@ yarn-error.log
 package-lock.json
 dist
 .DS_Store
+.idea
 .env
 .env.production
 testing
+.idea/

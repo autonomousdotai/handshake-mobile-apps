@@ -1,0 +1,39 @@
+@import './src/styles/style';
+
+.wrapper {
+    font-family: $font-family-base;
+    font-size: rem-calc(18px);
+    padding: rem-calc(10px 10px 10px 10px);
+    .rowWrapper {
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        margin-top: rem-calc(20px);
+        margin-bottom: rem-calc(20px);
+    }
+    .label {
+        flex-shrink: 0;
+        margin: 0;
+
+    }
+    .input{
+      height: rem-calc(50px);
+      text-align: right;
+      font-size: rem-calc(24px);
+      margin-left: rem-calc(20px);
+      width: rem-calc(200px);
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    .oddInput {
+        width: rem-calc(100px);
+
+    }
+    .oddLabel {
+        font-size: rem-calc(24px);
+        margin-left: rem-calc(20px);
+        margin-bottom: 0;
+
+    }
+}

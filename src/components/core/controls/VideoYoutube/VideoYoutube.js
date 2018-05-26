@@ -9,18 +9,18 @@ import YouTube from 'react-youtube';
 // VIDEO_PAUSE, VIDEO_STOP
 // style
 import './VideoYoutube.scss';
+
 const SpinnerSVG = 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/spinner.svg';
 const VIDEO_ID_REGEXP = /([^/]+)(?=$)/;
 
 
 class VideoYoutube extends React.Component {
-
   constructor(props) {
     super(props);
     // state
     this.state = {
       mvideoId: props.videoUrl.match(VIDEO_ID_REGEXP)[0],
-      status: 0 // video off
+      status: 0, // video off
     };
     // bind
     this.videoReady = this.videoReady.bind(this);
@@ -31,7 +31,7 @@ class VideoYoutube extends React.Component {
     this.hiddenPostImage = this.hiddenPostImage.bind(this);
   }
 
-  videoReady({target}) {
+  videoReady({ target }) {
     this.youTubeRef = target;
     this.hiddenPostImage();
     if (this.props.hasOwnProperty('mute')) {
@@ -61,7 +61,7 @@ class VideoYoutube extends React.Component {
       this.hiddenPostImage();
     } else if (status === 0) {
       // init video
-      this.setState({status: 1});
+      this.setState({ status: 1 });
     }
     const { callbackPlayVideo } = this.props;
     if (callbackPlayVideo && typeof callbackPlayVideo === 'function') {
@@ -124,15 +124,15 @@ class VideoYoutube extends React.Component {
       }
     }
     // on event
-    SystemEvent.on(VIDEO_PAUSE, videoId => { this.pauseVideo(videoId) });
-    SystemEvent.on(VIDEO_STOP, videoId => { this.stopVideo(videoId) });
+    SystemEvent.on(VIDEO_PAUSE, (videoId) => { this.pauseVideo(videoId); });
+    SystemEvent.on(VIDEO_STOP, (videoId) => { this.stopVideo(videoId); });
   }
 
   componentWillReceiveProps(nextProps) {
     const newVideoId = nextProps.videoUrl.match(VIDEO_ID_REGEXP)[0];
     if (newVideoId !== this.state.mvideoId) {
       this.setState({
-        mvideoId: newVideoId
+        mvideoId: newVideoId,
       });
     }
   }
@@ -143,7 +143,9 @@ class VideoYoutube extends React.Component {
   }
 
   render() {
-    const { imageUrl, imageAlt, autoPlayVideo, showLoading, playButtonIcon } = this.props;
+    const {
+      imageUrl, imageAlt, autoPlayVideo, showLoading, playButtonIcon,
+    } = this.props;
     const opts = {
       height: VIDEO_HEIGHT,
       width: '100%',
@@ -160,7 +162,7 @@ class VideoYoutube extends React.Component {
         <div className={s.imgCover} ref={(imgCover => this.imgCoverRef = imgCover)}>
           <img className="img-responsive" src={imageUrl} alt={imageAlt} onLoad={this.hiddenLoading} />
           <div className={s.icon} onClick={this.processPlayVideo}>
-            <img className="img-responsive" onClick={this.playVideo} src={playButtonIcon ? playButtonIcon : PLAY_BUTTON_ICON} alt="play" />
+            <img className="img-responsive" onClick={this.playVideo} src={playButtonIcon || PLAY_BUTTON_ICON} alt="play" />
           </div>
         </div>
         <div className={s.youTubeContainer} ref={(youTube => this.youTubeContainerRef = youTube)}>
@@ -191,7 +193,7 @@ VideoYoutube.propTypes = {
   playVideo: PropTypes.func,
   callbackPlayVideo: PropTypes.func,
   youTubeRef: PropTypes.func,
-  playButtonIcon: PropTypes.string
+  playButtonIcon: PropTypes.string,
 };
 
 VideoYoutube.defaultProps = {

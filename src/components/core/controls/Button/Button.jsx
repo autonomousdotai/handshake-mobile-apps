@@ -24,6 +24,16 @@ class Button extends React.PureComponent {
     immunity: PropTypes.bool,
   }
 
+  static defaultProps = {
+    disabled: false,
+    immunity: true,
+    block: false,
+    to: '',
+    small: false,
+    link: false,
+    onClick: () => {},
+  }
+
   typeClass(type) {
     switch (type) {
       case 'primary': return 'btn-primary';
@@ -37,9 +47,11 @@ class Button extends React.PureComponent {
   }
 
   render() {
-    const { type, cssType, onClick, link, block, small, className, children, to, disabled = false, immunity = false } = this.props;
-    let typeClass = this.typeClass(cssType);
-    let Tag = link ? Link : 'button';
+    const {
+      type, cssType, onClick, link, block, small, className, children, to, disabled, immunity,
+    } = this.props;
+    const typeClass = this.typeClass(cssType);
+    const Tag = link ? Link : 'button';
 
     return (
       <Tag
@@ -51,7 +63,7 @@ class Button extends React.PureComponent {
           `${block ? 'btn-block' : ''}`,
           `${small ? 'small' : ''}`,
           `${disabled ? 'disabled' : ''}`,
-          `${this.props.app.isCalling && !immunity ? 'disabled' : ''}`
+          `${this.props.app.isCalling && !immunity ? 'disabled' : ''}`,
         )}
         type={type || ''}
         onClick={onClick}
@@ -62,10 +74,10 @@ class Button extends React.PureComponent {
             <span dangerouslySetInnerHTML={{ __html: loading }} />
           )
         }
-        {this.props.app.isCalling && ! immunity ? '' : children}
+        {this.props.app.isCalling && !immunity ? '' : children}
       </Tag>
     );
   }
 }
 
-export default connect((state) => ({ app: state.app }))(Button);
+export default connect(state => ({ app: state.app }))(Button);

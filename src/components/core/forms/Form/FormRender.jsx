@@ -17,7 +17,7 @@ class FormRender extends React.Component {
   infoRender(field) {
     const label = field.label || field.name.replace(/[-_]/ig, ' ');
     const Label = `${label.charAt(0).toUpperCase()}${label.substr(1)}`;
-    const moreAgru = field.agru ? field.agru : [];
+    const moreAgrus = field.agru ? field.agru : [];
     return {
       label,
       Label,

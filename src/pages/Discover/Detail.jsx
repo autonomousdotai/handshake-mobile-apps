@@ -10,7 +10,7 @@ import DetailBetting from '@/components/handshakes/betting/Detail';
 import DetailExchange from '@/components/handshakes/exchange/Detail';
 import DetailSeed from '@/components/handshakes/seed/Detail';
 
-import Loading from '@/pages/Loading';
+import Loading from '@/components/core/presentation/Loading';
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: DetailPromise,

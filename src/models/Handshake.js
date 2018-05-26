@@ -19,8 +19,8 @@ class Handshake {
       toAddress: data.to_address || '',
       toEmail: data.to_email || '',
       userIdShaked: data.user_id_shaked || '',
-      slug: data.slug || ''
-    }
+      slug: data.slug || '',
+    };
   }
 }
 

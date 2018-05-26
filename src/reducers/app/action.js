@@ -1,3 +1,4 @@
+
 export const APP_ACTION = {
   NETWORK_ERROR: 'NETWORK_ERROR',
   CALLING: 'CALLING',
@@ -11,6 +12,8 @@ export const APP_ACTION = {
   HEADER_TITLE_SET: 'HEADER_TITLE_SET',
   HEADER_BACK_SET: 'HEADER_BACK_SET',
   HEADER_BACK_CLICK: 'HEADER_BACK_CLICK',
+  NOT_FOUND_SET: 'NOT_FOUND_SET',
+  NOT_FOUND_REMOVE: 'NOT_FOUND_REMOVE',
 };
 
 // Loading
@@ -31,3 +34,5 @@ export const setHeaderTitle = title => ({ type: APP_ACTION.HEADER_TITLE_SET, pay
 export const setHeaderCanBack = () => ({ type: APP_ACTION.HEADER_BACK_SET });
 export const clickHeaderBack = () => ({ type: APP_ACTION.HEADER_BACK_CLICK });
 export const clearHeaderBack = () => ({ type: APP_ACTION.HEADER_BACK_CLICK });
+export const setNotFound = () => ({ type: APP_ACTION.NOT_FOUND_SET });
+export const clearNotFound = () => ({ type: APP_ACTION.NOT_FOUND_REMOVE });

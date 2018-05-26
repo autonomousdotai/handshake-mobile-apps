@@ -11,6 +11,8 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const dotenv = require('dotenv');
+
 const stats = {
   modules: false,
   children: false,
@@ -124,9 +126,9 @@ module.exports = function webpackConfig(env, argv) {
   const isProduction = argv.mode === 'production';
 
   if (!isProduction) {
-    require('dotenv').config();
+    dotenv.config();
   } else {
-    require('dotenv').config({ path: xPath('.env.production') });
+    dotenv.config({ path: xPath('.env.production') });
   }
 
   return merge(
@@ -144,6 +146,7 @@ module.exports = function webpackConfig(env, argv) {
       plugins: [
         new CleanWebpackPlugin(['dist']),
         new webpack.DefinePlugin({
+          'process.env.ENV': `"${argv.mode}"`,
           'process.env.ROOT': `"${process.env.ROOT}"`,
           'process.env.BASE_URL': `"${process.env.BASE_URL}"`,
         }),

@@ -23,6 +23,17 @@ class Category extends React.PureComponent {
     arrows: false
   };
 
+  get categoriesHtml() {
+    const { categories } = this.props;
+    const categoriesList = (categories && categories.length > 0) ? categories : CATEGORIES;
+    return categoriesList.map((category, index) => (
+      <div className="category-item" key={index + 1} onClick={() => this.categoryClick(category)}>
+        <Image src={category.image} alt={category.name} />
+        <span>{category.name}</span>
+      </div>
+    ))
+  }
+
   categoryClick(category) {
     this.props.hasOwnProperty('onItemClick') && this.props.onItemClick(category);
   }
@@ -32,14 +43,7 @@ class Category extends React.PureComponent {
     return (
       <div className={`category ${className || ''}`}>
         <Slider settings={this.settings}>
-          {
-            CATEGORIES.map((category, index) => (
-              <div className="category-item" key={index + 1} onClick={()=> this.categoryClick(category)}>
-                <Image src={category.image} alt={category.name} />
-                <span>{category.name}</span>
-              </div>
-            ))
-          }
+          {this.categoriesHtml}
         </Slider>
       </div>
     );
@@ -48,6 +52,7 @@ class Category extends React.PureComponent {
 
 Category.propType = {
   className: PropTypes.string,
+  categories: PropTypes.array,
   onItemClick: PropTypes.func
 };
 

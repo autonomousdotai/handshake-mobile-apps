@@ -4,8 +4,9 @@
   background-color: $white;
   min-height: 100vh;
   position: relative;
-  padding-top: $header-height;
-  padding-bottom: $footer-height;
+  padding-top: $header-height + 10px;
+  padding-bottom: $footer-height + 10px;
+  overflow: hidden;
 }
 
 .header {
@@ -84,7 +85,7 @@
           position: absolute;
           transform: translateY(-50%);
         }
-        label {
+        span {
           text-align: center;
           position: absolute;
           width: 100%;
@@ -92,6 +93,24 @@
           display: block;
           margin: 0;
           font-size: 10px;
+          letter-spacing: 0.7px;
+        }
+      }
+      &.selected {
+        svg {
+          path {
+            fill: $deep-blue;
+          }
+        }
+        a {
+          color: $deep-blue;
+        }
+        .me-icon {
+          svg {
+            g {
+              stroke: $deep-blue;
+            }
+          }
         }
       }
     }
@@ -115,4 +134,12 @@
     border-color: $blue;
     border-width: 2px;
   }
+}
+.has-error {
+  box-shadow: none !important;
+  border-color: #dc3545 !important;
+}
+.has-warning {
+  box-shadow: none !important;
+  border-color: #ffc107 !important;
 }
