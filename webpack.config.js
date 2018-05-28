@@ -150,6 +150,10 @@ module.exports = function webpackConfig(env, argv) {
           'process.env.ROOT': `"${process.env.ROOT}"`,
           'process.env.BASE_URL': `"${process.env.BASE_URL}"`,
         }),
+        new webpack.ProvidePlugin({
+          $: 'jquery',
+          jQuery: 'jquery',
+        }),
         new HtmlWebpackPlugin({
           minify: isProduction
             ? {
