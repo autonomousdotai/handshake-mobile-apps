@@ -13,7 +13,7 @@ const config = {
       multiSigAuthAddress: '',
       handshakeAddress: '',
       crowdsaleHandshakeAddress: '',
-      basicHandshakeAddress: '',
+      basicHandshakeAddress: '0x4c621cfd5496b2077eb1c5b0308e2ea72358191b',
       payableHandshakeAddress: '',
       groupHandshakeAddress: '',
       cryptosignOwnerAddress: '',

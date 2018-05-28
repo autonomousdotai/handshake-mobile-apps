@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
 import Token from './neuron-token';
 import Handshake from './neuron-handshake';
+import BasicHandshake from './neuron-basichandshake';
 
 const BN = Web3.utils.BN;
 
@@ -12,6 +13,7 @@ class Neuron {
     this.web3 = null;
     this.instance = {};
     this.handshake = new Handshake(this);
+    this.basicHandshake = new BasicHandshake(this);
     this.token = new Token(this);
   }
 
