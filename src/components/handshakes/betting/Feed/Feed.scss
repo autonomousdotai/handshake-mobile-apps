@@ -1,21 +1,30 @@
-@import './src/styles/var';
-.wrapper {
-  //font-family: $font-family-base;
-  //font-size: rem-calc(16px);
-  padding: rem-calc(10px 10px 10px 10px) !important;
+@import './src/styles/style';
+
+.wrapperBettingFeed {
+  padding: rem-calc(30px 22px 36px 25px);
   .description {
-    font-size: rem-calc(32px) !important;
-    color: $white;
+    font-size: rem-calc(28px);
+    color: #FFFFFF;
     letter-spacing: 0;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    -webkit-box-orient: vertical;
+    line-height: rem-calc(36px);
+    .eventInfo, .odds {
+      font-size: rem-calc(20px);
+    }
   }
   .bottomWrapper{
-      flex-direction: 'row';
-      justify-content: 'space-between';
-      display: flex;
+    justify-content: space-between;
+    display: flex;
+    img {
+      margin-bottom: rem-calc(11px);
+    }
+    .content {
+      font-size: rem-calc(16px);
+      color: #FFFFFF;
+      letter-spacing: 0;
+      span {
+        opacity: 0.8;
+      }
+    }
   }
 
   .email {
@@ -24,5 +33,4 @@
     letter-spacing: 0;
     text-align: left;
   }
-  
 }

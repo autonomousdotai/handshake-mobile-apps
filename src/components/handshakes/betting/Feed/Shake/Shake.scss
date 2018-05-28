@@ -1,62 +1,75 @@
 @import './src/styles/style';
-.wrapper {
-    padding: rem-calc(30px 10px 20px 10px);
-    font-family: $font-family-base;
+
+.wrapperBettingShake {
+  padding: rem-calc(30px 10px 20px 10px);
+  font-family: $font-family-base;
+  font-size: rem-calc(18px);
+  .rowWrapper {
+    display: flex;
+    width: 100%;
+    margin-top: rem-calc(20px);
+    margin-bottom: rem-calc(20px);
+    align-items: center;
+    .btn-block + .btn-block {
+      margin-top: 0;
+    }
+  }
+  .line {
+    opacity: 0.17;
+    border-bottom: 1px solid #979797;;
+  }
+  .cryptoCurrency, .input {
     font-size: rem-calc(18px);
-    .rowWrapper{
-        //flex-direction: 'row';
-       // justify-content: 'space-between';
-        display: flex;
-        justify-content: space-between;
-        margin-top: rem-calc(20px);
-        margin-bottom: rem-calc(20px);
-        align-items: center;
-        .btn-block + .btn-block {
-            margin-top: 0;
-        }
+    color: #000000;
+    letter-spacing: 0;
+    line-height: rem-calc(22px);
+  }
+  .input {
+    margin-left: rem-calc(10px);
+    width: rem-calc(44px);
+    border-bottom: 2px solid #EFEFF4;
+  }
+  .input[readOnly] {
+    border-bottom: none;
+  }
+  .amountInput {
+    display: flex
+  }
+  .label {
+    flex-shrink: 0;
+    flex-basis: 40%;
+    text-align: right;
+    font-size: rem-calc(18px);
+    color: #666666;
+    letter-spacing: 0;
+    line-height: rem-calc(22px);
+    margin: 0;
+  }
+  .value {
+    flex-basis: 20%;
+    margin-left: rem-calc(40px);
+    margin-right: rem-calc(15px);
+  }
+  .atOdds {
+    font-size: rem-calc(18px);
+    color: #D0021B;
+    letter-spacing: 0;
+  }
+  .remaining {
+    color: #D5D5D5;
+    font-size: rem-calc(26px);
+  }
+  .total {
+    color: #1745FF;
+    font-size: rem-calc(22px);
+    & + .cryptoCurrency {
+      font-size: rem-calc(22px);
+      color: #000000;
+      letter-spacing: 0;
     }
-    .line {
-        height: rem-calc(1px);
-        background-color: #979797;;
-    }
-    .input{
-        text-align: right;
-        font-size: rem-calc(26px);
-        margin-left: rem-calc(10px);
-    }
-    .amountInput {
-        display: flex
-    }
-    .label {
-        flex-shrink: 0;
-        margin: 0;
-
-    }
-    .remaining {
-        color: #D5D5D5;
-        font-size: rem-calc(26px);
-
-    }
-    .total {
-        color: #1745FF;
-        font-size: rem-calc(26px);
-
-    }
-    .cancelBtn {
-        border-color: $light-gray;
-        color: #8F8F8F;
-        background-color: #F1F1F1;
-        width: rem-calc(135px);
-        height: rem-calc(54px);
-        font-size: rem-calc(26px);
-
-    }
-    .submitBtn{
-        background: $blue;
-        width: rem-calc(135px);
-        height: rem-calc(54px);
-        font-size: rem-calc(26px);
-
-
-    }
+  }
+  .btnOK {
+    font-size: rem-calc(20px);
+    color: #FFFFFF;
+  }
 }

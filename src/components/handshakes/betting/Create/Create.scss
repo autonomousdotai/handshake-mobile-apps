@@ -1,39 +1,65 @@
 @import './src/styles/style';
 
-.wrapper {
-    font-family: $font-family-base;
+.wrapperBetting {
+  font-family: $font-family-base;
+  font-size: rem-calc(18px);
+  padding: rem-calc(10px 10px 10px 10px);
+  .rowWrapper {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    margin: rem-calc(20px) auto;
+    max-width: 19.75rem;
+  }
+  .label {
+    flex-basis: 35%;
+    margin: 0;
     font-size: rem-calc(18px);
-    padding: rem-calc(10px 10px 10px 10px);
-    .rowWrapper {
-        justify-content: center;
-        align-items: center;
-        display: flex;
-        margin-top: rem-calc(20px);
-        margin-bottom: rem-calc(20px);
+    font-weight: $light;
+    color: #353535;
+    letter-spacing: 0;
+    text-align: right;
+    padding-right: rem-calc(20px);
+  }
+  .input {
+    height: rem-calc(50px);
+    font-size: rem-calc(24px);
+    font-weight: $normal;
+    color: $text-black;
+    letter-spacing: 0;
+    line-height: rem-calc(34px);
+    padding-left: 0;
+    width: 100%;
+    &:focus {
+      box-shadow: none;
     }
-    .label {
-        flex-shrink: 0;
-        margin: 0;
-
+    &::placeholder {
+      color: #C8C7CC;
+      font-weight: $light;
     }
-    .input{
-      height: rem-calc(50px);
-      text-align: right;
+  }
+  .oddField {
+    padding-left: rem-calc(5px);
+  }
+  .oddInput {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    &:before {
+      content: "1 :";
+      flex-shrink: 0;
+      flex-basis: 13%;
+      align-self: center;
       font-size: rem-calc(24px);
-      margin-left: rem-calc(20px);
-      width: rem-calc(200px);
-      &:focus {
-        box-shadow: none;
-      }
+      font-weight: $normal;
+      color: $text-black;
+      letter-spacing: 0;
+      line-height: rem-calc(34px);
     }
-    .oddInput {
-        width: rem-calc(100px);
-
+    input {
+      width: 80%;
+      border: none;
+      padding-left: rem-calc(5px);
     }
-    .oddLabel {
-        font-size: rem-calc(24px);
-        margin-left: rem-calc(20px);
-        margin-bottom: 0;
-
-    }
+  }
 }

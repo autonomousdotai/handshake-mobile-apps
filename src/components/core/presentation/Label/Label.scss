@@ -1,0 +1,22 @@
+@import './src/styles/var';
+
+.label {
+    padding: 5px;
+    border: 1px solid $lavender-gray;
+    border-radius: 5px;
+    background: $white;
+    font-weight: $normal;
+    color: $black;
+    .primary {
+    }
+    .secondary {
+    }
+    .success {
+    }
+    .danger {
+    }
+    .warning {
+    }
+    .info {
+    }
+}
