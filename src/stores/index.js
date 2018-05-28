@@ -6,9 +6,11 @@ import appReducer from '@/reducers/app';
 import authReducer from '@/reducers/auth';
 import thunk from 'redux-thunk';
 import reducers from '@/reducers';
+import { firebaseStateReducer } from 'react-redux-firebase';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 const reducersApp = combineReducers({
+  firebase: firebaseStateReducer,
   app: appReducer,
   auth: authReducer,
   router: routerReducer,
@@ -17,10 +19,7 @@ const reducersApp = combineReducers({
 
 const store = createStore(
   reducersApp,
-  composeWithDevTools(applyMiddleware(
-    routerMiddleware(history),
-    thunk,
-  )),
+  composeWithDevTools(applyMiddleware(routerMiddleware(history), thunk)),
 );
 
 export default store;
