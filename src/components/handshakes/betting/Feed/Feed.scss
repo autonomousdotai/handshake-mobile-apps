@@ -2,6 +2,7 @@
 
 .wrapperBettingFeed {
   padding: rem-calc(30px 22px 36px 25px);
+  margin-bottom: rem-calc(16px);
   .description {
     font-size: rem-calc(28px);
     color: #FFFFFF;
@@ -10,10 +11,14 @@
     .eventInfo, .odds {
       font-size: rem-calc(20px);
     }
+    p {
+      margin-bottom: 0;
+    }
   }
   .bottomWrapper{
-    justify-content: space-between;
     display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     img {
       margin-bottom: rem-calc(11px);
     }

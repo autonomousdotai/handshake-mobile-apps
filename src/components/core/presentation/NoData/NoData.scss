@@ -1,0 +1,10 @@
+.no-data {
+    display: flex;
+    height: 88vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .text {
+        margin: 0;
+    }
+}  

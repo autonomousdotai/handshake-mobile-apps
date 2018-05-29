@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@/components/core/controls/Button';
-import  {StatusHandler, BETTING_STATUS} from './StatusHandler.js';
+
+import  {BetHandshakeHandler, BETTING_STATUS} from './BetHandshakeHandler.js';
 import FeedBetting from '@/components/handshakes/betting/Feed';
 
 const payeeEmail = 'sa@autonomous.nyc';

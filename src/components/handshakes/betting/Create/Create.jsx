@@ -7,15 +7,22 @@ import createForm from '@/components/core/form/createForm';
 import { required } from '@/components/core/form/validation';
 import { Field } from "redux-form";
 import { initHandshake } from '@/reducers/handshake/action';
-
+import { HANDSHAKE_ID } from '@/constants';
+import {API_URL} from "@/constants";
+import  { BetHandshakeHandler} from '@/components/handshakes/betting/Feed/BetHandshakeHandler.js';
 // components
 import Button from '@/components/core/controls/Button';
 import Input from '@/components/core/forms/Input/Input';
 import DatePicker from '@/components/handshakes/betting/Create/DatePicker';
 import { InputField } from '../form/customField';
+import {MasterWallet} from '@/models/MasterWallet';
 
 // self
 import './Create.scss';
+
+import Neuron from '@/services/neuron';
+
+const neuron = new Neuron(4);
 
 const nameFormBettingCreate = 'bettingCreate';
 const BettingCreateForm = createForm({
@@ -66,7 +73,9 @@ class BettingCreate extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      values: []
+      values: [],
+      address: null,
+      privateKey: null,
     };
     this.onSubmit = ::this.onSubmit;
     this.renderInput = ::this.renderInput;
@@ -74,9 +83,18 @@ class BettingCreate extends React.PureComponent {
     this.renderForm = ::this.renderForm;
     this.renderNumber = ::this.renderNumber;
   }
+  componentDidMount(){
+    const wallet = MasterWallet.getWalletDefault();
+    console.log("Address, Private Key:", wallet.address, wallet.privateKey);
+    this.setState({
+      address: wallet.address,
+      privateKey: wallet.privateKey,
+    })
+  }
 
   onSubmit(values) {
     console.log("values", values);
+    const {address, privateKey} = this.state;
     let content = this.content;
     const inputList = this.inputList;
     let extraParams = values;
@@ -93,22 +111,13 @@ class BettingCreate extends React.PureComponent {
       );
     });
     console.log('After Content:', content);
-    console.log("this", this.datePickerRef.value);
+    //console.log("this", this.datePickerRef.value);
 
-    const {toAddress, isPublic, industryId} = this.props;
-
-    const params = {
-      to_address: toAddress ? toAddress.trim() : '',
-      public: isPublic,
-      //description: content,
-      // description: JSON.stringify(extraParams),
-      industries_type: industryId,
-      extraParams,
-    };
-
-    //Call API
-    this.props.initHandshake({PATH_URL: 'handshake?public=0&chain_id=4'});
-
+    //const {toAddress, isPublic, industryId} = this.props;
+    
+    //const fromAddress = "0x54CD16578564b9952d645E92b9fa254f1feffee9";
+    const fromAddress = address;
+    this.initHandshake(extraParams, fromAddress);
   }
 
   get inputList() {
@@ -177,7 +186,8 @@ class BettingCreate extends React.PureComponent {
         name={key}
         component={InputField}
         type="number"
-        // min="0.0001"
+        //min="0.0001"
+        //step="0.0002"
         placeholder={placeholder}
         validate={[required]}
         ErrorBox={ErrorBox}
@@ -232,6 +242,68 @@ class BettingCreate extends React.PureComponent {
       </div>
     );
   }
+
+  //Service
+  initHandshake(fields, fromAddress){
+    const json = {"odds": "1.25"}
+    const params = {
+      //to_address: toAddress ? toAddress.trim() : '',
+      //public: isPublic,
+      //description: content,
+      // description: JSON.stringify(extraParams),
+      //industries_type: industryId,
+      type: `${HANDSHAKE_ID.BETTING}`,
+      //type: 3,
+      //extra_data: JSON.stringify(fields),
+      extra_data: JSON.stringify(fields),
+      from_address: fromAddress,
+      chain_id: 4
+    };
+
+    
+    this.props.initHandshake({PATH_URL: API_URL.CRYPTOSIGN.INIT_HANDSHAKE, METHOD:'POST', data: params,
+    successFn: this.initHandshakeSuccess,
+    errorFn: this.handleGetCryptoPriceFailed
+  });
+    
+  }
+  initHandshakeSuccess = (data)=>{
+    console.log('initHandshakeSuccess', data);
+    const {offchain, status} = data;
+    const {values} = this.state;
+    const eventDate =  new Date(this.datePickerRef.value);
+    const escrow = values['event_bet'];
+    const event_odds = 1/parseInt(values['event_odds']);
+
+    console.log('Event Date: ', eventDate);
+    console.log('Escrow:', escrow);
+    console.log('Event Odds:', event_odds);
+
+    if(status){
+      BetHandshakeHandler.initItem(escrow, event_odds,eventDate, offchain);
+    }
+
+  }
+  initHandshakeFailed = (error) => {
+    console.log('initHandshakeFailed', error);
+  }
+
+
+  //Blockchain
+  /*
+  async initBet(escrow, odd, eventDate){
+
+    const address = "0x54CD16578564b9952d645E92b9fa254f1feffee9";
+    const privateKey = "9bf73320e0bcfd7cdb1c0e99f334d689ef2b6921794f23a5bffd2a6bb9c7a3d4";
+    const acceptors = [];
+    const goal = escrow*odd;
+    const currentDate = new Date();
+    const deadline = (eventDate.getTime() / 1000 - currentDate.getTime() / 1000);
+    const offchain = 'abc1';
+    const data = await neuron.bettingHandshake.initBet(address, privateKey, acceptors, goal, escrow, deadline, offchain);
+    console.log('Init Betting:', data);
+    
+  }*/
 }
 
 const mapDispatch = ({

@@ -1,13 +1,13 @@
 @import './src/styles/style';
 
-.feed-wrapper {
-  margin-bottom: 23px;
-}
-
-.category-wrapper {
-  margin-bottom: rem-calc(42px);
-}
-
-.buy-sell-wrapper {
-  margin-bottom: rem-calc(15px);
+.discover {
+  .feed-wrapper {
+    margin-bottom:  rem-calc(23px);
+  }
+  .category-wrapper {
+    margin-bottom: rem-calc(42px);
+  }
+  .buy-sell-wrapper {
+    margin-bottom: rem-calc(15px);
+  }
 }

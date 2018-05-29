@@ -21,7 +21,7 @@ const meReducter = (state = {
       return {
         ...state,
         isFetching: false,
-        list: handleListPayload(action.payload),
+        list: handleListPayload(action.payload.data.handshakes),
       };
     case `${ACTIONS.LOAD_MY_HANDSHAKE}_FAILED`:
       return {

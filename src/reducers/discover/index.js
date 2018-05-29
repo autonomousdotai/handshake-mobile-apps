@@ -1,7 +1,7 @@
 import Handshake from '@/models/Handshake';
 import { ACTIONS } from './action';
 
-const handleListPayload = payload => payload.data.map(handshake => Handshake.handshake(handshake));
+const handleListPayload = payload => payload.map(handshake => Handshake.handshake(handshake));
 
 const handleDetailPayload = payload => Handshake.handshake(payload.data);
 
@@ -21,7 +21,7 @@ const discoverReducter = (state = {
       return {
         ...state,
         isFetching: false,
-        list: handleListPayload(action.payload),
+        list: handleListPayload(action.payload.data.handshakes),
       };
     case `${ACTIONS.LOAD_DISCOVER}_FAILED`:
       return {

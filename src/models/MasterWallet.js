@@ -16,9 +16,9 @@ export class MasterWallet {
     // Create an autonomous wallet:
     static createMasterWallet() {
       // let mnemonic = 'canal marble trend ordinary rookie until combine hire rescue cousin issue that';
-      const mnemonic = 'book trial moral hunt riot ranch yard trap tool horse good barely';
-      // var bip39 = require('bip39');
-      // mnemonic = bip39.generateMnemonic(); //generates string
+      //const mnemonic = 'book trial moral hunt riot ranch yard trap tool horse good barely';
+      var bip39 = require('bip39');
+      const mnemonic = bip39.generateMnemonic(); //generates string
       const masterWallet = [];
       for (const k1 in MasterWallet.ListCoin) {
         for (const k2 in MasterWallet.ListCoin[k1].Network) {
