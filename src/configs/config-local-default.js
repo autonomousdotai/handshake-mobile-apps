@@ -22,16 +22,17 @@ const config = {
     },
   },
   firebase: {
+    apiKey: 'AIzaSyDBZMfls5cTmY7coHYdJr7BoX98HTz_REQ',
+    authDomain: 'handshake-ce73c.firebaseapp.com',
+    databaseURL: 'https://handshake-ce73c.firebaseio.com',
+    projectId: 'handshake-ce73c',
+    storageBucket: 'handshake-ce73c.appspot.com',
+    messagingSenderId: '1002982182043',
     // apiKey: 'AIzaSyCTUERDM-Pchn_UDTsfhVPiwM4TtNIxots',
-    // authDomain: 'redux-firebasev3.firebaseapp.com',
-    // databaseURL: 'https://redux-firebasev3.firebaseio.com',
-    // storageBucket: 'redux-firebasev3.appspot.com',
-    // messagingSenderId: '823357791673'
-    apiKey: 'AIzaSyCTUERDM-Pchn_UDTsfhVPiwM4TtNIxots',
-    authDomain: '',
-    databaseURL: '',
-    storageBucket: '',
-    messagingSenderId: '',
+    // authDomain: '',
+    // databaseURL: '',
+    // storageBucket: '',
+    // messagingSenderId: '',
   },
 };
 
