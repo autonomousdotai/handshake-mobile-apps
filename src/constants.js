@@ -34,7 +34,9 @@ export const CRYPTO_CURRENCY = [
   { value: 'ETH', text: 'ETH' },
   { value: 'BTC', text: 'BTC' },
 ];
-
+export const FIREBASE_PATH = {
+  USERS: '/users',
+};
 export const CRYPTO_CURRENCY_DEFAULT = 'ETH';
 
 export const EXCHANGE_ACTION = [
