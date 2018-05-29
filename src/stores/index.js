@@ -23,10 +23,12 @@ const reducersApp = combineReducers({
 
 const store = createStore(
   reducersApp,
-  compose(
-    reactReduxFirebase(firebase, configs.firebase),
-    composeWithDevTools(applyMiddleware(routerMiddleware(history), thunk)),
-  ),
+  configs.firebase.apiKey
+    ? compose(
+      reactReduxFirebase(firebase, configs.firebase),
+      composeWithDevTools(applyMiddleware(routerMiddleware(history), thunk)),
+    )
+    : composeWithDevTools(applyMiddleware(routerMiddleware(history), thunk)),
 );
 
 // const store = compose(reactReduxFirebase(configs.firebase, {}),createStore(
