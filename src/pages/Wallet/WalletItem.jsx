@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
-import {Bitcoin} from '@/models/Bitcoin.1.js' 
+import {Bitcoin} from '@/models/Bitcoin.js' 
 import {Ethereum} from '@/models/Ethereum.js' 
 import dontIcon from '@/assets/images/icon/3-dot-icon.svg';
 import iconSafe from '@/assets/images/icon/icon-safe.svg';

@@ -7,7 +7,7 @@ import { load } from '@/reducers/discover/action';
 import { Grid, Row, Col } from 'react-bootstrap';
 import Button from '@/components/core/controls/Button';
 import { handShakeList } from '@/data/shake.js';
-import { MasterWallet } from '@/models/MasterWallet';
+import {MasterWallet} from '@/models/MasterWallet'
 
 import dontIcon from '@/assets/images/icon/3-dot-icon.svg';
 import iconSafe from '@/assets/images/icon/icon-safe.svg';
@@ -21,77 +21,91 @@ import { setHeaderRight } from '@/reducers/app/action';
 
 // style
 import './Wallet.scss';
-import { Bitcoin } from '@/models/Bitcoin.1';
+import { Bitcoin } from '@/models/Bitcoin';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 
 
 class Wallet extends React.Component {
   constructor(props) {
-    super(props);
 
+    super(props);
     this.state = {
       data: {},
       isLoading: false,
       error: null,
       listMainWalletBalance: [],
       listTestWalletBalance: [],
+      listRewardWalletBalance: [],
       bottomSheet: false,
       listMenu: [],
-      walletNeedRemove: null,
+      walletNeedRemove: null
     };
-    this.props.setHeaderRight(this.headerRight());
+    this.props.setHeaderRight(this.headerRight());    
   }
 
   headerRight() {
     return (<HeaderMore onHeaderMoreClick={this.onIconRightHeaderClick} />);
   }
 
-  splitWalletData(listWallet) {
-    const listMainWallet = [];
-    const listTestWallet = [];
+  splitWalletData(listWallet){
 
-    listWallet.forEach((wallet) => {
+    let listMainWallet = [];
+    let listTestWallet = [];
+    let listRewardWallet = [];
+
+    listWallet.forEach(wallet => {
+      // is reward wallet:
+      if (wallet.isReward){        
+        listRewardWallet.push(wallet);
+      }
       // is Mainnet
-      if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
+      else if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet){        
         listMainWallet.push(wallet);
-      } else {
-        // is Testnet
+      }
+      else{
+        // is Testnet        
         listTestWallet.push(wallet);
       }
     });
 
-    this.setState({ isLoading: true, listMainWalletBalance: listMainWallet, listTestWalletBalance: listTestWallet });
+    this.setState({isLoading: true, listMainWalletBalance: listMainWallet, listTestWalletBalance: listTestWallet, listRewardWalletBalance: listRewardWallet});
   }
 
-  async componentDidMount() {
-    console.log('getWalletDefault()', MasterWallet.getWalletDefault());
+   async componentDidMount() {
+
+    // console.log('getWalletDefault()', MasterWallet.getWalletDefault());
 
     let listWallet = await MasterWallet.getMasterWallet();
 
-    if (listWallet == false) {
+    if (listWallet == false){
       listWallet = await MasterWallet.createMasterWallet();
     }
-    /* var btc = new Bitcoin();
+     /*var btc = new Bitcoin();
      var tx = await btc.transfer("tprv8ccSMiuz5MfvmYHzdMbz3pjn5uW3G8zxM975sv4MxSGkvAutv54raKHiinLsxW5E4UjyfVhCz6adExCmkt7GjC41cYxbNxt5ZqyJBdJmqPA","mrPJ6rBHpJGnsLK3JGfJQjdm5vkjeAb63M", 0.0001);
 
-     console.log(tx) */
+     console.log(tx)*/
 
-    await this.splitWalletData(listWallet);
+     await this.splitWalletData(listWallet)
 
-    await this.getListBalace();
+     await this.getListBalace();
+  }
+
+  getAllWallet(){
+    return this.state.listMainWalletBalance.concat(this.state.listTestWalletBalance).concat(this.state.listRewardWalletBalance);
   }
 
   async getListBalace() {
-    const listWallet = this.state.listMainWalletBalance.concat(this.state.listTestWalletBalance);
 
-    const pros = [];
+    let listWallet = this.getAllWallet();
 
-    listWallet.forEach((wallet) => {
+    const pros = []
+
+    listWallet.forEach(wallet => {
       pros.push(new Promise((resolve, reject) => {
-        wallet.getBalance().then((balance) => {
+        wallet.getBalance().then(balance => {
           wallet.balance = balance;
           resolve(wallet);
-        });
+        })
       }));
     });
 
@@ -109,188 +123,209 @@ class Wallet extends React.Component {
     // console.log("ethRinkeby", balance);
   }
 
-  toggleBottomSheet() {
-    const obj = (this.state.bottomSheet) ? { bottomSheet: false } : { bottomSheet: true };
-    this.setState(obj);
-  }
+  toggleBottomSheet () {
+    let obj = (this.state.bottomSheet) ? { 'bottomSheet': false } : { 'bottomSheet': true }
+    this.setState(obj)
+  }  
 
   copyToClipboard =(text) => {
-    const textField = document.createElement('textarea');
-    textField.innerText = text;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
+    var textField = document.createElement('textarea')
+    textField.innerText = text
+    document.body.appendChild(textField)
+    textField.select()
+    document.execCommand('copy')
+    textField.remove()
   }
-
+  
   // create list menu of wallet item when click Show more ...
-  crateSheetMenuItem(wallet) {
-    const obj = [];
-    obj.push({
-      title: 'Send',
-      handler: () => {
+  crateSheetMenuItem(wallet){
+    let obj = [];
+      obj.push({
+        title: 'Send',
+        handler: () => {
 
-      },
-    });
-    obj.push({
-      title: 'Fill up',
-      handler: () => {
+        }
+      })
+      obj.push({
+        title: 'Fill up',
+        handler: () => {
 
-      },
-    });
-    obj.push({
-      title: 'Protected your coin',
-      handler: () => {
+        }
+      })
+      obj.push({
+        title: 'Protected your coin',
+        handler: () => {
 
-      },
-    });
-    obj.push({
-      title: 'Transaction history',
-      handler: () => {
+        }
+      })
+      obj.push({
+        title: 'Transaction history',
+        handler: () => {
 
-      },
-    });
-    obj.push({
-      title: 'Copy address',
-      handler: () => {
-        this.copyToClipboard(wallet.address);
-        this.toggleBottomSheet();
-      },
-    });
+        }
+      })
+      obj.push({
+        title: 'Copy address',
+        handler: () => {
+          this.copyToClipboard(wallet.address);
+          this.toggleBottomSheet(); 
+        }
+      })
 
-    obj.push({
-      title: `Make it default ${wallet.default ? '✓ ' : ''}`,
-      handler: () => {
-        wallet.default = !wallet.default;
-        this.toggleBottomSheet();
-        // reset all wallet defaul:
-        const lstWalletTemp = this.state.listMainWalletBalance.concat(this.state.listTestWalletBalance);
-        if (wallet.default) lstWalletTemp.forEach((wal) => { if (wal != wallet) { wal.default = false; } });
-        // Update wallet master from local store:
-        MasterWallet.UpdateLocalStore(lstWalletTemp);
-      },
-    });
-    obj.push({
-      title: 'Remove',
-      handler: () => {
-        this.setState({ walletNeedRemove: wallet });
-        this.modalBetRef.open();
-        this.toggleBottomSheet();
-      },
-    });
+      obj.push({
+        title: 'Make it default ' + (wallet.default ? "✓ " : ""),
+        handler: () => {          
+          wallet.default = !wallet.default;    
+          this.toggleBottomSheet(); 
+          // reset all wallet defaul:
+          let lstWalletTemp = this.getAllWallet();
+          if (wallet.default) lstWalletTemp.forEach(wal => {if (wal != wallet){wal.default = false;}})          
+          // Update wallet master from local store:
+          MasterWallet.UpdateLocalStore(lstWalletTemp);
+        }
+      })
+      obj.push({
+        title: 'Remove',
+        handler: () => {
+          this.setState({walletNeedRemove: wallet});          
+          this.modalBetRef.open();   
+          this.toggleBottomSheet();   
+        }
+      })
 
-    return obj;
+      return obj;
   }
 
   // Remove wallet function:
-  removeWallet = () => {
-    const lstWalletTemp = this.state.listMainWalletBalance.concat(this.state.listTestWalletBalance);
-    let index = -1;
-    const walletTmp = this.state.walletNeedRemove;
-    if (walletTmp != null) {
-      // Find index for this item:
-      lstWalletTemp.forEach((wal, i) => { if (wal === walletTmp) { index = i ;} });
-      // Remove item:
-      if (index > -1) {
-        lstWalletTemp.splice(index, 1);
-        // Update wallet master from local store:
-        MasterWallet.UpdateLocalStore(lstWalletTemp);
-        this.splitWalletData(lstWalletTemp);
-      }
-    }
-    this.modalBetRef.close();
+  removeWallet = () =>{
+    let lstWalletTemp = this.getAllWallet();
+    var index = -1;
+    var walletTmp = this.state.walletNeedRemove;
+    if (walletTmp != null){
+        // Find index for this item:
+        lstWalletTemp.forEach(function (wal, i) {if (wal === walletTmp){index = i}});   
+        // Remove item:
+        if (index > -1) {
+          lstWalletTemp.splice(index, 1)
+          // Update wallet master from local store:
+          MasterWallet.UpdateLocalStore(lstWalletTemp);
+          this.splitWalletData(lstWalletTemp);
+        };       
+    }    
+    this.modalBetRef.close();     
+
   }
 
   // Menu for Right header bar
-  crateSheetMenuHeaderMore() {
-    const obj = [];
+  crateSheetMenuHeaderMore(){
+    let obj = [];
     obj.push({
-      title: 'Add new',
+      title: "Add new",
       handler: () => {
 
-      },
-    });
+      }
+    })
     obj.push({
-      title: 'Export wallet',
+      title: 'Export wallets',
       handler: () => {
 
-      },
-    });
+      }
+    })
     obj.push({
-      title: 'Restore wallet',
+      title: 'Restore wallets',
       handler: () => {
 
-      },
-    });
+      }
+    })
     return obj;
   }
 
-  onIconRightHeaderClick = () => {
-    this.setState({ listMenu: this.crateSheetMenuHeaderMore() });
+  onIconRightHeaderClick = () =>{
+    this.setState({listMenu: this.crateSheetMenuHeaderMore()})
     this.toggleBottomSheet();
+
   }
 
   onMoreClick = (wallet) => {
-    this.setState({ listMenu: this.crateSheetMenuItem(wallet) });
+    this.setState({listMenu: this.crateSheetMenuItem(wallet)})
     this.toggleBottomSheet();
   }
   onWarningClick = (wallet) => {
-    alert(`onWarningClick ->${  wallet.address}`);
+    alert("onWarningClick ->" + wallet.address);
   }
 
   get listMainWalletBalance() {
-    return this.state.listMainWalletBalance.map(wallet => <WalletItem wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} />);
+    return this.state.listMainWalletBalance.map((wallet) => {
+      return <WalletItem wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} />
+    });
   }
   get listTestWalletBalance() {
-    return this.state.listTestWalletBalance.map(wallet => <WalletItem wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} />);
+    return this.state.listTestWalletBalance.map((wallet) => {
+      return <WalletItem wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} />
+    });
+  }
+
+  get listRewardWalletBalance(){
+    return this.state.listRewardWalletBalance.map((wallet) => {
+      return <WalletItem wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} />
+    });
   }
 
   render() {
+
     return (
 
       <Grid>
         <ReactBottomsheet
           visible={this.state.bottomSheet}
           onClose={this.toggleBottomSheet.bind(this)}
-          list={this.state.listMenu}
-        />
-
-        <ModalDialog title="Confirm" onRef={modal => this.modalBetRef = modal}>
+          list={this.state.listMenu} />
+        
+        <ModalDialog title="Confirmation" onRef={modal => this.modalBetRef = modal}>
           <div><span>Are you sure to want to remove this wallet?</span></div>
-          <div className="bodyConfirm">
-            <Button className="left" type="primary" cssType="primary" onClick={this.removeWallet} >Ok</Button>
-            <Button className="right" type="warning" cssType="warning" onClick={() => { this.modalBetRef.close(); }}>Cancel</Button>
+          <div className='bodyConfirm'>
+            <Button className="left" type="primary" cssType="primary" onClick={this.removeWallet} >Yes, remove</Button>
+            <Button className="right" type="warning" cssType="warning" onClick={() => { this.modalBetRef.close(); }}>No</Button>
           </div>
         </ModalDialog>
 
         <Row className="list">
-          <Header title="Main net wallets" hasLink linkTitle="+ Add new" onLinkClick={this.onLinkClick} />
+          <Header title="Main net wallets" hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />
         </Row>
         <Row className="list">
           {this.listMainWalletBalance}
         </Row>
         <Row className="list">
-          <Header title="Test net wallet" hasLink={false} />
+          <Header title="Test net wallets" hasLink={false} />
         </Row>
         <Row className="list">
           {this.listTestWalletBalance}
         </Row>
+
+        <Row className="list">
+          <Header title="Reward wallets" hasLink={false} />
+        </Row>
+        <Row className="list">
+          {this.listRewardWalletBalance}
+        </Row>
+
       </Grid>
     );
   }
+
 }
 
 Wallet.propTypes = {
   discover: PropTypes.object,
-  load: PropTypes.func,
+  load: PropTypes.func
 };
 
-const mapState = state => ({
+const mapState = (state) => ({
   discover: state.discover,
 });
 
 const mapDispatch = ({
-  setHeaderRight,
+  setHeaderRight
 });
 
 export default connect(mapState, mapDispatch)(Wallet);

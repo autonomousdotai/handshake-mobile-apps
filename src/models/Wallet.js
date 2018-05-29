@@ -1,6 +1,7 @@
-export class Wallet {
+export class Wallet {      
+    
   constructor() {
-    this.mnemonic = '';
+    this.mnemonic = '';      
     this.address = '';
     this.privateKey = '';
     this.coinType = '';
@@ -8,14 +9,14 @@ export class Wallet {
     this.balance = 0;
     this.network = '';
     this.name = '';
-    this.title = '';
-    this.protected = false;
-    this.className = '';
+    this.title = ''; 
+    this.protected = false;  
+    this.className = '' 
+    this.isReward = false;     
   }
 
-  getShortAddress() {
+  getShortAddress(){
     return this.address.replace(this.address.substr(12, 27), '...');
   }
+  
 }
-
-export default { Wallet };
