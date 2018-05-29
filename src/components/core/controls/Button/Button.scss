@@ -1,3 +1,18 @@
 // style
 @import './src/styles/style';
+$secondary : #b7b7b7;
 
+.button {
+  padding: rem-calc(9px 0);
+  font-weight: $normal;
+  font-size: rem-calc(20px);
+  color: $white;
+  letter-spacing: 0;
+  text-align: center;
+  .btn-primary {
+    color: $deep-blue;
+  }
+  .btn-secondary {
+    color: $secondary;
+  }
+}

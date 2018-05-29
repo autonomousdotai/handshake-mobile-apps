@@ -41,6 +41,9 @@ class MainHeader extends React.Component {
           dangerouslySetInnerHTML={{ __html: backBtn }}
         />
         <div className="title">{this.props.app.headerTitle}</div>
+        <div className="header-right">
+          {this.props.app.headerRightContent}
+        </div>
       </header>
     );
   }

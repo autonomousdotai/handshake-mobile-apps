@@ -19,6 +19,12 @@
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
+  .header-right {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
   .header-back-btn {
     position: absolute;
     left: 0;

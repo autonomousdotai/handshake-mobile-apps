@@ -7,7 +7,7 @@ export const validate = (values, state, props) => {
   const errors = {};
   const { userProfile } = props;
   const { isNewCCOpen } = state;
-  const isCCExisting = userProfile && userProfile.credit_card.cc_number.trim().length > 0;
+  const isCCExisting = userProfile && userProfile.creditCard.ccNumber.length > 0;
 
   if (!isCCExisting
     || (isNewCCOpen && `${cc_number || ''}${cc_expired || ''}${cc_cvc || ''}`)

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="185px" height="134px" viewBox="0 0 185 134" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 8</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#CB75ED" offset="0%"></stop>
+            <stop stop-color="#9E53E1" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-2" x="0" y="0" width="184.5" height="134" rx="6"></rect>
+    </defs>
+    <g id="App--Wallet" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Discover-first-sight-Copy-14" transform="translate(-214.000000, -142.000000)">
+            <g id="icons8-ethereum-copy" transform="translate(214.000000, 142.000000)">
+                <g id="Group-6">
+                    <g id="Group-8">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <use id="Mask" fill="url(#linearGradient-1)" xlink:href="#path-2"></use>
+                        <g id="icons8-ethereum" opacity="0.199999988" mask="url(#mask-3)" fill="#FFFFFF" fill-rule="nonzero">
+                            <g transform="translate(148.746184, 71.510894) rotate(-346.000000) translate(-148.746184, -71.510894) translate(89.746184, -21.489106)" id="Shape">
+                                <polygon points="0 92.6567602 58.9633929 0 117.926786 92.6567602 58.9633929 126.350128"></polygon>
+                                <polygon points="58.9633929 0 117.926786 92.6567602 58.9633929 126.350128"></polygon>
+                                <polygon points="0 105.291773 58.9633929 138.98514 117.926786 105.291773 58.9633929 185.31352"></polygon>
+                                <polygon points="58.9633929 138.98514 117.926786 105.291773 58.9633929 185.31352"></polygon>
+                                <polygon points="0 92.6567602 58.9633929 67.3867347 117.926786 92.6567602 58.9633929 126.350128"></polygon>
+                                <polygon points="58.9633929 67.3867347 117.926786 92.6567602 58.9633929 126.350128"></polygon>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

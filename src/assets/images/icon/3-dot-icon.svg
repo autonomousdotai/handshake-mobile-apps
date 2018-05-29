@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="23px" viewBox="0 0 11 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-menu_2 copy 4</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-233.3%" y="-33.3%" width="566.7%" height="193.3%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="App--Wallet" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Discover-first-sight" transform="translate(-372.000000, -165.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="icons8-menu_2-copy-4" filter="url(#filter-1)" transform="translate(376.000000, 167.000000)">
+                <path d="M1.5,0 C0.67089825,0 0,0.67089825 0,1.5 C0,2.32910175 0.67089825,3 1.5,3 C2.32910175,3 3,2.32910175 3,1.5 C3,0.67089825 2.32910175,0 1.5,0 Z M1.5,6 C0.67089825,6 0,6.67089825 0,7.5 C0,8.32910175 0.67089825,9 1.5,9 C2.32910175,9 3,8.32910175 3,7.5 C3,6.67089825 2.32910175,6 1.5,6 Z M1.5,12 C0.67089825,12 0,12.6708983 0,13.5 C0,14.3291017 0.67089825,15 1.5,15 C2.32910175,15 3,14.3291017 3,13.5 C3,12.6708983 2.32910175,12 1.5,12 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

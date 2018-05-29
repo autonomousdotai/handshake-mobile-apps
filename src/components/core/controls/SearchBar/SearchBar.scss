@@ -1,0 +1,60 @@
+/**
+ * SearchBar Component.
+*/
+@import './src/styles/style';
+$search-bar-background: rgba(248, 248, 248, 0.82);
+$text-black: #000000;
+
+.search-bar {
+  width: 100%;
+  .input-container {
+    background-color: $search-bar-background;
+    padding: 10px 17px;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    border-radius: 6px;
+  }
+  .icon-search {
+    margin-right: 10px;
+  }
+  .icon-close {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .search-input {
+    width: 100%;
+    font-weight: $normal;
+    font-size: 1rem;
+    border: none;
+    background: transparent;
+    color: $text-black;
+    &:focus {
+      outline: none;
+    }
+    &::placeholder {
+      color: $text-black;
+      opacity: 0.37;
+    }
+  }
+  .search-list-group {
+    margin: 0;
+    padding: rem-calc(22px 0);
+    list-style: none;
+    .search-list-group-item {
+      margin-bottom: rem-calc(12px);
+      padding: rem-calc(0 20px);
+      font-weight: $normal;
+      font-size: 1rem;
+      color: $text-black;
+      &:hover {
+        cursor: pointer;
+        background: $bg-gray;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

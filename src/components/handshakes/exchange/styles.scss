@@ -1,8 +1,13 @@
-
 .form-control-custom-ex {
   border-color: #add0ff;
   &::placeholder {
     color: #ffffff;
     opacity: 0.4;
   }
+  &:focus {
+    border-color: darkblue;
+  }
+}
+input {
+  color: #ffffff;
 }

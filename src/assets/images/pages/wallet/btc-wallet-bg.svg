@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="185px" height="134px" viewBox="0 0 185 134" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-bitcoin copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <radialGradient cx="0%" cy="0%" fx="0%" fy="0%" r="170.1693%" gradientTransform="translate(0.000000,0.000000),scale(0.726287,1.000000),rotate(35.990426),translate(-0.000000,-0.000000)" id="radialGradient-1">
+            <stop stop-color="#F3CC5A" offset="0%"></stop>
+            <stop stop-color="#FEA348" offset="100%"></stop>
+        </radialGradient>
+        <rect id="path-2" x="0" y="0" width="184.5" height="134" rx="6"></rect>
+    </defs>
+    <g id="App--Wallet" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Discover-first-sight-Copy-14" transform="translate(-15.000000, -142.000000)">
+            <g id="icons8-bitcoin-copy-2" transform="translate(15.000000, 142.000000)">
+                <g id="Group-5">
+                    <g id="icons8-bitcoin">
+                        <mask id="mask-3" fill="white">
+                            <use xlink:href="#path-2"></use>
+                        </mask>
+                        <use id="Mask" fill="url(#radialGradient-1)" xlink:href="#path-2"></use>
+                        <g opacity="0.299999982" mask="url(#mask-3)" id="Group-7">
+                            <g transform="translate(136.906480, 66.473236) rotate(-345.000000) translate(-136.906480, -66.473236) translate(87.906480, -13.026764)" opacity="0.574330357">
+                                <g transform="translate(0.467498, 0.281540)">
+                                    <path d="M0.20952156,139.498153 L0.20952156,18.5459973 L49.7938579,18.5459973 C64.3685927,18.5459973 75.3994294,21.3581349 82.9347487,26.9824101 C90.470068,32.6066854 94.2256324,40.8495748 94.2256324,51.6929356 C94.2256324,57.6195913 92.7137305,62.8447244 89.714117,67.3562398 C86.6903131,71.8677552 82.4872257,75.1757967 77.0988072,77.2803642 C83.2431767,78.840647 88.0812629,81.9551651 91.6251611,86.6843944 C95.1751069,91.377338 96.9712464,97.1165178 96.9712464,103.944267 C96.9712464,115.567769 93.2882532,124.379134 85.9162193,130.35417 C78.5441854,136.329207 68.0576335,139.377201 54.4263255,139.498153 L0.20952156,139.498153 Z M24.3999528,66.9268597 L50.7856656,66.9268597 C63.2618805,66.7151934 69.5211546,61.9436308 69.5211546,52.1404586 C69.5211546,46.6613259 67.9366813,42.712238 64.7737825,40.3052901 C61.6108836,37.8983422 56.6216071,36.6888207 49.7938579,36.6888207 L24.3999528,36.6888207 L24.3999528,66.9268597 Z M24.3999528,85.0696831 L24.3999528,121.35533 L53.694565,121.35533 C59.5063161,121.35533 72.7808152,118.519002 72.7808152,105.577121 C72.7808152,92.6352404 66.0256373,85.2329685 54.6379918,85.0696831 L24.3999528,85.0696831 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+                                    <polygon id="Shape" fill="#FFFFFF" fill-rule="nonzero" points="18.352345 0.403173853 36.4951684 0.403173853 36.4951684 30.6412129 18.352345 30.6412129"></polygon>
+                                    <polygon id="Shape" fill="#FFFFFF" fill-rule="nonzero" points="48.590384 0.403173853 66.7332074 0.403173853 66.7332074 30.6412129 48.590384 30.6412129"></polygon>
+                                    <polygon id="Shape" fill="#FFFFFF" fill-rule="nonzero" points="18.352345 127.402938 36.4951684 127.402938 36.4951684 157.640977 18.352345 157.640977"></polygon>
+                                    <polygon id="Shape" fill="#FFFFFF" fill-rule="nonzero" points="48.590384 127.402938 66.7332074 127.402938 66.7332074 157.640977 48.590384 157.640977"></polygon>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

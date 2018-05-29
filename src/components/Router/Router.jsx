@@ -5,11 +5,10 @@ import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
 import DynamicImport from '@/components/App/DynamicImport';
 import Loading from '@/components/core/presentation/Loading';
 import { URL } from '@/config';
-
+import { APP } from '@/constants';
 
 import local from '@/services/localStore';
-import { APP } from '@/constants';
-import { signUp } from '@/reducers/auth/action';
+import { signUp, fetchProfile } from '@/reducers/auth/action';
 
 import ScrollToTop from '@/components/App/ScrollToTop';
 import Layout from '@/components/Layout/Main';
@@ -22,32 +21,66 @@ import messages from '@/locals';
 
 addLocaleData([...en, ...fr]);
 
-const Me = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Me')}>{Component => <Component {...props} />}</DynamicImport>);
-const Discover = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Discover')}>{Component => <Component {...props} />}</DynamicImport>); 
-const Chat = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Chat')}>{Component => <Component {...props} />}</DynamicImport>);
-const Wallet = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Wallet')}>{Component => <Component {...props} />}</DynamicImport>);
-const Create = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Create')}>{Component => <Component {...props} />}</DynamicImport>);
-const Exchange = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Exchange')}>{Component => <Component {...props} />}</DynamicImport>);
-const Transaction = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Transaction')}>{Component => <Component {...props} />}</DynamicImport>);
+const MeRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Me')}>{Component => <Component {...props} />}</DynamicImport>);
+const DiscoverRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Discover')}>{Component => <Component {...props} />}</DynamicImport>);
+const ChatRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Chat')}>{Component => <Component {...props} />}</DynamicImport>);
+const WalletRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Wallet')}>{Component => <Component {...props} />}</DynamicImport>);
+const CreateRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Create')}>{Component => <Component {...props} />}</DynamicImport>);
+const ExchangeRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Exchange')}>{Component => <Component {...props} />}</DynamicImport>);
+const TransactionRootRouter = props => (<DynamicImport loading={Loading} load={() => import('@/components/Router/Transaction')}>{Component => <Component {...props} />}</DynamicImport>);
 const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() => import('@/pages/Error/Page404')}>{Component => <Component {...props} />}</DynamicImport>);
 
 class Router extends React.Component {
   static propTypes = {
     signUp: PropTypes.func.isRequired,
+    fetchProfile: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired,
   }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.auth.isLogged !== prevState.isLogged) {
+      return { isLogged: nextProps.auth.isLogged };
+    }
+    return null;
+  }
+
   constructor(props) {
     super(props);
 
-    this.state = { currentLocale: 'en' };
+    this.state = {
+      currentLocale: 'en',
+      isLogged: this.props.auth.isLogged,
+    };
 
-    const token = local.get(APP.TOKEN);
+    const token = local.get(APP.AUTH_TOKEN);
 
+    // AUTH
     if (!token) {
-      this.props.signUp({ PATH_URL: 'user/sign-up', METHOD: 'POST' });
+      this.props.signUp({
+        PATH_URL: 'user/sign-up',
+        METHOD: 'POST',
+        successFn: () => {
+          this.props.fetchProfile({ PATH_URL: 'user/profile' });
+        },
+      });
+    } else {
+      this.props.fetchProfile({ PATH_URL: 'user/profile' });
     }
   }
 
   render() {
+    if (!this.state.isLogged) {
+      return (
+        <BrowserRouter>
+          <Route
+            path={URL.INDEX}
+            render={
+            props => (<Layout {...props}><Loading /></Layout>)
+            }
+          />
+        </BrowserRouter>
+      );
+    }
     return (
       <IntlProvider locale={this.state.currentLocale} messages={messages[this.state.currentLocale]}>
         <BrowserRouter>
@@ -65,13 +98,13 @@ class Router extends React.Component {
                           <Redirect to={{ pathname: URL.HANDSHAKE_DISCOVER }} />
                         )}
                       />
-                      <Route path={URL.HANDSHAKE_ME} component={Me} />
-                      <Route path={URL.HANDSHAKE_DISCOVER} component={Discover} />
-                      <Route path={URL.HANDSHAKE_CHAT} component={Chat} />
-                      <Route path={URL.HANDSHAKE_WALLET} component={Wallet} />
-                      <Route path={URL.HANDSHAKE_CREATE} component={Create} />
-                      <Route path={URL.HANDSHAKE_EXCHANGE} component={Exchange} />
-                      <Route path={URL.TRANSACTION_LIST} component={Transaction} />
+                      <Route path={URL.HANDSHAKE_ME} component={MeRootRouter} />
+                      <Route path={URL.HANDSHAKE_DISCOVER} component={DiscoverRootRouter} />
+                      <Route path={URL.HANDSHAKE_CHAT} component={ChatRootRouter} />
+                      <Route path={URL.HANDSHAKE_WALLET} component={WalletRootRouter} />
+                      <Route path={URL.HANDSHAKE_CREATE} component={CreateRootRouter} />
+                      <Route path={URL.HANDSHAKE_EXCHANGE} component={ExchangeRootRouter} />
+                      <Route path={URL.TRANSACTION_LIST} component={TransactionRootRouter} />
                       <Route component={Page404} />
                     </Switch>
                   </ScrollToTop>
@@ -85,4 +118,4 @@ class Router extends React.Component {
   }
 }
 
-export default connect(null, ({ signUp }))(Router);
+export default connect(state => ({ auth: state.auth }), ({ signUp, fetchProfile }))(Router);

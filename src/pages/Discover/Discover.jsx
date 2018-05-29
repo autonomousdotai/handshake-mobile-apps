@@ -3,21 +3,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // service, constant
 import { loadDiscoverList, success } from '@/reducers/discover/action';
-// components
-import { Grid, Row, Col } from 'react-bootstrap';
-import SearchBarContainer from '@/components/core/controls/SearchBarContainer';
-import Category from '@/components/core/controls/Category';
 import { handShakeList } from '@/data/shake.js';
 import { URL } from '@/config';
-
 import { HANDSHAKE_ID } from '@/constants';
+// components
+import { Grid, Row, Col } from 'react-bootstrap';
+import SearchBar from '@/components/core/controls/SearchBar';
+import Category from '@/components/core/controls/Category';
 import FeedPromise from '@/components/handshakes/promise/Feed';
 import FeedBetting from '@/components/handshakes/betting/Feed';
-import FeedExchange from '@/components/handshakes/exchange/Feed';
+import FeedExchange from '@/components/handshakes/exchange/Feed/FeedExchange';
 import FeedSeed from '@/components/handshakes/seed/Feed';
 
 // style
 import './Discover.scss';
+import FeedCreditCard from "@/components/handshakes/exchange/Feed/FeedCreditCard";
+import Tabs from '@/components/handshakes/exchange/components/Tabs';
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -36,6 +37,7 @@ class DiscoverPage extends React.Component {
     this.props.success(handShakeList); // temp
     // bind
     this.clickCategoryItem = this.clickCategoryItem.bind(this);
+    this.searchChange = this.searchChange.bind(this);
   }
 
   get getHandshakeList() {
@@ -50,6 +52,10 @@ class DiscoverPage extends React.Component {
       }
       return null;
     });
+  }
+
+  searchChange() {
+    // TODO: search feed
   }
 
   clickFeedDetail(slug) {
@@ -79,11 +85,12 @@ class DiscoverPage extends React.Component {
 
   render() {
     const { handshakeIdActive } = this.state;
+
     return (
       <Grid>
         <Row>
           <Col md={12} xs={12}>
-            <SearchBarContainer />
+            <SearchBar onSuggestionSelected={this.searchChange} />
           </Col>
         </Row>
         <Row>
@@ -93,10 +100,19 @@ class DiscoverPage extends React.Component {
         </Row>
         {
           handshakeIdActive === HANDSHAKE_ID.EXCHANGE && (
-            <Row className="text-center buy-sell-wrapper">
-              <Col md={6}><strong>Buy</strong></Col>
-              <Col md={6}><strong>Sell</strong></Col>
-            </Row>
+            <div>
+              <Tabs
+                activeId={1}
+                onClickTab={(index) => console.log('indexx', index)}
+                list={[
+                  { id: 1, text: 'Buy' },
+                  { id: 2, text: 'Sell' },
+                ]}
+              />
+              <div className="feed-wrapper">
+                <FeedCreditCard {...this.props} />
+              </div>
+            </div>
           )
         }
         <Row>
@@ -116,7 +132,6 @@ DiscoverPage.propTypes = {
 
 const mapState = state => ({
   discover: state.discover,
-  router: state.router,
 });
 
 const mapDispatch = ({

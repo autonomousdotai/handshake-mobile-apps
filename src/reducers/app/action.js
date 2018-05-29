@@ -14,6 +14,8 @@ export const APP_ACTION = {
   HEADER_BACK_CLICK: 'HEADER_BACK_CLICK',
   NOT_FOUND_SET: 'NOT_FOUND_SET',
   NOT_FOUND_REMOVE: 'NOT_FOUND_REMOVE',
+  HEADER_RIGHT_SET: 'HEADER_RIGHT_SET',
+  HEADER_RIGHT_REMOVE: 'HEADER_RIGHT_REMOVE',
 };
 
 // Loading
@@ -36,3 +38,5 @@ export const clickHeaderBack = () => ({ type: APP_ACTION.HEADER_BACK_CLICK });
 export const clearHeaderBack = () => ({ type: APP_ACTION.HEADER_BACK_CLICK });
 export const setNotFound = () => ({ type: APP_ACTION.NOT_FOUND_SET });
 export const clearNotFound = () => ({ type: APP_ACTION.NOT_FOUND_REMOVE });
+export const setHeaderRight = data => ({ type: APP_ACTION.HEADER_RIGHT_SET, payload: data });
+export const clearHeaderRight = () => ({ type: APP_ACTION.HEADER_RIGHT_REMOVE });

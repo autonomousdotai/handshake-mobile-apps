@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import DynamicImport from '@/components/App/DynamicImport';
 import Loading from '@/components/core/presentation/Loading';
 import { URL } from '@/config';
-import { setHeaderTitle } from '@/reducers/app/action';
+import { setHeaderTitle, clearHeaderRight } from '@/reducers/app/action';
 
 const Discover = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Discover/Discover')}>{Component => <Component {...props} />}</DynamicImport>);
 const DiscoverDetail = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Discover/Detail')}>{Component => <Component {...props} />}</DynamicImport>);
@@ -19,12 +19,14 @@ const routerMap = [
 class DiscoverRouter extends React.Component {
   static propTypes = {
     setHeaderTitle: PropTypes.func.isRequired,
+    clearHeaderRight: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props);
 
     this.props.setHeaderTitle('Discover');
+    this.props.clearHeaderRight();
   }
 
   render() {
@@ -37,4 +39,4 @@ class DiscoverRouter extends React.Component {
   }
 }
 
-export default connect(null, ({ setHeaderTitle }))(DiscoverRouter);
+export default connect(null, ({ setHeaderTitle, clearHeaderRight }))(DiscoverRouter);

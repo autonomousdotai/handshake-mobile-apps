@@ -1,0 +1,45 @@
+@import './src/styles/style';
+.my-feed-wrapper {
+  margin-top: rem-calc(35px);
+  &:hover {
+    cursor: pointer;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: rem-calc(15px);
+    .from {
+      width: 70%;
+      font-weight: $normal;
+      font-size: 1rem;
+      color: $steel;
+      .email {
+        font-weight: $normal;
+        font-size: 1rem;
+        color: $lavender-gray;
+      }
+    }
+    .status {
+      width: 30%;
+      text-align: right;
+      font-weight: $normal;
+      font-size: 1rem;
+      .pending {
+        color: $lavender-gray;
+      }
+      .done {
+        color: $emerald;
+      }
+    }
+  }
+  .my-feed {
+    padding: 23px;
+    .description {
+      margin: 0;
+      font-weight: $normal;
+      font-size: rem-calc(28px);
+      color: $white;
+      letter-spacing: 0.5px;
+    }
+  }
+}

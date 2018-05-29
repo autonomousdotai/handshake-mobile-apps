@@ -12,7 +12,7 @@ const $http = (url, data, id, qsObject, headersMore, method = 'GET') => {
     QS = qs.stringify(qsObject);
   }
 
-  const token = local.get(APP.TOKEN);
+  const token = local.get(APP.AUTH_TOKEN);
 
   let headers = {
     'Content-Type': 'application/json',

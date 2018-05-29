@@ -25,6 +25,7 @@ function appReducter(state = {
   headerTitle: APP.HEADER_DEFAULT,
   headerBack: false,
   isNotFound: false,
+  headerRightContent: null,
 
 }, action) {
   switch (action.type) {
@@ -121,6 +122,19 @@ function appReducter(state = {
       return {
         ...state,
         isNotFound: false,
+      };
+
+
+    case APP_ACTION.HEADER_RIGHT_SET:
+      return {
+        ...state,
+        headerRightContent: action.payload,
+      };
+
+    case APP_ACTION.HEADER_RIGHT_REMOVE:
+      return {
+        ...state,
+        headerRightContent: null,
       };
 
     default:

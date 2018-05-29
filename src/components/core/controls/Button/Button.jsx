@@ -58,6 +58,7 @@ class Button extends React.PureComponent {
         to={to || ''}
         className={cn(
           'btn',
+          'button',
           typeClass,
           className,
           `${block ? 'btn-block' : ''}`,
