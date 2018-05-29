@@ -1,9 +1,9 @@
-import {EXCHANGE_ACTIONS} from './action';
-import CcLimit from "@/models/CcLimit";
-import UserCcLimit from "@/models/UserCcLimit";
-import UserProfile from "@/models/UserProfile";
-import CryptoPrice from "@/models/CryptoPrice";
-import OfferPrice from "@/models/OfferPrice";
+import CcLimit from '@/models/CcLimit';
+import UserCcLimit from '@/models/UserCcLimit';
+import UserProfile from '@/models/UserProfile';
+import CryptoPrice from '@/models/CryptoPrice';
+import OfferPrice from '@/models/OfferPrice';
+import { EXCHANGE_ACTIONS } from './action';
 
 function exchangeReducter(state = {}, action) {
   // console.log('exchangeReducter', JSON.stringify(action));

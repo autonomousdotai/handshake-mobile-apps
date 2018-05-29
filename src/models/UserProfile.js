@@ -1,4 +1,4 @@
-import UserCreditCard from "@/models/UserCreditCard";
+import UserCreditCard from '@/models/UserCreditCard';
 
 class UserProfile {
   static userProfile(data) {

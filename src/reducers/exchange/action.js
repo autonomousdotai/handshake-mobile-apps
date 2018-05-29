@@ -23,53 +23,27 @@ export const EXCHANGE_ACTIONS = {
   CANCEL_SHAKE_OFFER: 'CANCEL_SHAKE_OFFER',
 };
 
-export const getCryptoPrice = createAPI(
-  EXCHANGE_ACTIONS.GET_CRYPTO_PRICE
-);
+export const getCryptoPrice = createAPI(EXCHANGE_ACTIONS.GET_CRYPTO_PRICE);
 
-export const createCCOrder = createAPI(
-  EXCHANGE_ACTIONS.CREATE_CC_ORDER,
-);
+export const createCCOrder = createAPI(EXCHANGE_ACTIONS.CREATE_CC_ORDER);
 
-export const getUserCcLimit = createAPI(
-  EXCHANGE_ACTIONS.GET_USER_CC_LIMIT,
-);
+export const getUserCcLimit = createAPI(EXCHANGE_ACTIONS.GET_USER_CC_LIMIT);
 
-export const getCcLimits = createAPI(
-  EXCHANGE_ACTIONS.GET_CC_LIMITS
-);
+export const getCcLimits = createAPI(EXCHANGE_ACTIONS.GET_CC_LIMITS);
 
-export const getUserProfile = createAPI(
-  EXCHANGE_ACTIONS.GET_USER_PROFILE
-);
+export const getUserProfile = createAPI(EXCHANGE_ACTIONS.GET_USER_PROFILE);
 
-export const getOfferPrice = createAPI(
-  EXCHANGE_ACTIONS.GET_OFFER_PRICE
-);
+export const getOfferPrice = createAPI(EXCHANGE_ACTIONS.GET_OFFER_PRICE);
 
-export const getUserTransaction = createAPI(
-  EXCHANGE_ACTIONS.GET_USER_TRANSACTION
-);
+export const getUserTransaction = createAPI(EXCHANGE_ACTIONS.GET_USER_TRANSACTION);
 
-export const createOffer = createAPI(
-  EXCHANGE_ACTIONS.CREATE_OFFER
-);
+export const createOffer = createAPI(EXCHANGE_ACTIONS.CREATE_OFFER);
 
-export const closeOffer = createAPI(
-  EXCHANGE_ACTIONS.CREATE_OFFER
-);
+export const closeOffer = createAPI(EXCHANGE_ACTIONS.CREATE_OFFER);
 
-export const shakeOffer = createAPI(
-  EXCHANGE_ACTIONS.SHAKE_OFFER
-);
+export const shakeOffer = createAPI(EXCHANGE_ACTIONS.SHAKE_OFFER);
 
-export const completeShakeOffer = createAPI(
-  EXCHANGE_ACTIONS.COMPLETE_SHAKE_OFFER
-);
+export const completeShakeOffer = createAPI(EXCHANGE_ACTIONS.COMPLETE_SHAKE_OFFER);
 
-export const cancelShakeOffer = createAPI(
-  EXCHANGE_ACTIONS.CANCEL_SHAKE_OFFER
-);
-
-
+export const cancelShakeOffer = createAPI(EXCHANGE_ACTIONS.CANCEL_SHAKE_OFFER);
 

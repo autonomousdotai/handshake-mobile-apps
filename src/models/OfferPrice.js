@@ -1,5 +1,5 @@
 class OfferPrice {
-  static offerPrice (data) {
+  static offerPrice(data) {
     return {
       type: data.Type || '',
       amount: data.Amount || '',

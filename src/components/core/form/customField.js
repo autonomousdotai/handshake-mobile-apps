@@ -65,14 +65,13 @@ export const fieldDropdown = customField(({
 });
 
 export const fieldRadioButton = customField(({
-  onChange, value, list, name, color = ''
-}) => {
-  return (
-    <span>
-      {
+  onChange, value, list, name, color = '',
+}) => (
+  <span>
+    {
         list.map((item, index) => {
           const { value: itemValue, text } = item;
-          const isChecked = itemValue === value
+          const isChecked = itemValue === value;
           return (
             <div key={index} className="radio-container">
               <input
@@ -93,9 +92,8 @@ export const fieldRadioButton = customField(({
           );
         })
       }
-    </span>
-  );
-});
+  </span>
+));
 
 export const fieldCleave = customField(({
   onChange, onBlur, onFocus, value, propsCleave, className,
