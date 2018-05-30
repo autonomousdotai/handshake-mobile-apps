@@ -1,20 +1,20 @@
 import configs from '../../configs';
 import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
-import Token from './neuron-token';
-import Handshake from './neuron-handshake';
-import BettingHandshake from './neuron-bettinghandshake';
+// import Token from './neuron-token';
+// import Handshake from './neuron-handshake';
+// import BettingHandshake from './neuron-bettinghandshake';
 
 const BN = Web3.utils.BN;
 
 class Neuron {
   constructor(chainId = 4) {
     this.chainId = chainId || 4;
-    this.web3 = null;
+    this.getWeb3();
     this.instance = {};
-    this.handshake = new Handshake(this);
-    this.bettingHandshake = new BettingHandshake(this);
-    this.token = new Token(this);
+    // this.handshake = new Handshake(this);
+    // this.bettingHandshake = new BettingHandshake(this);
+    // this.token = new Token(this);
   }
 
   getWeb3 = () => {
@@ -34,6 +34,11 @@ class Neuron {
     const balance = await web3.eth.getBalance(address);
     console.log(balance);
     return Web3.utils.fromWei(balance.toString());
+  };
+  getNonce = async (accountAddress) => {
+    const web3 = this.getWeb3();
+    const nonce = await web3.eth.getTransactionCount(accountAddress);
+    return nonce;
   };
   /**
    * Retrieve contract from compiled contracts folder
@@ -55,52 +60,63 @@ class Neuron {
    *                      gasPrice: modify default gas price 10gwei (gwei)
    *                    }
    */
-  makeRawTransaction = (address, privateKey, payloadData, options) =>
+  makeRawTransaction = (
+    address,
+    privateKey = '',
+    payloadData,
+    {
+      toAddress, amount, gasPrice, argumentsParams,
+    },
+  ) =>
     // console.log('makeRawTransaction', payloadData, options);
     new Promise(async (resolve, reject) => {
-      const _options = options || {};
       const web3 = this.getWeb3();
       if (privateKey.startsWith('0x')) {
         privateKey = privateKey.substr(2);
       }
 
-      let gasPrice = new BN(await web3.eth.getGasPrice());
-
+      // let gasPrice = new BN();
+      gasPrice = new BN(gasPrice
+        ? Web3.utils.toWei(String(gasPrice), 'gwei')
+        : await web3.eth.getGasPrice());
       // console.log(typeof _options.gasPrice);
-      if (_options.gasPrice) {
-        gasPrice = new BN(Web3.utils.toWei(_options.gasPrice.toString(), 'gwei'));
-      }
+      // if (_options.gasPrice) {
+      //   gasPrice = new BN(Web3.utils.toWei(_options.gasPrice.toString(), 'gwei'));
+      // }
 
       const nonce = await web3.eth.getTransactionCount(address);
       const balance = new BN(await web3.eth.getBalance(address));
 
       const estimateGas = balance.div(gasPrice);
-      const limitedGas = 200000;
+      const limitedGas = 3000000;
 
       const estimatedGas = Math.min(estimateGas, limitedGas);
       const chainId = await web3.eth.net.getId();
       console.log('gasPrice->', parseInt(gasPrice));
       console.log('estimatedGas->', parseInt(estimatedGas));
-      console.log('chainid ->', chainId);      
+      console.log('chainid ->', chainId);
       const rawTx = {
         nonce: web3.utils.toHex(nonce),
-        gasPrice: web3.utils.toHex(parseInt(gasPrice)),
-        gasLimit: 2000000,
+        gasPrice: web3.utils.toHex(gasPrice),
+        gasLimit: limitedGas,
         data: payloadData,
         from: address,
         chainId,
         gas: estimatedGas,
+        to: toAddress,
+        value: amount
+          ? web3.utils.toHex(web3.utils.toWei(String(amount, 'ether')))
+          : undefined,
       };
-      if (_options.toAddress) {
-        rawTx.to = _options.toAddress;
-      }
-      if (_options.amount) {
-        rawTx.value = web3.utils.toHex(web3.utils.toWei(_options.amount.toString(), 'ether'));
-      }
+
+      // if (_options.toAddress) {
+      //   rawTx.to = _options.toAddress;
+      // }
+      // if (_options.amount) {
+      //   rawTx.value = web3.utils.toHex(web3.utils.toWei(_options.amount.toString(), 'ether'));
+      // }
       console.log('rawTx->', rawTx);
       const tx = new Tx(rawTx);
-
-      // tx.sign(new Buffer(privateKey, 'hex'));
       tx.sign(Buffer.from(privateKey, 'hex'));
 
       const serializedTx = tx.serialize();
@@ -116,9 +132,9 @@ class Neuron {
           hash,
           payload: payloadData,
           fromAddress: address,
-          toAddress: _options.toAddress || '',
-          amount: _options.amount || 0,
-          arguments: _options.arguments || {},
+          toAddress: toAddress || '',
+          amount: amount || 0,
+          arguments: argumentsParams || {},
         });
       });
     });
