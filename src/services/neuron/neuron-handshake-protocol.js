@@ -1,18 +1,13 @@
 import Web3 from 'web3';
-import configsAll from '../../configs';
+import BaseHandshake from './BaseHandshake';
 
-let configs = {};
-export default class Handshake {
-  constructor(_neuron) {
-    const web3 = _neuron.getWeb3();
-    this.neuron = _neuron;
-    this.web3 = web3;
-    const compiled = _neuron.getCompiled('HandshakeProtocol');
-    configs = configsAll.network[_neuron.chainId];
-    this.handshakeInstance = new web3.eth.Contract(
-      compiled.abi,
-      configs.handshakeAddress,
-    );
+const TAG = 'HandshakeProtocol';
+export default class HandshakeProtocol extends BaseHandshake {
+  constructor(chainId) {
+    super(chainId);
+  }
+  get contractFileNameWithoutExtension() {
+    return 'HandshakeProtocol';
   }
   init = (
     address,
@@ -25,7 +20,8 @@ export default class Handshake {
     offchain,
   ) => {
     console.log(
-      'eth-contract-service init',
+      TAG,
+      ' init',
       address,
       privateKey,
       amount,
@@ -41,7 +37,7 @@ export default class Handshake {
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   initByPayer = (
@@ -55,7 +51,8 @@ export default class Handshake {
     offchain,
   ) => {
     console.log(
-      'eth-contract-service initByPayer',
+      TAG,
+      ' initByPayer',
       address,
       privateKey,
       amount,
@@ -71,7 +68,7 @@ export default class Handshake {
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   shake = (address, privateKey, amount, hid, offchain) => {
@@ -81,7 +78,7 @@ export default class Handshake {
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   unshake = (address, privateKey, amount, hid, offchain) => {
@@ -98,7 +95,7 @@ export default class Handshake {
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   deliver = (address, privateKey, amount, hid, offchain) => {
@@ -115,7 +112,7 @@ export default class Handshake {
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   withdraw = (address, privateKey, amount, hid, offchain) => {
@@ -132,58 +129,37 @@ export default class Handshake {
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   reject = (address, privateKey, amount, hid, offchain) => {
-    console.log(
-      'eth-contract-service reject',
-      address,
-      privateKey,
-      amount,
-      hid,
-      offchain,
-    );
+    console.log(TAG, ' reject', address, privateKey, amount, hid, offchain);
     const payloadData = this.handshakeInstance.methods
       .reject(hid, offchain)
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   accept = (address, privateKey, amount, hid, offchain) => {
-    console.log(
-      'eth-contract-service accept',
-      address,
-      privateKey,
-      amount,
-      hid,
-      offchain,
-    );
+    console.log(TAG, ' accept', address, privateKey, amount, hid, offchain);
     const payloadData = this.handshakeInstance.methods
       .accept(hid, offchain, offchain)
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
   cancel = (address, privateKey, amount, hid, offchain) => {
-    console.log(
-      'eth-contract-service cancel',
-      address,
-      privateKey,
-      amount,
-      hid,
-      offchain,
-    );
+    console.log(TAG, ' cancel', address, privateKey, amount, hid, offchain);
     const payloadData = this.handshakeInstance.methods
       .cancel(hid, offchain)
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
-      toAddress: configs.handshakeAddress,
+      toAddress: this.contractAddress,
     });
   };
 }

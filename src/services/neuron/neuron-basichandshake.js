@@ -1,17 +1,8 @@
-// import configs from '../../configs';
 import BaseHandshake from './BaseHandshake';
 
 export default class BasicHandshake extends BaseHandshake {
   constructor(chainId) {
     super(chainId);
-    // this.neuron = _neuron;
-    // const web3 = this.neuron.getWeb3();
-    // this.web3 = web3;
-    // const compiled = this.neuron.getCompiled('BasicHandshake');
-    // this.instance = new web3.eth.Contract(
-    //   compiled.abi,
-    //   configs.network[this.neuron.chainId].basicHandshakeAddress,
-    // );
   }
 
   get contractFileNameWithoutExtension() {
@@ -29,7 +20,7 @@ export default class BasicHandshake extends BaseHandshake {
       privateKey,
       payloadData,
       {
-        toAddress: this.configs.basicHandshakeAddress,
+        toAddress: this.contractAddress,
         arguments: { toAddress, offchain },
         gasPrice: (() => (this.chainId === 4 ? 100 : 20))(),
       },
@@ -44,7 +35,7 @@ export default class BasicHandshake extends BaseHandshake {
       .shake(hid, bytesOffchain)
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
-      toAddress: this.configs.basicHandshakeAddress,
+      toAddress: this.contractAddress,
       arguments: { hid, offchain },
       gasPrice: (() => (this.chainId === 4 ? 100 : 20))(),
     });

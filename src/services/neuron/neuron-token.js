@@ -1,4 +1,5 @@
 const TAG = 'neuron-token';
+// refactor not yet
 export default class Token {
   constructor(_neuron) {
     this.neuron = _neuron;

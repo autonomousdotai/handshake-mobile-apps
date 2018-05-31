@@ -1,7 +1,7 @@
 import configs from '@/configs';
 import Neuron from './index';
+import { camelCase } from 'lodash';
 
-// const configs = configsBetting.network[4];
 const TAG = 'BaseHandshake';
 export default class BaseHandshake {
   constructor(chainId) {
@@ -17,6 +17,12 @@ export default class BaseHandshake {
       this.configs.handshakeBettingAddress,
     );
     console.log('Hanshake instance:', this.handshakeInstance);
+  }
+
+  get contractAddress() {
+    return this.configs[
+      `${camelCase(this.contractFileNameWithoutExtension)}Address`
+    ];
   }
 
   get contractFileNameWithoutExtension() {
