@@ -54,13 +54,13 @@ export default class BettingHandshake extends BaseHandshake {
       toAddress: this.contractAddress,
     });
   };
-
+ 
   shake = (address, privateKey, hid, amount, offchain) => {
     console.log('eth-contract-service shake', address, privateKey, hid);
     const bytesOffchain = this.web3.utils.fromAscii(offchain);
 
     const payloadData = this.handshakeInstance.methods
-      .shake(hid, bytesOffchain)
+      .shake(hid,bytesOffchain)
       .encodeABI();
     return this.neuron.makeRawTransaction(address, privateKey, payloadData, {
       amount,
@@ -152,7 +152,7 @@ export default class BettingHandshake extends BaseHandshake {
       toAddress: this.contractAddress,
     });
   };
-
+  
   withdraw = (address, privateKey, hid, offchain) => {
     console.log(
       'eth-contract-service withdraw',

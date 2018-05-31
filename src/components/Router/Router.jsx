@@ -6,7 +6,7 @@ import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
 import DynamicImport from '@/components/App/DynamicImport';
 import Loading from '@/components/core/presentation/Loading';
 import { URL } from '@/config';
-import { APP, FIREBASE_PATH } from '@/constants';
+import { APP } from '@/constants';
 
 import local from '@/services/localStore';
 import { signUp, fetchProfile } from '@/reducers/auth/action';
@@ -17,7 +17,8 @@ import Layout from '@/components/Layout/Main';
 import { addLocaleData, IntlProvider } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import fr from 'react-intl/locale-data/fr';
-import { withFirebase } from 'react-redux-firebase';
+import { isLoaded, isEmpty, withFirebase } from 'react-redux-firebase';
+import { FIREBASE_PATH } from '@/constants';
 import messages from '@/locals';
 
 addLocaleData([...en, ...fr]);
@@ -87,25 +88,29 @@ const Page404 = props => (
     {Component => <Component {...props} />}
   </DynamicImport>
 );
-
+let pathFirebaseWithUser ="";
 class Router extends React.Component {
   static propTypes = {
+    
     signUp: PropTypes.func.isRequired,
     fetchProfile: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    firebase: PropTypes.object.isRequired,
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.auth.isLogged !== prevState.isLogged) {
       return { isLogged: nextProps.auth.isLogged };
     }
-    if (nextProps.auth.profileUpdatedAt !== prevState.profileUpdatedAt) {
-      nextProps.firebase.unWatchEvent('value', `${FIREBASE_PATH.USERS}/${String(prevState.profile.id)}`);
-      nextProps.firebase.watchEvent('value', `${FIREBASE_PATH.USERS}/${String(nextProps.auth.profile.id)}`);
-      return { profile: nextProps.auth.profile, profileUpdatedAt: nextProps.auth.profileUpdatedAt };
-    }
     return null;
+  }
+
+  componentDidUpdate(prevProps,prevState){
+    if(prevProps&& JSON.stringify(prevProps.auth) !== JSON.stringify(this.props.auth)){
+      console.log(`componentDidUpdate begin ---`);
+
+      pathFirebaseWithUser = FIREBASE_PATH.USERS+'/'+String(this.props.auth?.profile?.id);
+      this.props.firebase?.watchEvent('value', pathFirebaseWithUser);
+    }
   }
 
   constructor(props) {
@@ -114,28 +119,31 @@ class Router extends React.Component {
     this.state = {
       currentLocale: 'en',
       isLogged: this.props.auth.isLogged,
-      profile: this.props.auth.profile,
-      profileUpdatedAt: this.props.auth.profileUpdatedAt,
     };
 
     const token = local.get(APP.AUTH_TOKEN);
-
+    // const profile = this.props.auth.profile || {};
+    
     // AUTH
     if (!token) {
       this.props.signUp({
         PATH_URL: 'user/sign-up',
         METHOD: 'POST',
         successFn: () => {
+          
+          // this.props.firebase.set(FIREBASE_PATH.USERS, String(profile.id));
+          
           this.props.fetchProfile({ PATH_URL: 'user/profile' });
         },
       });
     } else {
+      
       this.props.fetchProfile({ PATH_URL: 'user/profile' });
     }
   }
 
-  componentWillUnmount() {
-    this.props.firebase.unWatchEvent('value', `${FIREBASE_PATH.USERS}/${String(this.state.profile.id)}`);
+  componentWillUnMount() {
+    this.props.firebase?.unWatchEvent('value',pathFirebaseWithUser);
   }
 
   render() {
@@ -209,9 +217,10 @@ class Router extends React.Component {
   }
 }
 
+// export default connect(state => ({ auth: state.auth }), ({ signUp, fetchProfile }))(Router);
 export default compose(
   withFirebase,
-  connect(state => ({ auth: state.auth, app: state.app }), {
+  connect(state => ({ auth: state.auth }), {
     signUp,
     fetchProfile,
   }),

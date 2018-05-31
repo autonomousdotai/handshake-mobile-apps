@@ -33,20 +33,12 @@ class Exchange extends React.Component {
   componentWillUnmount() {
   }
 
-  callbackFailed = () => {
-    console.log('callbackFailed');
-  }
-
-  callbackSuccess = () => {
-    console.log('callbackSuccess');
-  }
-
   render() {
     return (
       <div className="container">
         <div className="row">
           <div className="col">
-            <FeedCreditCard buttonTitle={ 'buttonTitle' } callbackFailed={this.callbackFailed} callbackSuccess={this.callbackSuccess}/>
+            <FeedCreditCard />
           </div>
         </div>
       </div>

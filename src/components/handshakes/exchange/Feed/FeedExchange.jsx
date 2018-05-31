@@ -8,34 +8,27 @@ import Feed from "@/components/core/presentation/Feed/Feed";
 import Button from "@/components/core/controls/Button/Button";
 import {BigNumber} from 'bignumber.js';
 import {AMOUNT_DECIMAL, PRICE_DECIMAL} from "@/constants";
-import {API_URL, HANDSHAKE_EXCHANGE_STATUS, HANDSHAKE_USER} from "../../../../constants";
+import {API_URL} from "../../../../constants";
 import ModalDialog from "../../../core/controls/ModalDialog/ModalDialog";
 import {connect} from "react-redux";
 import {
-  cancelShakedOffer,
-  closeOffer,
-  completeShakedOffer,
-  getListOfferPrice,
-  shakeOffer,
-  withdrawShakedOffer
-} from "@/reducers/exchange/action";
+  cancelShakedOffer, closeOffer, completeShakedOffer, getListOfferPrice, getListOffers, getOffer,
+  shakeOffer
+} from "../../../../reducers/exchange/action";
 import getSymbolFromCurrency from 'currency-symbol-map';
-import Offer from "@/models/Offer";
-import {MasterWallet} from "@/models/MasterWallet";
-import {getHandshakeUserType, getOfferPrice} from "@/services/offer-util";
+import Offer from "../../../../models/Offer";
+import {MasterWallet} from "../../../../models/MasterWallet";
 
 class FeedExchange extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const {initUserId, shakedUserIds, extraData} = props;
+    const { extraData } = props;
     const offer = Offer.offer(JSON.parse(extraData));
 
     this.state = {
       modalContent: '',
       offer: offer,
-      fiatAmount: 0,
-      userType: getHandshakeUserType(initUserId, shakedUserIds),
 
       listMainWalletBalance: [],
       listTestWalletBalance: [],
@@ -43,10 +36,61 @@ class FeedExchange extends React.PureComponent {
   }
 
   async componentDidMount() {
+    const offer = this.state.offer;
+    // this.props.getListOffers({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,
+    //   PATH_URL: API_URL.EXCHANGE.OFFERS,
+    //   successFn: this.handleGetListOffersSuccess,
+    //   errorFn: this.handleGetListOffersFailed,
+    // });
+    // this.props.getOffer({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,
+    //   PATH_URL: API_URL.EXCHANGE.OFFERS,
+    //   successFn: this.handleGetOfferSuccess,
+    //   // errorFn: this.handleGetOfferFailed,
+    //   errorFn: this.handleGetListOffersFailed,
+    // });
+    // this.props.shakeOffer({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,
+    //   PATH_URL: API_URL.EXCHANGE.OFFERS,
+    //   successFn: this.handleShakeOfferSuccess,
+    //   // errorFn: this.handleShakeOfferFailed,
+    //   errorFn: this.handleGetListOffersFailed,
+    // });
+    // this.props.closeOffer({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,
+    //   PATH_URL: API_URL.EXCHANGE.OFFERS,
+    //   successFn: this.handleCloseOfferSuccess,
+    //   // errorFn: this.handleCloseOfferFailed,
+    //   errorFn: this.handleGetListOffersFailed,
+    // });
+    // this.props.completeShakedOffer({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,
+    //   PATH_URL: API_URL.EXCHANGE.OFFERS,
+    //   successFn: this.handleCompleteShakedOfferSuccess,
+    //   // errorFn: this.handleCompleteShakedOfferFailed,
+    //   errorFn: this.handleGetListOffersFailed,
+    // });
+    // this.props.cancelShakedOffer({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,E
+    //   PATH_URL: API_URL.EXCHANGE.OFFERS,
+    //   successFn: this.handleCancelShakedOfferSuccess,
+    //   // errorFn: this.handleCancelShakedOfferFailed,
+    //   errorFn: this.handleGetListOffersFailed,
+    // });
+
+    // this.props.getListOfferPrice({
+    //   BASE_URL: API_URL.EXCHANGE.BASE,
+    //   PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
+    //   qs: {fiat_currency: offer.fiatCurrency},
+    //   successFn: this.handleGetPriceSuccess,
+    //   errorFn: this.handleGetPriceFailed,
+    // });
+
     //Get wallet
     let listWallet = await MasterWallet.getMasterWallet();
 
-    if (listWallet == false) {
+    if (listWallet == false){
       listWallet = await MasterWallet.createMasterWallet();
     }
 
@@ -55,17 +99,25 @@ class FeedExchange extends React.PureComponent {
     await this.getListBalance();
   }
 
-  splitWalletData(listWallet) {
+  // handleGetPriceSuccess = (data) => {
+  //   console.log('handleGetPriceSuccess', data);
+  // }
+  //
+  // handleGetPriceFailed = (e) => {
+  //   console.log('handleGetPriceFailed', e);
+  // }
+
+  splitWalletData(listWallet){
 
     let listMainWallet = [];
     let listTestWallet = [];
 
     listWallet.forEach(wallet => {
       // is Mainnet
-      if (wallet.network == MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
+      if (wallet.network == MasterWallet.ListCoin[wallet.className].Network.Mainnet){
         listMainWallet.push(wallet);
       }
-      else {
+      else{
         // is Testnet
         listTestWallet.push(wallet);
       }
@@ -94,6 +146,36 @@ class FeedExchange extends React.PureComponent {
     await this.splitWalletData(listWallet);
   }
 
+  handleGetListOffersSuccess = (data) => {
+    console.log('data', data);
+    this.setState({modalContent:
+        (
+          <div className="py-2">
+            <Feed className="feed p-2" background="#259B24">
+              <div className="text-white d-flex align-items-center" style={{ minHeight: '75px' }}>
+                <div>{'action success'}</div>
+              </div>
+            </Feed>
+            <Button block className="btn btn-secondary mt-2" onClick={this.handleActionSuccess}>Dismiss</Button>
+          </div>
+        )
+    }, () => {
+      this.modalRef.open();
+    });
+  }
+
+  handleGetOfferSuccess = (data) => {
+    console.log('data', data);
+  }
+
+  handleShakeOfferSuccess = (data) => {
+    console.log('handleShakeOfferSuccess', data);
+  }
+
+  handleCloseOfferSuccess = (data) => {
+    console.log('data', data);
+  }
+
   handleCompleteShakedOfferSuccess = (data) => {
     console.log('data', data);
   }
@@ -102,18 +184,17 @@ class FeedExchange extends React.PureComponent {
     console.log('data', data);
   }
 
-  handleActionFailed = (e) => {
+  handleGetListOffersFailed = (e) => {
     console.log('e', e);
-    this.setState({
-      modalContent:
+    this.setState({modalContent:
         (
           <div className="py-2">
             <Feed className="feed p-2" background="#259B24">
-              <div className="text-white d-flex align-items-center" style={{minHeight: '75px'}}>
+              <div className="text-white d-flex align-items-center" style={{ minHeight: '75px' }}>
                 <div>{e.response?.data?.message}</div>
               </div>
             </Feed>
-            <Button block className="btn btn-secondary mt-2" onClick={this.handleDismissActionFailed}>Dismiss</Button>
+            <Button block className="btn btn-secondary mt-2" onClick={this.handleActionFailed}>Dismiss</Button>
           </div>
         )
     }, () => {
@@ -121,38 +202,40 @@ class FeedExchange extends React.PureComponent {
     });
   }
 
-  handleDismissActionSuccess = () => {
+  handleActionSuccess = () => {
     this.modalRef.close();
   }
 
-  handleDismissActionFailed = () => {
+  handleActionFailed = () => {
     this.modalRef.close();
   }
 
-  confirmShakeOffer = (message, actionConfirm) => {
-    const {intl,} = this.props;
-    const {offer, fiatAmount} = this.state;
+  confirmShakeOffer = () => {
+    const { intl } = this.props;
+    const offer = this.state.offer;
     console.log('offer', offer);
 
-    // const message = intl.formatMessage({ id: 'handshakeOfferConfirm' }, {
-    //   type: offer.type === 'buy' ? 'Sell' : 'Buy',
-    //   amount: new BigNumber(offer.amount).toFormat(6),
-    //   currency: offer.currency,
-    //   currency_symbol: getSymbolFromCurrency(offer.fiatCurrency),
-    //   total: new BigNumber(fiatAmount).toFormat(2),
-    // });
+
+    const totalAmount = offer.amount * offer.price || 0;
+    const message = intl.formatMessage({ id: 'handshakeOfferConfirm' }, {
+      type: offer.type === 'buy' ? 'Sell' : 'Buy',
+      amount: new BigNumber(offer.amount).toFormat(6),
+      currency: offer.currency,
+      currency_symbol: getSymbolFromCurrency(offer.fiatCurrency),
+      total: new BigNumber(totalAmount).toFormat(2),
+    });
 
     this.setState({
       modalContent:
         (
           <div className="py-2">
             <Feed className="feed p-2" background="#259B24">
-              <div className="text-white d-flex align-items-center" style={{minHeight: '75px'}}>
+              <div className="text-white d-flex align-items-center" style={{ minHeight: '75px' }}>
                 <div>{message}</div>
               </div>
             </Feed>
-            <Button className="mt-2" block onClick={() => this.handleConfirmAction(actionConfirm)}>Confirm</Button>
-            <Button block className="btn btn-secondary" onClick={this.cancelAction}>Not now</Button>
+            <Button className="mt-2" block onClick={() => this.shakeOffer(offer)}>Confirm</Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelShakeOffer}>Not now</Button>
           </div>
         ),
     }, () => {
@@ -160,18 +243,8 @@ class FeedExchange extends React.PureComponent {
     });
   }
 
-  handleConfirmAction = (actionConfirm) => {
+  shakeOffer = (offer) => {
     this.modalRef.close();
-    actionConfirm();
-  }
-
-  cancelAction = () => {
-    this.modalRef.close();
-  }
-
-  ////////////////////////
-  handleShakeOffer = () => {
-    const {offer, fiatAmount} = this.state;
 
     let listWallet = [];
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -191,7 +264,7 @@ class FeedExchange extends React.PureComponent {
     }
 
     let offerShake = {
-      fiat_amount: fiatAmount.toString(),
+      fiat_amount: '',
       address: address
     };
 
@@ -201,444 +274,47 @@ class FeedExchange extends React.PureComponent {
       METHOD: 'POST',
       data: offerShake,
       successFn: this.handleShakeOfferSuccess,
-      errorFn: this.handleShakeOfferFailed,
+      // errorFn: this.handleShakeOfferFailed,
+      errorFn: this.handleGetListOffersFailed,
     });
   }
 
-  handleShakeOfferSuccess = (data) => {
-    console.log('handleShakeOfferSuccess', data);
+  cancelShakeOffer = () => {
+    this.modalRef.close();
   }
-
-  handleShakeOfferFailed = (e) => {
-    this.handleActionFailed(e);
-  }
-
-  ////////////////////////
-
-  handleCloseOffer = () => {
-    const {offer} = this.state;
-    this.props.closeOffer({
-      BASE_URL: API_URL.EXCHANGE.BASE,
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id,
-      METHOD: 'DELETE',
-      successFn: this.handleCloseOfferSuccess,
-      errorFn: this.handleCloseOfferFailed,
-    });
-  }
-
-  handleCloseOfferSuccess = (data) => {
-    console.log('data', data);
-  }
-
-  handleCloseOfferFailed = (e) => {
-    this.handleActionFailed(e);
-  }
-
-  ////////////////////////
-
-  handleCompleteShakedOffer = () => {
-    const {offer} = this.state;
-
-    this.props.completeShakedOffer({
-      BASE_URL: API_URL.EXCHANGE.BASE,
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.SHAKE,
-      METHOD: 'POST',
-      successFn: this.handleCompleteShakedOfferSuccess,
-      errorFn: this.handleCompleteShakedOfferFailed,
-    });
-  }
-
-  handleCompleteShakedOfferSuccess = (data) => {
-    console.log('data', data);
-  }
-
-  handleCompleteShakedOfferFailed = (e) => {
-    this.handleActionFailed(e);
-  }
-
-  ////////////////////////
-
-  handleCancelShakedOffer = () => {
-    const {offer} = this.state;
-
-    this.props.cancelShakedOffer({
-      BASE_URL: API_URL.EXCHANGE.BASE,
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.SHAKE,
-      METHOD: 'DELETE',
-      successFn: this.handleCancelShakedOfferSuccess,
-      errorFn: this.handleCancelShakedOfferFailed,
-    });
-  }
-
-  handleCancelShakedOfferSuccess = (data) => {
-    console.log('data', data);
-  }
-
-  handleCancelShakedOfferFailed = (e) => {
-    this.handleActionFailed(e);
-  }
-
-  ////////////////////////
-
-  handleWithdrawShakedOffer = () => {
-    const {offer} = this.state;
-
-    this.props.cancelShakedOffer({
-      BASE_URL: API_URL.EXCHANGE.BASE,
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.WITHDRAW,
-      METHOD: 'DELETE',
-      successFn: this.handleWithdrawShakedOfferSuccess,
-      errorFn: this.handleWithdrawShakedOfferFailed,
-    });
-  }
-
-  handleWithdrawShakedOfferSuccess = (data) => {
-    console.log('data', data);
-  }
-
-  handleWithdrawShakedOfferFailed = (e) => {
-    this.handleActionFailed(e);
-  }
-
-  ////////////////////////
-
-
-  getActionButtons = () => {
-    const {intl, status} = this.props;
-    const {offer, userType, fiatAmount} = this.state;
-    let actionButtons = null;
-    let message = '';
-
-    // export const HANDSHAKE_EXCHANGE_STATUS = {
-    //   CREATED: 0,
-    //   ACTIVE: 1,
-    //   CLOSED: 2,
-    //   SHAKING: 3,
-    //   SHAKE: 4,
-    //   COMPLETING: 5,
-    //   COMPLETED: 6
-    // }
-
-    // export const HANDSHAKE_STATUS = {
-    //   INITED: 0,
-    //   SHAKED: 1,
-    //   ACCEPTED: 2,
-    //   REJECTED: 3,
-    //   DONE: 4,
-    //   CANCELLED: 5,
-    //   PENDING: -1,
-    //   TRANSACTION_FAILED: -2,
-    //   NEW: -3,
-    //   BLOCKCHAIN_PENDING: -4,
-    // };
-
-    // console.log('offer.status', status)
-
-    //   nguoi nhan tien mat -> co nut accept
-    //
-    // enum S { Inited, Shaked, Accepted, Rejected, Done, Cancelled }
-    //   cancel transaction co nguoi shaked roi se bi penanty
-    //   phone lay tu profile va user co the edit trong man hinh tao offer
-
-    switch (userType) {
-      case HANDSHAKE_USER.NORMAL: {
-        switch (status) {
-          // case HANDSHAKE_EXCHANGE_STATUS.CREATED: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            message = intl.formatMessage({id: 'handshakeOfferConfirm'}, {
-              type: offer.type === 'buy' ? 'Sell' : 'Buy',
-              amount: new BigNumber(offer.amount).toFormat(6),
-              currency: offer.currency,
-              currency_symbol: getSymbolFromCurrency(offer.fiatCurrency),
-              total: new BigNumber(fiatAmount).toFormat(2),
-            });
-
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleShakeOffer)}>Shake Now</Button>
-              </div>
-            );
-            break;
-          }
-          // case HANDSHAKE_EXCHANGE_STATUS.CLOSED: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          // case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          // case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          // case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          // case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-        }
-        break;
-      }
-      case HANDSHAKE_USER.SHAKED: {
-        switch (status) {
-          // case HANDSHAKE_EXCHANGE_STATUS.CREATED: {
-          //   break;
-          // }
-          // case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-          //   break;
-          // }
-          // case HANDSHAKE_EXCHANGE_STATUS.CLOSED: {
-          //   break;
-          // }
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-            // actionButtons = 'Reject'; // complete: nguoi nhan cash
-            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
-            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleCancelShakedOffer)}>Reject</Button>
-                {offer.type === 'buy' &&
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message2, this.handleCompleteShakedOffer)}>Complete</Button>
-                }
-              </div>
-            );
-
-            break;
-          }
-          // case HANDSHAKE_EXCHANGE_STATUS.COMPLETING: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
-            // actionButtons = 'Withdraw';
-            // nguoi co crypto se withdraw
-            if (offer.type === 'sell') {
-              message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
-              actionButtons = (
-                <div>
-                  <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleWithdrawShakedOffer)}>Withdraw</Button>
-                </div>
-              );
-            }
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-            // title = 'Withdraw';
-            // Ko lam dc gi
-            break;
-          }
-        }
-        break;
-      }
-      case HANDSHAKE_USER.OWNER: {
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_STATUS.CREATED: {
-            // actionButtons = 'Cancel';
-            //call action cancel
-            message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleCloseOffer)}>Cancel</Button>
-              </div>
-            );
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            // actionButtons = 'Cancel';
-            //call action cancel
-            message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleCloseOffer)}>Cancel</Button>
-              </div>
-            );
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.CLOSED: {
-            // title = 'Shake Now';
-            //Ko lam gi dc
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
-            // title = 'Shake Now';
-            //Ko lam gi dc
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-            // actionButtons = 'Reject'; // complete: nguoi nhan cash
-            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
-            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleCancelShakedOffer)}>Reject</Button>
-                {offer.type === 'sell' &&
-                <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message2, this.handleCompleteShakedOffer)}>Complete</Button>
-                }
-              </div>
-            );
-            break;
-          }
-          // case HANDSHAKE_EXCHANGE_STATUS.COMPLETING: {
-          //   title = 'Shake Now';
-          //   break;
-          // }
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
-            // actionButtons = 'Withdraw';
-            // neu la nguoi buy coin thi dc withdraw
-            if (offer.type === 'buy') {
-              actionButtons = (
-                <div>
-                  <Button block className="mt-2" onClick={() => this.confirmShakeOffer(message, this.handleWithdrawShakedOffer)}>Withdraw</Button>
-                </div>
-              );
-            }
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-            // title = 'Withdraw';
-            // Ko lam dc gi
-            break;
-          }
-        }
-        break;
-      }
-    }
-
-    // if (offer.currency === 'BTC') {
-    //   switch (status) {
-    //     case HANDSHAKE_EXCHANGE_STATUS.CREATED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_EXCHANGE_STATUS.CLOSED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_EXCHANGE_STATUS.COMPLETING: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //   }
-    // } else if (offer.currency === 'ETH') {
-    //   switch (status) {
-    //     case HANDSHAKE_STATUS.INITED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.SHAKED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.ACCEPTED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.REJECTED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.DONE: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.CANCELLED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.PENDING: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.TRANSACTION_FAILED: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.NEW: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //     case HANDSHAKE_STATUS.BLOCKCHAIN_PENDING: {
-    //       title = 'Shake Now';
-    //       break;
-    //     }
-    //   }
-    // }
-
-    return actionButtons;
-  }
-
 
   render() {
-    const {initUserId, shakedUserIds, location, state, status, ...props} = this.props;
-    const {offer, userType} = this.state;
-    const {listOfferPrice} = this.props;
+    const {init_user_id, location, state, status, ...props } = this.props;
+
+    console.log('asfad', this.props);
+    const offer = this.state.offer;
     // let geolocation = location.split(',');
-    let fiatAmount = 0;
-    if (listOfferPrice) {
-      let offerPrice = getOfferPrice(listOfferPrice, offer.type, offer.currency);
-      fiatAmount = offer.amount * offerPrice.price || 0;
-      fiatAmount = fiatAmount + fiatAmount * offer.percentage;
-    }
-    this.setState({fiatAmount: fiatAmount});
 
     let modalContent = this.state.modalContent;
-    let actionButtons = this.getActionButtons();
-    // let userType = getHandshakeUserType(initUserId, shakedUserIds);
     return (
       <div>
         <Feed className="feed p-2 text-white" background="#FF2D55">
           <h5>
-            <FormattedMessage id="offerHandShakeContent" values={{
-              offerType: offer.type === 'buy' ? 'Buy' : 'Sell',
-              amount: new BigNumber(offer.amount).toFormat(AMOUNT_DECIMAL), currency: offer.currency,
+            <FormattedMessage id="offerHandShakeContent" values={{ offerType: offer.type === 'buy' ? 'Buy': 'Sell',
+            amount: new BigNumber(offer.amount).toFormat(AMOUNT_DECIMAL), currency: offer.currency,
               currency_symbol: getSymbolFromCurrency(offer.fiatCurrency),
-              total: new BigNumber(fiatAmount).toFormat(PRICE_DECIMAL)
+              total: new BigNumber(offer.fiatAmount || 0).toFormat(PRICE_DECIMAL)
             }}/>
           </h5>
           <div className="media">
-            <img className="mr-1" src={iconLocation} width={22}/>
-            <div className="media-body">
-              <span>status: {status}</span><br></br>
-              <span>userType: {userType}</span>
-              <div>
-                <small>
-                  <FormattedMessage id="offerDistanceContent" values={{
-                    offerType: offer.type === 'buy' ? 'Buyer' : 'Seller',
-                    distance: 100
-                  }}/>
-                </small>
+            <img className="mr-1" src={iconLocation} width={22} />
+              <div className="media-body">
+                {/*<h6 className="mt-0">{offer.contactInfo}</h6>*/}
+                <div>
+                  <small>
+                    <FormattedMessage id="offerDistanceContent" values={{ offerType: offer.type === 'buy' ? 'Buyer': 'Seller',
+                      distance: 100}} />
+                  </small>
+                </div>
               </div>
-            </div>
           </div>
         </Feed>
-        {/*<Button block className="mt-2" onClick={this.confirmShakeOffer}>{titleButton}</Button>*/}
-        {actionButtons}
+        <Button block className="mt-2" onClick={this.confirmShakeOffer}>Shake now</Button>
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
         </ModalDialog>
@@ -654,16 +330,16 @@ FeedExchange.propTypes = {
 
 const mapState = state => ({
   discover: state.discover,
-  listOfferPrice: state.exchange.listOfferPrice,
 });
 
 const mapDispatch = ({
+  getListOffers,
+  getOffer,
   shakeOffer,
   closeOffer,
   completeShakedOffer,
   cancelShakedOffer,
-  getListOfferPrice,
-  withdrawShakedOffer
+  getListOfferPrice
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedExchange));

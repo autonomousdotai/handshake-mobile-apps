@@ -84,7 +84,7 @@ export const fieldRadioButton = customField(({
                 type="button"
                 className="btn"
                 onClick={() => onChange(itemValue)}
-                style={{ color, minWidth: '58px' }}
+                style={{ color }}
               >
                 {text}
               </button>
@@ -94,19 +94,6 @@ export const fieldRadioButton = customField(({
       }
   </span>
 ));
-
-export const fieldNumericInput = customField(({
-  onChange, value, list, name, color = '', step = 0.25
-}) => {
-  const valueFloat = parseFloat(value || 0, 10)
-  return (
-    <span className="btn-group" role="group" style={{ color }}>
-      <button type="button" className="btn bg-white" style={{ color }} onClick={() => onChange(valueFloat - step)}>-</button>
-      <span className="bg-light text-center" style={{ minWidth: '50px', lineHeight: '38px', opacity: 0.6 }}>{value}</span>
-      <button type="button" className="btn bg-white" style={{ color }} onClick={() => onChange(valueFloat + step)}>+</button>
-    </span>
-  )
-});
 
 export const fieldCleave = customField(({
   onChange, onBlur, onFocus, value, propsCleave, className,

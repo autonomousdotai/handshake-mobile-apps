@@ -1,5 +1,5 @@
 export const APP = {
-  HEADER_DEFAULT: '',
+  HEADER_DEFAULT: 'Handshake',
   // store
   AUTH_TOKEN: 'auth_token',
   AUTH_PROFILE: 'auth_profile',
@@ -7,8 +7,6 @@ export const APP = {
   WALLET_CACHE: 'wallet_cache',
   WALLET_DEFAULT: 'wallet_default',
   WALLET_LIST: 'wallet_list',
-  SUBSCRIBE: 'app_subscribe',
-  SUBSCRIBE_ASK: 'app_subscribe_ask',
 };
 
 export const HANDSHAKE_ID = {
@@ -50,8 +48,8 @@ export const FIAT_CURRENCY = 'USD';
 export const FIAT_CURRENCY_SYMBOL = '$';
 
 export const SELL_PRICE_TYPE = [
-  { value: 'fix', text: 'Fix now' },
-  { value: 'flexible', text: 'Update on shake' },
+  { value: 'fix', text: 'Fix' },
+  { value: 'flexible', text: 'Flexible' },
 ];
 
 export const SELL_PRICE_TYPE_DEFAULT = 'fix';
@@ -77,7 +75,6 @@ export const API_URL = {
     GET_USER_TRANSACTION: 'user/transactions', // {path: '/user/transactions', method: 'get'},
     OFFERS: 'offers',
     SHAKE: 'shake',
-    WITHDRAW: 'withdraw',
   },
   SEED: {
     BASE: 'seed',
@@ -117,36 +114,3 @@ export const HANDSHAKE_STATUS_NAME = {
   [HANDSHAKE_STATUS.NEW]: 'New',
   [HANDSHAKE_STATUS.BLOCKCHAIN_PENDING]: 'Blockchain Pending',
 };
-
-export const HANDSHAKE_EXCHANGE_STATUS = {
-  CREATED: 0,
-  ACTIVE: 1,
-  CLOSED: 2,
-  SHAKING: 3,
-  SHAKE: 4,
-  COMPLETED: 5,
-  WITHDRAW: 6
-};
-
-export const HANDSHAKE_EXCHANGE_STATUS_NAME = {
-  [HANDSHAKE_EXCHANGE_STATUS.CREATED]: 'created',
-  [HANDSHAKE_EXCHANGE_STATUS.ACTIVE]: 'active',
-  [HANDSHAKE_EXCHANGE_STATUS.CLOSED]: 'closed',
-  [HANDSHAKE_EXCHANGE_STATUS.SHAKING]: 'shaking',
-  [HANDSHAKE_EXCHANGE_STATUS.SHAKE]: 'shake',
-  // [HANDSHAKE_EXCHANGE_STATUS.COMPLETING]: 'completing',
-  [HANDSHAKE_EXCHANGE_STATUS.COMPLETED]: 'completed',
-  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAW]: 'withdraw',
-};
-
-export const HANDSHAKE_USER  = {
-  NORMAL: 0,
-  OWNER: 1,
-  SHAKED: 2,
-};
-
-export const HANSHAKE_USER_NAME = {
-  [HANDSHAKE_USER.NORMAL]: 'NORMAL',
-  [HANDSHAKE_USER.OWNER]: 'OWNER',
-  [HANDSHAKE_USER.SHAKED]: 'SHAKED',
-}

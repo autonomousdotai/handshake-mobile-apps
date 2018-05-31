@@ -18,7 +18,7 @@ import Tabs from '@/components/handshakes/exchange/components/Tabs';
 import NoData from '@/components/core/presentation/NoData';
 // style
 import './Discover.scss';
-import { getListOfferPrice } from '../../reducers/exchange/action';
+import {getListOfferPrice} from "../../reducers/exchange/action";
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -34,7 +34,7 @@ class DiscoverPage extends React.Component {
       handshakeIdActive: '',
       tabIndexActive: 1,
     };
-    // this.props.loadDiscoverList({ PATH_URL: API_URL.DISCOVER.BASE });
+    this.props.loadDiscoverList({ PATH_URL: API_URL.DISCOVER.BASE });
     // bind
     this.clickCategoryItem = this.clickCategoryItem.bind(this);
     this.clickTabItem = this.clickTabItem.bind(this);
@@ -47,9 +47,9 @@ class DiscoverPage extends React.Component {
 
   async componentDidMount() {
     this.getListOfferPrice();
-    // this.intervalCountdown = setInterval(() => {
-    //   this.getListOfferPrice();
-    // }, 30000);
+    this.intervalCountdown = setInterval(() => {
+      this.getListOfferPrice();
+    }, 30000);
   }
 
   getListOfferPrice = () => {
@@ -57,23 +57,15 @@ class DiscoverPage extends React.Component {
       BASE_URL: API_URL.EXCHANGE.BASE,
       PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
       qs: {fiat_currency: 'VND'},
-      successFn: this.handleGetPriceSuccess,
-      errorFn: this.handleGetPriceFailed,
+      // successFn: this.handleGetPriceSuccess,
+      // errorFn: this.handleGetPriceFailed,
     });
   }
 
-  handleGetPriceSuccess = () => {
-    this.props.loadDiscoverList({ PATH_URL: API_URL.DISCOVER.BASE });
-  }
-
-  handleGetPriceFailed = () => {
-    this.props.loadDiscoverList({ PATH_URL: API_URL.DISCOVER.BASE });
-  }
-
   componentWillUnmount() {
-    // if (this.intervalCountdown) {
-    //   clearInterval(this.intervalCountdown);
-    // }
+    if (this.intervalCountdown) {
+      clearInterval(this.intervalCountdown);
+    }
   }
 
   get getHandshakeList() {
@@ -94,7 +86,6 @@ class DiscoverPage extends React.Component {
     }
   }
 
-  // TODO: search feed
   searchChange(query) {
     clearTimeout(this.searchTimeOut);
     this.searchTimeOut = setTimeout(() => {
@@ -162,7 +153,7 @@ class DiscoverPage extends React.Component {
               />
               { tabIndexActive === 1 && (
                 <div className="feed-wrapper">
-                  <FeedCreditCard {...this.props} ipInfo={this.state.ipInfo} />
+                  <FeedCreditCard {...this.props} ipInfo={this.state.ipInfo}/>
                 </div>)
               }
             </div>
@@ -189,7 +180,7 @@ const mapState = state => ({
 
 const mapDispatch = ({
   loadDiscoverList,
-  getListOfferPrice,
+  getListOfferPrice
 });
 
 export default connect(mapState, mapDispatch)(DiscoverPage);

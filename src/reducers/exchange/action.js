@@ -1,5 +1,5 @@
 // import { BASE_API } from '@/config';
-import { createAPI } from '@/reducers/action';
+import {createAPI} from '@/reducers/action';
 
 export const EXCHANGE_ACTIONS = {
   GET_CRYPTO_PRICE: 'GET_CRYPTO_PRICE',
@@ -25,7 +25,6 @@ export const EXCHANGE_ACTIONS = {
   SHAKE_OFFER: 'SHAKE_OFFER',
   COMPLETE_SHAKE_OFFER: 'COMPLETE_SHAKE_OFFER',
   CANCEL_SHAKE_OFFER: 'CANCEL_SHAKE_OFFER',
-  WITHDRAW_SHAKE_OFFER: 'WITHDRAW_SHAKE_OFFER',
 
   GET_IP_INFORM: 'GET_IP_INFORM',
 };
@@ -60,6 +59,5 @@ export const completeShakedOffer = createAPI(EXCHANGE_ACTIONS.COMPLETE_SHAKE_OFF
 
 export const cancelShakedOffer = createAPI(EXCHANGE_ACTIONS.CANCEL_SHAKE_OFFER);
 
-export const withdrawShakedOffer = createAPI(EXCHANGE_ACTIONS.WITHDRAW_SHAKE_OFFER);
 
 

@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.49",
-    "@firebase/app-types": "^0.3.2",
     "axios": "^0.18.0",
     "bignumber.js": "^7.2.1",
     "bip39": "^2.5.0",
@@ -111,7 +110,6 @@
     "raw-loader": "github:webpack-contrib/raw-loader#80be65e7968915c0b5d0e47a5b9b59497bb82df9",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
-    "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack": "^4.9.1",
     "webpack-cli": "^2.1.4",
     "webpack-dev-server": "^3.1.4",

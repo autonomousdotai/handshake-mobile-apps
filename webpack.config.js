@@ -10,7 +10,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const dotenv = require('dotenv');
 
@@ -74,19 +73,9 @@ const development = {
 const production = {
   optimization: {
     minimize: true,
-    minimizer: [
-      new UglifyJsPlugin({
-        uglifyOptions: {
-          compress: {
-            drop_console: true,
-          },
-        },
-      }),
-    ],
     splitChunks: {
       chunks: 'all',
     },
-    noEmitOnErrors: true,
   },
   module: {
     rules: [
@@ -157,10 +146,9 @@ module.exports = function webpackConfig(env, argv) {
       plugins: [
         new CleanWebpackPlugin(['dist']),
         new webpack.DefinePlugin({
-          'process.env.ENV': JSON.stringify(argv.mode),
-          'process.env.ROOT': JSON.stringify(process.env.ROOT),
-          'process.env.BASE_URL': JSON.stringify(process.env.BASE_URL),
-          'process.env.isProduction': JSON.stringify(isProduction),
+          'process.env.ENV': `"${argv.mode}"`,
+          'process.env.ROOT': `"${process.env.ROOT}"`,
+          'process.env.BASE_URL': `"${process.env.BASE_URL}"`,
         }),
         new webpack.ProvidePlugin({
           $: 'jquery',

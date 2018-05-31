@@ -2,9 +2,7 @@
 import { required, minValue } from '@/components/core/form/validation';
 
 export const validate = (values, state, props) => {
-  const {
-    cc_number, cc_expired, cc_cvc, currency, amount,
-  } = values;
+  const { cc_number, cc_expired, cc_cvc, currency, amount } = values;
   const errors = {};
   const { userProfile } = props;
   const { isNewCCOpen } = state;

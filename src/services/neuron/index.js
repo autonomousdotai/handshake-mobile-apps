@@ -94,7 +94,7 @@ class Neuron {
       const chainId = await web3.eth.net.getId();
       console.log('gasPrice->', parseInt(gasPrice));
       console.log('estimatedGas->', parseInt(estimatedGas));
-      console.log('chainid ->', chainId);
+      console.log('chainid ->', chainId);      
       const rawTx = {
         nonce: web3.utils.toHex(nonce),
         gasPrice: web3.utils.toHex(gasPrice),

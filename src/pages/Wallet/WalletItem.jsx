@@ -39,7 +39,7 @@ class WalletItem extends React.Component {
         const iconProtected = !wallet.protected ? iconWarning : iconSafe;
         
         return  ( 
-            <Col sm={6} md={6} xs={6} className="feed-wrapper">
+            <Col sm={6} md={6} xs={6} key={wallet.address+wallet.network} className="feed-wrapper">
               <div className={this.getBgClass(wallet)}>
               
                 <div className="name">{wallet.title}
