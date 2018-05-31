@@ -212,7 +212,6 @@ class FeedCreditCard extends React.Component {
     }
 
     const { callbackSuccess } = this.props;
-
     this.modalRef.close();
 
     if (callbackSuccess) {

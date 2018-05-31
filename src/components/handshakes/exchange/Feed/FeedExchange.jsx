@@ -11,8 +11,8 @@ import Feed from "@/components/core/presentation/Feed/Feed";
 import Button from "@/components/core/controls/Button/Button";
 import {BigNumber} from 'bignumber.js';
 import {AMOUNT_DECIMAL, PRICE_DECIMAL} from "@/constants";
-import {API_URL, HANDSHAKE_EXCHANGE_STATUS, HANDSHAKE_USER} from "../../../../constants";
-import ModalDialog from "../../../core/controls/ModalDialog/ModalDialog";
+import {API_URL, HANDSHAKE_EXCHANGE_STATUS, HANDSHAKE_USER} from "@/constants";
+import ModalDialog from "@/components/core/controls/ModalDialog";
 import {connect} from "react-redux";
 import {
   cancelShakedOffer,

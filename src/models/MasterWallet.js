@@ -61,6 +61,15 @@ export class MasterWallet{
         console.log("masterWallet saved: ", masterWallet);
         localStore.save(MasterWallet.KEY, masterWallet);
     }
+
+    // Restore wallets:
+    static RestoreMasterWallet(masterWalletDataString){
+        // todo: need verify invalid data:
+        localStore.save(MasterWallet.KEY, masterWalletDataString);
+        let masterWallet = JSON.parse(masterWalletDataString);        
+        localStore.save(MasterWallet.KEY, masterWallet);
+        return masterWallet;
+    }
     
     // Get list wallet from store local:
     static getMasterWallet(){
@@ -94,6 +103,7 @@ export class MasterWallet{
 
     // Get list wallet from store local:
     static getWalletDefault(coinName=''){
+                
         let wallets = localStore.get(MasterWallet.KEY);   
         
         if (wallets == false) return false;
@@ -104,9 +114,8 @@ export class MasterWallet{
             if (coinName != ''){
                 var wallet = false;
                 wallets.forEach(walletJson => {
-                    if (wallet.default && wallet==walletJson.name){
-                        wallet = MasterWallet.convertObject(walletJson);
-                        throw BreakException;
+                    if (walletJson.default && coinName==walletJson.name){
+                        wallet = MasterWallet.convertObject(walletJson);                        
                     }
                 })
                 return wallet;

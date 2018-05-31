@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 import satoshi from 'satoshi-bitcoin';
 import { rule } from 'postcss';
@@ -53,9 +52,6 @@ export class Bitcoin extends Wallet{
   }
 
     async getBalance() {
-
-      this.setDefaultNetwork();
-
       var url = this.network + '/addr/' + this.address + '/balance';
 
       var response = await axios.get(url);
@@ -116,7 +112,7 @@ export class Bitcoin extends Wallet{
         }
         else{
           // need update error code:
-            return "You don't have enough Satoshis to cover the miner fee.";            
+            return "You don't have enough amount.";            
         }
       }
     }
@@ -192,4 +188,16 @@ export class Bitcoin extends Wallet{
      }
       return false;
    }
+
+   async getTransactionHistory(){
+     //txs/?address=muU86kcQGfJUydQ9uZmfJwcDRb1H5PQuzr
+    let url = this.network +'/txs/?address=' + this.address;
+    let response = await axios.get(url);
+
+    if (response.status == 200){
+      console.log(response.data)
+      
+    }
+   }
+
 }

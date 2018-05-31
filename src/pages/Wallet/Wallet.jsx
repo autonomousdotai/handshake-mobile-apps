@@ -106,6 +106,8 @@ class Wallet extends React.Component {
 
     let listWallet = await MasterWallet.getMasterWallet();
 
+    // console.log("default", MasterWallet.getWalletDefault("ETH"))
+
     if (listWallet == false){
       listWallet = await MasterWallet.createMasterWallet();
     }
@@ -386,6 +388,10 @@ class Wallet extends React.Component {
     });
   }
 
+  afterWalletFill = () =>{
+    this.modalFillRef.close();
+  }
+
   render() {
     const {intl, userProfile, cryptoPrice, amount, userCcLimit, ccLimits} = this.props;    
     return (
@@ -422,7 +428,7 @@ class Wallet extends React.Component {
         </Modal>
 
         <Modal title="Fill up" onRef={modal => this.modalFillRef = modal}>
-          <FeedCreditCard buttonTitle="Send" />
+          <FeedCreditCard buttonTitle="Send" callbackSuccess={this.afterWalletFill} />
         </Modal>
 
         {/* Modal for Backup wallets : */}
