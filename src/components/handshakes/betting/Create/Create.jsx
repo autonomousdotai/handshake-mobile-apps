@@ -19,14 +19,12 @@ import Input from '@/components/core/forms/Input/Input';
 import DatePicker from '@/components/handshakes/betting/Create/DatePicker';
 import { InputField } from '../form/customField';
 import {MasterWallet} from '@/models/MasterWallet';
-
+import { BettingHandshake } from '@/services/neuron';
 // self
 import './Create.scss';
 
-import Neuron from '@/services/neuron';
 
-const neuron = new Neuron(4);
-
+const bettinghandshake = new BettingHandshake(MasterWallet.getWalletDefault('ETH')?.chainId);
 const nameFormBettingCreate = 'bettingCreate';
 const BettingCreateForm = createForm({
   propsReduxForm: {
@@ -171,7 +169,7 @@ class BettingCreate extends React.PureComponent {
           const {values} = this.state;
           values[key] = selectedDate.format();
           this.setState({values}, ()=>console.log(values));
-            
+
         }}
         inputProps={{
           readOnly: true,

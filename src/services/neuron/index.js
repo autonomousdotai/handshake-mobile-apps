@@ -3,7 +3,7 @@ import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
 // import Token from './neuron-token';
 // import Handshake from './neuron-handshake';
-// import BettingHandshake from './neuron-bettinghandshake';
+export { default as BettingHandshake } from './neuron-bettinghandshake';
 
 const BN = Web3.utils.BN;
 
@@ -94,7 +94,7 @@ class Neuron {
       const chainId = await web3.eth.net.getId();
       console.log('gasPrice->', parseInt(gasPrice));
       console.log('estimatedGas->', parseInt(estimatedGas));
-      console.log('chainid ->', chainId);      
+      console.log('chainid ->', chainId);
       const rawTx = {
         nonce: web3.utils.toHex(nonce),
         gasPrice: web3.utils.toHex(gasPrice),
