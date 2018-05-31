@@ -16,4 +16,4 @@ if (!String.prototype.format) {
 // require('../testing/test_handshake_blockchain');
 // require('../testing/web3_test');
 
-ReactDOM.render(<App />, document.getElementById(`${process.env.ROOT}`));
+ReactDOM.render(<App />, document.getElementById('app'));

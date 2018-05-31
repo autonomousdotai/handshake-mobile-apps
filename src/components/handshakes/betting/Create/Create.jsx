@@ -122,7 +122,10 @@ class BettingCreate extends React.PureComponent {
 
     //const fromAddress = "0x54CD16578564b9952d645E92b9fa254f1feffee9";
     const fromAddress = address;
-    this.initHandshake(extraParams, fromAddress);
+    //this.initHandshake(extraParams, fromAddress);
+    debugger
+    history.push(URL.HANDSHAKE_DISCOVER);
+  
   }
 
   get inputList() {

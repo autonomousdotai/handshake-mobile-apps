@@ -210,8 +210,15 @@ class FeedCreditCard extends React.Component {
     if (this.timeoutClosePopup) {
       clearTimeout(this.timeoutClosePopup);
     }
-    this.modalRef.close();
-    this.props.history.push(URL.HANDSHAKE_ME);
+
+    const { callbackSuccess } = this.props;
+
+    if (callbackSuccess) {
+      callbackSuccess();
+    } else {
+      this.modalRef.close();
+      this.props.history.push(URL.HANDSHAKE_ME);
+    }
   }
 
   handleCreateCCOrderFailed = (e) => {
@@ -234,30 +241,41 @@ class FeedCreditCard extends React.Component {
 
   handleBuyFailed = () => {
     this.modalRef.close();
+
+    const { callbackFailed } = this.props;
+
+    if (callbackFailed) {
+      callbackFailed();
+    }
   }
 
   handleSubmit = (values) => {
-    // console.log('handleSubmit', values);
-    const {userProfile: {creditCard}} = this.props;
-
-    let cc = {};
-
-    //Use existing credit card
-    if (creditCard.ccNumber.length > 0 && !this.state.isNewCCOpen) {
-      cc = {token: "true"};
+    const { handleSubmit } = this.props;
+    if (handleSubmit) {
+      handleSubmit(values);
     } else {
-      const {cc_number, cc_expired, cc_cvc} = values;
-      cc = {
-        cc_num: cc_number && cc_number.trim().replace(/ /g, ''),
-        cvv: cc_cvc && cc_cvc.trim().replace(/ /g, ''),
-        expiration_date: cc_expired && cc_expired.trim().replace(/ /g, ''),
-        token: "",
-        save: "true"
-      };
-    }
+      // console.log('handleSubmit', values);
+      const {userProfile: {creditCard}} = this.props;
 
-    // console.log('handleSubmit', cc);
-    this.handleCreateCCOrder(cc);
+      let cc = {};
+
+      //Use existing credit card
+      if (creditCard.ccNumber.length > 0 && !this.state.isNewCCOpen) {
+        cc = {token: "true"};
+      } else {
+        const {cc_number, cc_expired, cc_cvc} = values;
+        cc = {
+          cc_num: cc_number && cc_number.trim().replace(/ /g, ''),
+          cvv: cc_cvc && cc_cvc.trim().replace(/ /g, ''),
+          expiration_date: cc_expired && cc_expired.trim().replace(/ /g, ''),
+          token: "",
+          save: "true"
+        };
+      }
+
+      // console.log('handleSubmit', cc);
+      this.handleCreateCCOrder(cc);
+    }
   }
 
   onAmountChange = (e) => {
@@ -299,7 +317,7 @@ class FeedCreditCard extends React.Component {
   // }
 
   render() {
-    const {intl, userProfile, cryptoPrice, amount, userCcLimit, ccLimits} = this.props;
+    const {intl, userProfile, cryptoPrice, amount, userCcLimit, ccLimits, buttonTitle} = this.props;
 
     const fiatCurrency = '$';
     const total = cryptoPrice && cryptoPrice.fiatAmount;
@@ -307,6 +325,9 @@ class FeedCreditCard extends React.Component {
     let modalContent = this.state.modalContent;
 
     const curLevel = userCcLimit ? userCcLimit.level : 1;
+
+    let newTo = 0
+
     return (
       <div>
         <div className='row'>
@@ -317,27 +338,32 @@ class FeedCreditCard extends React.Component {
                   <div style={{ color: 'white' }}>
                     {
                       amount && (
-                        <div>
+                        <div style={{ background: '#50af4f' }} className="pt-2 px-2 rounded mb-2">
                           {
                             ccLimits.map((ccLimit, index) => {
-                              const { level, limit } = ccLimit
+                              const { level, limit, duration } = ccLimit
                               const isActive = curLevel === level
+
+                              let text = ''
+                              let from = newTo + 1
+                              newTo += duration
+                              let to = newTo
+                              if (index === ccLimits.length - 1) {
+                                text = `Every ${duration} days`
+                              } else {
+                                text = `Day ${from}-${to}`
+                              }
+
                               return (
-                                <LevelItem key={index} style={{ marginLeft: index > 0 ? '8px' : '', opacity: isActive ? '' : 0.6 }}>
-                                  <div>
-                                  <span
-                                    className='rounded-circle bg-white badge'
-                                    style={{ color: mainColor, width: 18 }}
-                                  >
-                                    {level}
-                                  </span>
+                                <LevelItem key={index} style={{ margin: '0 8px 8px 0', opacity: isActive ? '' : 0.6 }}>
+                                  <div className="rounded p-1" style={{ lineHeight: 1.2, background: isActive ? '#FF3B30' : '#84c683' }}>
+                                    {text}
                                   </div>
-                                  <div><small>Can buy up to {fiatCurrency}{limit}</small></div>
+                                  <div><small>Up to {fiatCurrency}{limit}</small></div>
                                 </LevelItem>
                               )
                             })
                           }
-                          <hr className="my-2" />
                         </div>
                       )
                     }
@@ -380,7 +406,7 @@ class FeedCreditCard extends React.Component {
                     }
                   </div>
                 </Feed>
-                <Button block type="submit"><FormattedMessage id="shakeNow"/></Button>
+                <Button block type="submit">{buttonTitle && buttonTitle || <FormattedMessage id="shakeNow"/>} </Button>
               </FormCreditCard>
             </div>
           </div>

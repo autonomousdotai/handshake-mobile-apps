@@ -23,7 +23,7 @@ class Offer {
       updatedAt: data.updated_at || '',
 
       contactPhone: data.contact_phone || '',
-      percentage: data.percentage || ''
+      percentage: data.percentage || '',
     };
   }
 }
