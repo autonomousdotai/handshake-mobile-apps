@@ -2,15 +2,6 @@
 
 ## Quick Overview
 
-```sh
-cd mobile-handshake
-yarn
-yarn start
-```
-
-Then open [http://0.0.0.0:8080/](http://0.0.0.0:8080/) to see your app.<br>
-
-
 ```
 handshake-mobile-apps
   ├── assets

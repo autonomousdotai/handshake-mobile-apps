@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MainHeader from '@/components/Header/MainHeader';
 import Navigation from '@/components/core/controls/Navigation/Navigation';
-import Alert from '@/components/core/presentation/Alert';
 
 class MainLayout extends React.Component {
   static propTypes = {
@@ -18,7 +17,6 @@ class MainLayout extends React.Component {
           {this.props.children}
         </div>
         <Navigation location={this.props.location} />
-        <Alert />
       </div>
     );
   }

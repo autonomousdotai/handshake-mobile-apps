@@ -6,15 +6,13 @@ export default {
   askUsingCreditCard: 'for {fiatCurrency}{total} using a credit card?',
   change: 'Change',
   ccNumber: 'Number',
-  ccExpire: 'Expire',
+  ccExpiry: 'Expiry',
   ccCVC: 'CVC',
 
   required: 'Required',
-  ccExpireTemplate: 'MM/YY',
+  ccExpiryTemplate: 'MM/YY',
   securityCode: 'Security Code',
   shakeNow: 'Shake Now',
-  offerHandShakeContent: '{offerType} {amount} {currency} for {currency_symbol}{total} in cash',
+  offerHandShakeContent: '{offerType} {amount} {currency} for ${total} in cash',
   offerDistanceContent: '{offerType} is {distance} meters away',
-  createOfferConfirm: 'You are about to {type} {amount} {currency} for {currency_symbol}{total}',
-  handshakeOfferConfirm: 'You are about to {type} {amount} {currency} for {currency_symbol}{total}',
 };

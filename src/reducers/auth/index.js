@@ -2,19 +2,12 @@ import { APP } from '@/constants';
 import local from '@/services/localStore';
 import { ACTIONS } from './action';
 
-const authReducter = (state = {
-  token: local.get(APP.AUTH_TOKEN),
-  profile: local.get(APP.AUTH_PROFILE),
-  isLogged: false,
-}, action) => {
+const authReducter = (state = {}, action) => {
   switch (action.type) {
     case `${ACTIONS.AUTH_SIGNUP}_SUCCESS`:
-      local.save(APP.AUTH_TOKEN, action.payload.data.passpharse);
-      return { ...state, token: action.payload.data.passpharse, isLogged: true };
+      local.save(APP.TOKEN, action.payload.data.passpharse);
+      return { state };
 
-    case `${ACTIONS.AUTH_FETCH}_SUCCESS`:
-      local.save(APP.AUTH_PROFILE, action.payload.data);
-      return { ...state, profile: action.payload.data, isLogged: true };
     default:
       return state;
   }

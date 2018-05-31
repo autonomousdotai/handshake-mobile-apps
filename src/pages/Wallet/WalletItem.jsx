@@ -1,11 +1,10 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
-import {Bitcoin} from '@/models/Bitcoin.js' 
+import {Bitcoin} from '@/models/Bitcoin.1.js' 
 import {Ethereum} from '@/models/Ethereum.js' 
 import dontIcon from '@/assets/images/icon/3-dot-icon.svg';
 import iconSafe from '@/assets/images/icon/icon-safe.svg';
 import iconWarning from '@/assets/images/icon/icon-warning.svg';
-import iconChecked from '@/assets/images/icon/icon-checked.svg';
 
 import PropTypes from 'prop-types';
 import './Wallet.scss';
@@ -37,14 +36,13 @@ class WalletItem extends React.Component {
     render(){ 
         const {wallet, onMoreClick, onWarningClick} =  this.props;   
         const iconProtected = !wallet.protected ? iconWarning : iconSafe;
-        
+        console.log("wallet object ==> ",wallet, wallet.network);     
+        console.log(`wallet balance ==> ${wallet["balance"]} --- ${wallet['network']}`);   
         return  ( 
             <Col sm={6} md={6} xs={6} key={wallet.address+wallet.network} className="feed-wrapper">
               <div className={this.getBgClass(wallet)}>
-              
-                <div className="name">{wallet.title}
-                {wallet.default ? <img className="iconDefault" src={iconChecked}/> : ''}
-                </div> 
+                
+                <p className="name">{wallet.title}</p>
                 <p className="balance"> {wallet.balance} {wallet.name} </p>
                 <img className="more" src={dontIcon} onClick={onMoreClick}/> 
                 <img className="safe" src={iconProtected} onClick={onWarningClick}/>          
