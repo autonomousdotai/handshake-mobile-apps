@@ -1,0 +1,59 @@
+@import './src/styles/style';
+.beeting-detail {
+  width: 100%;
+  .info {
+    background: $radical-red;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    width: 80%;
+    margin: 0 auto;
+    padding-top: rem-calc(37px);
+    p {
+      margin: 0;
+      color: $white;
+    }
+    .ninjas {
+      width: 33.33%;
+      padding: 20px 0;
+      font-weight: $medium;
+      font-size: rem-calc(20px);
+      color: $white;
+      text-align: center;
+      background: #fd5574;
+      border-radius: 6px;
+    }
+    .versus {
+      width: 33.33%;
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .line {
+    width: 80%;
+    margin: 23px auto 33px auto;
+    border-width: 3px;
+    background: $white;
+    opacity: 0.3;
+  }
+  .content {
+    padding-bottom: 10vh;
+    text-align: center;
+    font-weight: $medium;
+    font-size: rem-calc(17px);
+    color: $white;
+    .title {
+      font-size: rem-calc(28px);
+    }
+    .font-size-20 {
+        font-size: rem-calc(20px);
+    }
+  }
+  .btn-shake {
+    margin-top: 9px;
+  }
+}

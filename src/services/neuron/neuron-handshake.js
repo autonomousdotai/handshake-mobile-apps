@@ -1,16 +1,18 @@
 import Web3 from 'web3';
-import configs from '../../configs';
+import configsAll from '../../configs';
 
+let configs = {};
 export default class Handshake {
   constructor(_neuron) {
     const web3 = _neuron.getWeb3();
+    this.neuron = _neuron;
+    this.web3 = web3;
     const compiled = _neuron.getCompiled('HandshakeProtocol');
+    configs = configsAll.network[_neuron.chainId];
     this.handshakeInstance = new web3.eth.Contract(
       compiled.abi,
       configs.handshakeAddress,
     );
-    this.neuron = _neuron;
-    this.web3 = web3;
   }
   init = (
     address,

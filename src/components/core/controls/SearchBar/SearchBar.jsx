@@ -41,16 +41,17 @@ class SearchBar extends React.PureComponent {
     });
   }
 
+  handleInputSearchChange(event, { newValue, method }) {
+    this.value = newValue;
+    this.props.hasOwnProperty('onInputSearchChange') && this.props.onInputSearchChange(newValue);
+  }
+
   getSuggestionValue(suggestion) {
     return suggestion.name;
   }
 
   renderSuggestion(suggestion) {
     return <span className="">{suggestion.name}</span>;
-  }
-
-  handleInputSearchChange(event, { newValue, method }) {
-    this.value = newValue;
   }
 
   getSuggestions(value) {
@@ -157,7 +158,8 @@ SearchBar.propTypes = {
   onSuggestionSelected: PropTypes.func.isRequired,
   onSuggestionsFetchRequested: PropTypes.func,
   onSuggestionsClearRequested: PropTypes.func,
-  getSuggestionValue: PropTypes.func
+  getSuggestionValue: PropTypes.func,
+  onInputSearchChange: PropTypes.func,
 };
 
 SearchBar.defaultProps = {

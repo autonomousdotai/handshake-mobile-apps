@@ -9,19 +9,19 @@ const CATEGORIES = [{
   id: HANDSHAKE_ID.BETTING,
   name: 'Betting',
   image: chipSVG,
-  priority: 0
+  priority: 0,
 },
 {
   id: HANDSHAKE_ID.SEED,
   name: 'Seed',
   image: handPlantingSVG,
-  priority: 1
+  priority: 1,
 },
 {
   id: HANDSHAKE_ID.EXCHANGE,
   name: 'Exchange',
   image: exchangeSVG,
-  priority: 2
+  priority: 2,
 },
 // {
 //   name: 'Bazaar',

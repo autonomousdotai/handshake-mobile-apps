@@ -26,6 +26,10 @@ function appReducter(state = {
   headerBack: false,
   isNotFound: false,
   headerRightContent: null,
+  configAlert: {
+    isShow: false,
+    message: '',
+  },
 
 }, action) {
   switch (action.type) {
@@ -135,6 +139,18 @@ function appReducter(state = {
       return {
         ...state,
         headerRightContent: null,
+      };
+
+    case APP_ACTION.SHOW_ALERT:
+      return {
+        ...state,
+        configAlert: { ...action.payload },
+      };
+
+    case APP_ACTION.HIDE_ALERT:
+      return {
+        ...state,
+        configAlert: { ...action.payload },
       };
 
     default:

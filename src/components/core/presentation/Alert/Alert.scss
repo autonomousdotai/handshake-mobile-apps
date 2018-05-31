@@ -1,0 +1,11 @@
+@import './src/styles/var';
+
+.alerts {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: $app-width;
+    margin: 0 auto;
+    z-index: $z-index;
+}

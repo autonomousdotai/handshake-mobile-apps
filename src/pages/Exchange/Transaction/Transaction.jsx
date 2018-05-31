@@ -17,7 +17,7 @@ class Transaction extends React.Component {
   }
 
   componentDidMount() {
-    this.props.getUserTransaction({PATH_URL: API_URL.EXCHANGE.GET_USER_TRANSACTION, headers: {'Custom-Uid': 'megalodon'}});
+    this.props.getUserTransaction({ BASE_URL: API_URL.EXCHANGE.BASE, PATH_URL: API_URL.EXCHANGE.GET_USER_TRANSACTION});
   }
 
   feedHtml = () => {

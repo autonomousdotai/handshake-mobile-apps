@@ -16,6 +16,8 @@ export const APP_ACTION = {
   NOT_FOUND_REMOVE: 'NOT_FOUND_REMOVE',
   HEADER_RIGHT_SET: 'HEADER_RIGHT_SET',
   HEADER_RIGHT_REMOVE: 'HEADER_RIGHT_REMOVE',
+  SHOW_ALERT: 'SHOW_ALERT',
+  HIDE_ALERT: 'HIDE_ALERT',
 };
 
 // Loading
@@ -30,6 +32,8 @@ export const showModal = modalContent => ({
 export const hideModal = () => ({ type: APP_ACTION.CLOSE_MODAL });
 
 // Alert
+export const showAlert = config => ({ type: APP_ACTION.SHOW_ALERT, payload: { isShow: true, ...config } });
+export const hideAlert = config => ({ type: APP_ACTION.HIDE_ALERT, payload: { isShow: false, ...config } });
 
 // Header
 export const setHeaderTitle = title => ({ type: APP_ACTION.HEADER_TITLE_SET, payload: title });

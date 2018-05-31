@@ -11,7 +11,7 @@ export const URL = {
 
   HANDSHAKE_DISCOVER: '/discover',
   HANDSHAKE_DISCOVER_INDEX: '/discover',
-  HANDSHAKE_DISCOVER_DETAIL: '/discover/:slug',
+  HANDSHAKE_DISCOVER_DETAIL: '/discover/:id',
 
   HANDSHAKE_CHAT: '/chat',
   HANDSHAKE_CHAT_INDEX: '/chat',

@@ -7,7 +7,8 @@ import CreatePromise from '@/components/handshakes/promise/Create';
 import CreateBetting from '@/components/handshakes/betting/Create';
 import CreateExchange from '@/components/handshakes/exchange/Create';
 import CreateSeed from '@/components/handshakes/seed/Create';
-import { handShakeList } from '@/data/shake';
+// style
+import './Create.scss';
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: CreatePromise,
@@ -45,10 +46,14 @@ class Create extends React.Component {
     const CreateComponent = maps[this.state.seletedId];
 
     return (
-      <Grid>
+      <Grid className="create">
         <Row>
-          <Col md={12} xs={12}>
+          <Col md={12}>
             <SearchBar suggestions={this.handShakeList} onSuggestionSelected={this.handshakeChange} />
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12} className="margin-top-32">
             <CreateComponent />
           </Col>
         </Row>

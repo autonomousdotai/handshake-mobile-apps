@@ -61,3 +61,7 @@ $font-size-h4:            ($font-size-base * 1.25) !default;
 $font-size-h5:            ($font-size-base * 1.125) !default;
 $font-size-h6:            ($font-size-base * 1.125) !default;
 $font-size-caption:       ($font-size-base * 0.875) !default;
+/*
+* Utilities
+* ======================================================================== */
+$z-index: 1050 !default; // default of boostrap

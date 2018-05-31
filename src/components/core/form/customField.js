@@ -2,6 +2,7 @@ import React from 'react';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap';
 import Cleave from 'cleave.js/react';
 import cx from 'classnames';
+import './styles.scss';
 
 const customField = element => ({
   input,
@@ -62,6 +63,37 @@ export const fieldDropdown = customField(({
     </UncontrolledButtonDropdown>
   );
 });
+
+export const fieldRadioButton = customField(({
+  onChange, value, list, name, color = '',
+}) => (
+  <span>
+    {
+        list.map((item, index) => {
+          const { value: itemValue, text } = item;
+          const isChecked = itemValue === value;
+          return (
+            <div key={index} className="radio-container">
+              <input
+                type="radio"
+                name={name}
+                checked={isChecked}
+                readOnly
+              />
+              <button
+                type="button"
+                className="btn"
+                onClick={() => onChange(itemValue)}
+                style={{ color }}
+              >
+                {text}
+              </button>
+            </div>
+          );
+        })
+      }
+  </span>
+));
 
 export const fieldCleave = customField(({
   onChange, onBlur, onFocus, value, propsCleave, className,

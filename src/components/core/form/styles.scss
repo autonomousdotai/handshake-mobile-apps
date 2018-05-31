@@ -1,0 +1,25 @@
+.radio-container {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    &:checked ~ button {
+      background-color: #ffffff;
+      opacity: 1;
+    }
+    & ~ button {
+      background-color: buttonface;
+      opacity: 0.6;
+    }
+  }
+  &:not(:first-of-type) {
+    margin-left: 8px;
+  }
+}

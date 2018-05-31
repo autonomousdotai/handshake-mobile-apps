@@ -21,16 +21,16 @@ const heightOfTabsHeader = 0.5;
 
 // trick to make background larger than its div
 const Wrapper = styled.div`
-  background: #76b1ff;
+  background: #50af4f;
 
-  padding-left: ${heightOfTabsHeader}rem;
-  margin-left: -${heightOfTabsHeader}rem;
-  
-  padding-right: ${heightOfTabsHeader}rem;
-  margin-right: -${heightOfTabsHeader}rem;
-  
-  padding-bottom: ${heightOfTabsHeader}rem;
-  margin-bottom: -${heightOfTabsHeader}rem;
+  // padding-left: ${heightOfTabsHeader}rem;
+  // margin-left: -${heightOfTabsHeader}rem;
+  //
+  // padding-right: ${heightOfTabsHeader}rem;
+  // margin-right: -${heightOfTabsHeader}rem;
+  //
+  // padding-bottom: ${heightOfTabsHeader}rem;
+  // margin-bottom: -${heightOfTabsHeader}rem;
 `
 
 
@@ -99,14 +99,14 @@ class Component extends React.Component {
           </div>
         </div>
         <div className="d-flex mt-2">
-          <label className="col-form-label mr-auto" style={{ width: '100px' }}><FormattedMessage id="ccExpiry"/></label>
+          <label className="col-form-label mr-auto" style={{ width: '100px' }}><FormattedMessage id="ccExpire"/></label>
           <div className='input-group'>
             <Field
               name="cc_expired"
               className='form-control-custom form-control-custom-ex w-100'
               component={fieldCleave}
               propsCleave={{
-                placeholder: intl.formatMessage({id: 'ccExpiryTemplate'}),
+                placeholder: intl.formatMessage({id: 'ccExpireTemplate'}),
                 options: {blocks: [2, 2], delimiter: '/', numericOnly: true},
                 // type: "tel",
                 // id: `cart-date-${this.lastUniqueId()}`,
@@ -127,7 +127,7 @@ class Component extends React.Component {
               propsCleave={{
                 placeholder: intl.formatMessage({id: 'securityCode'}),
                 options: {blocks: [4], numericOnly: true},
-                type: "password",
+                // type: "password",
                 // maxLength: "4",
                 // minLength: "3",
                 // id: `cart-cvc-${this.lastUniqueId()}`,
@@ -140,12 +140,12 @@ class Component extends React.Component {
       </div>
     )
     return (
-      <Wrapper className="rounded-bottom">
+      <Wrapper className="rounded p-2">
         <div className='col1'>
           {
             isCCExisting ? (
               <div>
-                <div className='d-flex' style={{ height: '52px', lineHeight: '52px' }}>
+                <div className='d-flex' style={{ height: '36px', lineHeight: '36px' }}>
                   <span>
                     <img className='mx-2' width="26px" height="26px" src={imgCC} />
                     <span>∗∗∗∗ ∗∗∗∗ ∗∗∗∗ {lastDigits}</span>
@@ -155,13 +155,13 @@ class Component extends React.Component {
                       name="toggleCCOpen"
                       component={
                         ({ input: { onChange, value } }) =>
-                          <button className="w-100 btn btn-link" type='button'
+                          <button className="w-100 btn btn-link text-white" type='button'
                                   onClick={() => {
                                     onChange(!value)
                                     handleToggleNewCC()
                                   }}
                           >
-                            {intl.formatMessage({id: 'change'})}&nbsp;{value ? 'v' : '>'}
+                            {intl.formatMessage({id: 'change'})}<span className="ml-2">{value ? '﹀' : '〉'}</span>
                           </button>
                       }
                     />

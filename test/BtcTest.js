@@ -1,6 +1,6 @@
 var assert = require('assert');
 var bitcore =  require('bitcore-lib');
-var bitcoin = require('../src/models/btc.js');
+var bitcoin = require('../src/models/Bitcoin.js');
 
 const testnet = 'https://test-insight.bitpay.com/api';
 

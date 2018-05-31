@@ -1,8 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 // services, constants
-import  { BetStatusHandler, ROLE } from './StatusHandler.js';
+import  { BetHandshakeHandler, ROLE, 
+  BETTING_STATUS_LABEL, BETTING_STATUS, 
+  REJECT_WINDOWN_DAYS, CANCEL_WINDOWN_DAYS,
+  BETTING_OPTIONS_NAME, 
+  BETTING_OPTIONS} from './BetHandshakeHandler.js';
+
+import { APP } from '@/constants';
+import local from '@/services/localStore';
+import {FIREBASE_PATH} from '@/constants';
 
 // components
 import Image from '@/components/core/presentation/Image';
@@ -16,40 +25,21 @@ import './Feed.scss';
 import chipIcon from '@/assets/images/icon/betting/chip.svg';
 import conferenceCallIcon from '@/assets/images/icon/betting/conference_call.svg';
 import ethereumIcon from '@/assets/images/icon/betting/ethereum.svg';
+import BettingHandshake from '@/services/neuron/neuron-bettinghandshake.js';
 
-const date = '2018-06-18';
+const date = '2018-06-01';
 const eventDate = new Date(date);
 const goal = 30;
 
+
+
 class FeedBetting extends React.Component {
   static propTypes = {
-    item: PropTypes.object.isRequired,
     userEmail: PropTypes.string,
     updatedItem: PropTypes.func,
   }
 
   static defaultProps = {
-    item: {
-      "contract_file": "QmNSDCSvXJwi34AUgW3pCK9jhP6HY611tb5gUfj4NS2VPp",
-      "contract_file_name": "1526386710_2bf702980869bb1a8b0aa0b4126be6f3_crypto.pdf",
-      "delivery_date": "Tue, 15 May 2018 12:18:28 GMT",
-      "description": "long promises trong to test deploy.",
-      "escrow_date": "Tue, 15 May 2018 12:18:28 GMT",
-      "from_address": "0xBf7ca460D4D2AE804ade14b2399E2A2d67964983",
-      "from_email": "pierre.neter@gmail.com",
-      "hid": "442",
-      "id": 530,
-      "industries_type": 1,
-      "public": 0,
-      "signed_contract_file": "QmUfXMJhL55Kt8XtiQBkJyuSNYyaWbqpyBYy26rkJUPL7p",
-      "source": "android",
-      "status": 4,
-      "term": 0,
-      "to_address": "0x5eE2A7BF750Ad8103F04ec62FAbE502e3e3f93B4",
-      "to_email": "trong1@autonomous.nyc",
-      "user_id_shaked": 3,
-      "balance": 0
-    },
     userEmail: 'trong@autonomous.nyc',
 
   };
@@ -59,96 +49,268 @@ class FeedBetting extends React.Component {
 
       this.state = {
           role: ROLE.GUEST,
+          statusLabel: null,
+          statusAction: null,
+          isShowOptions: false,
+          seletedId: BETTING_OPTIONS.INITIATOR_WON,
       };
 
 
   }
 
   componentDidMount() {
-    const {userEmail, item} = this.props;
-    console.log('From email: ', item.from_email);
-    console.log('To Email:', item.to_email);
-    console.log('User Email:', userEmail);
-    const role = (userEmail === item.from_email) ? ROLE.PAYEE :
-      (userEmail === item.to_email) ? ROLE.PAYER : ROLE.GUEST;
+    console.log('Betting Feed:', this.props);
+    const item = this.props;
+    const {initUserId, shakedUserIds, status, extraData} = item;
+    console.log('Extra Data:', this.extraData);
+    const profile = local.get(APP.AUTH_PROFILE);
+    const token = local.get(APP.AUTH_TOKEN);
+    console.log('Token:', token);
+    console.log('Profile', profile);
+    console.log('InitUserId:', initUserId);
+    const isUserShake = this.isShakeUser(shakedUserIds, profile.id);
+    console.log('Is User Shake:', isUserShake);
+
+    
+    const role = (profile.id === initUserId) ? ROLE.PAYEE :
+                isUserShake ? ROLE.PAYER : ROLE.GUEST;
     console.log('Role:', role);
+
     this.setState({
       role
-    });
+    });    
+    
+   //const hardCodeRole = ROLE.PAYEE;
+    const hardCodeStatus = 2;
+
+    const result = BetHandshakeHandler.getStatusLabel(hardCodeStatus, role, eventDate)
+    console.log('Result:', result);
+    if(result){
+      this.updateStatus(result);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
 
   }
+  get extraData(){
+    const {extraData} = this.props
+    try {
+      return JSON.parse(extraData);
+    }catch(e){
+      console.log(e);
+      return {}
+    }
+  }
+  isShakeUser(shakeIds, userId){
+    console.log('User Id:', userId);
+    /*
+    if(shakeIds){
+      
+      if(shakeIds.indexOf(userId) > -1){
+        return true;
+
+      }
+      
+    }
+    */
+    if(userId == 151){
+      return true;
+    }
+
+    return false;
+  }
+  get balance(){
+    const {balance} = this.extraData;
+    return balance ? balance : 0;
+  }
+
+  get getOptionsId() {
+    this.ids = [];
+
+    const optionIds = Object.keys(BETTING_OPTIONS_NAME);
+
+    optionIds.forEach((id) => {
+      this.ids.push((<option id={id} key={id} value={id}>{BETTING_OPTIONS_NAME[id]}</option>));
+    });
+
+    return this.ids;
+  }
+  renderOptions(){
+    return (
+      <select defaultValue={this.state.seletedId} onChange={(e)=> this.changeOption(e.target.value)}>
+                {
+                  this.getOptionsId
+                }
+      </select>
+    );
+  }
 
   render() {
     console.log("render here");
-    const {role} = this.state;
-    const {item} = this.props;
-    const {description, from_email, status, balance} = item;
-    const bottomDes = `22 bettors against ${from_email}`;
-    const remaining = goal - balance;
+    const {shakeCount} = this.props;
+    const {role, statusAction, statusLabel, isShowOptions} = this.state;
+    const {event_name, event_predict, event_odds, event_bet,event_date, balance} = this.extraData;
+    //const extraData = JSON.parse(item.extraData); 
+    
+    //const {description, from_email, status, balance} = extraData;
+    // const bottomDes = `22 bettors against ${from_email}`;
+    const remaining = event_bet - this.balance;
 
-    const statusLabel = BetStatusHandler.getStatusLabel(status, role, eventDate);
-    console.log('Action:', statusLabel.action);
     return (
       <div>
         {/* Feed */}
         <Feed className="feed" handshakeId={this.props.id} onClick={this.props.onFeedClick}>
           <div className="wrapperBettingFeed">
-              {/*<p>Role: {`${role}`}</p>}
-              {statusLabel.status && <p>Status: {`${statusLabel.status}`}</p>}
-              {<p>Date: {`${date}`}</p>}
+              {<p>Role: {`${role}`}</p>}
+              {statusLabel && <p>Status: {`${statusLabel}`}</p>}
+              {/*<p>Date: {`${date}`}</p>}
               {<p>Bet: {`${goal}`}</p>}
     {<p>Balance: {`${balance}`}</p>*/}
 
               <div className="description">
-                <p>Birth of the royal baby</p>
-                <p className="eventInfo">10 ETH that it is ginger</p>
-                <p className="odds">1:10</p>
+                <p>{event_name}</p>
+                <p>{event_date}</p>
+                <p className="eventInfo">{event_predict}</p>
+                <p className="odds">1:{event_odds}</p>
               </div>
-              <hr/>
+              <hr className="line" />
               <div className="bottomWrapper">
                 <div>
                   <Image src={conferenceCallIcon} alt="conference call icon" />
-                  <p className="content">22 <span>ninjas</span></p>
+                  <p className="content">{shakeCount} <span>ninjas</span></p>
                 </div>
                 <div>
                   <Image src={ethereumIcon} alt="ethereum icon" />
-                  <p className="content">10 ETH <span>pool</span></p>
+                  <p className="content">{event_bet} ETH <span>pool</span></p>
                 </div>
                 <div>
                   <Image src={chipIcon} alt="chip icon" />
                   <p className="content">85% <span>filled</span></p>
                 </div>
               </div>
+              {isShowOptions && this.renderOptions()}
             </div>
         </Feed>
         {/* Shake */}
-        {statusLabel.action && <Button block onClick={() => { this.modalBetRef.open(); }}>{statusLabel.action}</Button>}
-        <Button block onClick={() => { this.modalBetRef.open(); }}>Shake betting now</Button>
+        {statusAction && <Button block onClick={() => { this.clickActionButton(statusAction); }}>{statusAction}</Button>}
+        {/*<Button block onClick={() => { this.modalBetRef.open(); }}>Shake betting now</Button>*/}
         {/* Modal */}
-        <ModalDialog title="Make a bet" onRef={modal => this.modalBetRef = modal}>
+        {<ModalDialog title="Make a bet" onRef={modal => this.modalBetRef = modal}>
           <BettingShake
             remaining={remaining}
             odd={0.1}
             onCancelClick={() => this.modalBetRef.close()}
             onSubmitClick={(amount) => this.submitShake(amount)}
           />
-        </ModalDialog>
+  </ModalDialog>}
       </div>
     );
+    
   }
+  changeOption(value){
+    console.log('Choose option:', value)
+    //TO DO: Choose an option
+  }
+  clickActionButton(title){
+    const {role} = this.state;
+    const item = this.props;
+    const {id, hid} = item;
+    const offchain = id;
+    switch(title){
+      case BETTING_STATUS_LABEL.SHAKE: 
+        this.modalBetRef.open();
+        break;
+      
+      case BETTING_STATUS_LABEL.CLOSE: 
+        // TO DO: CLOSE BET
+        BetHandshakeHandler.closeItem(role, hid, offchain);
+        break;
+
+      case BETTING_STATUS_LABEL.WITHDRAW: 
+        // TO DO: WITHDRAW
+        BettingHandshake.withdraw(role, hid, offchain);
+        break;
+
+      case BETTING_STATUS_LABEL.REJECT: 
+        // TO DO: REJECT
+        BettingHandshake.rejectItem(role, hid, offchain);
+        break;
+
+    }
+    
+  }
+  updateStatus(result){
+    this.setState({
+      statusLabel: result.status,
+      statusAction: result.action,
+      isShowOptions: result.isShowOptions,
+    })
+  }
+  receiveStatus(newState){
+    //TO DO: update item
+    //TO DO:
+    const {role} = this.state;
+    //const statusLabel = BetHandshakeHandler.getStatusLabel(status, role, eventDate);
+
+    if(newState === BETTING_STATUS.SHAKED || newState === BETTING_STATUS.CLOSED){
+        const deadlineResult = (eventDate.getTime() / 1000 - currentDate.getTime() / 1000);
+        setTimeout(function(){ //After a time change to inited
+          this.autoShowResult(role,eventDate);
+    }.bind(this),deadlineResult*1000);
+
+      const deadlineCancel = (eventDate.getTime() / 1000 - currentDate.getTime() / 1000) + CANCEL_WINDOWN_DAYS;
+      setTimeout(function(){ //After a time change to inited
+        this.autoCancel(role, eventDate);
+    }.bind(this),deadlineCancel*1000);
+    }
+    const statusDict = BetHandshakeHandler.getStatusLabel(newState, role, eventDate);
+    this.updateStatus(statusDict);
+
+  }
+  autoShowResult(role,eventDate){
+    const {item} = this.props;
+    const {status} = item;
+    const result = BetHandshakeHandler.getStatusLabel(status, role, eventDate)
+    if(result){
+      this.updateStatus(result);
+    }
+    
+  }
+  autoCancel(role,eventDate){
+    const item = this.props;
+    const {hid, id} = item;
+    const offchain = id;
+    BettingHandshake.autoCancel(role,eventDate, "state", hid, offchain);
+  }
+  // autoSetWinner(role,state, eventDate){
+  //   const {item} = this.props;
+  //   const {status} = item;
+
+  //   const result = BetHandshakeHandler.getStatusLabel(status, role, eventDate)
+  //   if(result){
+  //     this.updateStatus(result);
+  //   }
+    
+  // }
 
   submitShake(amount){
     this.modalBetRef.close();
     const {role} = this.state;
-    const {item} = this.props;
-    const {balance} = item;
-    let newItem = BetStatusHandler.shakeItem(role, eventDate, amount,goal,balance, item);
-    this.props.updatedItem(newItem);
+    const item = this.props;
+    const {hid, id} = item;
+    const offchain = id;
+    // let newItem = BetHandshakeHandler.shakeItem(role, eventDate, amount,goal,balance, item);
+    // this.props.updatedItem(newItem);
+    BetHandshakeHandler.shakeItem(role, hid, amount, offchain);
 
   }
 }
 
-export default FeedBetting;
+const mapState = state => ({
+  firebaseUser: state.firebase.data,
+});
+const mapDispatch = ({
+});
+export default connect(mapState, mapDispatch)(FeedBetting);
+
