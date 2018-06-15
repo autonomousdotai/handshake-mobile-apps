@@ -18,7 +18,7 @@ function handlePreProcessForOfferStore(handshake, result) {
   if (extraData.items.BTC) {
     let extraDataBTC = {...extraData, ...extraData.items.BTC};
     delete extraDataBTC.items;
-    delete extraDataBTC.status;
+    // delete extraDataBTC.status;
     handshake.extra_data = JSON.stringify(extraDataBTC);
     handshake.id = id + '_BTC';
 
@@ -28,7 +28,7 @@ function handlePreProcessForOfferStore(handshake, result) {
   if (extraData.items.ETH) {
     let extraDataETH = {...extraData, ...extraData.items.ETH};
     delete extraDataETH.items;
-    delete extraDataETH.status;
+    // delete extraDataETH.status;
     handshake.extra_data = JSON.stringify(extraDataETH);
     handshake.id = id + '_ETH';
 
