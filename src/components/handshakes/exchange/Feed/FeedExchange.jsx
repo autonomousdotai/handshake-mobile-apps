@@ -62,7 +62,7 @@ class FeedExchange extends React.PureComponent {
 
     this.offer = OfferShop.offerShop(JSON.parse(extraData));
 
-    // console.log('offer',this.offer);
+    console.log('offer',this.offer);
 
     this.state = {
       modalContent: '',
@@ -73,6 +73,10 @@ class FeedExchange extends React.PureComponent {
 
   render() {
     const { offer } = this;
+
+    const { review, reviewCount } = this.props;
+
+    console.log('review, reviewCount',review, reviewCount);
 
     const coins = [
       {
