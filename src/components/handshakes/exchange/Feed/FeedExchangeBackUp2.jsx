@@ -159,7 +159,7 @@ class FeedExchange extends React.PureComponent {
 
     if (shopType === EXCHANGE_ACTION.BUY) { // shop buy
       const balance = await wallet.getBalance();
-      const fee = await wallet.getFee(4, true);
+      const fee = await wallet.getFee(10, true);
 
       if (this.showNotEnoughCoinAlert(balance, values.amount, fee, values.currency)) {
         return;

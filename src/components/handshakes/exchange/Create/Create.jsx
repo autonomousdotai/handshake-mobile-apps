@@ -282,7 +282,7 @@ class Component extends React.Component {
     }
 
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(4, true);
+    const fee = await wallet.getFee(10, true);
 
     const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
 

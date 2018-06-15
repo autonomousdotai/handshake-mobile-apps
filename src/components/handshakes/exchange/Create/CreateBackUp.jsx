@@ -191,7 +191,7 @@ async componentDidMount() {
 
     const wallet = MasterWallet.getWalletDefault(values.currency);
     const balance = new BigNumber(await wallet.getBalance());
-    const fee = new BigNumber(await wallet.getFee(4, true));
+    const fee = new BigNumber(await wallet.getFee(10, true));
     let amount = new BigNumber(values.amount);
 
     if (values.currency === CRYPTO_CURRENCY.ETH && values.type === EXCHANGE_ACTION.BUY) {
