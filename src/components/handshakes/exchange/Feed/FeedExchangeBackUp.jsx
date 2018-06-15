@@ -228,7 +228,7 @@ class FeedExchange extends React.PureComponent {
     } else if (currency === CRYPTO_CURRENCY.BTC) {
       if (offer.type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(offer.currency);
-        wallet.transfer(offer.systemAddress, offer.totalAmount).then(success => {
+        wallet.transfer(offer.systemAddress, offer.totalAmount, 10).then(success => {
           console.log('transfer', success);
         });
       }

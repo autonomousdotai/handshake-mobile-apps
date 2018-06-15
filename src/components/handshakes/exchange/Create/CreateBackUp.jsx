@@ -320,7 +320,7 @@ async componentDidMount() {
     console.log('wallet', wallet);
 
     if (currency === CRYPTO_CURRENCY.BTC) {
-      wallet.transfer(data.system_address, data.amount).then(success => {
+      wallet.transfer(data.system_address, data.amount, 10).then(success => {
         console.log('transfer', success);
       });
     } else if (currency === CRYPTO_CURRENCY.ETH) {
