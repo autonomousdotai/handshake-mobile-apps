@@ -205,63 +205,10 @@ class FeedMe extends React.PureComponent {
     this.props.responseExchangeDataChange(data);
   }
 
-  getContentOfferStore = () => {
-    const {intl, status} = this.props;
-    const { offer } = this;
-    let message = '';
-    let fiatAmountBuy = this.calculateFiatAmountOfferStore(offer.buyAmount, EXCHANGE_ACTION.SELL, offer.currency, offer.buyPercentage);
-    let fiatAmountSell = this.calculateFiatAmountOfferStore(offer.sellAmount, EXCHANGE_ACTION.BUY, offer.currency, offer.sellPercentage);
-    switch (status) {
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING:
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
-        message = intl.formatMessage({id: 'offerStoreHandShakeContent'}, {
-          offerTypeBuy: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
-          offerTypeSell: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL],
-          amountBuy: offer.buyAmount,
-          amountSell: offer.sellAmount,
-          currency: offer.currency,
-          fiatAmountCurrency: offer.fiatCurrency,
-          fiatAmountBuy: formatMoney(fiatAmountBuy),
-          fiatAmountSell: formatMoney(fiatAmountSell),
-        });
-
-        break;
-      }
-    }
-
-    return message;
-  }
-
-  getActionButtonsOfferStore = () => {
-    const {intl, status} = this.props;
-    let actionButtons = null;
-
-    switch (status) {
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE: {
-        let message = intl.formatMessage({id: 'closeOfferConfirm'}, {});
-        actionButtons = (
-          <div>
-            <Button block className="mt-2"
-                    onClick={() => this.confirmOfferAction(message, this.deleteOfferItem)}>Close</Button>
-          </div>
-        );
-        break;
-      }
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING:
-      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
-        break;
-      }
-    }
-
-    return actionButtons;
-  }
-
+  ///Exchange
   ////////////////////////
 
-  getFrom = () => {
+  getFromExchange = () => {
     const {intl, status} = this.props;
 
     let from = '';
@@ -383,7 +330,199 @@ class FeedMe extends React.PureComponent {
     return message;
   }
 
+  getActionButtonsExchange = () => {
+    const {intl, status} = this.props;
+    const offer = this.offer;
+    const fiatAmount = this.fiatAmount;
+    let actionButtons = null;
+    let message = '';
+
+    switch (this.userType) {
+      case HANDSHAKE_USER.NORMAL: {
+        switch (status) {
+          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
+            message = intl.formatMessage({id: 'handshakeOfferConfirm'}, {
+              type: offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL] : EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
+              amount: formatAmountCurrency(offer.amount),
+              currency: offer.currency,
+              currency_symbol: offer.fiatCurrency,
+              total: formatMoney(fiatAmount),
+            });
+
+            actionButtons = (
+              <div>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOffer)}>Shake</Button>
+              </div>
+            );
+            break;
+          }
+        }
+        break;
+      }
+      case HANDSHAKE_USER.SHAKED: {
+        switch (status) {
+          case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
+            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
+            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
+            actionButtons = (
+              <div>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}>Reject</Button>
+                {offer.type === EXCHANGE_ACTION.BUY &&
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}>Complete</Button>
+                }
+              </div>
+            );
+
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
+            if (offer.type === EXCHANGE_ACTION.SELL) {
+              message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
+              actionButtons = (
+                <div>
+                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOffer)}>Withdraw</Button>
+                </div>
+              );
+            }
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
+            break;
+          }
+        }
+        break;
+      }
+      case HANDSHAKE_USER.OWNER: {
+        switch (status) {
+          case HANDSHAKE_EXCHANGE_STATUS.CREATED: {
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
+            message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
+            actionButtons = (
+              <div>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOffer)}>Cancel</Button>
+              </div>
+            );
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.CLOSED: {
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
+            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
+            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
+            actionButtons = (
+              <div>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}>Reject</Button>
+                {offer.type === EXCHANGE_ACTION.SELL &&
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}>Complete</Button>
+                }
+              </div>
+            );
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
+            if (offer.type === EXCHANGE_ACTION.BUY) {
+              message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
+              actionButtons = (
+                <div>
+                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOffer)}>Withdraw</Button>
+                </div>
+              );
+            }
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
+            break;
+          }
+        }
+        break;
+      }
+    }
+
+    return actionButtons;
+  }
+
+  ///Start Offer store
   ////////////////////////
+
+  calculateFiatAmountOfferStore(amount, type, currency, percentage) {
+    const { listOfferPrice } = this.props;
+    let fiatAmount = 0;
+
+    if (listOfferPrice) {
+      let offerPrice = getOfferPrice(listOfferPrice, type, currency);
+      if (offerPrice) {
+        fiatAmount = amount * offerPrice.price || 0;
+        fiatAmount += fiatAmount * percentage / 100;
+      } else {
+        console.log('aaaa', offer.type, offer.currency);
+      }
+    }
+
+    return fiatAmount;
+  }
+
+  getContentOfferStore = () => {
+    const {intl, status} = this.props;
+    const { offer } = this;
+    let message = '';
+    let fiatAmountBuy = this.calculateFiatAmountOfferStore(offer.buyAmount, EXCHANGE_ACTION.SELL, offer.currency, offer.buyPercentage);
+    let fiatAmountSell = this.calculateFiatAmountOfferStore(offer.sellAmount, EXCHANGE_ACTION.BUY, offer.currency, offer.sellPercentage);
+    switch (status) {
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING:
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
+        message = intl.formatMessage({id: 'offerStoreHandShakeContent'}, {
+          offerTypeBuy: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
+          offerTypeSell: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL],
+          amountBuy: offer.buyAmount,
+          amountSell: offer.sellAmount,
+          currency: offer.currency,
+          fiatAmountCurrency: offer.fiatCurrency,
+          fiatAmountBuy: formatMoney(fiatAmountBuy),
+          fiatAmountSell: formatMoney(fiatAmountSell),
+        });
+
+        break;
+      }
+    }
+
+    return message;
+  }
+
+  getActionButtonsOfferStore = () => {
+    const {intl, status} = this.props;
+    let actionButtons = null;
+
+    switch (status) {
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE: {
+        let message = intl.formatMessage({id: 'closeOfferConfirm'}, {});
+        actionButtons = (
+          <div>
+            <Button block className="mt-2"
+                    onClick={() => this.confirmOfferAction(message, this.deleteOfferItem)}>Close</Button>
+          </div>
+        );
+        break;
+      }
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING:
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
+        break;
+      }
+    }
+
+    return actionButtons;
+  }
 
   deleteOfferItem = async () => {
     const { offer } = this;
@@ -459,6 +598,32 @@ class FeedMe extends React.PureComponent {
 
   handleDeleteOfferItemFailed = (e) => {
     this.handleActionFailed(e);
+  }
+
+  ///End Offer store
+  ////////////////////////
+
+  ///Start Offer store shake
+  ////////////////////////
+
+  calculateFiatAmount = (offer) => {
+    const { listOfferPrice } = this.props;
+    let fiatAmount = 0;
+
+    if (offer.fiatAmount) {
+      fiatAmount = offer.fiatAmount;
+    } else {
+      if (listOfferPrice) {
+        let offerPrice = getOfferPrice(listOfferPrice, offer.type, offer.currency);
+        if (offerPrice) {
+          fiatAmount = offer.amount * offerPrice.price || 0;
+          fiatAmount = fiatAmount + fiatAmount * offer.percentage / 100;
+        } else {
+          console.log('aaaa', offer.type, offer.currency);
+        }
+      }
+    }
+    return fiatAmount;
   }
 
   getContent = (fiatAmount) => {
@@ -555,8 +720,6 @@ class FeedMe extends React.PureComponent {
     return message;
   }
 
-  ////////////////////////
-
   getActionButtons = () => {
     const {intl, status} = this.props;
     const offer = this.offer;
@@ -634,7 +797,6 @@ class FeedMe extends React.PureComponent {
     return actionButtons;
   }
 
-  ////////////////////////
   getEmail = () => {
     const { offer } = this;
     let email = '';
@@ -656,7 +818,6 @@ class FeedMe extends React.PureComponent {
     return email;
   }
 
-  ////////////////////////
   getChatUserName = () => {
     const { offer } = this;
     let chatUserName = '';
@@ -976,6 +1137,9 @@ class FeedMe extends React.PureComponent {
     this.handleActionFailed(e);
   }
 
+  ///End Offer store shake
+  ////////////////////////
+
   handleActionFailed = (e) => {
     this.hideLoading();
     this.props.showAlert({
@@ -986,43 +1150,6 @@ class FeedMe extends React.PureComponent {
         // this.props.history.push(URL.HANDSHAKE_ME);
       }
     });
-  }
-
-  calculateFiatAmount = (offer) => {
-    const { listOfferPrice } = this.props;
-    let fiatAmount = 0;
-
-    if (offer.fiatAmount) {
-      fiatAmount = offer.fiatAmount;
-    } else {
-      if (listOfferPrice) {
-        let offerPrice = getOfferPrice(listOfferPrice, offer.type, offer.currency);
-        if (offerPrice) {
-          fiatAmount = offer.amount * offerPrice.price || 0;
-          fiatAmount = fiatAmount + fiatAmount * offer.percentage / 100;
-        } else {
-          console.log('aaaa', offer.type, offer.currency);
-        }
-      }
-    }
-    return fiatAmount;
-  }
-
-  calculateFiatAmountOfferStore(amount, type, currency, percentage) {
-    const { listOfferPrice } = this.props;
-    let fiatAmount = 0;
-
-    if (listOfferPrice) {
-      let offerPrice = getOfferPrice(listOfferPrice, type, currency);
-      if (offerPrice) {
-        fiatAmount = amount * offerPrice.price || 0;
-        fiatAmount += fiatAmount * percentage / 100;
-      } else {
-        console.log('aaaa', offer.type, offer.currency);
-      }
-    }
-
-    return fiatAmount;
   }
 
   isMovingCoin = () => {
@@ -1218,7 +1345,7 @@ class FeedMe extends React.PureComponent {
         nameShop = 'About';
         const fiatAmount = this.calculateFiatAmount(offer);
 
-        from = this.getFrom();
+        from = this.getFromExchange();
 
         message = this.getContentExchange(fiatAmount);
 
@@ -1234,25 +1361,13 @@ class FeedMe extends React.PureComponent {
 
             showChat = true;
 
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {
-                chatUsername = offer.username;
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {
-                chatUsername = offer.toUsername;
-                break;
-              }
-            }
+            chatUsername = this.getChatUserName();
 
             break;
           }
         }
 
-        // actionButtons = this.getActionButtons();
+        actionButtons = this.getActionButtonsExchange();
         break;
       }
     }
