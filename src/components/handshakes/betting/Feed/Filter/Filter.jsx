@@ -501,6 +501,8 @@ class BettingFilter extends React.Component {
                   this.setState({
                     side: SIDE.SUPPORT,
                   }, () => this.modalBetRef.open());
+                  // send event tracking
+                  GA.clickChooseASide('Support');
                 }}
               >
                 SUPPORT
@@ -531,6 +533,8 @@ class BettingFilter extends React.Component {
                   this.setState({
                     side: SIDE.AGAINST,
                   }, () => this.modalBetRef.open());
+                  // send event tracking
+                  GA.clickChooseASide('Oppose');
                 }}
               >
                 OPPOSE

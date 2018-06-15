@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { HANDSHAKE_ID, HANDSHAKE_NAME, HANDSHAKE_ID_DEFAULT } from '@/constants';
 import Helper from '@/services/helper';
 // components
@@ -99,6 +101,12 @@ const maps = {
 };
 
 class Create extends React.Component {
+  static propTypes = {
+    isBannedCash: PropTypes.bool.isRequired,
+    isBannedPrediction: PropTypes.bool.isRequired,
+    isBannedChecked: PropTypes.bool.isRequired,
+  }
+
   constructor(props) {
     super(props);
     let seletedId = HANDSHAKE_ID_DEFAULT;
@@ -110,17 +118,48 @@ class Create extends React.Component {
     }
     this.state = {
       seletedId,
+      isBannedCash: this.props.isBannedCash,
+      isBannedPrediction: this.props.isBannedPrediction,
+      isBannedChecked: this.props.isBannedChecked,
     };
     // bind
     this.handshakeChange = this.handshakeChange.bind(this);
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.isBannedCash !== prevState.isBannedCash) {
+      return { isBannedCash: nextProps.isBannedCash };
+    }
+    if (nextProps.isBannedPrediction !== prevState.isBannedPrediction) {
+      return { isBannedPrediction: nextProps.isBannedPrediction };
+    }
+    if (nextProps.isBannedChecked !== prevState.isBannedChecked) {
+      return { isBannedChecked: nextProps.isBannedChecked };
+    }
+    if (nextProps.isBannedPrediction && nextProps.isBannedChecked) {
+      return { isLoading: false };
+    }
+    return null;
+  }
+
   get handshakeList() {
-    const handshakes = Object.entries(HANDSHAKE_NAME).map(([key, value]) => ({
-      id: key,
-      value: value.name,
-      priority: value.priority,
-    }));
+    const handshakes = Object.entries(HANDSHAKE_NAME).map(([key, value]) => {
+      const currentKey = parseInt(key, 10);
+      if (this.state.isBannedCash && (currentKey === HANDSHAKE_ID.EXCHANGE || currentKey === HANDSHAKE_ID.EXCHANGE_LOCAL)) {
+        return null;
+      }
+      if (this.state.isBannedPrediction && (currentKey === HANDSHAKE_ID.BETTING)) {
+        return null;
+      }
+      return {
+        id: key,
+        value: value.name,
+        priority: value.priority,
+      };
+    }).filter(a => a);
+    if (!handshakes.filter(item => item.id === this.state.seletedId).length) {
+      this.setState({ seletedId: handshakes[0].id });
+    }
     return [
       ...handshakes.sort((x, y) => x.priority > y.priority),
       {
@@ -168,4 +207,8 @@ class Create extends React.Component {
   }
 }
 
-export default Create;
+export default connect(state => ({
+  isBannedCash: state.app.isBannedCash,
+  isBannedPrediction: state.app.isBannedPrediction,
+  isBannedChecked: state.app.isBannedChecked,
+}))(Create);

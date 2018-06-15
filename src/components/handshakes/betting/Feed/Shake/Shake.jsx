@@ -528,6 +528,11 @@ class BetingShake extends React.Component {
       callBack: () => {
       }
     });
+     // send ga event
+      try {
+        const {matchName, matchOutcome, side} = this.props;
+        GA.createBetSuccess(matchName, matchOutcome, side);
+      } catch (err) {}
     }
     this.setState({
       disable: false

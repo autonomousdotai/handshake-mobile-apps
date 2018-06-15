@@ -15,6 +15,7 @@ const EVENT_ACTION = {
   CLICK_GO_BUTTON: 'Click go button',
   CLICK_COMMENTS_BOX: 'Click comments box',
   CLICK_SHARE_BUTTON: 'Click share button',
+  CREATE_BET_SUCCESSFUL: 'Create bet successful',
 };
 
 class GoogleAnalyticsService {
@@ -146,6 +147,38 @@ class GoogleAnalyticsService {
         category: EVENT_CATEGORY.CREATE,
         action: EVENT_ACTION.CLICK_GO_BUTTON,
         label: `${sideName === 1 ? 'Support' : 'Oppose'}: ${matchName} - ${matchOutCome}`,
+      });
+    } catch (err) {}
+  }
+
+  /**
+   *
+   * @param matchName
+   * @param matchOutCome
+   * @param sideName
+   */
+  createBetSuccess(matchName, matchOutCome, sideName) {
+    try {
+      this.sendGAEvent({
+        category: EVENT_CATEGORY.DISCOVER_BETTING,
+        action: EVENT_ACTION.CREATE_BET_SUCCESSFUL,
+        label: `${sideName === 1 ? 'Support' : 'Oppose'}: ${matchName} - ${matchOutCome}`,
+      });
+    } catch (err) {}
+  }
+
+  /**
+   *
+   * @param selectedMatch
+   * @param selectedOutcome
+   * @param sideName
+   */
+  createBetSuccessCreatePage(selectedMatch, selectedOutcome, sideName) {
+    try {
+      this.sendGAEvent({
+        category: EVENT_CATEGORY.CREATE,
+        action: EVENT_ACTION.CREATE_BET_SUCCESSFUL,
+        label: `${sideName}: ${selectedMatch.value} -  ${selectedOutcome.value}`,
       });
     } catch (err) {}
   }

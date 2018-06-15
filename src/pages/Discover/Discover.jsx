@@ -26,6 +26,7 @@ import FeedExchange from '@/components/handshakes/exchange/Feed/FeedExchange';
 import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchangeLocal';
 import FeedSeed from '@/components/handshakes/seed/Feed';
 // import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+import BlockCountry from '@/components/core/presentation/BlockCountry';
 
 // import Tabs from '@/components/handshakes/exchange/components/Tabs';
 import NoData from '@/components/core/presentation/NoData';
@@ -89,17 +90,17 @@ class DiscoverPage extends React.Component {
   }
 
   componentDidMount() {
-    const { ipInfo, } = this.props;
+    const { ipInfo } = this.props;
     navigator.geolocation.getCurrentPosition((location) => {
-      const { coords: { latitude, longitude } } = location
-      this.setAddressFromLatLng(latitude, longitude) // better precision
+      const { coords: { latitude, longitude } } = location;
+      this.setAddressFromLatLng(latitude, longitude); // better precision
     }, () => {
-      this.setAddressFromLatLng(ipInfo?.latitude, ipInfo?.longitude) // fallback
+      this.setAddressFromLatLng(ipInfo?.latitude, ipInfo?.longitude); // fallback
     });
   }
 
   setAddressFromLatLng = (lat, lng) => {
-    this.setState({lat: lat, lng: lng});
+    this.setState({ lat, lng });
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -378,7 +379,8 @@ class DiscoverPage extends React.Component {
           {
               this.state.isBannedChecked && this.state.handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
               ? (
-                <div>{'Hey Ninja. Your wet blanket IP address won\'t let you play this game.'}</div>
+                <BlockCountry />
+                // <div>{'Hey Ninja. Your wet blanket IP address won\'t let you play this game.'}</div>
               )
               : null
             }
@@ -424,7 +426,8 @@ class DiscoverPage extends React.Component {
             {
               this.state.isBannedChecked && handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.isBannedCash
               ? (
-                <div>{'Hey Ninja. Your wet blanket IP address won\'t let you play this game.'}</div>
+                <BlockCountry />
+                // <div>{'Hey Ninja. Your wet blanket IP address won\'t let you play this game.'}</div>
               )
               : null
             }
