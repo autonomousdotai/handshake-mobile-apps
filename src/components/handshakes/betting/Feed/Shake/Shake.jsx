@@ -12,6 +12,7 @@ import {HANDSHAKE_ID, API_URL, APP } from '@/constants';
 import {MasterWallet} from '@/models/MasterWallet';
 import local from '@/services/localStore';
 import moment from 'moment';
+import GA from '@/services/googleAnalytics';
 
 // components
 import { InputField } from '@/components/handshakes/betting/form/customField';
@@ -141,6 +142,11 @@ class BetingShake extends React.Component {
     console.log('Balance, estimate gas, total:', balance, estimatedGas, total);
 
     var message = null;
+
+    // send event tracking
+    try {
+      GA.clickGoButton(matchName, matchOutcome, side);
+    } catch (err) {}
 
     if (this.isExpiredDate()){
       message = MESSAGE.MATCH_OVER;
@@ -511,7 +517,7 @@ class BetingShake extends React.Component {
     const {status, data} = successData
 
     if(status && data){
-      
+
      const {outcomeHid} = this.props;
       console.log('OutcomeHid:', outcomeHid);
      betHandshakeHandler.controlShake(data, outcomeHid);

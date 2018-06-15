@@ -10,6 +10,7 @@ class Toggle extends React.Component {
       active: 1,
     };
     this.active = 1;
+    this.activeItem = {};
     this.onActive = ::this.onActive;
   }
 
@@ -17,9 +18,14 @@ class Toggle extends React.Component {
     return this.active;
   }
 
+  get sideName() {
+    return this.activeItem.name || '';
+  }
+
   onActive(item) {
     this.setState({ active: item.id });
     this.active = item.id;
+    this.activeItem = item;
     const { onChange } = this.props;
     onChange && onChange(item.id);
   }

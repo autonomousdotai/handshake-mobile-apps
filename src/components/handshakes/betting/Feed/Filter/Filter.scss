@@ -37,7 +37,7 @@
 
   .item {
     width: 49.8%;
-    height: rem-calc(280px);
+    min-height: rem-calc(280px);
     border: none;
   }
 

@@ -13,6 +13,7 @@ import { HANDSHAKE_ID, API_URL, APP } from '@/constants';
 import  { BetHandshakeHandler, SIDE, MESSAGE} from '@/components/handshakes/betting/Feed/BetHandshakeHandler.js';
 import { URL } from '@/constants';
 import local from '@/services/localStore';
+import GA from '@/services/googleAnalytics';
 
 // components
 import Button from '@/components/core/controls/Button';
@@ -103,7 +104,7 @@ class BettingCreate extends React.Component {
   componentDidMount(){
     console.log('Betting Create Props:', this.props, history);
     this.setState({
-      
+
     })
     this.props.loadMatches({PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES});
 
@@ -201,6 +202,11 @@ get defaultOutcome() {
     const inputList = this.inputList;
     let extraParams = values;
     console.log('Before Content:', content);
+
+    // send event tracking
+    try {
+      GA.clickGoButtonCreatePage(selectedMatch, selectedOutcome, this.toggleRef.sideName);
+    } catch (err) {}
 
     inputList.forEach(element => {
       const item = JSON.parse(element.replace(regexReplace, ''));
@@ -449,7 +455,8 @@ get defaultOutcome() {
                 const {values} = this.state;
                 values["event_name"] = item.value;
                 this.setState({selectedMatch: item, values});
-
+                // send event tracking
+                GA.clickChooseAnEventCreatePage(item.value);
               }
               }
           />
@@ -506,7 +513,9 @@ get defaultOutcome() {
     const winValue =  Math.floor(roundWin*ROUND)/ROUND;
     console.log('Win Value:', winValue);
 
-    this.setState({selectedOutcome: item, values, winValue})
+    this.setState({selectedOutcome: item, values, winValue});
+    // send event tracking
+    GA.clickChooseAnOutcomeCreatePage(item.value);
   }
 
   render() {

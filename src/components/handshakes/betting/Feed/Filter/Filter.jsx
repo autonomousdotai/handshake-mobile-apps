@@ -7,6 +7,7 @@ import moment from 'moment';
 import { API_URL } from '@/constants';
 import { loadMatches, loadHandshakes, checkFreeAvailable } from '@/reducers/betting/action';
 import { BetHandshakeHandler, SIDE } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
+import GA from '@/services/googleAnalytics';
 // components
 import Dropdown from '@/components/core/controls/Dropdown';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
@@ -198,8 +199,8 @@ class BettingFilter extends React.Component {
   get matchNames() {
     const { matches } = this.state;
     if (matches) {
-      const mathNamesList = matches.map(item => ({ id: item.id, 
-                                                value: `Event: ${item.name} (${this.getStringDate(item.date)})`, 
+      const mathNamesList = matches.map(item => ({ id: item.id,
+                                                value: `Event: ${item.name} (${this.getStringDate(item.date)})`,
                                                     marketFee: item.market_fee , date: item.date}));
       return [
         ...mathNamesList,
@@ -420,7 +421,13 @@ class BettingFilter extends React.Component {
               defaultId={defaultMatchId}
               source={this.matchNames}
               afterSetDefault={item => this.setState({ selectedMatch: item })}
-              onItemSelected={item => this.setState({ selectedMatch: item })}
+              onItemSelected={item => {
+                this.setState({ selectedMatch: item });
+                // send event tracking
+                try {
+                  GA.clickChooseAnEvent(item.value);
+                } catch (err) {}
+              }}
               hasSearch
             />
           </div>
@@ -438,6 +445,10 @@ class BettingFilter extends React.Component {
               this.setState({
                 selectedOutcome: item,
               }, () => this.callGetHandshakes(item));
+              try {
+                // send event tracking
+                GA.clickChooseAnOutcome(item.value);
+              } catch (err) {}
             }
             }
             />
