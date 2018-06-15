@@ -25,6 +25,7 @@ import {
   HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME,
+  HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE,
   HANDSHAKE_EXCHANGE_STATUS,
   HANDSHAKE_EXCHANGE_STATUS_NAME,
   HANDSHAKE_STATUS_NAME,
@@ -463,7 +464,7 @@ class FeedMe extends React.PureComponent {
         fiatAmount = amount * offerPrice.price || 0;
         fiatAmount += fiatAmount * percentage / 100;
       } else {
-        console.log('aaaa', offer.type, offer.currency);
+        // console.log('aaaa', offer.type, offer.currency);
       }
     }
 
@@ -473,9 +474,10 @@ class FeedMe extends React.PureComponent {
   getContentOfferStore = () => {
     const {intl, status} = this.props;
     const { offer } = this;
+    const { buyAmount, sellAmount, currency, buyPercentage, sellPercentage } = offer;
     let message = '';
-    let fiatAmountBuy = this.calculateFiatAmountOfferStore(offer.buyAmount, EXCHANGE_ACTION.SELL, offer.currency, offer.buyPercentage);
-    let fiatAmountSell = this.calculateFiatAmountOfferStore(offer.sellAmount, EXCHANGE_ACTION.BUY, offer.currency, offer.sellPercentage);
+    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.SELL, currency, buyPercentage);
+    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.BUY, currency, sellPercentage);
     switch (status) {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
@@ -500,7 +502,9 @@ class FeedMe extends React.PureComponent {
   }
 
   getActionButtonsOfferStore = () => {
-    const {intl, status} = this.props;
+    const {intl} = this.props;
+    const { offer } = this;
+    let status = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[offer.status];
     let actionButtons = null;
 
     switch (status) {
@@ -1318,7 +1322,8 @@ class FeedMe extends React.PureComponent {
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE: {
         email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.contactInfo;
-        statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME[status];
+        let statusValue = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[offer.status];
+        statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME[statusValue];
 
         message = this.getContentOfferStore();
 
