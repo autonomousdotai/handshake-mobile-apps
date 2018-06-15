@@ -37,10 +37,10 @@ export default {
   cancelShakedfferSuccessMessage: 'You have cancelled your order ',
   withdrawShakedfferSuccessMessage: 'Your offer has been withdrawn.',
   buyUsingCreditCardSuccessMessge: 'Your order using your credit card has gone through.',
-  notEnoughCoinInWallet: 'You only have {amount}({currency}) in default wallet {currency}. Fee ~ {fee}({currency}). Please add more',
+  notEnoughCoinInWallet: 'You don\'t have enough coin right now. Please top up your wallet.',
 
   createOfferStoreConfirm: 'Do you want to create offer Buy {amountBuy} {currency} - Sell {amountSell} {currency}?',
-  notEnoughCoinInWalletStores: 'You only have {amount}({currency}) in default wallet {currency}. Fee ~ {fee}({currency}). Please add more',
+  notEnoughCoinInWalletStores: 'You don\'t have enough coin right now. Please top up your wallet.',
   addOfferItemSuccessMassage: 'Success! Your order is now listed on Ninja',
   deleteOfferItemSuccessMassage: 'You have successfully deleted your order.',
   shakeOfferItemSuccessMassage: 'You have successfully shaked on Ninja',
