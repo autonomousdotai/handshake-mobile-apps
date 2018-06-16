@@ -1065,6 +1065,9 @@ class FeedMe extends React.PureComponent {
         // }
       }
     });
+
+    //TODO
+    console.log('hiện đánh sao');
   }
 
   handleCompleteShakedOfferFailed = (e) => {
