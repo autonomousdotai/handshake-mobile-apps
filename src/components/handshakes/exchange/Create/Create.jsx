@@ -56,6 +56,10 @@ import { addOfferItem, } from "@/reducers/exchange/action";
 import {getOfferStores} from "@/reducers/exchange/action";
 import { getErrorMessageFromCode } from "../utils";
 
+
+import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
+import iconEth from '@/assets/images/icon/coin/icon-eth.svg';
+
 const nameFormExchangeCreate = "exchangeCreate";
 const FormExchangeCreate = createForm({
   propsReduxForm: {
@@ -81,7 +85,7 @@ const FormExchangeCreate = createForm({
 });
 const selectorFormExchangeCreate = formValueSelector(nameFormExchangeCreate);
 
-const textColor = "#ffffff";
+const textColor = "#000000";
 const btnBg = "rgba(29,29,38,0.30)";
 const validateFee = [
   minValue(-50),
@@ -90,8 +94,8 @@ const validateFee = [
 
 class Component extends React.Component {
   CRYPTO_CURRENCY_LIST = [
-    { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], hide: false },
-    { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], hide: false },
+    { value: CRYPTO_CURRENCY.BTC, text: <div className="currency-selector"><img src={iconBtc}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC]}</span></div>, hide: false },
+    { value: CRYPTO_CURRENCY.ETH, text: <div className="currency-selector"><img src={iconEth}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH]}</span></div>, hide: false },
   ];
 
   constructor(props) {
@@ -524,8 +528,9 @@ class Component extends React.Component {
               />
             </div>
           </div>
+
           <div className="label">Exchange rate</div>
-          <Feed className="feed mt-2 wrapper" background={this.mainColor}>
+          <div className="section">
             <div className="d-flex">
               <label className="col-form-label mr-auto label-create"><span className="align-middle">Inventory for purchase</span></label>
               <div className='input-group'>
@@ -579,6 +584,7 @@ class Component extends React.Component {
                   color={textColor}
                   validate={validateFee}
                 />
+                { wantToBuy && <span className="w-100 estimate-price buy">&asymp; {estimatedPriceBuy} {fiatCurrency}</span> }
               </div>
             </div>
 
@@ -596,6 +602,7 @@ class Component extends React.Component {
                   color={textColor}
                   validate={validateFee}
                 />
+                { wantToSell && <span className="w-100 estimate-price sell">&asymp; {estimatedPriceSell} {fiatCurrency}</span> }
               </div>
             </div>
 
@@ -608,13 +615,13 @@ class Component extends React.Component {
                 </div>
               )
             }
-          </Feed>
+          </div>
 
           {
             !haveProfile && (
               <div>
                 <div className="label">Station information</div>
-                <Feed className="feed my-2 wrapper" background={this.mainColor}>
+                <div className="section">
                   <div className="d-flex">
                     <label className="col-form-label mr-auto label-create"><span className="align-middle">Station name</span></label>
                     <div className='input-group'>
@@ -658,7 +665,7 @@ class Component extends React.Component {
                       />
                     </div>
                   </div>
-                </Feed>
+                </div>
               </div>
             )
           }

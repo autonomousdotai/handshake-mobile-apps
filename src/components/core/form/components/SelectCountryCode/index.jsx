@@ -76,12 +76,12 @@ class SelectCountryCode extends React.Component {
                              onClick={() => this.onItemClick(dialCode)}>{flag} {name} ({dialCode})</div>
                       );
                     }) : (
-                      <div>No data</div>
+                      <div className="text-white">No data</div>
                     )
                   }
                 </div>
               </div>
-              <div className="mt-2 d-flex">
+              <div className="mt-2 d-flex filter">
                 <input type="text" value={strFilterCountry} className="form-control-custom form-control-custom-ex input-no-border" placeholder="Filter" onChange={this.handleFilterChange}/>
                 <button onClick={this.toggleShowSelect} className="text-white btn btn-link ml-auto btn-close">Close</button>
               </div>
