@@ -188,7 +188,7 @@ class Handle extends React.Component {
         if (listWallet === false) {
           this.setState({ loadingText: 'Creating your local wallets' });          
           listWallet = createMasterWallets().then(() => {            
-            this.setState({ isLoading: false, loadingText: '' });            
+            this.setState({ isLoading: false, loadingText: '' });               
             this.updateRewardAddress();
             // if (!process.env.isProduction) {
             //   const wallet = MasterWallet.getWalletDefault('ETH');
@@ -199,8 +199,16 @@ class Handle extends React.Component {
             // }
           });
         } else {
-          this.setState({ isLoading: false });
-          this.firebase();
+          // check exists shuri-wallet
+          let shuriWallet = MasterWallet.getShurikenWalletJson();          
+          if (shuriWallet === false){
+            MasterWallet.createShuriWallet();            
+            this.updateRewardAddress();//-> not called.
+          }
+          else{
+            this.firebase();
+          }
+          this.setState({ isLoading: false });          
         }
         
       },
@@ -208,7 +216,7 @@ class Handle extends React.Component {
     });
   }
 
-  updateRewardAddress() {        
+  updateRewardAddress() {                
     let walletReward = MasterWallet.getShurikenWalletJson();      
     const params = new URLSearchParams();
           params.append('reward_wallet_addresses', walletReward);
@@ -217,13 +225,13 @@ class Handle extends React.Component {
             data: params,            
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             METHOD: 'POST',
-            successFn: (response) => {
+            successFn: (response) => {              
               this.firebase();
             },
             errorFn: (e) =>{
               this.firebase();
             }
-          });
+          });          
   }
 
   getFreeETH(){
