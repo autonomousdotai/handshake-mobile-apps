@@ -10,7 +10,7 @@ import {fieldCleave, fieldDropdown, fieldInput, fieldRadioButton} from '@/compon
 import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
 import iconEthereum from '@/assets/images/icon/coin/eth.svg';
 import iconApproximate from '@/assets/images/icon/icons8-approximately_equal.svg';
-import {CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_LIST} from "../../../../../constants";
+import {CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_NAME} from "@/constants";
 import {connect} from "react-redux";
 import {injectIntl} from "react-intl";
 import {formatMoney, getOfferPrice} from "@/services/offer-util";
@@ -43,9 +43,14 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   render() {
-    const { offer, currency, fiatAmount, enableShake } = this.props;
+    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST } = this.props;
 
     const fiat = offer.fiatCurrency;
+
+    this.CRYPTO_CURRENCY_LIST = [
+      { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
+      { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
+    ];
 
     return (
       <div className="shake-detail">
@@ -150,10 +155,16 @@ const mapState = (state, prevProps) => {
   console.log('check', balance, amount, balance > amount);
   const enableShake = balance > amount;
 
+  const EXCHANGE_ACTION_LIST = [
+    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? offer.items.BTC.buyBalance <= 0 : offer.items.ETH.buyBalance <= 0},
+    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? offer.items.BTC.sellBalance <= 0 : offer.items.ETH.sellBalance <= 0},
+  ];
+
   return {
     listOfferPrice: listOfferPrice,
     fiatAmount: fiatAmount || 0,
-    enableShake
+    enableShake,
+    EXCHANGE_ACTION_LIST
   }
 };
 
