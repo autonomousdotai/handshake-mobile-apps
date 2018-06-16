@@ -58,7 +58,7 @@ class DiscoverPage extends React.Component {
     app: PropTypes.object.isRequired,
     firebaseUser: PropTypes.object,
     exchange: PropTypes.object.isRequired,
-    ipInfo: PropTypes.object.isRequired,
+    ipInfo: PropTypes.any.isRequired,
     isBannedCash: PropTypes.bool.isRequired,
     isBannedPrediction: PropTypes.bool.isRequired,
     isBannedChecked: PropTypes.bool.isRequired,
@@ -76,7 +76,7 @@ class DiscoverPage extends React.Component {
       query: '',
       isLoading: true,
       exchange: this.props.exchange,
-      modalContent: <div/>, // type is node
+      modalContent: <div />, // type is node
       lat: 0,
       lng: 0,
       isBannedCash: this.props.isBannedCash,

@@ -2,11 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 // components
-import App from '@/components/App/App';
-import * as OfflinePlugin from 'offline-plugin/runtime';
+import Website from '@/components/App/Basic';
 // import registerServiceWorker from '@/services/worker';
+import * as OfflinePlugin from 'offline-plugin/runtime';
 
-if (!process.env.TURN_OFF_CACHE) {
+// registerServiceWorker();
+
+if (process.env.caches) {
   OfflinePlugin.install({
     onUpdateReady() {
       OfflinePlugin.applyUpdate();
@@ -15,20 +17,23 @@ if (!process.env.TURN_OFF_CACHE) {
       window.location.reload();
     },
   });
+} else {
+  if (window.caches) {
+    window.caches
+      .keys()
+      .then(keyList => Promise.all(keyList.map(key => window.caches.delete(key))));
+  }
+  if (navigator.serviceWorker) {
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      registrations.forEach((sw) => {
+        if (/\/sw.js$/.test(sw.active.scriptURL)) {
+          sw.unregister();
+        }
+      });
+    });
+  }
 }
-// registerServiceWorker();
 
-// clear cache mode on:
-if (process.env.TURN_OFF_CACHE && window.caches) {
-  window.caches
-    .keys()
-    .then(keyList => Promise.all(keyList.map(key => window.caches.delete(key))));
-}
-
-// require('@/testing/web3_test');
-// require('@/testing/web3_handshake');
-
-const blockContextMenu = e => e.preventDefault();
-const app = document.getElementById('app');
-app.addEventListener('contextmenu', blockContextMenu);
-ReactDOM.render(<App />, app);
+ReactDOM.render(<Website />, document.getElementById('app'));
+const root = document.getElementById('root');
+if (root) root.addEventListener('contextmenu', e => e.preventDefault());
