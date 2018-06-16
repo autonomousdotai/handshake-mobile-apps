@@ -131,7 +131,10 @@ class Create extends React.Component {
       return { isBannedCash: nextProps.isBannedCash };
     }
     if (nextProps.isBannedPrediction !== prevState.isBannedPrediction) {
-      return { isBannedPrediction: nextProps.isBannedPrediction };
+      return { 
+        isBannedPrediction: nextProps.isBannedPrediction,
+        seletedId: HANDSHAKE_ID.EXCHANGE, // select exchange
+      };
     }
     if (nextProps.isBannedChecked !== prevState.isBannedChecked) {
       return { isBannedChecked: nextProps.isBannedChecked };
