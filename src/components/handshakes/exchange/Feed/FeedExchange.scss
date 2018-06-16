@@ -16,7 +16,7 @@
     border-radius: 6px;
     margin-right: 12px;
     margin-top: 12px;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     position: relative;
     .icon-coin {
       //width: 50px;
@@ -85,6 +85,7 @@
 }
 
 .ex-sticky-note {
+  font-size: 14px;
   text-align: center;
   color: white;
   position: fixed;
