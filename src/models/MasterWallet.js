@@ -13,7 +13,9 @@ const bip39 = require('bip39');
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
 
-    static ListCoin = { Ethereum, Shuriken, Bitcoin, BitcoinTestnet };
+    static ListCoin = {
+      Ethereum, Shuriken, Bitcoin, BitcoinTestnet,
+    };
 
     static ListCoinReward = { Ethereum, Bitcoin };
 
@@ -29,20 +31,19 @@ export class MasterWallet {
 
       let mnemonic = bip39.generateMnemonic(); // generates string
 
-      let masterWallet = [];
+      const masterWallet = [];
 
-      let defaultWallet = [1, 3]  
-      if (process.env.isProduction){
-        defaultWallet = [0, 1]  
-      }  
+      let defaultWallet = [1, 3];
+      if (process.env.isProduction) {
+        defaultWallet = [0, 1];
+      }
 
       for (const k1 in MasterWallet.ListCoin) {
         for (const k2 in MasterWallet.ListCoin[k1].Network) {
-          
           // check production, only get mainnet:
-          if (process.env.isProduction && k2 != "Mainnet"){
-            break
-          }              
+          if (process.env.isProduction && k2 != 'Mainnet') {
+            break;
+          }
           // init a wallet:
           const wallet = new MasterWallet.ListCoin[k1]();
           // set mnemonic, if not set then auto gen.
@@ -56,9 +57,9 @@ export class MasterWallet {
       }
 
       // set default item:
-      if (masterWallet.length > 1) 
-      { 
-        masterWallet[defaultWallet[0]].default = true; 
+      if (masterWallet.length > 1)
+      {
+        masterWallet[defaultWallet[0]].default = true;
         masterWallet[defaultWallet[1]].default = true;
       }
 
@@ -89,9 +90,9 @@ export class MasterWallet {
       for (const k1 in MasterWallet.ListCoin) {
         for (const k2 in MasterWallet.ListCoin[k1].Network) {
           // check production, only get mainnet:
-          if (process.env.isProduction && k2 != "Mainnet"){
-            break
-          }              
+          if (process.env.isProduction && k2 != 'Mainnet') {
+            break;
+          }
           const wallet = new MasterWallet.ListCoin[k1]();
           wallet.network = MasterWallet.ListCoin[k1].Network[k2];
           tempWallet.push(wallet);
@@ -109,8 +110,7 @@ export class MasterWallet {
       } else if (!bip39.validateMnemonic(mnemonic)) {
         console.log('validateMnemonic mnemonic', false);
         return false;
-      }
-      else {
+      } else {
         isImport = true;
       }
       const masterWallet = MasterWallet.getMasterWallet();
@@ -133,8 +133,8 @@ export class MasterWallet {
       localStore.save(MasterWallet.KEY, masterWallet);
     }
 
-    static UpdateBalanceItem(item){
-      let wallets = MasterWallet.getMasterWallet();
+    static UpdateBalanceItem(item) {
+      const wallets = MasterWallet.getMasterWallet();
       wallets.forEach((wallet) => {
         if (wallet.address == item.address && wallet.network == item.network) {
           wallet.balance = item.balance;
@@ -153,114 +153,113 @@ export class MasterWallet {
     }
 
     // check not exists Shuri wallet:
-    static createShuriWallet(){   
+    static createShuriWallet() {
 
-      let wallets = MasterWallet.getMasterWallet();      
+      const wallets = MasterWallet.getMasterWallet();
 
-      let hasUpdateMain = false; 
-      let shuriWalletMain = false;  
-      let hasUpdateTest = false; 
-      let shuriWalletTest = false;  
+      let hasUpdateMain = false;
+      let shuriWalletMain = false;
+      let hasUpdateTest = false;
+      let shuriWalletTest = false;
 
-      wallets.forEach((wallet) => {                  
-          if (wallet.name == 'ETH' && !hasUpdateMain){
-            shuriWalletMain = JSON.parse(JSON.stringify(wallet));
-            let shuriTemp = new Shuriken();
-            shuriWalletMain.name = shuriTemp.name;
-            shuriWalletMain.className = shuriTemp.className;
-            shuriWalletMain.title = shuriTemp.title;
-            shuriWalletMain.network = shuriTemp.constructor.Network.Mainnet;
-            shuriWalletMain.chainId = 1;
-            shuriWalletMain = MasterWallet.convertObject(shuriWalletMain);            
-            hasUpdateMain = true;            
-          }           
-          if (!process.env.isProduction && wallet.name == 'ETH' && !hasUpdateTest){
-            shuriWalletTest = JSON.parse(JSON.stringify(wallet));
-            let shuriTemp = new Shuriken();
-            shuriWalletTest.name = shuriTemp.name;
-            shuriWalletTest.className = shuriTemp.className;
-            shuriWalletTest.title = shuriTemp.title;
-            shuriWalletTest.network = shuriTemp.constructor.Network.Rinkeby;
-            shuriWalletTest.chainId = 4;
-            shuriWalletTest = MasterWallet.convertObject(shuriWalletTest);            
-            hasUpdateTest = true;      
-            
-          }                                  
+      wallets.forEach((wallet) => {
+        if (wallet.name == 'ETH' && !hasUpdateMain) {
+          shuriWalletMain = JSON.parse(JSON.stringify(wallet));
+          const shuriTemp = new Shuriken();
+          shuriWalletMain.name = shuriTemp.name;
+          shuriWalletMain.className = shuriTemp.className;
+          shuriWalletMain.title = shuriTemp.title;
+          shuriWalletMain.network = shuriTemp.constructor.Network.Mainnet;
+          shuriWalletMain.chainId = 1;
+          shuriWalletMain = MasterWallet.convertObject(shuriWalletMain);
+          hasUpdateMain = true;
+        }
+        if (!process.env.isProduction && wallet.name == 'ETH' && !hasUpdateTest) {
+          shuriWalletTest = JSON.parse(JSON.stringify(wallet));
+          const shuriTemp = new Shuriken();
+          shuriWalletTest.name = shuriTemp.name;
+          shuriWalletTest.className = shuriTemp.className;
+          shuriWalletTest.title = shuriTemp.title;
+          shuriWalletTest.network = shuriTemp.constructor.Network.Rinkeby;
+          shuriWalletTest.chainId = 4;
+          shuriWalletTest = MasterWallet.convertObject(shuriWalletTest);
+          hasUpdateTest = true;
+
+        }
       });
-      if (hasUpdateMain && shuriWalletMain){
+      if (hasUpdateMain && shuriWalletMain) {
         wallets.push(shuriWalletMain);
-        MasterWallet.UpdateLocalStore(wallets);        
+        MasterWallet.UpdateLocalStore(wallets);
       }
-      if (hasUpdateTest && shuriWalletTest){
+      if (hasUpdateTest && shuriWalletTest) {
         wallets.push(shuriWalletTest);
-        MasterWallet.UpdateLocalStore(wallets);        
+        MasterWallet.UpdateLocalStore(wallets);
       }
-      
+
       return wallets;
     }
 
     // for force set default mainnet:
-    static forceSetDefaultMainnet(wallets){
-      let listWallet = [];
+    static forceSetDefaultMainnet(wallets) {
+      const listWallet = [];
       let isDefaultBTC = false;
       let isDefaultETH = false;
       if (process.env.isProduction) {
-        wallets.forEach((wallet) => {          
-          if ( wallet.getNetworkName() == "Mainnet"){
-            if (wallet.default){
-              if (wallet.name == 'ETH'){
+        wallets.forEach((wallet) => {
+          if (wallet.getNetworkName() == 'Mainnet') {
+            if (wallet.default) {
+              if (wallet.name == 'ETH') {
                 isDefaultETH = true;
               }
-              if (wallet.name == 'BTC'){
+              if (wallet.name == 'BTC') {
                 isDefaultBTC = true;
               }
             }
             listWallet.push(wallet);
-          }                              
+          }
         });
-        if (!isDefaultBTC || !isDefaultETH){
-          listWallet.forEach((wallet) => {          
-            if (wallet.name == 'BTC' && !wallet.isReward){
-              if (!isDefaultBTC){
+        if (!isDefaultBTC || !isDefaultETH) {
+          listWallet.forEach((wallet) => {
+            if (wallet.name == 'BTC' && !wallet.isReward) {
+              if (!isDefaultBTC) {
                 wallet.default = true;
                 isDefaultBTC = true;
               }
             }
-            if (wallet.name == 'ETH' && !wallet.isReward){
-              if (!isDefaultETH){
+            if (wallet.name == 'ETH' && !wallet.isReward) {
+              if (!isDefaultETH) {
                 wallet.default = true;
                 isDefaultETH = true;
               }
-            }            
-          })
+            }
+          });
         }
         MasterWallet.UpdateLocalStore(listWallet);
         return listWallet;
       }
       return wallets;
-      
     }
 
     // Get list wallet from store local:
     static getMasterWallet() {
-      let wallets = localStore.get(MasterWallet.KEY);
+      const wallets = localStore.get(MasterWallet.KEY);
 
       if (wallets == false) return false;
 
-      let listWallet = [];
+      const listWallet = [];
       let hasTestnet = false;
-          
-      wallets.forEach((walletJson) => {        
-        let wallet =  MasterWallet.convertObject(walletJson);
+
+      wallets.forEach((walletJson) => {
+        const wallet = MasterWallet.convertObject(walletJson);
         if (wallet != false) {
-          if (wallet.getNetworkName() !== "Mainnet"){
+          if (wallet.getNetworkName() !== 'Mainnet') {
             hasTestnet = true;
-          }          
+          }
           listWallet.push(wallet);
         }
       });
 
-      if (hasTestnet){
+      if (hasTestnet) {
         return MasterWallet.forceSetDefaultMainnet(listWallet);
       }
 
@@ -279,13 +278,12 @@ export class MasterWallet {
           let wallet = false;
           wallets.forEach((walletJson) => {
             if (walletJson.default && coinName == walletJson.name) {
-              if (process.env.isProduction){
-                if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet){
+              if (process.env.isProduction) {
+                if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
                   wallet = MasterWallet.convertObject(walletJson);
                 }
-              }
-              else
-                wallet = MasterWallet.convertObject(walletJson);
+              } else
+                {wallet = MasterWallet.convertObject(walletJson);}
             }
           });
           return wallet;
@@ -296,13 +294,12 @@ export class MasterWallet {
         wallets.forEach((walletJson) => {
           if (!lstDefault.hasOwnProperty(walletJson.name)) { lstDefault[walletJson.name] = null; }
           if (walletJson.default) {
-            if (process.env.isProduction){
-              if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet){
+            if (process.env.isProduction) {
+              if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
                 lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);
               }
-            }
-            else
-              lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);
+            } else
+              {lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);}
           }
         });
         return lstDefault;
@@ -399,25 +396,29 @@ export class MasterWallet {
       return false;
     }
 
-    static getShurikenWalletJson(){
-      let wallets = MasterWallet.getMasterWallet();
-      const shuri_wallet_string = false;
-      wallets.forEach((shuriWallet) => {
-        if (shuriWallet.name=='SHURI'){
-          shuri_wallet_string["ETH"] = { address: shuriWallet.address, name: shuriWallet.name, network: shuriWallet.network, chainId: shuriWallet.chainId};
-          return JSON.stringify(shuri_wallet_string);
-        }
-      });      
-      return shuri_wallet_string;
+    static getShurikenWalletJson() {
+      const wallets = MasterWallet.getMasterWallet();
+      const shuries = wallets.filter(wallet => wallet.name === 'SHURI');
+      if (shuries.length) {
+        const {
+          address, name, network, chainId,
+        } = shuries[0];
+        return JSON.stringify({
+          ETH: {
+            address, name, network, chainId,
+          },
+        });
+      }
+      return false;
     }
 
-    static getRewardWalletJson() {      
-      let walletReward = MasterWallet.getMasterWallet();
+    static getRewardWalletJson() {
+      const walletReward = MasterWallet.getMasterWallet();
       const reward_wallet_string = {};
       walletReward.forEach((reward_wallet) => {
         if (reward_wallet.isReward)
-          reward_wallet_string[reward_wallet.name] = { address: reward_wallet.address, name: reward_wallet.name, network: reward_wallet.network, chainId: reward_wallet.chainId};
-      });      
+          {reward_wallet_string[reward_wallet.name] = { address: reward_wallet.address, name: reward_wallet.name, network: reward_wallet.network, chainId: reward_wallet.chainId};}
+      });
       return JSON.stringify(reward_wallet_string);
     }
 

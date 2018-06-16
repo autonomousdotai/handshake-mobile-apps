@@ -34,24 +34,6 @@ if (process.env.caches) {
   }
 }
 
-function parseQueryString() {
-  let query = window.location.search;
-  let obj = {},
-      qPos = query.indexOf("?"),
-  tokens = query.substr(qPos + 1).split('&'),
-  i = tokens.length - 1;
-  if (qPos !== -1 || query.indexOf("=") !== -1) {
-  for (; i >= 0; i--) {
-    let s = tokens[i].split('=');
-    obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
-  };
-  }
-  return obj;
-}
-
-const {ref} = parseQueryString();
-if (ref) localStorage.setItem("ref", ref);
-
 ReactDOM.render(<Website />, document.getElementById('app'));
 const root = document.getElementById('root');
 if (root) root.addEventListener('contextmenu', e => e.preventDefault());

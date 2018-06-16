@@ -16,6 +16,7 @@ module.exports = {
         "allowTemplateLiterals": true
       }
     ],
+    "no-console": "off",
     "class-methods-use-this": "off",
     "object-curly-spacing": ["error", "always"],
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["registration"] }],

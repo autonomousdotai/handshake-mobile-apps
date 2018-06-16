@@ -53,6 +53,9 @@ class Handle extends React.Component {
     this.authSuccess = ::this.authSuccess;
     this.firebase = ::this.firebase;
     this.notification = ::this.notification;
+    this.updateRewardAddress = ::this.updateRewardAddress;
+    this.setLanguage = ::this.setLanguage;
+    this.getListOfferPrice = ::this.getListOfferPrice;
 
     this.state = {
       auth: this.props.auth,
@@ -64,6 +67,9 @@ class Handle extends React.Component {
     if (currentLanguage && this.isSupportedLanguages.indexOf(currentLanguage) < 0) {
       local.remove(APP.LOCALE);
     }
+
+    const querystring = window.location.search.replace('?', '');
+    this.querystringParsed = qs.parse(querystring);
   }
 
   componentDidMount() {
@@ -76,170 +82,30 @@ class Handle extends React.Component {
     }
     return null;
   }
-
-  getListOfferPrice = () => {
-    this.props.getListOfferPrice({
-      PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
-      qs: { fiat_currency: this.props?.app?.ipInfo?.currency },
-    });
-  }
-
+  // locale
   setLanguage(language, autoDetect = true) {
     if (this.isSupportedLanguages.indexOf(language) >= 0) {
       this.props.changeLocale(language, autoDetect);
     }
   }
+  // /locale
 
-  ipInfo() {
-    const url = `https://ipapi.co/json${process.env.ipapiKey ? `?key=${process.env.ipapiKey}` : ''}`;
-    axios.get(url).then((res) => {
-      const { data } = res;
-      console.log('ipInfo', data);
-
-      const ipInfo = IpInfo.ipInfo(data);
-      this.props.setIpInfo(ipInfo);
-
-      local.save(APP.IP_INFO, ipInfo);
-      if (!local.get(APP.LOCALE)) {
-        const firstLanguage = data.languages.split(',')[0];
-        this.setLanguage(firstLanguage);
-      }
-
-      if (process.env.isProduction) {
-        // should use country code: .country ISO 3166-1 alpha-2
-        // https://ipapi.co/api/#complete-location
-        if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
-          this.props.setBannedPrediction();
-        }
-        if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
-          this.props.setBannedCash();
-        }
-      }
-      this.props.setCheckBanned();
+  // exchange
+  getListOfferPrice() {
+    this.props.getListOfferPrice({
+      PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
+      qs: { fiat_currency: this.props.app.ipInfo?.currency },
     });
   }
+  // /exchange
 
-  checkRegistry() {
-    const querystring = window.location.search.replace('?', '');
-    const { language, ref } = qs.parse(querystring);
-    if (language) this.setLanguage(language, false);
-    const token = local.get(APP.AUTH_TOKEN);
-
-    if (token) {
-      this.authSuccess();
-    } else {      
-      let refs = localStorage.getItem('ref');      
-      this.props.signUp({
-        PATH_URL: `user/sign-up${refs ? `?ref=${refs}` : ''}`,
-        METHOD: 'POST',
-        successFn: () => {
-          this.authSuccess();
-        },
-      });
-    }
-  }
-
-  authSuccess() {
-    // basic profile
-    this.props.fetchProfile({
-      PATH_URL: 'user/profile',
-      errorFn: (res) => {
-        if (!process.env.isProduction) {
-          if (res.message === 'Invalid user.') {
-            local.remove(APP.AUTH_TOKEN);
-            this.checkRegistry();
-          }
-        } else {
-          this.props.showAlert({
-            message: (
-              <div className="text-center">
-                Have something wrong with your profile, please contact supporters
-              </div>
-            ),
-            timeOut: false,
-            isShowClose: true,
-            type: 'danger',
-            callBack: () => {},
-          });
-        }
-      },
-      // end error fn
-      successFn: () => {
-        // exchange profile
-        this.props.getUserProfile({
-          PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE,
-        });
-
-        // GET IP INFO
-        this.ipInfo();
-        this.timeOutInterval = setInterval(() => {
-          this.ipInfo();
-        }, 30 * 60 * 1000); // 30'
-
-        // GET PRICE
-        this.getListOfferPrice();
-        this.timeOutGetPrice = setInterval(() => {
-          this.getListOfferPrice();
-        }, 2 * 60 * 1000); // 2'
-
-        // wallet handle
-        let listWallet = MasterWallet.getMasterWallet();
-
-        if (listWallet === false) {
-          this.setState({ loadingText: 'Creating your local wallets' });          
-          listWallet = createMasterWallets().then(() => {            
-            this.setState({ isLoading: false, loadingText: '' });               
-            this.updateRewardAddress();
-            // if (!process.env.isProduction) {
-            //   const wallet = MasterWallet.getWalletDefault('ETH');
-            //   this.props.getFreeETH({
-            //     PATH_URL: `/user/free-rinkeby-eth?address=${wallet.address}`,
-            //     METHOD: 'POST',
-            //   });
-            // }
-          });
-        } else {
-          // check exists shuri-wallet
-          let shuriWallet = MasterWallet.getShurikenWalletJson();          
-          if (shuriWallet === false){
-            MasterWallet.createShuriWallet();            
-            this.updateRewardAddress();//-> not called.
-          }
-          else{
-            this.firebase();
-          }
-          this.setState({ isLoading: false });          
-        }
-        
-      },
-      // end success fn
-    });
-  }
-
-  updateRewardAddress() {                
-    let walletReward = MasterWallet.getShurikenWalletJson();      
-    const params = new URLSearchParams();
-          params.append('reward_wallet_addresses', walletReward);
-          this.props.authUpdate({
-            PATH_URL: 'user/profile',
-            data: params,            
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            METHOD: 'POST',
-            successFn: (response) => {              
-              this.firebase();
-            },
-            errorFn: (e) =>{
-              this.firebase();
-            }
-          });          
-  }
-
-  getFreeETH(){
-    const wallet = MasterWallet.getWalletDefault('ETH');            
-    this.props.getFreeETH({//todo remove xxxxxx:
+  // wallet
+  getFreeETH() {
+    const wallet = MasterWallet.getWalletDefault('ETH');
+    this.props.getFreeETH({// todo remove xxxxxx:
       PATH_URL: `/user/free-rinkeby-eth?address=xxxxxx${wallet.address}`,
       METHOD: 'POST',
-      successFn: (response) => {                
+      successFn: () => {
         this.setState({ isLoading: false, loadingText: '' });
         // run cron alert user when got 1eth:
         this.timeOutCheckGotETHFree = setInterval(() => {
@@ -262,13 +128,152 @@ class Handle extends React.Component {
     });
   }
 
+  updateRewardAddress() {
+    console.log('root-handle - wallet - updateRewardAddress');
+    const walletReward = MasterWallet.getShurikenWalletJson();
+    const data = new FormData();
+    data.append('reward_wallet_addresses', walletReward);
+    this.props.authUpdate({
+      PATH_URL: 'user/profile',
+      data,
+      headers: { 'Content-Type': 'multipart/form-data' },
+      METHOD: 'POST',
+      successFn: (res) => {
+        console.log('root-handle - wallet - success - ', res);
+      },
+      errorFn: (e) => {
+        console.log('root-handle - wallet - error - ', e);
+      },
+    });
+  }
+  // /wallet
+
+  ipInfo() {
+    console.log('root-handle - ipinfo');
+    axios.get(`https://ipapi.co/json?key=${process.env.ipapiKey}`).then((res) => {
+      const { data } = res;
+      // ipInfo
+      const ipInfo = IpInfo.ipInfo(data);
+      this.props.setIpInfo(ipInfo);
+      local.save(APP.IP_INFO, ipInfo);
+      // locale
+      if (!local.get(APP.LOCALE)) {
+        const firstLanguage = data.languages.split(',')[0];
+        this.setLanguage(firstLanguage);
+      }
+
+      if (process.env.isProduction) {
+        // should use country code: .country ISO 3166-1 alpha-2
+        // https://ipapi.co/api/#complete-location
+        if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+          this.props.setBannedPrediction();
+        }
+        if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
+          this.props.setBannedCash();
+        }
+      }
+      this.props.setCheckBanned();
+      // /locale
+    });
+  }
+
+  // main
+  checkRegistry() {
+    const { language, ref } = this.querystringParsed;
+    if (language) this.setLanguage(language, false);
+
+    const token = local.get(APP.AUTH_TOKEN);
+
+    if (token) {
+      this.authSuccess();
+    } else {
+      this.props.signUp({
+        PATH_URL: `user/sign-up${ref ? `?ref=${ref}` : ''}`,
+        METHOD: 'POST',
+        successFn: () => {
+          this.authSuccess();
+        },
+      });
+    }
+  }
+
+  authSuccess() {
+    this.props.fetchProfile({
+      PATH_URL: 'user/profile',
+      errorFn: (res) => {
+        if (!process.env.isProduction) {
+          if (res.message === 'Invalid user.') {
+            local.remove(APP.AUTH_TOKEN);
+            this.checkRegistry();
+          }
+        } else {
+          this.props.showAlert({
+            message: (
+              <div className="text-center">
+                Have something wrong with your profile, please contact supporters
+              </div>
+            ),
+            timeOut: false,
+            isShowClose: true,
+            type: 'danger',
+            callBack: () => {},
+          });
+        }
+      },
+      successFn: () => {
+        // IP info - locale
+        this.ipInfo();
+        this.timeOutInterval = setInterval(() => this.ipInfo(), 30 * 60 * 1000); // 30'
+
+        // exchange
+        this.props.getUserProfile({ PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE });
+
+        this.getListOfferPrice();
+        this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
+
+        // wallet
+        const listWallet = MasterWallet.getMasterWallet();
+        console.log('root-handle - wallet - listWallet - ', listWallet);
+
+        if (listWallet === false) {
+          this.setState({ loadingText: 'Creating your local wallets' });
+          createMasterWallets().then(() => {
+            this.setState({ isLoading: false, loadingText: '' });
+            this.updateRewardAddress();
+            // if (!process.env.isProduction) {
+            //   const wallet = MasterWallet.getWalletDefault('ETH');
+            //   this.props.getFreeETH({
+            //     PATH_URL: `/user/free-rinkeby-eth?address=${wallet.address}`,
+            //     METHOD: 'POST',
+            //   });
+            // }
+          });
+        } else {
+          const shuriWallet = MasterWallet.getShurikenWalletJson();
+          console.log('root-handle - wallet - shuriWallet - ', shuriWallet);
+          if (shuriWallet === false) {
+            MasterWallet.createShuriWallet();
+            this.updateRewardAddress();
+          }
+        }
+
+        // core
+        this.firebase();
+        this.notification();
+        // /core
+      },
+    });
+  }
+  // /main
+
   firebase() {
-    this.notification();
+    console.log('root-handle - core - firebase');
     this.props.firebase.watchEvent('value', `/users/${this.state.auth.profile.id}`);
     this.props.firebase.watchEvent('value', `/config`);
   }
 
   notification() {
+    console.log('root-handle - core - notification');
     try {
       const messaging = this.props.firebase.messaging();
       messaging
@@ -276,14 +281,16 @@ class Handle extends React.Component {
         .then(() => messaging.getToken())
         .catch(e => console.log(e))
         .then((notificationToken) => {
-          const params = new URLSearchParams();
-          params.append('fcm_token', notificationToken);
-          this.props.authUpdate({
-            PATH_URL: 'user/profile',
-            data: params,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            METHOD: 'POST',
-          });
+          if (notificationToken) {
+            const data = new FormData();
+            data.append('fcm_token', notificationToken);
+            this.props.authUpdate({
+              PATH_URL: 'user/profile',
+              data,
+              headers: { 'Content-Type': 'multipart/form-data' },
+              METHOD: 'POST',
+            });
+          }
         })
         .catch(e => console.log(e));
     } catch (e) {
