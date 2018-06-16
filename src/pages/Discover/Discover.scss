@@ -1,28 +1,20 @@
 @import './src/styles/style';
+$gray: #f4f5f7;
 
 .discover {
+  background: $gray;
   .feed-wrapper {
     margin-bottom:  rem-calc(23px);
   }
   .category-wrapper {
     margin-bottom: rem-calc(11px);
+    background: $white;
   }
   .buy-sell-wrapper {
     margin-bottom: rem-calc(15px);
   }
   .search-bar-wrapper {
     margin-bottom: rem-calc(15px);
-  }
-  .faq {
-    margin-top: rem-calc(30px);
-    dl {
-      dd {
-        font-size: rem-calc(18px);
-      }
-      dt {
-        font-weight: $normal;
-      }
-    }
   }
   .exchange-intro {
     //background: #8BB7F0;
@@ -63,6 +55,14 @@
         //line-height: 23px;
       }
     }
+  }
+  .faq-block {
+    margin-top: rem-calc(15px);
+  }
+  .info {
+    padding: rem-calc(15px);
+    font-size: 13px;
+    font-size: $light;
   }
 }
 

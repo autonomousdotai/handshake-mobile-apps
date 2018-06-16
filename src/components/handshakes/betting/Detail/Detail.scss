@@ -1,6 +1,10 @@
 @import './src/styles/style';
 .beeting-detail {
   width: 100%;
+  .faq-block {
+    margin-top: rem-calc(15px);
+    padding: 0 15px;
+  }
   .info {
     background: $radical-red;
   }

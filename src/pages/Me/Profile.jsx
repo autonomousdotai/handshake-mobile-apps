@@ -321,8 +321,8 @@ class Profile extends React.Component {
                 </div>
               </div>
               <div className={`content ${this.state.phoneCollapse ? '' : 'd-none'}`}>
-                <p className="text">We only send humans rewards. Please verify your phone number.</p>
-                <p className="text">Enter phone number</p>
+                <p className="text">We only send humans rewards.</p>
+                <p className="text">Please verify your phone number.</p>
                 <NumberPhoneForm onSubmit={this.onSubmitVerifyPhone}>
                   <div className="phone-block">
                     <div className="dropdown country-code">

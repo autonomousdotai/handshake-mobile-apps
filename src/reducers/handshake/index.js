@@ -119,6 +119,21 @@ const handshakeReducter = (state = {
             ...state,
             isFetching: false,
         };
+        case ACTIONS.SAVE_TRANSACTION:
+        return {
+            ...state,
+            isFetching: false,
+        };
+        case `${ACTIONS.SAVE_TRANSACTION}_SUCCESS`:
+        return {
+            ...state,
+            isFetching: false,
+        };
+        case `${ACTIONS.SAVE_TRANSACTION}_FAILED`:
+        return {
+            ...state,
+            isFetching: false,
+        };
         default:
         return state;
     }

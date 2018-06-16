@@ -254,12 +254,12 @@ class Neuron {
           })
           .on('error', error => ({
             hash: -1,
-            error: String(error),
+            error: error,
           }));
       })
       .catch(error => ({
         hash: -1,
-        error: String(error),
+        error: error,
       }));
   };
   makeRawTransfer = (address, privateKey, options) => {

@@ -56,7 +56,6 @@ class DiscoverDetailPage extends React.Component {
 
 DiscoverDetailPage.propType = {
   loadDiscoverDetail: PropTypes.func,
-  // setHeaderTitle: PropTypes.func,
 };
 
 const mapState = state => ({
@@ -65,7 +64,6 @@ const mapState = state => ({
 
 const mapDispatch = ({
   loadDiscoverDetail,
-  // setHeaderTitle,
 });
 
 export default connect(mapState, mapDispatch)(DiscoverDetailPage);

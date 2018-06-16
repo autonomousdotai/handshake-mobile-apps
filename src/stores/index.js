@@ -3,6 +3,7 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import { firebaseReducer, reactReduxFirebase } from 'react-redux-firebase';
 import thunk from 'redux-thunk';
 import firebase from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/database';
 import 'firebase/messaging';
 
@@ -14,6 +15,7 @@ import authReducer from '@/reducers/auth';
 import reducers from '@/reducers';
 
 firebase.initializeApp(process.env.firebase);
+firebase.auth().signInAnonymously();
 
 const AppReducers = combineReducers({
   app: appReducer,

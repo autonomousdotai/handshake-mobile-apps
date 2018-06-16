@@ -28,7 +28,7 @@ import {showAlert} from '@/reducers/app/action';
 import './Create.scss';
 const ROUND = 1000000;
 
-const betHandshakeHandler = new BetHandshakeHandler()
+const betHandshakeHandler = BetHandshakeHandler.getShareManager();
 
 const nameFormBettingCreate = 'bettingCreate';
 // const BettingCreateForm = createForm({
@@ -137,7 +137,10 @@ get foundMatch(){
 get matchNames() {
   const {matches} = this.state;
   //return matches.map((item) => ({ id: item.id, value: `${item.homeTeamName} - ${item.awayTeamName} (${this.getStringDate(item.date)})` }));
-  const mathNamesList = matches.map((item) => ({ id: item.id, value: `Event: ${item.name} (${this.getStringDate(item.date)})`, marketFee: item.market_fee }));
+  const mathNamesList = matches.map((item) => ({ id: item.id, 
+                                                value: `Event: ${item.name} (${this.getStringDate(item.date)})`, 
+                                                marketFee: item.market_fee, 
+                                                date: item.date}));
   return [
     ...mathNamesList,
     {
@@ -183,6 +186,8 @@ get defaultMatch() {
 get defaultOutcome() {
   const matchOutcomes = this.matchOutcomes;
   //console.log('defaultOutcome matchOutcomes: ', matchOutcomes);
+  const sortedMatch = matchOutcomes.sort((a, b) => b.id > a.id);
+
   const { outComeId } = this.props;
   if (matchOutcomes && matchOutcomes.length > 0) {
       const itemDefault = matchOutcomes.find(item => item.id === outComeId);
@@ -192,10 +197,11 @@ get defaultOutcome() {
   // return matchOutcomes && matchOutcomes.length > 0 ? matchOutcomes[0] : null;
 }
 
+
   async onSubmit(e) {
     e.preventDefault();
     const dict = this.refs;
-    const {address, privateKey, values, selectedMatch, selectedOutcome} = this.state;
+    const {address, privateKey, values, selectedMatch, selectedOutcome, isChangeOdds} = this.state;
     console.log("values", values);
 
     let content = this.content;
@@ -230,7 +236,10 @@ get defaultOutcome() {
     //const estimatedGas = 0.00001;
     console.log('Estimate Gas:', estimatedGas);
     const eventBet = parseFloat(values["event_bet"]);
-    const odds = parseFloat(values['event_odds']);
+    let odds = parseFloat(values['event_odds']);
+    if(!isChangeOdds){
+      odds = selectedOutcome.marketOdds;
+    }
     const total = eventBet + parseFloat(estimatedGas);
     console.log("Event Bet, Odds, Estimate, Total:",eventBet,odds,estimatedGas, total);
 
@@ -238,9 +247,18 @@ get defaultOutcome() {
     console.log('Match, Outcome:', selectedMatch, selectedOutcome);
 
     var message = null;
+    const date = selectedMatch.date;
+    console.log('Date:', date);
+    if(!betHandshakeHandler.isRightNetwork()){
+      message = MESSAGE.MATCH_OVER;
 
+    }
+    
     if(selectedMatch && selectedOutcome){
-      if(eventBet > 0){
+      if (betHandshakeHandler.isExpiredDate(date)){
+        message = MESSAGE.MATCH_OVER;
+      }
+      else if(eventBet > 0){
         if(total <= balance){
           if(odds > 1){
             this.initHandshake(extraParams, fromAddress);
@@ -578,10 +596,17 @@ get defaultOutcome() {
     // const payout = stake * event_odds;
     //const hid = selectedOutcome.id;
     const hid = selectedOutcome.hid;
+
     if(status && data){
+      const isExist = betHandshakeHandler.isExistMatchBet(data);
+      let message = MESSAGE.CREATE_BET_NOT_MATCH;
+     if(isExist){
+       message = MESSAGE.CREATE_BET_MATCHED;
+     }
       betHandshakeHandler.controlShake(data, hid);
+
       this.props.showAlert({
-        message: <div className="text-center">{MESSAGE.CREATE_BET_SUCCESSFUL}</div>,
+        message: <div className="text-center">{message}</div>,
         timeOut: 3000,
         type: 'success',
         callBack: () => {

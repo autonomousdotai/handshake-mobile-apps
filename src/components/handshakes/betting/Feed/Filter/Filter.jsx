@@ -24,7 +24,7 @@ import './Filter.scss';
 
 const betHandshakeHandler = new BetHandshakeHandler();
 const freeAmount = 0.01;
-
+const CRYPTOSIGN_MINIMUM_MONEY = 0.00002;
 const TAG = 'BETTING_FILTER';
 const SELECTING_DEFAULT = {
   id: '',
@@ -60,6 +60,18 @@ class BettingFilter extends React.Component {
   }
 
   componentDidMount() {
+      /* Test */
+    let value = 1.389999999;
+    console.log(`Value, ceil:`, value, Math.ceil(value, 2));
+    console.log(`Value, floor:`, value, Math.floor(value, 2));
+
+    value = 1.33333333333;
+    console.log(`Value, ceil:`, value, Math.ceil(value, 2));
+    console.log(`Value, floor:`, value, Math.floor(value, 2));
+
+
+
+
     this.props.loadMatches({
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
       successFn: (res) => {
@@ -170,6 +182,7 @@ class BettingFilter extends React.Component {
     const { matchOutcomes } = this;
     // console.log('defaultOutcome matchOutcomes: ', matchOutcomes);
     const { outComeId } = this.props;
+    const sortedMatch = matchOutcomes.sort((a, b) => b.id > a.id);
     if (matchOutcomes && matchOutcomes.length > 0) {
       const itemDefault = matchOutcomes.find(item => item.id === outComeId);
       return itemDefault || matchOutcomes[0];
@@ -312,9 +325,11 @@ class BettingFilter extends React.Component {
     const { status, data } = successData;
     if (status && data) {
       const { support, against } = data;
+      const filterSupport = support.filter(item => item.amount >= CRYPTOSIGN_MINIMUM_MONEY);
+      const filterAgainst = against.filter(item => item.amount >= CRYPTOSIGN_MINIMUM_MONEY);
       this.setState({
-        support,
-        against,
+        support: filterSupport,
+        against: filterAgainst,
       });
     }
   }
@@ -456,16 +471,30 @@ class BettingFilter extends React.Component {
           {
           isFirstFree
           ? (
-              <div className="freeBox">
-                <div className="contentFree">You got <span>free ETH</span> to play</div>
+              
+              <div className="freeBox" onClick={() => {
+                this.modalBetFreeRef.open();
+            }}>
+                <div className="contentFree">Unlock your <span>FREE ETH</span> to play</div>
                 <Button
                 className="buttonBet"
-                onClick={() => {
-                    this.modalBetFreeRef.open();
-                }}
+                
                 >Bet now
                 </Button>
               </div>
+              
+             /*
+             <Button className="freeBox" onClick={() => {
+                this.modalBetFreeRef.open();
+            }}>
+                <div className="contentFree">Unlock your <span>FREE ETH</span> to play</div>
+                <div
+                className="buttonBet"
+                
+                >Bet now
+                </div>
+              </Button>
+              */
 
           )
           : ''

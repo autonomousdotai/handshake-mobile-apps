@@ -23,7 +23,7 @@ import './ShakeFree.scss';
 import { BetHandshakeHandler, MESSAGE, SIDE } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { Form } from 'reactstrap';
 
-const betHandshakeHandler = new BetHandshakeHandler()
+const betHandshakeHandler = BetHandshakeHandler.getShareManager();
 const nameFormBettingShake = 'bettingShakeForm';
 
 
@@ -102,30 +102,24 @@ class BetingShakeFree extends React.Component {
   }
 
 
-  isExpiredDate(){
-    const {closingDate} = this.props;
-    let dayUnit = moment.unix(closingDate).utc();
-    let today = moment();
-    let todayUnit = today.utc();
-    console.log('Date Unix:', dayUnit.format());
-    console.log('Today Unix:', todayUnit.format());
-    if(!todayUnit.isSameOrBefore(dayUnit, "miliseconds") && today){
-      console.log('Expired Date');
-      return true
-    }
-    return false;
-  }
+  
 
   async onSubmit(e) {
     console.log("Submit");
     e.preventDefault();
     const values = this.refs;
     console.log('Values:', values);
-    const {isShowOdds} = this.state;
-    const {matchName, matchOutcome, amount} = this.props;
+    const {isShowOdds, isChangeOdds} = this.state;
+    const {matchName, matchOutcome, amount, marketAgainstOdds, marketSupportOdds, closingDate} = this.props;
     //const amount = parseFloat(values.amount.value);
-    const odds = parseFloat(values.odds.value);
+    let odds = parseFloat(values.odds.value);
     const side = parseInt(this.toggleRef.value);
+
+    const marketOdds = side === SIDE.SUPPORT ? marketSupportOdds : marketAgainstOdds;
+
+    if(!isChangeOdds){
+      odds = marketOdds;
+    }
 
     console.log("Amount, Side, Odds", amount, side, odds);
     // this.props.onSubmitClick(amount);
@@ -136,8 +130,10 @@ class BetingShakeFree extends React.Component {
     console.log('Balance, estimate gas, total:', balance, estimatedGas, total);
 
     var message = null;
-
-    if(this.isExpiredDate()){
+    if(!betHandshakeHandler.isRightNetwork()){
+      message = MESSAGE.RIGHT_NETWORK;
+    }
+    else if(betHandshakeHandler.isExpiredDate(closingDate)){
       message = MESSAGE.MATCH_OVER;
 
     }
@@ -291,7 +287,7 @@ class BetingShakeFree extends React.Component {
         <p className="titleForm text-center">BET FREE ON THE OUTCOME</p>
         {<Toggle ref={(component) => {this.toggleRef = component}} onChange={this.onToggleChange} />}
         {/*this.renderInputField(amountField)*/}
-        <div className="freeAmount"> You have free {amount} ETH</div>
+        <div className="freeAmount"> You have {amount} ETH free </div>
         {isShowOdds && this.renderInputField(oddsField)}
         <div className="rowWrapper">
          <div>Possible winnings</div>
@@ -449,10 +445,12 @@ class BetingShakeFree extends React.Component {
     };
     console.log("Params:", params);
 
+    
     this.props.initFreeHandshake({PATH_URL: API_URL.CRYPTOSIGN.INIT_HANDSHAKE_FREE, METHOD:'POST', data: params,
     successFn: this.initHandshakeSuccess,
     errorFn: this.initHandshakeFailed
   });
+  
   }
 
   initHandshakeSuccess = async (successData)=>{
@@ -463,9 +461,14 @@ class BetingShakeFree extends React.Component {
       
      const {outcomeHid} = this.props;
       console.log('OutcomeHid:', outcomeHid);
-     //betHandshakeHandler.controlShake(data, outcomeHid);
+
+      const isExist = betHandshakeHandler.isExistMatchBet(data);
+     let message = MESSAGE.CREATE_BET_NOT_MATCH;
+     if(isExist){
+       message = MESSAGE.CREATE_BET_MATCHED;
+     }
      this.props.showAlert({
-      message: <div className="text-center">{MESSAGE.CREATE_BET_SUCCESSFUL}</div>,
+      message: <div className="text-center">{message}</div>,
       timeOut: 3000,
       type: 'success',
       callBack: () => {

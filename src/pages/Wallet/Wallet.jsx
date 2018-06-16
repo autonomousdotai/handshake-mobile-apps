@@ -222,6 +222,7 @@ class Wallet extends React.Component {
   }
 
   async componentDidMount() {
+
     this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
 
@@ -314,17 +315,17 @@ class Wallet extends React.Component {
           this.modalShareAddressRef.open();
         }
       })
-    // not allow for testnet:
-    if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet){
-      obj.push({
-        title: 'Buy coins',
-        handler: () => {
-          this.setState({ walletSelected: wallet });
-          this.toggleBottomSheet();
-          this.modalFillRef.open();
-        },
-      });
-    }
+    // now hide buy coin:    
+    // if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet){
+    //   obj.push({
+    //     title: 'Buy coins',
+    //     handler: () => {
+    //       this.setState({ walletSelected: wallet });
+    //       this.toggleBottomSheet();
+    //       this.modalFillRef.open();
+    //     },
+    //   });
+    // }
 
     if (!wallet.protected) {
       obj.push({
@@ -981,16 +982,17 @@ class Wallet extends React.Component {
           <Row className="list">
             {this.listMainWalletBalance}
           </Row>
-          {this.listTestWalletBalance.length > 0 ? 
+          {!process.env.isProduction ? 
           <Row className="list">
             <Header title="Testnet wallets" hasLink linkTitle="Request free ETH" onLinkClick={this.getETHFree} />
           </Row>
           : ''}
+          {!process.env.isProduction ? 
           <Row className="list">
             {this.listTestWalletBalance}
           </Row>
+          : ''}
           
-
           <Row className="list">
             <Header title="Reward wallets" hasLink={false} />
           </Row>
