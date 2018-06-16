@@ -25,6 +25,7 @@
       cursor: pointer;
       margin-bottom: 8px;
       color: white;
+      font-weight: normal;
       //width: 200px;
     }
   }
@@ -34,7 +35,8 @@
     }
   }
   .btn-close {
-    width: 100px;
+    margin: 0;
+    padding: 0;
   }
 }
 
