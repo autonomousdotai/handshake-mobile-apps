@@ -282,7 +282,7 @@ class Component extends React.Component {
     }
 
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(4, true);
+    const fee = await wallet.getFee(10, true);
 
     const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
 
@@ -408,7 +408,7 @@ class Component extends React.Component {
     if (currency === CRYPTO_CURRENCY.BTC) {
       console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
       if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, amountSell).then(success => {
+        wallet.transfer(offer.items.BTC.systemAddress, amountSell, 10).then(success => {
           console.log('transfer', success);
         });
       }

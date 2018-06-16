@@ -164,7 +164,7 @@ class Me extends React.Component {
                   return null;
                 })
               ) : (
-                <NoData message="Start a mission." />
+                <NoData message="Start a mission." isShowArrowDown />
               )
             }
           </Col>

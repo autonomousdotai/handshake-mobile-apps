@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 // services
 import { setHeaderTitle } from '@/reducers/app/action';
 // components
+import FAQBetting from '@/components/core/presentation/FAQBetting';
 import BettingFilter from '@/components/handshakes/betting/Feed/Filter';
 // style
 import './Detail.scss';
@@ -46,6 +47,9 @@ class BettingDetail extends React.Component {
     return (
       <div className="beeting-detail">
         <BettingFilter matchId={match} outComeId={outCome} />
+        <div className="faq-block">
+          <FAQBetting />
+        </div>
       </div>
     );
   }

@@ -9,7 +9,8 @@ export const ACTIONS = {
   UNINIT: 'UNINIT',
   COLLECT: 'COLLECT',
   REFUND: 'REFUND',
-  ROLLBACK: 'ROLLBACK'
+  ROLLBACK: 'ROLLBACK',
+  SAVE_TRANSACTION: 'SAVE_TRANSACTION'
 };
 
 export const initHandshake = createAPI(ACTIONS.INIT_HANDSHAKE);
@@ -19,6 +20,7 @@ export const uninitItem = createAPI(ACTIONS.UNINIT);
 export const collect = createAPI(ACTIONS.COLLECT);
 export const refund = createAPI(ACTIONS.REFUND);
 export const rollback = createAPI(ACTIONS.ROLLBACK);
+export const saveTransaction = createAPI(ACTIONS.SAVE_TRANSACTION);
 
 
 

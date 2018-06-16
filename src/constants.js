@@ -113,6 +113,7 @@ export const API_URL = {
     COLLECT: 'cryptosign/handshake/collect',
     ROLLBACK: 'cryptosign/handshake/rollback',
     REFUND: 'cryptosign/handshake/refund',
+    SAVE_TRANSACTION: 'cryptosign/tx/add'
   },
   DISCOVER: {
     INDEX: 'handshake/discover',

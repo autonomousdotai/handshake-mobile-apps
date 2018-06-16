@@ -20,6 +20,7 @@ import {
   EXCHANGE_ACTION_PRESENT_NAME,
   EXCHANGE_FEED_TYPE,
   EXCHANGE_METHOD_PAYMENT,
+  HANDSHAKE_EXCHANGE_CC_STATUS,
   HANDSHAKE_EXCHANGE_CC_STATUS_NAME,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME,
@@ -1156,21 +1157,30 @@ class FeedMe extends React.PureComponent {
     });
   }
 
-  isMovingCoin = () => {
+  getMessageMovingCoin = () => {
+    const { intl, status } = this.props;
     const { offer } = this;
-    const { status } = this.props;
-    let result = false;
+
+    let idMessage = '';
 
     switch (offer.feedType) {
       case EXCHANGE_FEED_TYPE.INSTANT: {
-        result = false;
+        switch (status) {
+          case HANDSHAKE_EXCHANGE_CC_STATUS.PROCESSING: {
+            idMessage = 'movingCoinFromEscrow';
+            break;
+          }
+        }
         break;
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE: {
         switch (status) {
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED: {
+            idMessage = 'movingCoinToEscrow';
+            break;
+          }
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING: {
-            result = true;
+            idMessage = 'movingCoinFromEscrow';
             break;
           }
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
@@ -1187,7 +1197,6 @@ class FeedMe extends React.PureComponent {
         switch (status) {
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTING:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLING: {
 
@@ -1197,14 +1206,37 @@ class FeedMe extends React.PureComponent {
               }
               case HANDSHAKE_USER.SHAKED: {//user shake
                 if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
-                  result = true;
+                  idMessage = 'movingCoinToEscrow';
                 }
 
                 break;
               }
               case HANDSHAKE_USER.OWNER: {//shop
                 if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
-                  result = true;
+                  idMessage = 'movingCoinToEscrow';
+                }
+
+                break;
+              }
+            }
+
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTING: {
+            switch (this.userType) {
+              case HANDSHAKE_USER.NORMAL: {
+                break;
+              }
+              case HANDSHAKE_USER.SHAKED: {//user shake
+                if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
+                  idMessage = 'movingCoinFromEscrow';
+                }
+
+                break;
+              }
+              case HANDSHAKE_USER.OWNER: {//shop
+                if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
+                  idMessage = 'movingCoinFromEscrow';
                 }
 
                 break;
@@ -1228,11 +1260,8 @@ class FeedMe extends React.PureComponent {
       case EXCHANGE_FEED_TYPE.EXCHANGE: {
         switch (status) {
           case HANDSHAKE_EXCHANGE_STATUS.CREATED:
-          case HANDSHAKE_EXCHANGE_STATUS.CLOSING:
           case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTING: {
+          case HANDSHAKE_EXCHANGE_STATUS.COMPLETING: {
 
             switch (this.userType) {
               case HANDSHAKE_USER.NORMAL: {
@@ -1240,14 +1269,64 @@ class FeedMe extends React.PureComponent {
               }
               case HANDSHAKE_USER.SHAKED: {//user shake
                 if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
-                  result = true;
+                  idMessage = 'movingCoinToEscrow';
                 }
 
                 break;
               }
               case HANDSHAKE_USER.OWNER: {//shop
                 if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
-                  result = true;
+                  idMessage = 'movingCoinToEscrow';
+                }
+
+                break;
+              }
+            }
+
+            break;
+          }
+
+          case HANDSHAKE_EXCHANGE_STATUS.CLOSING:
+          case HANDSHAKE_EXCHANGE_STATUS.REJECTING: {
+            switch (this.userType) {
+              case HANDSHAKE_USER.NORMAL: {
+                break;
+              }
+              case HANDSHAKE_USER.SHAKED: {//user shake
+                if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
+                  idMessage = 'movingCoinFromEscrow';
+                }
+
+                break;
+              }
+              case HANDSHAKE_USER.OWNER: {//shop
+                if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
+                  idMessage = 'movingCoinFromEscrow';
+                }
+
+                break;
+              }
+            }
+
+            break;
+          }
+
+          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING: {
+
+            switch (this.userType) {
+              case HANDSHAKE_USER.NORMAL: {
+                break;
+              }
+              case HANDSHAKE_USER.SHAKED: {//user shake
+                if (offer.type === EXCHANGE_ACTION.SELL) {//shop buy
+                  idMessage = 'movingCoinFromEscrow';
+                }
+
+                break;
+              }
+              case HANDSHAKE_USER.OWNER: {//shop
+                if (offer.type === EXCHANGE_ACTION.BUY) {//shop sell
+                  idMessage = 'movingCoinFromEscrow';
                 }
 
                 break;
@@ -1271,7 +1350,13 @@ class FeedMe extends React.PureComponent {
       }
     }
 
-    return result;
+    let message = '';
+    if (idMessage) {
+      message = intl.formatMessage({ id: idMessage }, {
+      });
+    }
+
+    return message;
   }
 
   render() {
@@ -1392,7 +1477,7 @@ class FeedMe extends React.PureComponent {
     const phone = offer.contactPhone;
     const phoneDisplayed = phone.replace(/-/g, '');
 
-    const isMovingCoin = this.isMovingCoin();
+    const messageMovingCoin = this.getMessageMovingCoin();
 
     return (
       <div className="feed-me-exchange">
@@ -1462,7 +1547,7 @@ class FeedMe extends React.PureComponent {
               </div>
             )
           }
-          { isMovingCoin && (<div className="mt-2">Moving your coin to escrow. This may take a few minutes.</div>) }
+          { messageMovingCoin && (<div className="mt-2">{messageMovingCoin}</div>) }
 
           {/*
             !isCreditCard && (

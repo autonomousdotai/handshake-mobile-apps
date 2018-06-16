@@ -51,6 +51,8 @@ export default {
   offerStoresAlreadyCreated: 'Oops! You already created an order on Ninja.',
   offerStoreHandShakeContent: '{offerTypeBuy} {amountBuy} {currency} at {fiatAmountBuy} {fiatAmountCurrency}. {offerTypeSell} {amountSell} {currency} at {fiatAmountSell} {fiatAmountCurrency}',
   requireDefaultWalletOnMainNet: 'You must set your wallet on Mainnet',
+  movingCoinToEscrow: 'Moving your coin to escrow. This may take a few minutes.',
+  movingCoinFromEscrow: 'Moving your coin from escrow. This may take a few minutes.',
 
   // FAQ
   FAQ_TITLE: 'FAQ',

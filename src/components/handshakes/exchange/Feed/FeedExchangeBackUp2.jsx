@@ -159,7 +159,7 @@ class FeedExchange extends React.PureComponent {
 
     if (shopType === EXCHANGE_ACTION.BUY) { // shop buy
       const balance = await wallet.getBalance();
-      const fee = await wallet.getFee(4, true);
+      const fee = await wallet.getFee(10, true);
 
       if (this.showNotEnoughCoinAlert(balance, values.amount, fee, values.currency)) {
         return;
@@ -210,7 +210,7 @@ class FeedExchange extends React.PureComponent {
     } else if (currency === CRYPTO_CURRENCY.BTC) {
       if (type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(currency);
-        wallet.transfer(systemAddress, totalAmount).then((success) => {
+        wallet.transfer(systemAddress, totalAmount, 10).then((success) => {
           console.log('transfer', success);
         });
       }

@@ -38,6 +38,12 @@ class Category extends React.PureComponent {
     });
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.idActive !== prevState.idActive) {
+      return { idActive: nextProps.idActive };
+    }
+  }
+
   categoryClick(category) {
     this.setState({
       idActive: category.id
@@ -65,6 +71,7 @@ class Category extends React.PureComponent {
 
 Category.propType = {
   className: PropTypes.string,
+  idActive: PropTypes.any,
   categories: PropTypes.array,
   onItemClick: PropTypes.func,
   onRef: PropTypes.func,

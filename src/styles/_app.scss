@@ -5,10 +5,16 @@
   min-height: 100vh;
   position: relative;
   padding-top: $header-height + 10px;
-  padding-bottom: $footer-height + 10px;
+  padding-bottom: $footer-height;
   overflow: hidden;
   &.hide-header {
     padding-top: 10px;
+  }
+  * {
+    user-select: none !important;
+    *:focus {
+      user-select: none !important;
+    }
   }
 }
 
