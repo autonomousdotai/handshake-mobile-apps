@@ -54,6 +54,12 @@ import OfferShop from '@/models/OfferShop';
 import {getLocalizedDistance} from "@/services/util";
 import {BigNumber} from "bignumber.js";
 
+import Rate from '@/components/core/controls/Rate';
+
+import iconChat from '@/assets/images/icon/chat-icon.svg';
+import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
+import iconEth from '@/assets/images/icon/coin/icon-eth.svg';
+
 class FeedExchange extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -71,6 +77,10 @@ class FeedExchange extends React.PureComponent {
     this.mainColor = 'linear-gradient(-180deg, rgba(0,0,0,0.50) 0%, #303030 0%, #000000 100%)';
   }
 
+  componentDidMount() {
+    // this.rateRef.open();
+  }
+
   render() {
     const { offer } = this;
 
@@ -83,13 +93,15 @@ class FeedExchange extends React.PureComponent {
         name: 'BTC',
         priceBuy: 2134343,
         priceSell: 2323111,
-        color: 'red'
+        color: '#FF880E',
+        icon: iconBtc
       },
       {
         name: 'ETH',
         priceBuy: 223322,
         priceSell: 231211,
-        color: 'blue'
+        color: 'linear-gradient(-135deg, #CB75ED 0%, #9E53E1 100%)',
+        iconEth: iconEth
       },
     ]
 
@@ -103,16 +115,18 @@ class FeedExchange extends React.PureComponent {
     // const {
     //   priceBuyBTC, priceSellBTC, priceBuyETH, priceSellETH,
     // } = this.getPrices();
+    const address = '0x2134134'
+    const distance = '12 km away'
     return (
       <div className="feed-exchange">
         <div>
           <div>
             {
               coins.map((coin, index) => {
-                const { name, priceBuy, priceSell, color } = coin
+                const { priceBuy, priceSell, color, icon } = coin
                 return (
                   <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
-                    <div>{name}</div>
+                    <div className="icon-coin"><img src={icon}/></div>
                     <div>Buy {priceBuy}</div>
                     <div>Sell {priceSell}</div>
                   </span>
@@ -120,9 +134,17 @@ class FeedExchange extends React.PureComponent {
               })
             }
           </div>
-          <div>
-            <div className="d-inline-block">Review</div>
-            <div className="d-inline-block"><button className="btn btn-primary" onClick={() => console.log('chat')}>Chat</button></div>
+          <div className="info">
+            <div>
+              <div className="address">{address}</div>
+              <div className="review">25 reviews</div>
+              <div className="distance">{distance}</div>
+            </div>
+            <div className="btn-chat">
+              <button className="btn" onClick={() => console.log('chat')}>
+                <img src={iconChat} />
+              </button>
+            </div>
           </div>
         </div>
         <div className="ex-sticky-note">

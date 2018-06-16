@@ -6,9 +6,50 @@
 .feed-exchange {
   .coin-item {
     display: inline-block;
-    width: 50%;
+    width: 160px;
     color: white;
+    border-radius: 6px;
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 6px;
+    .icon-coin {
+      width: 50px;
+    }
   }
+  .info {
+    padding-top: 10px;
+    & > div {
+      display: table-cell;
+      vertical-align: middle;
+      width: 100%;
+    }
+    .btn-chat {
+      width: 100px;
+      .btn {
+        background: transparent;
+      }
+    }
+    .address {
+      font-weight: 500;
+      font-size: 16px;
+      color: #1F2B34;
+      letter-spacing: 0.29px;
+    }
+    .review {
+      font-weight: 400;
+      font-size: 12px;
+      color: #6F6F6F;
+      letter-spacing: 0;
+    }
+    .distance {
+      opacity: 0.5;
+      font-weight: 400;
+      font-size: 12px;
+      color: #22292F;
+      letter-spacing: 0.21px;
+    }
+  }
+
   .ex-sticky-note {
     text-align: center;
     color: white;
