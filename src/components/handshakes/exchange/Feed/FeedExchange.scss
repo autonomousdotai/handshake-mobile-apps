@@ -3,20 +3,44 @@
 .app {
   padding-bottom: 150px !important;
 }
+
 .feed-exchange {
+  background: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(201,201,201,0.50);
+  border-radius: 4px;
+  padding: 0 10px 10px;
   .coin-item {
     display: inline-block;
-    width: 160px;
+    width: 148px;
     color: white;
     border-radius: 6px;
-    margin-right: 10px;
-    margin-top: 10px;
-    padding: 6px;
+    margin-right: 12px;
+    margin-top: 12px;
+    padding: 10px;
+    position: relative;
     .icon-coin {
-      width: 50px;
+      //width: 50px;
+      display: inline-block;
+      position: absolute;
+      top: -11px;
+      left: -9px;
+    }
+    .price {
+      font-weight: 500;
+      font-size: 12px;
+      color: #FFFFFF;
+      letter-spacing: 0.21px;
+      label {
+        min-width: 36px;
+      }
+      span {
+        font-weight: 700;
+        font-size: 16px;
+        letter-spacing: 0.29px;
+      }
     }
   }
-  .info {
+  .info-ex {
     padding-top: 10px;
     & > div {
       display: table-cell;
@@ -27,6 +51,7 @@
       width: 100px;
       .btn {
         background: transparent;
+        padding: 0;
       }
     }
     .address {
@@ -49,32 +74,32 @@
       letter-spacing: 0.21px;
     }
   }
+}
 
-  .ex-sticky-note {
-    text-align: center;
-    color: white;
-    position: fixed;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 414px;
-    background-color: black;
-    z-index: 2;
-    padding: 10px 0;
-    .btn-become {
-      min-width: 200px;
-      border: 1px solid white;
-      background: black;
-      color: white;
-    }
+.dialog-shake-detail {
+  .modal-custom-body {
+    background: #485059;
+    border-radius: 4px;
+    padding: 20px !important;
   }
+}
 
-  .dialog-shake-detail {
-    .modal-custom-body {
-      background: #485059;
-      border-radius: 4px;
-      padding: 20px !important;
-    }
+.ex-sticky-note {
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 414px;
+  background-color: black;
+  z-index: 2;
+  padding: 10px 0;
+  .btn-become {
+    min-width: 200px;
+    border: 1px solid white;
+    background: black;
+    color: white;
   }
 }

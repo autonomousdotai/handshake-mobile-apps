@@ -101,7 +101,7 @@ class FeedExchange extends React.PureComponent {
         priceBuy: 223322,
         priceSell: 231211,
         color: 'linear-gradient(-135deg, #CB75ED 0%, #9E53E1 100%)',
-        iconEth: iconEth
+        icon: iconEth
       },
     ]
 
@@ -118,35 +118,39 @@ class FeedExchange extends React.PureComponent {
     const address = '0x2134134'
     const distance = '12 km away'
     return (
-      <div className="feed-exchange">
-        <div>
+      <div>
+        <div className="feed-exchange">
           <div>
-            {
-              coins.map((coin, index) => {
-                const { priceBuy, priceSell, color, icon } = coin
-                return (
-                  <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
-                    <div className="icon-coin"><img src={icon}/></div>
-                    <div>Buy {priceBuy}</div>
-                    <div>Sell {priceSell}</div>
-                  </span>
-                )
-              })
-            }
-          </div>
-          <div className="info">
             <div>
-              <div className="address">{address}</div>
-              <div className="review">25 reviews</div>
-              <div className="distance">{distance}</div>
+              {
+                coins.map((coin, index) => {
+                  const { priceBuy, priceSell, color, icon } = coin
+                  return (
+                    <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
+                    <div className="icon-coin"><img src={icon}/></div>
+                    <div className="price"><label>BUY</label><span>{priceBuy}</span></div>
+                    <div className="price"><label>SELL</label><span>{priceSell}</span></div>
+                  </span>
+                  )
+                })
+              }
             </div>
-            <div className="btn-chat">
-              <button className="btn" onClick={() => console.log('chat')}>
-                <img src={iconChat} />
-              </button>
+            <div className="info-ex">
+              <div>
+                <div className="address">{address}</div>
+                <div className="review">25 reviews</div>
+                <div className="distance">{distance}</div>
+              </div>
+              <div className="btn-chat">
+                <button className="btn" onClick={() => console.log('chat')}>
+                  <img src={iconChat} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
+        <Button block className="mt-2" onClick={this.handleOnShake}>Shake</Button>
+
         <div className="ex-sticky-note">
           <div className="mb-2">Got coins? Turn them into a money-making machine.</div>
           <div><button className="btn btn-become">BECOME A LOCAL EXCHANGE</button></div>
