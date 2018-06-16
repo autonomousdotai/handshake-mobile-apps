@@ -23,7 +23,7 @@ import BettingShakeFree from './../ShakeFree';
 import './Filter.scss';
 
 const betHandshakeHandler = new BetHandshakeHandler();
-const freeAmount = 0.001;
+const freeAmount = 0.01;
 
 const TAG = 'BETTING_FILTER';
 const SELECTING_DEFAULT = {
