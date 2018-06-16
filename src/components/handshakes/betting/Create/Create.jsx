@@ -325,7 +325,7 @@ get defaultOutcome() {
     const odds = values['event_odds'];
     const total = amount * odds;
     this.setState({
-      winValue: Math.floor(total*ROUND)/ROUND || 0,
+      winValue: Math.round(total*ROUND)/ROUND || 0,
     })
   }
 
@@ -532,7 +532,7 @@ get defaultOutcome() {
     const roundWin = item.marketAmount * item.marketOdds;
     console.log('roundWin Value:', roundWin);
 
-    const winValue =  Math.floor(roundWin*ROUND)/ROUND;
+    const winValue =  Math.round(roundWin*ROUND)/ROUND;
     console.log('Win Value:', winValue);
 
     this.setState({selectedOutcome: item, values, winValue});

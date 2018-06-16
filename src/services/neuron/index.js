@@ -6,6 +6,7 @@ import Tx from 'ethereumjs-tx';
 export { default as BettingHandshake } from './neuron-bettinghandshake';
 export { default as ExchangeHandshake } from './neuron-exchangehandshake';
 export { default as ExchangeShopHandshake } from './neuron-exchangeshophandshake';
+export { default as PredictionHandshake } from './neuron-predictionhandshake';
 
 const BN = Web3.utils.BN;
 const TAG = 'Neuron';

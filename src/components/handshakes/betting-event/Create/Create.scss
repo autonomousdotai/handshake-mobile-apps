@@ -1,0 +1,22 @@
+@import "./src/styles/style";
+
+.save-betting-event{
+  margin: rem-calc(0px) 0 rem-calc(0px) 0;
+}
+.reporting-label,.event-label,.fees-label{
+  margin:rem-calc(30px) 0 rem-calc(10px) 0;
+}
+.input-field{
+  margin-bottom: 5px;
+  font-size: 16px;
+  line-height: 22px;
+  border:1px solid #EFEFEF;
+  height: 54px;
+}
+.submit-button{
+  margin-top: rem-calc(10px);
+  margin-bottom: rem-calc(30px);
+}
+.dropDown {
+  margin: rem-calc(7px 0);
+}

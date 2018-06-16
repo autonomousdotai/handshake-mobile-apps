@@ -31,7 +31,7 @@ const nameFormBettingShake = 'bettingShakeForm';
 
 const defaultAmount = 1;
 const titleBySide = { 1: 'Bet for the outcome', 2: 'Bet against the outcome' };
-
+const ROUND = 1000000;
 class BetingShake extends React.Component {
   static propTypes = {
     outcomeId: PropTypes.number,
@@ -102,11 +102,12 @@ class BetingShake extends React.Component {
     const marketOdds = side === SIDE.SUPPORT ? marketSupportOdds : marketAgainstOdds;
     const marketAmount = side === SIDE.SUPPORT ? amountSupport : amountAgainst;
     const winValue = marketAmount * marketOdds;
-    console.log('componentWillReceiveProps: marketOdds, marketAmount, winValue:', marketOdds, marketAmount, winValue);
+    const roundMarketAmount = Math.round(marketAmount*ROUND)/ROUND;
+    console.log('componentWillReceiveProps: marketOdds, marketAmount, winValue, roundMarketAmount:', marketOdds, marketAmount, winValue, roundMarketAmount);
     this.setState({
-      oddValue: Math.floor(marketOdds*100)/100,
-      amountValue: Math.floor(marketAmount*10000)/10000,
-      winValue: Math.floor(winValue*10000)/10000
+      oddValue: Math.round(marketOdds*100)/100,
+      amountValue: roundMarketAmount,
+      winValue: Math.round(winValue*ROUND)/ROUND
     })
   }
 
@@ -136,13 +137,15 @@ class BetingShake extends React.Component {
     const {isShowOdds, isChangeOdds} = this.state;
     const {matchName, matchOutcome, side, marketAgainstOdds, marketSupportOdds, closingDate} = this.props;
     const amount = parseFloat(values.amount.value);
-    let odds = parseFloat(values.odds.value);
+    const odds = parseFloat(values.odds.value);
 
     const marketOdds = side === SIDE.SUPPORT ? marketSupportOdds : marketAgainstOdds;
 
+    /*
     if(!isChangeOdds){
       odds = marketOdds;
     }
+    */
 
     console.log("Amount, Side, Odds", amount, side, odds);
     // this.props.onSubmitClick(amount);
@@ -228,7 +231,7 @@ class BetingShake extends React.Component {
     const {oddValue, amountValue} = this.state;
     const total = oddValue * amountValue;
       this.setState({
-        winValue: Math.floor(total*100)/100,
+        winValue: Math.round(total*ROUND)/ROUND,
       })
   }
 
