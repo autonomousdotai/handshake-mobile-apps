@@ -3,7 +3,7 @@ import exchangeSVG from '@/assets/images/categories/exchange.svg';
 // import handPlantingSVG from '@/assets/images/categories/hand-planting.svg';
 // import shoppingCartSVG from '@/assets/images/categories/shopping-cart.svg';
 
-import { HANDSHAKE_ID, HANDSHAKE_NAME } from '@/constants';
+import { HANDSHAKE_ID } from '@/constants';
 
 const CATEGORIES = [{
   id: HANDSHAKE_ID.BETTING,

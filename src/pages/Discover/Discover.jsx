@@ -56,16 +56,11 @@ class DiscoverPage extends React.Component {
     loadDiscoverList: PropTypes.func.isRequired,
     getListOfferPrice: PropTypes.func.isRequired,
     app: PropTypes.object.isRequired,
-    firebaseUser: PropTypes.object,
     exchange: PropTypes.object.isRequired,
     ipInfo: PropTypes.any.isRequired,
     isBannedCash: PropTypes.bool.isRequired,
     isBannedPrediction: PropTypes.bool.isRequired,
     isBannedChecked: PropTypes.bool.isRequired,
-  }
-
-  static defaultProps = {
-    firebaseUser: {},
   }
 
   constructor(props) {
@@ -381,7 +376,6 @@ class DiscoverPage extends React.Component {
               this.state.isBannedChecked && this.state.handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
               ? (
                 <BlockCountry />
-                // <div>{'Hey Ninja. Your wet blanket IP address won\'t let you play this game.'}</div>
               )
               : null
             }
@@ -403,7 +397,6 @@ class DiscoverPage extends React.Component {
               this.state.isBannedChecked && handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.isBannedCash
               ? (
                 <BlockCountry />
-                // <div>{'Hey Ninja. Your wet blanket IP address won\'t let you play this game.'}</div>
               )
               : null
             }
@@ -422,7 +415,6 @@ class DiscoverPage extends React.Component {
 
 const mapState = state => ({
   discover: state.discover,
-  firebaseUser: state.firebase.data,
   app: state.app,
   ipInfo: state.app.ipInfo,
   exchange: state.exchange,

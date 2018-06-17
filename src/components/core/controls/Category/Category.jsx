@@ -12,51 +12,53 @@ class Category extends React.PureComponent {
     super(props);
     this.state = {
       idActive: this.props.idActive || -1,
+      categories: this.props.categories,
     };
     // bind
     this.categoryClick.bind(this);
-  }
-
-  get categoriesHtml() {
-    const { categories } = this.props;
-    const { idActive } = this.state;
-    const categoriesList = (categories && categories.length > 0) ? categories : CATEGORIES;
-    return categoriesList.map((category, index) => (
-      <div
-        key={index + 1}
-        className={`category-item ${category.id === idActive ? 'active': ''}`}
-        onClick={() => this.categoryClick(category)}>
-        <Image src={category.image} alt={category.name} />
-        <span>{category.name}</span>
-      </div>
-    ))
-  }
-
-  set idActive(id) {
-    this.setState({
-      idActive: id
-    });
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.idActive !== prevState.idActive) {
       return { idActive: nextProps.idActive };
     }
+    return null;
+  }
+
+  componentDidMount() {
+    if (Object.prototype.hasOwnProperty.call(this.props, 'onRef')) this.props.onRef(this);
+  }
+
+  componentWillUnmount() {
+    if (Object.prototype.hasOwnProperty.call(this.props, 'onRef')) this.props.onRef(undefined);
+  }
+
+  get categoriesHtml() {
+    const { idActive, categories } = this.state;
+    const categoriesList = (categories && categories.length > 0) ? categories : CATEGORIES;
+    return categoriesList.map((category, index) => (
+      <div
+        key={index + 1}
+        className={`category-item ${category.id === idActive ? 'active' : ''}`}
+        onClick={() => this.categoryClick(category)}
+      >
+        <Image src={category.image} alt={category.name} />
+        <span>{category.name}</span>
+      </div>
+    ));
+  }
+
+  set idActive(id) {
+    this.setState({
+      idActive: id,
+    });
   }
 
   categoryClick(category) {
     this.setState({
-      idActive: category.id
+      idActive: category.id,
     });
-    this.props.hasOwnProperty('onItemClick') && this.props.onItemClick(category);
-  }
-
-  componentDidMount() {
-    this.props.hasOwnProperty('onRef') && this.props.onRef(this);
-  }
-
-  componentWillUnmount() {
-    this.props.hasOwnProperty('onRef') && this.props.onRef(undefined);
+    if (Object.prototype.hasOwnProperty.call(this.props, 'onItemClick')) this.props.onItemClick(category);
   }
 
   render() {
