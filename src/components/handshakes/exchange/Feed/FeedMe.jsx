@@ -462,6 +462,10 @@ class FeedMe extends React.PureComponent {
     const balance = await wallet.getBalance();
     const fee = await wallet.getFee(10, true);
 
+    if (!this.checkMainNetDefaultWallet(wallet)) {
+      return;
+    }
+
     if ((offer.currency === CRYPTO_CURRENCY.ETH || (offer.type === EXCHANGE_ACTION.BUY && offer.currency === CRYPTO_CURRENCY.BTC))
       && this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
 
@@ -529,6 +533,10 @@ class FeedMe extends React.PureComponent {
       const balance = await wallet.getBalance();
       const fee = await wallet.getFee();
 
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        return;
+      }
+
       if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
         return;
       }
@@ -592,6 +600,10 @@ class FeedMe extends React.PureComponent {
       const balance = await wallet.getBalance();
       const fee = await wallet.getFee();
 
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        return;
+      }
+
       if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
         return;
       }
@@ -648,6 +660,10 @@ class FeedMe extends React.PureComponent {
       const balance = await wallet.getBalance();
       const fee = await wallet.getFee();
 
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        return;
+      }
+
       if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
         return;
       }
@@ -696,6 +712,10 @@ class FeedMe extends React.PureComponent {
       const wallet = MasterWallet.getWalletDefault(offer.currency);
       const balance = await wallet.getBalance();
       const fee = await wallet.getFee();
+
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        return;
+      }
 
       if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
         return;
