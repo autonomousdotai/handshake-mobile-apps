@@ -131,7 +131,7 @@ class Create extends React.Component {
       return { isBannedCash: nextProps.isBannedCash };
     }
     if (nextProps.isBannedPrediction !== prevState.isBannedPrediction) {
-      return { 
+      return {
         isBannedPrediction: nextProps.isBannedPrediction,
         seletedId: HANDSHAKE_ID.EXCHANGE, // select exchange
       };
@@ -151,7 +151,7 @@ class Create extends React.Component {
       if (this.state.isBannedCash && (currentKey === HANDSHAKE_ID.EXCHANGE || currentKey === HANDSHAKE_ID.EXCHANGE_LOCAL)) {
         return null;
       }
-      if (this.state.isBannedPrediction && (currentKey === HANDSHAKE_ID.BETTING)) {
+      if (this.state.isBannedPrediction && (currentKey === HANDSHAKE_ID.BETTING || currentKey === HANDSHAKE_ID.BETTING_EVENT)) {
         return null;
       }
       return {
