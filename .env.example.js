@@ -20,7 +20,11 @@ module.exports = {
     facebookPixelId: '',
     facebookAppId: '',
   },
+
   PredictionHandshakeFileName: '',
   dropConsole: true,
+  TURN_OFF_CACHE: true,
+  isStaging: false,
   caches: false,
+
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
+
 // service, constant
 import { Grid, Row, Col } from 'react-bootstrap';
+
 // components
-import { load } from '@/reducers/discover/action';
 import Button from '@/components/core/controls/Button';
-import { handShakeList } from '@/data/shake.js';
 import { MasterWallet } from '@/models/MasterWallet';
 import Input from '@/components/core/forms/Input/Input';
 import { StringHelper } from '@/services/helper';
@@ -40,7 +40,8 @@ import HeaderMore from './HeaderMore';
 import WalletItem from './WalletItem';
 import WalletProtect from './WalletProtect';
 import WalletHistory from './WalletHistory';
-// import Refers from './Refers';
+import Refers from './Refers';
+import RefersDashboard from './RefersDashboard';
 import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import ReactBottomsheet from 'react-bottomsheet';
 import { setHeaderRight } from '@/reducers/app/action';
@@ -48,12 +49,12 @@ import QrReader from 'react-qr-reader';
 import { showAlert } from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
 import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
+import local from '@/services/localStore';
+import {APP} from '@/constants';
 import _ from 'lodash';
 
 // style
 import './Wallet.scss';
-import { Bitcoin } from '@/models/Bitcoin';
-import { initHandshake } from '@/reducers/handshake/action';
 import CoinTemp from '@/pages/Wallet/CoinTemp';
 
 const QRCode = require('qrcode.react');
@@ -290,23 +291,26 @@ class Wallet extends React.Component {
   // create list menu of wallet item when click Show more ...
   creatSheetMenuItem(wallet){
     let obj = [];
-      obj.push({
-        title: 'Transfer coins',
-        handler: () => {
 
-          wallet.getBalance().then(result=>{
-            wallet.balance = result;
-            this.setState({walletSelected: wallet});
-          });
+      if (wallet.name != "SHURI"){
+        obj.push({
+          title: 'Transfer coins',
+          handler: () => {
 
-          // clear form:
-          this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amount");
-          this.setState({isRestoreLoading: false, walletSelected: wallet, inputAddressAmountValue: '', inputSendAmountValue: ''}, () => {});
-          this.toggleBottomSheet();
-          this.modalSendRef.open();
+            wallet.getBalance().then(result=>{
+              wallet.balance = result;
+              this.setState({walletSelected: wallet});
+            });
 
-        }
-      })
+            // clear form:
+            this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amount");
+            this.setState({isRestoreLoading: false, walletSelected: wallet, inputAddressAmountValue: '', inputSendAmountValue: ''}, () => {});
+            this.toggleBottomSheet();
+            this.modalSendRef.open();
+
+          }
+        })
+      }
       obj.push({
         title: 'Receive coins',
         handler: () => {
@@ -337,27 +341,27 @@ class Wallet extends React.Component {
         },
       });
     }
+    if (wallet.name != "SHURI")
+      obj.push({
+        title: 'View transaction history',
+        handler: async () => {
+          let pagenoHistory = 1;
+          this.setState({ walletSelected: wallet, transactions: [], isHistory: true, pagenoHistory: pagenoHistory });
+          this.toggleBottomSheet();
+          this.modalHistoryRef.open();
+          this.showLoading();
 
-    obj.push({
-      title: 'View transaction history',
-      handler: async () => {
-        let pagenoHistory = 1;
-        this.setState({ walletSelected: wallet, transactions: [], isHistory: true, pagenoHistory: pagenoHistory });
-        this.toggleBottomSheet();
-        this.modalHistoryRef.open();
-        this.showLoading();
+          wallet.balance = await wallet.getBalance();
+          wallet.transaction_count = await wallet.getTransactionCount();
 
-        wallet.balance = await wallet.getBalance();
-        wallet.transaction_count = await wallet.getTransactionCount();
+          let data = await wallet.getTransactionHistory(pagenoHistory);
+          if(Number(data.length) < 20) pagenoHistory = 0;
+          if(data.length > wallet.transaction_count) wallet.transaction_count = data.length;
 
-        let data = await wallet.getTransactionHistory(pagenoHistory);
-        if(Number(data.length) < 20) pagenoHistory = 0;
-        if(data.length > wallet.transaction_count) wallet.transaction_count = data.length;
-
-        this.setState({ transactions: data, pagenoHistory: pagenoHistory, walletSelected: wallet });
-        this.hideLoading();
-      }
-    });
+          this.setState({ transactions: data, pagenoHistory: pagenoHistory, walletSelected: wallet });
+          this.hideLoading();
+        }
+      });
     obj.push({
       title: 'Copy address to clipboard',
       handler: () => {
@@ -367,7 +371,7 @@ class Wallet extends React.Component {
       },
     });
 
-    if (!wallet.isReward) {
+    if (!wallet.isReward && wallet.name != "SHURI") {
         obj.push({
           title: StringHelper.format('Set as default {0} wallet ', wallet.name) + (wallet.default ? "✓ " : ""),
           handler: () => {
@@ -647,14 +651,14 @@ class Wallet extends React.Component {
   }
 
   get listMainWalletBalance() {
-    return this.state.listMainWalletBalance.map(wallet => <WalletItem key={wallet.address + wallet.network} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
+    return this.state.listMainWalletBalance.map(wallet => <WalletItem key={wallet.address + wallet.network + wallet.name} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
   }
   get listTestWalletBalance() {
-    return this.state.listTestWalletBalance.map(wallet => <WalletItem key={wallet.address + wallet.network} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
+    return this.state.listTestWalletBalance.map(wallet => <WalletItem key={wallet.address + wallet.network + wallet.name} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
   }
 
   get listRewardWalletBalance() {
-    return this.state.listRewardWalletBalance.map(wallet => <WalletItem key={wallet.address + wallet.network} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
+    return this.state.listRewardWalletBalance.map(wallet => <WalletItem key={wallet.address + wallet.network + wallet.name} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
   }
 
   get getListCoinTempForCreate() {
@@ -724,7 +728,15 @@ class Wallet extends React.Component {
     this.modalScanQrCodeRef.open();
   }
 
-  renderScanQRCode = () => (
+  openRefers = () => {
+    let refers = local.get(APP.REFERS);
+    if(refers && refers.end)
+      this.modalRefersDashboardRef.open();
+    else
+      this.modalRefersRef.open();
+  }
+
+  renderScanQRCode = () => {
     <Modal onClose={() => this.oncloseQrCode()} title="Scan QR code" onRef={modal => this.modalScanQrCodeRef = modal}>
       {this.state.qrCodeOpen ?
         <QrReader
@@ -735,21 +747,25 @@ class Wallet extends React.Component {
         />
         : ''}
     </Modal>
-  )
+  }
 
   render() {
     const {intl, cryptoPrice, amount, userCcLimit, ccLimits} = this.props;
     return (
       <div className="wallet-page">
-      
+
         {/* Header for refers ... */}
-        {/* <div className="headerRefers" >
-          <p className="hTitle">Shuriken Airdrop</p>
-          <p className="hLink" onClick={() => { this.modalRefersRef.open() }}>Receive token</p>
+        <div className="headerRefers" >
+          <p className="hTitle">Shuriken Airdrop (limited)</p>
+          <p className="hLink" onClick={() => this.openRefers()}>Click here</p>
         </div>
-        <Modal title="Shuriken Airdrop (limited)" onRef={modal => this.modalRefersRef = modal}>
+        <Modal title="Shuriken Airdrop" onRef={modal => this.modalRefersRef = modal}>
             <Refers />
-        </Modal> */}
+        </Modal>
+
+        <Modal title="Shuriken Airdrop" onRef={modal => this.modalRefersDashboardRef = modal}>
+            <RefersDashboard />
+        </Modal>
 
         <Grid>
 
@@ -998,7 +1014,7 @@ class Wallet extends React.Component {
           </Row>
           <Row className="list">
             {this.listRewardWalletBalance}
-          </Row>          
+          </Row>
 
         </Grid>
       </div>

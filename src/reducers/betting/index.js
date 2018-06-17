@@ -62,7 +62,25 @@ const bettingReducter = (state = {
       return {
         ...state,
         isFetching: true,
-        
+
+      };
+      case `${BETTING_ACTIONS.ADD_MATCH}`:
+      return {
+        ...state,
+        isFetching: true,
+
+      };
+      case `${BETTING_ACTIONS.ADD_MATCH}_FAILED`:
+      return {
+        ...state,
+        isFetching: true,
+
+      };
+      case `${BETTING_ACTIONS.ADD_MATCH}_SUCCESS`:
+      return {
+        ...state,
+        isFetching: true,
+
       };
     default:
       return state;

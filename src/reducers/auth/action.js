@@ -12,6 +12,9 @@ export const ACTIONS = {
   SUBMIT_EMAIL: 'SUBMIT_EMAIL',
   CHECK_USERNAME: 'CHECK_USERNAME',
   GET_FREE_ETH: 'GET_FREE_ETH',
+  CHECK_JOIN_TELEGRAM: 'CHECK_JOIN_TELEGRAM',
+  REFERRED_INFO: 'REFERRED_INFO',
+  COMPLETE_PROFILE: 'COMPLETE_PROFILE'
 };
 
 export const fetchProfile = createAPI(ACTIONS.AUTH_FETCH);
@@ -27,3 +30,6 @@ export const submitEmail = createAPI(ACTIONS.SUBMIT_EMAIL);
 export const checkUsernameExist = createAPI(ACTIONS.CHECK_USERNAME);
 // wallet:
 export const getFreeETH = createAPI(ACTIONS.GET_FREE_ETH);
+export const checkJoinTelegram = createAPI(ACTIONS.CHECK_JOIN_TELEGRAM);
+export const referredInfo = createAPI(ACTIONS.REFERRED_INFO);
+export const completeProfile = createAPI(ACTIONS.COMPLETE_PROFILE);
