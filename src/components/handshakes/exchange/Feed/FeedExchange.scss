@@ -12,6 +12,7 @@
   .coins-wrapper {
     overflow: auto;
     white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
     padding-left: 8px;
     .coin-item {
       display: inline-block;
