@@ -491,14 +491,23 @@ class FeedMe extends React.PureComponent {
     });
   }
 
-  handleShakeOfferExchangeSuccess = (responseData) => {
+  handleShakeOfferExchangeSuccess = async (responseData) => {
     const { refreshPage } = this.props;
     const { data } = responseData;
     const { currency } = data;
 
-    const offer = this.offer;
+    const { offer } = this;
     if (currency === CRYPTO_CURRENCY.ETH) {
-      this.handleCallActionOnContract(data);
+      const wallet = MasterWallet.getWalletDefault(currency);
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      let amount = 0;
+
+      if (offer.type === EXCHANGE_ACTION.BUY) {
+        amount = data.total_amount;
+      }
+      const result = await exchangeHandshake.shake(data.hid, amount, data.id);
+
+      console.log('handleShakeOfferExchangeSuccess', result);
     } else if (currency === CRYPTO_CURRENCY.BTC) {
       if (offer.type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(offer.currency);
@@ -678,13 +687,18 @@ class FeedMe extends React.PureComponent {
     });
   }
 
-  handleWithdrawShakedOfferExchangeSuccess = (responseData) => {
+  handleWithdrawShakedOfferExchangeSuccess = async (responseData) => {
     const { refreshPage } = this.props;
     const { data } = responseData;
     const { currency } = data;
 
     if (currency === CRYPTO_CURRENCY.ETH) {
-      this.handleCallActionOnContract(data);
+      const wallet = MasterWallet.getWalletDefault(currency);
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+      const result = await exchangeHandshake.withdraw(data.hid, data.id);
+
+      console.log('handleWithdrawShakedOfferExchangeSuccess', result);
     }
 
     this.hideLoading();
@@ -731,13 +745,24 @@ class FeedMe extends React.PureComponent {
     });
   }
 
-  handleCloseOfferExchangeSuccess = (responseData) => {
+  handleCloseOfferExchangeSuccess = async (responseData) => {
     const { refreshPage } = this.props;
     const { data } = responseData;
     const { currency } = data;
 
+    const { offer } = this;
     if (currency === CRYPTO_CURRENCY.ETH) {
-      this.handleCallActionOnContract(data);
+      const wallet = MasterWallet.getWalletDefault(currency);
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+      let result = '';
+      if (offer.type === EXCHANGE_ACTION.BUY) {
+        result = await exchangeHandshake.closeByCashOwner(data.hid, data.id);
+      } else {
+        result = await exchangeHandshake.cancel(data.hid, data.id);
+      }
+
+      console.log('handleCloseOfferExchangeSuccess', result);
     }
 
     this.hideLoading();
