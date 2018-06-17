@@ -368,10 +368,10 @@ class FeedExchange extends React.PureComponent {
                   const { priceBuy, priceSell, color, icon } = coin
                   return (
                     <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
-                    <div className="icon-coin"><img src={icon}/></div>
-                    <div className="price"><label>BUY</label><span>{priceBuy} {currency}</span></div>
-                    <div className="price"><label>SELL</label><span>{priceSell} {currency}</span></div>
-                  </span>
+                      <div className="icon-coin"><img src={icon}/></div>
+                      <div className="price"><label>BUY</label><span>{priceBuy} {currency}</span></div>
+                      <div className="price"><label>SELL</label><span>{priceSell} {currency}</span></div>
+                    </span>
                   )
                 })
               }
