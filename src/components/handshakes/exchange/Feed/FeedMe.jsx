@@ -466,9 +466,9 @@ class FeedMe extends React.PureComponent {
       return;
     }
 
-    if ((offer.currency === CRYPTO_CURRENCY.ETH || (offer.type === EXCHANGE_ACTION.BUY && offer.currency === CRYPTO_CURRENCY.BTC))
-      && this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
-
+    if (offer.type === EXCHANGE_ACTION.BUY && this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+      return;
+    } else if (offer.currency === CRYPTO_CURRENCY.ETH && this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
       return;
     }
 
@@ -483,7 +483,7 @@ class FeedMe extends React.PureComponent {
 
     this.showLoading();
     this.props.shakeOffer({
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id,
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}`,
       METHOD: 'POST',
       data: offerShake,
       successFn: this.handleShakeOfferExchangeSuccess,
@@ -537,14 +537,14 @@ class FeedMe extends React.PureComponent {
         return;
       }
 
-      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+      if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
         return;
       }
     }
 
     this.showLoading();
     this.props.cancelShakedOffer({
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.SHAKE,
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/${API_URL.EXCHANGE.SHAKE}`,
       METHOD: 'DELETE',
       successFn: this.handleRejectShakedOfferExchangeSuccess,
       errorFn: this.handleRejectShakedOfferExchangeFailed,
@@ -604,14 +604,14 @@ class FeedMe extends React.PureComponent {
         return;
       }
 
-      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+      if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
         return;
       }
     }
 
     this.showLoading();
     this.props.completeShakedOffer({
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.SHAKE,
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/${API_URL.EXCHANGE.SHAKE}`,
       METHOD: 'POST',
       successFn: this.handleCompleteShakedOfferExchangeSuccess,
       errorFn: this.handleCompleteShakedOfferExchangeFailed,
@@ -664,14 +664,14 @@ class FeedMe extends React.PureComponent {
         return;
       }
 
-      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+      if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
         return;
       }
     }
 
     this.showLoading();
     this.props.cancelShakedOffer({
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.WITHDRAW,
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/${API_URL.EXCHANGE.WITHDRAW}`,
       METHOD: 'POST',
       successFn: this.handleWithdrawShakedOfferExchangeSuccess,
       errorFn: this.handleWithdrawShakedOfferExchangeFailed,
@@ -717,14 +717,14 @@ class FeedMe extends React.PureComponent {
         return;
       }
 
-      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+      if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
         return;
       }
     }
 
     this.showLoading();
     this.props.closeOffer({
-      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id,
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}`,
       METHOD: 'DELETE',
       successFn: this.handleCloseOfferExchangeSuccess,
       errorFn: this.handleCloseOfferExchangeFailed,
