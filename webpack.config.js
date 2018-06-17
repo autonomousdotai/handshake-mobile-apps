@@ -66,6 +66,7 @@ module.exports = function webpackConfig(env, argv) {
       minimize: true,
       minimizer: [
         new UglifyJsPlugin({
+          sourceMap: true,
           uglifyOptions: {
             compress: {
               drop_console: true,
@@ -245,6 +246,7 @@ module.exports = function webpackConfig(env, argv) {
         ],
       },
       stats,
+      devtool: 'source-map',
     },
     isProduction ? production : development,
   );
