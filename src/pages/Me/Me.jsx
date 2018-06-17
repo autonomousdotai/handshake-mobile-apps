@@ -1,6 +1,8 @@
 import React from 'react';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { withFirebase } from 'react-redux-firebase';
 // action, mock
 import { fireBaseExchangeDataChange, loadMyHandshakeList, fireBaseBettingChange } from '@/reducers/me/action';
 import { API_URL, APP, HANDSHAKE_ID, URL } from '@/constants';
@@ -57,21 +59,26 @@ class Me extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    /*
     if (nextProps.exchange.listOfferPrice.updatedAt !== prevState.exchange.listOfferPrice.updatedAt) {
       nextProps.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE });
       return { exchange: nextProps.exchange };
     }
-    */
     if (nextProps.firebaseUser) {
       if (JSON.stringify(nextProps.firebaseUser) !== JSON.stringify(prevState.firebaseUser)) {
-        const nextUser = nextProps.firebaseUser.users?.[prevState.auth?.profile?.id];
-        const prevUser = prevState?.firebaseUser.users?.[prevState.auth?.profile?.id];
-        if (JSON.stringify(nextUser?.offers) !== JSON.stringify(prevUser?.offers)) {
-          nextProps.fireBaseExchangeDataChange(nextUser?.offers);
-        } else if (nextUser?.betting && JSON.stringify(nextUser?.betting) !== JSON.stringify(prevUser?.betting)) {
-          nextProps.fireBaseBettingChange(nextUser?.betting);
+        const nextUser = nextProps.firebaseUser.users?.[nextProps.auth.profile.id];
+        const prevUser = prevState.firebaseUser.users?.[prevState.auth.profile.id];
+
+        if (nextUser && prevUser) {
+          if (JSON.stringify(nextUser?.offers) !== JSON.stringify(prevUser?.offers)) {
+            nextProps.fireBaseExchangeDataChange(nextUser?.offers);
+            nextProps.firebase.remove(`/users/${nextProps.auth.profile.id}/offers`);
+          }
+          if (JSON.stringify(nextUser?.betting) !== JSON.stringify(prevUser?.betting)) {
+            nextProps.fireBaseBettingChange(nextUser?.betting);
+            nextProps.firebase.remove(`/users/${nextProps.auth.profile.id}/betting`);
+          }
         }
+
         return { firebaseUser: nextProps.firebaseUser };
       }
     }
@@ -99,7 +106,7 @@ class Me extends React.Component {
     this.props.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE });
   }
 
-  handleSetOfflineStatusSuccess = (responseData) => {
+  handleSetOfflineStatusSuccess = () => {
     const { offline } = this.props.auth;
     local.save(APP.OFFLINE_STATUS, offline ? 1 : 0);
   }
@@ -179,6 +186,7 @@ const mapState = state => ({
   app: state.app,
   auth: state.auth,
   firebaseUser: state.firebase.data,
+  firebaseApp: state.firebase,
   exchange: state.exchange,
 });
 
@@ -190,4 +198,4 @@ const mapDispatch = ({
   setOfflineStatus,
 });
 
-export default connect(mapState, mapDispatch)(Me);
+export default compose(withFirebase, connect(mapState, mapDispatch))(Me);
