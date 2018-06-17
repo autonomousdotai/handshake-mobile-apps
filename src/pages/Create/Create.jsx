@@ -133,7 +133,7 @@ class Create extends React.Component {
     if (nextProps.isBannedPrediction !== prevState.isBannedPrediction) {
       return {
         isBannedPrediction: nextProps.isBannedPrediction,
-        seletedId: HANDSHAKE_ID.EXCHANGE, // select exchange
+        seletedId: nextProps.isBannedPrediction ? HANDSHAKE_ID.EXCHANGE : HANDSHAKE_ID.BETTING, // select exchange
       };
     }
     if (nextProps.isBannedChecked !== prevState.isBannedChecked) {
@@ -155,12 +155,13 @@ class Create extends React.Component {
         return null;
       }
       return {
-        id: key,
+        id: parseInt(key, 10),
         value: value.name,
         priority: value.priority,
       };
     }).filter(a => a);
-    if (!handshakes.filter(item => item.id === this.state.seletedId).length) {
+    if (handshakes.length && !handshakes.filter(item => item.id === this.state.seletedId).length) {
+      console.log('create page - handshakeList - set seletedId at notfound item', handshakes[0].id);
       this.setState({ seletedId: handshakes[0].id });
     }
     return [
@@ -181,7 +182,7 @@ class Create extends React.Component {
   render() {
     const { seletedId } = this.state;
     const CreateComponent = maps[seletedId];
-
+    console.log('create page - render - seletedId', seletedId);
     return (
       <Grid className="create">
         <Row>
