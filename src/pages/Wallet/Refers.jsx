@@ -7,7 +7,7 @@ import Button from '@/components/core/controls/Button';
 import {
     fieldInput
   } from '@/components/core/form/customField';
-import { verifyEmail, checkJoinTelegram, completeProfile } from '@/reducers/auth/action';
+import { verifyEmail, checkJoinTelegram, checkFollowTwitter, completeProfile } from '@/reducers/auth/action';
 import {required} from '@/components/core/form/validation';
 import {change, Field, formValueSelector, clearFields} from 'redux-form';
 import {bindActionCreators} from 'redux';
@@ -158,7 +158,7 @@ class Refers extends React.Component {
   }
 
   submitStep2 = async() => {
-    if(await this.getTwitter()){
+    if(await this.checkFollowTwitter()){
       this.setState({step2: true});
       let refers = local.get(APP.REFERS);
       if(!refers)
@@ -246,7 +246,28 @@ class Refers extends React.Component {
     });
   }
 
-  getTwitter(){
+  checkFollowTwitter(){
+    return new Promise((resolve, reject) => {
+      let result = false;
+      this.props.checkFollowTwitter({
+        PATH_URL: 'twitter/'+ this.state.step2_value,
+        //qs: { user_name: username, chat_id: '-1001320226748'},
+        successFn: (res) => {
+          if(res && res.data){
+            resolve(true);
+          }
+          else{
+            resolve(false);
+          }
+        },
+        errorFn: (e) =>{
+          reject(e);
+        }
+      });
+    });
+  }
+
+  getTwitter1(){
     const url = "http://www.mykenty.com/ninja/"+this.state.step2_value;
     return new Promise((resolve, reject) => {
       axios({
@@ -340,7 +361,7 @@ renderStep3= () => (
           name="refer_email"
           type="text"
           className="form-control"
-          placeholder="your favourite fake email to receive free stuff at"
+          placeholder="your favourite fake email"
           component={fieldInput}
           value={this.state.step3_value}
           onChange={evt => this.updateEmailValue(evt)}
@@ -432,7 +453,7 @@ renderLinkRefer = () => (
 
     return (
       <div className="refers">
-
+          <h5>80 shiny Shurikens (SHURI).</h5>
           {this.renderStep1()}
           {this.renderStep2()}
           {this.renderStep3()}
@@ -455,6 +476,7 @@ const mapDispatchToProps = (dispatch) => ({
   clearFields: bindActionCreators(clearFields, dispatch),
   verifyEmail: bindActionCreators(verifyEmail, dispatch),
   checkJoinTelegram: bindActionCreators(checkJoinTelegram, dispatch),
+  checkFollowTwitter: bindActionCreators(checkFollowTwitter, dispatch),
   completeProfile: bindActionCreators(completeProfile, dispatch),
 });
 

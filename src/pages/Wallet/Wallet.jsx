@@ -759,11 +759,11 @@ class Wallet extends React.Component {
           <p className="hTitle">Shuriken Airdrop (limited)</p>
           <p className="hLink" onClick={() => this.openRefers()}>Click here</p>
         </div>
-        <Modal title="Shuriken Airdrop" onRef={modal => this.modalRefersRef = modal}>
+        <Modal title="3 Shuriken Airdrop hoops. " onRef={modal => this.modalRefersRef = modal}>
             <Refers />
         </Modal>
 
-        <Modal title="Shuriken Airdrop" onRef={modal => this.modalRefersDashboardRef = modal}>
+        <Modal title="3 Shuriken Airdrop hoops." onRef={modal => this.modalRefersDashboardRef = modal}>
             <RefersDashboard />
         </Modal>
 
