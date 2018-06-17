@@ -1,8 +1,8 @@
 @import './src/styles/var';
 
-.app {
-  padding-bottom: 150px !important;
-}
+//.app {
+//  padding-bottom: 150px !important;
+//}
 
 .feed-exchange {
   background: #FFFFFF;
@@ -84,23 +84,23 @@
   }
 }
 
-.ex-sticky-note {
-  font-size: 14px;
-  text-align: center;
-  color: white;
-  position: fixed;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 414px;
-  background-color: black;
-  z-index: 2;
-  padding: 10px 0;
-  .btn-become {
-    min-width: 200px;
-    border: 1px solid white;
-    background: black;
-    color: white;
-  }
-}
+//.ex-sticky-note {
+//  font-size: 14px;
+//  text-align: center;
+//  color: white;
+//  position: fixed;
+//  bottom: 60px;
+//  left: 50%;
+//  transform: translateX(-50%);
+//  width: 100%;
+//  max-width: 414px;
+//  background-color: black;
+//  z-index: 2;
+//  padding: 10px 0;
+//  .btn-become {
+//    min-width: 200px;
+//    border: 1px solid white;
+//    background: black;
+//    color: white;
+//  }
+//}
