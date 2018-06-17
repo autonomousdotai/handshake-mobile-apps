@@ -6,7 +6,7 @@ import './styles.scss'
 import createForm from "@/components/core/form/createForm";
 import {getOfferPrice} from "@/services/offer-util";
 import axios from 'axios';
-
+import {FormattedMessage} from 'react-intl';
 import {
   fieldCleave,
   fieldDropdown,
@@ -499,7 +499,7 @@ class Component extends React.Component {
   }
 
   render() {
-    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell } = this.props;
+    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell, intl } = this.props;
     const modalContent = this.state.modalContent;
     const haveProfile = this.offer ? true : false;
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
@@ -529,10 +529,10 @@ class Component extends React.Component {
             </div>
           </div>
 
-          <div className="label">Exchange rate</div>
+          <div className="label"><FormattedMessage id="ex.create.label.exchangeRate"/></div>
           <div className="section">
             <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Inventory for purchase</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountBuy"/></span></label>
               <div className='input-group'>
                 <Field
                   name="amountBuy"
@@ -548,7 +548,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Inventory for sale</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountSell"/></span></label>
               <div className='input-group'>
                 <Field
                   name="amountSell"
@@ -564,7 +564,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Market price</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.marketPrice"/></span></label>
               <div className='input-group'>
                 <div><span className="form-text">{priceDisplayed} {fiatCurrency}</span></div>
               </div>
@@ -573,7 +573,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Your buying price</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.premiumBuy"/></span></label>
               <div className='input-group align-items-center'>
                 <Field
                   name="customizePriceBuy"
@@ -591,7 +591,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Your selling price</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountSell"/></span></label>
               <div className='input-group align-items-center'>
                 <Field
                   name="customizePriceSell"
@@ -623,7 +623,7 @@ class Component extends React.Component {
                 <div className="label">Station information</div>
                 <div className="section">
                   <div className="d-flex">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle">Station name</span></label>
+                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.nameStation"/></span></label>
                     <div className='input-group'>
                       <Field
                         name="nameShop"
@@ -639,7 +639,7 @@ class Component extends React.Component {
                   <hr className="hrLine"/>
 
                   <div className="d-flex mt-2">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle">Phone</span></label>
+                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.phone"/></span></label>
                     <div className="input-group w-100">
                       <Field
                         name="phone"
@@ -654,7 +654,7 @@ class Component extends React.Component {
                   <hr className="hrLine"/>
 
                   <div className="d-flex mt-2">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle">Address</span></label>
+                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.address"/></span></label>
                     <div className="w-100">
                       <Field
                         name="address"
@@ -669,7 +669,7 @@ class Component extends React.Component {
               </div>
             )
           }
-          <Button block type="submit" disabled={!allowInitiate} className="mt-3">Initiate</Button>
+          <Button block type="submit" disabled={!allowInitiate} className="mt-3"><FormattedMessage id="btn.initiate"/></Button>
         </FormExchangeCreate>
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}

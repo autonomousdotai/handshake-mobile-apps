@@ -53,6 +53,17 @@ export default {
   requireDefaultWalletOnMainNet: 'You must set your wallet on Mainnet',
   movingCoinToEscrow: 'Moving your coin to escrow. This may take a few minutes.',
   movingCoinFromEscrow: 'Moving your coin from escrow. This may take a few minutes.',
+  'ex.create.label.amountBuy': 'Inventory for purchase',
+  'ex.create.label.amountSell': 'Inventory for sale',
+  'ex.create.label.marketPrice': 'Market price',
+  'ex.create.label.premiumBuy': 'Your buying price',
+  'ex.create.label.premiumSell': 'Your selling price',
+  'ex.create.label.nameStation': 'Station name',
+  'ex.create.label.phone': 'Phone',
+  'ex.create.label.address': 'Address',
+  'ex.create.label.exchangeRate': 'Exchange rate',
+  'ex.create.label.stationInfo': 'Station information',
+  'btn.initiate': 'Initiate',
 
   // FAQ
   FAQ_TITLE: 'FAQ',
