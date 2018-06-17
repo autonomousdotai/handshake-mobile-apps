@@ -73,7 +73,7 @@ class Refers extends React.Component {
     this.showAlert(mst, 'primary', 2000);
   }
   showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
+    this.showAlert(mst, 'danger', 4000);
   }
   showSuccess(mst) {
     this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
@@ -308,7 +308,9 @@ class Refers extends React.Component {
     });
   }
 
+
 renderStep1 = () => (
+  !(this.state.step1 && this.state.step2 && this.state.step3 > 1 )?  
   <Step1Form onSubmit={this.submitStep1} className="refers-wrapper">
     <h6><a href="https://t.me/ninja_org" target="_blank">Insult us on telegram</a>. Be creative. There’s a leaderboard.</h6>
     <div className="col2">
@@ -328,9 +330,11 @@ renderStep1 = () => (
       />
     </div>
   </Step1Form>
+  :""
 )
 
 renderStep2= () => (
+  !(this.state.step1 && this.state.step2 && this.state.step3 > 1 )?
   <Step2Form onSubmit={this.submitStep2} className="refers-wrapper">
     <h6>Our social media guy says we need followers on <a href="https://twitter.com/ninja_org" target="_blank">twitter</a>.</h6>
     <div className="col2">
@@ -350,10 +354,12 @@ renderStep2= () => (
       />
     </div>
   </Step2Form>
+  : ""
 )
 
 renderStep3= () => (
-  <Step3Form onSubmit={this.submitStep3} className="refers-wrapper refers-wrapper-border">
+  !(this.state.step1 && this.state.step2 && this.state.step3 > 1 )?
+  <Step3Form onSubmit={this.submitStep3} className="refers-wrapper">
     <h6>Receive your randomly generated ninja name.</h6>
     <div className="col2"> {this.renderStep3_labelButton()}</div>
     <div className="col1">
@@ -377,6 +383,7 @@ renderStep3= () => (
     }
 
   </Step3Form>
+  :""
 )
 
 completeRefers() {
@@ -428,8 +435,8 @@ renderStep3_labelButton= () => {
 }
 
 renderLinkRefer = () => (
-  this.state.step1 && this.state.step2 && this.state.step3 > 1 ?
-  <Step4Form onSubmit={this.submitStep4} className="refers-wrapper">
+  (this.state.step1 && this.state.step2 && this.state.step3 > 1 )?
+  <Step4Form className="refers-wrapper refers-wrapper-border">
     <h6>This is your super sexy referral link. You get 20 shurikens for every new ninja.</h6>
     <div className="col100">
         <Field
@@ -437,8 +444,7 @@ renderLinkRefer = () => (
             type="text"
             className="form-control"
             placeholder=""
-            component={fieldInput}
-            onChange={evt => this.updateLinkValue(evt)}
+            component={fieldInput}            
             validate={[required]}
             onFocus={() => { Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
         />
