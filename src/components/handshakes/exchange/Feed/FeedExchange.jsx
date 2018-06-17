@@ -7,7 +7,7 @@ import iconOk from '@/assets/images/icon/icons8-ok.svg';
 import iconCancel from '@/assets/images/icon/icons8-cancel.svg';
 // style
 import './FeedExchange.scss';
-import {injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import Feed from '@/components/core/presentation/Feed/Feed';
 import Button from '@/components/core/controls/Button/Button';
 import {
@@ -369,8 +369,8 @@ class FeedExchange extends React.PureComponent {
                   return (
                     <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
                       <div className="icon-coin"><img src={icon}/></div>
-                      <div className="price"><label>BUY</label><span>{priceBuy} {currency}</span></div>
-                      <div className="price"><label>SELL</label><span>{priceSell} {currency}</span></div>
+                      <div className="price"><label><FormattedMessage id="ex.discover.label.priceBuy" /></label><span>{priceBuy} {currency}</span></div>
+                      <div className="price"><label><FormattedMessage id="ex.discover.label.priceSell" /></label><span>{priceSell} {currency}</span></div>
                     </span>
                   )
                 })
@@ -379,7 +379,7 @@ class FeedExchange extends React.PureComponent {
             <div className="info-ex">
               <div>
                 <div className="address">{address}</div>
-                <div className="review">{`(${reviewCount} reviews)`}</div>
+                <div className="review"><FormattedMessage id="ex.discover.label.reviews" values={{ reviewCount }} /></div>
                 <div className="distance">{distance}</div>
               </div>
               <div className="btn-chat">
@@ -390,11 +390,11 @@ class FeedExchange extends React.PureComponent {
             </div>
           </div>
         </div>
-        <Button block className="mt-2" onClick={this.handleOnShake}>Shake</Button>
+        <Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>
 
         <div className="ex-sticky-note">
-          <div className="mb-2">Got coins? Turn them into a money-making machine.</div>
-          <div><button className="btn btn-become">BECOME A LOCAL EXCHANGE</button></div>
+          <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
+          <div><button className="btn btn-become"><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
         </div>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
           <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} />

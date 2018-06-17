@@ -63,7 +63,13 @@ export default {
   'ex.create.label.address': 'Address',
   'ex.create.label.exchangeRate': 'Exchange rate',
   'ex.create.label.stationInfo': 'Station information',
+  'ex.discover.label.priceBuy': 'BUY',
+  'ex.discover.label.priceSell': 'SELL',
+  'ex.discover.label.reviews': '({reviewCount} reviews)',
+  'ex.discover.banner.text': 'Got coins? Turn them into a money-making machine.',
+  'ex.discover.banner.btnText': 'BECOME A LOCAL EXCHANGE',
   'btn.initiate': 'Initiate',
+  'btn.shake': 'Shake',
 
   // FAQ
   FAQ_TITLE: 'FAQ',
