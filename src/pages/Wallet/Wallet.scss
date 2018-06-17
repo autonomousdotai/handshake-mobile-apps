@@ -1,5 +1,10 @@
 @import './src/styles/style';
 
+.iconSuccessChecked{
+  margin-bottom: 1px;
+  margin-right: 5px;
+}
+
 .wallet-page{
   button:disabled{
     background: Silver;
@@ -437,12 +442,6 @@
 .wallet-create-footer{
   padding-bottom: 130px;
 }
-.iconSuccessChecked{
-  margin-bottom: 1px;
-  margin-right: 5px;
-}
-
-
 
 .historywallet-wrapper{
   padding-bottom: 40px;

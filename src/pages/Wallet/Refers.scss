@@ -1,9 +1,11 @@
 .refers{
     .button{
          font-size: 14px;
+         padding: 10px;
     };
     input{
         font-size: 14px;
+        padding: 10px;
     }
     form{
         margin-top: 40px;
@@ -16,5 +18,13 @@
     }
     .text-danger{
         font-size: 14px;
+    }
+    h6{
+        line-height: 25px;
+    }
+}
+.refers-wrapper{
+    h6{
+        line-height: 25px;
     }
 }
