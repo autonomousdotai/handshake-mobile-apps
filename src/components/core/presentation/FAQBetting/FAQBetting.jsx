@@ -7,8 +7,7 @@ class FAQBetting extends React.PureComponent {
       <dl className="faq-betting faq">
         <dt>Price (Odds)</dt>
         <dd>
-          Ninja uses
-          <strong>decimal odds</strong>. A winning bet at 1.75 would return a total of
+          Ninja uses <strong>decimal odds</strong>. A winning bet at 1.75 would return a total of
           1.75 ETH for every ETH staked. An even money bet is expressed as 2.00.
         </dd>
         <dt>Pool (ETH)</dt>
