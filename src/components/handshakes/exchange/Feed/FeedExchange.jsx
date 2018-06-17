@@ -362,7 +362,7 @@ class FeedExchange extends React.PureComponent {
       <div>
         <div className="feed-exchange">
           <div>
-            <div>
+            <div className="coins-wrapper">
               {
                 coins.map((coin, index) => {
                   const { priceBuy, priceSell, color, icon } = coin

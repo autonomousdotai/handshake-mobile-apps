@@ -9,34 +9,39 @@
   box-shadow: 0 2px 4px 0 rgba(201,201,201,0.50);
   border-radius: 4px;
   padding: 0 10px 10px;
-  .coin-item {
-    display: inline-block;
-    width: 148px;
-    color: white;
-    border-radius: 6px;
-    margin-right: 12px;
-    margin-top: 12px;
-    padding: 10px 10px 0 10px;
-    position: relative;
-    .icon-coin {
-      //width: 50px;
+  .coins-wrapper {
+    overflow: auto;
+    white-space: nowrap;
+    padding-left: 8px;
+    .coin-item {
       display: inline-block;
-      position: absolute;
-      top: -11px;
-      left: -9px;
-    }
-    .price {
-      font-weight: 500;
-      font-size: 12px;
-      color: #FFFFFF;
-      letter-spacing: 0.21px;
-      label {
-        min-width: 36px;
+      min-width: 148px;
+      color: white;
+      border-radius: 6px;
+      margin-right: 12px;
+      margin-top: 12px;
+      padding: 10px 10px 0 10px;
+      position: relative;
+      .icon-coin {
+        //width: 50px;
+        display: inline-block;
+        position: absolute;
+        top: -11px;
+        left: -9px;
       }
-      span {
-        font-weight: 700;
-        font-size: 16px;
-        letter-spacing: 0.29px;
+      .price {
+        font-weight: 500;
+        font-size: 12px;
+        color: #FFFFFF;
+        letter-spacing: 0.21px;
+        label {
+          min-width: 36px;
+        }
+        span {
+          font-weight: 700;
+          font-size: 16px;
+          letter-spacing: 0.29px;
+        }
       }
     }
   }
