@@ -353,7 +353,7 @@ class FeedMe extends React.PureComponent {
 
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOffer)}>Shake</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}>Shake</Button>
               </div>
             );
             break;
@@ -371,9 +371,9 @@ class FeedMe extends React.PureComponent {
             let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}>Reject</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}>Reject</Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}>Complete</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}>Complete</Button>
                 }
               </div>
             );
@@ -385,7 +385,7 @@ class FeedMe extends React.PureComponent {
               message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
               actionButtons = (
                 <div>
-                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOffer)}>Withdraw</Button>
+                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}>Withdraw</Button>
                 </div>
               );
             }
@@ -406,7 +406,7 @@ class FeedMe extends React.PureComponent {
             message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOffer)}>Cancel</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}>Cancel</Button>
               </div>
             );
             break;
@@ -422,9 +422,9 @@ class FeedMe extends React.PureComponent {
             let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}>Reject</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}>Reject</Button>
                 {offer.type === EXCHANGE_ACTION.SELL &&
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}>Complete</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}>Complete</Button>
                 }
               </div>
             );
@@ -435,7 +435,7 @@ class FeedMe extends React.PureComponent {
               message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
               actionButtons = (
                 <div>
-                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOffer)}>Withdraw</Button>
+                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}>Withdraw</Button>
                 </div>
               );
             }
@@ -450,6 +450,289 @@ class FeedMe extends React.PureComponent {
     }
 
     return actionButtons;
+  }
+
+  ////////////////////////
+  handleShakeOfferExchange = async () => {
+    const { intl, authProfile } = this.props;
+    const offer = this.offer;
+    const fiatAmount = this.fiatAmount;
+
+    const wallet = MasterWallet.getWalletDefault(offer.currency);
+    const balance = await wallet.getBalance();
+    const fee = await wallet.getFee(10, true);
+
+    if ((offer.currency === CRYPTO_CURRENCY.ETH || (offer.type === EXCHANGE_ACTION.BUY && offer.currency === CRYPTO_CURRENCY.BTC))
+      && this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+
+      return;
+    }
+
+    const address = wallet.address;
+
+    let offerShake = {
+      fiat_amount: fiatAmount.toString(),
+      address: address,
+      email: authProfile.email || '',
+      username: authProfile.username || '',
+    };
+
+    this.showLoading();
+    this.props.shakeOffer({
+      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id,
+      METHOD: 'POST',
+      data: offerShake,
+      successFn: this.handleShakeOfferExchangeSuccess,
+      errorFn: this.handleShakeOfferExchangeFailed,
+    });
+  }
+
+  handleShakeOfferExchangeSuccess = (responseData) => {
+    const { refreshPage } = this.props;
+    const { data } = responseData;
+    const { currency } = data;
+
+    const offer = this.offer;
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      this.handleCallActionOnContract(data);
+    } else if (currency === CRYPTO_CURRENCY.BTC) {
+      if (offer.type === EXCHANGE_ACTION.BUY) {
+        const wallet = MasterWallet.getWalletDefault(offer.currency);
+        wallet.transfer(offer.systemAddress, offer.totalAmount, 10).then(success => {
+          console.log('transfer', success);
+        });
+      }
+    }
+
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="shakeOfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // this.props.updateOfferStatus({ [`exchange_${data.id}`]: data });
+        this.props.history.push(URL.HANDSHAKE_ME);
+      }
+    });
+  }
+
+  handleShakeOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
+  }
+
+  ////////////////////////
+  handleRejectShakedOfferExchange = async () => {
+    const offer = this.offer;
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(offer.currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee();
+
+      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+        return;
+      }
+    }
+
+    this.showLoading();
+    this.props.cancelShakedOffer({
+      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.SHAKE,
+      METHOD: 'DELETE',
+      successFn: this.handleRejectShakedOfferExchangeSuccess,
+      errorFn: this.handleRejectShakedOfferExchangeFailed,
+    });
+  }
+
+  handleRejectShakedOfferExchangeSuccess = async (responseData) => {
+    const { refreshPage } = this.props;
+    const { data } = responseData;
+    const { currency } = data;
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+      let result = null;
+
+      if ((data.type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.OWNER) ||
+        (data.type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.SHAKED)
+      ) {
+        result = await exchangeHandshake.reject(data.hid, data.id);
+      } else {
+        result = await exchangeHandshake.cancel(data.hid, data.id);
+      }
+
+      console.log('handleCancelShakedOfferSuccess', result);
+    }
+
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="cancelShakedfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // if (refreshPage) {
+        //   refreshPage();
+        // }
+      }
+    });
+  }
+
+  handleRejectShakedOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
+  }
+
+  ////////////////////////
+  handleCompleteShakedOfferExchange = async () => {
+    const offer = this.offer;
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(offer.currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee();
+
+      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+        return;
+      }
+    }
+
+    this.showLoading();
+    this.props.completeShakedOffer({
+      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.SHAKE,
+      METHOD: 'POST',
+      successFn: this.handleCompleteShakedOfferExchangeSuccess,
+      errorFn: this.handleCompleteShakedOfferExchangeFailed,
+    });
+  }
+
+  handleCompleteShakedOfferExchangeSuccess = async (responseData) => {
+    const { refreshPage } = this.props;
+    const { data } = responseData;
+    const { currency } = data;
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+      let result = await exchangeHandshake.accept(data.hid, data.id);
+
+      console.log('handleCompleteShakedOfferSuccess', result);
+    }
+
+    // console.log('data', data);
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="completeShakedfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // if (refreshPage) {
+        //   refreshPage();
+        // }
+      }
+    });
+  }
+
+  handleCompleteShakedOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
+  }
+
+  ////////////////////////
+  handleWithdrawShakedOfferExchange = async () => {
+    const offer = this.offer;
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(offer.currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee();
+
+      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+        return;
+      }
+    }
+
+    this.showLoading();
+    this.props.cancelShakedOffer({
+      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id + '/' + API_URL.EXCHANGE.WITHDRAW,
+      METHOD: 'POST',
+      successFn: this.handleWithdrawShakedOfferExchangeSuccess,
+      errorFn: this.handleWithdrawShakedOfferExchangeFailed,
+    });
+  }
+
+  handleWithdrawShakedOfferExchangeSuccess = (responseData) => {
+    const { refreshPage } = this.props;
+    const { data } = responseData;
+    const { currency } = data;
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      this.handleCallActionOnContract(data);
+    }
+
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="withdrawShakedfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // if (refreshPage) {
+        //   refreshPage();
+        // }
+      }
+    });
+  }
+
+  handleWithdrawShakedOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
+  }
+
+  ////////////////////////
+  handleCloseOfferExchange = async () => {
+    const offer = this.offer;
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(offer.currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee();
+
+      if (this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
+        return;
+      }
+    }
+
+    this.showLoading();
+    this.props.closeOffer({
+      PATH_URL: API_URL.EXCHANGE.OFFERS + '/' + offer.id,
+      METHOD: 'DELETE',
+      successFn: this.handleCloseOfferExchangeSuccess,
+      errorFn: this.handleCloseOfferExchangeFailed,
+    });
+  }
+
+  handleCloseOfferExchangeSuccess = (responseData) => {
+    const { refreshPage } = this.props;
+    const { data } = responseData;
+    const { currency } = data;
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      this.handleCallActionOnContract(data);
+    }
+
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="closeOfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // this.props.fireBaseDataChange( { [`exchange_${data.id}`]: data });
+      }
+    });
+  }
+
+  handleCloseOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
   }
 
   ///Start Offer store
