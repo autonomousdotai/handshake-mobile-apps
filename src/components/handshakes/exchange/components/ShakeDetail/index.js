@@ -3,7 +3,7 @@ import './styles.scss'
 import createForm from '@/components/core/form/createForm';
 import {required} from '@/components/core/form/validation';
 
-import {Field, formValueSelector} from "redux-form";
+import {change, Field, formValueSelector} from "redux-form";
 import Button from '@/components/core/controls/Button';
 
 import {fieldCleave, fieldDropdown, fieldInput, fieldRadioButton} from '@/components/core/form/customField'
@@ -15,6 +15,7 @@ import {connect} from "react-redux";
 import {injectIntl} from "react-intl";
 import {formatMoney, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
+import {bindActionCreators} from "redux";
 
 const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -40,6 +41,26 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     if (handleShake) {
       handleShake(values);
     }
+  }
+
+  onCurrencyChange = (e, newValue) => {
+    const { offer, type, rfChange } = this.props;
+
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
+    const buyBalance = newValue === CRYPTO_CURRENCY.BTC ? btc.buyBalance : eth.buyBalance;
+    const sellBalance = newValue === CRYPTO_CURRENCY.BTC ? btc.sellBalance : eth.sellBalance;
+
+    let newType = type;
+
+    if (type === EXCHANGE_ACTION.BUY && buyBalance <= 0) {
+      newType = EXCHANGE_ACTION.SELL;
+    } else if (type === EXCHANGE_ACTION.SELL && sellBalance <= 0) {
+      newType = EXCHANGE_ACTION.BUY;
+    }
+
+    rfChange(nameFormShakeDetail, 'type', newType);
   }
 
   render() {
@@ -75,6 +96,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               list={this.CRYPTO_CURRENCY_LIST}
               // color={textColor}
               // validate={[required]}
+              onChange={this.onCurrencyChange}
             />
           </div>
           <div className="mt-3">
@@ -156,22 +178,24 @@ const mapState = (state, prevProps) => {
   const enableShake = balance > amount;
 
   const EXCHANGE_ACTION_LIST = [
-    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? offer.items.BTC.buyBalance <= 0 : offer.items.ETH.buyBalance <= 0},
-    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? offer.items.BTC.sellBalance <= 0 : offer.items.ETH.sellBalance <= 0},
+    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0},
+    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? btc.sellBalance <= 0 : eth.sellBalance <= 0},
   ];
 
   return {
     listOfferPrice: listOfferPrice,
     fiatAmount: fiatAmount || 0,
     enableShake,
-    EXCHANGE_ACTION_LIST
+    EXCHANGE_ACTION_LIST,
+    type,
   }
 };
 
-const mapDispatch = ({
-  showAlert,
-  showLoading,
-  hideLoading,
+const mapDispatch = (dispatch) => ({
+  showAlert: bindActionCreators(showAlert, dispatch),
+  showLoading: bindActionCreators(showLoading, dispatch),
+  hideLoading: bindActionCreators(hideLoading, dispatch),
+  rfChange: bindActionCreators(change, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(Component));
