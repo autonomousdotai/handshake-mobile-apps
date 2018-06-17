@@ -392,10 +392,10 @@ class FeedExchange extends React.PureComponent {
         </div>
         <Button block className="mt-2" onClick={this.handleOnShake}>Shake</Button>
 
-        {/*<div className="ex-sticky-note">
+        <div className="ex-sticky-note">
           <div className="mb-2">Got coins? Turn them into a money-making machine.</div>
           <div><button className="btn btn-become">BECOME A LOCAL EXCHANGE</button></div>
-        </div>*/}
+        </div>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
           <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} />
         </ModalDialog>
