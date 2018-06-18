@@ -39,7 +39,7 @@ import {Ethereum} from '@/models/Ethereum.js';
 import {Bitcoin} from '@/models/Bitcoin';
 import Offer from '@/models/Offer';
 import {MasterWallet} from '@/models/MasterWallet';
-import {formatAmountCurrency, formatMoney, getHandshakeUserType, getOfferPrice} from '@/services/offer-util';
+import {formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice} from '@/services/offer-util';
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
 import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from "../utils";
 import {ExchangeHandshake, ExchangeShopHandshake} from '@/services/neuron';
@@ -321,6 +321,7 @@ class FeedExchange extends React.PureComponent {
   render() {
     const { offer } = this;
     const { review, reviewCount } = this.props;
+    const currency = offer.fiatCurrency;
 
     let coins = [];
 
@@ -334,8 +335,8 @@ class FeedExchange extends React.PureComponent {
       coin.name = CRYPTO_CURRENCY.BTC;
       coin.color = '#FF880E';
       coin.icon = iconBtc;
-      coin.priceBuy = offer.items.BTC.buyBalance ? formatMoney(priceBuyBTC) : '-';
-      coin.priceSell = offer.items.BTC.sellBalance ? formatMoney(priceSellBTC) : '-';
+      coin.priceBuy = offer.items.BTC.buyBalance ? formatMoneyByLocale(priceBuyBTC,currency) : '-';
+      coin.priceSell = offer.items.BTC.sellBalance ? formatMoneyByLocale(priceSellBTC,currency) : '-';
 
       coins.push(coin);
     }
@@ -346,13 +347,12 @@ class FeedExchange extends React.PureComponent {
       coin.name = CRYPTO_CURRENCY.ETH;
       coin.color = 'linear-gradient(-135deg, #CB75ED 0%, #9E53E1 100%)';
       coin.icon = iconEth;
-      coin.priceBuy = offer.items.ETH.buyBalance ? formatMoney(priceBuyETH) : '-';
-      coin.priceSell = offer.items.ETH.sellBalance ? formatMoney(priceSellETH) : '-';
+      coin.priceBuy = offer.items.ETH.buyBalance ? formatMoneyByLocale(priceBuyETH,currency) : '-';
+      coin.priceSell = offer.items.ETH.sellBalance ? formatMoneyByLocale(priceSellETH,currency) : '-';
 
       coins.push(coin);
     }
 
-    const currency = offer.fiatCurrency;
     const address = this.getNameShopDisplayed();
     const distance = this.getOfferDistance();
 
