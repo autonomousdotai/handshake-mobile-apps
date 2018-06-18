@@ -1,7 +1,8 @@
 import React from "react";
 import COUNTRIES from "@/data/country-dial-codes.js";
 import "./styles.scss";
-import iconArrow from '@/assets/images/icon/Triangle.svg';
+import iconArrowWhite from '@/assets/images/icon/Triangle_white.svg';
+import iconArrowBlack from '@/assets/images/icon/Triangle_black.svg';
 
 // const isVisible = elem => !!elem && !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length )
 
@@ -54,14 +55,14 @@ class SelectCountryCode extends React.Component {
   }
 
   render() {
-    const { countryCode, onChange } = this.props;
+    const { countryCode, onChange, color } = this.props;
     const { showSelect, strFilterCountry } = this.state;
     const filteredCountries = COUNTRIES.filter(c => c.name.toUpperCase().includes(strFilterCountry.toUpperCase()));
     return (
       <span>
         <span className="select-country-code" onClick={this.toggleShowSelect}>
           <span>{countryCode}</span>
-          <img className="ml-2" src={iconArrow} />
+          <img className="ml-2" src={color === '#000000' ? iconArrowBlack : iconArrowWhite} />
         </span>
         {
           showSelect && (

@@ -168,7 +168,7 @@ export const fieldCleave = customField(({
 ));
 
 export const fieldPhoneInput = customField(({
-  onChange, onBlur, onFocus, value, propsCleave, className, placeholder
+  onChange, onBlur, onFocus, value, propsCleave, className, placeholder, color
 }) => {
   const splittedNumbers = value.split('-');
   let countryCode = '';
@@ -183,7 +183,7 @@ export const fieldPhoneInput = customField(({
   return (
     <span>
       <span style={{ display: 'table-cell' }}>
-        <SelectCountryCode countryCode={countryCode} onChange={newCountryCode => onChange(`${newCountryCode}-${phoneNumber}`)} />
+        <SelectCountryCode countryCode={countryCode} onChange={newCountryCode => onChange(`${newCountryCode}-${phoneNumber}`)} color={color} />
       </span>
       <span style={{ display: 'table-cell' }} className="pl-2"><input type="tel" placeholder={placeholder} className="form-control-custom form-control-custom-ex w-100 input-no-border" value={phoneNumber} onChange={e => onChange(`${countryCode}-${e.target.value}`)} /></span>
     </span>
