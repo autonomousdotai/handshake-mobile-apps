@@ -13,7 +13,7 @@
     overflow: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
-    padding-left: 8px;
+    //padding-left: 8px;
     .coin-item {
       display: inline-block;
       min-width: 148px;
@@ -23,6 +23,11 @@
       margin-top: 12px;
       padding: 10px 10px 0 10px;
       position: relative;
+      .name {
+        font-size: 12px;
+        color: #FFFFFF;
+        letter-spacing: 0.5px;
+      }
       .icon-coin {
         //width: 50px;
         display: inline-block;
@@ -30,7 +35,7 @@
         top: -11px;
         left: -9px;
       }
-      .price {
+      .price-wrapper {
         font-weight: 500;
         font-size: 12px;
         color: #FFFFFF;
@@ -38,7 +43,7 @@
         label {
           min-width: 36px;
         }
-        span {
+        .price {
           font-weight: 700;
           font-size: 16px;
           letter-spacing: 0.29px;
@@ -78,6 +83,7 @@
       font-size: 12px;
       color: #22292F;
       letter-spacing: 0.21px;
+      text-transform: uppercase;
     }
   }
 }
