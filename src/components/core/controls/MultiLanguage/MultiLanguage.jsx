@@ -53,9 +53,10 @@ class MultiLanguage extends React.PureComponent {
 
   render() {
     const { locale } = this.props.app;
+    const flag = locale === 'en' ? 'gb' : locale;
     return (
       <div className="multi-language">
-        <span class="flag-icon flag-icon-gb" onClick={() => this.modalLanguageRef.open()} />
+        <span className={`flag-icon flag-icon-${flag}`} onClick={() => this.modalLanguageRef.open()} />
         <ModalDialog onRef={modal => this.modalLanguageRef = modal}>
           <div className="country-block">
             <p className="text">Delivered Language</p>

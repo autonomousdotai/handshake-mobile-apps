@@ -137,7 +137,7 @@ export default {
   ],
 
   // MobileOrTablet components
-  MOT_TITLE: 'Anonyme Peer-to-Peer-Vorhersage Exchange',
+  MOT_TITLE: 'Der anonyme Austausch von etwas',
   MOT_CONTENT_0: 'Das Ninja-Netz ist nur erreichbar via Handy',
   MOT_CONTENT_1: 'Öffnen Sie',
   MOT_CONTENT_2: 'in Ihren mobilen Browser anonym Zutritt.',

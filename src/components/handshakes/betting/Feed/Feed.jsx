@@ -222,7 +222,7 @@ class FeedBetting extends React.Component {
               <span className="content">{amount.toFixed(6)} ETH </span>
               <span className="odds" >{odds.toFixed(2)}</span>
             </div>
-            <div className="possibleWin">Possible winnings: {Math.round(winValue*ROUND)/ROUND} ETH</div>
+            <div className="possibleWin">Possible winnings: {Math.floor(winValue*ROUND)/ROUND} ETH</div>
 
             {this.renderStatus()}
         </Feed>
@@ -246,17 +246,18 @@ class FeedBetting extends React.Component {
     //TO DO: Choose an option
   }
 
-  clickActionButton(title){
-    if(!betHandshakeHandler.isRightNetwork()){
+  async clickActionButton(title){
+    const balance = await betHandshakeHandler.getBalance();
+    const estimatedGas = await betHandshakeHandler.getEstimateGas();
+    let message = null;
+    if(estimatedGas < balance){
+      message = MESSAGE.NOT_ENOUGH_BALANCE;
+
+    }
+    else if(!betHandshakeHandler.isRightNetwork()){
       message = MESSAGE.RIGHT_NETWORK;
-      this.props.showAlert({
-        message: <div className="text-center">{message}</div>,
-        timeOut: 3000,
-        type: 'danger',
-        callBack: () => {
-        }
-      });
-    }else {
+    }
+    else {
       const {id} = this.props;
       const realId = betHandshakeHandler.getId(id);
       console.log('realId:', realId);
@@ -278,7 +279,17 @@ class FeedBetting extends React.Component {
   
       }
     }
-    
+    if(message){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+  
+    }
+   
 
 
   }

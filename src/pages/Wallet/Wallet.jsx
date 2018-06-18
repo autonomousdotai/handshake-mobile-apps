@@ -224,6 +224,7 @@ class Wallet extends React.Component {
 
   async componentDidMount() {
 
+
     this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
 

@@ -125,10 +125,10 @@ export class BetHandshakeHandler {
   constructor() {
 
   }
-
   isRightNetwork(){
     
     const wallet = MasterWallet.getWalletDefault('ETH');
+    MasterWallet.log(MasterWallet.getWalletDefault("ETH"));
 
     if (process.env.isProduction && !process.env.isStaging) { //Live use mainet
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
@@ -155,6 +155,8 @@ export class BetHandshakeHandler {
   }
   getChainIdDefaultWallet(){
     const wallet = MasterWallet.getWalletDefault('ETH');
+    MasterWallet.log(wallet);
+
     const chainId = wallet.chainId;
     console.log('ChainId:', chainId);
     return chainId;
@@ -297,7 +299,7 @@ export class BetHandshakeHandler {
     const {
       amount, odds, side, offchain,
     } = item;
-    const stake = Math.round(amount * 10 ** 18) / 10 ** 18;
+    const stake = Math.floor(amount * 10 ** 18) / 10 ** 18;
     //hid = 10000;
     const chainId = this.getChainIdDefaultWallet();
     const bettinghandshake = new BettingHandshake(chainId);
@@ -323,7 +325,7 @@ export class BetHandshakeHandler {
       amount, id, odds, side, from_address,
     } = item;
     //hid = 10000;
-    const stake = Math.round(amount * 10 ** 18) / 10 ** 18;
+    const stake = Math.floor(amount * 10 ** 18) / 10 ** 18;
     // const payout = stake * odds;
     // const payout = Math.round(stake * odds * 10 ** 18) / 10 ** 18;
     const offchain = `cryptosign_s${id}`;
