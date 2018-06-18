@@ -2,7 +2,7 @@
   //background: url("../../../../../assets/images/icon/Triangle.svg") no-repeat right center;
   //background-size: 8px 10px;
   cursor: pointer;
-  font-weight: 400;
+  //font-weight: 400;
 }
 .select-list-country-code-wrapper {
   position: absolute;
@@ -24,11 +24,19 @@
     .item {
       cursor: pointer;
       margin-bottom: 8px;
+      color: white;
+      font-weight: normal;
       //width: 200px;
     }
   }
+  .filter {
+    input {
+      color: white;
+    }
+  }
   .btn-close {
-    width: 100px;
+    margin: 0;
+    padding: 0;
   }
 }
 

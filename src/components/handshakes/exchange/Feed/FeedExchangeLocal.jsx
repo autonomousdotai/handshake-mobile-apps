@@ -131,7 +131,7 @@ class FeedMe extends React.PureComponent {
     const { intl } = this.props;
     let result = true;
 
-    if (process.env.isProduction) {
+    if (process.env.isProduction && !process.env.isStaging) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {

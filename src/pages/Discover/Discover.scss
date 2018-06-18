@@ -1,5 +1,4 @@
 @import './src/styles/style';
-$gray: #f4f5f7;
 
 .discover {
   background: $gray;
@@ -9,6 +8,11 @@ $gray: #f4f5f7;
   .category-wrapper {
     margin-bottom: rem-calc(11px);
     background: $white;
+    .multilanguage-block {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
   }
   .buy-sell-wrapper {
     margin-bottom: rem-calc(15px);
@@ -16,46 +20,46 @@ $gray: #f4f5f7;
   .search-bar-wrapper {
     margin-bottom: rem-calc(15px);
   }
-  .exchange-intro {
-    //background: #8BB7F0;
-    background-image: url("../../assets/images/icon/bg-exchange-intro.svg");
-    margin-bottom: 0.9375rem;
-    padding-top: 20px;
-    .icon-shop {
-      display: table-cell;
-      vertical-align: bottom;
-      width: 147px;
-      img {
-        width: 100%;
-      }
-    }
-    .text-intro {
-
-      font-size: 15px;
-      color: #FFFFFF;
-      letter-spacing: 0.27px;
-      padding-left: 12px;
-      display: table-cell;
-      font-weight: 400;
-      line-height: 23px;
-      .btn-join-now {
-        font-weight: bold;
-        color: #FFFFFF;
-        min-width: 121px;
-        background: #2456FB;
-        border: 2px solid #FFFFFF;
-        border-radius: 4px;
-        font-size: 14px;
-        letter-spacing: 0.25px;
-      }
-      .money {
-        font-weight: bold;
-        font-size: 14px;
-        letter-spacing: 0.25px;
-        //line-height: 23px;
-      }
-    }
-  }
+  //.exchange-intro {
+  //  //background: #8BB7F0;
+  //  background-image: url("../../assets/images/icon/bg-exchange-intro.svg");
+  //  margin-bottom: 0.9375rem;
+  //  padding-top: 20px;
+  //  .icon-shop {
+  //    display: table-cell;
+  //    vertical-align: bottom;
+  //    width: 147px;
+  //    img {
+  //      width: 100%;
+  //    }
+  //  }
+  //  .text-intro {
+  //
+  //    font-size: 15px;
+  //    color: #FFFFFF;
+  //    letter-spacing: 0.27px;
+  //    padding-left: 12px;
+  //    display: table-cell;
+  //    font-weight: 400;
+  //    line-height: 23px;
+  //    .btn-join-now {
+  //      font-weight: bold;
+  //      color: #FFFFFF;
+  //      min-width: 121px;
+  //      background: #2456FB;
+  //      border: 2px solid #FFFFFF;
+  //      border-radius: 4px;
+  //      font-size: 14px;
+  //      letter-spacing: 0.25px;
+  //    }
+  //    .money {
+  //      font-weight: bold;
+  //      font-size: 14px;
+  //      letter-spacing: 0.25px;
+  //      //line-height: 23px;
+  //    }
+  //  }
+  //}
   .faq-block {
     margin-top: rem-calc(15px);
   }

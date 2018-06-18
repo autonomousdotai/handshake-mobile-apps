@@ -6,7 +6,7 @@ import './styles.scss'
 import createForm from "@/components/core/form/createForm";
 import {getOfferPrice} from "@/services/offer-util";
 import axios from 'axios';
-
+import {FormattedMessage} from 'react-intl';
 import {
   fieldCleave,
   fieldDropdown,
@@ -16,7 +16,7 @@ import {
   fieldRadioButton
 } from "@/components/core/form/customField";
 import {maxValue, minValue, required} from "@/components/core/form/validation";
-import {change, Field, formValueSelector} from "redux-form";
+import {change, Field, formValueSelector, clearFields} from "redux-form";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {
@@ -56,14 +56,16 @@ import { addOfferItem, } from "@/reducers/exchange/action";
 import {getOfferStores} from "@/reducers/exchange/action";
 import { getErrorMessageFromCode } from "../utils";
 
+
+import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
+import iconEth from '@/assets/images/icon/coin/icon-eth.svg';
+
 const nameFormExchangeCreate = "exchangeCreate";
 const FormExchangeCreate = createForm({
   propsReduxForm: {
     form: nameFormExchangeCreate,
     initialValues: {
       currency: CRYPTO_CURRENCY_DEFAULT,
-      customizePriceBuy: 0,
-      customizePriceSell: 0,
       customizePriceBuy: -0.25,
       customizePriceSell: 0.25,
     }
@@ -81,7 +83,7 @@ const FormExchangeCreate = createForm({
 });
 const selectorFormExchangeCreate = formValueSelector(nameFormExchangeCreate);
 
-const textColor = "#ffffff";
+const textColor = "#000000";
 const btnBg = "rgba(29,29,38,0.30)";
 const validateFee = [
   minValue(-50),
@@ -90,8 +92,8 @@ const validateFee = [
 
 class Component extends React.Component {
   CRYPTO_CURRENCY_LIST = [
-    { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], hide: false },
-    { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], hide: false },
+    { value: CRYPTO_CURRENCY.ETH, text: <div className="currency-selector"><img src={iconEth}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH]}</span></div>, hide: false },
+    { value: CRYPTO_CURRENCY.BTC, text: <div className="currency-selector"><img src={iconBtc}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC]}</span></div>, hide: false },
   ];
 
   constructor(props) {
@@ -253,7 +255,7 @@ class Component extends React.Component {
     const { intl } = this.props;
     let result = true;
 
-    if (process.env.isProduction) {
+    if (process.env.isProduction && !process.env.isStaging) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {
@@ -264,6 +266,13 @@ class Component extends React.Component {
     }
 
     return result;
+  }
+
+  resetFormValue = () => {
+    const { rfChange, clearFields } = this.props;
+    rfChange(nameFormExchangeCreate, 'customizePriceBuy', -0.25);
+    rfChange(nameFormExchangeCreate, 'customizePriceSell', 0.25);
+    clearFields(nameFormExchangeCreate, false, false, 'amountBuy', 'amountSell');
   }
 
   handleSubmit = async (values) => {
@@ -282,7 +291,7 @@ class Component extends React.Component {
     }
 
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(4, true);
+    const fee = await wallet.getFee(10, true);
 
     const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
 
@@ -290,19 +299,19 @@ class Component extends React.Component {
       return;
     }
 
-    const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
+    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
 
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
 
     const data = {
       currency: currency,
-      sell_amount: amountSell.toString(),
+      sell_amount: amountSell && amountSell.toString() || "0",
       sell_percentage: customizePriceSell.toString(),
-      buy_amount: amountBuy.toString(),
+      buy_amount: amountBuy && amountBuy.toString() || "0",
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
-      reward_address: rewardWallet.address,
+      // reward_address: rewardWallet.address,
     };
 
     const offer = {
@@ -408,7 +417,7 @@ class Component extends React.Component {
     if (currency === CRYPTO_CURRENCY.BTC) {
       console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
       if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, amountSell).then(success => {
+        wallet.transfer(offer.items.BTC.systemAddress, amountSell, 10).then(success => {
           console.log('transfer', success);
         });
       }
@@ -433,6 +442,8 @@ class Component extends React.Component {
 
       }
     });
+
+    this.resetFormValue();
 
     let haveOfferETH = offer.itemFlags.ETH;
     let haveOfferBTC = offer.itemFlags.BTC;
@@ -495,7 +506,7 @@ class Component extends React.Component {
   }
 
   render() {
-    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell } = this.props;
+    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell, intl } = this.props;
     const modalContent = this.state.modalContent;
     const haveProfile = this.offer ? true : false;
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
@@ -524,10 +535,11 @@ class Component extends React.Component {
               />
             </div>
           </div>
-          <div className="label">Exchange rate</div>
-          <Feed className="feed mt-2 wrapper" background={this.mainColor}>
+
+          <div className="label"><FormattedMessage id="ex.create.label.exchangeRate"/></div>
+          <div className="section">
             <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Inventory for purchase</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountBuy"/></span></label>
               <div className='input-group'>
                 <Field
                   name="amountBuy"
@@ -543,7 +555,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Inventory for sale</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountSell"/></span></label>
               <div className='input-group'>
                 <Field
                   name="amountSell"
@@ -559,7 +571,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Market price</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.marketPrice"/></span></label>
               <div className='input-group'>
                 <div><span className="form-text">{priceDisplayed} {fiatCurrency}</span></div>
               </div>
@@ -568,7 +580,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Your buying price</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.premiumBuy"/></span></label>
               <div className='input-group align-items-center'>
                 <Field
                   name="customizePriceBuy"
@@ -579,13 +591,14 @@ class Component extends React.Component {
                   color={textColor}
                   validate={validateFee}
                 />
+                { wantToBuy && <span className="w-100 estimate-price buy">&asymp; {estimatedPriceBuy} {fiatCurrency}</span> }
               </div>
             </div>
 
             <hr className="hrLine"/>
 
             <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle">Your selling price</span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountSell"/></span></label>
               <div className='input-group align-items-center'>
                 <Field
                   name="customizePriceSell"
@@ -596,6 +609,7 @@ class Component extends React.Component {
                   color={textColor}
                   validate={validateFee}
                 />
+                { wantToSell && <span className="w-100 estimate-price sell">&asymp; {estimatedPriceSell} {fiatCurrency}</span> }
               </div>
             </div>
 
@@ -608,15 +622,15 @@ class Component extends React.Component {
                 </div>
               )
             }
-          </Feed>
+          </div>
 
           {
             !haveProfile && (
               <div>
                 <div className="label">Station information</div>
-                <Feed className="feed my-2 wrapper" background={this.mainColor}>
+                <div className="section">
                   <div className="d-flex">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle">Station name</span></label>
+                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.nameStation"/></span></label>
                     <div className='input-group'>
                       <Field
                         name="nameShop"
@@ -632,12 +646,13 @@ class Component extends React.Component {
                   <hr className="hrLine"/>
 
                   <div className="d-flex mt-2">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle">Phone</span></label>
+                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.phone"/></span></label>
                     <div className="input-group w-100">
                       <Field
                         name="phone"
                         className="form-control-custom form-control-custom-ex w-100 input-no-border"
                         component={fieldPhoneInput}
+                        color={textColor}
                         type="tel"
                         placeholder="4995926433"
                         // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
@@ -647,7 +662,7 @@ class Component extends React.Component {
                   <hr className="hrLine"/>
 
                   <div className="d-flex mt-2">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle">Address</span></label>
+                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.address"/></span></label>
                     <div className="w-100">
                       <Field
                         name="address"
@@ -658,11 +673,11 @@ class Component extends React.Component {
                       />
                     </div>
                   </div>
-                </Feed>
+                </div>
               </div>
             )
           }
-          <Button block type="submit" disabled={!allowInitiate} className="mt-3">Initiate</Button>
+          <Button block type="submit" disabled={!allowInitiate} className="mt-3"><FormattedMessage id="btn.initiate"/></Button>
         </FormExchangeCreate>
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
@@ -699,6 +714,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   showAlert: bindActionCreators(showAlert, dispatch),
   rfChange: bindActionCreators(change, dispatch),
+  clearFields: bindActionCreators(clearFields, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
   authUpdate: bindActionCreators(authUpdate, dispatch),

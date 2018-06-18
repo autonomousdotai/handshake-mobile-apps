@@ -184,7 +184,7 @@ class Create extends React.Component {
     const CreateComponent = maps[seletedId];
     console.log('create page - render - seletedId', seletedId);
     return (
-      <Grid className="create">
+      <Grid className="create-page">
         <Row>
           <Col md={12}>
             <Dropdown

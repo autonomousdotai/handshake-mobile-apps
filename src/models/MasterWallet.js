@@ -64,15 +64,16 @@ export class MasterWallet {
       }
 
       // For Reward wallet:
-      mnemonic = bip39.generateMnemonic();
-      for (const k in MasterWallet.ListCoinReward) {
-        const wallet = new MasterWallet.ListCoinReward[k]();
-        wallet.mnemonic = mnemonic;
-        wallet.network = MasterWallet.ListCoinReward[k].Network.Mainnet;
-        wallet.createAddressPrivatekey();
-        wallet.isReward = true;
-        masterWallet.push(wallet);
-      }
+      // todo: now need hide
+      // mnemonic = bip39.generateMnemonic();
+      // for (const k in MasterWallet.ListCoinReward) {
+      //   const wallet = new MasterWallet.ListCoinReward[k]();
+      //   wallet.mnemonic = mnemonic;
+      //   wallet.network = MasterWallet.ListCoinReward[k].Network.Mainnet;
+      //   wallet.createAddressPrivatekey();
+      //   wallet.isReward = true;
+      //   masterWallet.push(wallet);
+      // }
 
       // Save to local store:
       MasterWallet.UpdateLocalStore(masterWallet);
