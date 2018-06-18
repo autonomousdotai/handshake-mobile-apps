@@ -299,7 +299,7 @@ class Component extends React.Component {
       return;
     }
 
-    const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
+    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
 
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
@@ -311,7 +311,7 @@ class Component extends React.Component {
       buy_amount: amountBuy && amountBuy.toString() || "0",
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
-      reward_address: rewardWallet.address,
+      // reward_address: rewardWallet.address,
     };
 
     const offer = {
