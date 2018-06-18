@@ -31,6 +31,18 @@ export function formatMoney(price = 0) {
   return new BigNumber(price).toFormat(PRICE_DECIMAL);
 }
 
+
+export function formatMoneyByLocale(price = 0, locale = 'USD') {
+  switch (locale.toLowerCase()) {
+    case 'vnd':
+      return new BigNumber(price).dividedBy(1000).decimalPlaces(0).times(1000)
+        .toFormat(PRICE_DECIMAL);
+    default:
+      return new BigNumber(price).toFormat(PRICE_DECIMAL);
+  }
+}
+
+
 export function formatAmountCurrency(amount = 0) {
   return amount.toString();
   // return new BigNumber(amount).toFormat(AMOUNT_DECIMAL);
