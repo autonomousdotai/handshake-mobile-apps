@@ -11,33 +11,42 @@ import { ACTIONS } from './action';
 function handlePreProcessForOfferStore(handshake) {
   const extraData = JSON.parse(handshake.extra_data);
   const { id } = handshake;
-  const handledHandshake = Object.assign({}, handshake);
+  let result = [];
 
   if (extraData.items.BTC) {
+    const handledHandshake = Object.assign({}, handshake);
     const extraDataBTC = { ...extraData, ...extraData.items.BTC };
     delete extraDataBTC.items;
-    delete extraDataBTC.status;
     handledHandshake.extra_data = JSON.stringify(extraDataBTC);
     handledHandshake.id = `${id}_BTC`;
-  }
-  if (extraData.items.ETH) {
-    const extraDataETH = { ...extraData, ...extraData.items.ETH };
-    delete extraDataETH.items;
-    delete extraDataETH.status;
-    handledHandshake.extra_data = JSON.stringify(extraDataETH);
-    handledHandshake.id = `${id}_ETH`;
+
+    result.push(Handshake.handshake(handledHandshake));
   }
 
-  return Handshake.handshake(handledHandshake);
+  if (extraData.items.ETH) {
+    const handledHandshake = Object.assign({}, handshake);
+    const extraDataETH = { ...extraData, ...extraData.items.ETH };
+    delete extraDataETH.items;
+    handledHandshake.extra_data = JSON.stringify(extraDataETH);
+    handledHandshake.id = `${id}_ETH`;
+
+    result.push(Handshake.handshake(handledHandshake));
+  }
+
+  return result;
 }
 
 const handleListPayload = (payload) => {
-  const result = payload.map((handshake) => {
+  const result = [];
+  payload.map((handshake) => {
     if (handshake.offer_feed_type === EXCHANGE_FEED_TYPE.OFFER_STORE) {
-      return handlePreProcessForOfferStore(handshake);
+      result.push(...handlePreProcessForOfferStore(handshake));
+    } else {
+      result.push(Handshake.handshake(handshake));
     }
-    return Handshake.handshake(handshake);
+    return null;
   });
+
   return result;
 };
 
