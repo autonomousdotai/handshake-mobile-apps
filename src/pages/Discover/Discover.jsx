@@ -28,6 +28,7 @@ import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchang
 import FeedSeed from '@/components/handshakes/seed/Feed';
 // import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import BlockCountry from '@/components/core/presentation/BlockCountry';
+import MultiLanguage from '@/components/core/controls/MultiLanguage';
 
 // import Tabs from '@/components/handshakes/exchange/components/Tabs';
 import NoData from '@/components/core/presentation/NoData';
@@ -36,7 +37,7 @@ import { getListOfferPrice } from '@/reducers/exchange/action';
 import Image from '@/components/core/presentation/Image';
 import loadingSVG from '@/assets/images/icon/loading.gif';
 import ninjaLogoSVG from '@/assets/images/logo.png';
-import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
+// import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
 
 // style
 import './Discover.scss';
@@ -336,13 +337,16 @@ class DiscoverPage extends React.Component {
               <SearchBar onSuggestionSelected={() => {}} onInputSearchChange={this.searchChange} />
             </Col>
           </Row> */}
-          <Row className="category-wrapper">
-            <Col md={12} xs={6} style={{ marginBottom: handshakeIdActive === HANDSHAKE_ID.EXCHANGE ? '0px' : '' }}>
+          <Row className="category-wrapper" style={{ marginBottom: handshakeIdActive === HANDSHAKE_ID.EXCHANGE ? '0px' : '' }}>
+            <Col className="col-9">
               <Category
                 idActive={handshakeIdActive}
                 onRef={(category) => { this.categoryRef = category; return null; }}
                 onItemClick={this.clickCategoryItem}
               />
+            </Col>
+            <Col className="col-3 multilanguage-block">
+              <MultiLanguage />
             </Col>
           </Row>
           {
@@ -402,7 +406,7 @@ class DiscoverPage extends React.Component {
             }
           </Row>
           <Row className="info">
-            Ninja is open-source, decentralized software that never holds your funds. By choosing to use Ninja, the user makes it their business to be aware of the legalities of their governing jurisdiction, and accepts that they are solely responsible for how they choose to use the software. Ninja is not a gambling operator and cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!
+            Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!
           </Row>
         </Grid>
         <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} className="discover-popup" isDismiss={false} >

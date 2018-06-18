@@ -1,5 +1,4 @@
 @import './src/styles/style';
-$gray: #f4f5f7;
 
 .discover {
   background: $gray;
@@ -9,6 +8,11 @@ $gray: #f4f5f7;
   .category-wrapper {
     margin-bottom: rem-calc(11px);
     background: $white;
+    .multilanguage-block {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
   }
   .buy-sell-wrapper {
     margin-bottom: rem-calc(15px);

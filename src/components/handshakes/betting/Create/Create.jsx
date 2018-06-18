@@ -250,7 +250,7 @@ get defaultOutcome() {
     const date = selectedMatch.date;
     console.log('Date:', date);
     if(!betHandshakeHandler.isRightNetwork()){
-      message = MESSAGE.MATCH_OVER;
+      message = MESSAGE.RIGHT_NETWORK;
 
     }
     

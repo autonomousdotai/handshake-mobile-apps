@@ -103,11 +103,11 @@ export const BETTING_STATUS_LABEL =
     };
 
 export const CONTRACT_METHOD = {
-  INIT: 'INIT',
-  SHAKE: 'SHAKE',
-  CANCEL: 'CANCEL',
-  REFUND: 'REFUND',
-  COLLECT: 'COLLECT',
+  INIT: 'init',
+  SHAKE: 'shake',
+  CANCEL: 'uninit',
+  REFUND: 'refund',
+  COLLECT: 'collect',
 }
 
 let myManager = null;
@@ -125,10 +125,10 @@ export class BetHandshakeHandler {
   constructor() {
 
   }
-
   isRightNetwork(){
     
     const wallet = MasterWallet.getWalletDefault('ETH');
+    MasterWallet.log(MasterWallet.getWalletDefault("ETH"));
 
     if (process.env.isProduction && !process.env.isStaging) { //Live use mainet
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
@@ -155,6 +155,8 @@ export class BetHandshakeHandler {
   }
   getChainIdDefaultWallet(){
     const wallet = MasterWallet.getWalletDefault('ETH');
+    MasterWallet.log(wallet);
+
     const chainId = wallet.chainId;
     console.log('ChainId:', chainId);
     return chainId;
@@ -297,7 +299,7 @@ export class BetHandshakeHandler {
     const {
       amount, odds, side, offchain,
     } = item;
-    const stake = Math.round(amount * 10 ** 18) / 10 ** 18;
+    const stake = Math.floor(amount * 10 ** 18) / 10 ** 18;
     //hid = 10000;
     const chainId = this.getChainIdDefaultWallet();
     const bettinghandshake = new BettingHandshake(chainId);
@@ -323,7 +325,7 @@ export class BetHandshakeHandler {
       amount, id, odds, side, from_address,
     } = item;
     //hid = 10000;
-    const stake = Math.round(amount * 10 ** 18) / 10 ** 18;
+    const stake = Math.floor(amount * 10 ** 18) / 10 ** 18;
     // const payout = stake * odds;
     // const payout = Math.round(stake * odds * 10 ** 18) / 10 ** 18;
     const offchain = `cryptosign_s${id}`;
@@ -438,10 +440,11 @@ export class BetHandshakeHandler {
   }
   async cancelBet(hid, side, stake, odds, offchain){
     const chainId = this.getChainIdDefaultWallet();
+        //hid = 10000;
+
     const bettinghandshake = new BettingHandshake(chainId);
     const result = await bettinghandshake.cancelBet(hid, side, stake, odds, offchain);
     const {blockHash, logs, hash, error} = result;
-    
     
     let logJson = JSON.stringify(logs);
     const contractAddress = bettinghandshake.contractAddress;

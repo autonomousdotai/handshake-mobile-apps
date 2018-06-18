@@ -50,6 +50,7 @@ import OfferShop from '@/models/OfferShop';
 import {getLocalizedDistance} from "@/services/util";
 import {BigNumber} from "bignumber.js";
 import StarsRating from "@/components/core/presentation/StarsRating";
+import Rate from '@/components/core/controls/Rate';
 
 import iconChat from '@/assets/images/icon/chat-icon.svg';
 import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
