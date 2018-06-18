@@ -180,6 +180,7 @@ const mapState = (state, prevProps) => {
     enableShake,
     EXCHANGE_ACTION_LIST,
     type,
+    currency
   }
 };
 
