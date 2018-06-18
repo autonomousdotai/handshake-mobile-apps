@@ -200,12 +200,12 @@ class FeedExchange extends React.PureComponent {
     const { intl } = this.props;
     const { data } = responseData;
     const offerShake = Offer.offer(data);
-    const { currency, type, totalAmount, systemAddress, offChainId } = offerShake;
+    const { currency, type, amount, totalAmount, systemAddress, offChainId } = offerShake;
     const { offer } = this;
 
     if (currency === CRYPTO_CURRENCY.ETH) {
       if (type === EXCHANGE_ACTION.BUY) { // shop buy
-        const amount = totalAmount;
+        // const amount = totalAmount;
 
         const wallet = MasterWallet.getWalletDefault(currency);
         const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
@@ -315,8 +315,8 @@ class FeedExchange extends React.PureComponent {
   }
 
   handleChat = () => {
-    const { chatUsername } = this.props;
-    this.props.history.push(`${URL.HANDSHAKE_ME}/${chatUsername}`);
+    const { chatUsername } = this.offer;
+    this.props.history.push(`${URL.HANDSHAKE_CHAT}/${chatUsername}`);
   }
 
 

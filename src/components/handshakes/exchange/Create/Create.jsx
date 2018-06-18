@@ -94,8 +94,8 @@ const validateFee = [
 
 class Component extends React.Component {
   CRYPTO_CURRENCY_LIST = [
-    { value: CRYPTO_CURRENCY.BTC, text: <div className="currency-selector"><img src={iconBtc}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC]}</span></div>, hide: false },
     { value: CRYPTO_CURRENCY.ETH, text: <div className="currency-selector"><img src={iconEth}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH]}</span></div>, hide: false },
+    { value: CRYPTO_CURRENCY.BTC, text: <div className="currency-selector"><img src={iconBtc}/> <span>{CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC]}</span></div>, hide: false },
   ];
 
   constructor(props) {
@@ -301,9 +301,9 @@ class Component extends React.Component {
 
     const data = {
       currency: currency,
-      sell_amount: amountSell.toString(),
+      sell_amount: amountSell && amountSell.toString() || "0",
       sell_percentage: customizePriceSell.toString(),
-      buy_amount: amountBuy.toString(),
+      buy_amount: amountBuy && amountBuy.toString() || "0",
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
       reward_address: rewardWallet.address,
