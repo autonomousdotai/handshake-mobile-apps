@@ -281,7 +281,7 @@ class Refers extends React.Component {
 
   updateTwitterUsernameValue = (evt) => {
     this.setState({
-      step2_value: evt.target.valuet.trim(),
+      step2_value: evt.target.value.trim(),
     });
   }
 
