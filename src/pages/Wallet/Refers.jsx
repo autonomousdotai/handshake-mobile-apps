@@ -269,19 +269,19 @@ class Refers extends React.Component {
 
   updateTelegramUsernameValue = (evt) => {
     this.setState({
-      step1_value: evt.target.value,
+      step1_value: evt.target.value.trim(),
     });
   }
 
   updateEmailValue= (evt) => {
     this.setState({
-      step3_value: evt.target.value,
+      step3_value: evt.target.value.trim(),
     });
   }
 
   updateTwitterUsernameValue = (evt) => {
     this.setState({
-      step2_value: evt.target.value,
+      step2_value: evt.target.valuet.trim(),
     });
   }
 
