@@ -138,6 +138,7 @@ export const API_URL = {
     // Store
     OFFER_STORES: 'exchange/offer-stores',
     SHAKES: 'shakes',
+    REVIEWS: 'reviews',
   },
   SEED: {
     BASE: 'seed',
