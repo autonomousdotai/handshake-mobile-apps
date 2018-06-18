@@ -70,7 +70,7 @@ class Refers extends React.Component {
   }
 
   showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
+    this.showAlert(mst, 'primary', 3000);
   }
   showError(mst) {
     this.showAlert(mst, 'danger', 4000);
@@ -353,7 +353,7 @@ renderStep3= () => (
       <Field
           name="refer_email"
           type="email"
-          className="form-control"
+          className="form-control padding-right-10"
           placeholder="your favourite fake email"
           component={fieldInput}
           value={this.state.step3_value}
@@ -364,8 +364,8 @@ renderStep3= () => (
     </div>
     {
       this.state.step3 == 1 ?
-      <div className="col100">
-        <a className="reset-link" onClick={() => {this.resetStep3()}}>reset ninja name</a>
+      <div className="col100 dev-has-icon">
+        <a className="reset-link" onClick={() => {this.resetStep3()}}>✕</a>
       </div> : ""
     }
     {
