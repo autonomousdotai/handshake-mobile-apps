@@ -79,9 +79,10 @@ class Handle extends React.Component {
 
   // exchange
   getListOfferPrice() {
+    const ipInfo = local.get(APP.IP_INFO);
     this.props.getListOfferPrice({
       PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
-      qs: { fiat_currency: this.props.app.ipInfo?.currency },
+      qs: { fiat_currency: ipInfo?.currency },
     });
   }
   // /exchange
@@ -143,6 +144,8 @@ class Handle extends React.Component {
       const ipInfo = IpInfo.ipInfo(data);
       this.props.setIpInfo(ipInfo);
       local.save(APP.IP_INFO, ipInfo);
+
+      this.getListOfferPrice();
       // locale
       if (!local.get(APP.LOCALE)) {
         const firstLanguage = data.languages.split(',')[0];
@@ -212,7 +215,7 @@ class Handle extends React.Component {
         // exchange
         this.props.getUserProfile({ PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE });
 
-        this.getListOfferPrice();
+        // this.getListOfferPrice();
         this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
 
         // wallet
