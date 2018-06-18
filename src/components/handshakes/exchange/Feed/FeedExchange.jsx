@@ -55,6 +55,7 @@ import {getLocalizedDistance} from "@/services/util";
 import {BigNumber} from "bignumber.js";
 
 import Rate from '@/components/core/controls/Rate';
+import StarsRating from "@/components/core/presentation/StarsRating";
 
 import iconChat from '@/assets/images/icon/chat-icon.svg';
 import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
@@ -379,7 +380,7 @@ class FeedExchange extends React.PureComponent {
             <div className="info-ex">
               <div>
                 <div className="address">{address}</div>
-                <div className="review"><FormattedMessage id="ex.discover.label.reviews" values={{ reviewCount }} /></div>
+                <div className="review"><StarsRating className="d-inline-block" starPoint={review} startNum={5} /> <FormattedMessage id="ex.discover.label.reviews" values={{ reviewCount }} /></div>
                 <div className="distance">{distance}</div>
               </div>
               <div className="btn-chat">
