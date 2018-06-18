@@ -17,6 +17,7 @@ import {formatMoney, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {bindActionCreators} from "redux";
 import {FormattedMessage} from 'react-intl';
+import { minValueBTC, minValueETH } from "../../Create/validation";
 
 const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -109,9 +110,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                 component={fieldInput}
                 className="input"
                 placeholder="10.00"
+                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                 // type="tab-2"
                 // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
-                validate={[required]}
               />
               <span className="append-text">{currency}</span>
             </div>
