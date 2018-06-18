@@ -18,7 +18,7 @@ import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {bindActionCreators} from "redux";
 import {FormattedMessage} from 'react-intl';
 
-const nameFormShakeDetail = 'shakeDetail';
+export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
   propsReduxForm: {
     form: nameFormShakeDetail,
@@ -31,11 +31,6 @@ const FormShakeDetail = createForm({
 const selectorFormShakeDetail = formValueSelector(nameFormShakeDetail);
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  CRYPTO_CURRENCY_LIST = [
-    { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />},
-    { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />  },
-  ];
-
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -65,14 +60,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   render() {
-    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST } = this.props;
+    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST } = this.props;
 
     const fiat = offer.fiatCurrency;
-
-    this.CRYPTO_CURRENCY_LIST = [
-      { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
-      { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
-    ];
 
     return (
       <div className="shake-detail">
@@ -94,7 +84,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               // containerClass="radio-container-old"
               component={fieldRadioButton}
               type="tab-2"
-              list={this.CRYPTO_CURRENCY_LIST}
+              list={CRYPTO_CURRENCY_LIST}
               // color={textColor}
               // validate={[required]}
               onChange={this.onCurrencyChange}

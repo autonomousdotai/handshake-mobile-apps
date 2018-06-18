@@ -8,6 +8,7 @@ import {
   API_URL,
   APP_USER_NAME,
   CRYPTO_CURRENCY,
+  CRYPTO_CURRENCY_NAME,
   DEFAULT_FEE,
   EXCHANGE_ACTION,
   EXCHANGE_ACTION_NAME,
@@ -53,6 +54,12 @@ import StarsRating from "@/components/core/presentation/StarsRating";
 import iconChat from '@/assets/images/icon/chat-icon.svg';
 import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
 import iconEth from '@/assets/images/icon/coin/icon-eth.svg';
+import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
+import iconEthereum from '@/assets/images/icon/coin/eth.svg';
+
+import {nameFormShakeDetail} from '@/components/handshakes/exchange/components/ShakeDetail';
+import {change} from "redux-form";
+import {bindActionCreators} from "redux";
 
 class FeedExchange extends React.PureComponent {
   constructor(props) {
@@ -66,6 +73,10 @@ class FeedExchange extends React.PureComponent {
 
     this.state = {
       modalContent: '',
+      CRYPTO_CURRENCY_LIST: [
+        { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: false},
+        { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: false},
+      ]
     };
 
     this.mainColor = 'linear-gradient(-180deg, rgba(0,0,0,0.50) 0%, #303030 0%, #000000 100%)';
@@ -80,7 +91,19 @@ class FeedExchange extends React.PureComponent {
   }
 
   handleOnShake = () => {
+    const { offer } = this;
     this.modalRef.open();
+    this.setState({CRYPTO_CURRENCY_LIST: [
+      { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
+      { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
+    ]}, () => {
+      for (let crypto of this.state.CRYPTO_CURRENCY_LIST) {
+        if (!crypto.hide) {
+          this.props.rfChange(nameFormShakeDetail, 'currency', crypto.value);
+          break;
+        }
+      }
+    });
   }
 
   showAlert = (message) => {
@@ -395,7 +418,7 @@ class FeedExchange extends React.PureComponent {
           <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
         </div>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
-          <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} />
+          <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
         </ModalDialog>
       </div>
     );
@@ -414,11 +437,12 @@ const mapState = state => ({
   authProfile: state.auth.profile,
 });
 
-const mapDispatch = ({
-  shakeOfferItem,
-  showAlert,
-  showLoading,
-  hideLoading,
+const mapDispatch = (dispatch) => ({
+  shakeOfferItem: bindActionCreators(shakeOfferItem, dispatch),
+  showAlert: bindActionCreators(showAlert, dispatch),
+  showLoading: bindActionCreators(showLoading, dispatch),
+  hideLoading: bindActionCreators(hideLoading, dispatch),
+  rfChange: bindActionCreators(change, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedExchange));
