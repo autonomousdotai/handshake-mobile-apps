@@ -99,8 +99,8 @@ class FeedMe extends React.PureComponent {
                 <div>{message}</div>
               </div>
             </Feed>
-            <Button className="mt-2" block onClick={() => this.handleConfirmAction(actionConfirm)}>Confirm</Button>
-            <Button block className="btn btn-secondary" onClick={this.cancelAction}>Not now</Button>
+            <Button className="mt-2" block onClick={() => this.handleConfirmAction(actionConfirm)}><FormattedMessage id="ex.btn.confirm"/></Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelAction}><FormattedMessage id="ex.btn.notNow"/></Button>
           </div>
         ),
     }, () => {
@@ -223,12 +223,12 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
         switch (this.userType) {
           case HANDSHAKE_USER.SHAKED: {
-            from = 'With';
+            from = <FormattedMessage id="ex.me.label.with"/>;
 
             break;
           }
           case HANDSHAKE_USER.OWNER: {
-            from = 'From';
+            from = <FormattedMessage id="ex.me.label.from"/>;
 
             break;
           }
@@ -239,12 +239,12 @@ class FeedMe extends React.PureComponent {
       default: {
         switch (this.userType) {
           case HANDSHAKE_USER.SHAKED: {
-            from = 'With';
+            from = <FormattedMessage id="ex.me.label.with"/>;
 
             break;
           }
           case HANDSHAKE_USER.OWNER: {
-            from = 'From';
+            from = <FormattedMessage id="ex.me.label.from"/>;
 
             break;
           }
@@ -353,7 +353,7 @@ class FeedMe extends React.PureComponent {
 
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}>Shake</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}><FormattedMessage id="btn.shake"/></Button>
               </div>
             );
             break;
@@ -371,9 +371,9 @@ class FeedMe extends React.PureComponent {
             let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}>Reject</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject"/></Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}>Complete</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}><FormattedMessage id="btn.complete"/></Button>
                 }
               </div>
             );
@@ -385,7 +385,7 @@ class FeedMe extends React.PureComponent {
               message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
               actionButtons = (
                 <div>
-                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}>Withdraw</Button>
+                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}><FormattedMessage id="btn.withdraw"/></Button>
                 </div>
               );
             }
@@ -406,7 +406,7 @@ class FeedMe extends React.PureComponent {
             message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}>Cancel</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}><FormattedMessage id="btn.cancel"/></Button>
               </div>
             );
             break;
@@ -422,9 +422,9 @@ class FeedMe extends React.PureComponent {
             let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}>Reject</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject"/></Button>
                 {offer.type === EXCHANGE_ACTION.SELL &&
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}>Complete</Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}><FormattedMessage id="btn.complete"/></Button>
                 }
               </div>
             );
@@ -435,7 +435,7 @@ class FeedMe extends React.PureComponent {
               message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
               actionButtons = (
                 <div>
-                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}>Withdraw</Button>
+                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}><FormattedMessage id="btn.withdraw"/></Button>
                 </div>
               );
             }
@@ -842,7 +842,7 @@ class FeedMe extends React.PureComponent {
         actionButtons = (
           <div>
             <Button block className="mt-2"
-                    onClick={() => this.confirmOfferAction(message, this.deleteOfferItem)}>Close</Button>
+                    onClick={() => this.confirmOfferAction(message, this.deleteOfferItem)}><FormattedMessage id="btn.close"/></Button>
           </div>
         );
         break;
@@ -1070,7 +1070,7 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleAcceptShakedOffer)}>Accept</Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleAcceptShakedOffer)}><FormattedMessage id="btn.accept"/></Button>
               </div>
             );
             break;
@@ -1082,10 +1082,10 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}>Reject</Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.reject"/></Button>
                 {offer.type === EXCHANGE_ACTION.SELL &&
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}>Complete</Button>
+                        onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}><FormattedMessage id="btn.complete"/></Button>
                 }
               </div>
             );
@@ -1101,7 +1101,7 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleCancelShakeOffer)}>Cancel</Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleCancelShakeOffer)}><FormattedMessage id="btn.cancel"/></Button>
               </div>
             );
             break;
@@ -1113,10 +1113,10 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}>Reject</Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.reject"/></Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}>Complete</Button>
+                        onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}><FormattedMessage id="btn.complete"/></Button>
                 }
               </div>
             );
@@ -1703,7 +1703,7 @@ class FeedMe extends React.PureComponent {
     let message = '';
     let message2 = '';
     let actionButtons = null;
-    let from = 'From';
+    let from = <FormattedMessage id="ex.me.label.from"/>;
     let showChat = false;
     let chatUsername = '';
     // let buyerSeller = this.getBuyerSeller();
@@ -1748,7 +1748,7 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE_SHAKE: {
-        from = 'With';
+        from = <FormattedMessage id="ex.me.label.with"/>;
         email = this.getEmail();
         statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME[status];
         showChat = true;
@@ -1763,7 +1763,7 @@ class FeedMe extends React.PureComponent {
       }
       case EXCHANGE_FEED_TYPE.EXCHANGE: {
         statusText = HANDSHAKE_EXCHANGE_STATUS_NAME[status];
-        nameShop = 'About';
+        nameShop = <FormattedMessage id="ex.me.label.about"/>;
         const fiatAmount = this.calculateFiatAmount(offer);
 
         from = this.getFromExchange();
