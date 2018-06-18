@@ -7,6 +7,10 @@
   &:focus {
     border-color: darkblue;
   }
+  &::placeholder {
+    opacity: 1;
+    color: #C8C7CC;
+  }
 }
 input {
   color: #ffffff;

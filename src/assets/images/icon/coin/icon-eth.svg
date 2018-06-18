@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#CB75ED" offset="0%"></stop>
+            <stop stop-color="#9E53E1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="BUGS-14/6" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <g id="ethereum-copy" fill="url(#linearGradient-1)" stroke="#FFFFFF" stroke-width="3">
+                <rect id="Rectangle-3" x="1.5" y="1.5" width="19" height="19" rx="9.5"></rect>
+            </g>
+            <g id="icons8-ethereum" transform="translate(7.000000, 5.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                <polygon id="Shape" points="0 6.28571429 4 0 8 6.28571429 4 8.57142857"></polygon>
+                <polygon id="Shape" points="4 0 8 6.28571429 4 8.57142857"></polygon>
+                <polygon id="Shape" points="0 7.14285714 4 9.42857143 8 7.14285714 4 12.5714286"></polygon>
+                <polygon id="Shape" points="4 9.42857143 8 7.14285714 4 12.5714286"></polygon>
+                <polygon id="Shape" points="0 6.28571429 4 4.57142857 8 6.28571429 4 8.57142857"></polygon>
+                <polygon id="Shape" points="4 4.57142857 8 6.28571429 4 8.57142857"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

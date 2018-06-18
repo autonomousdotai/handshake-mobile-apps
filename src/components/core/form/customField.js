@@ -138,18 +138,18 @@ export const fieldRadioButton = customField(({
 });
 
 export const fieldNumericInput = customField(({
-  onChange, value, list, name, color = '', step = 0.25, suffix, btnBg = ''
+  onChange, onBlur, onFocus, value, list, name, color = '', step = 0.25, suffix, btnBg = ''
 }) => {
   const valueFloat = parseFloat(value || 0, 10);
   return (
     <span className="btn-group" role="group" style={{ color }}>
-      <button type="button" className="btn numeric-input" style={{ color }} onClick={() => onChange(valueFloat - step)}>-</button>
+      <button type="button" className="btn numeric-input" style={{ color }} onClick={() => onChange(valueFloat - step)} onBlur={() => onBlur()} onFocus={() => onFocus()}>–</button>
 
-      <span className="text-center" style={{ minWidth: '70px', lineHeight: '30px' }}>
+      <span className="text-center" style={{ minWidth: '70px', lineHeight: '36px' }}>
         {value}{ suffix && <span>{suffix}</span>}
       </span>
 
-      <button type="button" className="btn numeric-input" style={{ color }} onClick={() => onChange(valueFloat + step)}>+</button>
+      <button type="button" className="btn numeric-input" style={{ color }} onClick={() => onChange(valueFloat + step)} onBlur={() => onBlur()} onFocus={() => onFocus()}>+</button>
     </span>
   );
 });
@@ -168,7 +168,7 @@ export const fieldCleave = customField(({
 ));
 
 export const fieldPhoneInput = customField(({
-  onChange, onBlur, onFocus, value, propsCleave, className, placeholder
+  onChange, onBlur, onFocus, value, propsCleave, className, placeholder, color
 }) => {
   const splittedNumbers = value.split('-');
   let countryCode = '';
@@ -183,7 +183,7 @@ export const fieldPhoneInput = customField(({
   return (
     <span>
       <span style={{ display: 'table-cell' }}>
-        <SelectCountryCode countryCode={countryCode} onChange={newCountryCode => onChange(`${newCountryCode}-${phoneNumber}`)} />
+        <SelectCountryCode countryCode={countryCode} onChange={newCountryCode => onChange(`${newCountryCode}-${phoneNumber}`)} color={color} />
       </span>
       <span style={{ display: 'table-cell' }} className="pl-2"><input type="tel" placeholder={placeholder} className="form-control-custom form-control-custom-ex w-100 input-no-border" value={phoneNumber} onChange={e => onChange(`${countryCode}-${e.target.value}`)} /></span>
     </span>

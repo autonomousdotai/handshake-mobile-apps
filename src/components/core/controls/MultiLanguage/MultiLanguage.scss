@@ -4,6 +4,9 @@
 
 @import './src/styles/style';
 .multi-language {
+  .flag-country {
+    font-size: rem-calc(23px);
+  }
   .country-block {
     padding: rem-calc(20px 0);
     .text {

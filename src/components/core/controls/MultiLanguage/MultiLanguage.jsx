@@ -13,7 +13,7 @@ import './MultiLanguage.scss';
 
 const LANGUAGES = [
   {
-    code: 'gb',
+    code: 'en',
     name: 'English',
   },{
     code: 'fr',
@@ -25,16 +25,16 @@ const LANGUAGES = [
     code: 'es',
     name: 'Spanish',
   },{
-    code: 'cn',
+    code: 'zh',
     name: 'Chinese',
   },{
     code: 'ru',
     name: 'Russian',
   },{
-    code: 'kr',
+    code: 'ko',
     name: 'Korean',
   },{
-    code: 'jp',
+    code: 'ja',
     name: 'Japan',
   },
 ];
@@ -46,6 +46,21 @@ class MultiLanguage extends React.PureComponent {
     this.changeCountry  = ::this.changeCountry;
   }
 
+  getFlagIcon(code) {
+    switch(code) {
+      case 'en':
+        return 'gb';
+      case 'ja':
+        return 'jp';
+      case 'zh':
+        return 'cn';
+      case 'ko':
+        return 'kr';
+      default:
+        return code;
+    }
+  }
+
   changeCountry(countryCode) {
     this.props.changeLocale(countryCode);
     this.modalLanguageRef.close();
@@ -53,10 +68,10 @@ class MultiLanguage extends React.PureComponent {
 
   render() {
     const { locale } = this.props.app;
-    const flag = locale === 'en' ? 'gb' : locale;
+    const flag = this.getFlagIcon(locale);
     return (
-      <div className="multi-language">
-        <span className={`flag-icon flag-icon-${flag}`} onClick={() => this.modalLanguageRef.open()} />
+      <div className={`multi-language ${this.props.className || ''}`}>
+        <span className={`flag-country flag-icon flag-icon-${flag}`} onClick={() => this.modalLanguageRef.open()} />
         <ModalDialog onRef={modal => this.modalLanguageRef = modal}>
           <div className="country-block">
             <p className="text">Delivered Language</p>
@@ -66,7 +81,7 @@ class MultiLanguage extends React.PureComponent {
                   key={language.code} 
                   className={`country ${locale === language.code && 'active'}`}
                   onClick={() => this.changeCountry(language.code)}>
-                  <span className={`flag flag-icon flag-icon-${language.code}`} />
+                  <span className={`flag flag-icon flag-icon-${this.getFlagIcon(language.code)}`} />
                   <span className="name">{language.name}</span>
                   <span className="radio" />
                 </div>
@@ -80,6 +95,7 @@ class MultiLanguage extends React.PureComponent {
 }
 
 MultiLanguage.propTypes = {
+  className: PropTypes.string,
   app: PropTypes.object,
   changeLocale: PropTypes.func,
 };

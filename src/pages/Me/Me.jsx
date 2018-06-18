@@ -10,7 +10,7 @@ import { API_URL, APP, HANDSHAKE_ID, URL } from '@/constants';
 import { Link } from 'react-router-dom';
 import { Grid, Row, Col } from 'react-bootstrap';
 import NoData from '@/components/core/presentation/NoData';
-import { getListOfferPrice } from '@/reducers/exchange/action';
+import { getListOfferPrice, reviewOffer } from '@/reducers/exchange/action';
 import FeedPromise from '@/components/handshakes/promise/Feed';
 import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedExchange from '@/components/handshakes/exchange/Feed/FeedMe';
@@ -25,6 +25,8 @@ import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { setOfflineStatus } from '@/reducers/auth/action';
 import local from '@/services/localStore';
 import './Me.scss';
+import Helper from "@/services/helper";
+import Rate from "@/components/core/controls/Rate/Rate";
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -51,7 +53,14 @@ class Me extends React.Component {
   constructor(props) {
     super(props);
 
+    let { s, sh } = Helper.getQueryStrings(window.location.search);
+
+    let initUserId = s;
+    let offerId = sh;
+
     this.state = {
+      initUserId,
+      offerId,
       exchange: this.props.exchange,
       auth: this.props.auth,
       firebaseUser: this.props.firebaseUser,
@@ -89,6 +98,10 @@ class Me extends React.Component {
   }
 
   componentDidMount() {
+    const { initUserId, offerId } = this.state;
+    if (initUserId && offerId) {
+      this.rateRef.open();
+    }
     this.loadMyHandshakeList();
   }
 
@@ -113,6 +126,27 @@ class Me extends React.Component {
 
   handleSetOfflineStatusFailed = (e) => {
     console.log('handleSetOfflineStatusFailed', e);
+  }
+
+  //Review offer when receive notification after shop complete
+  handleOnClickRating = (numStars) => {
+    this.rateRef.close();
+    const { offerId, initUserId } = this.state;
+    this.props.reviewOffer({
+      PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${initUserId}/${API_URL.EXCHANGE.REVIEWS}/${offerId}`,
+      METHOD: 'POST',
+      qs: { score: numStars },
+      successFn: this.handleReviewOfferSuccess,
+      errorFn: this.handleReviewOfferFailed,
+    });
+  }
+
+  handleReviewOfferSuccess = (responseData) => {
+    console.log('handleReviewOfferSuccess', responseData);
+    const data = responseData.data;
+  }
+
+  handleReviewOfferFailed = (e) => {
   }
 
   render() {
@@ -176,6 +210,7 @@ class Me extends React.Component {
             }
           </Col>
         </Row>
+        <Rate onRef={e => this.rateRef = e} startNum={5} ratingOnClick={this.handleOnClickRating} />
       </Grid>
     );
   }
@@ -196,6 +231,7 @@ const mapDispatch = ({
   fireBaseExchangeDataChange,
   fireBaseBettingChange,
   setOfflineStatus,
+  reviewOffer,
 });
 
 export default compose(withFirebase, connect(mapState, mapDispatch))(Me);

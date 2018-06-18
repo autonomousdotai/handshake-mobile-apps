@@ -15,11 +15,13 @@ class ModalDialog extends React.Component {
   open() {
     this.modalRef && this.modalRef.classList.add('modal-custom-show');
     this.contentRef && this.contentRef.classList.add('zoomIn');
+    document.body.classList.add('hide-scroll');
   }
 
   close() {
     this.modalRef && this.modalRef.classList.remove('modal-custom-show');
     this.contentRef && this.contentRef.classList.remove('zoomIn');
+    document.body.classList.remove('hide-scroll');
   }
 
   onClosePanel() {

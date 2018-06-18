@@ -70,7 +70,7 @@ class Refers extends React.Component {
   }
 
   showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
+    this.showAlert(mst, 'primary', 3000);
   }
   showError(mst) {
     this.showAlert(mst, 'danger', 4000);
@@ -269,19 +269,19 @@ class Refers extends React.Component {
 
   updateTelegramUsernameValue = (evt) => {
     this.setState({
-      step1_value: evt.target.value,
+      step1_value: evt.target.value.trim(),
     });
   }
 
   updateEmailValue= (evt) => {
     this.setState({
-      step3_value: evt.target.value,
+      step3_value: evt.target.value.trim(),
     });
   }
 
   updateTwitterUsernameValue = (evt) => {
     this.setState({
-      step2_value: evt.target.value,
+      step2_value: evt.target.value.trim(),
     });
   }
 
@@ -301,7 +301,7 @@ renderStep1 = () => (
   <Step1Form onSubmit={this.submitStep1} className="refers-wrapper">
     <h6><a href="https://t.me/ninja_org" target="_blank">Insult us on telegram</a>. Be creative. There’s a leaderboard.</h6>
     <div className="col2">
-      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "done" : "bite me"}</Button>
+      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "verified" : "verify"}</Button>
     </div>
     <div className="col1">
       <Field
@@ -325,7 +325,7 @@ renderStep2= () => (
   <Step2Form onSubmit={this.submitStep2} className="refers-wrapper">
     <h6>Our social media guy says we need followers on <a href="https://twitter.com/ninja_org" target="_blank">twitter</a>.</h6>
     <div className="col2">
-        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "done" : "bite me"}</Button>
+        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "verified" : "verify"}</Button>
     </div>
     <div className="col1">
       <Field
@@ -353,7 +353,7 @@ renderStep3= () => (
       <Field
           name="refer_email"
           type="email"
-          className="form-control"
+          className="form-control padding-right-10"
           placeholder="your favourite fake email"
           component={fieldInput}
           value={this.state.step3_value}
@@ -364,8 +364,8 @@ renderStep3= () => (
     </div>
     {
       this.state.step3 == 1 ?
-      <div className="col100">
-        <a className="reset-link" onClick={() => {this.resetStep3()}}>reset ninja name</a>
+      <div className="col100 dev-has-icon">
+        <a className="reset-link" onClick={() => {this.resetStep3()}}>✕</a>
       </div> : ""
     }
     {
@@ -421,9 +421,9 @@ renderStep3_labelButton= () => {
     case 1:
       return <Button isLoading={this.state.isLoading} block type="submit">confirm</Button>
     case 2:
-      return <Button isLoading={this.state.isLoading} block disabled type="submit">done</Button>
+      return <Button isLoading={this.state.isLoading} block disabled type="submit">verified</Button>
     default:
-      return <Button isLoading={this.state.isLoading} block type="submit">bite me</Button>
+      return <Button isLoading={this.state.isLoading} block type="submit">verify</Button>
   }
 }
 

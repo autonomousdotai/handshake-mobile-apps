@@ -174,7 +174,7 @@ class Component extends React.Component {
     console.log('wallet', wallet);
 
     if (currency === CRYPTO_CURRENCY.BTC) {
-      wallet.transfer(data.system_address, data.amount).then(success => {
+      wallet.transfer(data.system_address, data.amount, 10).then(success => {
         console.log('transfer', success);
       });
     } else if (currency === CRYPTO_CURRENCY.ETH) {
@@ -302,7 +302,7 @@ class Component extends React.Component {
 
     const wallet = MasterWallet.getWalletDefault(values.currency);
     const balance = new BigNumber(await wallet.getBalance());
-    const fee = new BigNumber(await wallet.getFee(4, true));
+    const fee = new BigNumber(await wallet.getFee(10, true));
     let amount = new BigNumber(values.amount);
 
     if (values.currency === CRYPTO_CURRENCY.ETH && values.type === EXCHANGE_ACTION.BUY) {
@@ -353,8 +353,9 @@ class Component extends React.Component {
       fiat_currency: fiat_currency,
       latitude: this.state.lat,
       longitude: this.state.lng,
-      email: authProfile.email || '',
-      username: authProfile.username || '',
+      email: authProfile?.email || '',
+      username: authProfile?.name || '',
+      chat_username: authProfile?.username || '',
     };
 
     if (values.type === EXCHANGE_ACTION.BUY) {
@@ -487,6 +488,7 @@ class Component extends React.Component {
                     name="phone"
                     className="form-control-custom form-control-custom-ex w-100 input-no-border"
                     component={fieldPhoneInput}
+                    color={textColor}
                     type="tel"
                     placeholder="4995926433"
                     // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}

@@ -98,8 +98,9 @@
       opacity: 0;
       cursor: pointer;
       &:checked ~ button {
-        background: #2AB016;
-        border-color: #2AB016;
+        //background: #2AB016;
+        background: #000000;
+        border-color: #000000;
         color: #FFFFFF;
         box-shadow: none;
       }
@@ -108,14 +109,13 @@
 
         width: 100%;
         border-radius: 0;
-        background: rgba(216,216,216,0.14);
-
-        border: 2px solid #000000;
+        background: #FFFFFF;
+        border: 2px solid #EAEAEA;
         font-size: 13px;
         color: #000000;
         letter-spacing: 0.43px;
         text-align: center;
-        line-height: 13px;
+        line-height: 20px;
       }
     }
     &:first-of-type {
@@ -177,7 +177,7 @@
   outline: none;
   height: calc(2rem + 1px);
   border: none;
-  background: url("../../../assets/images/icon/Triangle.svg") no-repeat right center;
+  background: url("../../../assets/images/icon/Triangle_white.svg") no-repeat right center;
   background-size: 8px 10px;
   border-radius: 0;
   border-bottom: 1px solid #add0ff;
@@ -185,13 +185,27 @@
 }
 
 .numeric-input {
-  width: 30px;
+  width: 36px;
+  height: 36px;
   padding: 0;
-  border: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 2px;
+  //border: 1px solid rgba(255,255,255,0.2);
   background: transparent;
-  border-radius: 0;
-  height: 30px;
+  //border-radius: 0;
   line-height: 1;
+  color: #777777 !important;
+  font-weight: bold;
+
+  //background: #FFFFFF;
+  border-radius: 18px !important;
+  border: 2px solid #EAEAEA;
+  //-webkit-tap-highlight-color: red;
+  &:focus, &:hover {
+    background: #1E4EFF;
+    border-color: #1E4EFF;
+    color: #FFFFFF !important;
+  }
+  //-webkit-tap-highlight-color: #1E4EFF;
   //&:focus {
   //  box-shadow: none;
   //}

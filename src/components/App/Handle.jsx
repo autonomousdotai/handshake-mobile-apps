@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirebase } from 'react-redux-firebase';
-import qs from 'querystring';
 import axios from 'axios';
 // contants
 import { APP, API_URL } from '@/constants';
 // services
 import local from '@/services/localStore';
 // actions
-import { setIpInfo, showAlert, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
+import { setIpInfo, showAlert, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
 import { signUp, fetchProfile, authUpdate, getFreeETH } from '@/reducers/auth/action';
 import { getUserProfile, getListOfferPrice } from '@/reducers/exchange/action';
 import { createMasterWallets } from '@/reducers/wallet/action';
@@ -42,8 +41,13 @@ class Handle extends React.Component {
     //
     getListOfferPrice: PropTypes.func.isRequired,
     getFreeETH: PropTypes.func.isRequired,
-    changeLocale: PropTypes.func.isRequired,
     setIpInfo: PropTypes.func.isRequired,
+    setLanguage: PropTypes.func.isRequired,
+    ref: PropTypes.string,
+  }
+
+  static defaultProps = {
+    ref: '',
   }
 
   constructor(props) {
@@ -54,22 +58,11 @@ class Handle extends React.Component {
     this.firebase = ::this.firebase;
     this.notification = ::this.notification;
     this.updateRewardAddress = ::this.updateRewardAddress;
-    this.setLanguage = ::this.setLanguage;
     this.getListOfferPrice = ::this.getListOfferPrice;
 
     this.state = {
       auth: this.props.auth,
     };
-
-    this.isSupportedLanguages = ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'];
-
-    const currentLanguage = local.get(APP.LOCALE);
-    if (currentLanguage && this.isSupportedLanguages.indexOf(currentLanguage) < 0) {
-      local.remove(APP.LOCALE);
-    }
-
-    const querystring = window.location.search.replace('?', '');
-    this.querystringParsed = qs.parse(querystring);
   }
 
   componentDidMount() {
@@ -82,13 +75,7 @@ class Handle extends React.Component {
     }
     return null;
   }
-  // locale
-  setLanguage(language, autoDetect = true) {
-    if (this.isSupportedLanguages.indexOf(language) >= 0) {
-      this.props.changeLocale(language, autoDetect);
-    }
-  }
-  // /locale
+
 
   // exchange
   getListOfferPrice() {
@@ -159,7 +146,7 @@ class Handle extends React.Component {
       // locale
       if (!local.get(APP.LOCALE)) {
         const firstLanguage = data.languages.split(',')[0];
-        this.setLanguage(firstLanguage);
+        this.props.setLanguage(firstLanguage);
       }
 
       if (process.env.isProduction) {
@@ -179,16 +166,13 @@ class Handle extends React.Component {
 
   // main
   checkRegistry() {
-    const { language, ref } = this.querystringParsed;
-    if (language) this.setLanguage(language, false);
-
     const token = local.get(APP.AUTH_TOKEN);
 
     if (token) {
       this.authSuccess();
     } else {
       this.props.signUp({
-        PATH_URL: `user/sign-up${ref ? `?ref=${ref}` : ''}`,
+        PATH_URL: `user/sign-up${this.props.refer ? `?ref=${this.props.refer}` : ''}`,
         METHOD: 'POST',
         successFn: () => {
           this.authSuccess();
@@ -320,7 +304,6 @@ export default compose(withFirebase, connect(state => ({
   getFreeETH,
   getListOfferPrice,
   setIpInfo,
-  changeLocale,
   setBannedPrediction,
   setBannedCash,
   setCheckBanned,
