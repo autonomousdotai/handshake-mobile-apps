@@ -11,7 +11,7 @@ const config = {
       predictionHandshakeAddress: '0x6878ab7b780f8c3eb2657fcc920e451c5c814253',
       predictionHandshakeDevAddress: '0x1c2b89312cbe3b7e3429cf219ed708b849edf4da',
       exchangeHandshakeAddress: '0x5fa2e0d96dbe664beb502407bf46ea85b131fb86',
-      exchangeShopAddress: '0x05914192cbbaae87a910f79e012b4091a39cc85c',
+      exchangeShopAddress: '0xa849f62cacb770dd1aac0dceb9fc7ec53cffde84',
       blockchainNetwork: 'https://mainnet.infura.io/',
       apikeyEtherscan: 'AVBIHJUF3G4ZY2CHZI6F4RVBFWC3A3EIVB',
       shurikenTokenAddress: '0xca0fed76b5807557ce38e65cab83be3373cc2e7d',
