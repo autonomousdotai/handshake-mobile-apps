@@ -993,20 +993,21 @@ class Wallet extends React.Component {
           {this.renderScanQRCode()}
 
           {/* Render list wallet: */}
-          {!process.env.isProduction ? 
-          <Row className="list">
-            <Header title="Mainnet wallets" hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />
-          </Row>
-          :""}
+          
+          <Row className="list">           
+            <Header 
+              title={!process.env.isLive ? "Mainnet wallets" : ""}hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />            
+            </Row>
+          
           <Row className="list">
             {this.listMainWalletBalance}
           </Row>
-          {!process.env.isProduction ? 
+          {!process.env.isLive ? 
           <Row className="list">
             <Header title="Testnet wallets" hasLink linkTitle="Request free ETH" onLinkClick={this.getETHFree} />
           </Row>
           : ''}
-          {!process.env.isProduction ? 
+          {!process.env.isLive ? 
           <Row className="list">
             {this.listTestWalletBalance}
           </Row>
