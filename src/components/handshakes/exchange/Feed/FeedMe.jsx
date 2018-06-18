@@ -34,6 +34,7 @@ import {
   URL
 } from "@/constants";
 import ModalDialog from "@/components/core/controls/ModalDialog";
+import Rate from "@/components/core/controls/Rate";
 import {connect} from "react-redux";
 import {
   acceptOfferItem,
@@ -1394,8 +1395,13 @@ class FeedMe extends React.PureComponent {
       }
     });
 
-    //TODO
-    console.log('hiện đánh sao');
+    // console.log('hiện đánh sao');
+    this.rateRef.open();
+  }
+
+  handleOnClickRating = (numStars) => {
+    this.rateRef.close();
+    console.log('numstarrs', numStars)
   }
 
   handleCompleteShakedOfferFailed = (e) => {
@@ -1903,6 +1909,7 @@ class FeedMe extends React.PureComponent {
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
         </ModalDialog>
+        <Rate onRef={e => this.rateRef = e} startNum={5} ratingOnClick={this.handleOnClickRating} />
       </div>
     );
   }
