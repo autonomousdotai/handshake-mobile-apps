@@ -68,6 +68,8 @@ export default {
   'ex.discover.label.reviews': '({reviewCount} reviews)',
   'ex.discover.banner.text': 'Got coins? Turn them into a money-making machine.',
   'ex.discover.banner.btnText': 'BECOME A LOCAL EXCHANGE',
+  'ex.discover.shakeDetail.label.amount': 'Amount',
+  'ex.discover.shakeDetail.label.total': 'Total',
   'ex.me.label.with': 'With',
   'ex.me.label.from': 'From',
   'ex.me.label.about': 'About',

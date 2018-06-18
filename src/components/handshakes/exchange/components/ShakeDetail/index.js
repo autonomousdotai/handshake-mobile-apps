@@ -16,6 +16,7 @@ import {injectIntl} from "react-intl";
 import {formatMoney, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {bindActionCreators} from "redux";
+import {FormattedMessage} from 'react-intl';
 
 const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -100,7 +101,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
             />
           </div>
           <div className="mt-3">
-            <div className="text">Amount</div>
+            <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount"/></div>
             <div className='input-group'>
               <Field
                 name="amount"
@@ -117,9 +118,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
           </div>
           <hr className="hl" />
           <div className="text-total">
-            Total ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
+            <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
           </div>
-          <Button block type="submit" className="mt-3" disabled={!enableShake}>Shake</Button>
+          <Button block type="submit" className="mt-3" disabled={!enableShake}><FormattedMessage id="btn.shake"/></Button>
         </FormShakeDetail>
       </div>
     );
