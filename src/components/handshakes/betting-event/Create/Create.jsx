@@ -26,7 +26,6 @@ const predictionhandshake = new PredictionHandshake(chainId);
 
 const nameFormSaveBettingEvent = 'saveBettingEvent';
 const SaveBettingEventForm = createForm({ propsReduxForm: { form: nameFormSaveBettingEvent, enableReinitialize: true, clearSubmitErrors: true } });
-
 class CreateBettingEvent extends React.Component {
   static propTypes = {
     // children: PropTypes.any.isRequired,
@@ -112,6 +111,7 @@ class CreateBettingEvent extends React.Component {
     });
   }
 
+
   render() {
     const defaultMatchId = this.defaultMatch ? this.defaultMatch.id : null;
     const defaultOutcomeId = this.defaultOutcome ? this.defaultOutcome.id : null;
@@ -166,9 +166,9 @@ class CreateBettingEvent extends React.Component {
             onChange={evt => this.updateFormField(evt, 'resolutionSource')}
 
           />
-          <DatePicker onChange={(date) => { this.changeDate(date, 'closingTime'); }} className="form-control input-field" placeholder="Closing Time" />
-          <DatePicker onChange={(date) => { this.changeDate(date, 'reportingTime'); }} className="form-control input-field" placeholder="Reporting Time" />
-          <DatePicker onChange={(date) => { this.changeDate(date, 'disputeTime'); }} className="form-control input-field" placeholder="Dispute Time" />
+          <DatePicker onChange={(date) => { this.changeDate(date, 'closingTime'); }} className="form-control input-field" placeholder="Closing Time" required />
+          <DatePicker onChange={(date) => { this.changeDate(date, 'reportingTime'); }} className="form-control input-field" placeholder="Reporting Time" required />
+          <DatePicker onChange={(date) => { this.changeDate(date, 'disputeTime'); }} className="form-control input-field" placeholder="Dispute Time" required />
           <Label for="creatorFee" className="font-weight-bold text-uppercase fees-label">Fees</Label>
           <Field
             name="creatorFee"
