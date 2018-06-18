@@ -26,12 +26,6 @@ module.exports = function webpackConfig(env, argv) {
     chunks: false,
   };
 
-  let appEnvConfig = {
-    NODE_ENV: argv.mode,
-    isProduction,
-    ...envConfig,
-  };
-
   const development = {
     plugins: [new webpack.HotModuleReplacementPlugin()],
     devServer: {
@@ -72,9 +66,10 @@ module.exports = function webpackConfig(env, argv) {
       minimize: true,
       minimizer: [
         new UglifyJsPlugin({
+          sourceMap: true,
           uglifyOptions: {
             compress: {
-              drop_console: appEnvConfig.dropConsole,
+              drop_console: true,
             },
           },
         }),
@@ -89,7 +84,8 @@ module.exports = function webpackConfig(env, argv) {
         {
           test: /\.css$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            // MiniCssExtractPlugin.loader, TO-DO
+            'style-loader',
             'css-loader',
             'postcss-loader',
           ],
@@ -97,7 +93,8 @@ module.exports = function webpackConfig(env, argv) {
         {
           test: /\.scss$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            // MiniCssExtractPlugin.loader, TO-DO
+            'style-loader',
             'css-loader',
             'postcss-loader',
             'sass-loader',
@@ -119,6 +116,12 @@ module.exports = function webpackConfig(env, argv) {
       // }),
     ],
     performance: { hints: false },
+  };
+
+  let appEnvConfig = {
+    NODE_ENV: argv.mode,
+    isProduction,
+    ...envConfig,
   };
 
   if (isProduction && fs.existsSync(xPath('.env.production.js'))) {
@@ -167,7 +170,7 @@ module.exports = function webpackConfig(env, argv) {
           env: appEnvConfig,
         }),
         new PwaManifestPlugin({
-          name: appEnvConfig.title,
+          name: 'Ninja',
           short_name: 'Ninja',
           description: '',
           background_color: '#1A1919',
@@ -245,6 +248,7 @@ module.exports = function webpackConfig(env, argv) {
         ],
       },
       stats,
+      devtool: 'source-map',
     },
     isProduction ? production : development,
   );

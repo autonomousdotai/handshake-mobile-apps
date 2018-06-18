@@ -1,11 +1,13 @@
 import React from 'react';
-import { hot } from 'react-hot-loader';
+// redux
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
-import Router from '@/components/Router/Router';
+// app
+import Root from '@/components/App/Root';
+// store
 import store from '@/stores';
 import history from '@/services/history';
-
+// styles
 import '@/styles/main';
 
 class App extends React.Component {
@@ -13,11 +15,11 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <Router />
+          <Root />
         </ConnectedRouter>
       </Provider>
     );
   }
 }
 
-export default process.env.isProduction ? App : hot(module)(App);
+export default App;

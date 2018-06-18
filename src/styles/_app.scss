@@ -10,6 +10,12 @@
   &.hide-header {
     padding-top: 10px;
   }
+  * {
+    user-select: none !important;
+    *:focus {
+      user-select: none !important;
+    }
+  }
 }
 
 .header {

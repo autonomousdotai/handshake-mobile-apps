@@ -7,16 +7,36 @@
 .mobile-tablet {
   display: flex;
   align-items: center;
-  height: 100vh;
+  padding: 40px 0;
   margin: 0 auto;
   font-family: anonymous-pro, monospace;
   font-style: normal;
   .chooseLanguage {
+    margin: 0 auto;
     font-size: rem-calc(16px);
     color: #FFFFFF;
     text-align: center;
-    countryActive {
-      //border-bottom: ;
+    font-weight: $light;
+    display: flex;
+    justify-content: center;
+    margin-bottom:rem-calc(60px);
+    .countryName {
+      padding: rem-calc(0 10px);
+      &:hover {
+        cursor: pointer;
+      }
+      span {
+        padding: rem-calc(0 7.5px 5px);
+      }
+    }
+    .countryName + .countryName {
+      border-left:1px solid #666666;
+    }
+    .countryActive {
+      span {
+        border-bottom: 2px solid #FFFF00;
+        font-weight: $semi-bold;
+      }
     }
   }
   .imageHeader {

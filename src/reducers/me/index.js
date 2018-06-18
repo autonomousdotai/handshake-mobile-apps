@@ -1,57 +1,45 @@
 import Handshake from '@/models/Handshake';
 import {
   EXCHANGE_FEED_TYPE,
-  FIREBASE_PATH,
   HANDSHAKE_EXCHANGE_CC_STATUS_VALUE,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_VALUE,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE,
   HANDSHAKE_EXCHANGE_STATUS_VALUE,
 } from '@/constants';
-import firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/messaging';
-import {ACTIONS} from './action';
+import { ACTIONS } from './action';
 
-function handlePreProcessForOfferStore(handshake, result) {
-  let extraData = JSON.parse(handshake.extra_data);
-  const id = handshake.id;
+function handlePreProcessForOfferStore(handshake) {
+  const extraData = JSON.parse(handshake.extra_data);
+  const { id } = handshake;
+  const handledHandshake = Object.assign({}, handshake);
+
   if (extraData.items.BTC) {
-    let extraDataBTC = {...extraData, ...extraData.items.BTC};
+    const extraDataBTC = { ...extraData, ...extraData.items.BTC };
     delete extraDataBTC.items;
     delete extraDataBTC.status;
-    handshake.extra_data = JSON.stringify(extraDataBTC);
-    handshake.id = id + '_BTC';
-
-    result.push(Handshake.handshake(handshake));
+    handledHandshake.extra_data = JSON.stringify(extraDataBTC);
+    handledHandshake.id = `${id}_BTC`;
   }
-
   if (extraData.items.ETH) {
-    let extraDataETH = {...extraData, ...extraData.items.ETH};
+    const extraDataETH = { ...extraData, ...extraData.items.ETH };
     delete extraDataETH.items;
     delete extraDataETH.status;
-    handshake.extra_data = JSON.stringify(extraDataETH);
-    handshake.id = id + '_ETH';
-
-    result.push(Handshake.handshake(handshake));
+    handledHandshake.extra_data = JSON.stringify(extraDataETH);
+    handledHandshake.id = `${id}_ETH`;
   }
+
+  return Handshake.handshake(handledHandshake);
 }
 
-const handleListPayload = payload => {
-  let result = [];
-
-  for (let handshake of payload) {
+const handleListPayload = (payload) => {
+  const result = payload.map((handshake) => {
     if (handshake.offer_feed_type === EXCHANGE_FEED_TYPE.OFFER_STORE) {
-      handlePreProcessForOfferStore(handshake, result);
-
-    } else {
-      result.push(Handshake.handshake(handshake));
+      return handlePreProcessForOfferStore(handshake);
     }
-  }
-
-  // console.log('handleListPayload result', result);
-
+    return Handshake.handshake(handshake);
+  });
   return result;
-}
+};
 
 
 const handleDetailPayload = payload => Handshake.handshake(payload.data);
@@ -103,19 +91,15 @@ const meReducter = (
     case ACTIONS.FIREBASE_EXCHANGE_DATA_CHANGE: {
       const listOfferStatus = action.payload;
       const myList = state.list;
+      let handledMylist = [];
 
-      const userProfile = action.profile;
-      const rootPathFirebase = `${FIREBASE_PATH.USERS}/${String(userProfile.id || -1)}`;
-      const firebaseExchange = firebase
-        ?.database()
-        ?.ref(rootPathFirebase)
-        ?.child('offers');
-
-      Object.keys(listOfferStatus).forEach((offer_id) => {
-        const offer = listOfferStatus[offer_id];
-        for (const handshake of myList) {
+      Object.keys(listOfferStatus).forEach((offerId) => {
+        const offer = Object.assign({}, listOfferStatus[offerId]);
+        handledMylist = myList.map((handshake) => {
           let status = '';
-          let id = offer.id;
+          let { id } = offer;
+          const handledHandshake = handshake;
+
           if (offer.type === EXCHANGE_FEED_TYPE.INSTANT) {
             status = HANDSHAKE_EXCHANGE_CC_STATUS_VALUE[offer.status];
           } else if (offer.type === EXCHANGE_FEED_TYPE.EXCHANGE) {
@@ -124,36 +108,34 @@ const meReducter = (
             status = HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_VALUE[offer.status];
           } else if (offer.type === EXCHANGE_FEED_TYPE.OFFER_STORE) {
             const values = offer.status.split('_');
-            id = id + '_' + values[0].toUpperCase();
+            id = `${id}_${values[0].toUpperCase()}`;
             status = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[values[1]];
           }
 
-          if (handshake.id.includes(id) && handshake.status !== status) {
-            handshake.status = status;
-            break;
+          if (handledHandshake.id.includes(id) && handledHandshake.status !== status) {
+            handledHandshake.status = status;
           }
-        }
+          return handledHandshake;
+        });
       });
-
-      firebaseExchange?.remove();
 
       return {
         ...state,
-        list: myList,
+        list: handledMylist,
       };
     }
     case ACTIONS.RESPONSE_EXCHANGE_DATA_CHANGE: {
       const listOfferStatus = action.payload;
       const myList = state.list;
+      let handledMylist = [];
 
-      console.log('ACTIONS.RESPONSE_EXCHANGE_DATA_CHANGE', listOfferStatus);
-      console.log('ACTIONS.RESPONSE_EXCHANGE_DATA_CHANGE', myList);
-
-      Object.keys(listOfferStatus).forEach((offer_id) => {
-        const offer = listOfferStatus[offer_id];
-        for (const handshake of myList) {
+      Object.keys(listOfferStatus).forEach((offerId) => {
+        const offer = Object.assign({}, listOfferStatus[offerId]);
+        handledMylist = myList.map((handshake) => {
           let status = '';
-          let id = offer.id;
+          let { id } = offer;
+          const handledHandshake = handshake;
+
           if (offer.type === EXCHANGE_FEED_TYPE.INSTANT) {
             status = HANDSHAKE_EXCHANGE_CC_STATUS_VALUE[offer.status];
           } else if (offer.type === EXCHANGE_FEED_TYPE.EXCHANGE) {
@@ -162,54 +144,53 @@ const meReducter = (
             status = HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_VALUE[offer.status];
           } else if (offer.type === EXCHANGE_FEED_TYPE.OFFER_STORE) {
             const values = offer.status.split('_');
-            id = id + '_' + values[0].toUpperCase();
+            id = `${id}_${values[0].toUpperCase()}`;
             status = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[values[1]];
           }
 
-          if (handshake.id.includes(id) && handshake.status !== status) {
-            handshake.status = status;
-            break;
+          if (handledHandshake.id.includes(id) && handledHandshake.status !== status) {
+            handledHandshake.status = status;
           }
-        }
+          return handledHandshake;
+        });
       });
 
       return {
         ...state,
-        list: myList,
+        list: handledMylist,
       };
     }
 
     case ACTIONS.FIREBASE_BETTING_DATA_CHANGE: {
       const listBettingStatus = action.payload;
       const myList = state.list;
-      const userProfile = action.profile;
-      const rootPathFirebase = `${FIREBASE_PATH.USERS}/${String(userProfile.id || -1)}`;
-      const firebaseBetting = firebase
-        ?.database()
-        ?.ref(rootPathFirebase)
-        ?.child('betting');
+      let handledMylist;
+
       Object.keys(listBettingStatus).forEach((key) => {
         const element = listBettingStatus[key];
-        const { id, status_i, result_i } = element;
-        console.log('New id, status, result:', id, status_i, result_i);
-        for (const handshake of myList) {
-          if (handshake.id === id) {
+        const { id, status_i: statusI, result_i: resultI } = element;
+        console.log('New id, status, result:', id, statusI, resultI);
+
+        handledMylist = myList.map((handshake) => {
+          const handledHandshake = handshake;
+
+          if (handledHandshake.id === id) {
             console.log('Found handshake', handshake);
-            handshake.status = status_i;
-            handshake.result = result_i;
-            break;
+            handledHandshake.status = statusI;
+            handledHandshake.result = resultI;
           }
-        }
+          return handledHandshake;
+        });
+
         // const handshakeItem = myList.find(item => item.id === id);
         // handshakeItem.status = status_i;
         // handshakeItem.result = result_i;
         // //TO DO: delete record after update status
       });
-      firebaseBetting?.remove();
 
       return {
         ...state,
-        list: myList,
+        list: handledMylist,
       };
     }
 

@@ -222,7 +222,7 @@ class FeedBetting extends React.Component {
               <span className="content">{amount.toFixed(6)} ETH </span>
               <span className="odds" >{odds.toFixed(2)}</span>
             </div>
-            <div className="possibleWin">Possible winnings: {Math.floor(winValue*ROUND)/ROUND} ETH</div>
+            <div className="possibleWin">Possible winnings: {Math.round(winValue*ROUND)/ROUND} ETH</div>
 
             {this.renderStatus()}
         </Feed>

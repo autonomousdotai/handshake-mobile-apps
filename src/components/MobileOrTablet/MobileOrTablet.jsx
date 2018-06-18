@@ -1,5 +1,8 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+
+import { changeLocale } from '@/reducers/app/action';
 
 // style
 import onlyMobileTabletSVG from '@/assets/images/ninja/ninja-header.svg';
@@ -9,20 +12,20 @@ import './MobileOrTablet.scss';
 const whitePaperLink = 'https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8';
 const mediumLink = 'https://t.me/ninja_org';
 const countryList = [
-  'ENG',
-  'JP',
-  'CN',
+  'EN',
+  'ZH',
+  'FR',
+  'DE',
+  'JA',
+  'KO',
+  'RU',
   'ES',
-  'RUS',
 ];
 
 class MobileOrTablet extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      countryActive: countryList[0],
-    };
-    this.isCountryActivated = ::this.isCountryActivated;
+    this.changeCountry = ::this.changeCountry;
   }
 
   componentDidMount() {
@@ -30,8 +33,8 @@ class MobileOrTablet extends React.PureComponent {
     appContainer.style.backgroundColor = '#161616';
   }
 
-  isCountryActivated(countryName) {
-    return this.state.countryActive === countryName;
+  changeCountry(countryCode) {
+    this.props.changeLocale(countryCode);
   }
 
   render() {
@@ -41,16 +44,17 @@ class MobileOrTablet extends React.PureComponent {
         <div className="row">
           <div className="col-lg-12">
             <div className="chooseLanguage">
-              {/*{*/}
-                {/*countryList.map((item, index) => (*/}
-                  {/*<div*/}
-                    {/*key={index}*/}
-                    {/*className={`countryName ${this.isCountryActivated(item) ? 'countryActive' : ''}`}*/}
-                  {/*>*/}
-                    {/*{item}*/}
-                  {/*</div>)*/}
-                {/*)*/}
-              {/*}*/}
+              {
+                countryList.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`countryName ${locale.toUpperCase() === item ? 'countryActive' : ''}`}
+                    onClick={() => this.changeCountry(item.toLowerCase())}
+                  >
+                    <span>{item}</span>
+                  </div>)
+                )
+              }
             </div>
           </div>
           <div className="col-lg-12 text-center">
@@ -92,4 +96,8 @@ class MobileOrTablet extends React.PureComponent {
   }
 }
 
-export default injectIntl(MobileOrTablet);
+const mapDispatch = ({
+  changeLocale,
+});
+
+export default injectIntl(connect(null, mapDispatch)(MobileOrTablet));

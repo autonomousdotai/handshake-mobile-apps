@@ -14,23 +14,17 @@ export const success = data => ({
   type: `${ACTIONS.LOAD_MY_HANDSHAKE}_SUCCESS`,
   payload: data,
 });
-export const fireBaseBettingChange = data => (dispatch, getState) =>
-  dispatch({
-    type: ACTIONS.FIREBASE_BETTING_DATA_CHANGE,
-    payload: data,
-    profile: getState().auth.profile,
-  });
+export const fireBaseBettingChange = data => ({
+  type: ACTIONS.FIREBASE_BETTING_DATA_CHANGE,
+  payload: data,
+});
 
-export const fireBaseExchangeDataChange = data => (dispatch, getState) =>
-  dispatch({
-    type: ACTIONS.FIREBASE_EXCHANGE_DATA_CHANGE,
-    payload: data,
-    profile: getState().auth.profile,
-  });
+export const fireBaseExchangeDataChange = data => ({
+  type: ACTIONS.FIREBASE_EXCHANGE_DATA_CHANGE,
+  payload: data,
+});
 
-export const responseExchangeDataChange = data => (dispatch, getState) =>
-  dispatch({
-    type: ACTIONS.RESPONSE_EXCHANGE_DATA_CHANGE,
-    payload: data,
-    profile: getState().auth.profile,
-  });
+export const responseExchangeDataChange = data => ({
+  type: ACTIONS.RESPONSE_EXCHANGE_DATA_CHANGE,
+  payload: data,
+});

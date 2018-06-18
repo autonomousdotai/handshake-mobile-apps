@@ -58,9 +58,7 @@ class Button extends React.PureComponent {
   }
 
   onClick(e) {
-    console.log('clicked');
     if (e.target === this.btnRef) {
-      console.log('set immunity false');
       this.immunity = false;
     } else {
       this.immunity = true;

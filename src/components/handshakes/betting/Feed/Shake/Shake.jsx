@@ -31,7 +31,7 @@ const nameFormBettingShake = 'bettingShakeForm';
 
 const defaultAmount = 1;
 const titleBySide = { 1: 'Bet for the outcome', 2: 'Bet against the outcome' };
-
+const ROUND = 1000000;
 class BetingShake extends React.Component {
   static propTypes = {
     outcomeId: PropTypes.number,
@@ -73,7 +73,8 @@ class BetingShake extends React.Component {
       oddValue: 0,
       amountValue: 0,
       winValue: 0,
-      disable: false
+      disable: false,
+
       //BettingShakeForm
 
     };
@@ -101,20 +102,25 @@ class BetingShake extends React.Component {
     const marketOdds = side === SIDE.SUPPORT ? marketSupportOdds : marketAgainstOdds;
     const marketAmount = side === SIDE.SUPPORT ? amountSupport : amountAgainst;
     const winValue = marketAmount * marketOdds;
-    console.log('componentWillReceiveProps: marketOdds, marketAmount, winValue:', marketOdds, marketAmount, winValue);
+    const roundMarketAmount = Math.round(marketAmount*ROUND)/ROUND;
+    console.log('componentWillReceiveProps: marketOdds, marketAmount, winValue, roundMarketAmount:', marketOdds, marketAmount, winValue, roundMarketAmount);
     this.setState({
-      oddValue: Math.floor(marketOdds*100)/100,
-      amountValue: Math.floor(marketAmount*10000)/10000,
-      winValue: Math.floor(winValue*10000)/10000
+      oddValue: Math.round(marketOdds*100)/100,
+      amountValue: roundMarketAmount,
+      winValue: Math.round(winValue*ROUND)/ROUND
     })
   }
 
   isExpiredDate(){
     const {closingDate} = this.props;
-    let dayUnit = moment.unix(closingDate).utc();
+    //console.log(moment(closingDate).format());
+    const newClosingDate = moment.unix(closingDate).add(90, 'minutes');
+    //let closingDateUnit = moment.unix(closingDate).utc();
+    let dayUnit = newClosingDate.utc();
     let today = moment();
     let todayUnit = today.utc();
-    console.log('Date Unix:', dayUnit.format());
+    //console.log('Closing Unix:', closingDateUnit.format());
+    console.log('New Date Unix:', dayUnit.format());
     console.log('Today Unix:', todayUnit.format());
     if(!todayUnit.isSameOrBefore(dayUnit, "miliseconds") && today){
       console.log('Expired Date');
@@ -128,10 +134,19 @@ class BetingShake extends React.Component {
     e.preventDefault();
     const values = this.refs;
     console.log('Values:', values);
-    const {isShowOdds} = this.state;
-    const {matchName, matchOutcome, side} = this.props;
+    const {isShowOdds, isChangeOdds} = this.state;
+    const {matchName, matchOutcome, side, marketAgainstOdds, marketSupportOdds, closingDate} = this.props;
     const amount = parseFloat(values.amount.value);
     const odds = parseFloat(values.odds.value);
+
+    const marketOdds = side === SIDE.SUPPORT ? marketSupportOdds : marketAgainstOdds;
+
+    /*
+    if(!isChangeOdds){
+      odds = marketOdds;
+    }
+    */
+
     console.log("Amount, Side, Odds", amount, side, odds);
     // this.props.onSubmitClick(amount);
     //const side = parseInt(this.toggleRef.value);
@@ -152,7 +167,7 @@ class BetingShake extends React.Component {
       message = MESSAGE.MATCH_OVER;
 
     }
-    else if (this.isExpiredDate()){
+    else if (betHandshakeHandler.isExpiredDate(closingDate)){
       message = MESSAGE.MATCH_OVER;
     }
     else if(matchName && matchOutcome){
@@ -216,7 +231,7 @@ class BetingShake extends React.Component {
     const {oddValue, amountValue} = this.state;
     const total = oddValue * amountValue;
       this.setState({
-        winValue: Math.floor(total*100)/100,
+        winValue: Math.round(total*ROUND)/ROUND,
       })
   }
 
@@ -510,10 +525,12 @@ class BetingShake extends React.Component {
     };
     console.log("Params:", params);
 
+    
     this.props.initHandshake({PATH_URL: API_URL.CRYPTOSIGN.INIT_HANDSHAKE, METHOD:'POST', data: params,
     successFn: this.initHandshakeSuccess,
     errorFn: this.initHandshakeFailed
   });
+  
   }
 
   initHandshakeSuccess = async (successData)=>{
@@ -525,8 +542,13 @@ class BetingShake extends React.Component {
      const {outcomeHid} = this.props;
       console.log('OutcomeHid:', outcomeHid);
      betHandshakeHandler.controlShake(data, outcomeHid);
+     const isExist = betHandshakeHandler.isExistMatchBet(data);
+     let message = MESSAGE.CREATE_BET_NOT_MATCH;
+     if(isExist){
+       message = MESSAGE.CREATE_BET_MATCHED;
+     }
      this.props.showAlert({
-      message: <div className="text-center">{MESSAGE.CREATE_BET_SUCCESSFUL}</div>,
+      message: <div className="text-center">{message}</div>,
       timeOut: 3000,
       type: 'success',
       callBack: () => {

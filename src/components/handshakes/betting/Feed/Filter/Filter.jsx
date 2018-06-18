@@ -23,7 +23,8 @@ import BettingShakeFree from './../ShakeFree';
 import './Filter.scss';
 
 const betHandshakeHandler = new BetHandshakeHandler();
-const freeAmount = 0.01;
+const CRYPTOSIGN_MINIMUM_MONEY = 0.00002;
+const freeAmount = 0.001;
 
 const TAG = 'BETTING_FILTER';
 const SELECTING_DEFAULT = {
@@ -60,6 +61,26 @@ class BettingFilter extends React.Component {
   }
 
   componentDidMount() {
+      /* Test */
+      /*
+    let value = 1.389999999;
+    const roundValue = 100;
+    console.log(`Value, ceil:`, value, Math.ceil(value * roundValue)/roundValue);
+    console.log(`Value, floor:`, value, Math.floor(value * roundValue)/roundValue);
+    console.log(`Value, round:`, value, Math.round(value * roundValue)/roundValue);
+
+    value = 1.33333333333;
+    console.log(`Value, ceil:`, value, Math.ceil(value * roundValue)/roundValue);
+    console.log(`Value, floor:`, value, Math.floor(value * roundValue)/ roundValue);
+    console.log(`Value, round:`, value, Math.round(value * roundValue)/ roundValue);
+
+    value = 1.667777777;
+    console.log(`Value, ceil:`, value, Math.ceil(value * roundValue)/roundValue);
+    console.log(`Value, floor:`, value, Math.floor(value * roundValue)/ roundValue);
+    console.log(`Value, round:`, value, Math.round(value * roundValue)/ roundValue);
+
+    */
+
     this.props.loadMatches({
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
       successFn: (res) => {
@@ -170,6 +191,7 @@ class BettingFilter extends React.Component {
     const { matchOutcomes } = this;
     // console.log('defaultOutcome matchOutcomes: ', matchOutcomes);
     const { outComeId } = this.props;
+    const sortedMatch = matchOutcomes.sort((a, b) => b.id > a.id);
     if (matchOutcomes && matchOutcomes.length > 0) {
       const itemDefault = matchOutcomes.find(item => item.id === outComeId);
       return itemDefault || matchOutcomes[0];
@@ -312,9 +334,11 @@ class BettingFilter extends React.Component {
     const { status, data } = successData;
     if (status && data) {
       const { support, against } = data;
+      const filterSupport = support.filter(item => item.amount >= CRYPTOSIGN_MINIMUM_MONEY);
+      const filterAgainst = against.filter(item => item.amount >= CRYPTOSIGN_MINIMUM_MONEY);
       this.setState({
-        support,
-        against,
+        support: filterSupport,
+        against: filterAgainst,
       });
     }
   }
@@ -456,18 +480,18 @@ class BettingFilter extends React.Component {
           {
           isFirstFree
           ? (
-              
+
               <div className="freeBox" onClick={() => {
                 this.modalBetFreeRef.open();
             }}>
                 <div className="contentFree">Unlock your <span>FREE ETH</span> to play</div>
                 <Button
                 className="buttonBet"
-                
+
                 >Bet now
                 </Button>
               </div>
-              
+
              /*
              <Button className="freeBox" onClick={() => {
                 this.modalBetFreeRef.open();
@@ -475,7 +499,7 @@ class BettingFilter extends React.Component {
                 <div className="contentFree">Unlock your <span>FREE ETH</span> to play</div>
                 <div
                 className="buttonBet"
-                
+
                 >Bet now
                 </div>
               </Button>
@@ -506,7 +530,7 @@ class BettingFilter extends React.Component {
               {/* <GroupBook amountColor="#FA6B49" bookList={this.bookListAgainst}/> */}
               <div className="marketBox">
                 <div>Market</div>
-                <div>{Math.floor(this.defaultSupportOdds * 100) / 100}</div>
+                <div>{Math.round(this.defaultSupportOdds * 100) / 100}</div>
               </div>
               <Button
                 className="buttonSupport"
@@ -537,7 +561,7 @@ class BettingFilter extends React.Component {
               {<GroupBook amountColor="#FA6B49" bookList={this.bookListAgainst} />}
               <div className="titleBox">
                 <div>Market</div>
-                <div>{Math.floor(this.defaultAgainstOdds * 100) / 100}</div>
+                <div>{Math.round(this.defaultAgainstOdds * 100) / 100}</div>
               </div>
               <Button
                 className="buttonAgainst"

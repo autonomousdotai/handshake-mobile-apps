@@ -295,12 +295,12 @@ class FeedExchange extends React.PureComponent {
   getNameShopDisplayed = () => {
     const { username, item_flags, items } = this.offer;
     if (username) { return username; }
-    if (item_flags.ETH) {
+    if (item_flags && item_flags.ETH) {
       const wallet = new Ethereum();
       wallet.address = items.ETH.user_address;
       return wallet.getShortAddress();
     }
-    if (item_flags.BTC) {
+    if (item_flags && item_flags.BTC) {
       const wallet = new Bitcoin();
       wallet.address = items.BTC.user_address;
       return wallet.getShortAddress();

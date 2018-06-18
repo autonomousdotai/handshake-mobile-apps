@@ -6,6 +6,7 @@ import handshake from './handshake';
 import betting from './betting';
 import me from './me';
 import comment from './comment';
+// import firebase from './firebase';
 
 export default {
   auth,
@@ -16,4 +17,5 @@ export default {
   me,
   betting,
   comment,
+  // firebase,
 };

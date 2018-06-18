@@ -6,6 +6,7 @@ import { HANDSHAKE_ID, API_URL, APP } from '@/constants';
 import local from '@/services/localStore';
 import { uninitItem, collect, refund, rollback, saveTransaction } from '@/reducers/handshake/action';
 import store from '@/stores';
+import moment from 'moment';
 
 
 /*
@@ -29,8 +30,9 @@ import store from '@/stores';
 
 export const MESSAGE = {
   BET_PROGRESSING: 'Your bet is creating. Please wait',
-  CREATE_BET_SUCCESSFUL: 'Success! You placed a bet.',
-  NOT_ENOUGH_BALANCE: 'Time travel is hard. Please bet on a future or ongoing match.',
+  CREATE_BET_NOT_MATCH: 'Finding a ninja to bet against you.',
+  CREATE_BET_MATCHED: 'Bet matched! Waiting for outcome.',
+  NOT_ENOUGH_BALANCE: 'Too rich for your blood. Please top up your wallet.',
   CHOOSE_MATCH: 'Please choose match and outcome',
   ODD_LARGE_THAN: 'Please enter odds greater than 1',
   AMOUNT_VALID: 'Please place a bet larger than 0.',
@@ -84,7 +86,7 @@ export const BETTING_STATUS = {
 
 export const BETTING_STATUS_LABEL =
     {
-      INITING: 'Your bet is being placed',
+      INITING: 'Placing a bet..',
       CANCEL: 'Cancel this bet',
       LOSE: 'Better luck next time.',
       WIN: `You're a winner!`,
@@ -92,7 +94,8 @@ export const BETTING_STATUS_LABEL =
       WITHDRAW: 'Withdraw winnings',
       CANCELLING: 'Your bet is being cancelled.',
       PROGRESSING: 'Your bet is progressing.',
-      WAITING_RESULT: 'Waiting for the outcome',
+      BET_WAIT_MATCHING: 'Bet placed. Matching..',
+      BET_MACHED_WAIT_RESULT: 'Bet matched. Waiting for result..',
       REFUND: 'Refund your bet',
       CANCELLED: 'Your bet was cancelled.',
       REFUNDING: 'Your coin is being refunded to you.',
@@ -136,6 +139,20 @@ export class BetHandshakeHandler {
     }
     return false;
   }
+  isExpiredDate(closingDate){
+    const newClosingDate = moment.unix(closingDate).add(90, 'minutes');
+    let dayUnit = newClosingDate.utc();
+    let today = moment();
+    let todayUnit = today.utc();
+    //console.log('Closing Unix:', closingDateUnit.format());
+    console.log('New Date Unix:', dayUnit.format());
+    console.log('Today Unix:', todayUnit.format());
+    if(!todayUnit.isSameOrBefore(dayUnit, "miliseconds") && today){
+      console.log('Expired Date');
+      return true
+    }
+    return false;
+  }
   getChainIdDefaultWallet(){
     const wallet = MasterWallet.getWalletDefault('ETH');
     const chainId = wallet.chainId;
@@ -174,7 +191,7 @@ export class BetHandshakeHandler {
       isAction = false;
     } else if (!isMatch && role === ROLE.INITER && blockchainStatus !== BET_BLOCKCHAIN_STATUS.STATUS_SHAKER_SHAKED) {
       label = BETTING_STATUS_LABEL.CANCEL;
-      strStatus = BETTING_STATUS_LABEL.WAITING_RESULT;
+      strStatus = BETTING_STATUS_LABEL.BET_WAIT_MATCHING;
       isAction = true;
     } else if (isMatch && resultStatus === BETTING_STATUS.DRAW) {
       label = BETTING_STATUS_LABEL.REFUND;
@@ -197,7 +214,7 @@ export class BetHandshakeHandler {
       strStatus = BETTING_STATUS_LABEL.WIN;
       isAction = true;
     } else if (isMatch || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_SHAKER_SHAKED) {
-      strStatus = BETTING_STATUS_LABEL.WAITING_RESULT;
+      strStatus = BETTING_STATUS_LABEL.BET_MACHED_WAIT_RESULT;
       isAction = false;
     }
     return { title: label, isAction, status: strStatus };
@@ -248,6 +265,18 @@ export class BetHandshakeHandler {
       shakerList.push(foundShakedItem);
     }
     return shakerList;
+  }
+  isExistMatchBet(list){
+    for (let i = 0; i < list.length; i++) {
+      const element = list[i];
+      const { offchain } = element;
+      const foundShakeList = this.foundShakeItemList(element, offchain);
+      console.log('isExistMatchBet FoundShakeList:', this.foundShakeList);
+      if(foundShakeList.length > 0){
+        return true;
+      }
+    }
+    return false;
   }
 
   isInitBet(dict) {

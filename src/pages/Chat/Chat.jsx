@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Popover, PopoverBody } from 'reactstrap';
+// import { Popover, PopoverBody } from 'reactstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MessageList, ChatList, Input } from 'react-chat-elements';
@@ -7,6 +7,7 @@ import md5 from 'md5';
 import moment from 'moment';
 import Identicon from 'identicon.js';
 import firebase from 'firebase/app';
+import { validateCallback } from '@firebase/util';
 import 'firebase/database';
 import 'firebase/auth';
 // import TransferCoin from '@/components/Wallet/TransferCoin';
@@ -20,7 +21,6 @@ import IconAvatar from '@/assets/images/icon/avatar.svg';
 import { Firechat } from './Firechat';
 import './Firechat.scss';
 import './Chat.scss';
-import { validateCallback } from '@firebase/util';
 
 // Get a reference to the Firebase Realtime Database
 const chatRef = firebase.database().ref('chat');
@@ -136,7 +136,7 @@ class Chat extends Component {
         message.message = {
           message: message.message,
           type: 'plain_text',
-        }
+        };
       }
 
       room.messages.push(message);
@@ -242,8 +242,8 @@ class Chat extends Component {
       this.setState({
         // tooltipTarget: elementId,
         transferCoin: {
-          amount: amount,
-          coinName: coinName,
+          amount,
+          coinName,
         },
       });
     }
@@ -259,9 +259,7 @@ class Chat extends Component {
         const fromNamesFiltered = Object.keys(room.froms).filter(userId => (userId !== this.user.id));
         const fromNames = fromNamesFiltered.map(userId => (room.froms[userId])).join(', ');
         const fromUserIds = fromNamesFiltered.map(userId => (userId)).join(',');
-        const lastMessage = [...room.messages].reverse().find((message) => {
-          return message.message.type != 'special';
-        });
+        const lastMessage = [...room.messages].reverse().find((message) => message.message.type != 'special');
 
         const lastMessageTime = lastMessage.timestamp;
         const lastMessageContent = lastMessage.message.message;
@@ -598,9 +596,9 @@ class Chat extends Component {
 
     Object.keys(replacementKeywords).forEach((wholeText) => {
       const value = replacementKeywords[wholeText];
-      const searchTextIndex = message.indexOf(wholeText)
+      const searchTextIndex = message.indexOf(wholeText);
       messageArr.push(message.substr(0, searchTextIndex));
-      messageArr.push(<span className='special-text'>{value}</span>);
+      messageArr.push(<span className="special-text">{value}</span>);
       message = message.substr(searchTextIndex + wholeText.length);
     });
 
@@ -620,11 +618,11 @@ class Chat extends Component {
         const coinsTest = messageContent.match(this.coinTextRegEx);
         if (coinsTest && coinsTest.length > 0) {
           const messageArr = [];
-          for (let i in coinsTest) {
+          for (const i in coinsTest) {
             const coinMessage = coinsTest[i];
             const coinMessageIndex = messageContent.indexOf(coinMessage);
             messageArr.push(messageContent.substr(0, coinMessageIndex));
-            messageArr.push(<span id={`coin-highlight-${messageId}-${i}`} className={`coin-highlight`} key={i} onClick={() => { this.onCoinTextClicked(`coin-highlight-${messageId}-${i}`, coinMessage); }}>{coinMessage}</span>);
+            messageArr.push(<span id={`coin-highlight-${messageId}-${i}`} className="coin-highlight" key={i} onClick={() => { this.onCoinTextClicked(`coin-highlight-${messageId}-${i}`, coinMessage); }}>{coinMessage}</span>);
             messageContent = messageContent.substr(coinMessageIndex + coinMessage.length);
           }
 
@@ -675,7 +673,7 @@ class Chat extends Component {
 
   renderSearchButton() {
     return (
-      <div className={`chat-search-container`}>
+      <div className="chat-search-container">
         <input
           ref={(ref) => { this.searchBtnRef = ref; }}
           type="search"
@@ -704,7 +702,7 @@ class Chat extends Component {
 
     const messageList = messages.map((message, messageId) => {
       const { name: messageName, userId } = message;
-      let { message: messageContent, type: messageType } = message.message;
+      const { message: messageContent, type: messageType } = message.message;
       const notch = userId !== prevUserId;
       prevUserId = userId;
 

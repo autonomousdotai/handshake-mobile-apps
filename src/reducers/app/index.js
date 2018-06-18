@@ -51,6 +51,8 @@ function appReducter(state = {
   isBannedPrediction: false,
   isBannedChecked: false,
 
+  isNerworkError: false,
+
 }, action) {
   switch (action.type) {
     case APP_ACTION.HEADER_TITLE_SET:
@@ -74,10 +76,7 @@ function appReducter(state = {
     case APP_ACTION.NETWORK_ERROR:
       return {
         ...state,
-        overlay: true,
-        isAlert: true,
-        isError: true,
-        isAlertContent: null,
+        isNerworkError: true,
       };
 
 

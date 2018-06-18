@@ -12,7 +12,8 @@ import TwitterSVG from '@/assets/images/share/twitter.svg';
 import './ShareSocial.scss';
 
 const Clipboard = (function (window, document, navigator) {
-  let textArea, copy;
+  let textArea,
+    copy;
 
   function isOS() {
     return navigator.userAgent.match(/ipad|iphone/i);
@@ -25,7 +26,8 @@ const Clipboard = (function (window, document, navigator) {
   }
 
   function selectText() {
-    let range, selection;
+    let range,
+      selection;
     if (isOS()) {
       range = document.createRange();
       range.selectNodeContents(textArea);
@@ -39,7 +41,7 @@ const Clipboard = (function (window, document, navigator) {
   }
 
   function copyToClipboard() {
-    const execCommand =  document.execCommand('copy');
+    const execCommand = document.execCommand('copy');
     document.body.removeChild(textArea);
     return execCommand;
   }
@@ -49,7 +51,7 @@ const Clipboard = (function (window, document, navigator) {
     return copyToClipboard();
   };
   return {
-    copy
+    copy,
   };
 }(window, document, navigator));
 
@@ -59,15 +61,15 @@ class ShareSocial extends PureComponent {
     this.clickShare = ::this.clickShare;
     this.socialList = [{
       img: FacebookSVG,
-      title: 'FACEBOOK'
-    },{
+      title: 'FACEBOOK',
+    }, {
       img: TwitterSVG,
-      title: 'TWITTER'
+      title: 'TWITTER',
     },
     {
       img: CopyLink,
-      title: 'COPY'
-    }
+      title: 'COPY',
+    },
     ];
   }
 
@@ -85,7 +87,7 @@ class ShareSocial extends PureComponent {
     let rawUrlShare = '';
     let shortLink = shareUrl;
 
-    switch(shareType) {
+    switch (shareType) {
       case 'TWITTER':
         if (!Helper.broswer.isSafari) {
           try {
@@ -122,7 +124,7 @@ class ShareSocial extends PureComponent {
     }
     Helper.popupCenter(rawUrlShare, 'facebook', 670, 340);
   }
- 
+
   render() {
     const { className } = this.props;
 
@@ -130,18 +132,19 @@ class ShareSocial extends PureComponent {
       <div className={`share-social ${className}`}>
         {
           this.socialList.map((social, index) => (
-            <img key={index+1} src={social.img} alt={social.title} onClick={e => {this.clickShare(e, social.title)}} />
+            <img key={index + 1} src={social.img} alt={social.title} onClick={(e) => { this.clickShare(e, social.title); }} />
           ))
         }
       </div>
-    )
+    );
   }
 }
 
 ShareSocial.propTypes = {
   shareUrl: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  showAlert: PropTypes.func,
+  showAlert: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 ShareSocial.defaultProps = {
