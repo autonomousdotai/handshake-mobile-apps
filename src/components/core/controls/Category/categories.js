@@ -23,12 +23,12 @@ const CATEGORIES = [{
   image: exchangeSVG,
   priority: 2,
 },
-{
-  id: HANDSHAKE_ID.EXCHANGE_LOCAL,
-  name: 'Swap',
-  image: exchangeSVG,
-  priority: 3,
-},
+// {
+//   id: HANDSHAKE_ID.EXCHANGE_LOCAL,
+//   name: 'Swap',
+//   image: exchangeSVG,
+//   priority: 3,
+// },
 // {
 //   id: 99, // temp
 //   name: 'Bazaar',
