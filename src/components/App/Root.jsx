@@ -59,7 +59,7 @@ class Root extends React.Component {
     this.querystringParsed = qs.parse(querystring);
     const { language, ref } = this.querystringParsed;
     if (language) this.setLanguage(language, false);
-    if (ref) this.ref = ref;
+    if (ref) this.refer = ref;
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -82,7 +82,7 @@ class Root extends React.Component {
     if (window.location.pathname === URL.LANDING_PAGE_TRADE) return <LandingPageTrade />;
     if (window.location.pathname === URL.FAQ) return <LandingPageFAQ />;
     if (BrowserDetect.isDesktop) return <MobileOrTablet />;
-    return <Handle setLanguage={this.setLanguage} ref={this.ref} />;
+    return <Handle setLanguage={this.setLanguage} refer={this.refer} />;
   }
 
   render() {
