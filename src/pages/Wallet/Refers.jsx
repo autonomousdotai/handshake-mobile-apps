@@ -301,7 +301,7 @@ renderStep1 = () => (
   <Step1Form onSubmit={this.submitStep1} className="refers-wrapper">
     <h6><a href="https://t.me/ninja_org" target="_blank">Insult us on telegram</a>. Be creative. There’s a leaderboard.</h6>
     <div className="col2">
-      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "done" : "bite me"}</Button>
+      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "verified" : "verify"}</Button>
     </div>
     <div className="col1">
       <Field
@@ -325,7 +325,7 @@ renderStep2= () => (
   <Step2Form onSubmit={this.submitStep2} className="refers-wrapper">
     <h6>Our social media guy says we need followers on <a href="https://twitter.com/ninja_org" target="_blank">twitter</a>.</h6>
     <div className="col2">
-        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "done" : "bite me"}</Button>
+        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "verified" : "verify"}</Button>
     </div>
     <div className="col1">
       <Field
@@ -421,9 +421,9 @@ renderStep3_labelButton= () => {
     case 1:
       return <Button isLoading={this.state.isLoading} block type="submit">confirm</Button>
     case 2:
-      return <Button isLoading={this.state.isLoading} block disabled type="submit">done</Button>
+      return <Button isLoading={this.state.isLoading} block disabled type="submit">verified</Button>
     default:
-      return <Button isLoading={this.state.isLoading} block type="submit">bite me</Button>
+      return <Button isLoading={this.state.isLoading} block type="submit">verify</Button>
   }
 }
 
