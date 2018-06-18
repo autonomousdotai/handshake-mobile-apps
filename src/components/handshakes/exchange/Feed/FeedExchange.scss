@@ -1,9 +1,5 @@
 @import './src/styles/var';
 
-.app {
-  padding-bottom: 150px !important;
-}
-
 .feed-exchange {
   background: #FFFFFF;
   box-shadow: 0 2px 4px 0 rgba(201,201,201,0.50);
@@ -90,7 +86,7 @@
 
 .dialog-shake-detail {
   .modal-custom-body {
-    background: #485059;
+    background: #000B35;
     border-radius: 4px;
     padding: 20px !important;
   }

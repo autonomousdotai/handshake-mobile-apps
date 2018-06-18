@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // style
+import '../styles.scss';
 import './FeedExchange.scss';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import Button from '@/components/core/controls/Button/Button';

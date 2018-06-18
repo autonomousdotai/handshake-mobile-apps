@@ -61,7 +61,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   render() {
-    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST } = this.props;
+    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST, type } = this.props;
 
     const fiat = offer.fiatCurrency;
 
@@ -93,25 +93,47 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
           </div>
           <div className="mt-3">
             <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount"/></div>
-            <div className='input-group'>
-              <Field
-                name="amount"
-                // containerClass="radio-container-old"
-                component={fieldInput}
-                className="input"
-                placeholder="10.00"
-                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
-                // type="tab-2"
-                // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
-              />
-              <span className="append-text">{currency}</span>
+            <div className="form-group">
+              <div className='input-group-shake-detail'>
+                <Field
+                  name="amountFiat"
+                  // containerClass="radio-container-old"
+                  component={fieldInput}
+                  className="input"
+                  placeholder="500000"
+                  validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
+                  // type="tab-2"
+                  // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
+                />
+                <span className="append-text">{fiat}</span>
+              </div>
+
+              <div className="approximate-icon"><img src={iconApproximate} /></div>
+
+              <div className='input-group-shake-detail'>
+                <Field
+                  name="amount"
+                  // containerClass="radio-container-old"
+                  component={fieldInput}
+                  className="input"
+                  placeholder="10.00"
+                  validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
+                  // type="tab-2"
+                  // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
+                />
+                <span className="append-text">{currency}</span>
+              </div>
             </div>
+
           </div>
-          <hr className="hl" />
+          {/*<hr className="hl" />
           <div className="text-total">
             <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
           </div>
-          <Button block type="submit" className="mt-3" disabled={!enableShake}><FormattedMessage id="btn.shake"/></Button>
+          */}
+          <Button block type="submit" className="mt-3 btn-shake-detail" disabled={!enableShake}>
+            {EXCHANGE_ACTION_NAME[type]} {CRYPTO_CURRENCY[currency]} - {formatMoney(fiatAmount)} {fiat}
+          </Button>
         </FormShakeDetail>
       </div>
     );
