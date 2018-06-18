@@ -84,7 +84,8 @@ module.exports = function webpackConfig(env, argv) {
         {
           test: /\.css$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            // MiniCssExtractPlugin.loader, TO-DO
+            'style-loader',
             'css-loader',
             'postcss-loader',
           ],
@@ -92,7 +93,8 @@ module.exports = function webpackConfig(env, argv) {
         {
           test: /\.scss$/,
           use: [
-            MiniCssExtractPlugin.loader,
+            // MiniCssExtractPlugin.loader, TO-DO
+            'style-loader',
             'css-loader',
             'postcss-loader',
             'sass-loader',

@@ -56,6 +56,9 @@ class Router extends React.Component {
       if (nextProps.firebaseApp.config.isMaintain !== prevState.firebaseApp.config.isMaintain) {
         return { firebaseApp: nextProps.firebaseApp };
       }
+      if (nextProps.firebaseApp.config.version !== prevState.firebaseApp.config.version) {
+        window.location.reload();
+      }
     }
     return null;
   }

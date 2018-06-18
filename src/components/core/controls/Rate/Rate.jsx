@@ -11,7 +11,7 @@ class Rate extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    this.starNum = props.startNum || LENGTH;
+    this.starNum = props.starNum || LENGTH;
     // bind
     this.ratingClick = ::this.ratingClick;
     this.open = ::this.open;
@@ -55,7 +55,7 @@ class Rate extends React.PureComponent {
 Rate.propTypes = {
   className: PropTypes.string,
   ratingOnClick: PropTypes.func,
-  startNum: PropTypes.number,
+  starNum: PropTypes.number,
   onRef: PropTypes.func,
 };
 

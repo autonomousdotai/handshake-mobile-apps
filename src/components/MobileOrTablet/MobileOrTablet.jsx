@@ -12,14 +12,38 @@ import './MobileOrTablet.scss';
 const whitePaperLink = 'https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8';
 const mediumLink = 'https://t.me/ninja_org';
 const countryList = [
-  'EN',
-  'ZH',
-  'FR',
-  'DE',
-  'JA',
-  'KO',
-  'RU',
-  'ES',
+  {
+    code: 'en',
+    title: 'EN',
+  },
+  {
+    code: 'zh',
+    title: 'CN',
+  },
+  {
+    code: 'fr',
+    title: 'FR',
+  },
+  {
+    code: 'de',
+    title: 'DE',
+  },
+  {
+    code: 'ja',
+    title: 'JP',
+  },
+  {
+    code: 'ko',
+    title: 'KR',
+  },
+  {
+    code: 'ru',
+    title: 'RU',
+  },
+  {
+    code: 'es',
+    title: 'ES',
+  },
 ];
 
 class MobileOrTablet extends React.PureComponent {
@@ -30,7 +54,7 @@ class MobileOrTablet extends React.PureComponent {
 
   componentDidMount() {
     const appContainer = document.getElementById('app');
-    appContainer.style.backgroundColor = '#161616';
+    appContainer.classList.add('mobileTabletApp');
   }
 
   changeCountry(countryCode) {
@@ -48,10 +72,10 @@ class MobileOrTablet extends React.PureComponent {
                 countryList.map((item, index) => (
                   <div
                     key={index}
-                    className={`countryName ${locale.toUpperCase() === item ? 'countryActive' : ''}`}
-                    onClick={() => this.changeCountry(item.toLowerCase())}
+                    className={`countryName ${locale === item.code ? 'countryActive' : ''}`}
+                    onClick={() => this.changeCountry(item.code)}
                   >
-                    <span>{item}</span>
+                    <span>{item.title}</span>
                   </div>)
                 )
               }

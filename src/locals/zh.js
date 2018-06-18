@@ -137,7 +137,7 @@ export default {
   ],
 
   // MobileOrTablet components
-  MOT_TITLE: '忍者网络只能通过移动访问',
+  MOT_TITLE: '匿名交换任何东西',
   MOT_CONTENT_0: '忍者网络只能通过移动访问',
   MOT_CONTENT_1: '在移动浏览器上打开',
   MOT_CONTENT_2: '以获取匿名输入。',

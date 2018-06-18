@@ -1,0 +1,21 @@
+/**
+ * StarsRating Component.
+*/
+@import './src/styles/style';
+$blue: #2456fb;
+
+.stars-rating {
+  span {
+    margin-right: rem-calc(4.2px);
+    &:last-child {
+      margin-right: 0;
+    }
+    &:before {
+      content: "\2605";
+      position: absolute;
+    }
+  }
+  .full {
+    color: $blue;
+  }
+}

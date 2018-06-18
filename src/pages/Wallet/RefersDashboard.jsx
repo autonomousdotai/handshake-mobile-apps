@@ -127,6 +127,7 @@ class RefersDashboard extends React.Component {
               validate={[required]}
               onFocus={() => { evt => this.handleFocus(evt); Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
           />
+          <div className="note"> Do not change your alias or this link will be unvalid</div>
       </div>
     </Step4Form>
   )

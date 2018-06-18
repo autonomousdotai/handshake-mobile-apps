@@ -137,7 +137,7 @@ export default {
   ],
 
   // MobileOrTablet components
-  MOT_TITLE: '匿名のピア ツー ピア予測交換',
+  MOT_TITLE: '何か匿名の交流',
   MOT_CONTENT_0: '忍者ネットワークのみアクセス可能です携帯電話を介して',
   MOT_CONTENT_1: '匿名エントリを得るためにあなたの携帯電話のブラウザーで',
   MOT_CONTENT_2: 'を開きます。',

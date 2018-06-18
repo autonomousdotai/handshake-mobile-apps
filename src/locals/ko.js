@@ -137,7 +137,7 @@ export default {
   ],
 
   // MobileOrTablet components
-  MOT_TITLE: '익명 피어 투 피어 예측 교환',
+  MOT_TITLE: '아무것도의 익명 교환"입니다',
   MOT_CONTENT_0: '닌자 네트워크는 액세스할 수 모바일을 통해',
   MOT_CONTENT_1: '익명 항목을 얻을 귀하의 모바일 브라우저에서',
   MOT_CONTENT_2: '를 엽니다.',

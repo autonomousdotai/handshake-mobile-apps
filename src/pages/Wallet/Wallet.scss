@@ -606,7 +606,7 @@
       margin: 0;
     }
     .hLink{
-      background: #007bff;
+      background: #e39534;
       letter-spacing: 0;
       cursor: pointer;
       float: right;
@@ -615,6 +615,8 @@
       border-radius: 4px;
       margin: 0;
       font-size: 13px;
+      width: 33%;
+      text-align: center;
     }
   }
 }
@@ -635,8 +637,9 @@
 }
 
 .refers-wrapper-border{
-  border-bottom:solid 1px #9a9a9a;
-  padding-bottom: 20px;
+  // border-top:solid 1px #ced4da;
+  padding-top: 20px;
+  padding-bottom: 60px;
 }
 
 .refers-dashboard{
