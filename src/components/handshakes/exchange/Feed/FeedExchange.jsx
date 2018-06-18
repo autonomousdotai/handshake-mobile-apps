@@ -1,14 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
-import iconEthereum from '@/assets/images/icon/coin/eth.svg';
-import iconLocation from '@/assets/images/icon/icons8-marker.svg';
-import iconOk from '@/assets/images/icon/icons8-ok.svg';
-import iconCancel from '@/assets/images/icon/icons8-cancel.svg';
 // style
 import './FeedExchange.scss';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import Feed from '@/components/core/presentation/Feed/Feed';
 import Button from '@/components/core/controls/Button/Button';
 import {
   API_URL,
@@ -25,6 +19,7 @@ import {
   HANDSHAKE_EXCHANGE_CC_STATUS_NAME,
   HANDSHAKE_EXCHANGE_STATUS,
   HANDSHAKE_EXCHANGE_STATUS_NAME,
+  HANDSHAKE_ID,
   HANDSHAKE_STATUS_NAME,
   HANDSHAKE_USER,
   URL,
@@ -40,21 +35,19 @@ import {
   shakeOfferItem,
   withdrawShakedOffer,
 } from '@/reducers/exchange/action';
-import { Ethereum } from '@/models/Ethereum.js';
-import { Bitcoin } from '@/models/Bitcoin';
+import {Ethereum} from '@/models/Ethereum.js';
+import {Bitcoin} from '@/models/Bitcoin';
 import Offer from '@/models/Offer';
 import {MasterWallet} from '@/models/MasterWallet';
 import {formatAmountCurrency, formatMoney, getHandshakeUserType, getOfferPrice} from '@/services/offer-util';
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
-import { getDistanceFromLatLonInKm, getErrorMessageFromCode } from "../utils";
+import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from "../utils";
 import {ExchangeHandshake, ExchangeShopHandshake} from '@/services/neuron';
 import {feedBackgroundColors} from '@/components/handshakes/exchange/config';
 import {updateOfferStatus} from '@/reducers/discover/action';
 import OfferShop from '@/models/OfferShop';
 import {getLocalizedDistance} from "@/services/util";
 import {BigNumber} from "bignumber.js";
-
-import Rate from '@/components/core/controls/Rate';
 import StarsRating from "@/components/core/presentation/StarsRating";
 
 import iconChat from '@/assets/images/icon/chat-icon.svg';
@@ -320,6 +313,10 @@ class FeedExchange extends React.PureComponent {
     this.props.history.push(`${URL.HANDSHAKE_CHAT}/${chatUsername}`);
   }
 
+  handleCreateExchange = () => {
+    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
+  }
+
 
   render() {
     const { offer } = this;
@@ -395,7 +392,7 @@ class FeedExchange extends React.PureComponent {
 
         <div className="ex-sticky-note">
           <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
-          <div><button className="btn btn-become"><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
+          <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
         </div>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
           <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} />
