@@ -172,7 +172,7 @@ class Handle extends React.Component {
       this.authSuccess();
     } else {
       this.props.signUp({
-        PATH_URL: `user/sign-up${this.props.ref ? `?ref=${this.props.ref}` : ''}`,
+        PATH_URL: `user/sign-up${this.props.refer ? `?ref=${this.props.refer}` : ''}`,
         METHOD: 'POST',
         successFn: () => {
           this.authSuccess();

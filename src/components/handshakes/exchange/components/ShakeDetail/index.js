@@ -16,8 +16,10 @@ import {injectIntl} from "react-intl";
 import {formatMoney, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {bindActionCreators} from "redux";
+import {FormattedMessage} from 'react-intl';
+import { minValueBTC, minValueETH } from "../../Create/validation";
 
-const nameFormShakeDetail = 'shakeDetail';
+export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
   propsReduxForm: {
     form: nameFormShakeDetail,
@@ -30,11 +32,6 @@ const FormShakeDetail = createForm({
 const selectorFormShakeDetail = formValueSelector(nameFormShakeDetail);
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  CRYPTO_CURRENCY_LIST = [
-    { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />},
-    { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />  },
-  ];
-
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -64,14 +61,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   render() {
-    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST } = this.props;
+    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST } = this.props;
 
     const fiat = offer.fiatCurrency;
-
-    this.CRYPTO_CURRENCY_LIST = [
-      { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
-      { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
-    ];
 
     return (
       <div className="shake-detail">
@@ -93,14 +85,14 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               // containerClass="radio-container-old"
               component={fieldRadioButton}
               type="tab-2"
-              list={this.CRYPTO_CURRENCY_LIST}
+              list={CRYPTO_CURRENCY_LIST}
               // color={textColor}
               // validate={[required]}
               onChange={this.onCurrencyChange}
             />
           </div>
           <div className="mt-3">
-            <div className="text">Amount</div>
+            <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount"/></div>
             <div className='input-group'>
               <Field
                 name="amount"
@@ -108,18 +100,18 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                 component={fieldInput}
                 className="input"
                 placeholder="10.00"
+                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                 // type="tab-2"
                 // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
-                validate={[required]}
               />
               <span className="append-text">{currency}</span>
             </div>
           </div>
           <hr className="hl" />
           <div className="text-total">
-            Total ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
+            <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
           </div>
-          <Button block type="submit" className="mt-3" disabled={!enableShake}>Shake</Button>
+          <Button block type="submit" className="mt-3" disabled={!enableShake}><FormattedMessage id="btn.shake"/></Button>
         </FormShakeDetail>
       </div>
     );
@@ -188,6 +180,7 @@ const mapState = (state, prevProps) => {
     enableShake,
     EXCHANGE_ACTION_LIST,
     type,
+    currency
   }
 };
 

@@ -202,6 +202,26 @@ const meReducter = (
         list: handledMylist,
       };
     }
+    case ACTIONS.UPDATE_BETTING_DATA_CHANGE: {
+      const item = action.payload;
+      console.log('Item changed:', item);
+      const myList = state.list;
+      let handledMylist;
+      handledMylist = myList.map((handshake) => {
+        const handledHandshake = handshake;
+
+        if (handledHandshake.id === item.id) {
+          handledHandshake.status = item.status;
+          //handledHandshake.result = resultI;
+        }
+        return handledHandshake;
+      });
+
+      return {
+        ...state,
+        list: handledMylist,
+      };
+    }
 
     default:
       return state;

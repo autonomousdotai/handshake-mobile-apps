@@ -316,7 +316,7 @@ class Component extends React.Component {
 
     const offer = {
       email: authProfile?.email || '',
-      username: nameShop,
+      username: authProfile?.username,
       contact_phone: phoneNew,
       contact_info: address,
       latitude: lat,
@@ -629,6 +629,7 @@ class Component extends React.Component {
               <div>
                 <div className="label">Station information</div>
                 <div className="section">
+                  {/*
                   <div className="d-flex">
                     <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.nameStation"/></span></label>
                     <div className='input-group'>
@@ -642,8 +643,7 @@ class Component extends React.Component {
                       />
                     </div>
                   </div>
-
-                  <hr className="hrLine"/>
+                  <hr className="hrLine"/>*/}
 
                   <div className="d-flex mt-2">
                     <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.phone"/></span></label>

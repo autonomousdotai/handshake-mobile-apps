@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // services, constants
-import  { BetHandshakeHandler, SIDE, BETTING_STATUS_LABEL, ROLE} from './BetHandshakeHandler.js';
+import  { BetHandshakeHandler, SIDE, BETTING_STATUS_LABEL, ROLE, MESSAGE} from './BetHandshakeHandler.js';
 import momment from 'moment';
 import {MasterWallet} from '@/models/MasterWallet';
 
 import local from '@/services/localStore';
 import {FIREBASE_PATH, HANDSHAKE_ID, API_URL, APP} from '@/constants';
 import { uninitItem, collect, refund } from '@/reducers/handshake/action';
-import { loadMyHandshakeList} from '@/reducers/me/action';
+import { loadMyHandshakeList, updateBettingChange} from '@/reducers/me/action';
 
 
 // components
@@ -67,8 +67,8 @@ class FeedBetting extends React.Component {
   }
 
   isShakeUser(shakeIds, userId){
-    console.log('User Id:', userId);
-    console.log('ShakeIds:', shakeIds);
+    //console.log('User Id:', userId);
+    //console.log('ShakeIds:', shakeIds);
 
     if(shakeIds){
 
@@ -85,8 +85,8 @@ class FeedBetting extends React.Component {
     const {result, shakeUserIds, id} = props; // new state
     
 
-    console.log('Item Info bkstatus:', this.state.itemInfo.bkStatus);
-    console.log('Props Status:', props.status);
+    //console.log('Item Info bkstatus:', this.state.itemInfo.bkStatus);
+    //console.log('Props Status:', props.status);
     
     /*
     if(this.state.itemInfo){
@@ -105,7 +105,7 @@ class FeedBetting extends React.Component {
     const profile = local.get(APP.AUTH_PROFILE);
     const isUserShake = this.isShakeUser(shakeUserIds, profile.id);
     let itemInfo = props;
-    console.log('Inpu Props:', props);
+    //console.log('Inpu Props:', props);
     
     if(isUserShake){
       const extraData = this.extraData;
@@ -115,7 +115,7 @@ class FeedBetting extends React.Component {
 
       if(shakers){
         const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
-        console.log('Found Shaked Item:', foundShakedItem);
+        //console.log('Found Shaked Item:', foundShakedItem);
         if(foundShakedItem){
           itemInfo = foundShakedItem;
           
@@ -183,7 +183,7 @@ class FeedBetting extends React.Component {
      * side = SIDE.SUPPORT // SIDE.AGAINST ;ORGRANCE
      *
      */
-    console.log('Item info:', itemInfo);
+    //console.log('Item info:', itemInfo);
     const {amount, odds, side } = itemInfo;
     const {event_name, event_predict} = this.extraData;
     const { commentCount, id, type } = this.props;
@@ -199,7 +199,7 @@ class FeedBetting extends React.Component {
       eventName = `Event: ${eventName}`;
     }
     let predictName = event_predict ? event_predict : '';
-    console.log('Predict Name:', predictName);
+    //console.log('Predict Name:', predictName);
     if(predictName.indexOf('Outcome')!== -1) {
       predictName = event_predict.slice(8);
     }
@@ -242,7 +242,7 @@ class FeedBetting extends React.Component {
 
   }
   changeOption(value){
-    console.log('Choose option:', value)
+    //console.log('Choose option:', value)
     //TO DO: Choose an option
   }
 
@@ -250,7 +250,7 @@ class FeedBetting extends React.Component {
     const balance = await betHandshakeHandler.getBalance();
     const estimatedGas = await betHandshakeHandler.getEstimateGas();
     let message = null;
-    if(estimatedGas < balance){
+    if(estimatedGas > balance){
       message = MESSAGE.NOT_ENOUGH_BALANCE;
 
     }
@@ -260,7 +260,7 @@ class FeedBetting extends React.Component {
     else {
       const {id} = this.props;
       const realId = betHandshakeHandler.getId(id);
-      console.log('realId:', realId);
+      //console.log('realId:', realId);
   
       switch(title){
   
@@ -316,7 +316,8 @@ class FeedBetting extends React.Component {
       updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
-      this.handleStatus(updateInfo);
+      //this.handleStatus(updateInfo);
+      this.props.updateBettingChange(updateInfo);
       
       const stake = amount;
       //const payout = stake * odds;
@@ -331,6 +332,17 @@ class FeedBetting extends React.Component {
   }
   uninitHandshakeFailed = (error) => {
     console.log('uninitHandshakeFailed', error);
+    const {status, message} = error;
+    if(status == 0){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
+    
   }
 
   collect(id){
@@ -354,7 +366,9 @@ class FeedBetting extends React.Component {
       updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
-      this.handleStatus(updateInfo);
+      //this.handleStatus(updateInfo);
+      this.props.updateBettingChange(updateInfo);
+
 
       this.setState({
         itemInfo: updateInfo
@@ -371,6 +385,16 @@ class FeedBetting extends React.Component {
   }
   collectFailed = (error) => {
     console.log('collectFailed', error);
+    const {status, message} = error;
+    if(status == 0){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
 
   }
 
@@ -392,7 +416,9 @@ class FeedBetting extends React.Component {
       updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
-      this.handleStatus(updateInfo);
+      //this.handleStatus(updateInfo);
+      this.props.updateBettingChange(updateInfo);
+
 
       const offchain = id;
       const result = await betHandshakeHandler.refund(hid, offchain);
@@ -407,6 +433,17 @@ class FeedBetting extends React.Component {
   }
   refundFailed = (error) => {
     console.log('refundFailed', error);
+    const {status, message} = error;
+    if(status == 0){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
+
   }
 
   /*
@@ -433,6 +470,7 @@ const mapState = state => ({
 });
 const mapDispatch = ({
   loadMyHandshakeList,
+  updateBettingChange,
   uninitItem,
   collect,
   refund,

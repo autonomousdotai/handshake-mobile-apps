@@ -338,14 +338,14 @@ class DiscoverPage extends React.Component {
             </Col>
           </Row> */}
           <Row className="category-wrapper" style={{ marginBottom: handshakeIdActive === HANDSHAKE_ID.EXCHANGE ? '0px' : '' }}>
-            <Col md={9}>
+            <Col className="col-9">
               <Category
                 idActive={handshakeIdActive}
                 onRef={(category) => { this.categoryRef = category; return null; }}
                 onItemClick={this.clickCategoryItem}
               />
             </Col>
-            <Col md={3} className="multilanguage-block">
+            <Col className="col-3 multilanguage-block">
               <MultiLanguage />
             </Col>
           </Row>
@@ -406,7 +406,7 @@ class DiscoverPage extends React.Component {
             }
           </Row>
           <Row className="info">
-            Ninja is open-source, decentralized software that never holds your funds. By choosing to use Ninja, the user makes it their business to be aware of the legalities of their governing jurisdiction, and accepts that they are solely responsible for how they choose to use the software. Ninja is not a gambling operator and cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!
+            Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!
           </Row>
         </Grid>
         <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} className="discover-popup" isDismiss={false} >

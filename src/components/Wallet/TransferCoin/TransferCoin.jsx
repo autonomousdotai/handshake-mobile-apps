@@ -143,7 +143,7 @@ class Transfer extends React.Component {
     if (wallets.length > 0){
       wallets.forEach((wallet) => {
         wallet.text = wallet.getShortAddress() + " (" + wallet.name + "-" + wallet.getNetworkName() + ")";
-        if (process.env.isProduction){
+        if (process.env.isLive){
           wallet.text = wallet.getShortAddress() + " (" + wallet.className + " " + wallet.name + ")";
         }
         wallet.id = wallet.address + "-" + wallet.getNetworkName();        
@@ -155,7 +155,7 @@ class Transfer extends React.Component {
     MasterWallet.log(walletDefault, "walletDefault");
     if (walletDefault){      
       walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.name + "-" + walletDefault.getNetworkName() + ")";         
-      if (process.env.isProduction){
+      if (process.env.isLive){
         walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
       walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName();   

@@ -103,11 +103,11 @@ export const BETTING_STATUS_LABEL =
     };
 
 export const CONTRACT_METHOD = {
-  INIT: 'INIT',
-  SHAKE: 'SHAKE',
-  CANCEL: 'CANCEL',
-  REFUND: 'REFUND',
-  COLLECT: 'COLLECT',
+  INIT: 'init',
+  SHAKE: 'shake',
+  CANCEL: 'uninit',
+  REFUND: 'refund',
+  COLLECT: 'collect',
 }
 
 let myManager = null;
@@ -440,10 +440,11 @@ export class BetHandshakeHandler {
   }
   async cancelBet(hid, side, stake, odds, offchain){
     const chainId = this.getChainIdDefaultWallet();
+        //hid = 10000;
+
     const bettinghandshake = new BettingHandshake(chainId);
     const result = await bettinghandshake.cancelBet(hid, side, stake, odds, offchain);
     const {blockHash, logs, hash, error} = result;
-    
     
     let logJson = JSON.stringify(logs);
     const contractAddress = bettinghandshake.contractAddress;

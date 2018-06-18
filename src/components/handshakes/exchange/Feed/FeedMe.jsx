@@ -45,6 +45,7 @@ import {
   completeShakedOffer,
   deleteOfferItem,
   rejectOfferItem,
+  reviewOffer,
   shakeOffer,
   withdrawShakedOffer
 } from "@/reducers/exchange/action";
@@ -1173,6 +1174,29 @@ class FeedMe extends React.PureComponent {
     return chatUserName;
   }
 
+  handleOnClickRating = (numStars) => {
+    this.rateRef.close();
+    const { offer } = this;
+    const { initUserId } = this.props;
+    this.props.reviewOffer({
+      PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${initUserId}/${API_URL.EXCHANGE.REVIEWS}/${offer.id}`,
+      METHOD: 'POST',
+      qs: { score: numStars },
+      successFn: this.handleReviewOfferSuccess,
+      errorFn: this.handleReviewOfferFailed,
+    });
+
+    console.log('numstarrs', numStars);
+  }
+
+  handleReviewOfferSuccess = (responseData) => {
+    console.log('handleReviewOfferSuccess', responseData);
+    const data = responseData.data;
+  }
+
+  handleReviewOfferFailed = (e) => {
+  }
+
   ////////////////////////
 
   handleRejectShakedOffer = async () => {
@@ -1395,13 +1419,9 @@ class FeedMe extends React.PureComponent {
       }
     });
 
-    // console.log('hiện đánh sao');
-    this.rateRef.open();
-  }
-
-  handleOnClickRating = (numStars) => {
-    this.rateRef.close();
-    console.log('numstarrs', numStars)
+    if (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED) {
+      this.rateRef.open();
+    }
   }
 
   handleCompleteShakedOfferFailed = (e) => {
@@ -1944,6 +1964,7 @@ const mapDispatch = ({
   acceptOfferItem,
   deleteOfferItem,
   responseExchangeDataChange,
+  reviewOffer,
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedMe));
