@@ -13,7 +13,7 @@ import './MultiLanguage.scss';
 
 const LANGUAGES = [
   {
-    code: 'gb',
+    code: 'en',
     name: 'English',
   },{
     code: 'fr',
@@ -25,16 +25,16 @@ const LANGUAGES = [
     code: 'es',
     name: 'Spanish',
   },{
-    code: 'cn',
+    code: 'zh',
     name: 'Chinese',
   },{
     code: 'ru',
     name: 'Russian',
   },{
-    code: 'kr',
+    code: 'ko',
     name: 'Korean',
   },{
-    code: 'jp',
+    code: 'ja',
     name: 'Japan',
   },
 ];
