@@ -923,9 +923,9 @@ class FeedMe extends React.PureComponent {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
-        if (refreshPage) {
-          refreshPage();
-        }
+        // if (refreshPage) {
+        //   refreshPage();
+        // }
       },
     });
   }

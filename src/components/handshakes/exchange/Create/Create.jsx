@@ -16,7 +16,7 @@ import {
   fieldRadioButton
 } from "@/components/core/form/customField";
 import {maxValue, minValue, required} from "@/components/core/form/validation";
-import {change, Field, formValueSelector} from "redux-form";
+import {change, Field, formValueSelector, clearFields} from "redux-form";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
 import {
@@ -66,8 +66,6 @@ const FormExchangeCreate = createForm({
     form: nameFormExchangeCreate,
     initialValues: {
       currency: CRYPTO_CURRENCY_DEFAULT,
-      customizePriceBuy: 0,
-      customizePriceSell: 0,
       customizePriceBuy: -0.25,
       customizePriceSell: 0.25,
     }
@@ -270,6 +268,13 @@ class Component extends React.Component {
     return result;
   }
 
+  resetFormValue = () => {
+    const { rfChange, clearFields } = this.props;
+    rfChange(nameFormExchangeCreate, 'customizePriceBuy', -0.25);
+    rfChange(nameFormExchangeCreate, 'customizePriceSell', 0.25);
+    clearFields(nameFormExchangeCreate, false, false, 'amountBuy', 'amountSell');
+  }
+
   handleSubmit = async (values) => {
     const { intl, authProfile, ipInfo } = this.props;
     const { lat, lng } = this.state;
@@ -294,7 +299,7 @@ class Component extends React.Component {
       return;
     }
 
-    const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
+    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
 
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
@@ -306,7 +311,7 @@ class Component extends React.Component {
       buy_amount: amountBuy && amountBuy.toString() || "0",
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
-      reward_address: rewardWallet.address,
+      // reward_address: rewardWallet.address,
     };
 
     const offer = {
@@ -437,6 +442,8 @@ class Component extends React.Component {
 
       }
     });
+
+    this.resetFormValue();
 
     let haveOfferETH = offer.itemFlags.ETH;
     let haveOfferBTC = offer.itemFlags.BTC;
@@ -707,6 +714,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   showAlert: bindActionCreators(showAlert, dispatch),
   rfChange: bindActionCreators(change, dispatch),
+  clearFields: bindActionCreators(clearFields, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
   authUpdate: bindActionCreators(authUpdate, dispatch),
