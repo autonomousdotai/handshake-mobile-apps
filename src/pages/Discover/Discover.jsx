@@ -392,9 +392,9 @@ class DiscoverPage extends React.Component {
             )
           }
           <Row>
-            {this.state.isBannedChecked && handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && this.getHandshakeList()}
+            {this.state.isBannedChecked && [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
             {
-              this.state.isBannedChecked && handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.isBannedCash
+              this.state.isBannedChecked && [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
               ? (
                 <BlockCountry />
               )

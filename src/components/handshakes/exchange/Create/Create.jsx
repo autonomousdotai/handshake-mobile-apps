@@ -645,6 +645,7 @@ class Component extends React.Component {
                         name="phone"
                         className="form-control-custom form-control-custom-ex w-100 input-no-border"
                         component={fieldPhoneInput}
+                        color={textColor}
                         type="tel"
                         placeholder="4995926433"
                         // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
