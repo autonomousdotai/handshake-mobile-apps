@@ -98,7 +98,7 @@ class BettingFilter extends React.Component {
         this.setState({ errorMessage: `Can't load matches`, isError: true });
       },
     });
-    this.checkShowFreeBanner();
+    //this.checkShowFreeBanner();
   }
 
   componentWillReceiveProps(nextProps) {

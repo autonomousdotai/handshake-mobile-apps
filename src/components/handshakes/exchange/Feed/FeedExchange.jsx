@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // style
+import '../styles.scss';
 import './FeedExchange.scss';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import Button from '@/components/core/controls/Button/Button';
@@ -332,7 +333,8 @@ class FeedExchange extends React.PureComponent {
     return '';
   }
 
-  handleChat = () => {
+  handleChat = (e) => {
+    e.stopPropagation();
     const { chatUsername } = this.offer;
     this.props.history.push(`${URL.HANDSHAKE_CHAT}/${chatUsername}`);
   }
@@ -382,17 +384,18 @@ class FeedExchange extends React.PureComponent {
 
     return (
       <div>
-        <div className="feed-exchange">
+        <div className="feed-exchange" onClick={this.handleOnShake}>
           <div>
             <div className="coins-wrapper">
               {
                 coins.map((coin, index) => {
-                  const { priceBuy, priceSell, color, icon } = coin
+                  const { name, priceBuy, priceSell, color, icon } = coin
                   return (
                     <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
-                      <div className="icon-coin"><img src={icon}/></div>
-                      <div className="price"><label><FormattedMessage id="ex.discover.label.priceBuy" /></label>&nbsp;<span>{priceBuy} {currency}</span></div>
-                      <div className="price"><label><FormattedMessage id="ex.discover.label.priceSell" /></label>&nbsp;<span>{priceSell} {currency}</span></div>
+                      {/*<div className="icon-coin"><img src={icon}/></div>*/}
+                      <div className="name mb-1">{name}</div>
+                      <div className="price-wrapper"><label><FormattedMessage id="ex.discover.label.priceBuy" /></label>&nbsp;<span className="price">{priceBuy} {currency}</span></div>
+                      <div className="price-wrapper"><label><FormattedMessage id="ex.discover.label.priceSell" /></label>&nbsp;<span className="price">{priceSell} {currency}</span></div>
                     </span>
                   )
                 })
@@ -412,7 +415,7 @@ class FeedExchange extends React.PureComponent {
             </div>
           </div>
         </div>
-        <Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>
+        {/*<Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>*/}
 
         <div className="ex-sticky-note">
           <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>

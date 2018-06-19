@@ -337,7 +337,10 @@ class DiscoverPage extends React.Component {
               <SearchBar onSuggestionSelected={() => {}} onInputSearchChange={this.searchChange} />
             </Col>
           </Row> */}
-          <Row className="category-wrapper" style={{ marginBottom: handshakeIdActive === HANDSHAKE_ID.EXCHANGE ? '0px' : '' }}>
+          <Row
+            className="category-wrapper"
+            // style={{ marginBottom: handshakeIdActive === HANDSHAKE_ID.EXCHANGE ? '0px' : '' }}
+          >
             <Col className="col-9">
               <Category
                 idActive={handshakeIdActive}

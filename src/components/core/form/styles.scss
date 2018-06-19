@@ -75,11 +75,19 @@
       &:checked ~ button {
         color: #ffffff;
         box-shadow: none;
-        background: #0E1011;
+        border: 2px solid #3fe298;
+        //background: #0E1011;
+
+        //background: rgba(216,216,216,0.14);
+
       }
       & ~ button {
+
+        /* Rectangle 21 Copy 4: */
+        background: rgba(216,216,216,0.14);
+
         padding: 10px 0;
-        background: #5a626a;
+        //background: #5a626a;
         color: #b9b9be;
         width: 100%;
         border-radius: 0;
@@ -88,6 +96,12 @@
         font-size: 14px;
         letter-spacing: 0;
       }
+    }
+    &:first-of-type {
+      padding-right: 8px;
+    }
+    &:not(:first-of-type) {
+      padding-left: 8px;
     }
   }
 

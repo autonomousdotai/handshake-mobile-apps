@@ -7,12 +7,23 @@
     letter-spacing: 0;
     line-height: 22px;
   }
+  .input-group-shake-detail {
+    width: 45%;
+    display: table-cell;
+    position: relative;
+  }
+  .approximate-icon {
+    width: 10%;
+    display: table-cell;
+    color: #ffffff;
+    text-align: center;
+  }
   .input {
+    background: rgba(216,216,216,0.14);
+    border: 2px solid rgba(255,255,255,0.15);
     //color: #c5c4c9;
     width: 100%;
     padding: 2px 50px 2px 10px;
-    background: #5a626a;
-    border: 2px solid #6f767d;
     outline: none;
     line-height: 34px;
     -webkit-appearance: none;
@@ -21,7 +32,7 @@
 
     font-weight: 500;
     font-size: 16px;
-    color: #C8C7CC;
+    color: #ffffff;
     letter-spacing: 0;
   }
   .append-text {
@@ -43,5 +54,11 @@
     font-size: 14px;
     color: #FFFFFF;
     letter-spacing: 0;
+  }
+  .btn-shake-detail {
+    span {
+      margin: 0;
+      vertical-align: unset;
+    }
   }
 }
