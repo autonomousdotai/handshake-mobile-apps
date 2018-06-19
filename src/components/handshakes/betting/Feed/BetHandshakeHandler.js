@@ -2,6 +2,7 @@ import { MasterWallet } from '@/models/MasterWallet';
 import { BettingHandshake } from '@/services/neuron';
 import { API_URL, APP } from '@/constants';
 import {showAlert} from '@/reducers/app/action';
+
 import GA from '@/services/googleAnalytics';
 
 import local from '@/services/localStore';
@@ -106,6 +107,7 @@ export const BETTING_STATUS_LABEL =
       REFUNDING: 'Your coin is being refunded to you.',
       REFUNDED: 'Your coin has been refunded.',
       ROLLBACK: `Something did not go according to plan. We're fixing it`,
+
     };
 
 export const CONTRACT_METHOD = {
