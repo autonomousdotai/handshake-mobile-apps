@@ -52,7 +52,7 @@ import {
 // import getSymbolFromCurrency from 'currency-symbol-map';
 import Offer from "@/models/Offer";
 import {MasterWallet} from "@/models/MasterWallet";
-import {formatAmountCurrency, formatMoney, getHandshakeUserType, getOfferPrice} from "@/services/offer-util";
+import {formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
 import {Link} from "react-router-dom";
 import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from '../utils'
@@ -132,14 +132,13 @@ class FeedMe extends React.PureComponent {
   }
 
   checkMainNetDefaultWallet = (wallet) => {
-    const { intl } = this.props;
     let result = true;
 
     if (process.env.isProduction && !process.env.isStaging) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {
-        const message = intl.formatMessage({ id: 'requireDefaultWalletOnMainNet' }, {});
+        const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
         this.showAlert(message);
         result = false;
       }
@@ -156,14 +155,13 @@ class FeedMe extends React.PureComponent {
     const condition = bnBalance.isLessThan(bnAmount.plus(bnFee));
 
     if (condition) {
-      const { intl } = this.props;
       this.props.showAlert({
         message: <div className="text-center">
-          {intl.formatMessage({ id: 'notEnoughCoinInWallet' }, {
+          <FormattedMessage id="notEnoughCoinInWallet" values={ {
             amount: formatAmountCurrency(balance),
             fee: formatAmountCurrency(fee),
             currency: currency,
-          })}
+          } }/>
         </div>,
         timeOut: 3000,
         type: 'danger',
@@ -213,7 +211,7 @@ class FeedMe extends React.PureComponent {
   ////////////////////////
 
   getFromExchange = () => {
-    const {intl, status} = this.props;
+    const {status} = this.props;
 
     let from = '';
     switch (status) {
@@ -259,7 +257,7 @@ class FeedMe extends React.PureComponent {
   }
 
   getContentExchange(fiatAmount) {
-    const {intl, status} = this.props;
+    const {status} = this.props;
     console.log('thisss', this.offer)
     const { offer } = this;
     let message = '';
@@ -289,16 +287,18 @@ class FeedMe extends React.PureComponent {
         }
 
         // offerType = EXCHANGE_ACTION_PAST_NAME[offer.type];
-        message = intl.formatMessage({ id: 'offerHandShakeExchangeContentMeDone' }, {
-          offerType: offerType,
-          something: offer.physicalItem,
-          amount: formatAmountCurrency(offer.amount),
-          currency: offer.currency,
-          currency_symbol: offer.fiatCurrency,
-          total: formatMoney(fiatAmount),
-          fee: offer.feePercentage,
-          payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
-        });
+        message = <FormattedMessage id="offerHandShakeExchangeContentMeDone"
+                                    values={ {
+                                      offerType: offerType,
+                                      something: offer.physicalItem,
+                                      amount: formatAmountCurrency(offer.amount),
+                                      currency: offer.currency,
+                                      currency_symbol: offer.fiatCurrency,
+                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
+                                      fee: offer.feePercentage,
+                                      payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
+                                    } } />;
+
         break;
       }
       default: {
@@ -317,16 +317,19 @@ class FeedMe extends React.PureComponent {
             break;
           }
         }
-        message = intl.formatMessage({ id: 'offerHandShakeExchangeContentMe' }, {
-          offerType: offerType,
-          something: offer.physicalItem,
-          amount: formatAmountCurrency(offer.amount),
-          currency: offer.currency,
-          currency_symbol: offer.fiatCurrency,
-          total: formatMoney(fiatAmount),
-          fee: offer.feePercentage,
-          payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
-        });
+
+        message = <FormattedMessage id="offerHandShakeExchangeContentMe"
+                                    values={ {
+                                      offerType: offerType,
+                                      something: offer.physicalItem,
+                                      amount: formatAmountCurrency(offer.amount),
+                                      currency: offer.currency,
+                                      currency_symbol: offer.fiatCurrency,
+                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
+                                      fee: offer.feePercentage,
+                                      payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
+                                    } } />;
+
         break;
       }
     }
@@ -335,7 +338,7 @@ class FeedMe extends React.PureComponent {
   }
 
   getActionButtonsExchange = () => {
-    const {intl, status} = this.props;
+    const {status} = this.props;
     const offer = this.offer;
     const fiatAmount = this.fiatAmount;
     let actionButtons = null;
@@ -345,14 +348,14 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_USER.NORMAL: {
         switch (status) {
           case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            message = intl.formatMessage({id: 'handshakeOfferConfirm'}, {
-              type: offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL] : EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
-              amount: formatAmountCurrency(offer.amount),
-              currency: offer.currency,
-              currency_symbol: offer.fiatCurrency,
-              total: formatMoney(fiatAmount),
-            });
-
+            message = <FormattedMessage id="handshakeOfferConfirm"
+                                        values={ {
+                                          type: offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL] : EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
+                                          amount: formatAmountCurrency(offer.amount),
+                                          currency: offer.currency,
+                                          currency_symbol: offer.fiatCurrency,
+                                          total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
+                                        } } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}><FormattedMessage id="btn.shake"/></Button>
@@ -369,8 +372,8 @@ class FeedMe extends React.PureComponent {
             break;
           }
           case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
-            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
+            message = <FormattedMessage id="rejectOfferConfirm" values={ {} } />;
+            let message2 = <FormattedMessage id="completeOfferConfirm" values={ {} } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject"/></Button>
@@ -384,7 +387,7 @@ class FeedMe extends React.PureComponent {
           }
           case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
             if (offer.type === EXCHANGE_ACTION.SELL) {
-              message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
+              message = <FormattedMessage id="withdrawOfferConfirm" values={ {} } />;
               actionButtons = (
                 <div>
                   <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}><FormattedMessage id="btn.withdraw"/></Button>
@@ -405,7 +408,7 @@ class FeedMe extends React.PureComponent {
             break;
           }
           case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
+            message = <FormattedMessage id="cancelOfferConfirm" values={ {} } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}><FormattedMessage id="btn.cancel"/></Button>
@@ -420,8 +423,8 @@ class FeedMe extends React.PureComponent {
             break;
           }
           case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
-            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
+            message = <FormattedMessage id="rejectOfferConfirm" values={ {} } />;
+            let message2 = <FormattedMessage id="completeOfferConfirm" values={ {} } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject"/></Button>
@@ -434,7 +437,7 @@ class FeedMe extends React.PureComponent {
           }
           case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
             if (offer.type === EXCHANGE_ACTION.BUY) {
-              message = intl.formatMessage({id: 'withdrawOfferConfirm'}, {});
+              message = <FormattedMessage id="withdrawOfferConfirm" values={ {} } />;
               actionButtons = (
                 <div>
                   <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}><FormattedMessage id="btn.withdraw"/></Button>
@@ -456,7 +459,7 @@ class FeedMe extends React.PureComponent {
 
   ////////////////////////
   handleShakeOfferExchange = async () => {
-    const { intl, authProfile } = this.props;
+    const { authProfile } = this.props;
     const offer = this.offer;
     const fiatAmount = this.fiatAmount;
 
@@ -803,7 +806,7 @@ class FeedMe extends React.PureComponent {
   }
 
   getContentOfferStore = () => {
-    const {intl, status} = this.props;
+    const {status} = this.props;
     const { offer } = this;
     const { buyAmount, sellAmount, currency, buyPercentage, sellPercentage } = offer;
     let message = '';
@@ -814,17 +817,17 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
-        message = intl.formatMessage({id: 'offerStoreHandShakeContent'}, {
-          offerTypeBuy: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
-          offerTypeSell: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL],
-          amountBuy: offer.buyAmount,
-          amountSell: offer.sellAmount,
-          currency: offer.currency,
-          fiatAmountCurrency: offer.fiatCurrency,
-          fiatAmountBuy: formatMoney(fiatAmountBuy),
-          fiatAmountSell: formatMoney(fiatAmountSell),
-        });
-
+        message = <FormattedMessage id="offerStoreHandShakeContent"
+                                    values={ {
+                                      offerTypeBuy: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
+                                      offerTypeSell: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL],
+                                      amountBuy: offer.buyAmount,
+                                      amountSell: offer.sellAmount,
+                                      currency: offer.currency,
+                                      fiatAmountCurrency: offer.fiatCurrency,
+                                      fiatAmountBuy: formatMoneyByLocale(fiatAmountBuy,offer.fiatCurrency),
+                                      fiatAmountSell: formatMoneyByLocale(fiatAmountSell,offer.fiatCurrency),
+                                    } } />;
         break;
       }
     }
@@ -833,14 +836,13 @@ class FeedMe extends React.PureComponent {
   }
 
   getActionButtonsOfferStore = () => {
-    const {intl} = this.props;
     const { offer } = this;
     let status = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[offer.status];
     let actionButtons = null;
 
     switch (status) {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE: {
-        let message = intl.formatMessage({id: 'closeOfferConfirm'}, {});
+        let message = <FormattedMessage id="closeOfferConfirm" values={ { } } />;
         actionButtons = (
           <div>
             <Button block className="mt-2"
@@ -887,7 +889,7 @@ class FeedMe extends React.PureComponent {
   }
 
   handleDeleteOfferItemSuccess = async (responseData) => {
-    const { intl, refreshPage } = this.props;
+    const { refreshPage } = this.props;
     const { data } = responseData;
     const { offer } = this;
     const { currency, sellAmount } = offer;
@@ -916,8 +918,7 @@ class FeedMe extends React.PureComponent {
     }
 
     this.hideLoading();
-    const message = intl.formatMessage({ id: 'deleteOfferItemSuccessMassage' }, {
-    });
+    const message = <FormattedMessage id="deleteOfferItemSuccessMassage" values={ { } } />;
 
     this.props.showAlert({
       message: <div className="text-center">{message}</div>,
@@ -962,7 +963,7 @@ class FeedMe extends React.PureComponent {
   }
 
   getContent = (fiatAmount) => {
-    const {intl, status} = this.props;
+    const {status} = this.props;
     const { offer } = this;
     let offerType = '';
 
@@ -1041,22 +1042,22 @@ class FeedMe extends React.PureComponent {
 
     let  message = '';
     if (idMessage) {
-      message = intl.formatMessage({ id: idMessage }, {
+      message = <FormattedMessage id={idMessage} values={ {
         offerType: offerType,
         amount: formatAmountCurrency(offer.amount),
         currency: offer.currency,
         currency_symbol: offer.fiatCurrency,
-        total: formatMoney(fiatAmount),
+        total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
         // fee: offer.feePercentage,
         payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
-      });
+        } } />;
     }
 
     return message;
   }
 
   getActionButtons = () => {
-    const {intl, status} = this.props;
+    const {status} = this.props;
     const offer = this.offer;
     let actionButtons = null;
     let message = '';
@@ -1068,7 +1069,7 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_USER.OWNER: {
         switch (status) {
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE: {
-            message = intl.formatMessage({id: 'acceptOfferConfirm'}, {});
+            message = <FormattedMessage id="acceptOfferConfirm" values={ { } } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2"
@@ -1079,8 +1080,8 @@ class FeedMe extends React.PureComponent {
           }
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE: {
             // actionButtons = 'Reject'; // complete: nguoi nhan cash
-            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
-            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
+            message = <FormattedMessage id="rejectOfferConfirm" values={ { } } />;
+            let message2 = <FormattedMessage id="completeOfferConfirm" values={ { } } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2"
@@ -1099,7 +1100,7 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_USER.SHAKED: {
         switch (status) {
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE: {
-            let message = intl.formatMessage({id: 'cancelOfferConfirm'}, {});
+            message = <FormattedMessage id="cancelOfferConfirm" values={ { } } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2"
@@ -1110,8 +1111,8 @@ class FeedMe extends React.PureComponent {
           }
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE: {
             // actionButtons = 'Reject'; // complete: nguoi nhan cash
-            message = intl.formatMessage({id: 'rejectOfferConfirm'}, {});
-            let message2 = intl.formatMessage({id: 'completeOfferConfirm'}, {});
+            message = <FormattedMessage id="rejectOfferConfirm" values={ { } } />;
+            let message2 = <FormattedMessage id="completeOfferConfirm" values={ { } } />;
             actionButtons = (
               <div>
                 <Button block className="mt-2"
@@ -1515,7 +1516,7 @@ class FeedMe extends React.PureComponent {
   }
 
   getMessageMovingCoin = () => {
-    const { intl, status } = this.props;
+    const { status } = this.props;
     const { offer } = this;
 
     let idMessage = '';
@@ -1709,15 +1710,14 @@ class FeedMe extends React.PureComponent {
 
     let message = '';
     if (idMessage) {
-      message = intl.formatMessage({ id: idMessage }, {
-      });
+      message = <FormattedMessage id={idMessage} values={ {} } />;
     }
 
     return message;
   }
 
   render() {
-    const {intl, initUserId, shakeUserIds, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, review, reviewCount, ...props} = this.props;
+    const {initUserId, shakeUserIds, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, review, reviewCount, ...props} = this.props;
     const offer = this.offer;
     // console.log('render',offer);
     const {listOfferPrice} = this.props;
@@ -1749,15 +1749,15 @@ class FeedMe extends React.PureComponent {
 
         let fiatAmount = this.calculateFiatAmount(offer);
 
-        message = intl.formatMessage({ id: 'instantOfferHandShakeContent' }, {
+        message = <FormattedMessage id="instantOfferHandShakeContent" values={ {
           just: just,
           offerType: 'bought',
           amount: formatAmountCurrency(offer.amount),
           currency: offer.currency,
           currency_symbol: offer.fiatCurrency,
-          total: formatMoney(fiatAmount),
+          total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
           fee: offer.feePercentage,
-        });
+        } }/>;
 
         actionButtons = null;
         break;

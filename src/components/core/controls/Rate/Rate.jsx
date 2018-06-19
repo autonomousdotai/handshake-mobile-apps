@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { connect } from 'react-redux';
 // component
-
+import Button from '@/components/core/controls/Button/Button';
 // style
 import './Rate.scss';
 const LENGTH = 5;
@@ -39,14 +38,19 @@ class Rate extends React.PureComponent {
   }
 
   render() {
-    const { className } = this.props;
+    const { className, onSubmit, title, description } = this.props;
     return (
       <div className={`modal rate ${className || ''}`} ref={rating => this.ratingRef = rating}>
-        {
-          Array.apply(null, { length: this.starNum }).map((star, index) => (
-            <span key={index} onClick={() => this.ratingClick(index)}>☆</span>
-          ))
-        }
+        <p className="title">{title}</p>
+        <p className="description">{description}</p>
+        <div className="star-block">
+          {
+            Array.apply(null, { length: this.starNum }).map((star, index) => (
+              <span key={index} onClick={() => this.ratingClick(index)}>☆</span>
+            ))
+          }
+        </div>
+        <Button block onClick={onSubmit}>Submit</Button>
       </div>
     );
   }
@@ -55,8 +59,16 @@ class Rate extends React.PureComponent {
 Rate.propTypes = {
   className: PropTypes.string,
   ratingOnClick: PropTypes.func,
+  onSubmit: PropTypes.func,
   starNum: PropTypes.number,
   onRef: PropTypes.func,
+  title: PropTypes.string,
+  description: PropTypes.string,
+};
+
+Rate.defaultProps = {
+  title: 'Thank you!',
+  description: 'Rate your trade with ICO shop',
 };
 
 export default Rate;
