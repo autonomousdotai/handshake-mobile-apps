@@ -1155,7 +1155,8 @@ class FeedMe extends React.PureComponent {
   }
 
   getChatUserName = () => {
-    const { offer } = this;
+    const { initUserId, shakeUserIds, } = this.props;
+
     let chatUserName = '';
 
     switch (this.userType) {
@@ -1163,11 +1164,11 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case HANDSHAKE_USER.SHAKED: {
-        chatUserName = offer?.chatUsername;
+        chatUserName = initUserId;
         break;
       }
       case HANDSHAKE_USER.OWNER: {
-        chatUserName = offer?.toChatUsername;
+        chatUserName = shakeUserIds[0];
         break;
       }
     }
