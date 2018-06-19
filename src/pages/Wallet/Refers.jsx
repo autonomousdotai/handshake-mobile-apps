@@ -70,7 +70,7 @@ class Refers extends React.Component {
   }
 
   showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
+    this.showAlert(mst, 'primary', 3000);
   }
   showError(mst) {
     this.showAlert(mst, 'danger', 4000);
@@ -267,54 +267,41 @@ class Refers extends React.Component {
     });
   }
 
-  getTwitter1(){
-    const url = "http://www.mykenty.com/ninja/"+this.state.step2_value;
-    return new Promise((resolve, reject) => {
-      axios({
-        url: url,
-        method: 'get'
-      })
-      .then(response => {
-          if(response.data && response.data.id){
-            resolve(true);
-          }
-          else{
-            resolve(false);
-          }
-
-        })
-      .catch((error) => {
-          console.log(error);
-          resolve(false);
-      });
-    });
-  }
-
   updateTelegramUsernameValue = (evt) => {
     this.setState({
-      step1_value: evt.target.value,
+      step1_value: evt.target.value.trim(),
     });
   }
 
   updateEmailValue= (evt) => {
     this.setState({
-      step3_value: evt.target.value,
+      step3_value: evt.target.value.trim(),
     });
   }
 
   updateTwitterUsernameValue = (evt) => {
     this.setState({
-      step2_value: evt.target.value,
+      step2_value: evt.target.value.trim(),
     });
   }
 
+  resetStep3 = () => {
+    this.props.clearFields(nameFormStep3, false, false, "refer_email");
+    let refers = local.get(APP.REFERS);
+    if(!refers) refers = {};
+
+    this.setState({step3_value: "", step3:0});
+    refers.step3 = 0;
+    refers.step3_value = "";
+    local.save(APP.REFERS, refers);
+  }
 
 renderStep1 = () => (
-  !(this.state.step1 && this.state.step2 && this.state.step3 > 1 )?  
+  !(this.state.end) ?
   <Step1Form onSubmit={this.submitStep1} className="refers-wrapper">
     <h6><a href="https://t.me/ninja_org" target="_blank">Insult us on telegram</a>. Be creative. There’s a leaderboard.</h6>
     <div className="col2">
-      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "done" : "bite me"}</Button>
+      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "verified" : "verify"}</Button>
     </div>
     <div className="col1">
       <Field
@@ -334,11 +321,11 @@ renderStep1 = () => (
 )
 
 renderStep2= () => (
-  !(this.state.step1 && this.state.step2 && this.state.step3 > 1 )?
+  !(this.state.end) ?
   <Step2Form onSubmit={this.submitStep2} className="refers-wrapper">
     <h6>Our social media guy says we need followers on <a href="https://twitter.com/ninja_org" target="_blank">twitter</a>.</h6>
     <div className="col2">
-        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "done" : "bite me"}</Button>
+        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "verified" : "verify"}</Button>
     </div>
     <div className="col1">
       <Field
@@ -358,15 +345,15 @@ renderStep2= () => (
 )
 
 renderStep3= () => (
-  !(this.state.step1 && this.state.step2 && this.state.step3 > 1 )?
+  !(this.state.end) ?
   <Step3Form onSubmit={this.submitStep3} className="refers-wrapper">
     <h6>Receive your randomly generated ninja name.</h6>
     <div className="col2"> {this.renderStep3_labelButton()}</div>
     <div className="col1">
       <Field
           name="refer_email"
-          type="text"
-          className="form-control"
+          type="email"
+          className="form-control padding-right-10"
           placeholder="your favourite fake email"
           component={fieldInput}
           value={this.state.step3_value}
@@ -375,6 +362,12 @@ renderStep3= () => (
           disabled={this.state.step3 && this.state.step3 > 1}
       />
     </div>
+    {
+      this.state.step3 == 1 ?
+      <div className="col100 dev-has-icon">
+        <a className="reset-link" onClick={() => {this.resetStep3()}}>✕</a>
+      </div> : ""
+    }
     {
       this.state.step1 && this.state.step2 && this.state.step3 > 1 && !this.state.end ?
       <div className="col100 token">
@@ -428,14 +421,14 @@ renderStep3_labelButton= () => {
     case 1:
       return <Button isLoading={this.state.isLoading} block type="submit">confirm</Button>
     case 2:
-      return <Button isLoading={this.state.isLoading} block disabled type="submit">done</Button>
+      return <Button isLoading={this.state.isLoading} block disabled type="submit">verified</Button>
     default:
-      return <Button isLoading={this.state.isLoading} block type="submit">bite me</Button>
+      return <Button isLoading={this.state.isLoading} block type="submit">verify</Button>
   }
 }
 
 renderLinkRefer = () => (
-  (this.state.step1 && this.state.step2 && this.state.step3 > 1 )?
+  (this.state.end) ?
   <Step4Form className="refers-wrapper refers-wrapper-border">
     <h6>This is your super sexy referral link. You get 20 shurikens for every new ninja.</h6>
     <div className="col100">
@@ -444,7 +437,7 @@ renderLinkRefer = () => (
             type="text"
             className="form-control"
             placeholder=""
-            component={fieldInput}            
+            component={fieldInput}
             validate={[required]}
             onFocus={() => { Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
         />

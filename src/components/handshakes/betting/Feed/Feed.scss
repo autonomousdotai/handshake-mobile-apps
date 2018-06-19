@@ -1,82 +1,94 @@
 @import "./src/styles/style";
 
-.wrapperBettingFeed {
-  margin-top: rem-calc(10px);
-  padding: rem-calc(20px) !important;
+.wrapperBettingFeedMe {
+  padding: rem-calc(0) !important;
   margin-bottom: rem-calc(16px);
-  background-color: transparent;
-  .description {
-    font-size: rem-calc(22px);
-    color: #ffffff;
-    letter-spacing: 0;
-    line-height: rem-calc(36px);
-    font-weight: $heavy;
-    margin-bottom: rem-calc(10px);
-    .eventInfo,
-    .odds {
+  background: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(201, 201, 201, 0.50);
+  border-radius: 6px;
+  .eventName {
+    font-size: rem-calc(16px);
+    color: #FFFFFF;
+    letter-spacing: rem-calc(0.29px);
+    font-weight: $normal;
+    padding: rem-calc(12px 15px);
+    border-radius: 6px 6px 0 0;
+  }
+  .predictName {
+    font-size: rem-calc(16px);
+    font-weight: $bold;
+    color: #000;
+    letter-spacing: rem-calc(0.29px);
+    margin: rem-calc(18px 15px 19px);
+  }
+  .support {
+    color: $caribbean-green !important;
+  }
+  .oppose {
+    color: $radical-red !important;
+  }
+  .bettingInfo {
+    display: flex;
+    justify-content: space-between;
+    padding: rem-calc(0 15px 24px);
+    .description {
+      opacity: 0.3;
+      font-size: rem-calc(14px);
+      color: #000000;
+      letter-spacing: rem-calc(0.25px);
+      font-weight: $normal;
+      margin-bottom: rem-calc(12px);
+    }
+    .value {
       font-size: rem-calc(16px);
-    }
-    p {
-      margin-bottom: 0;
-    }
-    .eventInfo {
+      color: #000000;
+      letter-spacing: rem-calc(0.29px);
       font-weight: $normal;
     }
-    .eventName {
-      margin-bottom: rem-calc(5px);
-      line-height: rem-calc(30px);
-      .matchDate {
-        font-weight: $light;
-        font-size: rem-calc(20px);
+    @media (max-width: 320px) {
+      .description {
+        font-size: rem-calc(10px);
+      }
+      .value {
+        font-size: rem-calc(12px);
       }
     }
   }
-
-  .line {
-    opacity: 0.3;
-    border-bottom: 1px solid #ffffff;
-  }
-  .bottomWrapper {
+  .bottomDiv {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    margin-top: rem-calc(-16px);
-    margin-bottom: rem-calc(10px);
-    font-weight: $normal;
-    .odds {
-      color: #ffffff;
-      margin-right: 20px;
-      font-size: rem-calc(16px);
+    padding: rem-calc(0 15px 15px);
+    .statusBetting {
+      font-size: rem-calc(14px);
+      letter-spacing: rem-calc(0.25px);
+      font-weight: $normal;
+      color: #8a8a8f;
+      font-style: italic;
     }
-    img {
-      margin-bottom: rem-calc(11px);
+    button {
+      width: rem-calc(123px);
+      padding: rem-calc(10px);
+      font-size: rem-calc(14px);
+      letter-spacing: rem-calc(0.25px);
+      border-radius: rem-calc(6px);
+      font-weight: $bold;
+      border: none;
+      color: #fff;
+      background: #000000;
     }
-    .item {
-      display: flex;
+    .cancel {
+      background: #000000;
     }
-    .content {
-      font-size: rem-calc(16px);
-      color: #ffffff;
-      letter-spacing: 0;
-      align-items: center;
-      justify-content: space-between;
-      margin-right: 20px;
-      span {
-        opacity: 0.8;
-      }
+    .withdraw {
+      background: #3DD757;
     }
-  }
-  .possibleWin {
-    font-size: rem-calc(16px);
-    font-weight: $semi-bold;
-    color: #ffffff;
-    margin-bottom: rem-calc(24px);
-  }
+    .refund {
 
-  .email {
-    margin: 0;
-    color: $white;
-    letter-spacing: 0;
-    text-align: left;
+    }
   }
+}
+
+.feed-wrapper + .feed-wrapper {
+  margin-top: rem-calc(30px) !important;
 }

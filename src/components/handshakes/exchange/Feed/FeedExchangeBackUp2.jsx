@@ -1,14 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
+import iconEthereum from '@/assets/images/icon/coin/eth.svg';
+import iconLocation from '@/assets/images/icon/icons8-marker.svg';
+import iconOk from '@/assets/images/icon/icons8-ok.svg';
+import iconCancel from '@/assets/images/icon/icons8-cancel.svg';
 // style
 import './FeedExchange.scss';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
+import Feed from '@/components/core/presentation/Feed/Feed';
 import Button from '@/components/core/controls/Button/Button';
 import {
   API_URL,
   APP_USER_NAME,
   CRYPTO_CURRENCY,
-  CRYPTO_CURRENCY_NAME,
   DEFAULT_FEE,
   EXCHANGE_ACTION,
   EXCHANGE_ACTION_NAME,
@@ -20,7 +25,6 @@ import {
   HANDSHAKE_EXCHANGE_CC_STATUS_NAME,
   HANDSHAKE_EXCHANGE_STATUS,
   HANDSHAKE_EXCHANGE_STATUS_NAME,
-  HANDSHAKE_ID,
   HANDSHAKE_STATUS_NAME,
   HANDSHAKE_USER,
   URL,
@@ -36,31 +40,19 @@ import {
   shakeOfferItem,
   withdrawShakedOffer,
 } from '@/reducers/exchange/action';
-import {Ethereum} from '@/models/Ethereum.js';
-import {Bitcoin} from '@/models/Bitcoin';
+import { Ethereum } from '@/models/Ethereum.js';
+import { Bitcoin } from '@/models/Bitcoin';
 import Offer from '@/models/Offer';
 import {MasterWallet} from '@/models/MasterWallet';
-import {formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice} from '@/services/offer-util';
+import {formatAmountCurrency, formatMoney, getHandshakeUserType, getOfferPrice} from '@/services/offer-util';
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
-import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from "../utils";
+import { getDistanceFromLatLonInKm, getErrorMessageFromCode } from "../utils";
 import {ExchangeHandshake, ExchangeShopHandshake} from '@/services/neuron';
 import {feedBackgroundColors} from '@/components/handshakes/exchange/config';
 import {updateOfferStatus} from '@/reducers/discover/action';
 import OfferShop from '@/models/OfferShop';
 import {getLocalizedDistance} from "@/services/util";
 import {BigNumber} from "bignumber.js";
-import StarsRating from "@/components/core/presentation/StarsRating";
-import Rate from '@/components/core/controls/Rate';
-
-import iconChat from '@/assets/images/icon/chat-icon.svg';
-import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
-import iconEth from '@/assets/images/icon/coin/icon-eth.svg';
-import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
-import iconEthereum from '@/assets/images/icon/coin/eth.svg';
-
-import {nameFormShakeDetail} from '@/components/handshakes/exchange/components/ShakeDetail';
-import {change} from "redux-form";
-import {bindActionCreators} from "redux";
 
 class FeedExchange extends React.PureComponent {
   constructor(props) {
@@ -70,14 +62,10 @@ class FeedExchange extends React.PureComponent {
 
     this.offer = OfferShop.offerShop(JSON.parse(extraData));
 
-    console.log('offer',this.offer);
+    // console.log('offer',this.offer);
 
     this.state = {
       modalContent: '',
-      CRYPTO_CURRENCY_LIST: [
-        { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: false},
-        { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: false},
-      ]
     };
 
     this.mainColor = 'linear-gradient(-180deg, rgba(0,0,0,0.50) 0%, #303030 0%, #000000 100%)';
@@ -92,19 +80,7 @@ class FeedExchange extends React.PureComponent {
   }
 
   handleOnShake = () => {
-    const { offer } = this;
     this.modalRef.open();
-    this.setState({CRYPTO_CURRENCY_LIST: [
-      { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
-      { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
-    ]}, () => {
-      for (let crypto of this.state.CRYPTO_CURRENCY_LIST) {
-        if (!crypto.hide) {
-          this.props.rfChange(nameFormShakeDetail, 'currency', crypto.value);
-          break;
-        }
-      }
-    });
   }
 
   showAlert = (message) => {
@@ -218,12 +194,12 @@ class FeedExchange extends React.PureComponent {
     const { intl } = this.props;
     const { data } = responseData;
     const offerShake = Offer.offer(data);
-    const { currency, type, amount, totalAmount, systemAddress, offChainId } = offerShake;
+    const { currency, type, totalAmount, systemAddress, offChainId } = offerShake;
     const { offer } = this;
 
     if (currency === CRYPTO_CURRENCY.ETH) {
       if (type === EXCHANGE_ACTION.BUY) { // shop buy
-        // const amount = totalAmount;
+        const amount = totalAmount;
 
         const wallet = MasterWallet.getWalletDefault(currency);
         const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
@@ -317,109 +293,83 @@ class FeedExchange extends React.PureComponent {
   }
 
   getNameShopDisplayed = () => {
-    const { username, itemFlags, items } = this.offer;
+    const { username, item_flags, items } = this.offer;
     if (username) { return username; }
-    if (itemFlags.ETH) {
+    if (item_flags.ETH) {
       const wallet = new Ethereum();
-      wallet.address = items.ETH.userAddress;
+      wallet.address = items.ETH.user_address;
       return wallet.getShortAddress();
     }
-    if (itemFlags.BTC) {
+    if (item_flags.BTC) {
       const wallet = new Bitcoin();
-      wallet.address = items.BTC.userAddress;
+      wallet.address = items.BTC.user_address;
       return wallet.getShortAddress();
     }
     return '';
   }
 
-  handleChat = () => {
-    const { chatUsername } = this.offer;
-    this.props.history.push(`${URL.HANDSHAKE_CHAT}/${chatUsername}`);
-  }
-
-  handleCreateExchange = () => {
-    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
-  }
-
-
   render() {
     const { offer } = this;
-    const { review, reviewCount } = this.props;
+    const nameShopDisplayed = this.getNameShopDisplayed();
     const currency = offer.fiatCurrency;
+    const success = offer.transactionCount.success || 0;
+    const failed = offer.transactionCount.failed || 0;
 
-    let coins = [];
+    const distance = this.getOfferDistance();
 
     const {
       priceBuyBTC, priceSellBTC, priceBuyETH, priceSellETH,
     } = this.getPrices();
 
-    if (offer.itemFlags.BTC) {
-      let coin = {};
-
-      coin.name = CRYPTO_CURRENCY.BTC;
-      coin.color = '#FF880E';
-      coin.icon = iconBtc;
-      coin.priceBuy = offer.items.BTC.buyBalance ? formatMoneyByLocale(priceBuyBTC,currency) : '-';
-      coin.priceSell = offer.items.BTC.sellBalance ? formatMoneyByLocale(priceSellBTC,currency) : '-';
-
-      coins.push(coin);
-    }
-
-    if (offer.itemFlags.ETH) {
-      let coin = {};
-
-      coin.name = CRYPTO_CURRENCY.ETH;
-      coin.color = 'linear-gradient(-135deg, #CB75ED 0%, #9E53E1 100%)';
-      coin.icon = iconEth;
-      coin.priceBuy = offer.items.ETH.buyBalance ? formatMoneyByLocale(priceBuyETH,currency) : '-';
-      coin.priceSell = offer.items.ETH.sellBalance ? formatMoneyByLocale(priceSellETH,currency) : '-';
-
-      coins.push(coin);
-    }
-
-    const address = this.getNameShopDisplayed();
-    const distance = this.getOfferDistance();
-
     return (
-      <div>
-        <div className="feed-exchange">
-          <div>
-            <div className="coins-wrapper">
-              {
-                coins.map((coin, index) => {
-                  const { priceBuy, priceSell, color, icon } = coin
-                  return (
-                    <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
-                      <div className="icon-coin"><img src={icon}/></div>
-                      <div className="price"><label><FormattedMessage id="ex.discover.label.priceBuy" /></label>&nbsp;<span>{priceBuy} {currency}</span></div>
-                      <div className="price"><label><FormattedMessage id="ex.discover.label.priceSell" /></label>&nbsp;<span>{priceSell} {currency}</span></div>
-                    </span>
-                  )
-                })
-              }
-            </div>
-            <div className="info-ex">
-              <div>
-                <div className="address">{address}</div>
-                <div className="review"><StarsRating className="d-inline-block" starPoint={review} startNum={5} /> <FormattedMessage id="ex.discover.label.reviews" values={{ reviewCount }} /></div>
-                <div className="distance">{distance}</div>
-              </div>
-              <div className="btn-chat">
-                <button className="btn" onClick={this.handleChat}>
-                  <img src={iconChat} />
-                </button>
-              </div>
-            </div>
+      <div className="feed-exchange">
+        <Feed
+          className="feed"
+          background={this.mainColor}
+        >
+          <div className="name-shop">{nameShopDisplayed}</div>
+          <table className="table-ex mt-2">
+            <thead>
+              <tr>
+                <th></th>
+                <th className="header-text buy-color">Buy rate</th>
+                <th className="header-text sell-color">Sell rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div className="image"><img src={iconBitcoin} /></div></td>
+                <td>
+                  <div className="buy-color price-number mt-1">{formatMoney(priceBuyBTC)}</div>
+                  <div className="currency">{currency}</div>
+                </td>
+                <td>
+                  <div className="sell-color price-number mt-1">{formatMoney(priceSellBTC)}</div>
+                  <div className="currency">{currency}</div>
+                </td>
+              </tr>
+              <tr>
+                <td><div className="image"><img src={iconEthereum} /></div></td>
+                <td>
+                  <div className="buy-color price-number mt-1">{formatMoney(priceBuyETH)}</div>
+                  <div className="currency">{currency}</div>
+                </td>
+                <td>
+                  <div className="sell-color price-number mt-1">{formatMoney(priceSellETH)}</div>
+                  <div className="currency">{currency}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="mt-2">
+            <div className="distance"><img src={iconLocation}/>{distance}</div>
+            <div className="transaction-successful"><img src={iconOk}/> {success} successful</div>
+            <div className="transaction-failed"><img src={iconCancel}/> {failed} failed</div>
           </div>
-        </div>
-        <Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>
-
-        <div className="ex-sticky-note">
-          <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
-          <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
-        </div>
+        </Feed>
+        <Button block className="mt-2" onClick={this.handleOnShake}>Shake</Button>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
-          <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
+          <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} />
         </ModalDialog>
       </div>
     );
@@ -438,12 +388,11 @@ const mapState = state => ({
   authProfile: state.auth.profile,
 });
 
-const mapDispatch = (dispatch) => ({
-  shakeOfferItem: bindActionCreators(shakeOfferItem, dispatch),
-  showAlert: bindActionCreators(showAlert, dispatch),
-  showLoading: bindActionCreators(showLoading, dispatch),
-  hideLoading: bindActionCreators(hideLoading, dispatch),
-  rfChange: bindActionCreators(change, dispatch),
+const mapDispatch = ({
+  shakeOfferItem,
+  showAlert,
+  showLoading,
+  hideLoading,
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedExchange));

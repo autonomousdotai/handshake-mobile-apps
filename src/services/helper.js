@@ -82,6 +82,15 @@ class Helper {
     return assoc;
   }
 
+  /**
+   * @static
+   * @param {*} number
+   * @returns Bool
+   * @memberof Helper
+   */
+  static isFloat(number) {
+    return Number(number) === number && number % 1 !== 0;
+  }
 }
 
 export class StringHelper {

@@ -1,3 +1,6 @@
+import React from 'react';
+import {FormattedMessage} from 'react-intl';
+
 export const APP = {
   HEADER_DEFAULT: 'Handshake',
   // store
@@ -38,7 +41,7 @@ export const HANDSHAKE_NAME = {
   [HANDSHAKE_ID.WALLET_TRANSFER]: { name: 'Transfer coins', priority: 4 },
   [HANDSHAKE_ID.WALLET_RECEIVE]: { name: 'Receive coins', priority: 5 },
   [HANDSHAKE_ID.EXCHANGE]: { name: 'Manage your station', priority: 6 },
-  // [HANDSHAKE_ID.EXCHANGE_LOCAL]: { name: 'Exchange Local', priority: 7 },
+  // [HANDSHAKE_ID.EXCHANGE_LOCAL]: { name: 'Make swaps', priority: 7 },
   // UNSELECTED: { name: 'Create a prediction market', priority: 100 },
 };
 
@@ -70,23 +73,23 @@ export const EXCHANGE_ACTION = {
 };
 
 export const EXCHANGE_ACTION_NAME = {
-  [EXCHANGE_ACTION.BUY]: 'Buy',
-  [EXCHANGE_ACTION.SELL]: 'Sell',
+  [EXCHANGE_ACTION.BUY]: <FormattedMessage id="ex.label.buy"/>,
+  [EXCHANGE_ACTION.SELL]: <FormattedMessage id="ex.label.sell"/>,
 };
 
 export const EXCHANGE_ACTION_PAST_NAME = {
-  [EXCHANGE_ACTION.BUY]: 'Bought',
-  [EXCHANGE_ACTION.SELL]: 'Sold',
+  [EXCHANGE_ACTION.BUY]: <FormattedMessage id="ex.label.bought"/>,
+  [EXCHANGE_ACTION.SELL]: <FormattedMessage id="ex.label.sold"/>,
 };
 
 export const EXCHANGE_ACTION_PRESENT_NAME = {
-  [EXCHANGE_ACTION.BUY]: 'Buying',
-  [EXCHANGE_ACTION.SELL]: 'Selling',
+  [EXCHANGE_ACTION.BUY]: <FormattedMessage id="ex.label.buying"/>,
+  [EXCHANGE_ACTION.SELL]: <FormattedMessage id="ex.label.selling"/>,
 };
 
 export const EXCHANGE_ACTION_PERSON = {
-  [EXCHANGE_ACTION.BUY]: 'buyer',
-  [EXCHANGE_ACTION.SELL]: 'seller',
+  [EXCHANGE_ACTION.BUY]: <FormattedMessage id="ex.label.buyer"/>,
+  [EXCHANGE_ACTION.SELL]: <FormattedMessage id="ex.label.seller"/>,
 };
 
 export const EXCHANGE_ACTION_LIST = [
@@ -138,6 +141,7 @@ export const API_URL = {
     // Store
     OFFER_STORES: 'exchange/offer-stores',
     SHAKES: 'shakes',
+    REVIEWS: 'reviews',
   },
   SEED: {
     BASE: 'seed',
@@ -156,6 +160,9 @@ export const API_URL = {
     CREATE: 'comment/',
     LIST: 'comment/list',
     GET_COMMENT_COUNT: 'comment/count',
+  },
+  ADMIN: {
+    BASE: 'admin/',
   },
 };
 
@@ -200,18 +207,18 @@ export const HANDSHAKE_EXCHANGE_STATUS = {
 };
 
 export const HANDSHAKE_EXCHANGE_STATUS_NAME = {
-  [HANDSHAKE_EXCHANGE_STATUS.CREATED]: 'created',
-  [HANDSHAKE_EXCHANGE_STATUS.ACTIVE]: 'active',
-  [HANDSHAKE_EXCHANGE_STATUS.CLOSING]: 'closing',
-  [HANDSHAKE_EXCHANGE_STATUS.CLOSED]: 'closed',
-  [HANDSHAKE_EXCHANGE_STATUS.SHAKING]: 'shaking',
-  [HANDSHAKE_EXCHANGE_STATUS.SHAKE]: 'shake',
-  [HANDSHAKE_EXCHANGE_STATUS.COMPLETING]: 'completing',
-  [HANDSHAKE_EXCHANGE_STATUS.COMPLETED]: 'completed',
-  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING]: 'withdrawing',
-  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAW]: 'withdraw',
-  [HANDSHAKE_EXCHANGE_STATUS.REJECTING]: 'rejecting',
-  [HANDSHAKE_EXCHANGE_STATUS.REJECTED]: 'rejected',
+  [HANDSHAKE_EXCHANGE_STATUS.CREATED]: <FormattedMessage id="ex.exchange.status.created"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.ACTIVE]: <FormattedMessage id="ex.exchange.status.active"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.CLOSING]: <FormattedMessage id="ex.exchange.status.closing"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.CLOSED]: <FormattedMessage id="ex.exchange.status.closed"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.SHAKING]: <FormattedMessage id="ex.exchange.status.shaking"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.SHAKE]: <FormattedMessage id="ex.exchange.status.shake"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.COMPLETING]: <FormattedMessage id="ex.exchange.status.completing"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.COMPLETED]: <FormattedMessage id="ex.exchange.status.completed"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING]: <FormattedMessage id="ex.exchange.status.withdrawing"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAW]: <FormattedMessage id="ex.exchange.status.withdraw"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.REJECTING]: <FormattedMessage id="ex.exchange.status.rejecting"/>,
+  [HANDSHAKE_EXCHANGE_STATUS.REJECTED]: <FormattedMessage id="ex.exchange.status.rejected"/>,
 };
 
 export const HANDSHAKE_EXCHANGE_STATUS_VALUE = {
@@ -236,9 +243,9 @@ export const HANDSHAKE_EXCHANGE_CC_STATUS = {
 };
 
 export const HANDSHAKE_EXCHANGE_CC_STATUS_NAME = {
-  [HANDSHAKE_EXCHANGE_CC_STATUS.PROCESSING]: 'Processing',
-  [HANDSHAKE_EXCHANGE_CC_STATUS.SUCCESS]: 'Done',
-  [HANDSHAKE_EXCHANGE_CC_STATUS.CANCELLED]: 'Failed',
+  [HANDSHAKE_EXCHANGE_CC_STATUS.PROCESSING]: <FormattedMessage id="ex.cc.status.processing"/>,
+  [HANDSHAKE_EXCHANGE_CC_STATUS.SUCCESS]: <FormattedMessage id="ex.cc.status.success"/>,
+  [HANDSHAKE_EXCHANGE_CC_STATUS.CANCELLED]: <FormattedMessage id="ex.cc.status.cancelled"/>,
 };
 
 export const HANDSHAKE_EXCHANGE_CC_STATUS_VALUE = {
@@ -267,10 +274,10 @@ export const HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS = {
 };
 
 export const HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME = {
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED]: 'Verifying...',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE]: 'Active',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING]: 'Pending...',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED]: 'Closed',
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED]: <FormattedMessage id="ex.shop.status.created"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE]: <FormattedMessage id="ex.shop.status.active"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING]: <FormattedMessage id="ex.shop.status.closing"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED]: <FormattedMessage id="ex.shop.status.closed"/>,
 };
 
 export const HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE = {
@@ -294,16 +301,16 @@ export const HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS = {
 };
 
 export const HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME = {
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING]: 'Shake pending',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE]: 'Shook',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING]: 'Shake pending...',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE]: 'Shook',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTING]: 'Rejecting',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTED]: 'Rejected',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING]: 'Completing...',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETED]: 'Done',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLING]: 'Cancelling',
-  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLED]: 'Cancelled',
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING]: <FormattedMessage id="ex.shop.shake.status.pre_shaking"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE]: <FormattedMessage id="ex.shop.shake.status.pre_shake"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING]: <FormattedMessage id="ex.shop.shake.status.shaking"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE]: <FormattedMessage id="ex.shop.shake.status.shake"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTING]: <FormattedMessage id="ex.shop.shake.status.rejecting"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTED]: <FormattedMessage id="ex.shop.shake.status.rejected"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING]: <FormattedMessage id="ex.shop.shake.status.completing"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETED]: <FormattedMessage id="ex.shop.shake.status.completed"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLING]: <FormattedMessage id="ex.shop.shake.status.cancelling"/>,
+  [HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLED]: <FormattedMessage id="ex.shop.shake.status.cancelled"/>,
 };
 
 export const HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_VALUE = {

@@ -1,102 +1,112 @@
 @import './src/styles/var';
 
-.feed {
-  border-radius: 6px;
+.app {
+  padding-bottom: 150px !important;
 }
 
 .feed-exchange {
-  .name-shop {
-    font-weight: 500;
-    color: #FFFFFF;
-    font-size: 16px;
-    letter-spacing: 0.29px;
-  }
-  .distance {
-    padding-bottom: 2px;
-    font-weight: 400;
-    font-size: 14px;
-    color: #FFFFFF;
-    img {
-      margin-top: -2px;
-      padding: 0 11px 0 7px;
-    }
-  }
-  .transaction-successful {
-    color: #4CD964;
-    font-weight: 400;
-    font-size: 14px;
-  }
-  .transaction-failed {
-    font-size: 14px;
-    color: #F5A623;
-    font-weight: 400;
-  }
-  .table-ex {
-    width: 100%;
-    border-bottom: 1px solid rgba(255,255,255,0.25);
-    .image {
-      vertical-align: middle;
+  background: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(201,201,201,0.50);
+  border-radius: 4px;
+  padding: 0 10px 10px;
+  .coins-wrapper {
+    overflow: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-left: 8px;
+    .coin-item {
       display: inline-block;
-      width: 30px;
-      margin-right: 4px;
-      img {
-        width: 100%;
-        display: block;
-        height: auto;
+      min-width: 148px;
+      color: white;
+      border-radius: 6px;
+      margin-right: 12px;
+      margin-top: 12px;
+      padding: 10px 10px 0 10px;
+      position: relative;
+      .icon-coin {
+        //width: 50px;
+        display: inline-block;
+        position: absolute;
+        top: -11px;
+        left: -9px;
       }
-    }
-    td, th {
-      border: 0;
-    }
-    thead {
-      border-top: 1px solid rgba(255,255,255,0.25);
-      border-bottom: 1px solid rgba(255,255,255,0.25);
-      th {
-        padding: 5px 0;
-      }
-    }
-    tbody {
-      td {
-        padding-top: 15px;
-      }
-      tr:last-child {
-        td {
-          padding-bottom: 15px;
+      .price {
+        font-weight: 500;
+        font-size: 12px;
+        color: #FFFFFF;
+        letter-spacing: 0.21px;
+        label {
+          min-width: 36px;
+        }
+        span {
+          font-weight: 700;
+          font-size: 16px;
+          letter-spacing: 0.29px;
         }
       }
     }
-    .header-text {
+  }
+  .info-ex {
+    padding-top: 10px;
+    & > div {
+      display: table-cell;
+      vertical-align: middle;
+      width: 100%;
+    }
+    .btn-chat {
+      width: 100px;
+      .btn {
+        background: transparent;
+        padding: 0;
+      }
+    }
+    .address {
       font-weight: 500;
-      font-size: 14px;
-      color: #FFFFFF;
-      letter-spacing: 0.25px;
-    }
-    .buy-color {
-      color: #00FFC6;
-    }
-    .sell-color {
-      color: #FF3B3B;
-    }
-    .price-number {
-      font-weight: 900;
       font-size: 16px;
+      color: #1F2B34;
       letter-spacing: 0.29px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.50);
     }
-    .currency {
-      opacity: 0.8;
-      font-weight: 500;
-      font-size: 14px;
-      color: #FFFFFF;
-      letter-spacing: 0.25px;
-      //line-height: 32px;
+    .review {
+      font-weight: 400;
+      font-size: 12px;
+      color: #6F6F6F;
+      letter-spacing: 0;
+    }
+    .distance {
+      opacity: 0.5;
+      font-weight: 400;
+      font-size: 12px;
+      color: #22292F;
+      letter-spacing: 0.21px;
     }
   }
-  .dialog-shake-detail {
-    .modal-custom-body {
-      background: #485059;
-      border-radius: 4px;
-      padding: 20px !important;
-    }
+}
+
+.dialog-shake-detail {
+  .modal-custom-body {
+    background: #485059;
+    border-radius: 4px;
+    padding: 20px !important;
+  }
+}
+
+.ex-sticky-note {
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 414px;
+  background-color: black;
+  z-index: 2;
+  padding: 10px 0;
+  .btn-become {
+    min-width: 200px;
+    border: 1px solid white;
+    background: black;
+    color: white;
   }
 }

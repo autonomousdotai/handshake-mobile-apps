@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import qs from 'querystring';
 // contants
-import { URL } from '@/constants';
+import { URL, APP } from '@/constants';
+// actions
+import { changeLocale } from '@/reducers/app/action';
 // services
 import { createDynamicImport } from '@/services/app';
+import local from '@/services/localStore';
 import BrowserDetect from '@/services/browser-detect';
 // components
 import Handle from '@/components/App/Handle';
@@ -32,6 +36,7 @@ const MobileOrTablet = createDynamicImport(() => import('@/components/MobileOrTa
 class Root extends React.Component {
   static propTypes = {
     app: PropTypes.object.isRequired,
+    changeLocale: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -40,6 +45,21 @@ class Root extends React.Component {
       messages,
       app: this.props.app,
     };
+
+    this.setLanguage = ::this.setLanguage;
+
+    this.isSupportedLanguages = ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'];
+
+    const currentLanguage = local.get(APP.LOCALE);
+    if (currentLanguage && this.isSupportedLanguages.indexOf(currentLanguage) < 0) {
+      local.remove(APP.LOCALE);
+    }
+
+    const querystring = window.location.search.replace('?', '');
+    this.querystringParsed = qs.parse(querystring);
+    const { language, ref } = this.querystringParsed;
+    if (language) this.setLanguage(language, false);
+    if (ref) this.refer = ref;
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -49,12 +69,20 @@ class Root extends React.Component {
     return null;
   }
 
+  // locale
+  setLanguage(language, autoDetect = true) {
+    if (this.isSupportedLanguages.indexOf(language) >= 0) {
+      this.props.changeLocale(language, autoDetect);
+    }
+  }
+  // /locale
+
   preRender() {
     if (window.location.pathname === URL.LANDING_PAGE_SHURIKEN) return <LandingPage />;
     if (window.location.pathname === URL.LANDING_PAGE_TRADE) return <LandingPageTrade />;
     if (window.location.pathname === URL.FAQ) return <LandingPageFAQ />;
-    if (process.env.isProduction && BrowserDetect.isDesktop) return <MobileOrTablet />;
-    return <Handle />;
+    if (BrowserDetect.isDesktop) return <MobileOrTablet />;
+    return <Handle setLanguage={this.setLanguage} refer={this.refer} />;
   }
 
   render() {
@@ -73,5 +101,7 @@ class Root extends React.Component {
 
 export default connect(state => ({
   app: state.app,
-}))(Root);
+}), {
+  changeLocale,
+})(Root);
 

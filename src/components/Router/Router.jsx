@@ -22,6 +22,7 @@ const RouterWallet = createDynamicImport(() => import('@/components/Router/Walle
 const RouterExchange = createDynamicImport(() => import('@/components/Router/Exchange'), Loading);
 const RouterTransaction = createDynamicImport(() => import('@/components/Router/Transaction'), Loading);
 const RouterComment = createDynamicImport(() => import('@/components/Router/Comment'), Loading);
+const RouterAdmin = createDynamicImport(() => import('@/components/Router/Admin'), Loading);
 
 const rootRouterMap = [
   { path: URL.HANDSHAKE_ME, component: RouterMe },
@@ -32,6 +33,7 @@ const rootRouterMap = [
   { path: URL.HANDSHAKE_EXCHANGE, component: RouterExchange },
   { path: URL.TRANSACTION_LIST, component: RouterTransaction },
   { path: URL.COMMENTS_BY_SHAKE, component: RouterComment },
+  { path: URL.ADMIN, component: RouterAdmin },
 ];
 
 const Page404 = createDynamicImport(() => import('@/pages/Error/Page404'), Loading, true);

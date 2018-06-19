@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // services, constants
-import  { BetHandshakeHandler, SIDE, BETTING_STATUS_LABEL, ROLE} from './BetHandshakeHandler.js';
+import  { BetHandshakeHandler, SIDE, BETTING_STATUS_LABEL, ROLE, MESSAGE} from './BetHandshakeHandler.js';
 import momment from 'moment';
 import {MasterWallet} from '@/models/MasterWallet';
 
 import local from '@/services/localStore';
 import {FIREBASE_PATH, HANDSHAKE_ID, API_URL, APP} from '@/constants';
 import { uninitItem, collect, refund } from '@/reducers/handshake/action';
-import { loadMyHandshakeList} from '@/reducers/me/action';
+import { loadMyHandshakeList, updateBettingChange} from '@/reducers/me/action';
 
 
 // components
@@ -31,9 +31,29 @@ import Shake from '@/components/core/controls/Button';
 
 import GroupBook from './GroupBook';
 
-const betHandshakeHandler = new BetHandshakeHandler()
-const ROUND = 1000000
+const betHandshakeHandler = new BetHandshakeHandler();
+const ROUND = 1000000;
+const BACKGROUND_COLORS = [
+  'linear-gradient(-135deg, #FFA7E7 0%, #EA6362 100%)',
+  'linear-gradient(-135deg, #17EAD9 0%, #6078EA 100%)',
+  'linear-gradient(-135deg, #23BCBA 0%, #45E994 100%)',
+  'linear-gradient(-135deg, #FFDEA7 0%, #EA6362 100%)',
+  'linear-gradient(-133deg, #9B3CB7 0%, #FF396F 100%)',
+  'linear-gradient(-133deg, #004B91 0%, #78CC37 100%)',
+  'linear-gradient(-135deg, #38B8F2 0%, #843CF6 100%)',
+  'linear-gradient(-135deg, #E35C67 0%, #381CE2 100%)',
+  'linear-gradient(-135deg, #EFBFD5 0%, #9D61FD 100%)',
+  'linear-gradient(-135deg, #45E0A7 0%, #D5E969 100%)',
+  'linear-gradient(45deg, #FBC79A 0%, #D73E68 100%)',
+  'linear-gradient(45deg, #F6AB3E 0%, #8137F7 100%)',
+];
+
 class FeedBetting extends React.Component {
+
+  backgroundCss(background) {
+    return background ? background : this.BACKGROUND_COLORS[Math.floor(Math.random() * this.BACKGROUND_COLORS.length)];
+  }
+
   static propTypes = {
 
   }
@@ -67,8 +87,8 @@ class FeedBetting extends React.Component {
   }
 
   isShakeUser(shakeIds, userId){
-    console.log('User Id:', userId);
-    console.log('ShakeIds:', shakeIds);
+    //console.log('User Id:', userId);
+    //console.log('ShakeIds:', shakeIds);
 
     if(shakeIds){
 
@@ -81,32 +101,27 @@ class FeedBetting extends React.Component {
   }
 
   handleStatus(props){
-    
-    const {result, shakeUserIds, id} = props; // new state
-    
 
-    console.log('Item Info bkstatus:', this.state.itemInfo.bkStatus);
-    console.log('Props Status:', props.status);
-    
+    const {result, shakeUserIds, id} = props; // new state
+
     /*
     if(this.state.itemInfo){
       if(this.state.itemInfo.bkStatus === props.status){
         console.log('Not update UI');
         return;
-  
+
       }
-    
-   
+
+
     }
     */
-    
+
     console.log('Handle Status: ', props);
     //console.log('Props:', this.props);
     const profile = local.get(APP.AUTH_PROFILE);
     const isUserShake = this.isShakeUser(shakeUserIds, profile.id);
     let itemInfo = props;
-    console.log('Inpu Props:', props);
-    
+
     if(isUserShake){
       const extraData = this.extraData;
       console.log('Extra data:', extraData);
@@ -115,10 +130,10 @@ class FeedBetting extends React.Component {
 
       if(shakers){
         const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
-        console.log('Found Shaked Item:', foundShakedItem);
+        //console.log('Found Shaked Item:', foundShakedItem);
         if(foundShakedItem){
           itemInfo = foundShakedItem;
-          
+
         }
       }
     }
@@ -144,6 +159,10 @@ class FeedBetting extends React.Component {
     })
   }
 
+  randomItemInList(list) {
+    return list[Math.floor(Math.random() * list.length)]
+  }
+
   componentDidMount() {
     this.handleStatus(this.props);
 
@@ -151,7 +170,7 @@ class FeedBetting extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     console.log('Feeding Next Props:', nextProps);
-    
+
     this.handleStatus(nextProps);
   }
 
@@ -166,14 +185,8 @@ class FeedBetting extends React.Component {
   }
 
   renderStatus = () => {
-    const {statusTitle} = this.state;
-    const text = "Match is ongoing...";
-    //const textColor = status == 2?'white':'#35B371';
-    const textColor = 'white';
-    const label = statusTitle ? statusTitle : '';
-    //const backgroundColorWithStatus = status == 2? 'ffffff25' :'#00000030';
-    const backgroundColorWithStatus = '#ffffff25';
-    return <Button style={{backgroundColor:backgroundColorWithStatus , borderColor:'transparent',color:textColor, opacity: '0.85'}}  block disabled >{label}</Button>;
+    const { statusTitle } = this.state;
+    return <div className="statusBetting">{statusTitle || ''}</div>;
   }
 
   render() {
@@ -183,51 +196,65 @@ class FeedBetting extends React.Component {
      * side = SIDE.SUPPORT // SIDE.AGAINST ;ORGRANCE
      *
      */
-    console.log('Item info:', itemInfo);
+    //console.log('Item info:', itemInfo);
     const {amount, odds, side } = itemInfo;
     const {event_name, event_predict} = this.extraData;
-    const { commentCount, id, type } = this.props;
-    //const winValue = itemInfo.win_value || itemInfo.winValue;
     const winValue = amount * odds;
+    const styleEventName = {
+      background: this.randomItemInList(BACKGROUND_COLORS),
+    };
+    const colorBySide = side === 1 ? `support` : 'oppose';
 
-    // const realEventName = event_name ? event_name.slice(7).split('(') : ['', ''];
-    // const matchName = realEventName[0];
-    // const matchDate = `(${realEventName[1]}`;
     let eventName = event_name ? event_name: '';
-    //console.log('Result:', eventName.indexOf('Event'));
-    if(eventName.indexOf('Event') == -1){
+    if(eventName.indexOf('Event') === -1){
       eventName = `Event: ${eventName}`;
     }
     let predictName = event_predict ? event_predict : '';
-    console.log('Predict Name:', predictName);
+    //console.log('Predict Name:', predictName);
     if(predictName.indexOf('Outcome')!== -1) {
       predictName = event_predict.slice(8);
     }
-    
+
     return (
       <div>
         {/* Feed */}
         <Feed
-          className="wrapperBettingFeed"
+          className="wrapperBettingFeedMe"
           handshakeId={this.props.id}
           onClick={this.props.onFeedClick}
+          background="white"
         >
-            <div className="description">
-              <p className="eventName">
-                {eventName}
-              </p>
-              <p className="eventInfo">{side === 1 ? `Support: ` : 'Oppose: '}{predictName}</p>
-            </div>
-            <div className="bottomWrapper">
-              <span className="content">{amount.toFixed(6)} ETH </span>
-              <span className="odds" >{odds.toFixed(2)}</span>
-            </div>
-            <div className="possibleWin">Possible winnings: {Math.round(winValue*ROUND)/ROUND} ETH</div>
+          <div className="eventName" style={styleEventName}>
+            {eventName}
+          </div>
 
+          <div className={`predictName`}>
+            <span className={colorBySide}>{side === 1 ? `Support: ` : 'Oppose: '}</span>{predictName}
+          </div>
+
+          <div className="bettingInfo">
+            <div>
+              <div className="description">Amount</div>
+              <div className="value">{amount.toFixed(6)} ETH</div>
+            </div>
+            <div>
+              <div className="description">Odds</div>
+              <div className={`value ${colorBySide}`}> {odds.toFixed(2)}</div>
+            </div>
+            <div>
+              <div className="description">Possible winnings</div>
+              <div className="value">{Math.floor(winValue * ROUND) / ROUND} ETH</div>
+            </div>
+          </div>
+
+          <div className="bottomDiv">
             {this.renderStatus()}
+             {/* Shake */}
+             {actionTitle && <Button block disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
+             {/*{<Button block onClick={() => { this.clickActionButton(actionTitle); }} className={side === 1 ? 'cancel' : 'withdraw'}>{side === 1 ? 'cancel this bet' : 'withdraw'}</Button>}*/}
+          </div>
         </Feed>
-        {/* Shake */}
-        {actionTitle && <Button block disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
+
         {/* Modal */}
         {/*<ModalDialog title="Make a bet" onRef={modal => this.modalBetRef = modal}>
           <BettingShake
@@ -242,32 +269,32 @@ class FeedBetting extends React.Component {
 
   }
   changeOption(value){
-    console.log('Choose option:', value)
+    //console.log('Choose option:', value)
     //TO DO: Choose an option
   }
 
-  clickActionButton(title){
-    if(!betHandshakeHandler.isRightNetwork()){
+  async clickActionButton(title){
+    const balance = await betHandshakeHandler.getBalance();
+    const estimatedGas = await betHandshakeHandler.getEstimateGas();
+    let message = null;
+    if(estimatedGas > balance){
+      message = MESSAGE.NOT_ENOUGH_BALANCE;
+
+    }
+    else if(!betHandshakeHandler.isRightNetwork()){
       message = MESSAGE.RIGHT_NETWORK;
-      this.props.showAlert({
-        message: <div className="text-center">{message}</div>,
-        timeOut: 3000,
-        type: 'danger',
-        callBack: () => {
-        }
-      });
-    }else {
+    }
+    else {
       const {id} = this.props;
       const realId = betHandshakeHandler.getId(id);
-      console.log('realId:', realId);
-  
+
       switch(title){
-  
+
         case BETTING_STATUS_LABEL.CANCEL:
           // TO DO: CLOSE BET
           this.uninitItem(realId);
           break;
-  
+
         case BETTING_STATUS_LABEL.WITHDRAW:
           // TO DO: WITHDRAW
           this.collect(id);
@@ -275,10 +302,20 @@ class FeedBetting extends React.Component {
         case BETTING_STATUS_LABEL.REFUND:
         this.refund(realId);
         break;
-  
+
       }
     }
-    
+    if(message){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+
+    }
+
 
 
   }
@@ -299,14 +336,15 @@ class FeedBetting extends React.Component {
     const {status, data} = successData
     if(status && data){
       const {hid, side, amount, odds, offchain, status} = data;
-      
+
       const {itemInfo} = this.state;
       let updateInfo = Object.assign({}, itemInfo);
       updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
-      this.handleStatus(updateInfo);
-      
+      //this.handleStatus(updateInfo);
+      this.props.updateBettingChange(updateInfo);
+
       const stake = amount;
       //const payout = stake * odds;
       const result = await betHandshakeHandler.cancelBet(hid, side, stake, odds, offchain);
@@ -320,6 +358,17 @@ class FeedBetting extends React.Component {
   }
   uninitHandshakeFailed = (error) => {
     console.log('uninitHandshakeFailed', error);
+    const {status, message} = error;
+    if(status == 0){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
+
   }
 
   collect(id){
@@ -343,7 +392,9 @@ class FeedBetting extends React.Component {
       updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
-      this.handleStatus(updateInfo);
+      //this.handleStatus(updateInfo);
+      this.props.updateBettingChange(updateInfo);
+
 
       this.setState({
         itemInfo: updateInfo
@@ -360,6 +411,16 @@ class FeedBetting extends React.Component {
   }
   collectFailed = (error) => {
     console.log('collectFailed', error);
+    const {status, message} = error;
+    if(status == 0){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
 
   }
 
@@ -381,7 +442,9 @@ class FeedBetting extends React.Component {
       updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
-      this.handleStatus(updateInfo);
+      //this.handleStatus(updateInfo);
+      this.props.updateBettingChange(updateInfo);
+
 
       const offchain = id;
       const result = await betHandshakeHandler.refund(hid, offchain);
@@ -396,6 +459,17 @@ class FeedBetting extends React.Component {
   }
   refundFailed = (error) => {
     console.log('refundFailed', error);
+    const {status, message} = error;
+    if(status == 0){
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
+
   }
 
   /*
@@ -422,6 +496,7 @@ const mapState = state => ({
 });
 const mapDispatch = ({
   loadMyHandshakeList,
+  updateBettingChange,
   uninitItem,
   collect,
   refund,

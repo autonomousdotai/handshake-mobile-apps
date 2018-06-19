@@ -3,6 +3,7 @@ import { createAPI } from '@/reducers/action';
 export const ACTIONS = {
   LOAD_MY_HANDSHAKE: 'LOAD_MY_HANDSHAKE',
   LOAD_MY_HANDSHAKE_DETAIL: 'LOAD_MY_HANDSHAKE_DETAIL',
+  UPDATE_BETTING_DATA_CHANGE: 'UPDATE_BETTING_DATA_CHANGE',
   FIREBASE_BETTING_DATA_CHANGE: 'FIREBASE_BETTING_DATA_CHANGE',
   FIREBASE_EXCHANGE_DATA_CHANGE: 'FIREBASE_EXCHANGE_DATA_CHANGE',
   RESPONSE_EXCHANGE_DATA_CHANGE: 'RESPONSE_EXCHANGE_DATA_CHANGE',
@@ -18,6 +19,10 @@ export const fireBaseBettingChange = data => ({
   type: ACTIONS.FIREBASE_BETTING_DATA_CHANGE,
   payload: data,
 });
+export const updateBettingChange = data => ({
+  type: ACTIONS.UPDATE_BETTING_DATA_CHANGE,
+  payload: data,
+});
 
 export const fireBaseExchangeDataChange = data => ({
   type: ACTIONS.FIREBASE_EXCHANGE_DATA_CHANGE,
@@ -28,3 +33,4 @@ export const responseExchangeDataChange = data => ({
   type: ACTIONS.RESPONSE_EXCHANGE_DATA_CHANGE,
   payload: data,
 });
+

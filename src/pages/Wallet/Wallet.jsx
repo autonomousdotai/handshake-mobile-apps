@@ -224,6 +224,7 @@ class Wallet extends React.Component {
 
   async componentDidMount() {
 
+
     this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
 
@@ -992,29 +993,32 @@ class Wallet extends React.Component {
           {this.renderScanQRCode()}
 
           {/* Render list wallet: */}
-          <Row className="list">
-            <Header title="Mainnet wallets" hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />
-          </Row>
+          
+          <Row className="list">           
+            <Header 
+              title={!process.env.isLive ? "Mainnet wallets" : ""}hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />            
+            </Row>
+          
           <Row className="list">
             {this.listMainWalletBalance}
           </Row>
-          {!process.env.isProduction ? 
+          {!process.env.isLive ? 
           <Row className="list">
             <Header title="Testnet wallets" hasLink linkTitle="Request free ETH" onLinkClick={this.getETHFree} />
           </Row>
           : ''}
-          {!process.env.isProduction ? 
+          {!process.env.isLive ? 
           <Row className="list">
             {this.listTestWalletBalance}
           </Row>
           : ''}
           
-          <Row className="list">
+          {/* <Row className="list">
             <Header title="Reward wallets" hasLink={false} />
           </Row>
           <Row className="list">
             {this.listRewardWalletBalance}
-          </Row>
+          </Row> */}
 
         </Grid>
       </div>

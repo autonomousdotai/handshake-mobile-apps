@@ -22,6 +22,8 @@ class OfferShop {
         BTC: data.items.BTC && CoinOffer.coinOffer(data.items.BTC) || {},
         ETH: data.items.ETH && CoinOffer.coinOffer(data.items.ETH) || {},
       } : {},
+      chatUsername: data.chat_username || '',
+      toChatUsername: data.to_chat_username || '',
     };
   }
 }

@@ -1,7 +1,8 @@
 import React from "react";
 import COUNTRIES from "@/data/country-dial-codes.js";
 import "./styles.scss";
-import iconArrow from '@/assets/images/icon/Triangle.svg';
+import iconArrowWhite from '@/assets/images/icon/Triangle_white.svg';
+import iconArrowBlack from '@/assets/images/icon/Triangle_black.svg';
 
 // const isVisible = elem => !!elem && !!( elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length )
 
@@ -54,14 +55,14 @@ class SelectCountryCode extends React.Component {
   }
 
   render() {
-    const { countryCode, onChange } = this.props;
+    const { countryCode, onChange, color } = this.props;
     const { showSelect, strFilterCountry } = this.state;
     const filteredCountries = COUNTRIES.filter(c => c.name.toUpperCase().includes(strFilterCountry.toUpperCase()));
     return (
       <span>
         <span className="select-country-code" onClick={this.toggleShowSelect}>
           <span>{countryCode}</span>
-          <img className="ml-2" src={iconArrow} />
+          <img className="ml-2" src={color === '#000000' ? iconArrowBlack : iconArrowWhite} />
         </span>
         {
           showSelect && (
@@ -76,14 +77,14 @@ class SelectCountryCode extends React.Component {
                              onClick={() => this.onItemClick(dialCode)}>{flag} {name} ({dialCode})</div>
                       );
                     }) : (
-                      <div>No data</div>
+                      <div className="text-white">No data</div>
                     )
                   }
                 </div>
               </div>
-              <div className="mt-2 d-flex">
+              <div className="mt-2 d-flex filter">
                 <input type="text" value={strFilterCountry} className="form-control-custom form-control-custom-ex input-no-border" placeholder="Filter" onChange={this.handleFilterChange}/>
-                <button onClick={this.toggleShowSelect} className="text-white btn btn-link ml-auto btn-close">Close</button>
+                <button onClick={this.toggleShowSelect} className="text-white btn btn-link ml-auto btn-close">&times;</button>
               </div>
             </div>
           )

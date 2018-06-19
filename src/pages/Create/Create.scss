@@ -1,10 +1,16 @@
 @import './src/styles/style';
 
-.create {
+.create-page {
+    height: 100vh;
+    background:  $gray;
     .margin-top-20 {
         margin-top: rem-calc(20px);
     }
     .disable {
         color: $disable-color !important;
     }
+}
+
+.app.hide-header {
+    background:  $gray;
 }

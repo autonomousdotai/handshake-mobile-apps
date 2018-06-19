@@ -3,20 +3,23 @@ import './styles.scss'
 import createForm from '@/components/core/form/createForm';
 import {required} from '@/components/core/form/validation';
 
-import {Field, formValueSelector} from "redux-form";
+import {change, Field, formValueSelector} from "redux-form";
 import Button from '@/components/core/controls/Button';
 
 import {fieldCleave, fieldDropdown, fieldInput, fieldRadioButton} from '@/components/core/form/customField'
 import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
 import iconEthereum from '@/assets/images/icon/coin/eth.svg';
 import iconApproximate from '@/assets/images/icon/icons8-approximately_equal.svg';
-import {CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_LIST} from "../../../../../constants";
+import {CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_NAME} from "@/constants";
 import {connect} from "react-redux";
 import {injectIntl} from "react-intl";
 import {formatMoney, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
+import {bindActionCreators} from "redux";
+import {FormattedMessage} from 'react-intl';
+import { minValueBTC, minValueETH } from "../../Create/validation";
 
-const nameFormShakeDetail = 'shakeDetail';
+export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
   propsReduxForm: {
     form: nameFormShakeDetail,
@@ -29,11 +32,6 @@ const FormShakeDetail = createForm({
 const selectorFormShakeDetail = formValueSelector(nameFormShakeDetail);
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  CRYPTO_CURRENCY_LIST = [
-    { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />},
-    { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />  },
-  ];
-
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -42,8 +40,28 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     }
   }
 
+  onCurrencyChange = (e, newValue) => {
+    const { offer, type, rfChange } = this.props;
+
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
+    const buyBalance = newValue === CRYPTO_CURRENCY.BTC ? btc.buyBalance : eth.buyBalance;
+    const sellBalance = newValue === CRYPTO_CURRENCY.BTC ? btc.sellBalance : eth.sellBalance;
+
+    let newType = type;
+
+    if (type === EXCHANGE_ACTION.BUY && buyBalance <= 0) {
+      newType = EXCHANGE_ACTION.SELL;
+    } else if (type === EXCHANGE_ACTION.SELL && sellBalance <= 0) {
+      newType = EXCHANGE_ACTION.BUY;
+    }
+
+    rfChange(nameFormShakeDetail, 'type', newType);
+  }
+
   render() {
-    const { offer, currency, fiatAmount, enableShake } = this.props;
+    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST } = this.props;
 
     const fiat = offer.fiatCurrency;
 
@@ -67,13 +85,14 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               // containerClass="radio-container-old"
               component={fieldRadioButton}
               type="tab-2"
-              list={this.CRYPTO_CURRENCY_LIST}
+              list={CRYPTO_CURRENCY_LIST}
               // color={textColor}
               // validate={[required]}
+              onChange={this.onCurrencyChange}
             />
           </div>
           <div className="mt-3">
-            <div className="text">Amount</div>
+            <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount"/></div>
             <div className='input-group'>
               <Field
                 name="amount"
@@ -81,18 +100,18 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                 component={fieldInput}
                 className="input"
                 placeholder="10.00"
+                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                 // type="tab-2"
                 // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
-                validate={[required]}
               />
               <span className="append-text">{currency}</span>
             </div>
           </div>
           <hr className="hl" />
           <div className="text-total">
-            Total ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
+            <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
           </div>
-          <Button block type="submit" className="mt-3" disabled={!enableShake}>Shake</Button>
+          <Button block type="submit" className="mt-3" disabled={!enableShake}><FormattedMessage id="btn.shake"/></Button>
         </FormShakeDetail>
       </div>
     );
@@ -150,17 +169,26 @@ const mapState = (state, prevProps) => {
   console.log('check', balance, amount, balance > amount);
   const enableShake = balance > amount;
 
+  const EXCHANGE_ACTION_LIST = [
+    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0},
+    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? btc.sellBalance <= 0 : eth.sellBalance <= 0},
+  ];
+
   return {
     listOfferPrice: listOfferPrice,
     fiatAmount: fiatAmount || 0,
-    enableShake
+    enableShake,
+    EXCHANGE_ACTION_LIST,
+    type,
+    currency
   }
 };
 
-const mapDispatch = ({
-  showAlert,
-  showLoading,
-  hideLoading,
+const mapDispatch = (dispatch) => ({
+  showAlert: bindActionCreators(showAlert, dispatch),
+  showLoading: bindActionCreators(showLoading, dispatch),
+  hideLoading: bindActionCreators(hideLoading, dispatch),
+  rfChange: bindActionCreators(change, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(Component));

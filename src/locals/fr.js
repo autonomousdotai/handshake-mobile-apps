@@ -137,7 +137,7 @@ export default {
   ],
 
   // MobileOrTablet components
-  MOT_TITLE: 'Prédiction de Peer to Peer anonyme Exchange',
+  MOT_TITLE: 'L’échange anonyme de quoi que ce soit',
   MOT_CONTENT_0: 'Le réseau de Ninja n’est accessible que via mobile',
   MOT_CONTENT_1: 'Ouvrez',
   MOT_CONTENT_2: 'dans votre navigateur mobile pour gagner l’entrée anonyme.',

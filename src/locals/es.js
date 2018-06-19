@@ -129,7 +129,7 @@ export default {
   ],
 
   // MobileOrTablet components
-  MOT_TITLE: 'Predicción de Peer to Peer anónimo intercambio',
+  MOT_TITLE: 'El intercambio anónimo de nada',
   MOT_CONTENT_0: 'El red Ninja sólo es accesible a través del móvil',
   MOT_CONTENT_1: 'Abra',
   MOT_CONTENT_2: 'en el navegador del móvil para tener acceso anónimo.',

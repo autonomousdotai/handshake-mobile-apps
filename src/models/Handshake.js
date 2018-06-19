@@ -31,6 +31,8 @@ class Handshake {
       offerFeedType: data.offer_feed_type || '',
       offerType: data.offer_type || '',
       bkStatus: data.bk_status || '',
+      reviewCount: data.review_count || 0,
+      review: data.review || 0,
     };
   }
 }

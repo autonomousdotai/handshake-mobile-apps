@@ -1,16 +1,29 @@
 @import './src/styles/style';
 
-.app {
-  background: #161616;
+.mobileTabletApp {
+  background-color: #161616;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow-y: auto;
+  padding: rem-calc(50px 0);
+}
+
+.root {
+  height: 100%;
 }
 
 .mobile-tablet {
+  //height: 100%;
   display: flex;
   align-items: center;
   padding: 40px 0;
   margin: 0 auto;
   font-family: anonymous-pro, monospace;
   font-style: normal;
+  & > .row {
+    height: 100%;
+  }
   .chooseLanguage {
     margin: 0 auto;
     font-size: rem-calc(16px);

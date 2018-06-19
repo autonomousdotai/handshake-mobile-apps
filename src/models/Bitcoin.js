@@ -69,7 +69,7 @@ export class Bitcoin extends Wallet {
     }
 
 
-    async transfer(toAddress, amountToSend) {
+    async transfer(toAddress, amountToSend, blocks = 4) {
 
       let insufficientMsg = "You have insufficient coin to make the transfer. Please top up and try again."
 
@@ -100,7 +100,7 @@ export class Bitcoin extends Wallet {
         amountToSend = amountBig.times(satoShiRate).toString();
 
         const data = {};
-        const fee = await this.getFee(4);
+        const fee = await this.getFee(blocks);
 
         console.log('fee:', +fee);
 
