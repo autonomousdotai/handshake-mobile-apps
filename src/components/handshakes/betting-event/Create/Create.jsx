@@ -80,7 +80,7 @@ class CreateBettingEvent extends React.Component {
   submitBettingEvent= (values) => {
     console.log(values);
     const url = API_URL.CRYPTOSIGN.ADD_OUTCOME.concat(`/${this.state.selectedMatch.id}`);
-    const a = this.props.loadMatches({
+    this.props.loadMatches({
       PATH_URL: url,
       METHOD: 'post',
       data: [{ name: values.outcome }],
