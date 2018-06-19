@@ -113,7 +113,8 @@
   }
   .embed-responsive {
     iframe {
-      height: 185px !important;
+      max-height: rem-calc(185px) !important;
     }
+    max-height: rem-calc(185px) !important;
   }
 }
