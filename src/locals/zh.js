@@ -169,13 +169,13 @@ export default {
   * White Paper
   *
   * ******************************************************************************************* */
-  WHITE_PAPER_H1: 'Anonymous Peer-to-Peer Prediction Exchange on Ethereum',
-  WHITE_PAPER_SUBTITLE_1: 'Hello! We are Roc, Bakunawa, Hakawai and Grootslang from the Ninja team. We are building an electronic prediction exchange on the blockchain. Here’s why we did it, and how it works!',
-  WHITE_PAPER_SUBTITLE_2: 'Join the conversation at',
-  WHITE_PAPER_INTRO: 'Introduction',
-  WHITE_PAPER_INTRO_1: 'Online betting is run almost exclusively by bookmakers that serve as trusted third parties. As is typically the case, the users suffer from this “centralized trusted thirty party problem”:',
+  WHITE_PAPER_H1: '虚灵议会上的匿名对等预测交换',
+  WHITE_PAPER_SUBTITLE_1: '你好！我们是中华民国, Bakunawa, Hakawai 和 Grootslang 的忍者队。我们正在建立一个电子预测交换 blockchain。这就是为什么我们这样做, 以及它是如何工作的!',
+  WHITE_PAPER_SUBTITLE_2: '加入对话在',
+  WHITE_PAPER_INTRO: '介绍',
+  WHITE_PAPER_INTRO_1: '在线博彩几乎完全由作为受信任的第三方的收受赌注者运行。通常情况下, 用户会遭受此 "集中信任的三十方问题":',
   WHITE_PAPER_INTRO_2: [
-    'Bookmakers set the odds that always favor them (they always win)',
+    '收受赌注者设置了总是青睐他们的赔率 (他们总是赢)',
     'Bookmakers enjoy a hefty 5% — 30% margin on every bet',
     'Bets are reversible, and winnings are uncertain',
     'Completely anonymity is not possible',

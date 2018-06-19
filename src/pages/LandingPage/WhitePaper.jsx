@@ -46,7 +46,7 @@ class Handshake extends React.Component {
             </div>
 
             <div className="col-lg-12">
-              <p>{messages.WHITE_PAPER_INTRO}</p>
+              <p><strong>{messages.WHITE_PAPER_INTRO}</strong></p>
               <p>{messages.WHITE_PAPER_INTRO_1}</p>
               <ul>
                 {messages.WHITE_PAPER_INTRO_2.map((item, index) => (
