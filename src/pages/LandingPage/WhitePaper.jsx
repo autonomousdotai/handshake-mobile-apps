@@ -38,7 +38,18 @@ class Handshake extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col-lg-12">
-              <h1></h1>
+              <h1>{messages.WHITE_PAPER_H1}</h1>
+              <p>{messages.WHITE_PAPER_SUBTITLE_1}</p>
+              <p>
+                {messages.WHITE_PAPER_SUBTITLE_2} <a href="https://t.me/ninja_org.">https://t.me/ninja_org.</a>
+              </p>
+            </div>
+            <div className="col-lg-12">
+              <p>{messages.WHITE_PAPER_INTRO}</p>
+              <p>{messages.WHITE_PAPER_INTRO_1}</p>
+              <ul>
+                {messages.WHITE_PAPER_INTRO_2.map()}
+              </ul>
             </div>
           </div>
         </div>
