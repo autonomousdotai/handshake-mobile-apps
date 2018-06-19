@@ -77,6 +77,7 @@ class FeedMe extends React.PureComponent {
 
     this.state = {
       modalContent: '',
+      numStars: 0,
     };
     this.mainColor = _sample(feedBackgroundColors)
   }
@@ -1142,11 +1143,12 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case HANDSHAKE_USER.SHAKED: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.contactInfo;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
         break;
       }
       case HANDSHAKE_USER.OWNER: {
-        email = offer.toEmail ? offer.toEmail : offer.toContactPhone ? offer.toContactPhone : offer.toContactInfo;
+        // email = offer.toEmail ? offer.toEmail : offer.toContactPhone ? offer.toContactPhone : offer.toContactInfo;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
         break;
       }
     }
@@ -1177,18 +1179,20 @@ class FeedMe extends React.PureComponent {
   }
 
   handleOnClickRating = (numStars) => {
+    this.setState({numStars});
+  }
+
+  handleSubmitRating = () => {
     this.rateRef.close();
     const { offer } = this;
     const { initUserId } = this.props;
     this.props.reviewOffer({
       PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${initUserId}/${API_URL.EXCHANGE.REVIEWS}/${offer.id}`,
       METHOD: 'POST',
-      qs: { score: numStars },
+      qs: { score: this.state.numStars },
       successFn: this.handleReviewOfferSuccess,
       errorFn: this.handleReviewOfferFailed,
     });
-
-    console.log('numstarrs', numStars);
   }
 
   handleReviewOfferSuccess = (responseData) => {
@@ -1764,7 +1768,7 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.contactInfo;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
         let statusValue = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[offer.status];
         statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME[statusValue];
 
@@ -1930,7 +1934,7 @@ class FeedMe extends React.PureComponent {
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
         </ModalDialog>
-        <Rate onRef={e => this.rateRef = e} startNum={5} ratingOnClick={this.handleOnClickRating} />
+        <Rate onRef={e => this.rateRef = e} startNum={5} onSubmit={this.handleSubmitRating} ratingOnClick={this.handleOnClickRating}/>
       </div>
     );
   }
