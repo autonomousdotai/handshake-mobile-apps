@@ -62,7 +62,6 @@ class DiscoverPage extends React.Component {
     ipInfo: PropTypes.any.isRequired,
     isBannedCash: PropTypes.bool.isRequired,
     isBannedPrediction: PropTypes.bool.isRequired,
-    isBannedChecked: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
@@ -81,15 +80,18 @@ class DiscoverPage extends React.Component {
       lng: 0,
       isBannedCash: this.props.isBannedCash,
       isBannedPrediction: this.props.isBannedPrediction,
-      isBannedChecked: this.props.isBannedChecked,
-
     };
+
+    if (this.state.isBannedPrediction) {
+      this.state.isLoading = false;
+      this.state.handshakeIdActive = HANDSHAKE_ID.EXCHANGE;
+      this.loadDiscoverList();
+    }
 
     if (handshakeDefault === HANDSHAKE_ID.EXCHANGE) {
       this.loadDiscoverList();
     }
-    // this.loadDiscoverList();
-    // bind
+
     this.clickCategoryItem = this.clickCategoryItem.bind(this);
     this.clickTabItem = this.clickTabItem.bind(this);
     this.searchChange = this.searchChange.bind(this);
@@ -150,18 +152,6 @@ class DiscoverPage extends React.Component {
         // });
       }
       return { exchange: nextProps.exchange };
-    }
-    if (nextProps.isBannedCash !== prevState.isBannedCash) {
-      return { isBannedCash: nextProps.isBannedCash };
-    }
-    if (nextProps.isBannedPrediction !== prevState.isBannedPrediction) {
-      return { isBannedPrediction: nextProps.isBannedPrediction };
-    }
-    if (nextProps.isBannedChecked !== prevState.isBannedChecked) {
-      return { isBannedChecked: nextProps.isBannedChecked };
-    }
-    if (nextProps.isBannedPrediction && nextProps.isBannedChecked) {
-      return { isLoading: false };
     }
     return null;
   }
@@ -371,9 +361,9 @@ class DiscoverPage extends React.Component {
             </Col>
           </Row>
           {
-            this.state.isBannedChecked && handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
+            handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
               <React.Fragment>
-                {/*<Row>
+                {/* <Row>
                   <Col md={12} className="exchange-intro">
                     <span className="icon-shop">
                       <img src={icon2KuNinja} alt="" />
@@ -398,14 +388,14 @@ class DiscoverPage extends React.Component {
             )
           }
           {
-              this.state.isBannedChecked && this.state.handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
+              handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
               ? (
                 <BlockCountry />
               )
               : null
             }
           {
-            this.state.isBannedChecked && this.state.handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && (
+            handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && (
               <React.Fragment>
                 <BettingFilter setLoading={this.setLoading} />
                 <Row>
@@ -417,9 +407,9 @@ class DiscoverPage extends React.Component {
             )
           }
           <Row>
-            {this.state.isBannedChecked && [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
+            {[HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
             {
-              this.state.isBannedChecked && [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
+              [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
               ? (
                 <BlockCountry />
               )
@@ -445,7 +435,6 @@ const mapState = state => ({
   exchange: state.exchange,
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
-  isBannedChecked: state.app.isBannedChecked,
 });
 
 const mapDispatch = ({
