@@ -68,7 +68,7 @@ class Router extends React.Component {
   routers() {
     return rootRouterMap.map(router => (
       <Route
-        key={router.path}
+        key={Date.now()}
         path={router.path}
         component={router.component}
       />
