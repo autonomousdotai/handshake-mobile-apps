@@ -14,6 +14,7 @@ import {
 } from '@/constants';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import Helper from '@/services/helper';
 // components
 import { Col, Grid, Row } from 'react-bootstrap';
 import FAQBetting from '@/components/core/presentation/FAQBetting';
@@ -66,8 +67,11 @@ class DiscoverPage extends React.Component {
 
   constructor(props) {
     super(props);
+
+    const handshakeDefault = this.getDefaultHandShakeId();
+
     this.state = {
-      handshakeIdActive: HANDSHAKE_ID.BETTING, // default show bet
+      handshakeIdActive: handshakeDefault,
       // tabIndexActive: '',
       query: '',
       isLoading: true,
@@ -99,6 +103,16 @@ class DiscoverPage extends React.Component {
 
   setAddressFromLatLng = (lat, lng) => {
     this.setState({ lat, lng });
+  }
+
+  getDefaultHandShakeId() {
+    let seletedId = HANDSHAKE_ID.BETTING;
+    let { id } = Helper.getQueryStrings(window.location.search);
+    id = parseInt(id, 10);
+    if (id && Object.values(HANDSHAKE_ID).indexOf(id) !== -1) {
+      seletedId = id;
+    }
+    return seletedId;
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {

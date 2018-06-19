@@ -65,9 +65,10 @@
       font-weight: $normal;
       color: #8a8a8f;
       font-style: italic;
+      padding-right: rem-calc(10px);
     }
     button {
-      width: rem-calc(123px);
+      width: rem-calc(170px);
       padding: rem-calc(10px);
       font-size: rem-calc(14px);
       letter-spacing: rem-calc(0.25px);

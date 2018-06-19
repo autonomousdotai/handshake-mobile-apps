@@ -234,15 +234,15 @@ class FeedBetting extends React.Component {
 
           <div className="bettingInfo">
             <div>
-              <div className="description">Amount</div>
+              <div className="description">You bet</div>
               <div className="value">{amount.toFixed(6)} ETH</div>
             </div>
             <div>
-              <div className="description">Odds</div>
+              <div className="description">On odds</div>
               <div className={`value ${colorBySide}`}> {odds.toFixed(2)}</div>
             </div>
             <div>
-              <div className="description">Possible winnings</div>
+              <div className="description">You could win</div>
               <div className="value">{Math.floor(winValue * ROUND) / ROUND} ETH</div>
             </div>
           </div>

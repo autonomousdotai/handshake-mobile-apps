@@ -1,10 +1,10 @@
 import { MasterWallet } from '@/models/MasterWallet';
 import { BettingHandshake } from '@/services/neuron';
-import { connect } from 'react-redux';
-import { HANDSHAKE_ID, API_URL, APP } from '@/constants';
+import { API_URL, APP } from '@/constants';
+import {showAlert} from '@/reducers/app/action';
 
 import local from '@/services/localStore';
-import { uninitItem, collect, refund, rollback, saveTransaction } from '@/reducers/handshake/action';
+import { rollback, saveTransaction } from '@/reducers/handshake/action';
 import store from '@/stores';
 import moment from 'moment';
 
@@ -102,7 +102,7 @@ export const BETTING_STATUS_LABEL =
       CANCELLED: 'Your bet was cancelled.',
       REFUNDING: 'Your coin is being refunded to you.',
       REFUNDED: 'Your coin has been refunded.',
-      ROLLBACK: `There is something wrong. We're rollbacking the transaction.`,
+      ROLLBACK: `Something did not go according to plan. Please try again.`,
 
     };
 
@@ -441,6 +441,13 @@ export class BetHandshakeHandler {
   }
   rollbackSuccess = async (successData) => {
     console.log('rollbackSuccess', successData);
+    store.dispatch(showAlert({
+      message: <div className="text-center">{MESSAGE.ROLLBACK}</div>,
+      timeOut: 3000,
+      type: 'info',
+      callBack: () => {
+      }
+    }));
   }
   rollbackFailed = (error) => {
     console.log('rollbackFailed', error);
