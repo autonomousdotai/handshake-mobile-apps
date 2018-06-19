@@ -26,7 +26,7 @@ import './Filter.scss';
 const betHandshakeHandler = new BetHandshakeHandler();
 const CRYPTOSIGN_MINIMUM_MONEY = 0.00002;
 const freeAmount = 0.001;
-
+const ROUND_ODD = 10;
 const TAG = 'BETTING_FILTER';
 const SELECTING_DEFAULT = {
   id: '',
@@ -533,7 +533,7 @@ class BettingFilter extends React.Component {
               {/* <GroupBook amountColor="#FA6B49" bookList={this.bookListAgainst}/> */}
               <div className="marketBox">
                 <div>Market</div>
-                <div>{Math.floor(this.defaultSupportOdds * 100) / 100}</div>
+                <div>{Math.floor(this.defaultSupportOdds * ROUND_ODD) / ROUND_ODD}</div>
               </div>
               <Button
                 className="buttonSupport"
@@ -564,7 +564,7 @@ class BettingFilter extends React.Component {
               {<GroupBook amountColor="#FA6B49" bookList={this.bookListAgainst} />}
               <div className="titleBox">
                 <div>Market</div>
-                <div>{Math.floor(this.defaultAgainstOdds * 100) / 100}</div>
+                <div>{Math.floor(this.defaultAgainstOdds * ROUND_ODD) / ROUND_ODD}</div>
               </div>
               <Button
                 className="buttonAgainst"

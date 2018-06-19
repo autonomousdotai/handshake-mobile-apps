@@ -17,6 +17,15 @@ const EVENT_ACTION = {
   CLICK_SHARE_BUTTON: 'Click share button',
   CREATE_BET_SUCCESSFUL: 'Create bet successful',
   CREATE_SHARE_BUTTON: 'Create share button',
+  CREATE_BET_NOT_MATCH_FAIL: 'Create bet not match - fail',
+  CREATE_BET_NOT_MATCH_SUCCESS: 'Create bet not match - fail',
+  CREATE_BET_MATCHED_FAIL: 'Create bet matched - success',
+  CREATE_BET_MATCHED_SUCCESS: 'Create bet matched - success',
+};
+
+const BETTING_SIDE_NAME = {
+  1: 'Support',
+  2: 'Oppose',
 };
 
 class GoogleAnalyticsService {
@@ -29,6 +38,19 @@ class GoogleAnalyticsService {
       instance = this;
     }
     return instance;
+  }
+
+  get eventCategory() {
+    try {
+      const pathName = window.location.pathname;
+      const categoryByPathName = {
+        '/discover': EVENT_CATEGORY.DISCOVER_BETTING,
+        '/create': EVENT_CATEGORY.CREATE,
+      };
+      return categoryByPathName[pathName];
+    } catch (err){
+      return '';
+    }
   }
 
   /**
@@ -181,6 +203,84 @@ class GoogleAnalyticsService {
         action: EVENT_ACTION.CREATE_BET_SUCCESSFUL,
         label: `${sideName}: ${selectedMatch.value} -  ${selectedOutcome.value}`,
       });
+    } catch (err) {}
+  }
+
+  /**
+   *
+   * @param side
+   * @param odds
+   * @param amount
+   * @param message
+   */
+  createBetNotMatchFail({side, odds, amount, message}) {
+    try {
+      const category = this.eventCategory;
+      if (!!category) {
+        this.sendGAEvent({
+          category,
+          action: EVENT_CATEGORY.CREATE_BET_NOT_MATCH_FAIL,
+          label: `${BETTING_SIDE_NAME[side]} - Odds: ${odds} - Amount: ${amount} - Reason: ${message}`,
+        });
+      }
+    } catch (err) {}
+  }
+
+   /**z
+   *
+   * @param side
+   * @param odds
+   * @param amount
+   */
+  createBetNotMatchSuccess({side, odds, amount}) {
+    try {
+      const category = this.eventCategory;
+      if (!!category) {
+        this.sendGAEvent({
+          category,
+          action: EVENT_CATEGORY.CREATE_BET_NOT_MATCH_SUCCESS,
+          label: `${BETTING_SIDE_NAME[side]} - Odds: ${odds} - Amount: ${amount}`,
+        });
+      }
+    } catch (err) {}
+  }
+
+  /**
+   *
+   * @param side
+   * @param odds
+   * @param amount
+   * @param message
+   */
+  createBetMatchedFail({side, odds, amount, message}) {
+    try {
+      const category = this.eventCategory;
+      if (!!category) {
+        this.sendGAEvent({
+          category,
+          action: EVENT_CATEGORY.CREATE_BET_MATCHED_FAIL,
+          label: `${BETTING_SIDE_NAME[side]} - Odds: ${odds} - Amount: ${amount} - Reason: ${message}`,
+        });
+      }
+    } catch (err) {}
+  }
+
+  /**
+   *
+   * @param side
+   * @param odds
+   * @param amount
+   */
+  createBetMatchedSuccess({side, odds, amount}) {
+    try {
+      const category = this.eventCategory;
+      if (!!category) {
+        this.sendGAEvent({
+          category,
+          action: EVENT_CATEGORY.CREATE_BET_MATCHED_SUCCESS,
+          label: `${BETTING_SIDE_NAME[side]} - Odds: ${odds} - Amount: ${amount}`,
+        });
+      }
     } catch (err) {}
   }
 

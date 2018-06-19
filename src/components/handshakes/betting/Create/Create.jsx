@@ -27,7 +27,7 @@ import {showAlert} from '@/reducers/app/action';
 // self
 import './Create.scss';
 const ROUND = 1000000;
-
+const ROUND_ODD = 10;
 const betHandshakeHandler = BetHandshakeHandler.getShareManager();
 
 const nameFormBettingCreate = 'bettingCreate';
@@ -527,8 +527,8 @@ get defaultOutcome() {
   selectOutcomeClick(item){
     const {values} = this.state;
     values["event_predict"] = item.value;
-    values["event_odds"] = parseFloat(item.marketOdds).toFixed(2);
-    values["event_bet"] = parseFloat(item.marketAmount).toFixed(6);
+    values["event_odds"] = Math.floor(parseFloat(item.marketOdds)*ROUND_ODD)/ROUND_ODD;
+    values["event_bet"] = Math.floor(parseFloat(item.marketAmount)*ROUND)/ROUND;
     const roundWin = item.marketAmount * item.marketOdds;
     console.log('roundWin Value:', roundWin);
 

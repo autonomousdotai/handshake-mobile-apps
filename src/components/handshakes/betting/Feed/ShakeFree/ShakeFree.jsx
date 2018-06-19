@@ -29,7 +29,7 @@ const nameFormBettingShake = 'bettingShakeForm';
 
 const defaultAmount = 1;
 const ROUND = 1000000;
-
+const ROUND_ODD = 10;
 class BetingShakeFree extends React.Component {
   static propTypes = {
     outcomeId: PropTypes.number,
@@ -99,7 +99,7 @@ class BetingShakeFree extends React.Component {
     const roundWinValue = Math.floor(winValue*ROUND)/ROUND;
     console.log('Next props: amount, marketOdds, winValue, roundWinValue: ', amount, marketOdds, winValue, roundWinValue);
     this.setState({
-      oddValue: Math.floor(marketOdds*100)/100,
+      oddValue: Math.floor(marketOdds*ROUND_ODD)/ROUND_ODD,
       amountValue: amount,
       winValue: roundWinValue
     })
@@ -187,7 +187,7 @@ class BetingShakeFree extends React.Component {
     */
 
    this.setState({
-    oddValue: Math.floor(marketOdds*100)/100
+    oddValue: Math.floor(marketOdds*ROUND_ODD)/ROUND_ODD
   }, ()=> this.updateTotal());
 
 
