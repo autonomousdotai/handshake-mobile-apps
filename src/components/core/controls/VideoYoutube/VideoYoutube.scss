@@ -4,6 +4,9 @@
   .imgCover {
     position: relative;
     display: none;
+    & > img {
+      opacity: 0.65;
+    }
     .icon {
       position: absolute;
       top: 0;
@@ -17,6 +20,9 @@
         height: 25%;
         max-width: 90px;
         max-height: 90px;
+      }
+      &:hover {
+        cursor: pointer;
       }
     }
   }

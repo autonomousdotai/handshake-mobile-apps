@@ -52,7 +52,7 @@ import {
 // import getSymbolFromCurrency from 'currency-symbol-map';
 import Offer from "@/models/Offer";
 import {MasterWallet} from "@/models/MasterWallet";
-import {formatAmountCurrency, formatMoney, getHandshakeUserType, getOfferPrice} from "@/services/offer-util";
+import {formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
 import {Link} from "react-router-dom";
 import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from '../utils'
@@ -294,7 +294,7 @@ class FeedMe extends React.PureComponent {
                                       amount: formatAmountCurrency(offer.amount),
                                       currency: offer.currency,
                                       currency_symbol: offer.fiatCurrency,
-                                      total: formatMoney(fiatAmount),
+                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
                                       fee: offer.feePercentage,
                                       payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
                                     } } />;
@@ -325,7 +325,7 @@ class FeedMe extends React.PureComponent {
                                       amount: formatAmountCurrency(offer.amount),
                                       currency: offer.currency,
                                       currency_symbol: offer.fiatCurrency,
-                                      total: formatMoney(fiatAmount),
+                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
                                       fee: offer.feePercentage,
                                       payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
                                     } } />;
@@ -354,7 +354,7 @@ class FeedMe extends React.PureComponent {
                                           amount: formatAmountCurrency(offer.amount),
                                           currency: offer.currency,
                                           currency_symbol: offer.fiatCurrency,
-                                          total: formatMoney(fiatAmount),
+                                          total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
                                         } } />;
             actionButtons = (
               <div>
@@ -825,8 +825,8 @@ class FeedMe extends React.PureComponent {
                                       amountSell: offer.sellAmount,
                                       currency: offer.currency,
                                       fiatAmountCurrency: offer.fiatCurrency,
-                                      fiatAmountBuy: formatMoney(fiatAmountBuy),
-                                      fiatAmountSell: formatMoney(fiatAmountSell),
+                                      fiatAmountBuy: formatMoneyByLocale(fiatAmountBuy,offer.fiatCurrency),
+                                      fiatAmountSell: formatMoneyByLocale(fiatAmountSell,offer.fiatCurrency),
                                     } } />;
         break;
       }
@@ -1047,7 +1047,7 @@ class FeedMe extends React.PureComponent {
         amount: formatAmountCurrency(offer.amount),
         currency: offer.currency,
         currency_symbol: offer.fiatCurrency,
-        total: formatMoney(fiatAmount),
+        total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
         // fee: offer.feePercentage,
         payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
         } } />;
@@ -1755,7 +1755,7 @@ class FeedMe extends React.PureComponent {
           amount: formatAmountCurrency(offer.amount),
           currency: offer.currency,
           currency_symbol: offer.fiatCurrency,
-          total: formatMoney(fiatAmount),
+          total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
           fee: offer.feePercentage,
         } }/>;
 

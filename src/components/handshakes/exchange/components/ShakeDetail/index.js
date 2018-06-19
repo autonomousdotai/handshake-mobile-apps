@@ -20,6 +20,7 @@ import {FormattedMessage} from 'react-intl';
 import { minValueBTC, minValueETH } from "../../Create/validation";
 import {formatMoneyByLocale} from "@/services/offer-util";
 import {BigNumber} from "bignumber.js";
+import { countDecimals } from "../../utils";
 
 export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -32,6 +33,11 @@ const FormShakeDetail = createForm({
   },
 });
 const selectorFormShakeDetail = formValueSelector(nameFormShakeDetail);
+
+const fixed6 = (value) => {
+  if (countDecimals(value) > 6) return parseFloat(value).toFixed(6)
+  return value;
+}
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   handleSubmit = (values) => {
@@ -177,6 +183,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                   // containerClass="radio-container-old"
                   component={fieldInput}
                   className="input"
+                  type="number"
                   placeholder="500000"
                   validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                   onChange={this.onFiatAmountChange}
@@ -194,10 +201,12 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                   // containerClass="radio-container-old"
                   component={fieldInput}
                   className="input"
+                  type="number"
                   placeholder="10.00"
                   validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                   onChange={this.onAmountChange}
-                  maxLength={8}
+                  normalize={fixed6}
+                  // maxLength={8}
                   // type="tab-2"
                   // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
                 />

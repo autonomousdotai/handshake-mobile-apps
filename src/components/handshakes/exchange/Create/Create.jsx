@@ -46,7 +46,7 @@ import {ExchangeShopHandshake} from "@/services/neuron";
 // import phoneCountryCodes from '@/components/core/form/country-calling-codes.min.json';
 import COUNTRIES from "@/data/country-dial-codes.js";
 import {feedBackgroundColors} from "@/components/handshakes/exchange/config";
-import {formatAmountCurrency, formatMoney} from "@/services/offer-util";
+import {formatAmountCurrency, formatMoneyByLocale} from "@/services/offer-util";
 import {createOfferStores,} from "@/reducers/exchange/action";
 import {BigNumber} from "bignumber.js/bignumber";
 import { authUpdate } from '@/reducers/auth/action';
@@ -512,9 +512,9 @@ class Component extends React.Component {
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
     const { price } = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, currency);
-    const priceDisplayed = formatMoney(price)
-    const estimatedPriceBuy = formatMoney(price * (1 + parseFloat(customizePriceBuy, 10)/100))
-    const estimatedPriceSell = formatMoney(price * (1 + parseFloat(customizePriceSell, 10)/100))
+    const priceDisplayed = formatMoneyByLocale(price,fiatCurrency)
+    const estimatedPriceBuy = formatMoneyByLocale(price * (1 + parseFloat(customizePriceBuy, 10)/100),fiatCurrency)
+    const estimatedPriceSell = formatMoneyByLocale(price * (1 + parseFloat(customizePriceSell, 10)/100),fiatCurrency)
 
     const wantToBuy = amountBuy && amountBuy > 0
     const wantToSell = amountSell && amountSell > 0

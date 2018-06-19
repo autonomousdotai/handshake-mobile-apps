@@ -53,7 +53,7 @@
     }
   }
   .imageHeader {
-    min-width: 400px;
+    min-width: rem-calc(409px);
   }
   h1 {
     font-size: rem-calc(22px);
@@ -97,6 +97,23 @@
     }
     li + li {
       margin-top: rem-calc(16px);
+    }
+  }
+  .topBox {
+    display: flex;
+    & > div:first-child {
+      margin-right: rem-calc(40px);
+    }
+    & > div:last-child {
+      margin-left: rem-calc(30px);
+    }
+  }
+  .embed-responsive-16by9::before {
+    padding-top: 0 !important;
+  }
+  .embed-responsive {
+    iframe {
+      height: 200px !important;
     }
   }
 }
