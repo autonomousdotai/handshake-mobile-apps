@@ -1143,11 +1143,12 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case HANDSHAKE_USER.SHAKED: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.contactInfo;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
         break;
       }
       case HANDSHAKE_USER.OWNER: {
-        email = offer.toEmail ? offer.toEmail : offer.toContactPhone ? offer.toContactPhone : offer.toContactInfo;
+        // email = offer.toEmail ? offer.toEmail : offer.toContactPhone ? offer.toContactPhone : offer.toContactInfo;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
         break;
       }
     }
@@ -1767,7 +1768,7 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.contactInfo;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
         let statusValue = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[offer.status];
         statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME[statusValue];
 
