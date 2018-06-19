@@ -404,5 +404,8 @@ export const URL = {
 
   FAQ: '/faq',
   FAQ_INDEX: '/faq',
+
+  WHITE_PAPER: '/whitepaper',
+  WHITE_PAPER_INDEX: '/whitepaper',
 };
 

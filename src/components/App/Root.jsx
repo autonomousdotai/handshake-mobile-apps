@@ -37,6 +37,7 @@ addLocaleData([...en, ...fr, ...zh, ...de, ...ja, ...ko, ...ru, ...es]);
 // pages
 const LandingPage = createDynamicImport(() => import('@/pages/LandingPage/LandingPage'), Loading);
 const LandingPageTrade = createDynamicImport(() => import('@/pages/LandingPage/Trade'), Loading);
+const LandingPageWhitePaper = createDynamicImport(() => import('@/pages/LandingPage/WhitePaper'), Loading);
 const LandingPageFAQ = createDynamicImport(() => import('@/pages/FAQ/FAQ'), Loading);
 const MobileOrTablet = createDynamicImport(() => import('@/components/MobileOrTablet'), Loading);
 
@@ -149,6 +150,7 @@ class Root extends React.Component {
     if (window.location.pathname === URL.LANDING_PAGE_SHURIKEN) return <LandingPage />;
     if (window.location.pathname === URL.LANDING_PAGE_TRADE) return <LandingPageTrade />;
     if (window.location.pathname === URL.FAQ) return <LandingPageFAQ />;
+    if (window.location.pathname === URL.WHITE_PAPER) return <LandingPageWhitePaper />;
     if (BrowserDetect.isDesktop) return <MobileOrTablet />;
     return <Handle setLanguage={this.setLanguage} refer={this.refer} />;
   }
