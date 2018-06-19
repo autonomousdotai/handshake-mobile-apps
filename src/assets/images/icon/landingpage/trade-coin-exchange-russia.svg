@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1320px" height="384px" viewBox="0 0 1320 384" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 10</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="New-landing-page-2" transform="translate(-60.000000, -1661.000000)">
+            <g id="Group-10" transform="translate(60.000000, 1661.000000)">
+                <text id="Amount" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
+                    <tspan x="31" y="231">Торговля</tspan>
+                    <tspan x="142.730469" y="234.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="128.222813" y="231">на</tspan>
+                    <tspan x="171.144688" y="234.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="156.637031" y="231">основе</tspan>
+                    <tspan x="244.969063" y="234.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="230.461406" y="231">местоположения</tspan>
+                </text>
+                <text id="Amount" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
+                    <tspan x="31" y="291">Доступно</tspan>
+                    <tspan x="146.041016" y="294.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="131.533359" y="291">наличными</tspan>
+                </text>
+                <text id="Amount" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
+                    <tspan x="31" y="357">Анонимная</tspan>
+                    <tspan x="162.564453" y="360.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="148.056797" y="357">история</tspan>
+                    <tspan x="247.912266" y="360.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="233.404609" y="357">транзакций</tspan>
+                </text>
+                <text id="Narrative" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
+                    <tspan x="31" y="165.441406">Смарт</tspan>
+                    <tspan x="112.222656" y="168.473359" font-family="AzoSans-Regular, Azo Sans">-</tspan>
+                    <tspan x="99.915" y="165.441406">контракт</tspan>
+                    <tspan x="209.956016" y="168.473359" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="195.448359" y="165.441406">по</tspan>
+                    <tspan x="239.610469" y="168.473359" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="225.102813" y="165.441406">технологии</tspan>
+                    <tspan x="361.530547" y="168.473359" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="347.022891" y="165">Блокче́йн</tspan>
+                </text>
+                <text id="PayPal" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
+                    <tspan x="31" y="99">Уникальное</tspan>
+                    <tspan x="168.228516" y="102.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="153.720859" y="99">управление</tspan>
+                    <tspan x="289.513828" y="102.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
+                    <tspan x="275.006172" y="99">ключами</tspan>
+                </text>
+                <rect id="Rectangle-10" stroke="#979797" fill="#D8D8D8" opacity="0.100000001" x="0.5" y="0.5" width="1319" height="383" rx="4"></rect>
+                <rect id="Rectangle-231-Copy-26" fill="#F7F7F7" opacity="0.100000001" x="0" y="124" width="1320" height="2"></rect>
+                <rect id="Rectangle-231-Copy-26" fill="#F7F7F7" opacity="0.28" x="0" y="0" width="1320" height="60" rx="4"></rect>
+                <rect id="Rectangle-231-Copy-26" fill="#F7F7F7" opacity="0.100000001" x="0" y="190" width="1320" height="2"></rect>
+                <rect id="Rectangle-231-Copy-26" fill="#F7F7F7" opacity="0.100000001" x="0" y="250" width="1320" height="2"></rect>
+                <rect id="Rectangle-231-Copy-26" fill="#F7F7F7" opacity="0.100000001" x="0" y="316" width="1320" height="2"></rect>
+                <rect id="Rectangle-231-Copy-26" opacity="0.100000001" x="0" y="382" width="1320" height="2"></rect>
+                <path d="M683.869312,280.551738 L682.533188,279.126508 C682.375053,278.957831 682.118639,278.957831 681.960505,279.126508 L676.394639,285.063492 L674.027351,282.538446 C673.869274,282.369769 673.612832,282.369769 673.454726,282.538446 L672.118601,283.963677 C671.960466,284.132323 671.960466,284.405831 672.118601,284.574508 L676.108341,288.8302 C676.187409,288.914569 676.291053,288.956723 676.394668,288.956723 C676.498312,288.956723 676.601957,288.914569 676.680995,288.8302 L683.869312,281.162538 C683.945264,281.081554 683.987899,280.971677 683.987899,280.857154 C683.987928,280.742569 683.945264,280.632754 683.869312,280.551738 L683.869312,280.551738 Z" id="Shape" fill="#89FF00"></path>
+                <path d="M683.869312,346.551738 L682.533188,345.126508 C682.375053,344.957831 682.118639,344.957831 681.960505,345.126508 L676.394639,351.063492 L674.027351,348.538446 C673.869274,348.369769 673.612832,348.369769 673.454726,348.538446 L672.118601,349.963677 C671.960466,350.132323 671.960466,350.405831 672.118601,350.574508 L676.108341,354.8302 C676.187409,354.914569 676.291053,354.956723 676.394668,354.956723 C676.498312,354.956723 676.601957,354.914569 676.680995,354.8302 L683.869312,347.162538 C683.945264,347.081554 683.987899,346.971677 683.987899,346.857154 C683.987928,346.742569 683.945264,346.632754 683.869312,346.551738 L683.869312,346.551738 Z" id="Shape" fill="#89FF00"></path>
+                <path d="M683.869312,88.5517385 L682.533188,87.1265077 C682.375053,86.9578308 682.118639,86.9578308 681.960505,87.1265077 L676.394639,93.0634923 L674.027351,90.5384462 C673.869274,90.3697692 673.612832,90.3697692 673.454726,90.5384462 L672.118601,91.9636769 C671.960466,92.1323231 671.960466,92.4058308 672.118601,92.5745077 L676.108341,96.8302 C676.187409,96.9145692 676.291053,96.9567231 676.394668,96.9567231 C676.498312,96.9567231 676.601957,96.9145692 676.680995,96.8302 L683.869312,89.1625385 C683.945264,89.0815538 683.987899,88.9716769 683.987899,88.8571538 C683.987928,88.7425692 683.945264,88.6327538 683.869312,88.5517385 L683.869312,88.5517385 Z" id="Shape" fill="#89FF00"></path>
+                <path d="M683.869312,154.551738 L682.533188,153.126508 C682.375053,152.957831 682.118639,152.957831 681.960505,153.126508 L676.394639,159.063492 L674.027351,156.538446 C673.869274,156.369769 673.612832,156.369769 673.454726,156.538446 L672.118601,157.963677 C671.960466,158.132323 671.960466,158.405831 672.118601,158.574508 L676.108341,162.8302 C676.187409,162.914569 676.291053,162.956723 676.394668,162.956723 C676.498312,162.956723 676.601957,162.914569 676.680995,162.8302 L683.869312,155.162538 C683.945264,155.081554 683.987899,154.971677 683.987899,154.857154 C683.987928,154.742569 683.945264,154.632754 683.869312,154.551738 L683.869312,154.551738 Z" id="Shape" fill="#89FF00"></path>
+                <path d="M683.869312,220.551738 L682.533188,219.126508 C682.375053,218.957831 682.118639,218.957831 681.960505,219.126508 L676.394639,225.063492 L674.027351,222.538446 C673.869274,222.369769 673.612832,222.369769 673.454726,222.538446 L672.118601,223.963677 C671.960466,224.132323 671.960466,224.405831 672.118601,224.574508 L676.108341,228.8302 C676.187409,228.914569 676.291053,228.956723 676.394668,228.956723 C676.498312,228.956723 676.601957,228.914569 676.680995,228.8302 L683.869312,221.162538 C683.945264,221.081554 683.987899,220.971677 683.987899,220.857154 C683.987928,220.742569 683.945264,220.632754 683.869312,220.551738 L683.869312,220.551738 Z" id="Shape" fill="#89FF00"></path>
+                <text id="Ninja" font-family="AzoSans-Bold, Azo Sans" font-size="24" font-weight="bold" line-spacing="24" fill="#FFFFFF">
+                    <tspan x="648" y="42">Ninja</tspan>
+                </text>
+                <text id="Традиционная-платфор" font-family="LucidaGrande-Bold, Lucida Grande" font-size="24" font-weight="bold" line-spacing="24" fill="#FFFFFF">
+                    <tspan x="913" y="41">Традиционная</tspan>
+                    <tspan x="1124.11506" y="44.5506875" font-family="AzoSans-Bold, Azo Sans"> </tspan>
+                    <tspan x="1106.16456" y="41">платформа</tspan>
+                </text>
+                <polygon id="Shape" stroke="#FF0000" fill="#FFFFFF" fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round" points="1081.84404 278 1081 278.844037 1086.15596 284 1081 289.155963 1081.84404 290 1087 284.844037 1092.15596 290 1093 289.155963 1087.84404 284 1093 278.844037 1092.15596 278 1087 283.155963"></polygon>
+                <polygon id="Shape" stroke="#FF0000" fill="#FFFFFF" fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round" points="1081.84404 86 1081 86.8440367 1086.15596 92 1081 97.1559633 1081.84404 98 1087 92.8440367 1092.15596 98 1093 97.1559633 1087.84404 92 1093 86.8440367 1092.15596 86 1087 91.1559633"></polygon>
+                <polygon id="Shape" stroke="#FF0000" fill="#FFFFFF" fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round" points="1081.84404 218 1081 218.844037 1086.15596 224 1081 229.155963 1081.84404 230 1087 224.844037 1092.15596 230 1093 229.155963 1087.84404 224 1093 218.844037 1092.15596 218 1087 223.155963"></polygon>
+                <polygon id="Shape" stroke="#FF0000" fill="#FFFFFF" fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round" points="1081.84404 344 1081 344.844037 1086.15596 350 1081 355.155963 1081.84404 356 1087 350.844037 1092.15596 356 1093 355.155963 1087.84404 350 1093 344.844037 1092.15596 344 1087 349.155963"></polygon>
+                <polygon id="Shape" stroke="#FF0000" fill="#FFFFFF" fill-rule="nonzero" stroke-linecap="round" stroke-linejoin="round" points="1081.84404 152 1081 152.844037 1086.15596 158 1081 163.155963 1081.84404 164 1087 158.844037 1092.15596 164 1093 163.155963 1087.84404 158 1093 152.844037 1092.15596 152 1087 157.155963"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

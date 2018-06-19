@@ -91,6 +91,7 @@ class MobileOrTablet extends React.PureComponent {
               imageUrl={videoLeftCover}
               imageAlt="ninja place prediction"
               videoUrl="https://youtu.be/YYZJlLDzeEs"
+              autoPlayVideo
             />
             <div>
               <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja"/>

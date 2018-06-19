@@ -113,7 +113,7 @@ class Create extends React.Component {
     // get default
     let { id } = Helper.getQueryStrings(window.location.search);
     id = parseInt(id, 10);
-    if (id && Object.values(HANDSHAKE_ID).indexOf(id !== -1)) {
+    if (id && Object.values(HANDSHAKE_ID).indexOf(id) !== -1) {
       seletedId = id;
     }
     this.state = {

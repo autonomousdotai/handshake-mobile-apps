@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import $http from '@/services/api';
 import Helper from '@/services/helper';
 import { showAlert } from '@/reducers/app/action';
+import GA from '@/services/googleAnalytics';
+
 // style
 import CopyLink from '@/assets/images/share/link.svg';
 import FacebookSVG from '@/assets/images/share/facebook.svg';
@@ -83,9 +85,17 @@ class ShareSocial extends PureComponent {
 
   async clickShare(e, shareType) {
     e.stopPropagation();
-    const { title, shareUrl } = this.props;
+    const { title, shareUrl, sharePage } = this.props;
     let rawUrlShare = '';
     let shortLink = shareUrl;
+
+    // Send GA
+    GA.createShareButton({
+      category: sharePage,
+      title,
+      shareType,
+      shareUrl,
+    });
 
     switch (shareType) {
       case 'TWITTER':
