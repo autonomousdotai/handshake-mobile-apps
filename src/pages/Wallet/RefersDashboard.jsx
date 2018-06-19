@@ -97,7 +97,7 @@ class RefersDashboard extends React.Component {
 
   getLinkRefer(){
     const profile = local.get(APP.AUTH_PROFILE);
-    let referLink = profile && profile.username ? "https://ninja.org/?ref=" + profile.username : '';
+    let referLink = profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : '';
     this.setState({referLink: referLink});
     this.props.rfChange(nameFormStep4, 'refer_link', referLink);
   }
@@ -122,8 +122,7 @@ class RefersDashboard extends React.Component {
               type="text"
               className="form-control"
               placeholder=""
-              component={fieldInput}
-              onChange={evt => this.updateLinkValue(evt)}
+              component={fieldInput}              
               validate={[required]}
               onFocus={() => { evt => this.handleFocus(evt); Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
           />

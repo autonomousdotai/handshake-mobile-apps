@@ -2,6 +2,7 @@ import { MasterWallet } from '@/models/MasterWallet';
 import { BettingHandshake } from '@/services/neuron';
 import { API_URL, APP } from '@/constants';
 import {showAlert} from '@/reducers/app/action';
+
 import GA from '@/services/googleAnalytics';
 
 import local from '@/services/localStore';
@@ -106,6 +107,7 @@ export const BETTING_STATUS_LABEL =
       REFUNDING: 'Your coin is being refunded to you.',
       REFUNDED: 'Your coin has been refunded.',
       ROLLBACK: `Something did not go according to plan. We're fixing it`,
+
     };
 
 export const CONTRACT_METHOD = {
@@ -174,6 +176,15 @@ export class BetHandshakeHandler {
     console.log('getStatusLabel Role:', role);
     console.log('getStatusLabel isMatch:', isMatch);
     console.log('getStatusLabel Blockchain status:', blockchainStatus);
+    if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_BLOCKCHAIN_PENDING
+      || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING
+      || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING
+      || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_REFUND_PENDING
+      || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_DISPUTE_PENDING) {
+    // TO DO: scan txhash and rollback after a few minutes
+    strStatus = BETTING_STATUS_LABEL.PROGRESSING;
+    isAction = false;
+} 
     if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_PENDING) {
       strStatus = BETTING_STATUS_LABEL.INITING;
       isAction = false;
@@ -191,14 +202,6 @@ export class BetHandshakeHandler {
       isAction = false;
     } else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_DONE && resultStatus === BETTING_STATUS.SUPPORT_WIN && side === SIDE.AGAINST) {
       strStatus = BETTING_STATUS_LABEL.WIN;
-      isAction = false;
-    } else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_BLOCKCHAIN_PENDING
-              || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING
-              || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING
-              || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_REFUND_PENDING
-              || blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_DISPUTE_PENDING) {
-      // TO DO: scan txhash and rollback after a few minutes
-      strStatus = BETTING_STATUS_LABEL.PROGRESSING;
       isAction = false;
     } else if (!isMatch && role === ROLE.INITER && blockchainStatus !== BET_BLOCKCHAIN_STATUS.STATUS_SHAKER_SHAKED) {
       label = BETTING_STATUS_LABEL.CANCEL;

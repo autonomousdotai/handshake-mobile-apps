@@ -130,15 +130,15 @@ class Component extends React.Component {
     const bnFee = new BigNumber(fee);
     const condition = bnBalance.isLessThan(bnAmount.plus(bnFee));
     if (condition) {
-      const { intl } = this.props;
       this.props.showAlert({
         message: (
           <div className="text-center">
-            {intl.formatMessage({ id: "notEnoughCoinInWallet" }, {
-              amount: formatAmountCurrency(balance),
-              fee: formatAmountCurrency(fee),
-              currency: currency
-            })}
+            <FormattedMessage id="notEnoughCoinInWallet"
+                              values={ {
+                                amount: formatAmountCurrency(balance),
+                                fee: formatAmountCurrency(fee),
+                                currency: currency
+                              } } />
           </div>
         ),
         timeOut: 3000,
@@ -295,7 +295,7 @@ class Component extends React.Component {
   }
 
   handleSubmit = async (values) => {
-    const { intl, totalAmount, price } = this.props;
+    const { totalAmount, price } = this.props;
     // const fiat_currency = this.state.ipInfo.currency;
     const {ipInfo: {currency: fiat_currency}, authProfile} = this.props;
     // console.log('valuessss', values);
@@ -315,11 +315,12 @@ class Component extends React.Component {
       && condition) {
       this.props.showAlert({
         message: <div className="text-center">
-          {intl.formatMessage({ id: 'notEnoughCoinInWallet' }, {
-            amount: formatAmountCurrency(balance),
-            fee: formatAmountCurrency(fee),
-            currency: values.currency,
-          })}
+          <FormattedMessage id="notEnoughCoinInWallet"
+                            values={ {
+                              amount: formatAmountCurrency(balance),
+                              fee: formatAmountCurrency(fee),
+                              currency: values.currency,
+                            } } />
         </div>,
         timeOut: 3000,
         type: 'danger',
@@ -367,13 +368,14 @@ class Component extends React.Component {
     offer.reward_address = reward_address;
 
     console.log('handleSubmit', offer);
-    const message = intl.formatMessage({ id: 'createOfferConfirm' }, {
-      type: EXCHANGE_ACTION_NAME[values.type],
-      amount: formatAmountCurrency(values.amount),
-      currency: values.currency,
-      currency_symbol: fiat_currency,
-      total: formatMoney(totalAmount),
-    });
+    const message = <FormattedMessage id="createOfferConfirm"
+                      values={ {
+                        type: EXCHANGE_ACTION_NAME[values.type],
+                        amount: formatAmountCurrency(values.amount),
+                        currency: values.currency,
+                        currency_symbol: fiat_currency,
+                        total: formatMoney(totalAmount),
+                      } } />;
 
     this.setState({
       modalContent:
