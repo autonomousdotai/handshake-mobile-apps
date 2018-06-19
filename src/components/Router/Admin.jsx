@@ -98,7 +98,7 @@ class Admin extends React.Component {
     const data = new FormData(event.target);
     const email = data.get('email');
     const password = data.get('password');
-    const password_md5 = md5('admin@ninja.orgAutonomous');
+    const password_md5 = md5(process.env.admin_password);
     const auth = $http(`${BASE_API.BASE_URL}/cryptosign/auth`, {
       email,
       password: password_md5,
