@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import Web3 from 'web3';
 import './Book.scss';
 const BN = Web3.utils.BN;
-
+const ROUND_ODDS = 10;
+const ROUND = 1000000;
 class BetBook extends React.Component {
   constructor(props) {
     super(props);
@@ -22,11 +23,11 @@ class BetBook extends React.Component {
     const amountStyle = {
       color: amountColor,
     };
-    console.log()
+    console.log("Odds:", odds);
     return (
       <div className="wrapperBettingBook">
-        <div className="oddText">{parseFloat(amount).toFixed(6)}</div>
-        <div className="amountText" style={amountStyle}>{parseFloat(odds).toFixed(2)}</div>
+        <div className="oddText">{Math.floor(parseFloat(amount)*ROUND)/ROUND}</div>
+        <div className="amountText" style={amountStyle}>{Math.floor(odds*ROUND_ODDS)/ROUND_ODDS}</div>
         {/*<div className="amountText" style={amountStyle}>/{parseFloat(oppositeOdds).toFixed(2)}</div>*/}
       </div>
     );

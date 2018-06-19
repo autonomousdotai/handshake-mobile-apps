@@ -3,16 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import qs from 'querystring';
 // contants
-import { URL, APP } from '@/constants';
+import { URL, APP, API_URL } from '@/constants';
 // actions
-import { changeLocale } from '@/reducers/app/action';
+import { setIpInfo, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
+import { getListOfferPrice } from '@/reducers/exchange/action';
+
 // services
+import $http from '@/services/api';
 import { createDynamicImport } from '@/services/app';
 import local from '@/services/localStore';
 import BrowserDetect from '@/services/browser-detect';
 // components
 import Handle from '@/components/App/Handle';
 import Loading from '@/components/core/presentation/Loading';
+
+import IpInfo from '@/models/IpInfo';
+import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
+import COUNTRIES_BLACKLIST_CASH from '@/data/country-blacklist-exchange';
 // languages
 import { addLocaleData, IntlProvider } from 'react-intl';
 import en from 'react-intl/locale-data/en';
@@ -37,6 +44,13 @@ class Root extends React.Component {
   static propTypes = {
     app: PropTypes.object.isRequired,
     changeLocale: PropTypes.func.isRequired,
+    //
+    setBannedPrediction: PropTypes.func.isRequired,
+    setBannedCash: PropTypes.func.isRequired,
+    setCheckBanned: PropTypes.func.isRequired,
+    //
+    setIpInfo: PropTypes.func.isRequired,
+    getListOfferPrice: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -47,6 +61,7 @@ class Root extends React.Component {
     };
 
     this.setLanguage = ::this.setLanguage;
+    this.ipInfo = ::this.ipInfo;
 
     this.isSupportedLanguages = ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'];
 
@@ -60,6 +75,10 @@ class Root extends React.Component {
     const { language, ref } = this.querystringParsed;
     if (language) this.setLanguage(language, false);
     if (ref) this.refer = ref;
+
+    // IP info - locale
+    this.ipInfo();
+    this.timeOutInterval = setInterval(() => this.ipInfo(), 30 * 60 * 1000); // 30'
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -76,6 +95,55 @@ class Root extends React.Component {
     }
   }
   // /locale
+
+  // exchange
+  getListOfferPrice() {
+    const ipInfo = local.get(APP.IP_INFO);
+    this.props.getListOfferPrice({
+      PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
+      qs: { fiat_currency: ipInfo?.currency },
+    });
+  }
+  // /exchange
+
+  ipInfo() {
+    console.log('app - handle - ipinfo');
+    $http({
+      url: 'https://ipapi.co/json',
+      qs: {
+        key: process.env.ipapiKey,
+      },
+    }).then((res) => {
+      const { data } = res;
+      // ipInfo
+      const ipInfo = IpInfo.ipInfo(data);
+      this.props.setIpInfo(ipInfo);
+      local.save(APP.IP_INFO, ipInfo);
+
+      // exchange
+      this.getListOfferPrice();
+      this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
+
+      // locale
+      if (!local.get(APP.LOCALE)) {
+        const firstLanguage = data.languages.split(',')[0];
+        this.setLanguage(firstLanguage);
+      }
+
+      if (process.env.isProduction) {
+        // should use country code: .country ISO 3166-1 alpha-2
+        // https://ipapi.co/api/#complete-location
+        if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+          this.props.setBannedPrediction();
+        }
+        if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
+          this.props.setBannedCash();
+        }
+      }
+      this.props.setCheckBanned();
+      // /locale
+    });
+  }
 
   preRender() {
     if (window.location.pathname === URL.LANDING_PAGE_SHURIKEN) return <LandingPage />;
@@ -103,5 +171,10 @@ export default connect(state => ({
   app: state.app,
 }), {
   changeLocale,
+  setIpInfo,
+  setBannedPrediction,
+  setBannedCash,
+  setCheckBanned,
+  getListOfferPrice,
 })(Root);
 

@@ -5,6 +5,14 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
+export const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  const decimalsString = value.toString().split('.')[1];
+  if (!decimalsString) return 0;
+  return decimalsString.length || 0;
+  // return value.toString().split('.')[1].length || 0;
+}
+
 export const getDistanceFromLatLonInKm = (_lat1, _lon1, _lat2, _lon2) => {
   const lat1 = parseFloat(_lat1, 10);
   const lon1 = parseFloat(_lon1, 10);

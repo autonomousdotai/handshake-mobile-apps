@@ -372,7 +372,7 @@ class FeedCreditCard extends React.Component {
                       validate={[required]}
                       component={fieldCleave}
                       propsCleave={{
-                        placeholder: intl.formatMessage({ id: 'amount' }),
+                        placeholder: <FormattedMessage id="amount"/>,
                         options: { numeral: true, delimiter: '', numeralDecimalScale: 8 },
                         style: {
                           fontSize: '26px',
