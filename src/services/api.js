@@ -1,47 +1,39 @@
 import axios from 'axios';
-import qs from 'qs';
-import { isEmpty, merge } from 'lodash';
+import { merge, trimEnd } from 'lodash';
 import local from '@/services/localStore';
 import { APP, BASE_API } from '@/constants';
 import { MasterWallet } from '@/models/MasterWallet';
 
-const $http = (url, data, id, qsObject, headersMore, method = 'GET') => {
-  let QS = '';
-
-  if (!isEmpty(qsObject)) {
-    QS = qs.stringify(qsObject);
-  }
-
-  const token = local.get(APP.AUTH_TOKEN);
-  const wallet = MasterWallet.getWalletDefault('ETH');
-
-  let headers = {
-    // 'Content-Type': 'application/json',
+const $http = ({
+  url, data = {}, qs, id = '', headers = {}, method = 'GET',
+}) => {
+  // start handle headers
+  const defaultHeaders = {
+    'Content-Type': 'application/json',
   };
+  const completedHeaders = merge(defaultHeaders, headers);
 
-  if (!isEmpty(headersMore)) {
-    headers = merge(headers, headersMore);
+  if (url.startsWith(BASE_API.BASE_URL)) {
+    const token = local.get(APP.AUTH_TOKEN);
+    if (token) {
+      completedHeaders.Payload = token;
+    }
+
+    const wallet = MasterWallet.getWalletDefault('ETH');
+    if (wallet && wallet.chainId) {
+      completedHeaders.ChainId = wallet.chainId;
+    }
   }
+  // end handle headers
 
-  if (token) {
-    headers.Payload = token;
-  }
-
-  if (wallet && wallet.chainId) {
-    headers.ChainId = wallet.chainId;
-  }
-
-  const profile = local.get(APP.AUTH_PROFILE);
-
-  if (profile && profile.fcm_token) {
-    headers['Fcm-Token'] = profile.fcm_token;
-  }
-
-  return axios.create({
+  return axios({
+    method: method.toLowerCase(),
     timeout: BASE_API.TIMEOUT,
-    // withCredentials: true,
-    headers,
-  })[method.toLocaleLowerCase()](`${url}${id ? `${id}/` : ''}${QS ? `?${QS}` : ''}`, data);
+    headers: completedHeaders,
+    url: trimEnd(`${url}/${id}`, '/'),
+    params: qs,
+    data,
+  });
 };
 
 export default $http;

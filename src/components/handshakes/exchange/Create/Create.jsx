@@ -46,7 +46,7 @@ import {ExchangeShopHandshake} from "@/services/neuron";
 // import phoneCountryCodes from '@/components/core/form/country-calling-codes.min.json';
 import COUNTRIES from "@/data/country-dial-codes.js";
 import {feedBackgroundColors} from "@/components/handshakes/exchange/config";
-import {formatAmountCurrency, formatMoney} from "@/services/offer-util";
+import {formatAmountCurrency, formatMoneyByLocale} from "@/services/offer-util";
 import {createOfferStores,} from "@/reducers/exchange/action";
 import {BigNumber} from "bignumber.js/bignumber";
 import { authUpdate } from '@/reducers/auth/action';
@@ -144,7 +144,7 @@ class Component extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    const { intl, rfChange } = this.props;
+    const { rfChange } = this.props;
     console.log('componentWillReceiveProps',nextProps);
     if (nextProps.offerStores && nextProps.offerStores !== this.props.offerStores) {
       console.log('componentWillReceiveProps inside', nextProps.offerStores);
@@ -165,8 +165,7 @@ class Component extends React.Component {
       }
 
       if (haveOfferETH && haveOfferBTC) {
-        const message = intl.formatMessage({ id: 'offerStoresAlreadyCreated' }, {
-        });
+        const message = <FormattedMessage id="offerStoresAlreadyCreated"/>;
 
         this.setState({
           modalContent:
@@ -232,14 +231,14 @@ class Component extends React.Component {
     const conditionSell = bnBalance.isLessThan(bnAmountSell.plus(bnFeeSell));
 
     if (conditionBuy || conditionSell) {
-      const { intl } = this.props;
       this.props.showAlert({
         message: <div className="text-center">
-          {intl.formatMessage({ id: 'notEnoughCoinInWalletStores' }, {
-            amount: formatAmountCurrency(balance),
-            fee: formatAmountCurrency(fee),
-            currency: currency,
-          })}
+          <FormattedMessage id="notEnoughCoinInWalletStores"
+                            values={ {
+                              amount: formatAmountCurrency(balance),
+                              fee: formatAmountCurrency(fee),
+                              currency: currency,
+                            } } />
         </div>,
         timeOut: 5000,
         type: 'danger',
@@ -252,14 +251,13 @@ class Component extends React.Component {
   }
 
   checkMainNetDefaultWallet = (wallet) => {
-    const { intl } = this.props;
     let result = true;
 
     if (process.env.isLive) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {
-        const message = intl.formatMessage({id: 'requireDefaultWalletOnMainNet'}, {});
+        const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
         this.showAlert(message);
         result = false;
       }
@@ -276,7 +274,7 @@ class Component extends React.Component {
   }
 
   handleSubmit = async (values) => {
-    const { intl, authProfile, ipInfo } = this.props;
+    const { authProfile, ipInfo } = this.props;
     const { lat, lng } = this.state;
     console.log('handleSubmit', values);
     const {
@@ -330,11 +328,12 @@ class Component extends React.Component {
       item: data,
     }
 
-    const message = intl.formatMessage({ id: 'createOfferStoreConfirm' }, {
-      currency: currency,
-      amountBuy: amountBuy,
-      amountSell: amountSell,
-    });
+    const message = <FormattedMessage id="createOfferStoreConfirm"
+                                values={ {
+                                  currency: currency,
+                                  amountBuy: amountBuy,
+                                  amountSell: amountSell,
+                                } } />;
 
     this.setState({
       modalContent:
@@ -401,7 +400,7 @@ class Component extends React.Component {
 
   handleCreateOfferSuccess = async (responseData) => {
     console.log('handleCreateOfferSuccess', responseData);
-    const { intl, rfChange, currency, amountSell } = this.props;
+    const { rfChange, currency, amountSell } = this.props;
     const data = responseData.data;
     const offer = OfferShop.offerShop(data);
     this.offer = offer;
@@ -432,8 +431,8 @@ class Component extends React.Component {
     }
 
     this.hideLoading();
-    const message = intl.formatMessage({ id: 'createOfferSuccessMessage' }, {
-    });
+    const message = <FormattedMessage id="createOfferSuccessMessage" />;
+
     this.props.showAlert({
       message: <div className="text-center">{message}</div>,
       timeOut: 2000,
@@ -506,15 +505,15 @@ class Component extends React.Component {
   }
 
   render() {
-    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell, intl } = this.props;
+    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell, } = this.props;
     const modalContent = this.state.modalContent;
     const haveProfile = this.offer ? true : false;
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
     const { price } = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, currency);
-    const priceDisplayed = formatMoney(price)
-    const estimatedPriceBuy = formatMoney(price * (1 + parseFloat(customizePriceBuy, 10)/100))
-    const estimatedPriceSell = formatMoney(price * (1 + parseFloat(customizePriceSell, 10)/100))
+    const priceDisplayed = formatMoneyByLocale(price,fiatCurrency)
+    const estimatedPriceBuy = formatMoneyByLocale(price * (1 + parseFloat(customizePriceBuy, 10)/100),fiatCurrency)
+    const estimatedPriceSell = formatMoneyByLocale(price * (1 + parseFloat(customizePriceSell, 10)/100),fiatCurrency)
 
     const wantToBuy = amountBuy && amountBuy > 0
     const wantToSell = amountSell && amountSell > 0

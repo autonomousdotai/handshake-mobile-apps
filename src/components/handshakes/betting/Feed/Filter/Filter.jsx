@@ -113,7 +113,7 @@ class BettingFilter extends React.Component {
       support,
       against,
     });
-    this.checkShowFreeBanner();
+    //this.checkShowFreeBanner();
 
   }
 
