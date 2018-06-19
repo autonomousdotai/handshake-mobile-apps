@@ -305,25 +305,30 @@ class FeedBetting extends React.Component {
       message = MESSAGE.RIGHT_NETWORK;
     }
     else {
-      const {id} = this.props;
-      const realId = betHandshakeHandler.getId(id);
+      const {id, freeBet} = this.props;
+      if(freeBet){
+        //TO DO: handle with freebet 
+      }else {
+        const realId = betHandshakeHandler.getId(id);
 
-      switch(title){
-
-        case BETTING_STATUS_LABEL.CANCEL:
-          // TO DO: CLOSE BET
-          this.uninitItem(realId);
+        switch(title){
+  
+          case BETTING_STATUS_LABEL.CANCEL:
+            // TO DO: CLOSE BET
+            this.uninitItem(realId);
+            break;
+  
+          case BETTING_STATUS_LABEL.WITHDRAW:
+            // TO DO: WITHDRAW
+            this.collect(id);
+            break;
+          case BETTING_STATUS_LABEL.REFUND:
+          this.refund(realId);
           break;
-
-        case BETTING_STATUS_LABEL.WITHDRAW:
-          // TO DO: WITHDRAW
-          this.collect(id);
-          break;
-        case BETTING_STATUS_LABEL.REFUND:
-        this.refund(realId);
-        break;
-
+  
+        }
       }
+      
     }
     if(message){
       this.props.showAlert({
