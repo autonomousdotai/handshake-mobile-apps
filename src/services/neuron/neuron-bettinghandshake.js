@@ -142,7 +142,7 @@ export default class BettingHandshake extends BaseHandshake {
     const payloadData = this.handshakeInstance.methods
       .uninit(hid, side, stakeValue, oddsValue, bytesOffchain)
       .encodeABI();
-    const dataBlockChain = await this.neuron.makeRawTransaction(
+    const dataBlockChain = await this.neuron.sendRawTransaction(
       this.address,
       this.privateKey,
       payloadData,

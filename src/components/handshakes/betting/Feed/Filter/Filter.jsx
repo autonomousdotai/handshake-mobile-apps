@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 
 // service, constant
-import { API_URL } from '@/constants';
+import { APP, API_URL } from '@/constants';
 import { loadMatches, loadHandshakes, checkFreeAvailable } from '@/reducers/betting/action';
 import { BetHandshakeHandler, SIDE } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import GA from '@/services/googleAnalytics';
@@ -18,6 +18,7 @@ import GroupBook from './../GroupBook';
 import TopInfo from './../TopInfo';
 import BettingShake from './../Shake';
 import BettingShakeFree from './../ShakeFree';
+import local from '@/services/localStore';
 
 // style
 import './Filter.scss';
@@ -302,9 +303,11 @@ class BettingFilter extends React.Component {
   }
 
   getInfoShare(selectedMatch, selectedOutcome) {
+    const profile = local.get(APP.AUTH_PROFILE);    
+    let ref = profile ? "&ref=" + profile.username : ''
     return {
       title: `I put a bet on ${selectedMatch.value}. ${selectedOutcome.value}! Put your coin where your mouth is.`,
-      shareUrl: `${window.location.origin}/discover/${encodeURI(selectedMatch.value)}?match=${selectedMatch.id}&out_come=${selectedOutcome.id}`,
+      shareUrl: `${window.location.origin}/discover/${encodeURI(selectedMatch.value)}?match=${selectedMatch.id}&out_come=${selectedOutcome.id}${ref}`,
     };
   }
 
@@ -421,7 +424,7 @@ class BettingFilter extends React.Component {
     return (
       <div className="wrapperBettingFilter">
         <div className="share-block">
-          <p className="text">Bet against more ninjas!</p>
+          <p className="text">Share. Get 20 coins.</p>
           <ShareSocial
             className="share"
             title={shareInfo.title}

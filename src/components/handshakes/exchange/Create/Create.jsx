@@ -255,7 +255,7 @@ class Component extends React.Component {
     const { intl } = this.props;
     let result = true;
 
-    if (process.env.isProduction && !process.env.isStaging) {
+    if (process.env.isLive) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {

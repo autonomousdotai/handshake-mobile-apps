@@ -34,14 +34,14 @@ export class MasterWallet {
       const masterWallet = [];
 
       let defaultWallet = [1, 3];
-      if (process.env.isProduction) {
+      if (process.env.isLive) {
         defaultWallet = [0, 1];
       }
 
       for (const k1 in MasterWallet.ListCoin) {
         for (const k2 in MasterWallet.ListCoin[k1].Network) {
           // check production, only get mainnet:
-          if (process.env.isProduction && k2 != 'Mainnet') {
+          if (process.env.isLive && k2 != 'Mainnet') {
             break;
           }
           // init a wallet:
@@ -91,7 +91,7 @@ export class MasterWallet {
       for (const k1 in MasterWallet.ListCoin) {
         for (const k2 in MasterWallet.ListCoin[k1].Network) {
           // check production, only get mainnet:
-          if (process.env.isProduction && k2 != 'Mainnet') {
+          if (process.env.isLive && k2 != 'Mainnet') {
             break;
           }
           const wallet = new MasterWallet.ListCoin[k1]();
@@ -153,7 +153,7 @@ export class MasterWallet {
       return masterWallet;
     }
 
-    // check not exists Shuri wallet:
+    // create shuriken if not exists:
     static createShuriWallet() {
 
       const wallets = MasterWallet.getMasterWallet();
@@ -172,10 +172,11 @@ export class MasterWallet {
           shuriWalletMain.title = shuriTemp.title;
           shuriWalletMain.network = shuriTemp.constructor.Network.Mainnet;
           shuriWalletMain.chainId = 1;
+          shuriWalletMain.default = false;
           shuriWalletMain = MasterWallet.convertObject(shuriWalletMain);
           hasUpdateMain = true;
         }
-        if (!process.env.isProduction && wallet.name == 'ETH' && !hasUpdateTest) {
+        if (!process.env.isLive && wallet.name == 'ETH' && !hasUpdateTest) {
           shuriWalletTest = JSON.parse(JSON.stringify(wallet));
           const shuriTemp = new Shuriken();
           shuriWalletTest.name = shuriTemp.name;
@@ -183,6 +184,7 @@ export class MasterWallet {
           shuriWalletTest.title = shuriTemp.title;
           shuriWalletTest.network = shuriTemp.constructor.Network.Rinkeby;
           shuriWalletTest.chainId = 4;
+          shuriWalletTest.default = false;
           shuriWalletTest = MasterWallet.convertObject(shuriWalletTest);
           hasUpdateTest = true;
 
@@ -205,7 +207,7 @@ export class MasterWallet {
       const listWallet = [];
       let isDefaultBTC = false;
       let isDefaultETH = false;
-      if (process.env.isProduction) {
+      if (process.env.isLive) {
         wallets.forEach((wallet) => {
           if (wallet.getNetworkName() == 'Mainnet') {
             if (wallet.default) {
@@ -279,7 +281,7 @@ export class MasterWallet {
           let wallet = false;
           wallets.forEach((walletJson) => {
             if (walletJson.default && coinName == walletJson.name) {
-              if (process.env.isProduction) {
+              if (process.env.isLive) {
                 if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
                   wallet = MasterWallet.convertObject(walletJson);
                 }
@@ -295,7 +297,7 @@ export class MasterWallet {
         wallets.forEach((walletJson) => {
           if (!lstDefault.hasOwnProperty(walletJson.name)) { lstDefault[walletJson.name] = null; }
           if (walletJson.default) {
-            if (process.env.isProduction) {
+            if (process.env.isLive) {
               if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
                 lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);
               }

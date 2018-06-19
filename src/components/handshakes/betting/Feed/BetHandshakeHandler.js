@@ -56,6 +56,8 @@ export const BET_BLOCKCHAIN_STATUS = {
     STATUS_REFUND_PENDING: -6,
     STATUS_DISPUTE_PENDING: -5,
     STATUS_BLOCKCHAIN_PENDING: -4,
+    STATUS_BLOCKCHAIN_ROLLBACK: -9,
+
 
     STATUS_PENDING: -1,
     STATUS_INITED: 0,
@@ -100,6 +102,8 @@ export const BETTING_STATUS_LABEL =
       CANCELLED: 'Your bet was cancelled.',
       REFUNDING: 'Your coin is being refunded to you.',
       REFUNDED: 'Your coin has been refunded.',
+      ROLLBACK: `There is something wrong. We're rollbacking the transaction.`,
+
     };
 
 export const CONTRACT_METHOD = {
@@ -172,6 +176,9 @@ export class BetHandshakeHandler {
       strStatus = BETTING_STATUS_LABEL.INITING;
       isAction = false;
     } else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINITED) {
+      strStatus = BETTING_STATUS_LABEL.CANCELLED;
+      isAction = false;
+    }else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_BLOCKCHAIN_ROLLBACK) {
       strStatus = BETTING_STATUS_LABEL.CANCELLED;
       isAction = false;
     } else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_REFUND) {
@@ -440,7 +447,6 @@ export class BetHandshakeHandler {
   }
   async cancelBet(hid, side, stake, odds, offchain){
     const chainId = this.getChainIdDefaultWallet();
-        //hid = 10000;
 
     const bettinghandshake = new BettingHandshake(chainId);
     const result = await bettinghandshake.cancelBet(hid, side, stake, odds, offchain);

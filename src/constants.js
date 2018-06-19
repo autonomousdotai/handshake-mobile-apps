@@ -161,6 +161,9 @@ export const API_URL = {
     LIST: 'comment/list',
     GET_COMMENT_COUNT: 'comment/count',
   },
+  ADMIN: {
+    BASE: 'admin/',
+  },
 };
 
 export const HANDSHAKE_STATUS = {
