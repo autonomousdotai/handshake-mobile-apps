@@ -15,6 +15,11 @@ $blue: #2456fb;
       position: absolute;
     }
   }
+  .half:before {
+    color: $blue;
+    width: 8px;
+    overflow: hidden;
+  }
   .full {
     color: $blue;
   }
