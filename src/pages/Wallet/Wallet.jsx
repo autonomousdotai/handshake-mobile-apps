@@ -990,7 +990,17 @@ class Wallet extends React.Component {
           </Modal>
 
           {/* QR code dialog */}
-          {this.renderScanQRCode()}
+          {/* {this.renderScanQRCode()} */}
+          <Modal onClose={() => this.oncloseQrCode()} title="Scan QR code" onRef={modal => this.modalScanQrCodeRef = modal}>
+            {this.state.qrCodeOpen ?
+              <QrReader
+                delay={this.state.delay}
+                onScan={(data) => { this.handleScan(data); }}
+                onError={this.handleError}
+                style={{ width: '100%', height: '100%' }}
+              />
+            : ''}
+          </Modal>
 
           {/* Render list wallet: */}
           
