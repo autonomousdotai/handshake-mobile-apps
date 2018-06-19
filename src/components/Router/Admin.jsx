@@ -103,7 +103,7 @@ class Admin extends React.Component {
       password: password_md5,
     }, '', '', '', 'post');
     auth.then((response) => {
-      if (response.status == 1) {
+      if (response.status === 200) {
         token = response.data.data.access_token;
         this.setState({
           login: true,
@@ -115,11 +115,14 @@ class Admin extends React.Component {
   onSubmit=(event) => {
     const url = `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
     const submit = $http(url, {
-      homeScore: this.state.activeMatchData.homeScore,
-      awayScore: this.state.activeMatchData.awayScore,
+      homeScore: Number(this.state.activeMatchData.homeScore),
+      awayScore: Number(this.state.activeMatchData.awayScore),
       result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
     }, '', '', { Authorization: `Bearer ${token}` }, 'post');
     submit.then((response) => {
+      response.data.status === 1 && this.setState({
+        modal: false,
+      });
       console.log(response);
     });
   }
@@ -143,7 +146,7 @@ class Admin extends React.Component {
             id="password"
             placeholder="Enter Password"
             value="admin@ninja.org"
-            required
+            readOnly
           />
           <br />
           <Button type="submit">Submit</Button>
@@ -197,7 +200,7 @@ class Admin extends React.Component {
         <Button onClick={this.toggle}>Submit</Button>
         <div>
           <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
-            <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+            <ModalHeader toggle={this.toggle}>Update Match Data</ModalHeader>
             <ModalBody>
               <Label>Selected Match - {this.state.selectedMatch}</Label> <br />
               <Label>Selected Outcome {this.state.selectedOutcome}</Label> <br />
