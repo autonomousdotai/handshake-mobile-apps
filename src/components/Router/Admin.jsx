@@ -23,18 +23,12 @@ class Admin extends React.Component {
       matches: [],
       outcomes: [],
       activeMatchData: {},
+      login: false,
+      disable: false,
     };
     this.toggle = this.toggle.bind(this);
   }
   componentDidMount() {
-    const password = md5('admin@ninja.orgAutonomous');
-    const auth = $http(`${BASE_API.BASE_URL}/cryptosign/auth`, {
-      email: 'admin@ninja.org',
-      password,
-    }, '', '', '', 'post');
-    auth.then((response) => {
-      token = response.data.data.access_token;
-    });
     this.props.loadMatches({
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
       successFn: (res) => {
@@ -99,80 +93,146 @@ class Admin extends React.Component {
     });
   }
 
+  loginUser=(event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const email = data.get('email');
+    const password = data.get('password');
+    const password_md5 = md5(process.env.admin_password);
+    const auth = $http(`${BASE_API.BASE_URL}/cryptosign/auth`, {
+      email,
+      password: password_md5,
+    }, '', '', '', 'post');
+    auth.then((response) => {
+      if (response.status === 200) {
+        token = response.data.data.access_token;
+        this.setState({
+          login: true,
+        });
+      }
+    });
+  }
+
+  disablePage() {
+    localStorage.setItem('disable', true);
+    setTimeout(() => {
+      localStorage.setItem('disable', false);
+      this.setState({
+        disable: false,
+      });
+    }, 120000);
+  }
   onSubmit=(event) => {
+    if (localStorage.getItem('disable') === false) {
+      return null;
+    }
     const url = `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
     const submit = $http(url, {
-      homeScore: this.state.activeMatchData.homeScore,
-      awayScore: this.state.activeMatchData.awayScore,
+      homeScore: Number(this.state.activeMatchData.homeScore),
+      awayScore: Number(this.state.activeMatchData.awayScore),
       result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
     }, '', '', { Authorization: `Bearer ${token}` }, 'post');
     submit.then((response) => {
+      response.data.status === 1 && this.setState({
+        modal: false,
+        disable: true,
+      }, this.disablePage);
       console.log(response);
     });
   }
   render() {
-    return (
-      <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }}>
+    return (!this.state.login ?
+      <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }} onSubmit={this.loginUser}>
         <FormGroup>
-          <Label for="matchSelect">Select Match</Label>
-          <Input type="select" name="select" id="matchSelect" onChange={(event) => { this.onChangeEvent(event, 'selectedMatch'); }}>
-            {this.state.matches && this.state.matches.length > 0 && this.state.matches.map(item => <option key={item.id}>{item.name}</option>)}
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="outcomeSelect">Select Outcome</Label>
-          <Input type="select" name="select" id="outcomeSelect" onChange={(event) => { this.onChangeOutcome(event, 'selectedOutcome'); }}>
-            {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => <option key={item.id}>{`${item.name},id:${item.id}`}</option>)}
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="resultOfMatch">Result of Match</Label>
-          <Input type="select" name="select" id="resultOfMatch" onChange={(event) => { this.onChangeResult(event, 'selectedResult'); }}>
-            <option>0</option>
-            <option>1</option>
-            <option>2</option>
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="homescore">Home Score</Label>
+          <Label for="login">Login</Label>
           <Input
-            type="number"
-            name="homeScore"
-            id="homescore"
-            placeholder="Home Score"
-            value={this.state.activeMatchData.homeScore || ''}
-            onChange={(event) => { this.onChangeScore(event, 'homeScore'); }}
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Enter Email"
+            value="admin@ninja.org"
+            required
           />
-        </FormGroup>
-        <FormGroup>
-          <Label for="awayscore">Away Score</Label>
+          <br />
           <Input
-            type="number"
-            name="awayScore"
-            id="awayscore"
-            placeholder="Away Score"
-            value={this.state.activeMatchData.awayScore || ''}
-            onChange={(event) => { this.onChangeScore(event, 'awayScore'); }}
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter Password"
+            value="admin@ninja.org"
+            readOnly
           />
+          <br />
+          <Button type="submit">Submit</Button>
+          <br />
         </FormGroup>
-        <Button onClick={this.toggle}>Submit</Button>
-        <div>
-          <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
-            <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
-            <ModalBody>
-              <Label>Selected Match - {this.state.selectedMatch}</Label> <br />
-              <Label>Selected Outcome {this.state.selectedOutcome}</Label> <br />
-              <Label>Selected Result {this.state.selectedResult}</Label> <br />
-              <Label>HomeScore {this.state.activeMatchData.homeScore}</Label> <br />
-              <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br />
-            </ModalBody>
-            <ModalFooter>
-              <Button color="primary" onClick={this.onSubmit}>Confirm</Button>{' '}
-              <Button color="secondary" onClick={this.toggle}>Cancel</Button>
-            </ModalFooter>
-          </Modal>
-        </div>
       </Form>
+      :
+      <div>
+        <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }}>
+          <FormGroup disabled={this.state.disable}>
+            <Label for="matchSelect">Select Match</Label>
+            <Input type="select" name="select" id="matchSelect" onChange={(event) => { this.onChangeEvent(event, 'selectedMatch'); }} disabled={this.state.disable}>
+              {this.state.matches && this.state.matches.length > 0 && this.state.matches.map(item => <option key={item.id}>{item.name}</option>)}
+            </Input>
+          </FormGroup>
+          <FormGroup disabled={this.state.disable}>
+            <Label for="outcomeSelect">Select Outcome</Label>
+            <Input type="select" name="select" id="outcomeSelect" onChange={(event) => { this.onChangeOutcome(event, 'selectedOutcome'); }} disabled={this.state.disable}>
+              {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => <option key={item.id}>{`${item.name},id:${item.id}`}</option>)}
+            </Input>
+          </FormGroup>
+          <FormGroup disabled={this.state.disable}>
+            <Label for="resultOfMatch">Result of Match</Label>
+            <Input type="select" name="select" id="resultOfMatch" onChange={(event) => { this.onChangeResult(event, 'selectedResult'); }} disabled={this.state.disable}>
+              <option>0</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label for="homescore">Home Score</Label>
+            <Input
+              type="number"
+              name="homeScore"
+              id="homescore"
+              placeholder="Home Score"
+              value={this.state.activeMatchData.homeScore || ''}
+              onChange={(event) => { this.onChangeScore(event, 'homeScore'); }}
+              disabled={this.state.disable}
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label for="awayscore">Away Score</Label>
+            <Input
+              type="number"
+              name="awayScore"
+              id="awayscore"
+              placeholder="Away Score"
+              value={this.state.activeMatchData.awayScore || ''}
+              disabled={this.state.disable}
+              onChange={(event) => { this.onChangeScore(event, 'awayScore'); }}
+            />
+          </FormGroup>
+          <Button disabled={this.state.disable} onClick={this.toggle}>Submit</Button>
+          <div>
+            <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
+              <ModalHeader toggle={this.toggle}>Update Match Data</ModalHeader>
+              <ModalBody>
+                <Label>Selected Match - {this.state.selectedMatch}</Label> <br />
+                <Label>Selected Outcome {this.state.selectedOutcome}</Label> <br />
+                <Label>Selected Result {this.state.selectedResult}</Label> <br />
+                <Label>HomeScore {this.state.activeMatchData.homeScore}</Label> <br />
+                <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br />
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={this.onSubmit}>Confirm</Button>{' '}
+                <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
+          </div>
+        </Form>
+      </div>
     );
   }
 }

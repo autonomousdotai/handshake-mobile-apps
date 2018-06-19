@@ -124,7 +124,7 @@ class Refers extends React.Component {
       this.props.rfChange(nameFormStep3, 'refer_email', refers && refers.step3_value ? refers.step3_value : '');
 
       if(refers.step1 && refers.step2 && refers.step3 == 2){
-        let referLink = profile && profile.username ? "https://ninja.org/?ref=" + profile.username : '';
+        let referLink = profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : '';
         this.setState({referLink: referLink});
         this.props.rfChange(nameFormStep4, 'refer_link', referLink);
       }
@@ -142,7 +142,7 @@ class Refers extends React.Component {
   submitStep1 = async () => {
     let result = await this.checkJoinTelegram(this.state.step1_value);
     if(!result){
-      this.showError("Not found your telegram in our community. Please try again.")
+      this.showError("Couldn't find you on Telegram. Please exit the group and try again.")
     }
     else{
       this.setState({step1: true});
@@ -170,7 +170,7 @@ class Refers extends React.Component {
       this.showSuccess("You followed our Twitter!");
     }
     else{
-      this.showError("Not found your following in our Twitter. Please try again.")
+      this.showError("You haven't followed us yet. Please try again.")
     }
   }
 
@@ -185,11 +185,11 @@ class Refers extends React.Component {
         refers.step3_value = profile.email;
 
         local.save(APP.REFERS, refers);
-        this.setState({step3: refers.step3, step3_value: refers.step3_value, referLink: profile && profile.username ? "https://ninja.org/?ref=" + profile.username : ''});
+        this.setState({step3: refers.step3, step3_value: refers.step3_value, referLink: profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : ''});
         this.showSuccess("Your email is verified successfully!");
       }
       else{
-        this.showError("Your email is unverified. Please try again.");
+        this.showError("Please click on the verification link sent to your email address.");
       }
     }
     else{
