@@ -331,8 +331,8 @@ class FeedExchange extends React.PureComponent {
 
   handleChat = (e) => {
     e.stopPropagation();
-    const { chatUsername } = this.offer;
-    this.props.history.push(`${URL.HANDSHAKE_CHAT}/${chatUsername}`);
+    const { id, chatUsername } = this.offer;
+    this.props.history.push(`${URL.HANDSHAKE_CHAT}/${id}`);
   }
 
   handleCreateExchange = () => {
