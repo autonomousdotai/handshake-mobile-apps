@@ -35,7 +35,7 @@ class FeedComment extends React.PureComponent {
     if (objectId) {
       const fullObjectId = Helper.getObjectIdOfComment({ id: objectId });
       const url = `${BASE_API.BASE_URL}/${API_URL.COMMENT.GET_COMMENT_COUNT}?object_id=${fullObjectId}`;
-      const getCommentCountPromise = $http(url, '', '', '', '', 'get');
+      const getCommentCountPromise = $http({ url, method: 'get' });
       getCommentCountPromise.then((response) => {
         const { status, data } = response.data;
         if (status === 1 && data > 0) {

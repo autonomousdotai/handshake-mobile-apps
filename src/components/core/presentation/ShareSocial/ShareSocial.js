@@ -80,7 +80,7 @@ class ShareSocial extends PureComponent {
     const data = {
       longUrl,
     };
-    return $http(url, data, null, null, null, 'POST');
+    return $http({ url, data, method: 'POST' });
   }
 
   async clickShare(e, shareType) {

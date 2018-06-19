@@ -1,13 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Route, Switch } from 'react-router-dom';
-import Loading from '@/components/core/presentation/Loading';
-import { URL } from '@/constants';
-import { Button, Form, FormGroup, Label, Input, FormText, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { loadMatches } from '@/reducers/betting/action';
-import { BASE_API, API_URL, APP } from '@/constants';
-import axios from 'axios';
+import { BASE_API, API_URL } from '@/constants';
 import md5 from 'md5';
 import $http from '@/services/api';
 
@@ -51,6 +47,7 @@ class Admin extends React.Component {
       selectedOutcome: matches[0].outcomes[0].id,
     });
   }
+
   toggle() {
     this.setState({
       modal: !this.state.modal,
@@ -96,13 +93,18 @@ class Admin extends React.Component {
   loginUser=(event) => {
     event.preventDefault();
     const data = new FormData(event.target);
+
     const email = data.get('email');
-    const password = data.get('password');
-    const password_md5 = md5(process.env.admin_password);
-    const auth = $http(`${BASE_API.BASE_URL}/cryptosign/auth`, {
-      email,
-      password: password_md5,
-    }, '', '', '', 'post');
+    const password = md5(data.get('password'));
+
+    const auth = $http({
+      url: `${BASE_API.BASE_URL}/cryptosign/auth`,
+      data: {
+        email,
+        password,
+      },
+      method: 'post',
+    });
     auth.then((response) => {
       if (response.status === 200) {
         token = response.data.data.access_token;
@@ -122,16 +124,22 @@ class Admin extends React.Component {
       });
     }, 120000);
   }
-  onSubmit=(event) => {
+
+  onSubmit= (event) => {
     if (localStorage.getItem('disable') === false) {
       return null;
     }
     const url = `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
-    const submit = $http(url, {
-      homeScore: Number(this.state.activeMatchData.homeScore),
-      awayScore: Number(this.state.activeMatchData.awayScore),
-      result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
-    }, '', '', { Authorization: `Bearer ${token}` }, 'post');
+    const submit = $http({
+      url,
+      data: {
+        homeScore: Number(this.state.activeMatchData.homeScore),
+        awayScore: Number(this.state.activeMatchData.awayScore),
+        result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
+      },
+      headers: { Authorization: `Bearer ${token}` },
+      method: 'post',
+    });
     submit.then((response) => {
       response.data.status === 1 && this.setState({
         modal: false,
