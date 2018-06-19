@@ -64,6 +64,8 @@ import {BigNumber} from "bignumber.js";
 import "./FeedMe.scss"
 import {getLocalizedDistance} from "@/services/util"
 import {responseExchangeDataChange} from "@/reducers/me/action";
+import {Ethereum} from '@/models/Ethereum.js';
+import {Bitcoin} from '@/models/Bitcoin';
 
 class FeedMe extends React.PureComponent {
   constructor(props) {
@@ -1137,18 +1139,30 @@ class FeedMe extends React.PureComponent {
   getEmail = () => {
     const { offer } = this;
     let email = '';
+    let walletAddress = '';
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = new Ethereum();
+      wallet.address = offer.userAddress;
+      walletAddress = wallet.getShortAddress();
+    }
+    if (offer.currency === CRYPTO_CURRENCY.BTC) {
+      const wallet = new Bitcoin();
+      wallet.address = offer.userAddress;
+      walletAddress = wallet.getShortAddress();
+    }
 
     switch (this.userType) {
       case HANDSHAKE_USER.NORMAL: {
         break;
       }
       case HANDSHAKE_USER.SHAKED: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : walletAddress;
         break;
       }
       case HANDSHAKE_USER.OWNER: {
         // email = offer.toEmail ? offer.toEmail : offer.toContactPhone ? offer.toContactPhone : offer.toContactInfo;
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : walletAddress;
         break;
       }
     }
