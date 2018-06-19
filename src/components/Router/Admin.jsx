@@ -120,7 +120,7 @@ class Admin extends React.Component {
       this.setState({
         disable: false,
       });
-    }, 12000);
+    }, 120000);
   }
   onSubmit=(event) => {
     if (localStorage.getItem('disable') === false) {
