@@ -52,6 +52,7 @@ import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
 import local from '@/services/localStore';
 import {APP} from '@/constants';
 import _ from 'lodash';
+import qs from 'querystring';
 
 // style
 import './Wallet.scss';
@@ -241,7 +242,16 @@ class Wallet extends React.Component {
      var tx = await btc.transfer("tprv8ccSMiuz5MfvmYHzdMbz3pjn5uW3G8zxM975sv4MxSGkvAutv54raKHiinLsxW5E4UjyfVhCz6adExCmkt7GjC41cYxbNxt5ZqyJBdJmqPA","mrPJ6rBHpJGnsLK3JGfJQjdm5vkjeAb63M", 0.0001);
 
      console.log(tx) */
+     this.checkAirDrop();
   }
+
+  checkAirDrop(){
+    const querystring = window.location.search.replace('?', '');
+    this.querystringParsed = qs.parse(querystring);
+    const { ref } = this.querystringParsed;    
+    if (ref) this.modalRefersRef.open();
+  }
+
 
   getAllWallet() {
     return this.state.listMainWalletBalance.concat(this.state.listTestWalletBalance).concat(this.state.listRewardWalletBalance);
