@@ -84,6 +84,10 @@ class DiscoverPage extends React.Component {
       isBannedChecked: this.props.isBannedChecked,
 
     };
+
+    if (handshakeDefault === HANDSHAKE_ID.EXCHANGE) {
+      this.loadDiscoverList();
+    }
     // this.loadDiscoverList();
     // bind
     this.clickCategoryItem = this.clickCategoryItem.bind(this);
