@@ -2,6 +2,7 @@ import { MasterWallet } from '@/models/MasterWallet';
 import { BettingHandshake } from '@/services/neuron';
 import { API_URL, APP } from '@/constants';
 import {showAlert} from '@/reducers/app/action';
+import GA from '@/services/googleAnalytics';
 
 import local from '@/services/localStore';
 import { rollback, saveTransaction } from '@/reducers/handshake/action';
@@ -38,6 +39,8 @@ export const MESSAGE = {
   AMOUNT_VALID: 'Please place a bet larger than 0.',
   MATCH_OVER: 'Time travel is hard. Please bet on a future or ongoing match.',
   RIGHT_NETWORK: 'You must set your wallet on Mainnet',
+  ROLLBACK: `Something did not go according to plan. Please try again.`,
+
 };
 
 export const BET_BLOCKCHAIN_STATUS = {
@@ -102,8 +105,7 @@ export const BETTING_STATUS_LABEL =
       CANCELLED: 'Your bet was cancelled.',
       REFUNDING: 'Your coin is being refunded to you.',
       REFUNDED: 'Your coin has been refunded.',
-      ROLLBACK: `Something did not go according to plan. Please try again.`,
-
+      ROLLBACK: `Something did not go according to plan. We're fixing it`,
     };
 
 export const CONTRACT_METHOD = {
@@ -122,7 +124,7 @@ export class BetHandshakeHandler {
       console.log("Create new instance");
       this.myManager = new BetHandshakeHandler();
 
-    }      
+    }
 
     return this.myManager;
   }
@@ -130,14 +132,14 @@ export class BetHandshakeHandler {
 
   }
   isRightNetwork(){
-    
+
     const wallet = MasterWallet.getWalletDefault('ETH');
     MasterWallet.log(MasterWallet.getWalletDefault("ETH"));
 
     if (process.env.isProduction && !process.env.isStaging) { //Live use mainet
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         return true;
-      } 
+      }
     }else if (process.env.isStaging){
       return true;
     }
@@ -320,6 +322,21 @@ export class BetHandshakeHandler {
       realBlockHash = "-1";
       logJson = error.message;
     }
+
+    // Send GA event tracking
+    try {
+      if(hash === -1) {
+        GA.createBetNotMatchFail({
+          side,
+          odds,
+          amount,
+          message: logJson,
+        })
+      } else {
+        GA.createBetNotMatchSuccess({ side, odds, amount });
+      }
+    } catch (err) {}
+
     this.saveTransaction(offchain,CONTRACT_METHOD.INIT, chainId, realBlockHash, contractAddress, logJson);
 
     return dataBlockchain;
@@ -351,7 +368,7 @@ export class BetHandshakeHandler {
       offchain,
     );
     const {blockHash, logs, hash, error} = result;
-    
+
     let logJson = JSON.stringify(logs);
     const contractAddress = bettinghandshake.contractAddress;
     let realBlockHash = blockHash;
@@ -359,8 +376,22 @@ export class BetHandshakeHandler {
       realBlockHash = "-1";
       logJson = error.message;
       this.rollback(offchain);
-
     }
+
+     // Send GA event tracking
+    try {
+      if(hash === -1) {
+        GA.createBetMatchedFail({
+          side,
+          odds,
+          amount,
+          message: logJson,
+        });
+      } else {
+        GA.createBetMatchedSuccess({ side, odds, amount });
+      }
+    } catch (err) {}
+
     this.saveTransaction(offchain,CONTRACT_METHOD.SHAKE, chainId, realBlockHash, contractAddress, logJson);
 
     return result;
@@ -442,11 +473,10 @@ export class BetHandshakeHandler {
   rollbackSuccess = async (successData) => {
     console.log('rollbackSuccess', successData);
     store.dispatch(showAlert({
-      message: <div className="text-center">{MESSAGE.ROLLBACK}</div>,
-      timeOut: 3000,
-      type: 'info',
-      callBack: () => {
-      }
+      message: MESSAGE.ROLLBACK,
+      timeOut: 5000,
+      type: 'danger',
+      
     }));
   }
   rollbackFailed = (error) => {
@@ -458,7 +488,7 @@ export class BetHandshakeHandler {
     const bettinghandshake = new BettingHandshake(chainId);
     const result = await bettinghandshake.cancelBet(hid, side, stake, odds, offchain);
     const {blockHash, logs, hash, error} = result;
-    
+
     let logJson = JSON.stringify(logs);
     const contractAddress = bettinghandshake.contractAddress;
     let realBlockHash = blockHash;
@@ -494,7 +524,7 @@ export class BetHandshakeHandler {
     const chainId = this.getChainIdDefaultWallet();
     const bettinghandshake = new BettingHandshake(chainId);
     const result = await bettinghandshake.refund(hid, offchain);
-    const {blockHash, logs, hash, error} = result;    
+    const {blockHash, logs, hash, error} = result;
     //this.saveTransaction(offchain,CONTRACT_METHOD.SHAKE, chainId, blockHash, contractAddress);
     let logJson = JSON.stringify(logs);
     const contractAddress = bettinghandshake.contractAddress;

@@ -105,7 +105,7 @@
       margin-right: rem-calc(40px);
     }
     & > div:last-child {
-      margin-left: rem-calc(30px);
+      margin-left: rem-calc(40px);
     }
   }
   .embed-responsive-16by9::before {
@@ -113,8 +113,8 @@
   }
   .embed-responsive {
     iframe {
-      max-height: rem-calc(185px) !important;
+      max-height: rem-calc(182px) !important;
     }
-    max-height: rem-calc(185px) !important;
+    max-height: rem-calc(182px) !important;
   }
 }
