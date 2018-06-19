@@ -3,10 +3,14 @@ import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 
 import { changeLocale } from '@/reducers/app/action';
+import VideoYoutube from "@/components/core/controls/VideoYoutube";
 
 // style
 import onlyMobileTabletSVG from '@/assets/images/ninja/ninja-header.svg';
 import shurikenIcon from '@/assets/images/ninja/shuriken-icon.svg';
+import playVideoButton from '@/assets/images/ninja/play-video-button.svg';
+import videoLeftCover from '@/assets/images/ninja/video-left-cover.jpg';
+import videoRightCover from '@/assets/images/ninja/video-right-cover.jpg';
 import './MobileOrTablet.scss';
 
 const whitePaperLink = 'https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8';
@@ -81,9 +85,24 @@ class MobileOrTablet extends React.PureComponent {
               }
             </div>
           </div>
-          <div className="col-lg-12 text-center">
-            <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja" />
-            <h1>{messages.MOT_TITLE}</h1>
+          <div className="col-lg-12 text-center topBox">
+            <VideoYoutube
+              playButtonIcon={playVideoButton}
+              imageUrl={videoLeftCover}
+              imageAlt="ninja place prediction"
+              videoUrl="https://youtu.be/YYZJlLDzeEs"
+              autoPlayVideo
+            />
+            <div>
+              <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja"/>
+              <h1>{messages.MOT_TITLE}</h1>
+            </div>
+            <VideoYoutube
+              playButtonIcon={playVideoButton}
+              imageUrl={videoRightCover}
+              imageAlt="prediction exchange walk thru"
+              videoUrl="https://youtu.be/6bd6-XtO3Wk"
+            />
           </div>
           <div className="col-lg-12 text-center">
             <p>

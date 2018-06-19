@@ -6,7 +6,7 @@ let instance = null;
 const EVENT_CATEGORY = {
   DISCOVER_BETTING: 'DiscoverBetting',
   CREATE: 'Create',
-  ME: 'ME',
+  ME: 'Me',
 };
 const EVENT_ACTION = {
   CLICK_CHOOSE_EVENT: 'Click choose an event',
@@ -16,6 +16,7 @@ const EVENT_ACTION = {
   CLICK_COMMENTS_BOX: 'Click comments box',
   CLICK_SHARE_BUTTON: 'Click share button',
   CREATE_BET_SUCCESSFUL: 'Create bet successful',
+  CREATE_SHARE_BUTTON: 'Create share button',
 };
 
 class GoogleAnalyticsService {
@@ -180,6 +181,23 @@ class GoogleAnalyticsService {
         action: EVENT_ACTION.CREATE_BET_SUCCESSFUL,
         label: `${sideName}: ${selectedMatch.value} -  ${selectedOutcome.value}`,
       });
+    } catch (err) {}
+  }
+
+  /**
+   *
+   * @param category
+   * @param shareType
+   * @param title
+   * @param shareUrl
+   */
+  createShareButton({ category = EVENT_CATEGORY.DISCOVER_BETTING, shareType, title, shareUrl }) {
+    try {
+      this.sendGAEvent({
+        category: category || EVENT_CATEGORY.DISCOVER_BETTING,
+        action: `${EVENT_ACTION.CLICK_SHARE_BUTTON}: ${shareType}`,
+        label: `${title} - (${shareUrl})`,
+      })
     } catch (err) {}
   }
 }

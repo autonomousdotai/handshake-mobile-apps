@@ -18,6 +18,9 @@ import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {bindActionCreators} from "redux";
 import {FormattedMessage} from 'react-intl';
 import { minValueBTC, minValueETH } from "../../Create/validation";
+import {formatMoneyByLocale} from "@/services/offer-util";
+import {BigNumber} from "bignumber.js";
+import { countDecimals } from "../../utils";
 
 export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -31,7 +34,13 @@ const FormShakeDetail = createForm({
 });
 const selectorFormShakeDetail = formValueSelector(nameFormShakeDetail);
 
+const fixed6 = (value) => {
+  if (countDecimals(value) > 6) return parseFloat(value).toFixed(6)
+  return value;
+}
+
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+  state = {enableShake: false};
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -60,8 +69,99 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     rfChange(nameFormShakeDetail, 'type', newType);
   }
 
+  onAmountChange = (e, amount) => {
+    // console.log('onAmountChange', amount);
+    const { offer, listOfferPrice, currency, type, rfChange } = this.props;
+
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
+    //Calculate fiatAmount
+    let fiatAmount = 0;
+
+    if (listOfferPrice && type && currency) {
+      const offerPrice = getOfferPrice(listOfferPrice, type, CRYPTO_CURRENCY_NAME[currency]);
+      fiatAmount = amount * offerPrice?.price || 0;
+    }
+
+    let percentage = 0;
+    let balance = 0;
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        percentage = eth?.buyPercentage;
+        balance = eth?.buyBalance;
+      } else {
+        percentage = eth?.sellPercentage;
+        balance = eth?.sellBalance;
+      }
+    } else if (currency === CRYPTO_CURRENCY.BTC) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        percentage = btc?.buyPercentage;
+        balance = btc?.buyBalance;
+      } else {
+        percentage = btc?.sellPercentage;
+        balance = btc?.sellBalance;
+      }
+    }
+
+    const enableShake = +balance >= +amount;
+    this.setState({enableShake});
+
+    fiatAmount += fiatAmount * percentage / 100;
+    fiatAmount = Math.round(fiatAmount);
+    rfChange(nameFormShakeDetail, 'amountFiat', fiatAmount);
+  }
+
+  onFiatAmountChange = (e, amount) => {
+    console.log('onFiatAmountChange', amount);
+
+    const { offer, listOfferPrice, currency, type, rfChange } = this.props;
+
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
+    //Calculate fiatAmount
+    let fiatAmount = 0;
+
+    let percentage = 0;
+    let balance = 0;
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        percentage = eth?.buyPercentage;
+        balance = eth?.buyBalance;
+      } else {
+        percentage = eth?.sellPercentage;
+        balance = eth?.sellBalance;
+      }
+    } else if (currency === CRYPTO_CURRENCY.BTC) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        percentage = btc?.buyPercentage;
+        balance = btc?.buyBalance;
+      } else {
+        percentage = btc?.sellPercentage;
+        balance = btc?.sellBalance;
+      }
+    }
+
+    fiatAmount = amount / (1 + percentage / 100);
+
+    let newAmount = 0;
+    if (listOfferPrice && type && currency) {
+      const offerPrice = getOfferPrice(listOfferPrice, type, CRYPTO_CURRENCY_NAME[currency]);
+      newAmount =  fiatAmount / offerPrice?.price || 0;
+    }
+
+    newAmount = new BigNumber(newAmount).decimalPlaces(6).toNumber();
+
+    const enableShake = +balance >= +newAmount;
+
+    this.setState({enableShake});
+
+    rfChange(nameFormShakeDetail, 'amount', newAmount);
+  }
+
   render() {
-    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST } = this.props;
+    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST, type } = this.props;
 
     const fiat = offer.fiatCurrency;
 
@@ -93,25 +193,53 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
           </div>
           <div className="mt-3">
             <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount"/></div>
-            <div className='input-group'>
-              <Field
-                name="amount"
-                // containerClass="radio-container-old"
-                component={fieldInput}
-                className="input"
-                placeholder="10.00"
-                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
-                // type="tab-2"
-                // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
-              />
-              <span className="append-text">{currency}</span>
+            <div className="form-group">
+              <div className='input-group-shake-detail'>
+                <Field
+                  name="amountFiat"
+                  // containerClass="radio-container-old"
+                  component={fieldInput}
+                  className="input"
+                  type="number"
+                  placeholder="500000"
+                  validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
+                  onChange={this.onFiatAmountChange}
+                  // type="tab-2"
+                  // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
+                />
+                <span className="append-text">{fiat}</span>
+              </div>
+
+              <div className="approximate-icon"><img src={iconApproximate} /></div>
+
+              <div className='input-group-shake-detail'>
+                <Field
+                  name="amount"
+                  // containerClass="radio-container-old"
+                  component={fieldInput}
+                  className="input"
+                  type="number"
+                  placeholder="10.00"
+                  validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
+                  onChange={this.onAmountChange}
+                  normalize={fixed6}
+                  // maxLength={8}
+                  // type="tab-2"
+                  // list={[{ value: 'btc', text: 'BTC', icon: <img src={iconBitcoin} width={22} /> }, { value: 'eth', text: 'ETH', icon: <img src={iconEthereum} width={22} /> }]}
+                />
+                <span className="append-text">{currency}</span>
+              </div>
             </div>
+
           </div>
-          <hr className="hl" />
+          {/*<hr className="hl" />
           <div className="text-total">
             <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
           </div>
-          <Button block type="submit" className="mt-3" disabled={!enableShake}><FormattedMessage id="btn.shake"/></Button>
+          */}
+          <Button block type="submit" className="mt-3 btn-shake-detail" disabled={!this.state.enableShake}>
+            {EXCHANGE_ACTION_NAME[type]} {CRYPTO_CURRENCY[currency]} - {formatMoneyByLocale(fiatAmount)} {fiat}
+          </Button>
         </FormShakeDetail>
       </div>
     );
@@ -126,48 +254,53 @@ const mapState = (state, prevProps) => {
   const type = selectorFormShakeDetail(state, 'type');
   const currency = selectorFormShakeDetail(state, 'currency');
   const amount = selectorFormShakeDetail(state, 'amount');
+  const fiatAmount = selectorFormShakeDetail(state, 'amountFiat');
 
 
   //Calculate fiatAmount
-  let fiatAmount = 0;
+  // let fiatAmount = 0;
 
-  if (listOfferPrice && type && currency) {
-    const offerPrice = getOfferPrice(listOfferPrice, type, CRYPTO_CURRENCY_NAME[currency]);
-    fiatAmount = amount * offerPrice?.price || 0;
-  }
+  // if (listOfferPrice && type && currency) {
+  //   const offerPrice = getOfferPrice(listOfferPrice, type, CRYPTO_CURRENCY_NAME[currency]);
+  //   fiatAmount = amount * offerPrice?.price || 0;
+  // }
 
-  let percentage = 0;
-  let balance = 0;
+  // let percentage = 0;
+  // let balance = 0;
   const { offer } = prevProps;
 
   const eth = offer.items.ETH;
   const btc = offer.items.BTC;
+  //
+  // if (currency === CRYPTO_CURRENCY.ETH) {
+  //   if (type === EXCHANGE_ACTION.SELL) {
+  //     // percentage = eth?.buyPercentage;
+  //     balance = eth?.buyBalance;
+  //   } else {
+  //     // percentage = eth?.sellPercentage;
+  //     balance = eth?.sellBalance;
+  //   }
+  // } else if (currency === CRYPTO_CURRENCY.BTC) {
+  //   if (type === EXCHANGE_ACTION.SELL) {
+  //     // percentage = btc?.buyPercentage;
+  //     balance = btc?.buyBalance;
+  //   } else {
+  //     // percentage = btc?.sellPercentage;
+  //     balance = btc?.sellBalance;
+  //   }
+  // }
 
-  if (currency === CRYPTO_CURRENCY.ETH) {
-    if (type === EXCHANGE_ACTION.SELL) {
-      percentage = eth?.buyPercentage;
-      balance = eth?.buyBalance;
-    } else {
-      percentage = eth?.sellPercentage;
-      balance = eth?.sellBalance;
-    }
-  } else if (currency === CRYPTO_CURRENCY.BTC) {
-    if (type === EXCHANGE_ACTION.SELL) {
-      percentage = btc?.buyPercentage;
-      balance = btc?.buyBalance;
-    } else {
-      percentage = btc?.sellPercentage;
-      balance = btc?.sellBalance;
-    }
-  }
+  // console.log('mapState',fiatAmount);
 
-  fiatAmount += fiatAmount * percentage / 100;
+  // fiatAmount += fiatAmount * percentage / 100;
+
+  // console.log('offer', offer);
 
   //Enable Shake or not
-  console.log('currency',currency);
-  console.log('type',type);
-  console.log('check', balance, amount, balance > amount);
-  const enableShake = balance > amount;
+  // console.log('currency',currency);
+  // console.log('type',type);
+  // console.log('check', balance, amount, balance > amount);
+  // const enableShake = +balance > +amount;
 
   const EXCHANGE_ACTION_LIST = [
     { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0},
@@ -177,7 +310,7 @@ const mapState = (state, prevProps) => {
   return {
     listOfferPrice: listOfferPrice,
     fiatAmount: fiatAmount || 0,
-    enableShake,
+    // enableShake,
     EXCHANGE_ACTION_LIST,
     type,
     currency

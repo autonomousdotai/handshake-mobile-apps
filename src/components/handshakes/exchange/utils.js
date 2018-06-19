@@ -1,5 +1,16 @@
+import React from 'react';
+import {FormattedMessage} from 'react-intl';
+
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
+}
+
+export const countDecimals = (value) => {
+  if (Math.floor(value) === value) return 0;
+  const decimalsString = value.toString().split('.')[1];
+  if (!decimalsString) return 0;
+  return decimalsString.length || 0;
+  // return value.toString().split('.')[1].length || 0;
 }
 
 export const getDistanceFromLatLonInKm = (_lat1, _lon1, _lat2, _lon2) => {
@@ -27,40 +38,40 @@ export const getErrorMessageFromCode = (error) => {
   switch (codeInt) {
     case -4: case -5: case -6: case -201: case -202: case -203: case -204:
     case -305: case -306: case -307: case -308: case -311:
-      result = 'Sorry Ninja. Something went wrong. Come back soon.';
+      result = <FormattedMessage id="ex.error.systemError"/>;
       break;
     case -312:
-      result = 'Oh no! You cancelled your offer. You will not be able to make orders for 4 hours. Sorry'
+      result = <FormattedMessage id="ex.error.312"/>
       break;
     case -313:
-      result = 'You already have a listing! To change your rates, please cancel your current listing.'
+      result = <FormattedMessage id="ex.error.313"/>
       break;
     case -314:
-      result = 'Looks like that listing has been deleted.'
+      result = <FormattedMessage id="ex.error.314"/>
       break;
     case -315:
-      result = 'Sorry ninja, someone else got there first.'
+      result = <FormattedMessage id="ex.error.315"/>
       break;
     case -1:
-      result = 'Oops! Something went wrong. Come back soon.'
+      result = <FormattedMessage id="ex.error.1"/>
       break;
     case -3:
-      result = 'It looks like that token is invalid.'
+      result = <FormattedMessage id="ex.error.3"/>
       break;
     case -301:
-      result = 'You are already a ninja.'
+      result = <FormattedMessage id="ex.error.301"/>
       break;
     case -302:
-      result = 'Sorry, that ninja does not exist.'
+      result = <FormattedMessage id="ex.error.302"/>
       break;
     case -303:
-      result = 'It looks like you have reached your credit card limit.'
+      result = <FormattedMessage id="ex.error.303"/>
       break;
     case -309:
-      result = 'You already have a listing! To change your rates, please cancel your current listing.'
+      result = <FormattedMessage id="ex.error.309"/>
       break;
     default:
-      result = messageFromApi || 'Oops! Something went wrong.';
+      result = messageFromApi || <FormattedMessage id="ex.error.default"/>;
   }
   return result;
 }

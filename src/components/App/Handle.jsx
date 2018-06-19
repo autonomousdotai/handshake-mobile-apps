@@ -3,27 +3,22 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withFirebase } from 'react-redux-firebase';
-import axios from 'axios';
 // contants
 import { APP, API_URL } from '@/constants';
 // services
 import local from '@/services/localStore';
 // actions
-import { setIpInfo, showAlert, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
+import { showAlert } from '@/reducers/app/action';
 import { signUp, fetchProfile, authUpdate, getFreeETH } from '@/reducers/auth/action';
-import { getUserProfile, getListOfferPrice } from '@/reducers/exchange/action';
+import { getUserProfile } from '@/reducers/exchange/action';
 import { createMasterWallets } from '@/reducers/wallet/action';
 // components
 import { MasterWallet } from '@/models/MasterWallet';
-import IpInfo from '@/models/IpInfo';
-import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
-import COUNTRIES_BLACKLIST_CASH from '@/data/country-blacklist-exchange';
 import Loading from '@/components/core/presentation/Loading';
 import Router from '@/components/Router/Router';
 
 class Handle extends React.Component {
   static propTypes = {
-    app: PropTypes.object.isRequired,
     auth: PropTypes.object.isRequired,
     //
     firebase: PropTypes.object.isRequired,
@@ -35,19 +30,12 @@ class Handle extends React.Component {
     authUpdate: PropTypes.func.isRequired,
     getUserProfile: PropTypes.func.isRequired,
     //
-    setBannedPrediction: PropTypes.func.isRequired,
-    setBannedCash: PropTypes.func.isRequired,
-    setCheckBanned: PropTypes.func.isRequired,
-    //
-    getListOfferPrice: PropTypes.func.isRequired,
     getFreeETH: PropTypes.func.isRequired,
-    setIpInfo: PropTypes.func.isRequired,
-    setLanguage: PropTypes.func.isRequired,
-    ref: PropTypes.string,
+    refer: PropTypes.string,
   }
 
   static defaultProps = {
-    ref: '',
+    refer: '',
   }
 
   constructor(props) {
@@ -58,7 +46,6 @@ class Handle extends React.Component {
     this.firebase = ::this.firebase;
     this.notification = ::this.notification;
     this.updateRewardAddress = ::this.updateRewardAddress;
-    this.getListOfferPrice = ::this.getListOfferPrice;
 
     this.state = {
       auth: this.props.auth,
@@ -75,16 +62,6 @@ class Handle extends React.Component {
     }
     return null;
   }
-
-
-  // exchange
-  getListOfferPrice() {
-    this.props.getListOfferPrice({
-      PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
-      qs: { fiat_currency: this.props.app.ipInfo?.currency },
-    });
-  }
-  // /exchange
 
   // wallet
   getFreeETH() {
@@ -116,7 +93,7 @@ class Handle extends React.Component {
   }
 
   updateRewardAddress() {
-    console.log('root-handle - wallet - updateRewardAddress');
+    console.log('app - handle - wallet - updateRewardAddress');
     const walletReward = MasterWallet.getShurikenWalletJson();
     const data = new FormData();
     data.append('reward_wallet_addresses', walletReward);
@@ -126,43 +103,14 @@ class Handle extends React.Component {
       headers: { 'Content-Type': 'multipart/form-data' },
       METHOD: 'POST',
       successFn: (res) => {
-        console.log('root-handle - wallet - success - ', res);
+        console.log('app - handle - wallet - success - ', res);
       },
       errorFn: (e) => {
-        console.log('root-handle - wallet - error - ', e);
+        console.log('app - handle - wallet - error - ', e);
       },
     });
   }
   // /wallet
-
-  ipInfo() {
-    console.log('root-handle - ipinfo');
-    axios.get(`https://ipapi.co/json?key=${process.env.ipapiKey}`).then((res) => {
-      const { data } = res;
-      // ipInfo
-      const ipInfo = IpInfo.ipInfo(data);
-      this.props.setIpInfo(ipInfo);
-      local.save(APP.IP_INFO, ipInfo);
-      // locale
-      if (!local.get(APP.LOCALE)) {
-        const firstLanguage = data.languages.split(',')[0];
-        this.props.setLanguage(firstLanguage);
-      }
-
-      if (process.env.isProduction) {
-        // should use country code: .country ISO 3166-1 alpha-2
-        // https://ipapi.co/api/#complete-location
-        if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
-          this.props.setBannedPrediction();
-        }
-        if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
-          this.props.setBannedCash();
-        }
-      }
-      this.props.setCheckBanned();
-      // /locale
-    });
-  }
 
   // main
   checkRegistry() {
@@ -205,19 +153,12 @@ class Handle extends React.Component {
         }
       },
       successFn: () => {
-        // IP info - locale
-        this.ipInfo();
-        this.timeOutInterval = setInterval(() => this.ipInfo(), 30 * 60 * 1000); // 30'
-
         // exchange
         this.props.getUserProfile({ PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE });
 
-        this.getListOfferPrice();
-        this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
-
         // wallet
         const listWallet = MasterWallet.getMasterWallet();
-        console.log('root-handle - wallet - listWallet - ', listWallet);
+        // console.log('app - handle - wallet - listWallet - ', listWallet);
 
         if (listWallet === false) {
           this.setState({ loadingText: 'Creating your local wallets' });
@@ -234,7 +175,7 @@ class Handle extends React.Component {
           });
         } else {
           const shuriWallet = MasterWallet.getShurikenWalletJson();
-          console.log('root-handle - wallet - shuriWallet - ', shuriWallet);
+          // console.log('app - handle - wallet - shuriWallet - ', shuriWallet);
           if (shuriWallet === false) {
             MasterWallet.createShuriWallet();
             this.updateRewardAddress();
@@ -251,13 +192,13 @@ class Handle extends React.Component {
   // /main
 
   firebase() {
-    console.log('root-handle - core - firebase');
+    console.log('app - handle - core - firebase');
     this.props.firebase.watchEvent('value', `/users/${this.state.auth.profile.id}`);
     this.props.firebase.watchEvent('value', `/config`);
   }
 
   notification() {
-    console.log('root-handle - core - notification');
+    console.log('app - handle - core - notification');
     try {
       const messaging = this.props.firebase.messaging();
       messaging
@@ -302,9 +243,4 @@ export default compose(withFirebase, connect(state => ({
   authUpdate,
   getUserProfile,
   getFreeETH,
-  getListOfferPrice,
-  setIpInfo,
-  setBannedPrediction,
-  setBannedCash,
-  setCheckBanned,
 }))(Handle);

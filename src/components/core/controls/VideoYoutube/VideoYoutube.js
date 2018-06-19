@@ -12,6 +12,7 @@ import './VideoYoutube.scss';
 
 const SpinnerSVG = 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/spinner.svg';
 const VIDEO_ID_REGEXP = /([^/]+)(?=$)/;
+const VIDEO_HEIGHT = '300';
 
 
 class VideoYoutube extends React.Component {
@@ -54,7 +55,7 @@ class VideoYoutube extends React.Component {
   playVideo(e) {
     const { status } = this.state;
     // stop all video playing
-    SystemEvent.emit(VIDEO_STOP);
+    // SystemEvent.emit(VIDEO_STOP);
     e && e.stopPropagation();
     if (this.youTubeRef) {
       this.youTubeRef.playVideo();
@@ -124,8 +125,8 @@ class VideoYoutube extends React.Component {
       }
     }
     // on event
-    SystemEvent.on(VIDEO_PAUSE, (videoId) => { this.pauseVideo(videoId); });
-    SystemEvent.on(VIDEO_STOP, (videoId) => { this.stopVideo(videoId); });
+    // SystemEvent.on(VIDEO_PAUSE, (videoId) => { this.pauseVideo(videoId); });
+    // SystemEvent.on(VIDEO_STOP, (videoId) => { this.stopVideo(videoId); });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -138,8 +139,8 @@ class VideoYoutube extends React.Component {
   }
 
   componentWillUnmount() {
-    SystemEvent.removeListener(VIDEO_PAUSE);
-    SystemEvent.removeListener(VIDEO_STOP);
+    // SystemEvent.removeListener(VIDEO_PAUSE);
+    // SystemEvent.removeListener(VIDEO_STOP);
   }
 
   render() {
@@ -158,14 +159,14 @@ class VideoYoutube extends React.Component {
     const { mvideoId, status } = this.state;
 
     return (
-      <div className={`embed-responsive embed-responsive-16by9 ${s.video}`}>
-        <div className={s.imgCover} ref={(imgCover => this.imgCoverRef = imgCover)}>
-          <img className="img-responsive" src={imageUrl} alt={imageAlt} onLoad={this.hiddenLoading} />
-          <div className={s.icon} onClick={this.processPlayVideo}>
-            <img className="img-responsive" onClick={this.playVideo} src={playButtonIcon || PLAY_BUTTON_ICON} alt="play" />
+      <div className="embed-responsive embed-responsive-16by9 video-youtube">
+        <div className="imgCover" ref={(imgCover => this.imgCoverRef = imgCover)}>
+          <img className="img-fluid" src={imageUrl} alt={imageAlt} onLoad={this.hiddenLoading} />
+          <div className="icon" onClick={this.processPlayVideo}>
+            <img className="img-fluid" onClick={this.playVideo} src={playButtonIcon || PLAY_BUTTON_ICON} alt="play" />
           </div>
         </div>
-        <div className={s.youTubeContainer} ref={(youTube => this.youTubeContainerRef = youTube)}>
+        <div className="youTubeContainer" ref={(youTube => this.youTubeContainerRef = youTube)}>
           {
             status !== 0 && (
               <YouTube
@@ -176,8 +177,8 @@ class VideoYoutube extends React.Component {
             )
           }
         </div>
-        <div className={s.loading} ref={loading => this.loadingRef = loading}>
-          <img className="img-resonsive" src={SpinnerSVG} alt="loading" />
+        <div className="loading" ref={loading => this.loadingRef = loading}>
+          <img className="img-fluid" src={SpinnerSVG} alt="loading" />
         </div>
       </div>
     );
@@ -200,4 +201,4 @@ VideoYoutube.defaultProps = {
   hiddenLoading: false,
 };
 
-export default withStyles(s)(VideoYoutube);
+export default VideoYoutube;
