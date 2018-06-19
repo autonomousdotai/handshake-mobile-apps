@@ -5,6 +5,7 @@ import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, M
 import { loadMatches } from '@/reducers/betting/action';
 import { BASE_API, API_URL } from '@/constants';
 import md5 from 'md5';
+import { Alert } from 'reactstrap';
 import $http from '@/services/api';
 
 let token = null;
@@ -24,17 +25,14 @@ class Admin extends React.Component {
     };
     this.toggle = this.toggle.bind(this);
   }
+
   componentDidMount() {
-    this.props.loadMatches({
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
-      successFn: (res) => {
-        const { data } = res;
-        console.log('loadMatches success', data);
-      },
-      errorFn: (e) => {
-        console.log('loadMatches failed', e);
-      },
-    });
+    if (this.checkToken() != null) {
+      this.setState({
+        login: true,
+      });
+    }
+    this.fetchMatches();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,6 +43,19 @@ class Admin extends React.Component {
       activeMatchData: matches[0],
       selectedMatch: matches[0].name,
       selectedOutcome: matches[0].outcomes[0].id,
+    });
+  }
+
+  fetchMatches() {
+    this.props.loadMatches({
+      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
+      successFn: (res) => {
+        const { data } = res;
+        console.log('loadMatches success', data);
+      },
+      errorFn: (e) => {
+        console.log('loadMatches failed', e);
+      },
     });
   }
 
@@ -95,7 +106,7 @@ class Admin extends React.Component {
     const data = new FormData(event.target);
 
     const email = data.get('email');
-    const password = md5(data.get('password'));
+    const password = md5(`${data.get('password')}Autonomous`);
 
     const auth = $http({
       url: `${BASE_API.BASE_URL}/cryptosign/auth`,
@@ -106,8 +117,10 @@ class Admin extends React.Component {
       method: 'post',
     });
     auth.then((response) => {
-      if (response.status === 200) {
+      if (response.data.status === 1) {
         token = response.data.data.access_token;
+        localStorage.setItem('Token', token);
+        localStorage.setItem('TokenInit', new Date());
         this.setState({
           login: true,
         });
@@ -119,16 +132,24 @@ class Admin extends React.Component {
     localStorage.setItem('disable', true);
     setTimeout(() => {
       localStorage.setItem('disable', false);
+      this.fetchMatches();
       this.setState({
         disable: false,
       });
     }, 120000);
   }
 
+  checkToken() {
+    if (localStorage.getItem('Token') !== null) {
+      return localStorage.getItem('Token');
+    }
+    return null;
+  }
   onSubmit= (event) => {
     if (localStorage.getItem('disable') === false) {
       return null;
     }
+    const tokenValue = token || this.checkToken();
     const url = `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
     const submit = $http({
       url,
@@ -137,7 +158,7 @@ class Admin extends React.Component {
         awayScore: Number(this.state.activeMatchData.awayScore),
         result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
       },
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${tokenValue}` },
       method: 'post',
     });
     submit.then((response) => {
@@ -158,7 +179,6 @@ class Admin extends React.Component {
             name="email"
             id="email"
             placeholder="Enter Email"
-            value="admin@ninja.org"
             required
           />
           <br />
@@ -167,8 +187,6 @@ class Admin extends React.Component {
             name="password"
             id="password"
             placeholder="Enter Password"
-            value="admin@ninja.org"
-            readOnly
           />
           <br />
           <Button type="submit">Submit</Button>
@@ -223,6 +241,11 @@ class Admin extends React.Component {
             />
           </FormGroup>
           <Button disabled={this.state.disable} onClick={this.toggle}>Submit</Button>
+
+          {this.state.disable && <div><br /><Alert color="success">
+            Match details submitted. Please wait.
+                                            </Alert>
+                                 </div>}
           <div>
             <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
               <ModalHeader toggle={this.toggle}>Update Match Data</ModalHeader>
