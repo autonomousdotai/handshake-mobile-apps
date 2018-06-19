@@ -1,11 +1,15 @@
 /**
  * SearchBar Component.
 */
-
 @import './src/styles/style';
+
 .multi-language {
-  .flag-country {
-    font-size: rem-calc(23px);
+  .country-name {
+    font-size: rem-calc(14px);
+  }
+  .expand-arrow {
+    margin-left: rem-calc(10px);
+    width: rem-calc(10px);
   }
   .country-block {
     padding: rem-calc(20px 0);
@@ -21,7 +25,11 @@
       align-items: center;
       padding: 15px 0;
       border-bottom: 1px solid #f0f0f0;
-      .flag, .name {
+      &:last-child {
+        border-bottom: none;
+      }
+      .flag,
+      .name {
         display: inline-block;
       }
       .flag {
@@ -30,22 +38,18 @@
         margin-right: 15px;
       }
       .name {
-        width: 70%;
-        font-weight: $semi-bold;
+        width: 90%;
+        font-weight: $normal;
         font-size: rem-calc(18px);
         color: $black;
       }
-      .radio {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        border: 2px solid #cbcbcb;
+      .tick {
+        width: 15px;
       }
     }
     .active {
-      .radio {
-        background-color: $blue;
-        border: 2px solid $black;
+      .name {
+        font-weight: $semi-bold;
       }
     }
   }

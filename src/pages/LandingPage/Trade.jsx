@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import qs from 'qs';
 import { showAlert } from '@/reducers/app/action';
+import { injectIntl } from 'react-intl';
 
 import Alert from '@/components/core/presentation/Alert';
 
@@ -15,6 +16,7 @@ import Alert from '@/components/core/presentation/Alert';
 import './Trade.scss';
 import ninjaIcon from '@/assets/images/icon/landingpage/trading-ninja.svg';
 import tradeCoinExchange from '@/assets/images/icon/landingpage/trade-coin-exchange.svg';
+import tradeCoinExchangeRussia from '@/assets/images/icon/landingpage/trade-coin-exchange-russia.svg';
 import tradeThirdContainer from '@/assets/images/icon/landingpage/trade-third-container.svg';
 import paymentMethodIcon from '@/assets/images/icon/landingpage/trade-payment-method.svg';
 import safeIcon from '@/assets/images/icon/landingpage/trade-safe.svg';
@@ -23,45 +25,6 @@ import ExpandArrowSVG from '@/assets/images/icon/expand-arrow-white.svg';
 
 const inputRefOne = 'emailRef';
 const inputRefTwo = 'emailRefTwo';
-
-const data = [
-  {
-    question: 'What ID do I need as a seller or a buyer?',
-    answer: 'We do not need ID verification. If you verify your phone number, you will have the chance to get 1 free ETH to make transactions on Shake Ninja',
-  },
-  {
-    question: 'Are credit cards accepted?',
-    answer: 'Yes. We accept Visa, Mastercard, Amex and Discover',
-  },
-  {
-    question: 'What currencies can people exchange?',
-    answer: 'We accept all types of currencies',
-  },
-  {
-    question: 'Is there a system to track the trading history?',
-    answer: 'Yes. We count the successful and failed transactions with clear report for each seller and buyer',
-  },
-  {
-    question: 'Is there any country restricted for this platform?',
-    answer: 'We are available for all countries',
-  },
-  {
-    question: 'Is there decentralized exchange?',
-    answer: 'Yes. Therefore the transaction is 100% safe and secured',
-  },
-  {
-    question: 'Can I use paypal?',
-    answer: 'We are not available on Paypal at the moment',
-  },
-  {
-    question: 'Will the funds be held in Escrow?',
-    answer: 'Yes, in either Escrow on smart contract or ethereum blockchain',
-  },
-  {
-    question: 'How will the Smart Contract execute when physical cash is involved and there is a lag in transaction time?',
-    answer: 'After receiving the physical cash, the seller will click on the accept button, the coin will be automatically transferred to the buyer. The process takes about 10 minutes to 20 minutes',
-  },
-];
 
 class Collapse extends React.PureComponent {
   constructor(props) {
@@ -201,6 +164,7 @@ class Handshake extends React.Component {
   }
 
   renderInputForm({id, onSubmit, refName}) {
+    const { messages, locale } = this.props.intl;
     return (
       <form className="registerEmail" onSubmit={onSubmit}>
         <input
@@ -208,17 +172,18 @@ class Handshake extends React.Component {
           name="email"
           type="text"
           id={id}
-          placeholder="Enter your email"
+          placeholder={messages.COIN_EXCHANGE_LP_PLACEHOLDER_INPUT}
           ref={input => this[refName] = input}
         />
         <button className="btnSubmit" onClick={onSubmit}>
-          <span>Join mailing list</span>
+          <span>{messages.COIN_EXCHANGE_LP_TITLE_SUBMIT_BT}</span>
         </button>
       </form>
     )
   }
 
   render() {
+    const { messages, locale } = this.props.intl;
     return (
       <div className="root">
         <Alert />
@@ -226,30 +191,27 @@ class Handshake extends React.Component {
           <div className={`row rowEqHeight`}>
             <div className="col-lg-8 col-md-12 col-sm-12 col-xs-12">
               <img src={ninjaIcon} alt="ninja icon" className="bannerIcon" />
-              <h1>Trade Easy. Stay Safe</h1>
+              <h1>{messages.COIN_EXCHANGE_LP_TRADE_EASY_TRADE_SAFE.title}</h1>
               <dl>
-                <dt>1. Post your trade</dt>
-                <dd>Select the coin you want to buy/sell along with your desired price</dd>
-
-                <dt>2. Choose your shop</dt>
-                <dd>Search and choose the most suitable shop in your location</dd>
-
-                <dt>3. Fulfill your exchange</dt>
-                <dd>Meet up at the shop and exchange cash to coin or coin to cash</dd>
-
-                <dt>4. Secure your payment</dt>
-                <dd>Process has been secured 100% by smart contract</dd>
+                {
+                  messages.COIN_EXCHANGE_LP_TRADE_EASY_TRADE_SAFE.info.map((item, index) => (
+                    [
+                      <dt key={`dt-${index}`}>{item.title}</dt>,
+                      <dd key={`dd-${index}`}>{item.description}</dd>,
+                    ]
+                  ))
+                }
               </dl>
 
-              <div className="row bottomBox">
-                <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+              <div className={`row bottomBox${locale === 'ru' ? ' russia' : ''}`}>
+                <div className={`${locale === 'ru' ? 'col-lg-10' : 'col-lg-4'} col-md-12 col-sm-12 col-xs-12`}>
                   <a href="/"
                      className="btnStartTrading"
                   >
-                    <span>Start Trading Now</span>
+                    <span>{messages.COIN_EXCHANGE_LP_START_TRADING_NOW}</span>
                   </a>
                 </div>
-                <div className="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+                <div className={`${locale === 'ru' ? 'col-lg-10' : 'col-lg-8'} col-md-12 col-sm-12 col-xs-12`}>
                   {
                     this.renderInputForm({
                       id: 'email-1',
@@ -277,11 +239,11 @@ class Handshake extends React.Component {
               <img src={tradeCoinExchange} alt="trade coin exchange icon" className="img-fluid" />
             </div>
             <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-              <p className="subTitle">We are the first to offer a completely decentralized platform to buy and sell Bitcoin and Ethereum.</p>
+              <p className="subTitle">{messages.COIN_EXCHANGE_LP_SECOND_BOX_TITLE}</p>
               <p className="description">
-                Multiple payment method: credit card and cash<br />
-                Secured transaction by blockchain technology<br />
-                Fast and convenient usage.
+                {messages.COIN_EXCHANGE_LP_SECOND_BOX_DESCRIPTION_1} <br />
+                {messages.COIN_EXCHANGE_LP_SECOND_BOX_DESCRIPTION_2} <br />
+                {messages.COIN_EXCHANGE_LP_SECOND_BOX_DESCRIPTION_3}
               </p>
             </div>
           </div>
@@ -289,7 +251,7 @@ class Handshake extends React.Component {
         <div className={`container thirdContainer`}>
           <div className="row">
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <img src={tradeThirdContainer} alt="third container" className="img-fluid" />
+              <img src={locale === 'ru' ? tradeCoinExchangeRussia : tradeThirdContainer} alt="third container" className="img-fluid" />
             </div>
           </div>
         </div>
@@ -297,18 +259,18 @@ class Handshake extends React.Component {
           <div className="row">
             <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12">
               <img src={paymentMethodIcon} height={80} />
-              <p className="subTitle">Multiple Payment Method</p>
-              <p className="description">We are available for cash - coin trading and credit card - coin trading. Find your nearest traders and leave no transaction history for any activity on our platform.</p>
+              <p className="subTitle">{messages.COIN_EXCHANGE_LP_THIRD_BOX_1.title}</p>
+              <p className="description">{messages.COIN_EXCHANGE_LP_THIRD_BOX_1.description}</p>
             </div>
             <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12">
               <img src={fastAnOnIcon} width={80} height={80} />
-              <p className="subTitle">Fast and On the go</p>
-              <p className="description">With location based trading, we allow you to make payment in few minutes with utmost convenience.</p>
+              <p className="subTitle">{messages.COIN_EXCHANGE_LP_THIRD_BOX_2.title}</p>
+              <p className="description">{messages.COIN_EXCHANGE_LP_THIRD_BOX_2.description}</p>
             </div>
             <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12">
               <img src={safeIcon} width={70} height={80} />
-              <p className="subTitle">100% safe and secured for both sides</p>
-              <p className="description">Unlike any other platform, we do not hold users' keys and grant full key controls to buyers and sellers.</p>
+              <p className="subTitle">{messages.COIN_EXCHANGE_LP_THIRD_BOX_3.title}</p>
+              <p className="description">{messages.COIN_EXCHANGE_LP_THIRD_BOX_3.description}</p>
             </div>
           </div>
         </div>
@@ -316,9 +278,9 @@ class Handshake extends React.Component {
         <div className={`container fiveContainer`}>
           <div className="row">
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <p className="subTitle">Have any questions?</p>
+              <p className="subTitle">{messages.COIN_EXCHANGE_LP_FAQ_TITLE}</p>
               <div>
-                {data.map((item, index) => <Collapse label={item.question} content={item.answer} isList={item.isList} key={index} index={index + 1} />)}
+                {messages.COIN_EXCHANGE_LP_FAQ.map((item, index) => <Collapse label={item.question} content={item.answer} isList={item.isList} key={index} index={index + 1} />)}
               </div>
             </div>
           </div>
@@ -338,4 +300,4 @@ const mapDispatch = ({
   showAlert,
 });
 
-export default connect(null, mapDispatch)(Handshake);
+export default injectIntl(connect(null, mapDispatch)(Handshake));

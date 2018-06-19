@@ -96,6 +96,27 @@
         border: none;
       }
     }
+    .russia {
+      & > div:last-child, & > div:first-child {
+        padding-left: rem-calc(15px);
+        padding-right: rem-calc(40px);
+      }
+      .btnStartTrading {
+        position: inherit;
+        top: unset;
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: rem-calc(30px);
+        padding: rem-calc(12px 26px);
+      }
+      .registerEmail {
+        .btnSubmit {
+          width: 51%;
+          right: -48%;
+        }
+      }
+    }
     .appScreen {
       width: 324px;
       height: 670px;
@@ -254,6 +275,40 @@
         margin-bottom: rem-calc(25px);
         width: 100%;
       }
+      .russia {
+        & > div:last-child, & > div:first-child {
+          padding-left: rem-calc(15px);
+          padding-right: rem-calc(15px);
+        }
+        .registerEmail {
+          .btnSubmit {
+            width: 46%;
+            right: -53%;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .root {
+    .firstContainer {
+      .russia {
+        & > div:last-child, & > div:first-child {
+          padding-left: rem-calc(15px);
+          padding-right: rem-calc(15px);
+        }
+        .registerEmail {
+          .btnSubmit {
+            width: 100%;
+            position: inherit;
+            right: unset;
+            top: unset;
+            margin-top: rem-calc(10px);
+          }
+        }
+      }
     }
   }
 }
@@ -309,6 +364,17 @@
           right: unset;
           top: unset;
           margin-top: rem-calc(10px);
+        }
+      }
+      .russia {
+        .registerEmail {
+          .btnSubmit {
+            width: 100%;
+            position: inherit;
+            right: unset;
+            top: unset;
+            margin-top: rem-calc(10px);
+          }
         }
       }
     }
