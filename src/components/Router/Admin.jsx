@@ -23,18 +23,11 @@ class Admin extends React.Component {
       matches: [],
       outcomes: [],
       activeMatchData: {},
+      login: false,
     };
     this.toggle = this.toggle.bind(this);
   }
   componentDidMount() {
-    const password = md5('admin@ninja.orgAutonomous');
-    const auth = $http(`${BASE_API.BASE_URL}/cryptosign/auth`, {
-      email: 'admin@ninja.org',
-      password,
-    }, '', '', '', 'post');
-    auth.then((response) => {
-      token = response.data.data.access_token;
-    });
     this.props.loadMatches({
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
       successFn: (res) => {
@@ -99,6 +92,26 @@ class Admin extends React.Component {
     });
   }
 
+  loginUser=(event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const email = data.get('email');
+    const password = data.get('password');
+    const password_md5 = md5('admin@ninja.orgAutonomous');
+    const auth = $http(`${BASE_API.BASE_URL}/cryptosign/auth`, {
+      email,
+      password: password_md5,
+    }, '', '', '', 'post');
+    auth.then((response) => {
+      if (response.status == 1) {
+        token = response.data.data.access_token;
+        this.setState({
+          login: true,
+        });
+      }
+    });
+  }
+
   onSubmit=(event) => {
     const url = `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
     const submit = $http(url, {
@@ -111,7 +124,33 @@ class Admin extends React.Component {
     });
   }
   render() {
-    return (
+    return (!this.state.login ?
+      <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }} onSubmit={this.loginUser}>
+        <FormGroup>
+          <Label for="login">Login</Label>
+          <Input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Enter Email"
+            value="admin@ninja.org"
+            required
+          />
+          <br />
+          <Input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Enter Password"
+            value="admin@ninja.org"
+            required
+          />
+          <br />
+          <Button type="submit">Submit</Button>
+          <br />
+        </FormGroup>
+      </Form>
+      :
       <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }}>
         <FormGroup>
           <Label for="matchSelect">Select Match</Label>
