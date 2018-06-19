@@ -7,7 +7,6 @@ import { URL, APP, API_URL } from '@/constants';
 // actions
 import { setIpInfo, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
 import { getListOfferPrice } from '@/reducers/exchange/action';
-
 // services
 import $http from '@/services/api';
 import { createDynamicImport } from '@/services/app';
@@ -58,6 +57,7 @@ class Root extends React.Component {
     this.state = {
       messages,
       app: this.props.app,
+      isLoading: true,
     };
 
     this.setLanguage = ::this.setLanguage;
@@ -141,6 +141,7 @@ class Root extends React.Component {
         }
       }
       this.props.setCheckBanned();
+      this.setState({ isLoading: false });
       // /locale
     });
   }
@@ -160,7 +161,11 @@ class Root extends React.Component {
         messages={this.state.messages[this.state.app.locale]}
       >
         <div className="root">
-          {this.preRender()}
+          {
+            this.state.isLoading
+            ? <Loading style={{ height: '100vh' }} />
+            : this.preRender()
+          }
         </div>
       </IntlProvider>
     );

@@ -25,7 +25,7 @@ class WalletItem extends React.Component {
         // const itemSelected = wallet.default ? "feed feed-selected" : "feed";
         return  ( 
             
-            <Col sm={6} md={6} xs={6} key={wallet.address+wallet.network} className="feed-wrapper">
+            <Col sm={6} md={6} xs={6} key={wallet.address+wallet.network} className="feed-wrapper-wallet">
               <div className='feed' style={{backgroundImage: "url('"+bgImg+"')"}}>
                 
                 <div className="name">{wallet.title}

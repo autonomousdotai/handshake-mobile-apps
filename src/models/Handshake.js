@@ -33,6 +33,7 @@ class Handshake {
       bkStatus: data.bk_status || '',
       reviewCount: data.review_count || 0,
       review: data.review || 0,
+      freeBet: data.free_bet || 0,
     };
   }
 }

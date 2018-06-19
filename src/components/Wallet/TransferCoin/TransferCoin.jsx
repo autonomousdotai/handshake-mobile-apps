@@ -21,7 +21,7 @@ import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import './TransferCoin.scss';
 import Dropdown from '@/components/core/controls/Dropdown';
 
-import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code-w.svg';
+import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code.svg';
 
 import bgBox from '@/assets/images/pages/wallet/bg-box-wallet-coin.svg';
 
