@@ -367,6 +367,7 @@ export default {
     'Be a Creator of their own Prediction Market',
     'Collect winnings instantly (guaranteed under a Smart Contract)',
   ],
+  WHITE_PAPER_PEX_3: 'Place a bet.',
   WHITE_PAPER_OUTCOME: 'Outcomes as tradable assets. Odds as prices.',
   WHITE_PAPER_OUTCOME_1: 'In a stock exchange, the tradeable asset is share, and traders bet on share unit prices (e.g. sell 100 shares of Apple at $200 each).',
   WHITE_PAPER_OUTCOME_2: 'In a coin exchange, the tradeable asset is coin, and traders bet on coin unit prices (e.g. buy 2 Bitcoin at $7000 each).',
@@ -403,10 +404,12 @@ export default {
   WHITE_PAPER_ARCHITECTURE_2: 'PEX allows anyone to create a prediction market about any future event. This can be in any field — sports, politics, science, lifestyle, even weather and so on. The only limit here is your creativity. Each market is part of an on-chain smart contract. It has its own order book, makers and takers.',
   WHITE_PAPER_ARCHITECTURE_3_HL: 'Order Book',
   WHITE_PAPER_ARCHITECTURE_3: 'Each Prediction Market has its own order book. PEX Order Book manages all Support Outcome Orders (ask) and all Against Outcome Order (bid). It aggregates all orders with the same price (odds) into an entry on the order book.',
+  WHITE_PAPER_ARCHITECTURE_3_1: 'The order book.',
   WHITE_PAPER_ARCHITECTURE_4_HL: 'Matching Engine',
   WHITE_PAPER_ARCHITECTURE_4_1: 'PEX uses a first-in, first-out (FIFO) order book. Orders are executed in price-time priority. This means that it will match by price first, and if there are two orders with the same price, then it will match by time.',
   WHITE_PAPER_ARCHITECTURE_4_2: 'In some cases, the amount placed on either side is uneven, and the order will be partially filled. The remaining order will be matched with the next best price-then-time in the order book until the order is completely filled.',
-  WHITE_PAPER_ARCHITECTURE_4_3: [
+  WHITE_PAPER_ARCHITECTURE_4_3: 'Your perfect match.',
+  WHITE_PAPER_ARCHITECTURE_4_4: [
     'A user places a Support Outcome Order into the Open Order Book',
     'Another user place an Against Outcome Order into the Open Order Book',
     'Matching Engine finds a match and moves both Orders from the Open Order Book to Matched Order Book',
