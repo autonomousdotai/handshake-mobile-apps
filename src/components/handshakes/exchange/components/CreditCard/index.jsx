@@ -55,7 +55,6 @@ class Component extends React.Component {
   }
 
   render() {
-    const {intl} = this.props;
     const { isCCExisting, lastDigits, isNewCCOpen, handleToggleNewCC } = this.props;
     const { ccType } = this.state;
 
@@ -98,7 +97,7 @@ class Component extends React.Component {
               className='form-control-custom form-control-custom-ex w-100'
               component={fieldCleave}
               propsCleave={{
-                placeholder: intl.formatMessage({id: 'ccExpireTemplate'}),
+                placeholder: <FormattedMessage id="ccExpireTemplate"/>,
                 options: {blocks: [2, 2], delimiter: '/', numericOnly: true},
                 // type: "tel",
                 // id: `cart-date-${this.lastUniqueId()}`,
@@ -117,7 +116,7 @@ class Component extends React.Component {
               className='form-control-custom form-control-custom-ex w-100'
               component={fieldCleave}
               propsCleave={{
-                placeholder: intl.formatMessage({id: 'securityCode'}),
+                placeholder: <FormattedMessage id="securityCode"/>,
                 options: {blocks: [4], numericOnly: true},
                 // type: "password",
                 // maxLength: "4",
@@ -154,7 +153,7 @@ class Component extends React.Component {
                                     handleToggleNewCC()
                                   }}
                           >
-                            {intl.formatMessage({id: 'change'})}<span className="ml-2">{value ? <img src={iconChevronBottom} /> : <img src={iconChevronRight} />}</span>
+                            <FormattedMessage id="change"/><span className="ml-2">{value ? <img src={iconChevronBottom} /> : <img src={iconChevronRight} />}</span>
                           </button>
                       }
                     />

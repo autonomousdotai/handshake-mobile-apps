@@ -121,14 +121,13 @@ class FeedExchange extends React.PureComponent {
   }
 
   checkMainNetDefaultWallet = (wallet) => {
-    const { intl } = this.props;
     let result = true;
 
     if (process.env.isProduction && !process.env.isStaging) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {
-        const message = intl.formatMessage({id: 'requireDefaultWalletOnMainNet'}, {});
+        const message = <FormattedMessage id="requireDefaultWalletOnMainNet"/>;
         this.showAlert(message);
         result = false;
       }
@@ -145,14 +144,14 @@ class FeedExchange extends React.PureComponent {
     const condition = bnBalance.isLessThan(bnAmount.plus(bnFee));
 
     if (condition) {
-      const { intl } = this.props;
       this.props.showAlert({
         message: <div className="text-center">
-          {intl.formatMessage({ id: 'notEnoughCoinInWallet' }, {
-            amount: formatAmountCurrency(balance),
-            fee: formatAmountCurrency(fee),
-            currency: currency,
-          })}
+          <FormattedMessage id="notEnoughCoinInWallet"
+                            values={ {
+                              amount: formatAmountCurrency(balance),
+                              fee: formatAmountCurrency(fee),
+                              currency: currency,
+                            } } />
         </div>,
         timeOut: 3000,
         type: 'danger',
@@ -216,7 +215,6 @@ class FeedExchange extends React.PureComponent {
   handleShakeOfferItemSuccess = async (responseData) => {
     console.log('handleShakeOfferItemSuccess', responseData);
 
-    const { intl } = this.props;
     const { data } = responseData;
     const offerShake = Offer.offer(data);
     const { currency, type, amount, totalAmount, systemAddress, offChainId } = offerShake;
@@ -242,8 +240,7 @@ class FeedExchange extends React.PureComponent {
     }
 
     this.hideLoading();
-    const message = intl.formatMessage({ id: 'shakeOfferItemSuccessMassage' }, {
-    });
+    const message = <FormattedMessage id="shakeOfferItemSuccessMassage" />;
 
     this.props.showAlert({
       message: <div className="text-center">{message}</div>,
@@ -272,7 +269,7 @@ class FeedExchange extends React.PureComponent {
   }
 
   getOfferDistance = () => {
-    const { intl,  ipInfo: { latitude, longitude, country }, location } = this.props;
+    const { ipInfo: { latitude, longitude, country }, location } = this.props;
     const { offer } = this;
     // let distanceKm = 0;
     // let distanceMiles = 0;
@@ -283,11 +280,10 @@ class FeedExchange extends React.PureComponent {
       distanceKm = getDistanceFromLatLonInKm(latitude, longitude, latLng[0], latLng[1]);
     }
 
-    return intl.formatMessage({ id: 'offerDistanceContent' }, {
-      distance: getLocalizedDistance(distanceKm, country)
-      // distanceKm: distanceKm > 1 || distanceMiles === 0 ? distanceKm.toFixed(0) : distanceKm.toFixed(3),
-      // distanceMiles: distanceMiles === 0 ? distanceKm.toFixed(0) : distanceMiles.toFixed(1),
-    });
+    return <FormattedMessage id="offerDistanceContent"
+                                      values={ {
+                                        distance: getLocalizedDistance(distanceKm, country)
+                                      } } />;
   }
 
   getPrices = () => {
