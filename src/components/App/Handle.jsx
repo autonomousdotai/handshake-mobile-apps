@@ -100,7 +100,6 @@ class Handle extends React.Component {
     this.props.authUpdate({
       PATH_URL: 'user/profile',
       data,
-      headers: { 'Content-Type': 'multipart/form-data' },
       METHOD: 'POST',
       successFn: (res) => {
         console.log('app - handle - wallet - success - ', res);
@@ -212,7 +211,6 @@ class Handle extends React.Component {
             this.props.authUpdate({
               PATH_URL: 'user/profile',
               data,
-              headers: { 'Content-Type': 'multipart/form-data' },
               METHOD: 'POST',
             });
           }
