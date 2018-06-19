@@ -10,6 +10,8 @@ import { changeLocale } from '@/reducers/app/action';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 // style
 import './MultiLanguage.scss';
+import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
+import TickSVG from '@/assets/images/icon/tick.svg';
 
 const LANGUAGES = [
   {
@@ -61,6 +63,11 @@ class MultiLanguage extends React.PureComponent {
     }
   }
 
+  getCountryName(locale) {
+    const hasSupportLanguage = LANGUAGES.find(language => language.code === locale);
+    return hasSupportLanguage ? hasSupportLanguage : LANGUAGES[0];
+  }
+
   changeCountry(countryCode) {
     this.props.changeLocale(countryCode);
     this.modalLanguageRef.close();
@@ -68,22 +75,28 @@ class MultiLanguage extends React.PureComponent {
 
   render() {
     const { locale } = this.props.app;
-    const flag = this.getFlagIcon(locale);
+    const countrySelecting = this.getCountryName(locale);
     return (
       <div className={`multi-language ${this.props.className || ''}`}>
-        <span className={`flag-country flag-icon flag-icon-${flag}`} onClick={() => this.modalLanguageRef.open()} />
+        <span className="country-name" onClick={() => this.modalLanguageRef.open()}>
+          {countrySelecting.name}
+        </span>
+        <img className="expand-arrow" src={ExpandArrowSVG} alt="expand" />
         <ModalDialog onRef={modal => this.modalLanguageRef = modal}>
           <div className="country-block">
-            <p className="text">Delivered Language</p>
+            <p className="text">Select your language</p>
             {
               LANGUAGES.map(language => (
                 <div
                   key={language.code} 
                   className={`country ${locale === language.code && 'active'}`}
                   onClick={() => this.changeCountry(language.code)}>
-                  <span className={`flag flag-icon flag-icon-${this.getFlagIcon(language.code)}`} />
                   <span className="name">{language.name}</span>
-                  <span className="radio" />
+                  {
+                    locale === language.code && (
+                      <img className="tick" src={TickSVG} alt="active" />
+                    )
+                  }
                 </div>
               ))
             }

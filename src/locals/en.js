@@ -252,4 +252,86 @@ export default {
       isBlankTarget: true,
     },
   ],
+
+  // landing page --> /coin-exchange
+  COIN_EXCHANGE_LP_FAQ_TITLE: 'Have any questions?',
+  COIN_EXCHANGE_LP_FAQ: [
+    {
+      question: 'What ID do I need as a seller or a buyer?',
+      answer: 'We do not need ID verification. If you verify your phone number, you will have the chance to get 1 free ETH to make transactions on Shake Ninja',
+    },
+    {
+      question: 'Are credit cards accepted?',
+      answer: 'Yes. We accept Visa, Mastercard, Amex and Discover',
+    },
+    {
+      question: 'What currencies can people exchange?',
+      answer: 'We accept all types of currencies',
+    },
+    {
+      question: 'Is there a system to track the trading history?',
+      answer: 'Yes. We count the successful and failed transactions with clear report for each seller and buyer',
+    },
+    {
+      question: 'Is there any country restricted for this platform?',
+      answer: 'We are available for all countries',
+    },
+    {
+      question: 'Is there decentralized exchange?',
+      answer: 'Yes. Therefore the transaction is 100% safe and secured',
+    },
+    {
+      question: 'Can I use paypal?',
+      answer: 'We are not available on Paypal at the moment',
+    },
+    {
+      question: 'Will the funds be held in Escrow?',
+      answer: 'Yes, in either Escrow on smart contract or ethereum blockchain',
+    },
+    {
+      question: 'How will the Smart Contract execute when physical cash is involved and there is a lag in transaction time?',
+      answer: 'After receiving the physical cash, the seller will click on the accept button, the coin will be automatically transferred to the buyer. The process takes about 10 minutes to 20 minutes',
+    },
+  ],
+  COIN_EXCHANGE_LP_TRADE_EASY_TRADE_SAFE: {
+    title: 'Trade Easy. Stay Safe',
+    info: [
+      {
+        title: '1. Post your trade',
+        description: 'Select the coin you want to buy/sell along with your desired price',
+      },
+      {
+        title: '2. Choose your shop',
+        description: 'Search and choose the most suitable shop in your location',
+      },
+      {
+        title: '3. Fulfill your exchange',
+        description: 'Meet up at the shop and exchange cash to coin or coin to cash',
+      },
+      {
+        title: '4. Secure your payment',
+        description: 'Process has been secured 100% by smart contract',
+      },
+    ],
+  },
+  COIN_EXCHANGE_LP_START_TRADING_NOW: 'Start Trading Now',
+  COIN_EXCHANGE_LP_PLACEHOLDER_INPUT: 'Enter your email',
+  COIN_EXCHANGE_LP_TITLE_SUBMIT_BT: 'Join mailing list',
+  COIN_EXCHANGE_LP_SECOND_BOX_TITLE: 'We are the first to offer a completely decentralized platform to buy and sell Bitcoin and Ethereum.',
+  COIN_EXCHANGE_LP_SECOND_BOX_DESCRIPTION_1: 'Multiple payment method: credit card and cash',
+  COIN_EXCHANGE_LP_SECOND_BOX_DESCRIPTION_2: 'Secured transaction by blockchain technology',
+  COIN_EXCHANGE_LP_SECOND_BOX_DESCRIPTION_3: 'Fast and convenient usage.',
+  COIN_EXCHANGE_LP_THIRD_BOX_1: {
+    title: 'Multiple Payment Method',
+    description: 'We are available for cash - coin trading and credit card - coin trading. Find your nearest traders and leave no transaction history for any activity on our platform.',
+  },
+  COIN_EXCHANGE_LP_THIRD_BOX_2: {
+    title: 'Fast and On the go',
+    description: 'With location based trading, we allow you to make payment in few minutes with utmost convenience.',
+  },
+  COIN_EXCHANGE_LP_THIRD_BOX_3: {
+    title: '100% safe and secured for both sides',
+    description: 'Unlike any other platform, we do not hold users\' keys and grant full key controls to buyers and sellers.',
+  },
+
 };
