@@ -310,7 +310,7 @@ class FeedCreditCard extends React.Component {
 
   onAmountChange = (e, amount) => {
     // const amount = e.target.value;
-    this.getCryptoPriceByAmount(amount);
+    // this.getCryptoPriceByAmount(amount);
     this.setState({ amount }, () => {
       this.getCryptoPriceByAmountThrottled(amount);
     });
@@ -320,7 +320,7 @@ class FeedCreditCard extends React.Component {
     // console.log('onCurrencyChange', newValue);
     // const currency = e.target.textContent || e.target.innerText;
     this.setState({ currency: newValue }, () => {
-      this.getCryptoPriceByAmount(this.state.amount);
+      this.getCryptoPriceByAmountThrottled(this.state.amount);
     });
   };
 
