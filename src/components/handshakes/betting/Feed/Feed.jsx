@@ -9,7 +9,7 @@ import {MasterWallet} from '@/models/MasterWallet';
 
 import local from '@/services/localStore';
 import {FIREBASE_PATH, HANDSHAKE_ID, API_URL, APP} from '@/constants';
-import { uninitItem, collect, refund } from '@/reducers/handshake/action';
+import { uninitItem, collect, refund, collectFree } from '@/reducers/handshake/action';
 import { loadMyHandshakeList, updateBettingChange} from '@/reducers/me/action';
 
 
@@ -292,43 +292,76 @@ class FeedBetting extends React.Component {
     //console.log('Choose option:', value)
     //TO DO: Choose an option
   }
+  handleActionFree(title, id){
+    switch(title){
+
+      case BETTING_STATUS_LABEL.WITHDRAW:
+        this.collectFree(id);
+        break;
+
+    }
+  }
+  handleActionReal(title, id){
+    const realId = betHandshakeHandler.getId(id);
+
+    switch(title){
+
+      case BETTING_STATUS_LABEL.CANCEL:
+        // TO DO: CLOSE BET
+        this.uninitItem(realId);
+        break;
+
+      case BETTING_STATUS_LABEL.WITHDRAW:
+        // TO DO: WITHDRAW
+        this.collect(id);
+        break;
+      case BETTING_STATUS_LABEL.REFUND:
+      this.refund(realId);
+      break;
+
+    }
+  }
 
   async clickActionButton(title){
     const balance = await betHandshakeHandler.getBalance();
     const estimatedGas = await betHandshakeHandler.getEstimateGas();
     let message = null;
-    if(estimatedGas > balance){
-      message = MESSAGE.NOT_ENOUGH_BALANCE;
+    const {id, shakeUserIds, freeBet} = this.props; // new state
+    let idCryptosign = id;
+    let isFreeBet = freeBet;
+    const profile = local.get(APP.AUTH_PROFILE);
+    const isUserShake = this.isShakeUser(shakeUserIds, profile.id);
+    if(isUserShake){
+      const extraData = this.extraData;
+      const {shakers} = extraData;
+      const idOffchain = betHandshakeHandler.getId(id);
 
+      if(shakers){
+        const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
+        //console.log('Found Shaked Item:', foundShakedItem);
+        idCryptosign = `cryptosign_s${foundShakedItem.id}`;
+        isFreeBet = foundShakedItem.free_bet;
+      }
     }
-    else if(!betHandshakeHandler.isRightNetwork()){
+    console.log("idCryptosign, isFreeBet, isUserShaker: ", idCryptosign, isFreeBet, isUserShake);
+
+    if(!betHandshakeHandler.isRightNetwork()){
       message = MESSAGE.RIGHT_NETWORK;
     }
     else {
-      const {id, freeBet} = this.props;
-      if(freeBet){
-        //TO DO: handle with freebet 
-      }else {
-        const realId = betHandshakeHandler.getId(id);
+      if(isFreeBet){
+        this.handleActionFree(title,idCryptosign);
+      }
+      else {
+        if(estimatedGas > balance){
+          message = MESSAGE.NOT_ENOUGH_GAS;
 
-        switch(title){
-  
-          case BETTING_STATUS_LABEL.CANCEL:
-            // TO DO: CLOSE BET
-            this.uninitItem(realId);
-            break;
-  
-          case BETTING_STATUS_LABEL.WITHDRAW:
-            // TO DO: WITHDRAW
-            this.collect(id);
-            break;
-          case BETTING_STATUS_LABEL.REFUND:
-          this.refund(realId);
-          break;
-  
+        }else {
+          this.handleActionReal(title, idCryptosign);
+
         }
       }
-      
+
     }
     if(message){
       this.props.showAlert({
@@ -395,8 +428,19 @@ class FeedBetting extends React.Component {
     }
 
   }
+  collectFree(id){
+    console.log('Call Collect Free');
+    let params = {
+      offchain: id
+    }
+    this.props.collectFree({PATH_URL: API_URL.CRYPTOSIGN.COLLECT_FREE, METHOD:'POST',data: params,
+    successFn: this.collectSuccess,
+    errorFn: this.collectFailed
+  });
+  }
 
   collect(id){
+    console.log('Withdraw');
     let params = {
       offchain: id
     }
@@ -524,6 +568,7 @@ const mapDispatch = ({
   updateBettingChange,
   uninitItem,
   collect,
+  collectFree,
   refund,
   //rollback,
   showAlert

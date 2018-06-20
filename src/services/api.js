@@ -15,7 +15,6 @@ const $http = ({
   const completedHeaders = merge(
     defaultHeaders,
     headers,
-    parsedMethod === 'post' ? { 'Content-Type': 'multipart/form-data' } : {},
   );
 
   if (url.startsWith(BASE_API.BASE_URL)) {

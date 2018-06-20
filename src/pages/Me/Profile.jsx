@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 
 // services
 import createForm from '@/components/core/form/createForm';
+import Refers from '@/components/Wallet/Refers';
 import { setHeaderTitle, showAlert } from '@/reducers/app/action';
 import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate, submitEmail } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
@@ -133,6 +134,7 @@ class Profile extends React.Component {
           country: `${countryCode.dialCode.replace('+', '')}`,
           phone,
         },
+        headers: { 'Content-Type': 'multipart/form-data' },
         METHOD: 'POST',
         successFn: () => {
           this.setState(() => ({ phoneStart: phone, isShowVerificationPhoneCode: true }));
@@ -169,6 +171,7 @@ class Profile extends React.Component {
           phone,
           code: sms,
         },
+        headers: { 'Content-Type': 'multipart/form-data' },
         METHOD: 'POST',
         successFn: () => {
           const data = new FormData();
@@ -176,6 +179,7 @@ class Profile extends React.Component {
           this.props.authUpdate({
             PATH_URL: 'user/profile',
             data,
+            headers: { 'Content-Type': 'multipart/form-data' },
             METHOD: 'POST',
             successFn: () => {
               this.setState({ isShowVerificationPhoneCode: false });
@@ -223,6 +227,7 @@ class Profile extends React.Component {
       if (emailStart !== email) {
         this.props.verifyEmail({
           PATH_URL: `user/verification/email/start?email=${email}`,
+          headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',
           successFn: (data) => {
             if (data.status) {
@@ -258,6 +263,7 @@ class Profile extends React.Component {
             email,
             code,
           },
+          headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',
           successFn: () => {
             const params = new URLSearchParams();
@@ -548,6 +554,11 @@ class Profile extends React.Component {
                 </EmailForm>
               </div>
             </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <Refers />
           </Col>
         </Row>
         <ModalDialog onRef={(modal) => { this.modalVerifyRef = modal; return null; }}>

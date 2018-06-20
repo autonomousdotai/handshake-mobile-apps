@@ -22,6 +22,7 @@ class Admin extends React.Component {
       activeMatchData: {},
       login: false,
       disable: false,
+      errorMessage: '',
     };
     this.toggle = this.toggle.bind(this);
   }
@@ -81,6 +82,7 @@ class Admin extends React.Component {
 
   onChangeEvent=(event, type) => {
     this.setState({ [type]: event.target.value }, this.fillOutcome);
+    this.setState({ errorMessage: '' });
   }
   onChangeOutcome=(event, type) => {
     this.setState({
@@ -114,6 +116,7 @@ class Admin extends React.Component {
         email,
         password,
       },
+      headers: { 'Content-Type': 'application/json' },
       method: 'post',
     });
     auth.then((response) => {
@@ -158,7 +161,7 @@ class Admin extends React.Component {
         awayScore: Number(this.state.activeMatchData.awayScore),
         result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
       },
-      headers: { Authorization: `Bearer ${tokenValue}` },
+      headers: { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' },
       method: 'post',
     });
     submit.then((response) => {
@@ -167,6 +170,9 @@ class Admin extends React.Component {
         disable: true,
       }, this.disablePage);
       console.log(response);
+      response.data.status === 0 && this.setState({
+        errorMessage: response.data.message,
+      });
     });
   }
   render() {
@@ -211,9 +217,9 @@ class Admin extends React.Component {
           <FormGroup disabled={this.state.disable}>
             <Label for="resultOfMatch">Result of Match</Label>
             <Input type="select" name="select" id="resultOfMatch" onChange={(event) => { this.onChangeResult(event, 'selectedResult'); }} disabled={this.state.disable}>
-              <option>0</option>
-              <option>1</option>
-              <option>2</option>
+              <option value="0">Unknown</option>
+              <option value="1">Support</option>
+              <option value="2">Against</option>
             </Input>
           </FormGroup>
           <FormGroup>
@@ -255,6 +261,9 @@ class Admin extends React.Component {
                 <Label>Selected Result {this.state.selectedResult}</Label> <br />
                 <Label>HomeScore {this.state.activeMatchData.homeScore}</Label> <br />
                 <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br />
+                {this.state.errorMessage && <Alert color="danger">
+                    {this.state.errorMessage}
+                                            </Alert>}
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={this.onSubmit}>Confirm</Button>{' '}

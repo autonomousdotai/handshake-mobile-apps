@@ -8,18 +8,10 @@
         <g id="New-landing-page-2" transform="translate(-60.000000, -1661.000000)">
             <g id="Group-10" transform="translate(60.000000, 1661.000000)">
                 <text id="Amount" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
-                    <tspan x="31" y="231">Торговля</tspan>
-                    <tspan x="142.730469" y="234.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="128.222813" y="231">на</tspan>
-                    <tspan x="171.144688" y="234.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="156.637031" y="231">основе</tspan>
-                    <tspan x="244.969063" y="234.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="230.461406" y="231">местоположения</tspan>
+                    <tspan x="31" y="231">Торговля по местоположению</tspan>
                 </text>
                 <text id="Amount" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
-                    <tspan x="31" y="291">Доступно</tspan>
-                    <tspan x="146.041016" y="294.031953" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="131.533359" y="291">наличными</tspan>
+                    <tspan x="31" y="291">Доступна оплата наличными</tspan>
                 </text>
                 <text id="Amount" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
                     <tspan x="31" y="357">Анонимная</tspan>
@@ -29,15 +21,7 @@
                     <tspan x="233.404609" y="357">транзакций</tspan>
                 </text>
                 <text id="Narrative" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
-                    <tspan x="31" y="165.441406">Смарт</tspan>
-                    <tspan x="112.222656" y="168.473359" font-family="AzoSans-Regular, Azo Sans">-</tspan>
-                    <tspan x="99.915" y="165.441406">контракт</tspan>
-                    <tspan x="209.956016" y="168.473359" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="195.448359" y="165.441406">по</tspan>
-                    <tspan x="239.610469" y="168.473359" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="225.102813" y="165.441406">технологии</tspan>
-                    <tspan x="361.530547" y="168.473359" font-family="AzoSans-Regular, Azo Sans"> </tspan>
-                    <tspan x="347.022891" y="165">Блокче́йн</tspan>
+                    <tspan x="31" y="165">Смарт контракт на технологии блокчейн</tspan>
                 </text>
                 <text id="PayPal" font-family="LucidaGrande, Lucida Grande" font-size="20" font-weight="normal" line-spacing="20" fill="#FFFFFF">
                     <tspan x="31" y="99">Уникальное</tspan>

@@ -35,6 +35,7 @@ export const MESSAGE = {
   CREATE_BET_NOT_MATCH: 'Finding a ninja to bet against you.',
   CREATE_BET_MATCHED: 'Bet matched! Waiting for outcome.',
   NOT_ENOUGH_BALANCE: 'Too rich for your blood. Please top up your wallet.',
+  NOT_ENOUGH_GAS: `Not enough gas. Please top up your wallet.`,
   CHOOSE_MATCH: 'Please choose match and outcome',
   ODD_LARGE_THAN: 'Please enter odds greater than 1',
   AMOUNT_VALID: 'Please place a bet larger than 0.',
@@ -163,7 +164,7 @@ export class BetHandshakeHandler {
   }
   getChainIdDefaultWallet(){
     const wallet = MasterWallet.getWalletDefault('ETH');
-    MasterWallet.log(wallet);
+    //MasterWallet.log(wallet);
 
     const chainId = wallet.chainId;
     console.log('ChainId:', chainId);
@@ -240,8 +241,8 @@ export class BetHandshakeHandler {
       const secondItem = array[1];
       if (secondItem) {
         const strId = secondItem.substring(1);
-        console.log(strId);
-        console.log(secondItem);
+        //console.log(strId);
+        //console.log(secondItem);
         return parseInt(strId);
       }
     }
