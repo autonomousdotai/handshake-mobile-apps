@@ -353,18 +353,6 @@ class FeedExchange extends React.PureComponent {
       priceBuyBTC, priceSellBTC, priceBuyETH, priceSellETH,
     } = this.getPrices();
 
-    if (offer.itemFlags.BTC) {
-      let coin = {};
-
-      coin.name = CRYPTO_CURRENCY.BTC;
-      coin.color = 'linear-gradient(45deg, #FF8006 0%, #FFA733 51%, #FFC349 100%)';
-      coin.icon = iconBtc;
-      coin.priceBuy = offer.items.BTC.buyBalance > 0 ? formatMoneyByLocale(priceBuyBTC,currency) : '-';
-      coin.priceSell = offer.items.BTC.sellBalance > 0 ? formatMoneyByLocale(priceSellBTC,currency) : '-';
-
-      coins.push(coin);
-    }
-
     if (offer.itemFlags.ETH) {
       let coin = {};
 
@@ -373,6 +361,18 @@ class FeedExchange extends React.PureComponent {
       coin.icon = iconEth;
       coin.priceBuy = offer.items.ETH.buyBalance > 0 ? formatMoneyByLocale(priceBuyETH,currency) : '-';
       coin.priceSell = offer.items.ETH.sellBalance > 0 ? formatMoneyByLocale(priceSellETH,currency) : '-';
+
+      coins.push(coin);
+    }
+
+    if (offer.itemFlags.BTC) {
+      let coin = {};
+
+      coin.name = CRYPTO_CURRENCY.BTC;
+      coin.color = 'linear-gradient(45deg, #FF8006 0%, #FFA733 51%, #FFC349 100%)';
+      coin.icon = iconBtc;
+      coin.priceBuy = offer.items.BTC.buyBalance > 0 ? formatMoneyByLocale(priceBuyBTC,currency) : '-';
+      coin.priceSell = offer.items.BTC.sellBalance > 0 ? formatMoneyByLocale(priceSellBTC,currency) : '-';
 
       coins.push(coin);
     }
