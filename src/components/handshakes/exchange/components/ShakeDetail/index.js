@@ -119,8 +119,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   onFiatAmountChange = (e, amount) => {
     console.log('onFiatAmountChange', amount);
 
-    const { offer, listOfferPrice, type, rfChange } = this.props;
-    const { currency } = this.state;
+    const { offer, listOfferPrice, currency, type, rfChange } = this.props;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
