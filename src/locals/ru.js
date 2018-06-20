@@ -18,7 +18,7 @@ export default {
   offerHandShakeContentMe: '{offerType} {amount} {currency} for {total} {currency_symbol} ({payment_method})',
   offerHandShakeContentMeDone: '{offerType} {amount} {currency} for {total} {currency_symbol} ({payment_method})',
   instantOfferHandShakeContent: 'You{just}{offerType} {amount} {currency} for {total} {currency_symbol} on your card - fee {fee}%',
-  offerDistanceContent: '{distanceKm} km ({distanceMiles} miles) away',
+  offerDistanceContent: '{distance} away',
   transactonOfferInfo: 'Successful ({success}) / Failed ({failed})',
   createOfferConfirm: 'You are about to {type} {amount} {currency} for {total} {currency_symbol}',
   handshakeOfferConfirm: 'You are about to {type} {amount} {currency} for {total} {currency_symbol}',

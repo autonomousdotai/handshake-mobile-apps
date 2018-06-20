@@ -297,8 +297,6 @@ class Component extends React.Component {
       return;
     }
 
-    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
-
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
 
@@ -309,7 +307,6 @@ class Component extends React.Component {
       buy_amount: amountBuy && amountBuy.toString() || "0",
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
-      // reward_address: rewardWallet.address,
     };
 
     const offer = {
@@ -408,10 +405,6 @@ class Component extends React.Component {
     // console.log('handleCreateOfferSuccess', data);
 
     const wallet = MasterWallet.getWalletDefault(currency);
-    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
-
-    // console.log('wallet', wallet);
-    // console.log('rewardWallet', rewardWallet);
 
     if (currency === CRYPTO_CURRENCY.BTC) {
       console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
