@@ -343,7 +343,6 @@ class FeedBetting extends React.Component {
           idCryptosign = betHandshakeHandler.getShakeOffchain(foundShakedItem.id);
           isFreeBet = foundShakedItem.free_bet;
         }
-        
       }
     }
     console.log("idCryptosign, isFreeBet, isUserShaker: ", idCryptosign, isFreeBet, isUserShake);

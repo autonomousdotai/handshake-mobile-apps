@@ -60,9 +60,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
     let newType = type;
 
-    if (type === EXCHANGE_ACTION.BUY && buyBalance <= 0) {
+    if (type === EXCHANGE_ACTION.BUY && sellBalance <= 0) {
       newType = EXCHANGE_ACTION.SELL;
-    } else if (type === EXCHANGE_ACTION.SELL && sellBalance <= 0) {
+    } else if (type === EXCHANGE_ACTION.SELL && buyBalance <= 0) {
       newType = EXCHANGE_ACTION.BUY;
     }
 
@@ -334,8 +334,8 @@ const mapState = (state, prevProps) => {
   // const enableShake = +balance > +amount;
 
   const EXCHANGE_ACTION_LIST = [
-    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0},
-    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? btc.sellBalance <= 0 : eth.sellBalance <= 0},
+    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.sellBalance <= 0 : eth.sellBalance <= 0},
+    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0},
   ];
 
   return {

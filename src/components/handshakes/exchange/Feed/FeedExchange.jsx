@@ -91,19 +91,42 @@ class FeedExchange extends React.PureComponent {
     this.props.hideLoading();
   }
 
-  handleOnShake = () => {
+  handleOnShake = (name) => {
     const { offer } = this;
     this.modalRef.open();
     this.setState({CRYPTO_CURRENCY_LIST: [
       { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
       { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
     ]}, () => {
-      for (let crypto of this.state.CRYPTO_CURRENCY_LIST) {
-        if (!crypto.hide) {
-          this.props.rfChange(nameFormShakeDetail, 'currency', crypto.value);
-          break;
+      let newCurrency = '';
+      if (name) {
+        newCurrency = name;
+        this.props.rfChange(nameFormShakeDetail, 'currency', name);
+      } else {
+        for (let crypto of this.state.CRYPTO_CURRENCY_LIST) {
+          if (!crypto.hide) {
+            newCurrency = crypto.value;
+            this.props.rfChange(nameFormShakeDetail, 'currency', crypto.value);
+            break;
+          }
         }
       }
+
+      const eth = offer.items.ETH;
+      const btc = offer.items.BTC;
+
+      const buyBalance = newCurrency === CRYPTO_CURRENCY.BTC ? btc.buyBalance : eth.buyBalance;
+      const sellBalance = newCurrency === CRYPTO_CURRENCY.BTC ? btc.sellBalance : eth.sellBalance;
+
+      let newType = EXCHANGE_ACTION.BUY;
+
+      if (newType === EXCHANGE_ACTION.BUY && sellBalance <= 0) {
+        newType = EXCHANGE_ACTION.SELL;
+      } else if (newType === EXCHANGE_ACTION.SELL && buyBalance <= 0) {
+        newType = EXCHANGE_ACTION.BUY;
+      }
+
+      this.props.rfChange(nameFormShakeDetail, 'type', newType);
 
       this.props.clearFields(nameFormShakeDetail, false, false, 'amount', 'amountFiat');
     });
@@ -336,6 +359,10 @@ class FeedExchange extends React.PureComponent {
     const { id, chatUsername } = this.offer;
     this.props.history.push(`${URL.HANDSHAKE_CHAT}/${id}`);
   }
+  handleClickCoin = (e, name) => {
+    e.stopPropagation();
+    this.handleOnShake(name)
+  }
 
   handleCreateExchange = () => {
     this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
@@ -382,14 +409,14 @@ class FeedExchange extends React.PureComponent {
 
     return (
       <div>
-        <div className="feed-exchange" onClick={this.handleOnShake}>
+        <div className="feed-exchange" onClick={() => this.handleOnShake()}>
           <div>
             <div className="coins-wrapper">
               {
                 coins.map((coin, index) => {
                   const { name, priceBuy, priceSell, color, icon } = coin
                   return (
-                    <span key={index} className="coin-item" style={{ background: color }} onClick={() => console.log('click item')}>
+                    <span key={index} className="coin-item" style={{ background: color }} onClick={(e) => this.handleClickCoin(e, name)}>
                       {/*<div className="icon-coin"><img src={icon}/></div>*/}
                       <div className="name mb-1">{name}</div>
                       <div className="price-wrapper"><label><FormattedMessage id="ex.discover.label.priceBuy" /></label>&nbsp;<span className="price">{priceBuy} {priceBuy !== '-' && currency}</span></div>
