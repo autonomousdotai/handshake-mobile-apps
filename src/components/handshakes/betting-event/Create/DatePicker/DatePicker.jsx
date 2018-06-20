@@ -30,7 +30,7 @@ class DatePicker extends React.PureComponent {
     console.log('Date:', this.selectedDate);
     const { onChange } = this.props;
     console.log('test');
-    const unixDate = this.isDate(date) ? date.toISOString() : date;
+    const unixDate = this.isDate(date) ? date.unix() : date;
     if (this.isDate(date)) {
       onChange && onChange(unixDate);
     } else {}
