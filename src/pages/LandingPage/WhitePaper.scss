@@ -1,0 +1,45 @@
+@import './src/styles/style';
+
+.whitePaper {
+  background: white;
+  img {
+    margin: 0 auto 30px;
+    display: block;
+  }
+  .container {
+    padding-top: rem-calc(80px);
+    padding-bottom: rem-calc(50px);
+    max-width: rem-calc(740px);
+    margin: 0 auto;
+  }
+  h1 {
+    font-weight: 600;
+    font-size: 42px;
+  }
+  p {
+    font-weight: 300;
+    font-style: normal;
+    font-size: 21px;
+    line-height: 1.58;
+    letter-spacing: -.003em;
+    text-align: justify;
+  }
+  strong {
+    font-weight: 700;
+  }
+  p {
+    margin-top: rem-calc(30px);
+    margin-bottom: rem-calc(30px);
+  }
+  p + p {
+    margin-top: rem-calc(29px);
+  }
+  li {
+    margin-bottom: rem-calc(14px);
+    font-weight: 300;
+    font-size: rem-calc(21px);
+  }
+  //img + p {
+  //  margin-top: rem-calc(10px);
+  //}
+}

@@ -134,6 +134,7 @@ class Profile extends React.Component {
           country: `${countryCode.dialCode.replace('+', '')}`,
           phone,
         },
+        headers: { 'Content-Type': 'multipart/form-data' },
         METHOD: 'POST',
         successFn: () => {
           this.setState(() => ({ phoneStart: phone, isShowVerificationPhoneCode: true }));
@@ -170,6 +171,7 @@ class Profile extends React.Component {
           phone,
           code: sms,
         },
+        headers: { 'Content-Type': 'multipart/form-data' },
         METHOD: 'POST',
         successFn: () => {
           const data = new FormData();
@@ -177,6 +179,7 @@ class Profile extends React.Component {
           this.props.authUpdate({
             PATH_URL: 'user/profile',
             data,
+            headers: { 'Content-Type': 'multipart/form-data' },
             METHOD: 'POST',
             successFn: () => {
               this.setState({ isShowVerificationPhoneCode: false });
@@ -224,6 +227,7 @@ class Profile extends React.Component {
       if (emailStart !== email) {
         this.props.verifyEmail({
           PATH_URL: `user/verification/email/start?email=${email}`,
+          headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',
           successFn: (data) => {
             if (data.status) {
@@ -259,6 +263,7 @@ class Profile extends React.Component {
             email,
             code,
           },
+          headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',
           successFn: () => {
             const params = new URLSearchParams();
