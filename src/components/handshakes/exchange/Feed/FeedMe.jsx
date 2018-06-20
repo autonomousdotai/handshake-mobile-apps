@@ -64,6 +64,8 @@ import {BigNumber} from "bignumber.js";
 import "./FeedMe.scss"
 import {getLocalizedDistance} from "@/services/util"
 import {responseExchangeDataChange} from "@/reducers/me/action";
+import {Ethereum} from '@/models/Ethereum.js';
+import {Bitcoin} from '@/models/Bitcoin';
 
 class FeedMe extends React.PureComponent {
   constructor(props) {
@@ -806,6 +808,24 @@ class FeedMe extends React.PureComponent {
     return fiatAmount;
   }
 
+  getEmailOfferStore = () => {
+    const { email, contactPhone, currency, userAddress, } = this.offer;
+
+    if (email) { return email; }
+    if (contactPhone) { return contactPhone; }
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = new Ethereum();
+      wallet.address = userAddress;
+      return wallet.getShortAddress();
+    }
+    if (currency === CRYPTO_CURRENCY.BTC) {
+      const wallet = new Bitcoin();
+      wallet.address = userAddress;
+      return wallet.getShortAddress();
+    }
+    return '';
+  }
+
   getContentOfferStore = () => {
     const {status} = this.props;
     const { offer } = this;
@@ -1142,13 +1162,23 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_USER.NORMAL: {
         break;
       }
-      case HANDSHAKE_USER.SHAKED: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
-        break;
-      }
+      case HANDSHAKE_USER.SHAKED:
       case HANDSHAKE_USER.OWNER: {
-        // email = offer.toEmail ? offer.toEmail : offer.toContactPhone ? offer.toContactPhone : offer.toContactInfo;
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
+        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : '';
+
+        if (!email) {
+          if (offer.currency === CRYPTO_CURRENCY.ETH) {
+            const wallet = new Ethereum();
+            wallet.address = offer.userAddress;
+            email = wallet.getShortAddress();
+          }
+          if (offer.currency === CRYPTO_CURRENCY.BTC) {
+            const wallet = new Bitcoin();
+            wallet.address = offer.userAddress;
+            email = wallet.getShortAddress();
+          }
+        }
+
         break;
       }
     }
@@ -1768,7 +1798,7 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE: {
-        email = offer.email ? offer.email : offer.contactPhone ? offer.contactPhone : offer.userAddress;
+        email = this.getEmailOfferStore();
         let statusValue = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[offer.status];
         statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME[statusValue];
 

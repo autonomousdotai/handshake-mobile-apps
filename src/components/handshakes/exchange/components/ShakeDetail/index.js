@@ -40,7 +40,7 @@ const fixed6 = (value) => {
 }
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {enableShake: false};
+  state = {enableShake: false, currency: CRYPTO_CURRENCY.ETH};
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -50,7 +50,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   onCurrencyChange = (e, newValue) => {
-    const { offer, type, rfChange } = this.props;
+    const { offer, type, rfChange, fiatAmount } = this.props;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
@@ -67,6 +67,10 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     }
 
     rfChange(nameFormShakeDetail, 'type', newType);
+
+    this.setState({ currency: newValue}, () => {
+      this.onFiatAmountChange(e, fiatAmount);
+    });
   }
 
   onAmountChange = (e, amount) => {
@@ -160,10 +164,36 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     rfChange(nameFormShakeDetail, 'amount', newAmount);
   }
 
+  getBalance = () => {
+    const { offer, type, currency } = this.props;
+
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
+    let balance = 0;
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        balance = eth?.buyBalance;
+      } else {
+        balance = eth?.sellBalance;
+      }
+    } else if (currency === CRYPTO_CURRENCY.BTC) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        balance = btc?.buyBalance;
+      } else {
+        balance = btc?.sellBalance;
+      }
+    }
+
+    return balance;
+  }
+
   render() {
     const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST, type } = this.props;
 
     const fiat = offer.fiatCurrency;
+    const balance = this.getBalance();
 
     return (
       <div className="shake-detail">
@@ -200,7 +230,6 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                   // containerClass="radio-container-old"
                   component={fieldInput}
                   className="input"
-                  type="number"
                   placeholder="500000"
                   validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                   onChange={this.onFiatAmountChange}
@@ -218,7 +247,6 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                   // containerClass="radio-container-old"
                   component={fieldInput}
                   className="input"
-                  type="number"
                   placeholder="10.00"
                   validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                   onChange={this.onAmountChange}
@@ -231,6 +259,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               </div>
             </div>
 
+          </div>
+          <div>
+            <span className="text"><FormattedMessage id="ex.discover.shakeDetail.label.maximum"/> </span><strong className="text-white">{balance} {currency}</strong>
           </div>
           {/*<hr className="hl" />
           <div className="text-total">

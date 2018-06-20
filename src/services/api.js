@@ -8,10 +8,15 @@ const $http = ({
   url, data = {}, qs, id = '', headers = {}, method = 'GET',
 }) => {
   // start handle headers
+  const parsedMethod = method.toLowerCase();
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
-  const completedHeaders = merge(defaultHeaders, headers);
+  const completedHeaders = merge(
+    defaultHeaders,
+    headers,
+    parsedMethod === 'post' ? { 'Content-Type': 'multipart/form-data' } : {},
+  );
 
   if (url.startsWith(BASE_API.BASE_URL)) {
     const token = local.get(APP.AUTH_TOKEN);
@@ -27,7 +32,7 @@ const $http = ({
   // end handle headers
 
   return axios({
-    method: method.toLowerCase(),
+    method: parsedMethod,
     timeout: BASE_API.TIMEOUT,
     headers: completedHeaders,
     url: trimEnd(`${url}/${id}`, '/'),

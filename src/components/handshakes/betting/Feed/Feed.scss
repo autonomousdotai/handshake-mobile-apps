@@ -90,6 +90,8 @@
   }
 }
 
-.feed-wrapper + .feed-wrapper {
-  margin-top: rem-calc(30px) !important;
+.me {
+  .feed-wrapper + .feed-wrapper {
+    margin-top: rem-calc(30px) !important;
+  }
 }
