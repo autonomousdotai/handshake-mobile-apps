@@ -235,6 +235,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
             </div>
 
           </div>
+          <div>
+            <span className="text">Maximum: </span><strong className="text-white">100 ETH</strong>
+          </div>
           {/*<hr className="hl" />
           <div className="text-total">
             <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
