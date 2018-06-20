@@ -5,6 +5,7 @@ import { injectIntl } from 'react-intl';
 
 // services
 import createForm from '@/components/core/form/createForm';
+import Refers from '@/components/Wallet/Refers';
 import { setHeaderTitle, showAlert } from '@/reducers/app/action';
 import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate, submitEmail } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
@@ -548,6 +549,11 @@ class Profile extends React.Component {
                 </EmailForm>
               </div>
             </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <Refers />
           </Col>
         </Row>
         <ModalDialog onRef={(modal) => { this.modalVerifyRef = modal; return null; }}>

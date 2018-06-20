@@ -40,10 +40,9 @@ class RefersDashboard extends React.Component {
   }
 
   async componentDidMount(){
-    console.log("componentDidMount");
     let info = await this.getInfoRefer();
-    if(info)
-      this.setState({"number_ninjas" : info.total, "number_token": info.amount});
+    if(info && info.referral)
+      this.setState({"number_ninjas" : info.referral.total, "number_token": info.referral.amount});
     this.getLinkRefer();
   }
 
@@ -111,7 +110,7 @@ class RefersDashboard extends React.Component {
   handleFocus = (event) =>{
     event.target.select();
   }
-  
+
 
   renderLinkRefer = () => (
     <Step4Form className="refers-wrapper">
@@ -122,7 +121,7 @@ class RefersDashboard extends React.Component {
               type="text"
               className="form-control"
               placeholder=""
-              component={fieldInput}              
+              component={fieldInput}
               validate={[required]}
               onFocus={() => { evt => this.handleFocus(evt); Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
           />
@@ -137,7 +136,7 @@ class RefersDashboard extends React.Component {
     const { } = this.props;
 
     return (
-      <div className="refers-dashboard">      
+      <div className="refers-dashboard">
         {this.showInfoRefer()}
         {this.renderLinkRefer()}
       </div>
