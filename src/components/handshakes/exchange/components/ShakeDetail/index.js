@@ -164,10 +164,36 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     rfChange(nameFormShakeDetail, 'amount', newAmount);
   }
 
+  getBalance = () => {
+    const { offer, type, currency } = this.props;
+
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
+    let balance = 0;
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        balance = eth?.buyBalance;
+      } else {
+        balance = eth?.sellBalance;
+      }
+    } else if (currency === CRYPTO_CURRENCY.BTC) {
+      if (type === EXCHANGE_ACTION.SELL) {
+        balance = btc?.buyBalance;
+      } else {
+        balance = btc?.sellBalance;
+      }
+    }
+
+    return balance;
+  }
+
   render() {
     const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST, type } = this.props;
 
     const fiat = offer.fiatCurrency;
+    const balance = this.getBalance();
 
     return (
       <div className="shake-detail">
@@ -235,7 +261,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
           </div>
           <div>
-            <span className="text">Maximum: </span><strong className="text-white">100 ETH</strong>
+            <span className="text"><FormattedMessage id="ex.discover.shakeDetail.label.maximum"/> </span><strong className="text-white">{balance} {currency}</strong>
           </div>
           {/*<hr className="hl" />
           <div className="text-total">

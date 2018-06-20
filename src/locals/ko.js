@@ -78,6 +78,7 @@ export default {
   'ex.discover.banner.btnText': 'BECOME A LOCAL EXCHANGE',
   'ex.discover.shakeDetail.label.amount': 'Amount',
   'ex.discover.shakeDetail.label.total': 'Total',
+  'ex.discover.shakeDetail.label.maximum': 'Maximum:',
   'ex.me.label.with': 'With',
   'ex.me.label.from': 'From',
   'ex.me.label.about': 'About',
