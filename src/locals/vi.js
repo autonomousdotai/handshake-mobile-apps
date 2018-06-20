@@ -58,10 +58,12 @@ export default {
   'ex.create.label.marketPrice': 'Current market price',
   'ex.create.label.premiumBuy': 'Your buying price',
   'ex.create.label.premiumSell': 'Your selling price',
+  'ex.create.label.premiumSellExplanation': '= Market price + percentage',
   'ex.create.label.nameStation': 'Station name',
   'ex.create.label.phone': 'Phone',
   'ex.create.label.address': 'Meet-up place',
-  'ex.create.label.exchangeRate': 'Exchange rate',
+  'ex.create.label.beASeller': 'Be a seller',
+  'ex.create.label.beABuyer': 'You can also be a buyer',
   'ex.create.label.stationInfo': 'Station information',
 
   'ex.createLocal.label.iWantTo': 'I want to',
