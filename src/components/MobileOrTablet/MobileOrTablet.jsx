@@ -50,6 +50,8 @@ const countryList = [
   },
 ];
 
+const languagesWhitePaper = [ 'zh', 'fr', 'de', 'ru' ];
+
 class MobileOrTablet extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -124,11 +126,16 @@ class MobileOrTablet extends React.PureComponent {
                   )
                 }
                 {
-                  messages.MOT_LIST_CONTENT.map((item, index) => (
-                    <li key={index}>
-                      <img src={shurikenIcon} alt="shuriken icon" /> {item.mainContent || ''} <a href={item.link} target="_blank">{item.placeHolderLink}</a> {item.mainContent1 || ''}
-                    </li>
-                  ))
+                  messages.MOT_LIST_CONTENT.map((item, index) => {
+                    let link = item.link;
+                    if(index === 0 && locale !== 'en' && languagesWhitePaper.indexOf(locale) !== -1) {
+                      link = '/whitepaper';
+                    }
+                    return (<li key={index}>
+                      <img src={shurikenIcon} alt="shuriken icon"/> {item.mainContent || ''} <a href={link}
+                                                                                                target="_blank">{item.placeHolderLink}</a> {item.mainContent1 || ''}
+                    </li>);
+                  })
                 }
               </ul>
             </div>
