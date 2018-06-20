@@ -167,7 +167,7 @@ class GoogleAnalyticsService {
     try {
       console.log("matchName", matchName, matchOutCome, sideName);
       this.sendGAEvent({
-        category: EVENT_CATEGORY.CREATE,
+        category: EVENT_CATEGORY.DISCOVER_BETTING,
         action: EVENT_ACTION.CLICK_GO_BUTTON,
         label: `${sideName === 1 ? 'Support' : 'Oppose'}: ${matchName} - ${matchOutCome}`,
       });
