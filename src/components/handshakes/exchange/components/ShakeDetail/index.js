@@ -40,7 +40,7 @@ const fixed6 = (value) => {
 }
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {enableShake: false};
+  state = {enableShake: false, currency: CRYPTO_CURRENCY.ETH};
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -50,7 +50,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   onCurrencyChange = (e, newValue) => {
-    const { offer, type, rfChange } = this.props;
+    const { offer, type, rfChange, fiatAmount } = this.props;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
@@ -67,6 +67,10 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     }
 
     rfChange(nameFormShakeDetail, 'type', newType);
+
+    this.setState({ currency: newValue}, () => {
+      this.onFiatAmountChange(e, fiatAmount);
+    });
   }
 
   onAmountChange = (e, amount) => {
@@ -115,7 +119,8 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   onFiatAmountChange = (e, amount) => {
     console.log('onFiatAmountChange', amount);
 
-    const { offer, listOfferPrice, currency, type, rfChange } = this.props;
+    const { offer, listOfferPrice, type, rfChange } = this.props;
+    const { currency } = this.state;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
