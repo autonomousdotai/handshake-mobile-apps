@@ -11,7 +11,7 @@ import { fieldDropdown, fieldInput, fieldRadioButton } from '@/components/core/f
 import createForm from '@/components/core/form/createForm';
 import { showLoading, hideLoading } from '@/reducers/app/action';
 import { required } from '@/components/core/form/validation';
-import { Label } from 'reactstrap';
+import { Label, Col, Row } from 'reactstrap';
 import DatePicker from './DatePicker';
 import './Create.scss';
 import { MasterWallet } from '@/models/MasterWallet';
@@ -45,6 +45,7 @@ class CreateBettingEvent extends React.Component {
       disputeTime: '',
       creatorFee: null,
       referralFee: null,
+      newEvent: false,
     };
   }
 
@@ -77,8 +78,7 @@ class CreateBettingEvent extends React.Component {
     });
   }
 
-  submitBettingEvent= (values) => {
-    console.log(values);
+  submitOutCome = (values) => {
     const url = API_URL.CRYPTOSIGN.ADD_OUTCOME.concat(`/${this.state.selectedMatch.id}`);
     this.props.loadMatches({
       PATH_URL: url,
@@ -91,6 +91,42 @@ class CreateBettingEvent extends React.Component {
       },
       errorFn: () => { },
     });
+  }
+  submitNewEvent = (values) => {
+    const data = [
+      {
+        homeTeamName: '',
+        awayTeamName: '',
+        date: this.state.closingTime,
+        homeTeamCode: '',
+        homeTeamFlag: '',
+        awayTeamCode: '',
+        awayTeamFlag: '',
+        name: this.state.eventName,
+        source: this.state.resolutionSource,
+        market_fee: this.state.creatorFee,
+        outcomes: [
+          {
+            name: this.state.outcome,
+          },
+        ],
+      },
+    ];
+    this.props.loadMatches({
+      PATH_URL: API_URL.CRYPTOSIGN.ADD_MATCH,
+      METHOD: 'post',
+      data,
+      successFn: (response) => {
+        console.log(response.data);
+        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data.id);
+        console.log(result);
+      },
+      errorFn: () => { },
+    });
+  }
+  submitBettingEvent= (values) => {
+    console.log(values);
+    this.state.newEvent ? this.submitNewEvent(values) : this.submitOutCome(values);
   }
   getStringDate(date) {
     const formattedDate = moment.unix(date).format('MMM DD');
@@ -111,14 +147,25 @@ class CreateBettingEvent extends React.Component {
     });
   }
 
-
+  handleNewEvent=() => {
+    this.setState({
+      newEvent: true,
+    });
+  }
   render() {
     const defaultMatchId = this.defaultMatch ? this.defaultMatch.id : null;
     const defaultOutcomeId = this.defaultOutcome ? this.defaultOutcome.id : null;
     return (
       <div>
         <SaveBettingEventForm className="save-betting-event" onSubmit={this.submitBettingEvent}>
-          <Label for="eventName" className="font-weight-bold text-uppercase event-label">Event</Label>
+          <Row className="events-label-button-block">
+            <Col xs="6" className="events-label-button-block-col">
+              <Label for="eventName" className="font-weight-bold text-uppercase event-label">Event</Label>
+            </Col>
+            <Col xs="6" className="events-label-button-block-col">
+              <Button type="button" block className="btnPrimary create-event-button" onClick={this.handleNewEvent}>Create New Event</Button>
+            </Col>
+          </Row>
           {this.state.matches && this.state.matches.length > 0 && <Dropdown
             placeholder="Select an event"
             defaultId={defaultMatchId}
@@ -132,11 +179,11 @@ class CreateBettingEvent extends React.Component {
             onItemSelected={(item) => {
                 const { values } = this.state;
                 values.event_name = item.value;
-                this.setState({ selectedMatch: item, values });
+                this.setState({ selectedMatch: item, values, newEvent: false });
               }
               }
           />}
-          <Field
+          {this.state.newEvent && <Field
             name="eventName"
             type="text"
             className="form-control input-event-name input-field"
@@ -144,7 +191,7 @@ class CreateBettingEvent extends React.Component {
             component={fieldInput}
             value={this.state.eventName}
             onChange={evt => this.updateFormField(evt, 'eventName')}
-          />
+          />}
           <Field
             name="outcome"
             type="text"
@@ -155,20 +202,22 @@ class CreateBettingEvent extends React.Component {
             onChange={evt => this.updateFormField(evt, 'outcome')}
             validate={[required]}
           />
-          <Label for="reporting" className="font-weight-bold text-uppercase reporting-label">Reportings</Label>
-          <Field
-            name="reportingSource"
-            type="text"
-            className="form-control input-field"
-            placeholder="Resolution source"
-            component={fieldInput}
-            value={this.state.resolutionSource}
-            onChange={evt => this.updateFormField(evt, 'resolutionSource')}
-
-          />
-          <DatePicker onChange={(date) => { this.changeDate(date, 'closingTime'); }} className="form-control input-field" placeholder="Closing Time" required />
-          <DatePicker onChange={(date) => { this.changeDate(date, 'reportingTime'); }} className="form-control input-field" placeholder="Reporting Time" required />
-          <DatePicker onChange={(date) => { this.changeDate(date, 'disputeTime'); }} className="form-control input-field" placeholder="Dispute Time" required />
+          {this.state.newEvent && (
+          <div><Label for="reporting" className="font-weight-bold text-uppercase reporting-label">Reportings</Label>
+            <Field
+              name="reportingSource"
+              type="text"
+              className="form-control input-field"
+              placeholder="Resolution source"
+              component={fieldInput}
+              value={this.state.resolutionSource}
+              onChange={evt => this.updateFormField(evt, 'resolutionSource')}
+            />
+            <DatePicker onChange={(date) => { this.changeDate(date, 'closingTime'); }} className="form-control input-field" placeholder="Closing Time" required />
+            <DatePicker onChange={(date) => { this.changeDate(date, 'reportingTime'); }} className="form-control input-field" placeholder="Reporting Time" required />
+            <DatePicker onChange={(date) => { this.changeDate(date, 'disputeTime'); }} className="form-control input-field" placeholder="Dispute Time" required />
+          </div>
+        )}
           <Label for="creatorFee" className="font-weight-bold text-uppercase fees-label">Fees</Label>
           <Field
             name="creatorFee"
@@ -180,8 +229,8 @@ class CreateBettingEvent extends React.Component {
             onChange={evt => this.updateFormField(evt, 'creatorFee')}
 
           />
-          <Label for="feesDesc" className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis aliquid iure illum dolor asperiores. </Label>
-          <Label for="referralFee" className="font-weight-bold text-uppercase fees-label">Referral</Label>
+          <Label for="feesDesc" className="">The creator fee is a percentage of the total winnings of the market.</Label>
+          {/* <Label for="referralFee" className="font-weight-bold text-uppercase fees-label">Referral</Label>
           <Field
             name="referralFee"
             type="number"
@@ -192,7 +241,7 @@ class CreateBettingEvent extends React.Component {
             onChange={evt => this.updateFormField(evt, 'referralFee')}
 
           />
-          <Label for="reffeesDesc" className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. </Label>
+          <Label for="reffeesDesc" className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. </Label> */}
           <Button type="submit" block className="btnGreen submit-button">Submit</Button>
         </SaveBettingEventForm>
       </div>

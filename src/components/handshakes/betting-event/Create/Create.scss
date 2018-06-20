@@ -3,8 +3,8 @@
 .save-betting-event{
   margin: rem-calc(0px) 0 rem-calc(0px) 0;
 }
-.reporting-label,.event-label,.fees-label{
-  margin:rem-calc(30px) 0 rem-calc(10px) 0;
+.reporting-label,.fees-label,.events-label-button-block{
+  margin:rem-calc(30px) 0 1rem 0;
 }
 .input-field{
   margin-bottom: 5px;
@@ -22,4 +22,13 @@
 }
 .text-danger{
   display: block;
+}
+.event-label{
+  margin-top: 9px;
+}
+.events-label-button-block-col{
+ padding : 0;
+}
+.dateField{
+  background-color:#fff;
 }
