@@ -33,6 +33,8 @@ class Chat extends Component {
   constructor(props) {
     super(props);
 
+    console.log('chat - contructor - init');
+
     this.coinTextRegEx = /([-+]?[0-9]*\.?[0-9]+)\s*?(ETHEREUM|BITCOIN|ETHER|ETH|BTC)/gi;
     this.htmlTagRegEx = /<\/?[\w\s="/.':;#-\/\?]+>/gi;
     this.specialTags = ['transfer_coin'];
