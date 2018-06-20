@@ -325,12 +325,10 @@ class Component extends React.Component {
       item: data,
     }
 
-    const message = <FormattedMessage id="createOfferStoreConfirm"
-                                values={ {
-                                  currency: currency,
-                                  amountBuy: amountBuy,
-                                  amountSell: amountSell,
-                                } } />;
+    const message =<FormattedMessage id="createOfferStoreConfirm"
+      values={ {
+        intentMsg: (amountBuy > 0 && amountSell > 0) ? `buy ${amountBuy} ${currency} and sell ${amountSell} ${currency}` : (amountBuy > 0 ? `buy ${amountBuy} ${currency}` : `sell ${amountSell} ${currency}`)
+      } } />;
 
     this.setState({
       modalContent:

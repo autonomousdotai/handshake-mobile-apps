@@ -39,7 +39,7 @@ export default {
   buyUsingCreditCardSuccessMessge: 'Your order using your credit card has gone through.',
   notEnoughCoinInWallet: 'You don\'t have enough coin right now. Please top up your wallet.',
 
-  createOfferStoreConfirm: 'Do you want to create offer Buy {amountBuy} {currency} - Sell {amountSell} {currency}?',
+  createOfferStoreConfirm: 'Do you want to set up an offer to {intentMsg}?',
   notEnoughCoinInWalletStores: 'You don\'t have enough coin right now. Please top up your wallet.',
   addOfferItemSuccessMassage: 'Success! Your order is now listed on Ninja',
   deleteOfferItemSuccessMassage: 'You have successfully deleted your order.',
