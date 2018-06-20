@@ -205,7 +205,6 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                   // containerClass="radio-container-old"
                   component={fieldInput}
                   className="input"
-                  type="number"
                   placeholder="500000"
                   validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                   onChange={this.onFiatAmountChange}
@@ -223,7 +222,6 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                   // containerClass="radio-container-old"
                   component={fieldInput}
                   className="input"
-                  type="number"
                   placeholder="10.00"
                   validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
                   onChange={this.onAmountChange}
