@@ -5,15 +5,15 @@
 .sendwallet-wrapper{
     
     .bgBox{
-      background-image: url('../../../assets/images/pages/wallet/bg-box-wallet-coin.svg');
-      background-repeat: no-repeat;
-      background-size: cover;      
+      // background-image: url('../../../assets/images/pages/wallet/bg-box-wallet-coin.svg');
+      // background-repeat: no-repeat;
+      // background-size: cover;      
       padding: 12px;
-      color: #fff;
+      // color: #fff;
       border-radius: 6px;
-      margin-top: 20px;
+      // margin-top: 20px;
       ::placeholder{
-        color: #ffffff;
+        // color: #ffffff;
       }
     }
   
@@ -24,7 +24,7 @@
   
     .label-balance{
       margin-top: 9px;
-      color: #ffffff;
+      // color: #ffffff;
       font-size: 16px;
       display: block;
     }
@@ -35,13 +35,14 @@
       height: 45px;
       // background: #4869D1;
       // border: 1px solid #6485F6;
-      border: 1px solid #6c95ea;
-      background: rgba(255, 255, 255, 0.15);
+
+      // border: 1px solid #6c95ea;
+      // background: rgba(255, 255, 255, 0.15);
       border-radius: 6px;
-      color: #fff;
+      // color: #fff;
       font-weight: 300;
       ::placeholder{
-        color: #ffffff;
+        // color: #ffffff;
       }
     }
   }
@@ -63,7 +64,7 @@
       position: absolute;
       right: 15px;
       top: 10px;
-      color: #f9f7fa;
+      // color: #f9f7fa;
       font-weight: 400;
     }
     input{
@@ -113,19 +114,31 @@
   .btn{
     padding-left: 10px;
     text-align: left;
-    border: 0!important;
-    background: transparent!important;
-    box-shadow: none!important;
-    color: #ffffff;
+    // border: 0!important;
+    // background: transparent!important;
+    // box-shadow: none!important;
+    // color: #ffffff;
   };
   .btn-group{
     // background: #4869D1;
     // border: 1px solid #6485F6;
-    border: 1px solid #6c95ea;
-    background: rgba(255, 255, 255, 0.15);
+    
+    // border: 1px solid #6c95ea;
+    // background: rgba(255, 255, 255, 0.15);
+    border: 1px solid #ced4da;
+    background: #ffffff;
+    
     padding: 5px;
     border-radius: 5px;
     padding-left: 1px;
+    button{
+      background-color:transparent;
+      border: none;
+    }
+    button:hover{
+      background-color:transparent;
+      border: none;
+    }
   }
   .dropdown-custom-item{
     margin-left: 10px!important;

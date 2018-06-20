@@ -8,12 +8,14 @@ import ru from './ru';
 import es from './es';
 
 const languages = {
-  en, fr, zh, de, ja, ko, ru, es,
+  en: { ...en },
+  fr: { ...en, ...fr },
+  zh: { ...en, ...zh },
+  de: { ...en, ...de },
+  ja: { ...en, ...ja },
+  ko: { ...en, ...ko },
+  ru: { ...en, ...ru },
+  es: { ...en, ...es },
 };
-const keys = Object.keys(languages);
-
-keys.forEach((key) => {
-  languages[key] = { ...en, ...languages[key] };
-});
 
 export default languages;

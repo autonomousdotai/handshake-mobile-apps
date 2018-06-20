@@ -7,7 +7,7 @@ import Button from '@/components/core/controls/Button';
 import {
     fieldInput
   } from '@/components/core/form/customField';
-import { verifyEmail, checkJoinTelegram, checkFollowTwitter, completeProfile } from '@/reducers/auth/action';
+import { verifyEmail, submitEmail, checkJoinTelegram, checkFollowTwitter, completeProfile, authUpdate } from '@/reducers/auth/action';
 import {required} from '@/components/core/form/validation';
 import {change, Field, formValueSelector, clearFields} from 'redux-form';
 import {bindActionCreators} from 'redux';
@@ -45,6 +45,7 @@ class Refers extends React.Component {
     super(props);
 
     this.state = {
+      email: "",
       step1_value: "",
       step1: false,
       step2_value: "",
@@ -124,7 +125,7 @@ class Refers extends React.Component {
       this.props.rfChange(nameFormStep3, 'refer_email', refers && refers.step3_value ? refers.step3_value : '');
 
       if(refers.step1 && refers.step2 && refers.step3 == 2){
-        let referLink = profile && profile.username ? "https://ninja.org/?ref=" + profile.username : '';
+        let referLink = profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : '';
         this.setState({referLink: referLink});
         this.props.rfChange(nameFormStep4, 'refer_link', referLink);
       }
@@ -142,7 +143,7 @@ class Refers extends React.Component {
   submitStep1 = async () => {
     let result = await this.checkJoinTelegram(this.state.step1_value);
     if(!result){
-      this.showError("Not found your telegram in our community. Please try again.")
+      this.showError("Couldn't find you on Telegram. Please exit the group and try again.")
     }
     else{
       this.setState({step1: true});
@@ -170,7 +171,7 @@ class Refers extends React.Component {
       this.showSuccess("You followed our Twitter!");
     }
     else{
-      this.showError("Not found your following in our Twitter. Please try again.")
+      this.showError("You haven't followed us yet. Please try again.")
     }
   }
 
@@ -179,18 +180,43 @@ class Refers extends React.Component {
     if(!refers) refers = {};
 
     if(this.state.step3 && this.state.step3 == 1){
-      let profile = local.get(APP.AUTH_PROFILE);
-      if(profile && profile.email){
-        refers.step3 = 2;
-        refers.step3_value = profile.email;
 
-        local.save(APP.REFERS, refers);
-        this.setState({step3: refers.step3, step3_value: refers.step3_value, referLink: profile && profile.username ? "https://ninja.org/?ref=" + profile.username : ''});
-        this.showSuccess("Your email is verified successfully!");
-      }
-      else{
-        this.showError("Your email is unverified. Please try again.");
-      }
+      let code = this.state.step3_value, email = this.state.email;
+      this.props.submitEmail({
+        PATH_URL: `user/verification/email/check`,
+        qs: { email, code },
+        METHOD: 'POST',
+        successFn: () => {
+          const params = new URLSearchParams();
+          params.append('email', email);
+
+          this.props.authUpdate({
+            PATH_URL: 'user/profile',
+            data: params,
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            METHOD: 'POST',
+            successFn: () => {
+              const profile = local.get(APP.AUTH_PROFILE);
+
+              refers.step3 = 2;
+              refers.step3_value = email;
+              local.save(APP.REFERS, refers);
+              this.setState({isShowVerificationEmailCode: false, step3: refers.step3, step3_value: refers.step3_value, referLink: profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : ''});
+
+              this.props.rfChange(nameFormStep3, 'refer_email', email);
+              this.showSuccess("Your email has been verified.");
+            },
+            errorFn: (e) => {
+              console.error(e);
+              this.showError("Verification code is wrong. Please try again!");
+            },
+          });
+        },
+        errorFn: (e) => {
+          console.error(e);
+          this.showError("Verification code is wrong. Please try again!");
+        },
+      });
     }
     else{
       let email = this.state.step3_value;
@@ -199,18 +225,20 @@ class Refers extends React.Component {
         METHOD: 'POST',
         successFn: (data) => {
           if (data.status) {
-            this.showToast("Sent verify email, please check your email!");
-
+            this.showToast("Verification code is sent to your email. Please check!");
             local.save(APP.EMAIL_NEED_VERIFY, email);
-            this.setState({step3: 1});
+            this.setState({step3: 1, email: email});
 
-            refers.step3 = 1;
-            refers.step3_value = email;
-            local.save(APP.REFERS, refers);
+            // refers.step3 = 1;
+            // refers.step3_value = "";
+            // local.save(APP.REFERS, refers);
+
+            this.props.rfChange(nameFormStep3, 'refer_email', "");
+            this.props.clearFields(nameFormStep3, false, false, "refer_email");
           }
         },
         errorFn: (e) => {
-          console.log("errorFn", e);
+          console.error(e);
           this.showError("Can\'t send verify email");
         },
       });
@@ -308,7 +336,7 @@ renderStep1 = () => (
         name="telegram_username"
         type="text"
         className="form-control"
-        placeholder="your telegram alias"
+        placeholder="Your telegram alias"
         component={fieldInput}
         value={this.state.step1_value}
         onChange={evt => this.updateTelegramUsernameValue(evt)}
@@ -332,7 +360,7 @@ renderStep2= () => (
         name="twitter_username"
         type="text"
         className="form-control"
-        placeholder="your twitter username"
+        placeholder="Your twitter username"
         component={fieldInput}
         value={this.state.step2_value}
         onChange={evt => this.updateTwitterUsernameValue(evt)}
@@ -352,9 +380,9 @@ renderStep3= () => (
     <div className="col1">
       <Field
           name="refer_email"
-          type="email"
+          type="text"
           className="form-control padding-right-10"
-          placeholder="your favourite fake email"
+          placeholder={this.state.step3 > 0 ? "Verification code" : "Your favourite fake email"}
           component={fieldInput}
           value={this.state.step3_value}
           onChange={evt => this.updateEmailValue(evt)}
@@ -364,8 +392,8 @@ renderStep3= () => (
     </div>
     {
       this.state.step3 == 1 ?
-      <div className="col100 dev-has-icon">
-        <a className="reset-link" onClick={() => {this.resetStep3()}}>✕</a>
+      <div className="col100">
+        <a className="reset-link" onClick={() => {this.resetStep3()}}>Reset email</a>
       </div> : ""
     }
     {
@@ -474,9 +502,11 @@ const mapDispatchToProps = (dispatch) => ({
   hideLoading: bindActionCreators(hideLoading, dispatch),
   clearFields: bindActionCreators(clearFields, dispatch),
   verifyEmail: bindActionCreators(verifyEmail, dispatch),
+  submitEmail: bindActionCreators(submitEmail, dispatch),
   checkJoinTelegram: bindActionCreators(checkJoinTelegram, dispatch),
   checkFollowTwitter: bindActionCreators(checkFollowTwitter, dispatch),
   completeProfile: bindActionCreators(completeProfile, dispatch),
+  authUpdate: bindActionCreators(authUpdate, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Refers);

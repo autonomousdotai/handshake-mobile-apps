@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
+
 // services
 import createForm from '@/components/core/form/createForm';
 import { setHeaderTitle, showAlert } from '@/reducers/app/action';
-import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate } from '@/reducers/auth/action';
+import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate, submitEmail } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
 // components
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -34,6 +36,8 @@ class Profile extends React.Component {
     submitPhone: PropTypes.func.isRequired,
     verifyPhone: PropTypes.func.isRequired,
     verifyEmail: PropTypes.func.isRequired,
+    submitEmail: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -46,11 +50,14 @@ class Profile extends React.Component {
       emailCollapse: false,
       isShowCountryCode: false,
       phoneStart: false,
+      emailStart: false,
       phone: props.auth.profile.phone,
       email: props.auth.profile.email,
       sms: '',
+      code: '',
       successMessage: '',
-      isShowVerificationCode: false,
+      isShowVerificationPhoneCode: false,
+      isShowVerificationEmailCode: false,
     };
     // bind
     this.onSubmitVerifyPhone = ::this.onSubmitVerifyPhone;
@@ -60,32 +67,51 @@ class Profile extends React.Component {
     this.onTextFieldChange = ::this.onTextFieldChange;
     this.addUsername = ::this.addUsername;
 
-    if (props.auth.profile.phone) {
-      const selectedCountry = COUNTRIES.filter(country => country.dialCode === props.auth.profile.phone.substr(0, props.auth.profile.phone.indexOf(' ')))[0];
-      this.state.countryCode = selectedCountry;
-    }
-
     this.UsernameForm = createForm({
       propsReduxForm: {
         form: 'UsernameForm',
         initialValues: { username: props.auth.profile.username },
       },
     });
+
+    this.localPhone = local.get(APP.PHONE_NEED_VERIFY);
+    this.localCountryPhone = local.get(APP.COUNTRY_PHONE_NEED_VERIFY) || '';
+    if (props.auth.profile.phone) {
+      const selectedCountry = COUNTRIES.filter(country => country.dialCode === props.auth.profile.phone.substr(0, props.auth.profile.phone.indexOf(' ')))[0];
+      this.state.countryCode = selectedCountry;
+    } else {
+      if (this.localCountryPhone) {
+        const selectedCountry = COUNTRIES.filter(country => country.dialCode === `+${this.localCountryPhone}`)[0];
+        this.state.countryCode = selectedCountry;
+      }
+      if (this.localCountryPhone && this.localPhone) {
+        this.state.phoneStart = this.localPhone;
+        this.state.isShowVerificationPhoneCode = true;
+        this.state.phoneCollapse = true;
+      }
+    }
     this.NumberPhoneForm = createForm({
       propsReduxForm: {
         form: 'NumberPhoneForm',
         initialValues: {
           phone: props.auth.profile.phone
             ? props.auth.profile.phone.substr(props.auth.profile.phone.indexOf(' ') + 1)
-            : '',
+            : this.localPhone ? this.localPhone : '',
         },
       },
     });
-
+    this.localEmail = local.get(APP.EMAIL_NEED_VERIFY);
+    if (!props.auth.profile.email) {
+      if (this.localEmail) {
+        this.state.emailStart = this.localEmail;
+        this.state.isShowVerificationEmailCode = true;
+        this.state.emailCollapse = true;
+      }
+    }
     this.EmailForm = createForm({
       propsReduxForm: {
         form: 'EmailForm',
-        initialValues: { email: props.auth.profile.email },
+        initialValues: { email: props.auth.profile.email || local.get(APP.EMAIL_NEED_VERIFY) || '' },
       },
     });
   }
@@ -96,8 +122,10 @@ class Profile extends React.Component {
 
   onSubmitVerifyPhone() {
     const {
-      countryCode, phone, phoneStart, sms,
+      countryCode, phoneStart, sms,
     } = this.state;
+    const { messages } = this.props.intl;
+    const phone = this.state.phone || local.get(APP.PHONE_NEED_VERIFY);
     if (phoneStart !== phone) {
       this.props.verifyPhone({
         PATH_URL: 'user/verification/phone/start',
@@ -107,22 +135,33 @@ class Profile extends React.Component {
         },
         METHOD: 'POST',
         successFn: () => {
-          this.setState(() => ({ phoneStart: phone, isShowVerificationCode: true }));
+          this.setState(() => ({ phoneStart: phone, isShowVerificationPhoneCode: true }));
           this.props.showAlert({
-            message: <div className="text-center">We sent the secret code to your phone.</div>,
+            message: <div className="text-center">{messages.me.profile.verify.alert.send.phone}</div>,
             timeOut: 3000,
             type: 'success',
           });
+          local.save(APP.PHONE_NEED_VERIFY, phone);
+          local.save(APP.COUNTRY_PHONE_NEED_VERIFY, countryCode.dialCode.replace('+', ''));
         },
         errorFn: () => {
           this.props.showAlert({
-            message: <div className="text-center">That’s not a real number. Try harder.</div>,
+            message: <div className="text-center">{messages.me.profile.verify.alert.notValid.server.phone}</div>,
             timeOut: 3000,
             type: 'danger',
           });
         },
       });
     } else {
+      console.log(sms);
+      if (!sms) {
+        this.props.showAlert({
+          message: <div className="text-center">{messages.me.profile.verify.alert.require.phone}</div>,
+          timeOut: 3000,
+          type: 'danger',
+        });
+        return;
+      }
       this.props.submitPhone({
         PATH_URL: 'user/verification/phone/check',
         qs: {
@@ -132,24 +171,23 @@ class Profile extends React.Component {
         },
         METHOD: 'POST',
         successFn: () => {
-          const params = new URLSearchParams();
-          params.append('phone', `${countryCode.dialCode} ${phone}`);
+          const data = new FormData();
+          data.append('phone', `${countryCode.dialCode} ${phone}`);
           this.props.authUpdate({
             PATH_URL: 'user/profile',
-            data: params,
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data,
             METHOD: 'POST',
             successFn: () => {
-              this.setState({ isShowVerificationCode: false });
+              this.setState({ isShowVerificationPhoneCode: false });
               this.props.showAlert({
-                message: <div className="text-center">Phone number securely saved.</div>,
+                message: <div className="text-center">{messages.me.profile.verify.alert.success.phone}</div>,
                 timeOut: 3000,
                 type: 'success',
               });
             },
             errorFn: () => {
               this.props.showAlert({
-                message: <div className="text-center">Enter the secret code sent to your phone.</div>,
+                message: <div className="text-center">{messages.me.profile.verify.alert.require.phone}</div>,
                 timeOut: 3000,
                 type: 'danger',
               });
@@ -158,7 +196,7 @@ class Profile extends React.Component {
         },
         errorFn: () => {
           this.props.showAlert({
-            message: <div className="text-center">That’s not a real number. Try harder.</div>,
+            message: <div className="text-center">{messages.me.profile.verify.alert.cannot.phone}</div>,
             timeOut: 3000,
             type: 'danger',
           });
@@ -168,40 +206,96 @@ class Profile extends React.Component {
   }
 
   onSubmitVerifyEmail() {
-    const { email } = this.state;
+    const { messages } = this.props.intl;
+    const email = this.state.email || this.localEmail;
+    const { emailStart, code } = this.state;
+    console.log('emailStart', emailStart);
+    console.log('email', email);
     if (email) {
       if (valid.email(email)) {
         this.props.showAlert({
-          message: <div className="text-center">A valid email would work better.</div>,
+          message: <div className="text-center">{messages.me.profile.verify.alert.notValid.client.email}</div>,
           timeOut: 3000,
           type: 'danger',
         });
         return;
       }
-      this.props.verifyEmail({
-        PATH_URL: `user/verification/email/start?email=${email}`,
-        METHOD: 'POST',
-        successFn: (data) => {
-          if (data.status) {
+      if (emailStart !== email) {
+        this.props.verifyEmail({
+          PATH_URL: `user/verification/email/start?email=${email}`,
+          METHOD: 'POST',
+          successFn: (data) => {
+            if (data.status) {
+              this.props.showAlert({
+                message: <div className="text-center">{messages.me.profile.verify.alert.send.email}</div>,
+                timeOut: 3000,
+                type: 'success',
+              });
+              this.setState(() => ({ emailStart: email, isShowVerificationEmailCode: true }));
+              local.save(APP.EMAIL_NEED_VERIFY, email);
+            }
+          },
+          errorFn: () => {
             this.props.showAlert({
-              message: <div className="text-center">Tap the verification link we just sent to your email.</div>,
+              message: <div className="text-center">{messages.me.profile.verify.alert.notValid.client.email}</div>,
               timeOut: 3000,
-              type: 'success',
+              type: 'danger',
             });
-            local.save(APP.EMAIL_NEED_VERIFY, email);
-          }
-        },
-        errorFn: () => {
+          },
+        });
+      } else {
+        if (!code) {
           this.props.showAlert({
-            message: <div className="text-center">A valid email would work better.</div>,
+            message: <div className="text-center">{messages.me.profile.verify.alert.require.email}</div>,
             timeOut: 3000,
             type: 'danger',
           });
-        },
-      });
+          return;
+        }
+        this.props.submitEmail({
+          PATH_URL: `user/verification/email/check`,
+          qs: {
+            email,
+            code,
+          },
+          METHOD: 'POST',
+          successFn: () => {
+            const params = new URLSearchParams();
+            params.append('email', email);
+            this.props.authUpdate({
+              PATH_URL: 'user/profile',
+              data: params,
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              METHOD: 'POST',
+              successFn: () => {
+                this.setState({ isShowVerificationEmailCode: false });
+                this.props.showAlert({
+                  message: <div className="text-center">{messages.me.profile.verify.alert.success.email}</div>,
+                  timeOut: 3000,
+                  type: 'success',
+                });
+              },
+              errorFn: () => {
+                this.props.showAlert({
+                  message: <div className="text-center">{messages.me.profile.verify.alert.require.email}</div>,
+                  timeOut: 3000,
+                  type: 'danger',
+                });
+              },
+            });
+          },
+          errorFn: () => {
+            this.props.showAlert({
+              message: <div className="text-center">{messages.me.profile.verify.alert.cannot.email}</div>,
+              timeOut: 3000,
+              type: 'danger',
+            });
+          },
+        });
+      }
     } else {
       this.props.showAlert({
-        message: <div className="text-center">A valid email would work better.</div>,
+        message: <div className="text-center">{messages.me.profile.verify.alert.notValid.client.email}</div>,
         timeOut: 3000,
         type: 'danger',
       });
@@ -209,6 +303,7 @@ class Profile extends React.Component {
   }
 
   addUsername(values) {
+    const { messages } = this.props.intl;
     if (values.username) {
       this.props.checkUsernameExist({
         PATH_URL: 'user/username-exist',
@@ -224,7 +319,7 @@ class Profile extends React.Component {
               METHOD: 'POST',
               successFn: () => {
                 this.props.showAlert({
-                  message: <div className="text-center">Your alias is recorded.</div>,
+                  message: <div className="text-center">{messages.me.profile.username.success}</div>,
                   timeOut: 3000,
                   type: 'success',
                 });
@@ -233,7 +328,7 @@ class Profile extends React.Component {
             });
           } else {
             this.props.showAlert({
-              message: <div className="text-center">username has existed!</div>,
+              message: <div className="text-center">{messages.me.profile.username.exist}</div>,
               timeOut: 3000,
               type: 'danger',
             });
@@ -242,7 +337,7 @@ class Profile extends React.Component {
       });
     } else {
       this.props.showAlert({
-        message: <div className="text-center">Username is required</div>,
+        message: <div className="text-center">{messages.me.profile.username.required}</div>,
         timeOut: 3000,
         type: 'danger',
       });
@@ -268,9 +363,10 @@ class Profile extends React.Component {
 
   render() {
     const {
-      countryCode, countries, sms, email,
+      countryCode, countries, sms, email, code,
     } = this.state;
     const { UsernameForm, NumberPhoneForm, EmailForm } = this;
+    const { messages } = this.props.intl;
     return (
       <Grid className="profile">
         <Row>
@@ -285,21 +381,21 @@ class Profile extends React.Component {
                 }
               >
                 <p className="label">
-                  Alias
+                  {messages.me.profile.text.username.label}
                 </p>
                 <div className="extend">
                   <Image className={this.state.usernameCollapse ? 'rotate' : ''} src={ExpandArrowSVG} alt="arrow" />
                 </div>
               </div>
               <div className={`content ${this.state.usernameCollapse ? '' : 'd-none'}`}>
-                <p className="text">What do they call you?</p>
+                <p className="text">{messages.me.profile.text.username.desc1}?</p>
                 <UsernameForm onSubmit={this.addUsername}>
                   <Field
                     name="username"
                     className="form-control-custom form-control-custom-ex w-100"
                     component={fieldCleave}
                   />
-                  <Button cssType="anonymous" className="submit-btn">Save</Button>
+                  <Button cssType="anonymous" className="submit-btn">{messages.me.profile.text.username.button.submit}</Button>
                 </UsernameForm>
               </div>
             </div>
@@ -310,9 +406,9 @@ class Profile extends React.Component {
             <div className="collapse-custom">
               <div className="head" onClick={() => this.setState(state => ({ phoneCollapse: !state.phoneCollapse }))}>
                 <p className="label">
-                  Phone Number
+                  {messages.me.profile.text.phone.label}
                   <span>
-                    To send you free ETH sometimes, we’ll need your phone number to verify that you are not a robot. This is optional.
+                    {messages.me.profile.text.phone.desc1}
                   </span>
                 </p>
                 <div className="extend">
@@ -321,8 +417,8 @@ class Profile extends React.Component {
                 </div>
               </div>
               <div className={`content ${this.state.phoneCollapse ? '' : 'd-none'}`}>
-                <p className="text">We only send humans rewards.</p>
-                <p className="text">Please verify your phone number.</p>
+                <p className="text">{messages.me.profile.text.phone.desc2}</p>
+                <p className="text">{messages.me.profile.text.phone.desc3}</p>
                 <NumberPhoneForm onSubmit={this.onSubmitVerifyPhone}>
                   <div className="phone-block">
                     <div className="dropdown country-code">
@@ -361,10 +457,10 @@ class Profile extends React.Component {
                         this.onTextFieldChange(name, value);
                       }}
                     />
-                    <Button cssType="anonymous" className="send-btn">Send</Button>
+                    <Button cssType="anonymous" className="send-btn">{messages.me.profile.text.phone.button.send}</Button>
                   </div>
-                  <div className={this.state.isShowVerificationCode ? '' : 'd-none'}>
-                    <p className="text">Enter the secret code sent to your phone.</p>
+                  <div className={this.state.isShowVerificationPhoneCode ? '' : 'd-none'}>
+                    <p className="text">{messages.me.profile.text.phone.desc4}</p>
                     <Field
                       name="sms"
                       className="form-control-custom form-control-custom-ex w-100"
@@ -377,7 +473,7 @@ class Profile extends React.Component {
                       }}
                       value={sms}
                     />
-                    <Button cssType="anonymous" className="submit-btn">Verify your number</Button>
+                    <Button cssType="anonymous" className="submit-btn">{messages.me.profile.text.phone.button.submit}</Button>
                   </div>
                 </NumberPhoneForm>
               </div>
@@ -389,8 +485,8 @@ class Profile extends React.Component {
             <div className="collapse-custom">
               <div className="head" onClick={() => this.setState(state => ({ emailCollapse: !state.emailCollapse }))}>
                 <p className="label">
-                  Email Verification
-                  <span>You may prefer to receive updates and notifications via email. This is also optional.</span>
+                  {messages.me.profile.text.email.label}
+                  <span>{messages.me.profile.text.email.desc1}</span>
                 </p>
                 <div className="extend">
                   <span className="badge badge-success">{ this.props.auth.profile.email ? 'Verified' : '' }</span>
@@ -398,19 +494,57 @@ class Profile extends React.Component {
                 </div>
               </div>
               <div className={`content ${this.state.emailCollapse ? '' : 'd-none'}`}>
-                <p className="text">Prefer to receive notifications and updates via email?</p>
-                <p className="text">Enter your email</p>
+                <p className="text">{messages.me.profile.text.email.desc2}</p>
+                <p className="text">{messages.me.profile.text.email.desc3}</p>
                 <EmailForm onSubmit={this.onSubmitVerifyEmail}>
-                  <Field
-                    name="email"
-                    className="form-control-custom form-control-custom-ex w-100"
-                    component={fieldCleave}
-                    onChange={(evt, value, unknown, name) => {
-                      this.onTextFieldChange(name, value);
+                  <div>
+                    <Row>
+                      <div className="col-9">
+                        <Field
+                          name="email"
+                          className="form-control-custom form-control-custom-ex w-100"
+                          component={fieldCleave}
+                          onChange={(evt, value, unknown, name) => {
+                            this.onTextFieldChange(name, value);
+                          }}
+                          value={email}
+                        />
+                      </div>
+                      <div className="col-3">
+                        <Button
+                          cssType="anonymous"
+                          className="submit-btn"
+                          style={{
+                            height: '53px',
+                            marginTop: 0,
+                          }}
+                        >
+                          {messages.me.profile.text.email.button.send}
+                        </Button>
+                      </div>
+                    </Row>
+                  </div>
+                  <div
+                    className={this.state.isShowVerificationEmailCode ? '' : 'd-none'}
+                    style={{
+                      marginTop: '10px',
                     }}
-                    value={email}
-                  />
-                  <Button cssType="anonymous" className="submit-btn">Verify your email</Button>
+                  >
+                    <p className="text">{messages.me.profile.text.email.desc4}</p>
+                    <Field
+                      name="code"
+                      className="form-control-custom form-control-custom-ex w-100"
+                      component={fieldCleave}
+                      propsCleave={{
+                        options: { blocks: [6], numericOnly: true },
+                      }}
+                      onChange={(evt, value, unknown, name) => {
+                        this.onTextFieldChange(name, value);
+                      }}
+                      value={code}
+                    />
+                    <Button cssType="anonymous" className="submit-btn">{messages.me.profile.text.email.button.submit}</Button>
+                  </div>
                 </EmailForm>
               </div>
             </div>
@@ -440,6 +574,7 @@ const mapDispatch = ({
   showAlert,
   checkUsernameExist,
   authUpdate,
+  submitEmail,
 });
 
-export default connect(mapState, mapDispatch)(Profile);
+export default injectIntl(connect(mapState, mapDispatch)(Profile));

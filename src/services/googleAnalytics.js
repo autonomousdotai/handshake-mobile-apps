@@ -18,8 +18,8 @@ const EVENT_ACTION = {
   CREATE_BET_SUCCESSFUL: 'Create bet successful',
   CREATE_SHARE_BUTTON: 'Create share button',
   CREATE_BET_NOT_MATCH_FAIL: 'Create bet not match - fail',
-  CREATE_BET_NOT_MATCH_SUCCESS: 'Create bet not match - fail',
-  CREATE_BET_MATCHED_FAIL: 'Create bet matched - success',
+  CREATE_BET_NOT_MATCH_SUCCESS: 'Create bet not match - success',
+  CREATE_BET_MATCHED_FAIL: 'Create bet matched - fail',
   CREATE_BET_MATCHED_SUCCESS: 'Create bet matched - success',
 };
 
@@ -167,7 +167,7 @@ class GoogleAnalyticsService {
     try {
       console.log("matchName", matchName, matchOutCome, sideName);
       this.sendGAEvent({
-        category: EVENT_CATEGORY.CREATE,
+        category: EVENT_CATEGORY.DISCOVER_BETTING,
         action: EVENT_ACTION.CLICK_GO_BUTTON,
         label: `${sideName === 1 ? 'Support' : 'Oppose'}: ${matchName} - ${matchOutCome}`,
       });

@@ -53,6 +53,8 @@ class Me extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log('me - contructor - init');
+
     let { s, sh } = Helper.getQueryStrings(window.location.search);
 
     let initUserId = s;
@@ -64,6 +66,7 @@ class Me extends React.Component {
       exchange: this.props.exchange,
       auth: this.props.auth,
       firebaseUser: this.props.firebaseUser,
+      numStars: 0,
     };
   }
 
@@ -130,12 +133,16 @@ class Me extends React.Component {
 
   //Review offer when receive notification after shop complete
   handleOnClickRating = (numStars) => {
+    this.setState({numStars});
+  }
+
+  handleSubmitRating = () => {
     this.rateRef.close();
     const { offerId, initUserId } = this.state;
     this.props.reviewOffer({
       PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${initUserId}/${API_URL.EXCHANGE.REVIEWS}/${offerId}`,
       METHOD: 'POST',
-      qs: { score: numStars },
+      qs: { score: this.state.numStars },
       successFn: this.handleReviewOfferSuccess,
       errorFn: this.handleReviewOfferFailed,
     });
@@ -210,7 +217,7 @@ class Me extends React.Component {
             }
           </Col>
         </Row>
-        <Rate onRef={e => this.rateRef = e} startNum={5} ratingOnClick={this.handleOnClickRating} />
+        <Rate onRef={e => this.rateRef = e} startNum={5} onSubmit={this.handleSubmitRating} ratingOnClick={this.handleOnClickRating}/>
       </Grid>
     );
   }

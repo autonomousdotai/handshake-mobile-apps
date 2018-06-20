@@ -27,7 +27,7 @@ import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedExchange from '@/components/handshakes/exchange/Feed/FeedExchange';
 import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchangeLocal';
 import FeedSeed from '@/components/handshakes/seed/Feed';
-// import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import BlockCountry from '@/components/core/presentation/BlockCountry';
 import MultiLanguage from '@/components/core/controls/MultiLanguage';
 
@@ -62,12 +62,11 @@ class DiscoverPage extends React.Component {
     ipInfo: PropTypes.any.isRequired,
     isBannedCash: PropTypes.bool.isRequired,
     isBannedPrediction: PropTypes.bool.isRequired,
-    isBannedChecked: PropTypes.bool.isRequired,
   }
 
   constructor(props) {
     super(props);
-
+    console.log('discover - contructor - init');
     const handshakeDefault = this.getDefaultHandShakeId();
 
     this.state = {
@@ -81,15 +80,18 @@ class DiscoverPage extends React.Component {
       lng: 0,
       isBannedCash: this.props.isBannedCash,
       isBannedPrediction: this.props.isBannedPrediction,
-      isBannedChecked: this.props.isBannedChecked,
-
     };
+
+    if (this.state.isBannedPrediction) {
+      this.state.isLoading = false;
+      this.state.handshakeIdActive = HANDSHAKE_ID.EXCHANGE;
+      this.loadDiscoverList();
+    }
 
     if (handshakeDefault === HANDSHAKE_ID.EXCHANGE) {
       this.loadDiscoverList();
     }
-    // this.loadDiscoverList();
-    // bind
+
     this.clickCategoryItem = this.clickCategoryItem.bind(this);
     this.clickTabItem = this.clickTabItem.bind(this);
     this.searchChange = this.searchChange.bind(this);
@@ -150,18 +152,6 @@ class DiscoverPage extends React.Component {
         // });
       }
       return { exchange: nextProps.exchange };
-    }
-    if (nextProps.isBannedCash !== prevState.isBannedCash) {
-      return { isBannedCash: nextProps.isBannedCash };
-    }
-    if (nextProps.isBannedPrediction !== prevState.isBannedPrediction) {
-      return { isBannedPrediction: nextProps.isBannedPrediction };
-    }
-    if (nextProps.isBannedChecked !== prevState.isBannedChecked) {
-      return { isBannedChecked: nextProps.isBannedChecked };
-    }
-    if (nextProps.isBannedPrediction && nextProps.isBannedChecked) {
-      return { isLoading: false };
     }
     return null;
   }
@@ -370,42 +360,43 @@ class DiscoverPage extends React.Component {
               <MultiLanguage />
             </Col>
           </Row>
+
           {
-            this.state.isBannedChecked && handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
-              <React.Fragment>
-                {/*<Row>
-                  <Col md={12} className="exchange-intro">
-                    <span className="icon-shop">
-                      <img src={icon2KuNinja} alt="" />
-                    </span>
-                    <span className="text-intro">
-                      <div>Sell coin for cash, buy coin with cash. Set your own rates.</div>
-                      <div><span className="money">1 ETH welcome bonus.</span></div>
-                      <div className="my-3">
-                        <Link className="btn btn-sm btn-join-now" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
-                          <span>Open your station</span>
-                        </Link>
-                      </div>
-                    </span>
-                  </Col>
-                </Row>
-                 <Row>
-                   <Col md={12} className="feed-wrapper">
-                 <FeedCreditCard history={this.props.history} />
-                   </Col>
-                 </Row> */}
-              </React.Fragment>
-            )
+            // handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
+            //   <React.Fragment>
+            //     {/*<Row>
+            //       <Col md={12} className="exchange-intro">
+            //         <span className="icon-shop">
+            //           <img src={icon2KuNinja} alt="" />
+            //         </span>
+            //         <span className="text-intro">
+            //           <div>Sell coin for cash, buy coin with cash. Set your own rates.</div>
+            //           <div><span className="money">1 ETH welcome bonus.</span></div>
+            //           <div className="my-3">
+            //             <Link className="btn btn-sm btn-join-now" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
+            //               <span>Open your station</span>
+            //             </Link>
+            //           </div>
+            //         </span>
+            //       </Col>
+            //     </Row>*/}
+            //     <Row>
+            //       <Col md={12} className="feed-wrapper">
+            //         <FeedCreditCard history={this.props.history} />
+            //       </Col>
+            //     </Row>
+            //   </React.Fragment>
+            // )
           }
           {
-              this.state.isBannedChecked && this.state.handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
+              handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
               ? (
                 <BlockCountry />
               )
               : null
             }
           {
-            this.state.isBannedChecked && this.state.handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && (
+            handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && (
               <React.Fragment>
                 <BettingFilter setLoading={this.setLoading} />
                 <Row>
@@ -417,9 +408,9 @@ class DiscoverPage extends React.Component {
             )
           }
           <Row>
-            {this.state.isBannedChecked && [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
+            {[HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
             {
-              this.state.isBannedChecked && [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
+              [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
               ? (
                 <BlockCountry />
               )
@@ -445,7 +436,6 @@ const mapState = state => ({
   exchange: state.exchange,
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
-  isBannedChecked: state.app.isBannedChecked,
 });
 
 const mapDispatch = ({
