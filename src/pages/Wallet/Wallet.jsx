@@ -96,6 +96,9 @@ var topOfElement = function(element) {
 class Wallet extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log('wallet - contructor - init');
+
     this.state = {
       data: {},
       isLoading: false,

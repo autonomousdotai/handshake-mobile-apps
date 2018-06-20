@@ -349,4 +349,76 @@ export default {
     description: 'Unlike any other platform, we do not hold users\' keys and grant full key controls to buyers and sellers.',
   },
 
+  // me page
+  me: {
+    profile: {
+      username: {
+        exist: 'Alias has existed!',
+        success: 'Your alias is recorded',
+        required: 'Alias has required!',
+      },
+      verify: {
+        alert: {
+          send: {
+            phone: 'We sent the secret code to your phone.',
+            email: 'We sent a verification code to your email.',
+          },
+          notValid: {
+            server: {
+              phone: 'That’s not a real number. Try harder.',
+              email: 'That’s not a real email. Try harder.',
+            },
+            client: {
+              phone: 'A valid phone number would work better.',
+              email: 'A valid email would work better.',
+            },
+          },
+          require: {
+            phone: 'Please enter your verify code.',
+            email: 'Please enter your verify code.',
+          },
+          success: {
+            phone: 'Phone number securely saved.',
+            email: 'Your email has been verified.',
+          },
+          cannot: {
+            phone: 'Can\'t verify your phone, please check your code',
+            email: 'Can\'t verify your email, please check your code.',
+          },
+        },
+      },
+      text: {
+        verified: 'Verified',
+        username: {
+          label: 'Alias',
+          desc1: 'What do they call you?',
+          button: {
+            submit: 'Save',
+          },
+        },
+        phone: {
+          label: 'Phone Number',
+          desc1: 'To send you free ETH sometimes, we’ll need your phone number to verify that you are not a robot. This is optional.',
+          desc2: 'We only send humans rewards.',
+          desc3: 'Please verify your phone number.',
+          desc4: 'Enter the secret code sent to your phone.',
+          button: {
+            send: 'Send',
+            submit: 'Verify your number',
+          },
+        },
+        email: {
+          label: 'Email Verification',
+          desc1: 'You may prefer to receive updates and notifications via email. This is also optional.',
+          desc2: 'Prefer to receive notifications and updates via email?',
+          desc3: 'Enter your email',
+          desc4: 'Enter the secret code sent to your email.',
+          button: {
+            send: 'Send',
+            submit: 'Verify your email',
+          },
+        },
+      },
+    },
+  },
 };

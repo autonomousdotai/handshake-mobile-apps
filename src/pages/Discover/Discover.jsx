@@ -66,7 +66,7 @@ class DiscoverPage extends React.Component {
 
   constructor(props) {
     super(props);
-
+    console.log('discover - contructor - init');
     const handshakeDefault = this.getDefaultHandShakeId();
 
     this.state = {
