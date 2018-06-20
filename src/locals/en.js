@@ -55,12 +55,12 @@ export default {
   movingCoinFromEscrow: 'Moving your coin from escrow. This may take a few minutes.',
   'ex.create.label.amountBuy': 'Inventory for purchase',
   'ex.create.label.amountSell': 'Inventory for sale',
-  'ex.create.label.marketPrice': 'Market price',
+  'ex.create.label.marketPrice': 'Current market price',
   'ex.create.label.premiumBuy': 'Your buying price',
   'ex.create.label.premiumSell': 'Your selling price',
   'ex.create.label.nameStation': 'Station name',
   'ex.create.label.phone': 'Phone',
-  'ex.create.label.address': 'Address',
+  'ex.create.label.address': 'Meet-up place',
   'ex.create.label.exchangeRate': 'Exchange rate',
   'ex.create.label.stationInfo': 'Station information',
 
@@ -69,7 +69,7 @@ export default {
   'ex.createLocal.label.coin': 'Coin',
   'ex.createLocal.label.amount': 'Amount',
   'ex.createLocal.label.phone': 'Phone',
-  'ex.createLocal.label.address': 'Address',
+  'ex.createLocal.label.address': 'Meet-up place',
 
   'ex.discover.label.priceBuy': 'BUY',
   'ex.discover.label.priceSell': 'SELL',
