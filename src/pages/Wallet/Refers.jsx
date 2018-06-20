@@ -63,7 +63,7 @@ class Refers extends React.Component {
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
     this.props.showAlert({
-      message: <div className="textCenter">{icon}{msg}</div>,
+      message: <div className="textCenter" style={{"word-wrap": "break-word"}}>{icon}{msg}</div>,
       timeOut,
       type,
       callBack: () => {},
@@ -414,11 +414,11 @@ completeRefers() {
       PATH_URL: 'user/complete-profile',
       METHOD: 'POST',
       successFn: (res) => {
-        if(res && res.data){
-          resolve(true);
+        if(res){
+          resolve(res);
         }
         else{
-          resolve(false);
+          resolve(null);
         }
       },
       errorFn: (e) =>{
@@ -429,15 +429,22 @@ completeRefers() {
 }
 
 submitEndStep= async () => {
-  if(await this.completeRefers()){
-    let refers = local.get(APP.REFERS);
-    if(!refers) refers = {};
+  let result = await this.completeRefers();
+  console.log(result);
+  if(result){
+    if(result.data){
+      let refers = local.get(APP.REFERS);
+      if(!refers) refers = {};
 
-    this.setState({end: true})
-    refers.end = 1;
-    local.save(APP.REFERS, refers);
+      this.setState({end: true})
+      refers.end = 1;
+      local.save(APP.REFERS, refers);
 
-    this.showSuccess("Complete success! You will receive 80 shurikens in few seconds.");
+      this.showSuccess("Complete success! You will receive 80 shurikens in few seconds.");
+    }
+    else{
+      this.showError(result.message);
+    }
   }
   else{
     this.showError("Failed! Your reffers are not complete.");
