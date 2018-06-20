@@ -195,7 +195,7 @@ class Handshake extends React.Component {
                <h3>{messages.WHITE_PAPER_FEE}</h3>
                <p>{messages.WHITE_PAPER_FEE_1}</p>
                <p>{messages.WHITE_PAPER_FEE_2}</p>
-               <p>{messages.WHITE_PAPER_FEE_3}</p>
+               <p dangerouslySetInnerHTML={{__html: messages.WHITE_PAPER_FEE_3}} />
                <p>{messages.WHITE_PAPER_FEE_4}</p>
             </div>
 
