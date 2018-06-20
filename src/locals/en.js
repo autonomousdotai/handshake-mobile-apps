@@ -58,7 +58,7 @@ export default {
   'ex.create.label.marketPrice': 'Current market price',
   'ex.create.label.premiumBuy': 'Your buying price',
   'ex.create.label.premiumSell': 'Your selling price',
-  'ex.create.label.premiumSellExplanation': '= Market price + percentage',
+  'ex.create.label.premiumSellExplanation': '= Market price ± percentage',
   'ex.create.label.nameStation': 'Station name',
   'ex.create.label.phone': 'Phone',
   'ex.create.label.address': 'Meet-up place',
