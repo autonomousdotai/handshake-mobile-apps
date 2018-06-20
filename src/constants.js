@@ -407,5 +407,7 @@ export const URL = {
 
   WHITE_PAPER: '/whitepaper',
   WHITE_PAPER_INDEX: '/whitepaper',
+
+  INTRODUCING_NINJA_CASH: '/introducing-ninja-cash',
 };
 
