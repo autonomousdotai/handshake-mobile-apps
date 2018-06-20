@@ -274,6 +274,7 @@ class CreateBettingEvent extends React.Component {
           <Label for="reffeesDesc" className="">Lorem ipsum dolor sit amet consectetur adipisicing elit. </Label> */}
               <Button type="submit" block className="submit-button">Submit</Button>
               <Button type="submit" block className="cancel-button" onClick={this.resetForm}>Cancel</Button>
+              <br />
               {this.state.message &&
               <Alert color={this.state.messageType === 'error' ? 'danger' : 'success'}>
                 {this.state.message}
