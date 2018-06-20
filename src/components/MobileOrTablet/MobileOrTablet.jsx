@@ -50,7 +50,7 @@ const countryList = [
   },
 ];
 
-const languagesWhitePaper = [ 'zh', 'fr', 'de' ];
+const languagesWhitePaper = [ 'zh', 'fr', 'de', 'ru' ];
 
 class MobileOrTablet extends React.PureComponent {
   constructor(props) {

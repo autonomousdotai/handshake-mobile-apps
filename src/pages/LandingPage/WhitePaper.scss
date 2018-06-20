@@ -3,7 +3,7 @@
 .whitePaper {
   background: white;
   img {
-    margin: 0 auto;
+    margin: 0 auto 30px;
     display: block;
   }
   .container {
@@ -22,6 +22,7 @@
     font-size: 21px;
     line-height: 1.58;
     letter-spacing: -.003em;
+    text-align: justify;
   }
   strong {
     font-weight: 700;
@@ -36,8 +37,9 @@
   li {
     margin-bottom: rem-calc(14px);
     font-weight: 300;
+    font-size: rem-calc(21px);
   }
-  img + p {
-    margin-top: rem-calc(10px);
-  }
+  //img + p {
+  //  margin-top: rem-calc(10px);
+  //}
 }
