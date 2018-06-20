@@ -176,7 +176,7 @@ class Component extends React.Component {
                     <div>{message}</div>
                   </div>
                 </Feed>
-                <Button block className="btn btn-secondary" onClick={this.handleOfferStoreAlreadyCreated}>OK</Button>
+                <Button block className="btn btn-secondary" onClick={this.handleOfferStoreAlreadyCreated}><FormattedMessage id="ex.btn.OK" /></Button>
               </div>
             ),
         }, () => {
@@ -297,8 +297,6 @@ class Component extends React.Component {
       return;
     }
 
-    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
-
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
 
@@ -309,7 +307,6 @@ class Component extends React.Component {
       buy_amount: amountBuy && amountBuy.toString() || "0",
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
-      // reward_address: rewardWallet.address,
     };
 
     const offer = {
@@ -328,12 +325,10 @@ class Component extends React.Component {
       item: data,
     }
 
-    const message = <FormattedMessage id="createOfferStoreConfirm"
-                                values={ {
-                                  currency: currency,
-                                  amountBuy: amountBuy,
-                                  amountSell: amountSell,
-                                } } />;
+    const message =<FormattedMessage id="createOfferStoreConfirm"
+      values={ {
+        intentMsg: (amountBuy > 0 && amountSell > 0) ? `buy ${amountBuy} ${currency} and sell ${amountSell} ${currency}` : (amountBuy > 0 ? `buy ${amountBuy} ${currency}` : `sell ${amountSell} ${currency}`)
+      } } />;
 
     this.setState({
       modalContent:
@@ -346,12 +341,12 @@ class Component extends React.Component {
             </Feed>
             {
               this.offer ? (
-                <Button className="mt-2" block onClick={() => this.addOfferItem(data)}>Confirm</Button>
+                <Button className="mt-2" block onClick={() => this.addOfferItem(data)}><FormattedMessage id="ex.btn.confirm" /></Button>
               ) : (
-                <Button className="mt-2" block onClick={() => this.createOffer(offerStore)}>Confirm</Button>
+                <Button className="mt-2" block onClick={() => this.createOffer(offerStore)}><FormattedMessage id="ex.btn.confirm" /></Button>
               )
             }
-            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}>Not now</Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}><FormattedMessage id="ex.btn.notNow" /></Button>
           </div>
         ),
     }, () => {
@@ -408,10 +403,6 @@ class Component extends React.Component {
     // console.log('handleCreateOfferSuccess', data);
 
     const wallet = MasterWallet.getWalletDefault(currency);
-    // const rewardWallet = MasterWallet.getRewardWalletDefault(currency);
-
-    // console.log('wallet', wallet);
-    // console.log('rewardWallet', rewardWallet);
 
     if (currency === CRYPTO_CURRENCY.BTC) {
       console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
@@ -597,7 +588,7 @@ class Component extends React.Component {
             <hr className="hrLine"/>
 
             <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountSell"/></span></label>
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.premiumSell"/></span></label>
               <div className='input-group align-items-center'>
                 <Field
                   name="customizePriceSell"
@@ -626,7 +617,7 @@ class Component extends React.Component {
           {
             !haveProfile && (
               <div>
-                <div className="label">Station information</div>
+                <div className="label"><FormattedMessage id="ex.create.label.stationInfo"/></div>
                 <div className="section">
                   {/*
                   <div className="d-flex">

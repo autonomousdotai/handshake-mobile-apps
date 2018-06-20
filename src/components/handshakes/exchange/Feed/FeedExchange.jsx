@@ -51,7 +51,6 @@ import OfferShop from '@/models/OfferShop';
 import {getLocalizedDistance} from "@/services/util";
 import {BigNumber} from "bignumber.js";
 import StarsRating from "@/components/core/presentation/StarsRating";
-import Rate from '@/components/core/controls/Rate';
 
 import iconChat from '@/assets/images/icon/chat-icon.svg';
 import iconBtc from '@/assets/images/icon/coin/icon-btc.svg';
@@ -60,7 +59,7 @@ import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
 import iconEthereum from '@/assets/images/icon/coin/eth.svg';
 
 import {nameFormShakeDetail} from '@/components/handshakes/exchange/components/ShakeDetail';
-import {change} from "redux-form";
+import {change, clearFields} from "redux-form";
 import {bindActionCreators} from "redux";
 
 class FeedExchange extends React.PureComponent {
@@ -105,6 +104,8 @@ class FeedExchange extends React.PureComponent {
           break;
         }
       }
+
+      this.props.clearFields(nameFormShakeDetail, false, false, 'amount', 'amountFiat');
     });
   }
 
@@ -247,7 +248,8 @@ class FeedExchange extends React.PureComponent {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
-        // this.props.history.push(URL.HANDSHAKE_ME);
+        const { id } = this.offer;
+        this.props.history.push(`${URL.HANDSHAKE_CHAT}/${id}`);
       },
     });
   }
@@ -443,6 +445,7 @@ const mapDispatch = (dispatch) => ({
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
   rfChange: bindActionCreators(change, dispatch),
+  clearFields: bindActionCreators(clearFields, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedExchange));

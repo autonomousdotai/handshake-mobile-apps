@@ -39,7 +39,7 @@ export default {
   buyUsingCreditCardSuccessMessge: 'Your order using your credit card has gone through.',
   notEnoughCoinInWallet: 'You don\'t have enough coin right now. Please top up your wallet.',
 
-  createOfferStoreConfirm: 'Do you want to create offer Buy {amountBuy} {currency} - Sell {amountSell} {currency}?',
+  createOfferStoreConfirm: 'Do you want to set up an offer to {intentMsg}?',
   notEnoughCoinInWalletStores: 'You don\'t have enough coin right now. Please top up your wallet.',
   addOfferItemSuccessMassage: 'Success! Your order is now listed on Ninja',
   deleteOfferItemSuccessMassage: 'You have successfully deleted your order.',
@@ -53,16 +53,24 @@ export default {
   requireDefaultWalletOnMainNet: 'You must set your wallet on Mainnet',
   movingCoinToEscrow: 'Moving your coin to escrow. This may take a few minutes.',
   movingCoinFromEscrow: 'Moving your coin from escrow. This may take a few minutes.',
-  'ex.create.label.amountBuy': 'Inventory for purchase',
-  'ex.create.label.amountSell': 'Inventory for sale',
-  'ex.create.label.marketPrice': 'Market price',
+  'ex.create.label.amountBuy': 'I want to buy',
+  'ex.create.label.amountSell': 'I want to sell',
+  'ex.create.label.marketPrice': 'Current market price',
   'ex.create.label.premiumBuy': 'Your buying price',
   'ex.create.label.premiumSell': 'Your selling price',
   'ex.create.label.nameStation': 'Station name',
   'ex.create.label.phone': 'Phone',
-  'ex.create.label.address': 'Address',
+  'ex.create.label.address': 'Meet-up place',
   'ex.create.label.exchangeRate': 'Exchange rate',
   'ex.create.label.stationInfo': 'Station information',
+
+  'ex.createLocal.label.iWantTo': 'I want to',
+  'ex.createLocal.placeholder.anyItem': 'any item or service',
+  'ex.createLocal.label.coin': 'Coin',
+  'ex.createLocal.label.amount': 'Amount',
+  'ex.createLocal.label.phone': 'Phone',
+  'ex.createLocal.label.address': 'Meet-up place',
+
   'ex.discover.label.priceBuy': 'BUY',
   'ex.discover.label.priceSell': 'SELL',
   'ex.discover.label.reviews': '({reviewCount})',
@@ -70,10 +78,12 @@ export default {
   'ex.discover.banner.btnText': 'BECOME A LOCAL EXCHANGE',
   'ex.discover.shakeDetail.label.amount': 'Amount',
   'ex.discover.shakeDetail.label.total': 'Total',
+  'ex.discover.shakeDetail.label.maximum': 'Maximum:',
   'ex.me.label.with': 'With',
   'ex.me.label.from': 'From',
   'ex.me.label.about': 'About',
   'ex.btn.confirm': 'Confirm',
+  'ex.btn.OK': 'OK',
   'ex.btn.notNow': 'Not now',
 
   'ex.label.buy': 'Buy',
@@ -130,6 +140,11 @@ export default {
   'ex.error.303': 'It looks like you have reached your credit card limit.',
   'ex.error.309': 'You already have a listing! To change your rates, please cancel your current listing.',
   'ex.error.default': 'Oops! Something went wrong.',
+
+  'error.required': 'Required',
+  'error.requiredOne': 'You need to fill in one of these!',
+  'error.greaterThan': 'Must be greater than {min}',
+  'error.lessThan': 'Must be less than {max}',
 
   'btn.initiate': 'Initiate',
   'btn.shake': 'Shake',
@@ -334,4 +349,76 @@ export default {
     description: 'Unlike any other platform, we do not hold users\' keys and grant full key controls to buyers and sellers.',
   },
 
+  // me page
+  me: {
+    profile: {
+      username: {
+        exist: 'Alias has existed!',
+        success: 'Your alias is recorded',
+        required: 'Alias has required!',
+      },
+      verify: {
+        alert: {
+          send: {
+            phone: 'We sent the secret code to your phone.',
+            email: 'We sent a verification code to your email.',
+          },
+          notValid: {
+            server: {
+              phone: 'That’s not a real number. Try harder.',
+              email: 'That’s not a real email. Try harder.',
+            },
+            client: {
+              phone: 'A valid phone number would work better.',
+              email: 'A valid email would work better.',
+            },
+          },
+          require: {
+            phone: 'Please enter your verify code.',
+            email: 'Please enter your verify code.',
+          },
+          success: {
+            phone: 'Phone number securely saved.',
+            email: 'Your email has been verified.',
+          },
+          cannot: {
+            phone: 'Can\'t verify your phone, please check your code',
+            email: 'Can\'t verify your email, please check your code.',
+          },
+        },
+      },
+      text: {
+        verified: 'Verified',
+        username: {
+          label: 'Alias',
+          desc1: 'What do they call you?',
+          button: {
+            submit: 'Save',
+          },
+        },
+        phone: {
+          label: 'Phone Number',
+          desc1: 'To send you free ETH sometimes, we’ll need your phone number to verify that you are not a robot. This is optional.',
+          desc2: 'We only send humans rewards.',
+          desc3: 'Please verify your phone number.',
+          desc4: 'Enter the secret code sent to your phone.',
+          button: {
+            send: 'Send',
+            submit: 'Verify your number',
+          },
+        },
+        email: {
+          label: 'Email Verification',
+          desc1: 'You may prefer to receive updates and notifications via email. This is also optional.',
+          desc2: 'Prefer to receive notifications and updates via email?',
+          desc3: 'Enter your email',
+          desc4: 'Enter the secret code sent to your email.',
+          button: {
+            send: 'Send',
+            submit: 'Verify your email',
+          },
+        },
+      },
+    },
+  },
 };

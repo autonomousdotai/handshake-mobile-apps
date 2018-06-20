@@ -22,7 +22,7 @@ class CoinTemp extends React.Component {
         const itemSelected = wallet.default ? "feed feed-selected" : "feed";
 
         return  ( 
-            <Col sm={6} md={6} xs={6} className="feed-wrapper">              
+            <Col sm={6} md={6} xs={6} className="feed-wrapper-wallet">              
               <div onClick={onClick}  className={itemSelected} style={{backgroundImage: "url('"+bgImg+"')"}}>
                 <span className="name">{wallet.getNetworkName() + " (" + wallet.name + ")"}</span>                 
                 
