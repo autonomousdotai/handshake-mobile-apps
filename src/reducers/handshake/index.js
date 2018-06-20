@@ -89,6 +89,21 @@ const handshakeReducter = (state = {
             ...state,
             isFetching: false,
         };
+        case ACTIONS.COLLECT_FREE:
+        return {
+            ...state,
+            isFetching: false,
+        };
+        case `${ACTIONS.COLLECT_FREE}_SUCCESS`:
+        return {
+            ...state,
+            isFetching: false,
+        };
+        case `${ACTIONS.COLLECT_FREE}_FAILED`:
+        return {
+            ...state,
+            isFetching: false,
+        };
         case ACTIONS.REFUND:
         return {
             ...state,

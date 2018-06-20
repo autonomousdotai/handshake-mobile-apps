@@ -526,24 +526,8 @@ class Component extends React.Component {
             </div>
           </div>
 
-          <div className="label"><FormattedMessage id="ex.create.label.exchangeRate"/></div>
+          <div className="label"><FormattedMessage id="ex.create.label.beASeller"/></div>
           <div className="section">
-            <div className="d-flex">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountBuy"/></span></label>
-              <div className='input-group'>
-                <Field
-                  name="amountBuy"
-                  className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                  component={fieldInput}
-                  placeholder={MIN_AMOUNT[currency]}
-                  // onChange={this.onAmountChange}
-                  // validate={[requiredOneOfAmounts, currency === CRYPTO_CURRENCY.BTC ? minValue001 : minValue01]}
-                />
-              </div>
-            </div>
-
-            <hr className="hrLine"/>
-
             <div className="d-flex">
               <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountSell"/></span></label>
               <div className='input-group'>
@@ -566,29 +550,13 @@ class Component extends React.Component {
                 <div><span className="form-text">{priceDisplayed} {fiatCurrency}</span></div>
               </div>
             </div>
-
             <hr className="hrLine"/>
 
             <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.premiumBuy"/></span></label>
-              <div className='input-group align-items-center'>
-                <Field
-                  name="customizePriceBuy"
-                  // className='form-control-custom form-control-custom-ex w-100'
-                  component={fieldNumericInput}
-                  btnBg={btnBg}
-                  suffix={"%"}
-                  color={textColor}
-                  validate={validateFee}
-                />
-                { wantToBuy && <span className="w-100 estimate-price buy">&asymp; {estimatedPriceBuy} {fiatCurrency}</span> }
-              </div>
-            </div>
-
-            <hr className="hrLine"/>
-
-            <div className="d-flex py-1">
-              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.premiumSell"/></span></label>
+              <label className="col-form-label mr-auto label-create">
+                <span className="align-middle"><FormattedMessage id="ex.create.label.premiumSell"/></span>
+                <div className="explanation"><FormattedMessage id="ex.create.label.premiumSellExplanation"/></div>
+              </label>
               <div className='input-group align-items-center'>
                 <Field
                   name="customizePriceSell"
@@ -603,7 +571,7 @@ class Component extends React.Component {
               </div>
             </div>
 
-            {
+            {/*
               (wantToBuy || wantToSell) && (
                 <div className="tooltip-price mt-2">
                   { wantToBuy && <span>Your buying price {estimatedPriceBuy} {fiatCurrency}. </span> }
@@ -611,7 +579,53 @@ class Component extends React.Component {
                   { (wantToBuy && wantToSell) ? 'These' : 'This'} may fluctuate according to the price of {currency}
                 </div>
               )
-            }
+            */}
+          </div>
+
+          <div className="label"><FormattedMessage id="ex.create.label.beABuyer"/></div>
+          <div className="section">
+            <div className="d-flex">
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.amountBuy"/></span></label>
+              <div className='input-group'>
+                <Field
+                  name="amountBuy"
+                  className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                  component={fieldInput}
+                  placeholder={MIN_AMOUNT[currency]}
+                  // onChange={this.onAmountChange}
+                  // validate={[requiredOneOfAmounts, currency === CRYPTO_CURRENCY.BTC ? minValue001 : minValue01]}
+                />
+              </div>
+            </div>
+            <hr className="hrLine"/>
+
+            <div className="d-flex">
+              <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.marketPrice"/></span></label>
+              <div className='input-group'>
+                <div><span className="form-text">{priceDisplayed} {fiatCurrency}</span></div>
+              </div>
+            </div>
+            <hr className="hrLine"/>
+
+
+            <div className="d-flex py-1">
+              <label className="col-form-label mr-auto label-create">
+                <span className="align-middle"><FormattedMessage id="ex.create.label.premiumBuy"/></span>
+                <div className="explanation"><FormattedMessage id="ex.create.label.premiumSellExplanation"/></div>
+              </label>
+              <div className='input-group align-items-center'>
+                <Field
+                  name="customizePriceBuy"
+                  // className='form-control-custom form-control-custom-ex w-100'
+                  component={fieldNumericInput}
+                  btnBg={btnBg}
+                  suffix={"%"}
+                  color={textColor}
+                  validate={validateFee}
+                />
+                { wantToBuy && <span className="w-100 estimate-price buy">&asymp; {estimatedPriceBuy} {fiatCurrency}</span> }
+              </div>
+            </div>
           </div>
 
           {

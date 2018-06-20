@@ -217,9 +217,9 @@ class Admin extends React.Component {
           <FormGroup disabled={this.state.disable}>
             <Label for="resultOfMatch">Result of Match</Label>
             <Input type="select" name="select" id="resultOfMatch" onChange={(event) => { this.onChangeResult(event, 'selectedResult'); }} disabled={this.state.disable}>
-              <option>0</option>
-              <option>1</option>
-              <option>2</option>
+              <option value="0">Unknown</option>
+              <option value="1">Support</option>
+              <option value="2">Against</option>
             </Input>
           </FormGroup>
           <FormGroup>
