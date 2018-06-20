@@ -6,7 +6,6 @@ import qs from 'querystring';
 import { URL, APP, API_URL } from '@/constants';
 // actions
 import { setIpInfo, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
-import { getListOfferPrice } from '@/reducers/exchange/action';
 // services
 import $http from '@/services/api';
 import { createDynamicImport } from '@/services/app';
@@ -49,7 +48,6 @@ class Root extends React.Component {
     setCheckBanned: PropTypes.func.isRequired,
     //
     setIpInfo: PropTypes.func.isRequired,
-    getListOfferPrice: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -96,16 +94,6 @@ class Root extends React.Component {
   }
   // /locale
 
-  // exchange
-  getListOfferPrice() {
-    const ipInfo = local.get(APP.IP_INFO);
-    this.props.getListOfferPrice({
-      PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
-      qs: { fiat_currency: ipInfo?.currency },
-    });
-  }
-  // /exchange
-
   ipInfo() {
     console.log('app - handle - ipinfo');
     $http({
@@ -119,10 +107,6 @@ class Root extends React.Component {
       const ipInfo = IpInfo.ipInfo(data);
       this.props.setIpInfo(ipInfo);
       local.save(APP.IP_INFO, ipInfo);
-
-      // exchange
-      this.getListOfferPrice();
-      this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
 
       // locale
       if (!local.get(APP.LOCALE)) {
@@ -180,6 +164,5 @@ export default connect(state => ({
   setBannedPrediction,
   setBannedCash,
   setCheckBanned,
-  getListOfferPrice,
 })(Root);
 
