@@ -55,7 +55,7 @@ class Component extends React.Component {
   }
 
   render() {
-    const { isCCExisting, lastDigits, isNewCCOpen, handleToggleNewCC } = this.props;
+    const { isCCExisting, lastDigits, isNewCCOpen, handleToggleNewCC, intl } = this.props;
     const { ccType } = this.state;
 
     const newCCElement = (
@@ -97,7 +97,7 @@ class Component extends React.Component {
               className='form-control-custom form-control-custom-ex w-100'
               component={fieldCleave}
               propsCleave={{
-                placeholder: <FormattedMessage id="ccExpireTemplate"/>,
+                placeholder: intl.formatMessage({ id: 'ccExpireTemplate' }),
                 options: {blocks: [2, 2], delimiter: '/', numericOnly: true},
                 // type: "tel",
                 // id: `cart-date-${this.lastUniqueId()}`,
@@ -116,7 +116,7 @@ class Component extends React.Component {
               className='form-control-custom form-control-custom-ex w-100'
               component={fieldCleave}
               propsCleave={{
-                placeholder: <FormattedMessage id="securityCode"/>,
+                placeholder: intl.formatMessage({ id: 'securityCode' }),
                 options: {blocks: [4], numericOnly: true},
                 // type: "password",
                 // maxLength: "4",

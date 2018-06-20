@@ -27,7 +27,7 @@ import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedExchange from '@/components/handshakes/exchange/Feed/FeedExchange';
 import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchangeLocal';
 import FeedSeed from '@/components/handshakes/seed/Feed';
-// import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import BlockCountry from '@/components/core/presentation/BlockCountry';
 import MultiLanguage from '@/components/core/controls/MultiLanguage';
 
@@ -360,10 +360,11 @@ class DiscoverPage extends React.Component {
               <MultiLanguage />
             </Col>
           </Row>
+
           {
             handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
               <React.Fragment>
-                {/* <Row>
+                {/*<Row>
                   <Col md={12} className="exchange-intro">
                     <span className="icon-shop">
                       <img src={icon2KuNinja} alt="" />
@@ -378,12 +379,12 @@ class DiscoverPage extends React.Component {
                       </div>
                     </span>
                   </Col>
+                </Row>*/}
+                <Row>
+                  <Col md={12} className="feed-wrapper">
+                    <FeedCreditCard history={this.props.history} />
+                  </Col>
                 </Row>
-                 <Row>
-                   <Col md={12} className="feed-wrapper">
-                 <FeedCreditCard history={this.props.history} />
-                   </Col>
-                 </Row> */}
               </React.Fragment>
             )
           }
