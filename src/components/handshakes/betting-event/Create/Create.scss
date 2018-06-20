@@ -3,7 +3,7 @@
 .save-betting-event{
   margin: rem-calc(0px) 0 rem-calc(0px) 0;
 }
-.reporting-label,.fees-label,.events-label-button-block{
+.reporting-label,.fees-label,.event-label{
   margin:rem-calc(30px) 0 1rem 0;
 }
 .input-field{
@@ -15,7 +15,7 @@
 }
 .submit-button{
   margin-top: rem-calc(10px);
-  margin-bottom: rem-calc(30px);
+  margin-bottom: rem-calc(20px);
 }
 .dropDown {
   margin: rem-calc(7px 0);
@@ -23,12 +23,16 @@
 .text-danger{
   display: block;
 }
-.event-label{
-  margin-top: 9px;
-}
 .events-label-button-block-col{
  padding : 0;
 }
 .dateField{
   background-color:#fff;
+}
+.or-label{
+  margin:1em auto;
+}
+.cancel-button{
+  background-color: #a0a0a0;
+  border-color:#a0a0a0;
 }
