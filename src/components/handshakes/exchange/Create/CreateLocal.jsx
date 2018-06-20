@@ -325,7 +325,7 @@ class Component extends React.Component {
   }
 
   render() {
-    const { type, currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, total, totalFormatted } = this.props;
+    const { type, currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, total, totalFormatted, intl } = this.props;
     const modalContent = this.state.modalContent;
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
@@ -336,7 +336,7 @@ class Component extends React.Component {
             <div style={{ color: "white", padding: "20px" }}>
 
               <div className="d-flex mb-4">
-                <label className="col-form-label mr-auto label-create head-label"><span className="align-middle">I want to</span></label>
+                <label className="col-form-label mr-auto label-create head-label"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.iWantTo"/></span></label>
                 <div className='input-group'>
                   <Field
                     name="type"
@@ -358,7 +358,7 @@ class Component extends React.Component {
                     name="physical_item"
                     className="form-control-custom form-control-custom-ex w-100 input-no-border"
                     component={fieldInput}
-                    placeholder="any item or service"
+                    placeholder={intl.formatMessage({ id: 'ex.createLocal.placeholder.anyItem' })}
                     // onChange={this.onAmountChange}
                     validate={[required]}
                   />
@@ -368,7 +368,7 @@ class Component extends React.Component {
 
               <div className="d-flex mb-2">
                 <label className="col-form-label mr-auto label-create" style={{ width: "190px" }}><span
-                  className="align-middle">Coin</span></label>
+                  className="align-middle"><FormattedMessage id="ex.createLocal.label.coin"/></span></label>
                 <div className='input-group'>
                   <Field
                     name="currency"
@@ -385,7 +385,7 @@ class Component extends React.Component {
               <hr className="hrLine"/>
 
               <div className="d-flex">
-                <label className="col-form-label mr-auto label-create"><span className="align-middle">Amount</span></label>
+                <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.amount"/></span></label>
                 <div className='input-group'>
                   <Field
                     name="amount"
@@ -402,7 +402,7 @@ class Component extends React.Component {
 
               <div className="d-flex mt-2">
                 <label className="col-form-label mr-auto label-create"><span
-                  className="align-middle">Phone</span></label>
+                  className="align-middle"><FormattedMessage id="ex.createLocal.label.phone"/></span></label>
                 <div className="input-group w-100">
                   <Field
                     name="phone"
@@ -420,7 +420,7 @@ class Component extends React.Component {
 
               <div className="d-flex mt-2">
                 <label className="col-form-label mr-auto label-create"><span
-                  className="align-middle">Address*</span></label>
+                  className="align-middle"><FormattedMessage id="ex.createLocal.label.address"/></span></label>
                 <div className="w-100">
                   <Field
                     name="address"

@@ -63,6 +63,14 @@ export default {
   'ex.create.label.address': 'Address',
   'ex.create.label.exchangeRate': 'Exchange rate',
   'ex.create.label.stationInfo': 'Station information',
+
+  'ex.createLocal.label.iWantTo': 'I want to',
+  'ex.createLocal.placeholder.anyItem': 'any item or service',
+  'ex.createLocal.label.coin': 'Coin',
+  'ex.createLocal.label.amount': 'Amount',
+  'ex.createLocal.label.phone': 'Phone',
+  'ex.createLocal.label.address': 'Address',
+
   'ex.discover.label.priceBuy': 'BUY',
   'ex.discover.label.priceSell': 'SELL',
   'ex.discover.label.reviews': '({reviewCount})',
