@@ -114,6 +114,7 @@ class Admin extends React.Component {
         email,
         password,
       },
+      headers: { 'Content-Type': 'application/json' },
       method: 'post',
     });
     auth.then((response) => {
@@ -158,7 +159,7 @@ class Admin extends React.Component {
         awayScore: Number(this.state.activeMatchData.awayScore),
         result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
       },
-      headers: { Authorization: `Bearer ${tokenValue}` },
+      headers: { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' },
       method: 'post',
     });
     submit.then((response) => {
@@ -244,8 +245,8 @@ class Admin extends React.Component {
 
           {this.state.disable && <div><br /><Alert color="success">
             Match details submitted. Please wait.
-                                            </Alert>
-                                 </div>}
+          </Alert>
+          </div>}
           <div>
             <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
               <ModalHeader toggle={this.toggle}>Update Match Data</ModalHeader>
