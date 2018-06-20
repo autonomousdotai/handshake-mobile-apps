@@ -95,25 +95,25 @@ class Handshake extends React.Component {
                <h3>{messages.WHITE_PAPER_PEX_WORK}</h3>
                <p>{messages.WHITE_PAPER_PEX_WORK_SUB_TITLE}</p>
 
-               <p>{messages.WHITE_PAPER_STEP_1}</p>
+               <p><strong>{messages.WHITE_PAPER_STEP_1}</strong></p>
                <p>{messages.WHITE_PAPER_STEP_1_1}</p>
                <p>{messages.WHITE_PAPER_STEP_1_2}</p>
                <img className="img-fluid text-center" src="https://cdn-images-1.medium.com/max/1600/0*a8YWxmX76z9_XA9u" />
                <p className="text-center">{messages.WHITE_PAPER_STEP_1_3}</p>
 
-               <p>{messages.WHITE_PAPER_STEP_2}</p>
+               <p><strong>{messages.WHITE_PAPER_STEP_2}</strong></p>
                <p>{messages.WHITE_PAPER_STEP_2_1}</p>
                <img className="img-fluid" src="https://cdn-images-1.medium.com/max/1600/0*5w0aqMLQuqIElvnP" />
                <p className="text-center">{messages.WHITE_PAPER_STEP_2_2}</p>
 
-               <p>{messages.WHITE_PAPER_STEP_3}</p>
+               <p><strong>{messages.WHITE_PAPER_STEP_3}</strong></p>
                <p>{messages.WHITE_PAPER_STEP_3_1}</p>
                <p>{messages.WHITE_PAPER_STEP_3_2}</p>
                <p>{messages.WHITE_PAPER_STEP_3_3}</p>
                <img className="img-fluid" src="https://cdn-images-1.medium.com/max/1600/0*p1ssaZDN5IrczCvs" />
                <p className="text-center">{messages.WHITE_PAPER_STEP_3_4}</p>
 
-               <p>{messages.WHITE_PAPER_STEP_4}</p>
+               <p><strong>{messages.WHITE_PAPER_STEP_4}</strong></p>
                <p>{messages.WHITE_PAPER_STEP_4_1}</p>
                <img className="img-fluid" src="https://cdn-images-1.medium.com/max/1600/0*kj9pwxJ9_rRg1BH6" />
                <p className="text-center">{messages.WHITE_PAPER_STEP_4_2}</p>
@@ -130,20 +130,20 @@ class Handshake extends React.Component {
               <p className="text-center">{messages.WHITE_PAPER_ARCHITECTURE_1}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_ARCHITECTURE_2_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_ARCHITECTURE_2_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_ARCHITECTURE_2}</p>
               <img className="img-fluid" src="https://cdn-images-1.medium.com/max/1600/0*bNRuCO61Pg_hX_ra" />
 
               <ul>
-                <li>{messages.WHITE_PAPER_ARCHITECTURE_3_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_ARCHITECTURE_3_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_ARCHITECTURE_3}</p>
               <img className="img-fluid" src="https://cdn-images-1.medium.com/max/1600/0*DzT7lTaGIqTUCFE9"/>
               <p className="text-center">{messages.WHITE_PAPER_ARCHITECTURE_3_1}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_ARCHITECTURE_4_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_ARCHITECTURE_4_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_ARCHITECTURE_4_1}</p>
               <p>{messages.WHITE_PAPER_ARCHITECTURE_4_2}</p>
@@ -154,12 +154,12 @@ class Handshake extends React.Component {
               ))}</ol>
 
               <ul>
-                <li>{messages.WHITE_PAPER_ARCHITECTURE_5_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_ARCHITECTURE_5_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_ARCHITECTURE_5}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_ARCHITECTURE_6_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_ARCHITECTURE_6_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_ARCHITECTURE_6}</p>
             </div>
@@ -169,24 +169,24 @@ class Handshake extends React.Component {
               <p>{messages.WHITE_PAPER_PRIVACY_SUB}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_PRIVACY_1_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_PRIVACY_1_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_PRIVACY_1}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_PRIVACY_2_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_PRIVACY_2_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_PRIVACY_2_1} {messages.WHITE_PAPER_PRIVACY_2_2}</p>
               <p>{messages.WHITE_PAPER_PRIVACY_2_3}</p>
               <p>{messages.WHITE_PAPER_PRIVACY_2_4}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_PRIVACY_3_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_PRIVACY_3_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_PRIVACY_3}</p>
 
               <ul>
-                <li>{messages.WHITE_PAPER_PRIVACY_4_HL}</li>
+                <li><strong>{messages.WHITE_PAPER_PRIVACY_4_HL}</strong></li>
               </ul>
               <p>{messages.WHITE_PAPER_PRIVACY_4}</p>
             </div>
@@ -212,12 +212,12 @@ class Handshake extends React.Component {
                <p>{messages.WHITE_PAPER_SUMMARY_4} <a href="https://t.me/ninja_org" target="_blank" rel="noopener noreferrer">https://t.me/ninja_org</a>.</p>
             </div>
 
-             <div className="col-lg-12">
-               <h3>{messages.WHITE_PAPER_END}</h3>
-               <p>
-                 {messages.WHITE_PAPER_END_1} <a href="http://ninja.org" target="_blank" rel="noopener noreferrer">http://ninja.org</a>
-               </p>
-            </div>
+             {/*<div className="col-lg-12">*/}
+               {/*<h3>{messages.WHITE_PAPER_END}</h3>*/}
+               {/*<p>*/}
+                 {/*{messages.WHITE_PAPER_END_1} <a href="http://ninja.org" target="_blank" rel="noopener noreferrer">http://ninja.org</a>*/}
+               {/*</p>*/}
+            {/*</div>*/}
           </div>
         </div>
       </div>

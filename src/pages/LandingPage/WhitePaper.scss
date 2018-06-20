@@ -26,7 +26,18 @@
   strong {
     font-weight: 700;
   }
+  p {
+    margin-top: rem-calc(30px);
+    margin-bottom: rem-calc(30px);
+  }
   p + p {
     margin-top: rem-calc(29px);
+  }
+  li {
+    margin-bottom: rem-calc(14px);
+    font-weight: 300;
+  }
+  img + p {
+    margin-top: rem-calc(10px);
   }
 }
