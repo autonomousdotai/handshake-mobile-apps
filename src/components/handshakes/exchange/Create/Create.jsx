@@ -176,7 +176,7 @@ class Component extends React.Component {
                     <div>{message}</div>
                   </div>
                 </Feed>
-                <Button block className="btn btn-secondary" onClick={this.handleOfferStoreAlreadyCreated}>OK</Button>
+                <Button block className="btn btn-secondary" onClick={this.handleOfferStoreAlreadyCreated}><FormattedMessage id="ex.btn.OK" /></Button>
               </div>
             ),
         }, () => {
@@ -343,12 +343,12 @@ class Component extends React.Component {
             </Feed>
             {
               this.offer ? (
-                <Button className="mt-2" block onClick={() => this.addOfferItem(data)}>Confirm</Button>
+                <Button className="mt-2" block onClick={() => this.addOfferItem(data)}><FormattedMessage id="ex.btn.confirm" /></Button>
               ) : (
-                <Button className="mt-2" block onClick={() => this.createOffer(offerStore)}>Confirm</Button>
+                <Button className="mt-2" block onClick={() => this.createOffer(offerStore)}><FormattedMessage id="ex.btn.confirm" /></Button>
               )
             }
-            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}>Not now</Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}><FormattedMessage id="ex.btn.notNow" /></Button>
           </div>
         ),
     }, () => {
@@ -619,7 +619,7 @@ class Component extends React.Component {
           {
             !haveProfile && (
               <div>
-                <div className="label">Station information</div>
+                <div className="label"><FormattedMessage id="ex.create.label.stationInfo"/></div>
                 <div className="section">
                   {/*
                   <div className="d-flex">

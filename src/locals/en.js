@@ -74,6 +74,7 @@ export default {
   'ex.me.label.from': 'From',
   'ex.me.label.about': 'About',
   'ex.btn.confirm': 'Confirm',
+  'ex.btn.OK': 'OK',
   'ex.btn.notNow': 'Not now',
 
   'ex.label.buy': 'Buy',
