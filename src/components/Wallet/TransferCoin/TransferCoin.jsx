@@ -329,7 +329,7 @@ renderScanQRCode = () => (
             <div className="div-amount">
               <Field
                     name="amount"
-                    type="number"
+                    type="text"
                     className="form-control"
                     component={fieldInput}
                     value={this.state.inputSendAmountValue}

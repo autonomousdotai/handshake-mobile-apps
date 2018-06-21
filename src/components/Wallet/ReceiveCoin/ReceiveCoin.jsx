@@ -224,7 +224,7 @@ onItemSelectedWallet = (item) =>{
                   <InputGroupAddon addonType="prepend">Amount</InputGroupAddon>
                   <Input2
                   placeholder="Specify amount ..."
-                  type="number"
+                  type="text"
                   value={this.state.inputSendAmountValue} onChange={evt => this.updateSendAmountValue(evt)}/>
                   <InputGroupAddon addonType="append">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ""}</InputGroupAddon>
                 </InputGroup>

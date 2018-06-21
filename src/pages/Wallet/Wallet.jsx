@@ -72,7 +72,7 @@ const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform
 
 const nameFormSendWallet = 'sendWallet';
 const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
- 
+
 const nameFormCreditCard = 'creditCard';
 const FormCreditCard = createForm({
   propsReduxForm: {
@@ -826,7 +826,7 @@ class Wallet extends React.Component {
             <p className="labelText">{ this.state.walletSelected ? StringHelper.format("Amount ({0})", this.state.walletSelected.name) : "Amount "}</p>
               <Field
                     name="amount"
-                    type="number"
+                    type="text"
                     className="form-control"
                     component={fieldInput}
                     value={this.state.inputSendAmountValue}
@@ -937,7 +937,7 @@ class Wallet extends React.Component {
                   <InputGroupAddon addonType="prepend">Amount</InputGroupAddon>
                   <Input2
                   placeholder="Specify amount ..."
-                  type="number"
+                  type="text"
                   value={this.state.inputSendAmountValue} onChange={evt => this.updateSendAmountValue(evt)}/>
                   <InputGroupAddon addonType="append">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ""}</InputGroupAddon>
                 </InputGroup>
