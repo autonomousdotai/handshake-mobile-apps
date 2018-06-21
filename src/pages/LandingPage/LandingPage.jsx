@@ -47,6 +47,7 @@ class Handshake extends React.Component {
   }
 
   productId = 1296;
+  productIdFillForm = 1300;
 
   showAlertMessage({ message, type = 'danger' }) {
     this.props.showAlert({
@@ -128,7 +129,7 @@ class Handshake extends React.Component {
     // ga('send', 'event', 'ShakeNinja', 'submit register email');
     const backOrder = axios({
       method: 'post',
-      url: `https://dev.autonomous.ai/api-v2/order-api/order/back-order/${this.productId}?${qs.stringify(params)}`,
+      url: `https://dev.autonomous.ai/api-v2/order-api/order/back-order/${this.productIdFillForm}?${qs.stringify(params)}`,
       data: {},
     });
     backOrder.then((backOrderResult) => {
