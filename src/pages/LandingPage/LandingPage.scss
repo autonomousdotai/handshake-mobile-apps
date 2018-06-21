@@ -58,11 +58,27 @@ body {
   }
 
   .mb160 {
-    margin-bottom: rem-calc(160px);
+    margin-bottom: rem-calc(160px) !important;
   }
 
   .mb80 {
     margin-bottom: rem-calc(80px);
+  }
+
+  .mb94 {
+    margin-bottom: rem-calc(94px);
+  }
+
+  .mb50 {
+    margin-bottom: rem-calc(50px);
+  }
+
+  .mb60 {
+    margin-bottom: rem-calc(60px);
+  }
+
+  .mb200 {
+    margin-bottom: rem-calc(200px);
   }
 
   .mw810 {
@@ -85,7 +101,7 @@ body {
   .btn-y {
     color: #333;
     background: #FFD402;
-
+    width: 100%;
   }
 
   .text-y {
@@ -196,6 +212,7 @@ body {
     color: #9B9B9B;
     letter-spacing: 0;
     font-weight: $heavy;
+    line-height: rem-calc(40px);
   }
 
   .content-main {
@@ -208,16 +225,19 @@ body {
 
   .fillInForm {
     .form-group {
-      width: 30%;
       label {
         font-size: rem-calc(20px);
         color: #9B9B9B;
         letter-spacing: 0;
+         width: 30%;
       }
       label + input {
         border: 1px solid #979797;
         border-radius: 3px;
         color: white;
+        width: 50%;
+        background: inherit;
+        height: rem-calc(50px);
       }
     }
   }

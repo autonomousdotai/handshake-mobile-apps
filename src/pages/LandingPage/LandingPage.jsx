@@ -202,7 +202,7 @@ class Handshake extends React.Component {
           />
         </div>
 
-        <button className="btnSubmit" onClick={() => {}}>
+        <button className="btn btn-y" onClick={() => {}}>
           <span>Yes, I'm in</span>
         </button>
       </form>
@@ -317,7 +317,7 @@ class Handshake extends React.Component {
     return (
       <div className="root">
         <Alert />
-        <section className="first-page">
+        <section className="first-page mb200">
           <div className="content-first">
             <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
           </div>
@@ -377,28 +377,28 @@ class Handshake extends React.Component {
 
         <div className="container">
           <div className="row">
-            <div className="col-lg-12 text-center">
+            <div className="col-lg-12 text-center mb94">
               <div className="line-ninja">
                 <div className="ico-ninja wow animated fadeInUp" />
                 <div className="line-" />
               </div>
             </div>
 
-            <div className="col-lg-12 wow animated fadeInUp text-center mw810">
-              <h3 className="h3-y">Wanna join a clan... of Ninjas?</h3>
+            <div className="col-lg-12 wow animated fadeInUp text-center mw810 mb160">
+              <h3 className="h3-y mb48">Wanna join a clan... of Ninjas?</h3>
               <div className="row">
                 <div className="col-lg-6 col-md-12 content-header">
                   There’s some loot with your name on it.
                 </div>
                 <div className="col-lg-6 col-md-12">
-                  <p className="content-main">All you gotta do is make some noise. The more you like us, the more we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us grow Ninja and.. </p>
+                  <p className="content-main mb30">All you gotta do is make some noise. The more you like us, the more we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us grow Ninja and.. </p>
                   <buton className="btn btn-y btn-lg">Make us as cool as you are</buton>
                 </div>
               </div>
             </div>
 
-            <div className="col-lg-12 wow animated fadeInUp text-center mw810">
-              <h3 className="h3-y">Plus we’ll give you free stuff.</h3>
+            <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
+              <h3 className="h3-y text-center">Plus we’ll give you free stuff.</h3>
               <div className="row">
                 <div className="col-lg-6 col-md-12">
                   <div className="d-flex mb30">
@@ -420,21 +420,21 @@ class Handshake extends React.Component {
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-12">
-                  <p className="content-header">Wanna play a real part in one of the most exciting platforms on the crypto market?</p>
+                  <p className="content-header mb23">Wanna play a real part in one of the most exciting platforms on the crypto market?</p>
                   <buton className="btn btn-y btn-lg">Hell yeah!</buton>
                 </div>
               </div>
             </div>
 
-            <div className="col-lg-12 text-center">
+            <div className="col-lg-12 text-center mb80">
               <div className="line-ninja">
                 <div className="ico-ninja wow animated fadeInUp" />
                 <div className="line-" />
               </div>
             </div>
 
-            <div className="col-lg-12 wow animated fadeInUp text-center mw810">
-              <h3 className="h3-gray">Please fill in this form</h3>
+            <div className="col-lg-12 wow animated fadeInUp mw810">
+              <h3 className="h3-gray mb60 text-center">Please fill in this form</h3>
               {this.renderFillInForm()}
             </div>
 
