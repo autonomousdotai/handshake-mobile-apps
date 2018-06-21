@@ -1,6 +1,6 @@
 import React from 'react';
 import {injectIntl} from 'react-intl';
-import {Field, formValueSelector, clearFields} from "redux-form";
+import {Field, clearFields} from "redux-form";
 import {connect} from "react-redux";
 import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
@@ -8,26 +8,21 @@ import Modal from '@/components/core/controls/Modal';
 import createForm from '@/components/core/form/createForm'
 import { change } from 'redux-form'
 import {fieldDropdown, fieldInput, fieldRadioButton} from '@/components/core/form/customField'
-
+import { API_URL } from "@/constants";
 import {required} from '@/components/core/form/validation'
 import {MasterWallet} from "@/models/MasterWallet";
 import { bindActionCreators } from "redux";
 import {showAlert} from '@/reducers/app/action';
 import {getCryptoPrice} from '@/reducers/exchange/action';
+import CryptoPrice from "@/models/CryptoPrice";
 import { showLoading, hideLoading } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
 import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
 import { StringHelper } from '@/services/helper';
 import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
-
 import './TransferCoin.scss';
-import Dropdown from '@/components/core/controls/Dropdown';
-
 import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code.svg';
-
-import bgBox from '@/assets/images/pages/wallet/bg-box-wallet-coin.svg';
-
-
+import { BigNumber } from "bignumber.js";
 
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -79,7 +74,7 @@ class Transfer extends React.Component {
     // clear form:
     this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
     if (this.props.amount){
-      this.setState({inputSendAmountValue: this.props.amount, inputSendMoneyValue: this.getCryptoPriceByAmount(this.props.amount)});
+      //this.setState({inputSendAmountValue: this.props.amount, inputSendMoneyValue: this.getCryptoPriceByAmount(this.props.amount)});
       this.props.rfChange(nameFormSendWallet, 'amount', this.props.amount);
     }
 
@@ -119,17 +114,17 @@ class Transfer extends React.Component {
 
   getCryptoPriceByAmount = (amount) => {
     var data = {amount: amount, currency: "ETH"};
-
+    console.log("amount", amount);
     this.props.getCryptoPrice({
       PATH_URL: API_URL.EXCHANGE.GET_CRYPTO_PRICE,
       qs: data,
-      successFn(response) {
-        const { userCcLimit } = this.props;
+      successFn: (response) => {
         const cryptoPrice = CryptoPrice.cryptoPrice(response.data);
-        const price = new BigNumber(userCcLimit.amount).plus(new BigNumber(cryptoPrice.fiatAmount)).toNumber();
-        this.setState({inputSendAmountValue: amount, inputSendAmountValue: price});
+        const price = new BigNumber(amount).plus(new BigNumber(cryptoPrice.fiatAmount)).toNumber();
+        console.log("cryptoPrice", price);
+        this.setState({inputSendMoneyValue: price});
       },
-      errorFn (){
+      errorFn: (e) => {
         console.error(e);
       },
     });
@@ -161,7 +156,7 @@ class Transfer extends React.Component {
         if (process.env.isLive){
           wallet.text = wallet.getShortAddress() + " (" + wallet.className + " " + wallet.name + ")";
         }
-        wallet.id = wallet.address + "-" + wallet.getNetworkName();
+        wallet.id = wallet.address + "-" + wallet.getNetworkName() + wallet.name;
 
       });
     }
@@ -173,7 +168,7 @@ class Transfer extends React.Component {
       if (process.env.isLive){
         walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
-      walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName();
+      walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName() + walletDefault.name;
 
       // get balance for first item + update to local store:
       walletDefault.getBalance().then(result => {
@@ -343,13 +338,14 @@ renderScanQRCode = () => (
             <InputGroup>
                 <InputGroupAddon addonType="prepend">USD</InputGroupAddon>
                 <Input2
+                  key="1"
                   name="amount-money"
                   placeholder={"0.0"}
                   type={isIOs ? "number" : "tel"}
                   className="form-control"
                   component={fieldInput}
                   value={this.state.inputSendMoneyValue}
-                  onChange={evt => this.updateSendAmountValue(evt)}
+                  //onChange={evt => this.updateSendAmountValue(evt)}
                   validate={[required, amountValid]}
                 />
               </InputGroup>
@@ -358,6 +354,7 @@ renderScanQRCode = () => (
               <InputGroup>
                 <InputGroupAddon addonType="prepend">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</InputGroupAddon>
                 <Input2
+                  key="2"
                   name="amount-coin"
                   placeholder={"0.0"}
                   type={isIOs ? "number" : "tel"}
@@ -379,6 +376,7 @@ renderScanQRCode = () => (
                   name="walletSelected"
                   component={fieldDropdown}
                   // className="dropdown-wallet-tranfer"
+
                   placeholder="Sellect a wallet"
                   defaultText={this.state.walletDefault.text}
                   list={this.state.wallets}
