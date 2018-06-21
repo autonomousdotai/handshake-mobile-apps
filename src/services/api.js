@@ -14,7 +14,6 @@ const $http = ({
   };
   const completedHeaders = merge(
     defaultHeaders,
-    parsedMethod === 'post' ? { 'Content-Type': 'multipart/form-data' } : {},
     headers,
   );
 

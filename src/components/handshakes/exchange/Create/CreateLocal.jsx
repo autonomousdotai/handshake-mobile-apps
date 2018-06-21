@@ -63,7 +63,6 @@ const FormExchangeCreateLocal = createForm({
 const selectorFormExchangeCreateLocal = formValueSelector(nameFormExchangeCreateLocal);
 
 const textColor = "#ffffff";
-const btnBg = "rgba(29,29,38,0.30)";
 
 class Component extends React.Component {
   constructor(props) {
@@ -103,8 +102,23 @@ class Component extends React.Component {
       detectedCountryCode = foundCountryPhone.dialCode;
     }
     rfChange(nameFormExchangeCreateLocal, "phone", authProfile.phone || `${detectedCountryCode}-`);
-    rfChange(nameFormExchangeCreateLocal, "nameShop", authProfile.name || "");
     rfChange(nameFormExchangeCreateLocal, "address", authProfile.address || "");
+  }
+
+  checkMainNetDefaultWallet = (wallet) => {
+    let result = true;
+
+    if (process.env.isLive) {
+      if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
+        result = true;
+      } else {
+        const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
+        this.showAlert(message);
+        result = false;
+      }
+    }
+
+    return result;
   }
 
   showNotEnoughCoinAlert = (balance, amount, fee, currency) => {
@@ -139,6 +153,106 @@ class Component extends React.Component {
 
   hideLoading = () => {
     this.props.hideLoading();
+  }
+
+  handleSubmit = async (values) => {
+    const { totalAmount, price } = this.props;
+    const {ipInfo: {currency: fiat_currency}, authProfile} = this.props;
+
+    const wallet = MasterWallet.getWalletDefault(values.currency);
+
+    if (!this.checkMainNetDefaultWallet(wallet)) {
+      return;
+    }
+
+    const balance = new BigNumber(await wallet.getBalance());
+    const fee = new BigNumber(await wallet.getFee(10, true));
+    let amount = new BigNumber(values.amount);
+
+    if (values.currency === CRYPTO_CURRENCY.ETH && values.type === EXCHANGE_ACTION.BUY) {
+      amount = 0;
+    }
+
+    const shopType = values.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
+
+    if ((values.currency === CRYPTO_CURRENCY.ETH || (shopType === EXCHANGE_ACTION.SELL && values.currency === CRYPTO_CURRENCY.BTC))
+      && this.showNotEnoughCoinAlert(balance, amount, fee, values.currency)) {
+
+      return;
+    }
+
+    const address = wallet.address;
+
+    let phones = values.phone.trim().split('-');
+
+    let phone = '';
+    if (phones.length > 1) {
+      phone = phones[1].length > 0 ? values.phone : '';
+    }
+
+    const offer = {
+      amount: values.amount,
+      price: '0',
+      physical_item: values.physical_item,
+      currency: values.currency,
+      type: values.type,
+      contact_info: values.address,
+      contact_phone: phone,
+      fiat_currency: fiat_currency,
+      latitude: this.state.lat,
+      longitude: this.state.lng,
+      email: authProfile?.email || '',
+      username: authProfile?.name || '',
+      chat_username: authProfile?.username || '',
+    };
+
+    if (values.type === EXCHANGE_ACTION.BUY) {
+      offer.user_address = address;
+    } else {
+      offer.refund_address = address;
+    }
+
+    console.log('handleSubmit', offer);
+    const message = <FormattedMessage id="createOfferConfirm"
+                                      values={ {
+                                        type: EXCHANGE_ACTION_NAME[values.type],
+                                        amount: formatAmountCurrency(values.amount),
+                                        currency: values.currency,
+                                        currency_symbol: fiat_currency,
+                                        total: formatMoney(totalAmount),
+                                      } } />;
+
+    this.setState({
+      modalContent:
+        (
+          <div className="py-2">
+            <Feed className="feed p-2" background="#259B24">
+              <div className="text-white d-flex align-items-center" style={{ minHeight: '50px' }}>
+                <div>{message}</div>
+              </div>
+            </Feed>
+            <Button className="mt-2" block onClick={() => this.createOffer(offer)}>Confirm</Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}>Not now</Button>
+          </div>
+        ),
+    }, () => {
+      this.modalRef.open();
+    });
+  }
+
+  createOffer = (offer) => {
+    this.modalRef.close();
+    console.log('createOffer', offer);
+    const { currency } = this.props;
+
+    this.showLoading();
+    this.props.createOffer({
+      PATH_URL: API_URL.EXCHANGE.OFFERS,
+      data: offer,
+      METHOD: 'POST',
+      successFn: this.handleCreateOfferSuccess,
+      errorFn: this.handleCreateOfferFailed,
+    });
   }
 
   cancelCreateOffer = () => {
@@ -194,140 +308,9 @@ class Component extends React.Component {
     });
   }
 
-  createOffer = (offer) => {
-    this.modalRef.close();
-    console.log('createOffer', offer);
-    const { currency } = this.props;
-
-    this.showLoading();
-    this.props.createOffer({
-      PATH_URL: API_URL.EXCHANGE.OFFERS,
-      data: offer,
-      METHOD: 'POST',
-      successFn: this.handleCreateOfferSuccess,
-      errorFn: this.handleCreateOfferFailed,
-    });
-  }
-
-  checkMainNetDefaultWallet = (wallet) => {
-    let result = true;
-
-    if (process.env.isLive) {
-      if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
-        result = true;
-      } else {
-        const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
-        this.showAlert(message);
-        result = false;
-      }
-    }
-
-    return result;
-  }
-
-  handleSubmit = async (values) => {
-    const { totalAmount, price } = this.props;
-    const {ipInfo: {currency: fiat_currency}, authProfile} = this.props;
-
-    const wallet = MasterWallet.getWalletDefault(values.currency);
-
-    if (!this.checkMainNetDefaultWallet(wallet)) {
-      return;
-    }
-
-    const balance = new BigNumber(await wallet.getBalance());
-    const fee = new BigNumber(await wallet.getFee(10, true));
-    let amount = new BigNumber(values.amount);
-
-    if (values.currency === CRYPTO_CURRENCY.ETH && values.type === EXCHANGE_ACTION.BUY) {
-      amount = new BigNumber(0);
-    }
-
-    let condition = balance.isLessThan(amount.plus(fee));
-
-    if ((values.currency === CRYPTO_CURRENCY.ETH || (values.type === EXCHANGE_ACTION.SELL && values.currency === CRYPTO_CURRENCY.BTC))
-      && condition) {
-      this.props.showAlert({
-        message: <div className="text-center">
-          <FormattedMessage id="notEnoughCoinInWallet"
-                            values={ {
-                              amount: formatAmountCurrency(balance),
-                              fee: formatAmountCurrency(fee),
-                              currency: values.currency,
-                            } } />
-        </div>,
-        timeOut: 3000,
-        type: 'danger',
-        callBack: () => {
-        }
-      });
-
-      return;
-    }
-
-    const address = wallet.address;
-
-    let phones = values.phone.trim().split('-');
-
-    let phone = '';
-    if (phones.length > 1) {
-      phone = phones[1].length > 0 ? values.phone : '';
-    }
-
-    const offer = {
-      amount: values.amount,
-      price: '0',
-      physical_item: values.physical_item,
-      currency: values.currency,
-      type: values.type,
-      contact_info: values.address,
-      contact_phone: phone,
-      fiat_currency: fiat_currency,
-      latitude: this.state.lat,
-      longitude: this.state.lng,
-      email: authProfile?.email || '',
-      username: authProfile?.name || '',
-      chat_username: authProfile?.username || '',
-    };
-
-    if (values.type === EXCHANGE_ACTION.BUY) {
-      offer.user_address = address;
-    } else {
-      offer.refund_address = address;
-    }
-
-    console.log('handleSubmit', offer);
-    const message = <FormattedMessage id="createOfferConfirm"
-                      values={ {
-                        type: EXCHANGE_ACTION_NAME[values.type],
-                        amount: formatAmountCurrency(values.amount),
-                        currency: values.currency,
-                        currency_symbol: fiat_currency,
-                        total: formatMoney(totalAmount),
-                      } } />;
-
-    this.setState({
-      modalContent:
-        (
-          <div className="py-2">
-            <Feed className="feed p-2" background="#259B24">
-              <div className="text-white d-flex align-items-center" style={{ minHeight: '50px' }}>
-                <div>{message}</div>
-              </div>
-            </Feed>
-            <Button className="mt-2" block onClick={() => this.createOffer(offer)}>Confirm</Button>
-            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}>Not now</Button>
-          </div>
-        ),
-    }, () => {
-      this.modalRef.open();
-    });
-  }
-
   render() {
     const { type, currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, total, totalFormatted, intl } = this.props;
     const modalContent = this.state.modalContent;
-    const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
     return (
       <div className="create-exchange-local">
@@ -434,7 +417,7 @@ class Component extends React.Component {
 
             </div>
           </Feed>
-          <Button block type="submit" disabled={!allowInitiate}><FormattedMessage id="btn.initiate"/></Button>
+          <Button block type="submit"><FormattedMessage id="btn.initiate"/></Button>
         </FormExchangeCreateLocal>
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}

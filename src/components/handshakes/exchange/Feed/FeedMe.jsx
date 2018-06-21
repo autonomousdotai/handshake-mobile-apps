@@ -838,17 +838,32 @@ class FeedMe extends React.PureComponent {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
-        message = <FormattedMessage id="offerStoreHandShakeContent"
-                                    values={ {
-                                      offerTypeBuy: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
-                                      offerTypeSell: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL],
-                                      amountBuy: offer.buyAmount,
-                                      amountSell: offer.sellAmount,
-                                      currency: offer.currency,
-                                      fiatAmountCurrency: offer.fiatCurrency,
-                                      fiatAmountBuy: formatMoneyByLocale(fiatAmountBuy,offer.fiatCurrency),
-                                      fiatAmountSell: formatMoneyByLocale(fiatAmountSell,offer.fiatCurrency),
-                                    } } />;
+        message = (
+          <span>
+            {offer.buyAmount > 0 && (
+              <FormattedMessage id="offerStoreHandShakeContentBuy"
+                values={ {
+                  offerTypeBuy: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
+                  amountBuy: offer.buyAmount,
+                  currency: offer.currency,
+                  fiatAmountCurrency: offer.fiatCurrency,
+                  fiatAmountBuy: formatMoneyByLocale(fiatAmountBuy,offer.fiatCurrency),
+                } }
+              />
+            )}
+            {offer.sellAmount > 0 && (
+              <FormattedMessage id="offerStoreHandShakeContentSell"
+                values={ {
+                  offerTypeSell: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL],
+                  amountSell: offer.sellAmount,
+                  currency: offer.currency,
+                  fiatAmountCurrency: offer.fiatCurrency,
+                  fiatAmountSell: formatMoneyByLocale(fiatAmountSell,offer.fiatCurrency),
+                } }
+              />
+            )}
+          </span>
+        );
         break;
       }
     }

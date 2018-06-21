@@ -8,6 +8,7 @@ export const ACTIONS = {
   SHAKE: 'SHAKE',
   UNINIT: 'UNINIT',
   COLLECT: 'COLLECT',
+  COLLECT_FREE: 'COLLECT_FREE',
   REFUND: 'REFUND',
   ROLLBACK: 'ROLLBACK',
   SAVE_TRANSACTION: 'SAVE_TRANSACTION'
@@ -18,6 +19,7 @@ export const initFreeHandshake = createAPI(ACTIONS.INIT_HANDSHAKE_FREE);
 export const shakeItem = createAPI(ACTIONS.SHAKE);
 export const uninitItem = createAPI(ACTIONS.UNINIT);
 export const collect = createAPI(ACTIONS.COLLECT);
+export const collectFree = createAPI(ACTIONS.COLLECT_FREE);
 export const refund = createAPI(ACTIONS.REFUND);
 export const rollback = createAPI(ACTIONS.ROLLBACK);
 export const saveTransaction = createAPI(ACTIONS.SAVE_TRANSACTION);

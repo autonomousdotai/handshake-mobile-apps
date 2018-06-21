@@ -6,7 +6,6 @@ import qs from 'querystring';
 import { URL, APP, API_URL } from '@/constants';
 // actions
 import { setIpInfo, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
-import { getListOfferPrice } from '@/reducers/exchange/action';
 // services
 import $http from '@/services/api';
 import { createDynamicImport } from '@/services/app';
@@ -36,6 +35,8 @@ addLocaleData([...en, ...fr, ...zh, ...de, ...ja, ...ko, ...ru, ...es]);
 // pages
 const LandingPage = createDynamicImport(() => import('@/pages/LandingPage/LandingPage'), Loading);
 const LandingPageTrade = createDynamicImport(() => import('@/pages/LandingPage/Trade'), Loading);
+const LandingPageWhitePaper = createDynamicImport(() => import('@/pages/LandingPage/WhitePaper'), Loading);
+const LandingPageIntroNjnjaCash = createDynamicImport(() => import('@/pages/LandingPage/IntroducingNinjaCash'), Loading);
 const LandingPageFAQ = createDynamicImport(() => import('@/pages/FAQ/FAQ'), Loading);
 const MobileOrTablet = createDynamicImport(() => import('@/components/MobileOrTablet'), Loading);
 
@@ -49,7 +50,6 @@ class Root extends React.Component {
     setCheckBanned: PropTypes.func.isRequired,
     //
     setIpInfo: PropTypes.func.isRequired,
-    getListOfferPrice: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -96,16 +96,6 @@ class Root extends React.Component {
   }
   // /locale
 
-  // exchange
-  getListOfferPrice() {
-    const ipInfo = local.get(APP.IP_INFO);
-    this.props.getListOfferPrice({
-      PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
-      qs: { fiat_currency: ipInfo?.currency },
-    });
-  }
-  // /exchange
-
   ipInfo() {
     console.log('app - handle - ipinfo');
     $http({
@@ -119,10 +109,6 @@ class Root extends React.Component {
       const ipInfo = IpInfo.ipInfo(data);
       this.props.setIpInfo(ipInfo);
       local.save(APP.IP_INFO, ipInfo);
-
-      // exchange
-      this.getListOfferPrice();
-      this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
 
       // locale
       if (!local.get(APP.LOCALE)) {
@@ -150,6 +136,8 @@ class Root extends React.Component {
     if (window.location.pathname === URL.LANDING_PAGE_SHURIKEN) return <LandingPage />;
     if (window.location.pathname === URL.LANDING_PAGE_TRADE) return <LandingPageTrade />;
     if (window.location.pathname === URL.FAQ) return <LandingPageFAQ />;
+    if (window.location.pathname === URL.WHITE_PAPER) return <LandingPageWhitePaper />;
+    if (window.location.pathname === URL.INTRODUCING_NINJA_CASH) return <LandingPageIntroNjnjaCash />;
     if (BrowserDetect.isDesktop) return <MobileOrTablet />;
     return <Handle setLanguage={this.setLanguage} refer={this.refer} />;
   }
@@ -180,6 +168,5 @@ export default connect(state => ({
   setBannedPrediction,
   setBannedCash,
   setCheckBanned,
-  getListOfferPrice,
 })(Root);
 

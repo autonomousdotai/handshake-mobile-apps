@@ -35,13 +35,14 @@ export const MESSAGE = {
   CREATE_BET_NOT_MATCH: 'Finding a ninja to bet against you.',
   CREATE_BET_MATCHED: 'Bet matched! Waiting for outcome.',
   NOT_ENOUGH_BALANCE: 'Too rich for your blood. Please top up your wallet.',
+  NOT_ENOUGH_GAS: `Not enough gas. Please top up your wallet.`,
   CHOOSE_MATCH: 'Please choose match and outcome',
   ODD_LARGE_THAN: 'Please enter odds greater than 1',
   AMOUNT_VALID: 'Please place a bet larger than 0.',
   MATCH_OVER: 'Time travel is hard. Please bet on a future or ongoing match.',
   RIGHT_NETWORK: 'You must set your wallet on Mainnet',
   ROLLBACK: `Something did not go according to plan. Please try again.`,
-
+  WITHDRAW_SUCCESS: 'Success! Your winnings have been withdrawn to your wallet.'
 };
 
 export const BET_BLOCKCHAIN_STATUS = {
@@ -163,7 +164,7 @@ export class BetHandshakeHandler {
   }
   getChainIdDefaultWallet(){
     const wallet = MasterWallet.getWalletDefault('ETH');
-    MasterWallet.log(wallet);
+    //MasterWallet.log(wallet);
 
     const chainId = wallet.chainId;
     console.log('ChainId:', chainId);
@@ -240,11 +241,14 @@ export class BetHandshakeHandler {
       const secondItem = array[1];
       if (secondItem) {
         const strId = secondItem.substring(1);
-        console.log(strId);
-        console.log(secondItem);
+        //console.log(strId);
+        //console.log(secondItem);
         return parseInt(strId);
       }
     }
+  }
+  getShakeOffchain(id){
+    return `cryptosign_s${id}`;
   }
 
   async getBalance() {
