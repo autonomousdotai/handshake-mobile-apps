@@ -831,8 +831,8 @@ class FeedMe extends React.PureComponent {
     const { offer } = this;
     const { buyAmount, sellAmount, currency, buyPercentage, sellPercentage } = offer;
     let message = '';
-    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.SELL, currency, buyPercentage);
-    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.BUY, currency, sellPercentage);
+    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.BUY, currency, buyPercentage);
+    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.SELL, currency, sellPercentage);
     switch (status) {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
