@@ -354,7 +354,7 @@ class Handshake extends React.Component {
     return (
       <div className="root">
         <Alert />
-        <section className="first-page mb160">
+        <section className="first-page">
           {/*<div className="content-first">*/}
             <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
           {/*</div>*/}
@@ -437,17 +437,21 @@ class Handshake extends React.Component {
                 </div>
               </div>
             </div>
+          <div className="line-down wow animated fadeIn" data-wow-delay="7s">
+            <span></span>
+          </div>
           {/*</div>*/}
         </section>
 
+        <div className="col-lg-12 text-center mb94">
+          <div className="line-ninja">
+            <div className="ico-ninja wow animated fadeInUp"/>
+            <div className="line-"/>
+          </div>
+        </div>
+
         <div className="container">
           <div className="row">
-            <div className="col-lg-12 text-center mb94">
-              <div className="line-ninja">
-                <div className="ico-ninja wow animated fadeInUp" />
-                <div className="line-" />
-              </div>
-            </div>
 
             <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
               <h3 className="h3-y mb48 text-center">Wanna join a clan... of Ninjas?</h3>
