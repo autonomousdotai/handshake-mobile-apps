@@ -350,14 +350,14 @@ class Handshake extends React.Component {
   // }
 
   render() {
-    if(typeof WOW === 'undefined') return <div/>;
+    if(typeof WOW === 'undefined') return <div />;
     return (
       <div className="root">
         <Alert />
         <section className="first-page">
           <iframe width="100%" className="fadeIn" src="/ninja-star/index.html"/>
           <div className="content-first col-lg-12 col-md-12">
-            <div className="img-screen wow animated slideInLeft col-lg-6 col-md-12 text-right" data-wow-delay="6.6s">
+            <div className="img-screen wow animated slideInLeft col-lg-6 col-md-12 text-right d-none d-lg-block" data-wow-delay="6.6s">
               <div className="label-100 wow animated zoomIn" data-wow-delay="8s">
                 <img width="70" src={labelIcon}/>
               </div>
