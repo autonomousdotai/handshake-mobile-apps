@@ -22,7 +22,7 @@ export default {
   instantOfferHandShakeContent: 'You{just}{offerType} {amount} {currency} for {total} {currency_symbol} on your card - fee {fee}%',
   offerDistanceContent: '{distance} away',
   transactonOfferInfo: 'Successful ({success}) / Failed ({failed})',
-  createOfferConfirm: 'You are about to {type} {amount} {currency} for {total} {currency_symbol}',
+  createOfferConfirm: 'You are about to {type} {something} by {amount} {currency}',
   handshakeOfferConfirm: 'You are about to {type} {amount} {currency} for {total} {currency_symbol}',
   rejectOfferConfirm: 'Do you want to Reject this handshake? You will not be able to make transactions for 4 hours.',
   completeOfferConfirm: 'Finish shaking?',

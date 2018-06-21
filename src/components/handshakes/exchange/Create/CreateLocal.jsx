@@ -155,9 +155,21 @@ class Component extends React.Component {
     this.props.hideLoading();
   }
 
+  showAlert = (message) => {
+    this.props.showAlert({
+      message: <div className="text-center">
+        {message}
+      </div>,
+      timeOut: 5000,
+      type: 'danger',
+      callBack: () => {
+      }
+    });
+  }
+
   handleSubmit = async (values) => {
-    const { totalAmount, price } = this.props;
     const {ipInfo: {currency: fiat_currency}, authProfile} = this.props;
+    const { amount, currency, type, phone, physical_item, address } = values;
 
     const wallet = MasterWallet.getWalletDefault(values.currency);
 
@@ -165,39 +177,37 @@ class Component extends React.Component {
       return;
     }
 
-    const balance = new BigNumber(await wallet.getBalance());
-    const fee = new BigNumber(await wallet.getFee(10, true));
-    let amount = new BigNumber(values.amount);
+    const balance = await wallet.getBalance();
+    const fee = await wallet.getFee(10, true);
+    let checkAmount = amount;
 
-    if (values.currency === CRYPTO_CURRENCY.ETH && values.type === EXCHANGE_ACTION.BUY) {
-      amount = 0;
+    const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
+
+    if (currency === CRYPTO_CURRENCY.ETH && shopType === EXCHANGE_ACTION.BUY) {
+      checkAmount = 0;
     }
 
-    const shopType = values.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
-
-    if ((values.currency === CRYPTO_CURRENCY.ETH || (shopType === EXCHANGE_ACTION.SELL && values.currency === CRYPTO_CURRENCY.BTC))
-      && this.showNotEnoughCoinAlert(balance, amount, fee, values.currency)) {
+    if ((currency === CRYPTO_CURRENCY.ETH || (shopType === EXCHANGE_ACTION.SELL && currency === CRYPTO_CURRENCY.BTC))
+      && this.showNotEnoughCoinAlert(balance, checkAmount, fee, values.currency)) {
 
       return;
     }
 
-    const address = wallet.address;
+    let phones = phone.trim().split('-');
 
-    let phones = values.phone.trim().split('-');
-
-    let phone = '';
+    let newPhone = '';
     if (phones.length > 1) {
-      phone = phones[1].length > 0 ? values.phone : '';
+      newPhone = phones[1].length > 0 ? phone : '';
     }
 
     const offer = {
-      amount: values.amount,
+      amount: amount,
       price: '0',
-      physical_item: values.physical_item,
-      currency: values.currency,
-      type: values.type,
-      contact_info: values.address,
-      contact_phone: phone,
+      physical_item: physical_item,
+      currency: currency,
+      type: shopType,
+      contact_info: address,
+      contact_phone: newPhone,
       fiat_currency: fiat_currency,
       latitude: this.state.lat,
       longitude: this.state.lng,
@@ -206,20 +216,19 @@ class Component extends React.Component {
       chat_username: authProfile?.username || '',
     };
 
-    if (values.type === EXCHANGE_ACTION.BUY) {
-      offer.user_address = address;
+    if (shopType === EXCHANGE_ACTION.BUY) {
+      offer.user_address = wallet.address;
     } else {
-      offer.refund_address = address;
+      offer.refund_address = wallet.address;
     }
 
     console.log('handleSubmit', offer);
     const message = <FormattedMessage id="createOfferConfirm"
                                       values={ {
-                                        type: EXCHANGE_ACTION_NAME[values.type],
-                                        amount: formatAmountCurrency(values.amount),
-                                        currency: values.currency,
-                                        currency_symbol: fiat_currency,
-                                        total: formatMoney(totalAmount),
+                                        type: EXCHANGE_ACTION_NAME[type],
+                                        something: physical_item,
+                                        amount: amount,
+                                        currency: currency,
                                       } } />;
 
     this.setState({
@@ -231,8 +240,8 @@ class Component extends React.Component {
                 <div>{message}</div>
               </div>
             </Feed>
-            <Button className="mt-2" block onClick={() => this.createOffer(offer)}>Confirm</Button>
-            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}>Not now</Button>
+            <Button className="mt-2" block onClick={() => this.createOffer(offer)}><FormattedMessage id="ex.btn.confirm" /></Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}><FormattedMessage id="ex.btn.notNow" /></Button>
           </div>
         ),
     }, () => {
@@ -243,7 +252,6 @@ class Component extends React.Component {
   createOffer = (offer) => {
     this.modalRef.close();
     console.log('createOffer', offer);
-    const { currency } = this.props;
 
     this.showLoading();
     this.props.createOffer({
@@ -259,33 +267,26 @@ class Component extends React.Component {
     this.modalRef.close();
   }
 
-  handleCreateOfferSuccess = async (responseData) => {
-    const data = responseData.data;
-
-    const currency = data.currency;
+  handleCreateOfferSuccess = async (res) => {
+    const { data } = res;
+    const { currency, type, system_address, amount } = data;
 
     console.log('handleCreateOfferSuccess', data);
 
-    const wallet = MasterWallet.getWalletDefault(currency);
+    if (type === EXCHANGE_ACTION.SELL) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+      console.log('wallet', wallet);
 
-    console.log('data', data);
-    console.log('wallet', wallet);
+      if (currency === CRYPTO_CURRENCY.BTC) {
+        wallet.transfer(system_address, amount, 10).then(success => {
+          console.log('transfer', success);
+        });
+      } else if (currency === CRYPTO_CURRENCY.ETH) {
+        const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
-    if (currency === CRYPTO_CURRENCY.BTC) {
-      wallet.transfer(data.system_address, data.amount, 10).then(success => {
-        console.log('transfer', success);
-      });
-    } else if (currency === CRYPTO_CURRENCY.ETH) {
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
-
-      let result = null;
-      if (data.type === EXCHANGE_ACTION.BUY) {
-        result = await exchangeHandshake.initByCashOwner(wallet.address, data.amount, data.id);
-      } else {
-        result = await exchangeHandshake.initByCoinOwner(wallet.address, data.amount, data.id);
+        const result = await exchangeHandshake.initByCoinOwner(wallet.address, data.amount, data.id);
+        console.log('handleCreateOfferSuccess', result);
       }
-
-      console.log('handleCreateOfferSuccess', result);
     }
 
     this.hideLoading();
