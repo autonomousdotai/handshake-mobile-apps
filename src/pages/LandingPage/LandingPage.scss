@@ -307,6 +307,32 @@ body {
     width: 1px;
     background-color: #333;
     position: relative;
-    margin-bottom: -150px;
+    margin-bottom: -80px;
+  }
+  .second-page {
+    background: url("../../assets/images/icon/landingpage/shuriken_backgroud.svg") no-repeat;
+  }
+}
+
+@media (max-width: 767px) {
+  .root {
+    .content-header + div, p.content-header {
+       margin-top: rem-calc(20px);
+    }
+
+    .fillInForm {
+      .form-group {
+        margin-right: 0;
+        margin-left: 0;
+        label {
+          text-align: left;
+          padding-left: 0;
+        }
+      }
+      div[class="row"]:last-child {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
   }
 }

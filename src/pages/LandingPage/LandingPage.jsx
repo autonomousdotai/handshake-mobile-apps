@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import qs from 'qs';
 import { showAlert } from '@/reducers/app/action';
+import Helper from '@/services/Helper';
 
 import Alert from '@/components/core/presentation/Alert';
 import ninjaStarHtml from '../../assets/images/ninja-star/index.html';
@@ -193,9 +194,9 @@ class Handshake extends React.Component {
     return (
       <form className="fillInForm" onSubmit={() => this.submitFillForm()}>
         <div className="form-group row">
-          <label className="col-lg-4 required">Ninja alias</label>
+          <label className="col-lg-4 col-md-12 required">Ninja alias</label>
           <input
-            className="col-lg-6"
+            className="col-lg-6 col-md-12"
             name="alias"
             type="text"
             id="email-input"
@@ -204,9 +205,9 @@ class Handshake extends React.Component {
           />
         </div>
         <div className="form-group row">
-          <label className="col-lg-4 required">Telegram handle</label>
+          <label className="col-lg-4 col-md-12 required">Telegram handle</label>
           <input
-            className="col-lg-6"
+            className="col-lg-6 col-md-12"
             name="telegram"
             type="text"
             id="alias-input"
@@ -215,9 +216,9 @@ class Handshake extends React.Component {
           />
         </div>
         <div className="form-group row">
-          <label className="col-lg-4">Email</label>
+          <label className="col-lg-4 col-md-12">Email</label>
           <input
-            className="col-lg-6"
+            className="col-lg-6 col-md-12"
             name="email-fill"
             type="text"
             id="email-input"
@@ -226,9 +227,9 @@ class Handshake extends React.Component {
           />
         </div>
         <div className="form-group row">
-          <label className="col-lg-4">Phone number</label>
+          <label className="col-lg-4 col-md-12">Phone number</label>
           <input
-            className="col-lg-6"
+            className="col-lg-6 col-md-12"
             name="email"
             type="tel"
             id="email-input"
@@ -448,65 +449,70 @@ class Handshake extends React.Component {
           </div>
         </div>
 
-        <div className="container">
-          <div className="row">
+        <section className="second-page">
+          <div className="container">
+            <div className="row">
 
-            <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
-              <h3 className="h3-y mb48 text-center">Wanna join a clan... of Ninjas?</h3>
-              <div className="row">
-                <div className="col-lg-6 col-md-12 content-header">
-                  There’s some loot <br/> with your name on it.
-                </div>
-                <div className="col-lg-6 col-md-12">
-                  <p className="content-main mb30">All you gotta do is make some noise. The more you like us, the more we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us grow Ninja and.. </p>
-                  <a className="btn btn-y btn-lg" href="#fillInForm">Make us as cool as you are</a>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
-              <h3 className="h3-y text-center">Plus we’ll give you free stuff.</h3>
-              <div className="row">
-                <div className="col-lg-6 col-md-12">
-                  <div className="d-flex mb30">
-                    <img src={shurikenYIcon} className="icon-text"/>
-                    <div className="content-main">
-                      Shurikens <br/>
-                      -the multi <br/>
-                      -edged Ninja Token
-                    </div>
+              <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
+                <h3 className="h3-y mb48 text-center">Wanna join a clan... of Ninjas?</h3>
+                <div className="row">
+                  <div className="col-lg-6 col-md-12 content-header">
+                    There’s some loot <br/> with your name on it.
                   </div>
-
-                  <div className="d-flex">
-                    <img src={moneyBagIcon} className="icon-text"/>
-                    <div className="content-main">
-                      Goodies, <br/>
-                      merchandise, <br/>
-                      bags full of swag
-                    </div>
+                  <div className="col-lg-6 col-md-12">
+                    <p className="content-main mb30">All you gotta do is make some noise. The more you like us, the more
+                      we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us
+                      grow Ninja and.. </p>
+                    <a className="btn btn-y btn-lg" href="#fillInForm">Make us as cool as you are</a>
                   </div>
                 </div>
-                <div className="col-lg-6 col-md-12">
-                  <p className="content-header mb23">Wanna play a real part in one of the most exciting platforms on the crypto market?</p>
-                  <a className="btn btn-y btn-lg" href="#fillInForm">Hell yeah!</a>
+              </div>
+
+              <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
+                <h3 className="h3-y text-center">Plus we’ll give you free stuff.</h3>
+                <div className="row">
+                  <div className="col-lg-6 col-md-12">
+                    <div className="d-flex mb30">
+                      <img src={shurikenYIcon} className="icon-text"/>
+                      <div className="content-main">
+                        Shurikens <br/>
+                        -the multi <br/>
+                        -edged Ninja Token
+                      </div>
+                    </div>
+
+                    <div className="d-flex">
+                      <img src={moneyBagIcon} className="icon-text"/>
+                      <div className="content-main">
+                        Goodies, <br/>
+                        merchandise, <br/>
+                        bags full of swag
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-lg-6 col-md-12">
+                    <p className="content-header mb23">Wanna play a real part in one of the most exciting platforms on
+                      the crypto market?</p>
+                    <a className="btn btn-y btn-lg" href="#fillInForm">Hell yeah!</a>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="col-lg-12 text-center mb80">
-              <div className="line-ninja">
-                <div className="ico-ninja wow animated fadeInUp" />
-                <div className="line-" />
+              <div className="col-lg-12 text-center mb80">
+                <div className="line-ninja">
+                  <div className="ico-ninja wow animated fadeInUp"/>
+                  <div className="line-"/>
+                </div>
               </div>
-            </div>
 
-            <div className="col-lg-12 wow animated fadeInUp mw810" id="fillInForm">
-              <h3 className="h3-gray mb30 text-center">Please fill in this form</h3>
-              {this.renderFillInForm()}
-            </div>
+              <div className="col-lg-12 wow animated fadeInUp mw810" id="fillInForm">
+                <h3 className="h3-gray mb30 text-center">Please fill in this form</h3>
+                {this.renderFillInForm()}
+              </div>
 
+            </div>
           </div>
-        </div>
+        </section>
       </div>
     );
   }
