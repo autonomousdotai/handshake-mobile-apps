@@ -136,6 +136,7 @@ body {
     position: absolute;
     top: 60px;
     display: flex;
+    flex-wrap: wrap;
   }
   .icon-text {
     margin-right: rem-calc(23px);
@@ -177,7 +178,7 @@ body {
     border-color: #FFD402;
   }
   .cnt-w {
-    width: 400px;
+    max-width: 400px;
   }
   .line-ninja {
     position: relative;
