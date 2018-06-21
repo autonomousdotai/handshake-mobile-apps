@@ -9,12 +9,15 @@ import axios from 'axios';
 import qs from 'qs';
 import { showAlert } from '@/reducers/app/action';
 
-import ninjaIcon from '@/assets/images/icon/landingpage/ninja.svg';
-import telegramAppIcon from '@/assets/images/icon/landingpage/telegram_app.svg';
-import blockchainDescriptionImage from '@/assets/images/icon/landingpage/chart-discount-time.svg';
-import shakeNinjaText from '@/assets/images/icon/landingpage/shakeninjatext.svg';
-import arrowsRightIcon from '@/assets/images/icon/landingpage/arrows_long_right.svg';
 import Alert from '@/components/core/presentation/Alert';
+import ninjaStarHtml from '../../assets/images/ninja-star/index.html';
+import lineIcon from '../../assets/images/icon/landingpage/line-.svg';
+import logoNinjaIcon from '../../assets/images/icon/landingpage/logo-ninja.svg';
+import telegramIcon from '../../assets/images/icon/landingpage/ico-telegram.svg';
+import petNinja2Icon from '../../assets/images/icon/landingpage/pet-ninja2.png';
+import ninjaIcon from '../../assets/images/icon/landingpage/ninja_icon.png';
+import moneyBagIcon from '../../assets/images/icon/landingpage/money-bag-icon.svg';
+import shurikenYIcon from '../../assets/images/icon/landingpage/shuriken-y-icon.svg';
 
 // style
 import './LandingPage.scss';
@@ -30,10 +33,12 @@ class Handshake extends React.Component {
     this.renderInputForm = this.renderInputForm.bind(this);
     this.showAlertMessage = this.showAlertMessage.bind(this);
     this.isEmail = this.isEmail.bind(this);
+    this.renderFillInForm = this.renderFillInForm.bind(this);
   }
 
   componentDidMount() {
-    if (window.addEventListener) { window.addEventListener('load', this.injectFontPage, false); } else if (window.attachEvent) { window.attachEvent('onload', this.injectFontPage); } else window.onload = this.injectFontPage;
+    this.injectFontPage();
+    // if (window.addEventListener) { window.addEventListener('load', this.injectFontPage, false); } else if (window.attachEvent) { window.attachEvent('onload', this.injectFontPage); } else window.onload = this.injectFontPage;
   }
 
   componentWillReceiveProps() {
@@ -96,19 +101,26 @@ class Handshake extends React.Component {
   }
 
   injectFontPage() {
-    if (!document.getElementById('anonymous-pro')) {
-      const PoppinsElement = document.createElement('link');
-      PoppinsElement.id = 'anonymous-pro';
-      PoppinsElement.href = 'https://use.typekit.net/qow3iea.css';
-      PoppinsElement.rel = 'stylesheet';
-      document.body.appendChild(PoppinsElement);
+    console.log("here");
+    // add animation css
+    if (!document.getElementById('daneden-animate')) {
+      const danedenAnimate = document.createElement('link');
+      danedenAnimate.id = 'daneden-animate';
+      danedenAnimate.href = 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css';
+      danedenAnimate.rel = 'stylesheet';
+      document.body.appendChild(danedenAnimate);
     }
-    if (!document.getElementById('azo-sans')) {
-      const AzoSansElement = document.createElement('link');
-      AzoSansElement.id = 'azo-sans';
-      AzoSansElement.href = 'https://use.typekit.net/nfr2whb.css';
-      AzoSansElement.rel = 'stylesheet';
-      document.body.appendChild(AzoSansElement);
+
+    // add wowJS
+    if (!document.getElementById('wowjs')) {
+      const wowJS = document.createElement('script');
+      wowJS.id = 'wowjs';
+      wowJS.src = 'https://wowjs.uk/dist/wow.min.js';
+      document.body.appendChild(wowJS);
+      setTimeout(() => {
+        new WOW().init();
+        this.forceUpdate();
+      }, 2000);
     }
   }
 
@@ -130,103 +142,302 @@ class Handshake extends React.Component {
     );
   }
 
+  renderFillInForm() {
+    return (
+      <form className="fillInForm" onSubmit={() => {}}>
+        <div className="form-group">
+          <label>Ninja alias</label>
+          <input
+            className="email"
+            name="email"
+            type="text"
+            id="email-input"
+            // placeholder="Enter your email"
+            // ref={(input) => {
+            //   this[refName] = input;
+            //   return null;
+            // }}
+          />
+        </div>
+        <div className="form-group">
+          <label>Telegram handle</label>
+          <input
+            className="email"
+            name="email"
+            type="text"
+            id="alias-input"
+            // placeholder="Enter your email"
+            // ref={(input) => {
+            //   this[refName] = input;
+            //   return null;
+            // }}
+          />
+        </div>
+        <div className="form-group">
+          <label>Email</label>
+          <input
+            className="email"
+            name="email"
+            type="text"
+            id="email-input"
+            placeholder="Enter your email"
+            // ref={(input) => {
+            //   this[refName] = input;
+            //   return null;
+            // }}
+          />
+        </div>
+        <div className="form-group">
+          <label>Please fill in this form</label>
+          <input
+            className="email"
+            name="email"
+            type="text"
+            id="email-input"
+            placeholder="Enter your email"
+            // ref={(input) => {
+            //   this[refName] = input;
+            //   return null;
+            // }}
+          />
+        </div>
+
+        <button className="btnSubmit" onClick={() => {}}>
+          <span>Yes, I'm in</span>
+        </button>
+      </form>
+    );
+  }
+
+  // render() {
+  //   return (
+  //     <div className="root">
+  //       <Alert />
+  //       <div className="banner">
+  //         <div className="container mainContent">
+  //           <div className="row rowEqHeight">
+  //             <div className="col-lg-6 col-md-12 d-none d-lg-block">
+  //               {/* <img src={appScreenIcon} alt="app screen" className={`img-fluid ${s.appScreen}`} /> */}
+  //               <div className="appScreen">
+  //                 {/* <video src={appScreenVideo} autoPlay="autoplay" loop="loop" muted="muted" className={s.appScreenVideo} /> */}
+  //               </div>
+  //             </div>
+  //             <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+  //               <div className="headerLandingpage">
+  //                 <img src={ninjaIcon} alt="ninja icon" />
+  //                 <div>
+  //                   <img src={shakeNinjaText} alt="ninja text icon" />
+  //                   <p>THE ANONYMOUS EXCHANGE OF ANYTHING hh</p>
+  //                 </div>
+  //               </div>
+  //               <h1>Meet <span className="blue">Shuriken</span>, the native coin of the Ninja network.</h1>
+  //               <p className="subTitle">
+  //                 You can use Shuriken to pay for any fees on the Ninja network such as betting fees, exchange fees, and market creation fees.
+  //                 <br />
+  //                 <br />
+  //                 Paying with Shuriken allows you to slash fees and unlock the best rates.
+  //               </p>
+  //               <a
+  //                 className="readTheWhitePaper"
+  //                 href="https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8"
+  //                 target="_blank"
+  //                 rel="noopener noreferrer"
+  //               >
+  //                 <span>Read the whitepaper</span>
+  //                 <img src={arrowsRightIcon} alt="arrow right icon" />
+  //               </a>
+  //               <p className="telegramDescription">
+  //                 Coming soon.  To receive updates on token sales and airdrops:
+  //               </p>
+  //               <a href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww" target="_blank" rel="noopener noreferrer" className="btnTelegram">
+  //                 <img src={telegramAppIcon} alt="telegram app icon" />
+  //                 <span>Join the conversation on telegram</span>
+  //               </a>
+  //               <div className="or text-center">- or -</div>
+  //               {
+  //                 this.renderInputForm({
+  //                   id: 'email-1',
+  //                   onSubmit: (e) => {
+  //                     if (e) e.preventDefault();
+  //                     this.submitEmail(inputRefOne);
+  //                   },
+  //                   refName: inputRefOne,
+  //                 })
+  //               }
+  //             </div>
+  //           </div>
+  //         </div>
+  //       </div>
+  //       <div className="container blockChainContent">
+  //         <div className="row">
+  //           <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+  //             <h3>Slash fees.</h3>
+  //             <p className="text-left">Early adopters of Shuriken will benefit from large discounts on all the network fees. 2018 users will
+  //               receive a <span className="green">100% discount and play completely free</span>. Preferred pricing will end in 2023. Shuriken is an
+  //               ERC20 token and tradable on the blockchain. There will only be 100 million Shurikens. Ninja’s oath.
+  //             </p>
+  //           </div>
+  //           <div className="col-lg-8 col-md-12 col-sm-12 col-xs-12">
+  //             <img src={blockchainDescriptionImage} alt="block chain description" className="img-fluid" />
+  //           </div>
+  //         </div>
+  //       </div>
+  //       <div className="container text-center countdownBlock">
+  //         <div className="row">
+  //           <div className="col-md-12 col-sm-12 col-xs-12">
+  //             <h3>Get Shuriken. Play for free.</h3>
+  //             <a
+  //               href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
+  //               target="_blank"
+  //               rel="noopener noreferrer"
+  //               className="btnTelegram"
+  //             >
+  //               <img src={telegramAppIcon} alt="telegram app icon" />
+  //               <span>Join Telegram channel</span>
+  //             </a>
+  //             {
+  //               this.renderInputForm({
+  //                 id: 'email-2',
+  //                 onSubmit: (e) => {
+  //                   if (e) e.preventDefault();
+  //                   this.submitEmail(inputRefTwo);
+  //                 },
+  //                 refName: inputRefTwo,
+  //               })
+  //             }
+  //           </div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
   render() {
+    if(typeof WOW === 'undefined') return <div/>;
     return (
       <div className="root">
         <Alert />
-        <div className="banner">
-          <div className="container mainContent">
-            <div className="row rowEqHeight">
-              <div className="col-lg-6 col-md-12 d-none d-lg-block">
-                {/* <img src={appScreenIcon} alt="app screen" className={`img-fluid ${s.appScreen}`} /> */}
-                <div className="appScreen">
-                  {/* <video src={appScreenVideo} autoPlay="autoplay" loop="loop" muted="muted" className={s.appScreenVideo} /> */}
-                </div>
+        <section className="first-page">
+          <div className="content-first">
+            <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
+          </div>
+          <div className="container">
+            <div className="row">
+              <div className="img-screen wow animated slideInLeft col-lg-6 text-right" data-wow-delay="6.6s">
+                <img height="500" src={petNinja2Icon}/>
               </div>
-              <div className="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                <div className="headerLandingpage">
-                  <img src={ninjaIcon} alt="ninja icon" />
-                  <div>
-                    <img src={shakeNinjaText} alt="ninja text icon" />
-                    <p>THE ANONYMOUS EXCHANGE OF ANYTHING</p>
+              <div className="col-lg-6 wow animated slideInLeft" data-wow-delay="6.7s">
+                <div className="cnt-w ">
+                  <div className="logo wow animated fadeInUp" data-wow-delay="0.2s">
+                    <img height="45" src={logoNinjaIcon}/>
+                  </div>
+                  <h2 className="text-up text-y mt20 wow animated fadeInUp" data-wow-delay="1.5s">Our token is the
+                    Shuriken (SHURI). <br/>
+                    No, there is no ICO.</h2>
+                  <div className="mt20  wow animated fadeInUp" data-wow-delay="3s">
+                    <p className="logo">Use it to slash fees. Increase your likelihood of matching bets. Unlock first
+                      access to bounties, bonuses and new features.
+                    </p>
+                  </div>
+                  <div className="mt20  wow animated fadeInUp" data-wow-delay="4s">
+                    <p className="logo">
+                      Our <a className="text-link"
+                             href="https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8"
+                             target="_blank"
+                             rel="noopener noreferrer"
+                    >
+                      whitepaper
+                    </a> wasn’t written to confuse.
+                      <br/>
+                      Our <a className="text-link" href="#">telegram</a> discusses the actual working product</p>
+                  </div>
+                  <div className=" wow animated fadeInUp" data-wow-delay="5s">
+                    <p className="logo wow animated fadeInUp mt20">Coming soon. To receive updates on token sales and
+                      airdrops:</p>
+                    <a className="btn-lg btn-y mt10 wow animated fadeInUp btn-block" href="#">
+                      <img height="25" src={telegramIcon}/> Join the conversation on telegram
+                    </a>
+                  </div>
+
+                  <div className=" wow animated fadeInUp mt20" data-wow-delay="6s">
+                    <p>We’ll send you an airdrop invitation.</p>
+
+                    <div className="input-group email-frm">
+                      <input type="text" className="form-control" placeholder="Enter your email"/>
+                      <span className="input-group-btn">
+                          <button className="btn btn-y btn-lg" type="button">I'm in</button>
+                        </span>
+                    </div>
                   </div>
                 </div>
-                <h1>Meet <span className="blue">Shuriken</span>, the native coin of the Ninja network.</h1>
-                <p className="subTitle">
-                  You can use Shuriken to pay for any fees on the Ninja network such as betting fees, exchange fees, and market creation fees.
-                  <br />
-                  <br />
-                  Paying with Shuriken allows you to slash fees and unlock the best rates.
-                </p>
-                <a
-                  className="readTheWhitePaper"
-                  href="https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Read the whitepaper</span>
-                  <img src={arrowsRightIcon} alt="arrow right icon" />
-                </a>
-                <p className="telegramDescription">
-                  Coming soon.  To receive updates on token sales and airdrops:
-                </p>
-                <a href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww" target="_blank" rel="noopener noreferrer" className="btnTelegram">
-                  <img src={telegramAppIcon} alt="telegram app icon" />
-                  <span>Join the conversation on telegram</span>
-                </a>
-                <div className="or text-center">- or -</div>
-                {
-                  this.renderInputForm({
-                    id: 'email-1',
-                    onSubmit: (e) => {
-                      if (e) e.preventDefault();
-                      this.submitEmail(inputRefOne);
-                    },
-                    refName: inputRefOne,
-                  })
-                }
               </div>
             </div>
           </div>
-        </div>
-        <div className="container blockChainContent">
+        </section>
+
+        <div className="container">
           <div className="row">
-            <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-              <h3>Slash fees.</h3>
-              <p className="text-left">Early adopters of Shuriken will benefit from large discounts on all the network fees. 2018 users will
-                receive a <span className="green">100% discount and play completely free</span>. Preferred pricing will end in 2023. Shuriken is an
-                ERC20 token and tradable on the blockchain. There will only be 100 million Shurikens. Ninja’s oath.
-              </p>
+            <div className="col-lg-12 text-center">
+              <div className="line-ninja">
+                <div className="ico-ninja wow animated fadeInUp" />
+                <div className="line-" />
+              </div>
             </div>
-            <div className="col-lg-8 col-md-12 col-sm-12 col-xs-12">
-              <img src={blockchainDescriptionImage} alt="block chain description" className="img-fluid" />
+
+            <div className="col-lg-12 wow animated fadeInUp text-center mw810">
+              <h3 className="h3-y">Wanna join a clan... of Ninjas?</h3>
+              <div className="row">
+                <div className="col-lg-6 col-md-12 content-header">
+                  There’s some loot with your name on it.
+                </div>
+                <div className="col-lg-6 col-md-12">
+                  <p className="content-main">All you gotta do is make some noise. The more you like us, the more we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us grow Ninja and.. </p>
+                  <buton className="btn btn-y btn-lg">Make us as cool as you are</buton>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="container text-center countdownBlock">
-          <div className="row">
-            <div className="col-md-12 col-sm-12 col-xs-12">
-              <h3>Get Shuriken. Play for free.</h3>
-              <a
-                href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btnTelegram"
-              >
-                <img src={telegramAppIcon} alt="telegram app icon" />
-                <span>Join Telegram channel</span>
-              </a>
-              {
-                this.renderInputForm({
-                  id: 'email-2',
-                  onSubmit: (e) => {
-                    if (e) e.preventDefault();
-                    this.submitEmail(inputRefTwo);
-                  },
-                  refName: inputRefTwo,
-                })
-              }
+
+            <div className="col-lg-12 wow animated fadeInUp text-center mw810">
+              <h3 className="h3-y">Plus we’ll give you free stuff.</h3>
+              <div className="row">
+                <div className="col-lg-6 col-md-12">
+                  <div className="d-flex mb30">
+                    <img src={shurikenYIcon} className="icon-text"/>
+                    <div className="content-main">
+                      Shurikens <br/>
+                      -the multi <br/>
+                      -edged Ninja Token
+                    </div>
+                  </div>
+
+                  <div className="d-flex">
+                    <img src={moneyBagIcon} className="icon-text"/>
+                    <div className="content-main">
+                      Goodies, <br/>
+                      merchandise, <br/>
+                      bags full of swag
+                    </div>
+                  </div>
+                </div>
+                <div className="col-lg-6 col-md-12">
+                  <p className="content-header">Wanna play a real part in one of the most exciting platforms on the crypto market?</p>
+                  <buton className="btn btn-y btn-lg">Hell yeah!</buton>
+                </div>
+              </div>
             </div>
+
+            <div className="col-lg-12 text-center">
+              <div className="line-ninja">
+                <div className="ico-ninja wow animated fadeInUp" />
+                <div className="line-" />
+              </div>
+            </div>
+
+            <div className="col-lg-12 wow animated fadeInUp text-center mw810">
+              <h3 className="h3-gray">Please fill in this form</h3>
+              {this.renderFillInForm()}
+            </div>
+
           </div>
         </div>
       </div>
