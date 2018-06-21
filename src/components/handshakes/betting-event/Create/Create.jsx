@@ -181,7 +181,16 @@ class CreateBettingEvent extends React.Component {
 
   resetForm=() => {
     this.setState({
+      selectedMatch: '',
+      values: {},
+      closingTime: '',
+      resolutionSource: '',
+      reportingTime: '',
+      disputeTime: '',
+      creatorFee: null,
       eventType: '',
+      messageType: null,
+      message: '',
     });
   }
 
