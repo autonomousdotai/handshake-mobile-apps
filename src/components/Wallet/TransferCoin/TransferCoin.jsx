@@ -46,7 +46,7 @@ class Transfer extends React.Component {
       qrCodeOpen: false,
       delay: 300,
       walletsData: false,
-    }    
+    }
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -73,20 +73,20 @@ class Transfer extends React.Component {
     this.props.hideLoading();
   }
 
-  componentDidMount() {    
+  componentDidMount() {
     // clear form:
     this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
     if (this.props.amount){
       this.setState({inputSendAmountValue: this.props.amount});
       this.props.rfChange(nameFormSendWallet, 'amount', this.props.amount);
     }
-      
+
     if (this.props.toAddress)
       {
         this.setState({inputAddressAmountValue: this.props.toAddress});
         this.props.rfChange(nameFormSendWallet, 'to_address', this.props.toAddress);
       }
-    
+
       this.getWalletDefault();
   }
 
@@ -95,7 +95,7 @@ class Transfer extends React.Component {
   }
 
   componentWillUnmount() {
-    
+
   }
 
   showLoading = () => {
@@ -108,15 +108,15 @@ class Transfer extends React.Component {
 
 
   onFinish = () => {
-    
+
     const { onFinish } = this.props;
-    
+
 
     if (onFinish) {
       let result = {"toAddress": this.state.inputAddressAmountValue, "fromWallet": this.state.walletSelected, "amount": this.state.inputSendAmountValue}
       onFinish(result);
     } else {
-      
+
     }
   }
 
@@ -130,7 +130,7 @@ class Transfer extends React.Component {
     if (!wallets){
       wallets = MasterWallet.getMasterWallet();
     }
-    
+
     if (coinName){
         walletDefault = MasterWallet.getWalletDefault(coinName);
     }
@@ -146,19 +146,19 @@ class Transfer extends React.Component {
         if (process.env.isLive){
           wallet.text = wallet.getShortAddress() + " (" + wallet.className + " " + wallet.name + ")";
         }
-        wallet.id = wallet.address + "-" + wallet.getNetworkName();        
-        
+        wallet.id = wallet.address + "-" + wallet.getNetworkName();
+
       });
     }
 
     // set name for walletDefault:
     MasterWallet.log(walletDefault, "walletDefault");
-    if (walletDefault){      
-      walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.name + "-" + walletDefault.getNetworkName() + ")";         
+    if (walletDefault){
+      walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.name + "-" + walletDefault.getNetworkName() + ")";
       if (process.env.isLive){
         walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
-      walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName();   
+      walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName();
 
       // get balance for first item + update to local store:
       walletDefault.getBalance().then(result => {
@@ -167,17 +167,17 @@ class Transfer extends React.Component {
         MasterWallet.UpdateBalanceItem(walletDefault);
       });
 
-    }    
+    }
 
     this.setState({wallets: wallets, walletDefault: walletDefault, walletSelected: walletDefault});
 
   }
 
-  sendCoin = () => {    
-      this.modalConfirmTranferRef.open();    
+  sendCoin = () => {
+      this.modalConfirmTranferRef.open();
   }
 
-  invalidateTransferCoins = (value) => {    
+  invalidateTransferCoins = (value) => {
     if (!this.state.walletSelected) return {};
     let errors = {};
     if (this.state.walletSelected){
@@ -208,7 +208,7 @@ submitSendCoin=()=>{
   this.setState({isRestoreLoading: true});
   this.modalConfirmTranferRef.close();
     this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue).then(success => {
-        
+
         this.setState({isRestoreLoading: false});
         if (success.hasOwnProperty('status')){
           if (success.status == 1){
@@ -225,7 +225,7 @@ submitSendCoin=()=>{
 }
 
 onItemSelectedWallet = (item) =>{
-  
+
   // I don't know why the item is not object class ?????
   let wallet = MasterWallet.convertObject(item);
 
@@ -235,7 +235,7 @@ onItemSelectedWallet = (item) =>{
 
   // this.props.rfChange(nameFormSendWallet, 'amount', this.state.inputSendAmountValue);
   // this.props.rfChange(nameFormSendWallet, 'to_address', this.state.inputAddressAmountValue);
-  
+
   wallet.getBalance().then(result => {
     wallet.balance = result;
     this.setState({walletSelected: wallet});
@@ -288,13 +288,13 @@ renderScanQRCode = () => (
   </Modal>
 )
 
-  
+
   render() {
 
-    const {formAddress, toAddress, amount, coinName } = this.props;  
-    
-    return ( 
-      <div>                       
+    const {formAddress, toAddress, amount, coinName } = this.props;
+
+    return (
+      <div>
           {/* Dialog confirm transfer coin */}
           <ModalDialog title="Confirmation" onRef={modal => this.modalConfirmTranferRef = modal}>
           <div className="bodyConfirm"><span>Are you sure you want to transfer out {this.state.inputSendAmountValue} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
@@ -322,14 +322,14 @@ renderScanQRCode = () => (
                     value={this.state.inputAddressAmountValue}
                     onChange={evt => this.updateSendAddressValue(evt)}
                     validate={[required]}
-                  />          
+                  />
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeWhite} /> : ""}
             </div>
-            <p className="labelText">Amount</p>          
+            <p className="labelText">Amount</p>
             <div className="div-amount">
               <Field
                     name="amount"
-                    type={isIOs ? "number" : "tel"}
+                    type="number"
                     className="form-control"
                     component={fieldInput}
                     value={this.state.inputSendAmountValue}
@@ -342,9 +342,9 @@ renderScanQRCode = () => (
               </div>
 
 
-            { this.state.walletDefault ? 
+            { this.state.walletDefault ?
               <div className ="dropdown-wallet-tranfer">
-                <p className="labelText">From wallet</p>            
+                <p className="labelText">From wallet</p>
                 <Field
                   name="walletSelected"
                   component={fieldDropdown}
@@ -356,7 +356,7 @@ renderScanQRCode = () => (
                       this.onItemSelectedWallet(item);
                     }
                     }
-                  />                  
+                  />
 
                   <label className='label-balance'>Wallet balance: { this.state.walletSelected ? StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name) : ""}</label>
               </div>
@@ -372,16 +372,16 @@ renderScanQRCode = () => (
 }
 
 const mapStateToProps = (state) => ({
-  
+
 });
 
-const mapDispatchToProps = (dispatch) => ({  
+const mapDispatchToProps = (dispatch) => ({
   rfChange: bindActionCreators(change, dispatch),
   showAlert: bindActionCreators(showAlert, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
   clearFields: bindActionCreators(clearFields, dispatch),
-  
+
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Transfer));

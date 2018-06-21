@@ -251,7 +251,7 @@ class Wallet extends React.Component {
   checkAirDrop(){
     const querystring = window.location.search.replace('?', '');
     this.querystringParsed = qs.parse(querystring);
-    const { ref } = this.querystringParsed;    
+    const { ref } = this.querystringParsed;
     if (ref) this.modalRefersRef.open();
   }
 
@@ -333,7 +333,7 @@ class Wallet extends React.Component {
           this.modalShareAddressRef.open();
         }
       })
-    // now hide buy coin:    
+    // now hide buy coin:
     // if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet){
     //   obj.push({
     //     title: 'Buy coins',
@@ -824,15 +824,9 @@ class Wallet extends React.Component {
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeBlack} /> : ""}
             </div>
             <p className="labelText">{ this.state.walletSelected ? StringHelper.format("Amount ({0})", this.state.walletSelected.name) : "Amount "}</p>
-              {/* <Input name="amount" type={isIOs ? "number" : "tel"} required
-                value={this.state.inputSendAmountValue}
-                placeholder="0.0"
-                onChange={evt => this.updateSendAmountValue(evt)}
-                /> */}
-
               <Field
                     name="amount"
-                    type={isIOs ? "number" : "tel"}
+                    type="number"
                     className="form-control"
                     component={fieldInput}
                     value={this.state.inputSendAmountValue}
@@ -943,7 +937,7 @@ class Wallet extends React.Component {
                   <InputGroupAddon addonType="prepend">Amount</InputGroupAddon>
                   <Input2
                   placeholder="Specify amount ..."
-                  type={isIOs ? "number" : "tel"}
+                  type="number"
                   value={this.state.inputSendAmountValue} onChange={evt => this.updateSendAmountValue(evt)}/>
                   <InputGroupAddon addonType="append">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ""}</InputGroupAddon>
                 </InputGroup>
@@ -1016,26 +1010,26 @@ class Wallet extends React.Component {
           </Modal>
 
           {/* Render list wallet: */}
-          
-          <Row className="list">           
-            <Header 
-              title={!process.env.isLive ? "Mainnet wallets" : ""}hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />            
+
+          <Row className="list">
+            <Header
+              title={!process.env.isLive ? "Mainnet wallets" : ""}hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />
             </Row>
-          
+
           <Row className="list">
             {this.listMainWalletBalance}
           </Row>
-          {!process.env.isLive ? 
+          {!process.env.isLive ?
           <Row className="list">
             <Header title="Testnet wallets" hasLink linkTitle="Request free ETH" onLinkClick={this.getETHFree} />
           </Row>
           : ''}
-          {!process.env.isLive ? 
+          {!process.env.isLive ?
           <Row className="list">
             {this.listTestWalletBalance}
           </Row>
           : ''}
-          
+
           {/* <Row className="list">
             <Header title="Reward wallets" hasLink={false} />
           </Row>
