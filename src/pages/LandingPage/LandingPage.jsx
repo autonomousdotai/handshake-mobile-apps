@@ -86,7 +86,7 @@ class Handshake extends React.Component {
     // ga('send', 'event', 'ShakeNinja', 'submit register email');
     const backOrder = axios({
       method: 'post',
-      url: `https://www.autonomous.ai/api-v2/order-api/order/back-order/${this.productId}?${qs.stringify(params)}`,
+      url: `https://dev.autonomous.ai/api-v2/order-api/order/back-order/${this.productId}?${qs.stringify(params)}`,
       data: {},
     });
     backOrder.then((backOrderResult) => {
@@ -365,10 +365,21 @@ class Handshake extends React.Component {
                     <p>We’ll send you an airdrop invitation.</p>
 
                     <div className="input-group email-frm">
-                      <input type="text" className="form-control" placeholder="Enter your email"/>
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Enter your email"
+                        ref={input => this[inputRefOne] = input}
+                      />
                       <span className="input-group-btn">
-                          <button className="btn btn-y btn-lg" type="button">I'm in</button>
-                        </span>
+                        <button
+                          className="btn btn-y btn-lg"
+                          type="button"
+                          onClick={() => {this.submitEmail(inputRefOne)}}
+                        >
+                          I'm in
+                        </button>
+                      </span>
                     </div>
                   </div>
                 </div>
