@@ -108,7 +108,7 @@ class Admin extends React.Component {
     const data = new FormData(event.target);
 
     const email = data.get('email');
-    const password = md5(`${data.get('password')}Autonomous`);
+    const password = data.get('password');
 
     const auth = $http({
       url: `${BASE_API.BASE_URL}/cryptosign/auth`,
@@ -250,8 +250,8 @@ class Admin extends React.Component {
 
           {this.state.disable && <div><br /><Alert color="success">
             Match details submitted. Please wait.
-                                            </Alert>
-                                 </div>}
+          </Alert>
+          </div>}
           <div>
             <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
               <ModalHeader toggle={this.toggle}>Update Match Data</ModalHeader>
@@ -263,7 +263,7 @@ class Admin extends React.Component {
                 <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br />
                 {this.state.errorMessage && <Alert color="danger">
                     {this.state.errorMessage}
-                                            </Alert>}
+                </Alert>}
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={this.onSubmit}>Confirm</Button>{' '}
