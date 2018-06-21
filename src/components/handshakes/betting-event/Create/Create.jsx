@@ -19,7 +19,7 @@ import { __asyncValues } from 'tslib';
 import { loadMatches, addMatch } from '@/reducers/betting/action';
 import Dropdown from '@/components/core/controls/Dropdown';
 import { Alert } from 'reactstrap';
-import { HANDSHAKE_ID, API_URL, APP } from '@/constants';
+import { API_URL, APP,URL } from '@/constants';
 import history from '@/services/history';
 import { showAlert } from '@/reducers/app/action';
 
