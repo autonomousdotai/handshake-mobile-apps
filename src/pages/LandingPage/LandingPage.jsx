@@ -189,7 +189,7 @@ class Handshake extends React.Component {
     return (
       <form className="fillInForm" onSubmit={() => this.submitFillForm()}>
         <div className="form-group row">
-          <label className="col-lg-4">Ninja alias</label>
+          <label className="col-lg-4 required">Ninja alias</label>
           <input
             className="col-lg-6"
             name="alias"
@@ -200,7 +200,7 @@ class Handshake extends React.Component {
           />
         </div>
         <div className="form-group row">
-          <label className="col-lg-4">Telegram handle</label>
+          <label className="col-lg-4 required">Telegram handle</label>
           <input
             className="col-lg-6"
             name="telegram"
@@ -441,7 +441,7 @@ class Handshake extends React.Component {
               <h3 className="h3-y mb48 text-center">Wanna join a clan... of Ninjas?</h3>
               <div className="row">
                 <div className="col-lg-6 col-md-12 content-header">
-                  There’s some loot with your name on it.
+                  There’s some loot <br/> with your name on it.
                 </div>
                 <div className="col-lg-6 col-md-12">
                   <p className="content-main mb30">All you gotta do is make some noise. The more you like us, the more we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us grow Ninja and.. </p>
@@ -487,7 +487,7 @@ class Handshake extends React.Component {
             </div>
 
             <div className="col-lg-12 wow animated fadeInUp mw810" id="fillInForm">
-              <h3 className="h3-gray mb60 text-center">Please fill in this form</h3>
+              <h3 className="h3-gray mb30 text-center">Please fill in this form</h3>
               {this.renderFillInForm()}
             </div>
 

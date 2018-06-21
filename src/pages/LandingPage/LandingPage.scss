@@ -5,6 +5,7 @@ body {
 }
 
 .root {
+  font-family: motiva-sans, sans-serif !important;
   padding-bottom: rem-calc(50px);
   .mt0 {
     margin-top: 0;
@@ -83,7 +84,7 @@ body {
   }
 
   .mw810 {
-    max-width: rem-calc(810px);
+    max-width: 37rem;
     margin: 0 auto;
   }
 
@@ -146,11 +147,13 @@ body {
     letter-spacing: 0;
     line-height: 38px;
     color: #9B9B9B;
+    font-family: motiva-sans, sans-serif !important;
   }
   p {
     color: #9B9B9B;
     font-size: 14px;
     line-height: 20px;
+    font-family: motiva-sans, sans-serif !important;
   }
   a.text-link {
     color: #ababab;
@@ -163,8 +166,13 @@ body {
   }
   .email-frm input {
     display: inline-block;
-    height: 43px;
+    height: 46px;
     font-size: 16px;
+  }
+  .email-frm {
+    button {
+      border-radius: 0 4px 4px 0;
+    }
   }
   .form-control:focus {
     box-shadow: none;
@@ -196,40 +204,49 @@ body {
   }
 
   .h3-y {
-    font-size: rem-calc(34px);
+    font-size: rem-calc(30px);
     color: #FFD402;
     letter-spacing: 0;
     margin-bottom: rem-calc(40px);
+    text-transform: uppercase;
+    font-weight: $heavy;
   }
 
   .h3-gray {
-    font-size: rem-calc(34px);
+    font-size: rem-calc(30px);
     color: #4A4A4A;
     letter-spacing: 0;
+    font-weight: $heavy;
   }
 
   .content-header {
-    font-size: rem-calc(32px);
-    color: #9B9B9B;
+    font-size: rem-calc(20px);
+    color: #575757;
     letter-spacing: 0;
     font-weight: $heavy;
-    line-height: rem-calc(40px);
+    line-height: 1.4;
   }
 
   .content-main {
-    font-size: rem-calc(20px);
+    font-size: rem-calc(14px);
     color: #9B9B9B;
     letter-spacing: 0;
-    line-height: rem-calc(30px);
+    line-height: rem-calc(20px);
     font-weight: $normal;
   }
 
   .fillInForm {
+    button {
+      margin-top: rem-calc(10px);
+    }
     .form-group {
+      align-items: center;
       label {
-        font-size: rem-calc(20px);
+        font-size: rem-calc(14px);
         color: #9B9B9B;
         letter-spacing: 0;
+        margin-bottom: 0;
+        text-align: right;
          //width: 30%;
       }
       label + input {
@@ -238,7 +255,17 @@ body {
         color: white;
         //width: 50%;
         background: inherit;
-        height: rem-calc(50px);
+        height: rem-calc(36px);
+        padding-left: rem-calc(5px);
+        &:focus {
+          outline: none;
+        }
+      }
+      .required {
+        &::after {
+          content: "*";
+          color: #FF1B43;
+        }
       }
     }
   }
