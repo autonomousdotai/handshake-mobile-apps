@@ -34,6 +34,7 @@ class Handshake extends React.Component {
     this.showAlertMessage = this.showAlertMessage.bind(this);
     this.isEmail = this.isEmail.bind(this);
     this.renderFillInForm = this.renderFillInForm.bind(this);
+    this.submitFillForm = this.submitFillForm.bind(this);
   }
 
   componentDidMount() {
@@ -100,6 +101,47 @@ class Handshake extends React.Component {
     });
   }
 
+  submitFillForm() {
+    const alias = this.aliasRef.value.trim();
+    const telegram = this.telegramRef.value.trim();
+    const email = this.emailFillRef.value.trim();
+    const phone = this.phoneRef.value.trim();
+
+    // validation email
+    if (!alias || !telegram) {
+      this.showAlertMessage({ message: 'Ninja alias or Telegram handle are empty!' });
+      return;
+    }
+
+    if (email && !this.isEmail(email)) {
+      this.showAlertMessage({ message: 'Email is invalid.' });
+      return;
+    }
+
+    // const ref = Helper.getValueParamURLQueryByName('ref') || '';
+    const params = {
+      ref: '',
+      email: `${alias};${telegram};${email};${phone}`,
+      has_options: 1,
+    };
+
+    // ga('send', 'event', 'ShakeNinja', 'submit register email');
+    const backOrder = axios({
+      method: 'post',
+      url: `https://dev.autonomous.ai/api-v2/order-api/order/back-order/${this.productId}?${qs.stringify(params)}`,
+      data: {},
+    });
+    backOrder.then((backOrderResult) => {
+      if (backOrderResult.data.status > 0) {
+        this.showAlertMessage({ message: 'Success!', type: 'success' });
+      } else {
+        this.showAlertMessage({ message: backOrderResult.data.message });
+      }
+    }).catch((error) => {
+      this.showAlertMessage({ message: error });
+    });
+  }
+
   injectFontPage() {
     console.log("here");
     // add animation css
@@ -144,7 +186,7 @@ class Handshake extends React.Component {
 
   renderFillInForm() {
     return (
-      <form className="fillInForm" onSubmit={() => {}}>
+      <form className="fillInForm" onSubmit={() => this.submitFillForm()}>
         <div className="form-group row">
           <label className="col-lg-4">Ninja alias</label>
           <input
@@ -153,10 +195,7 @@ class Handshake extends React.Component {
             type="text"
             id="email-input"
             // placeholder="Enter your email"
-            // ref={(input) => {
-            //   this[refName] = input;
-            //   return null;
-            // }}
+            ref={(input) => {this.aliasRef = input;}}
           />
         </div>
         <div className="form-group row">
@@ -167,10 +206,7 @@ class Handshake extends React.Component {
             type="text"
             id="alias-input"
             // placeholder="Enter your email"
-            // ref={(input) => {
-            //   this[refName] = input;
-            //   return null;
-            // }}
+            ref={(input) => {this.telegramRef = input;}}
           />
         </div>
         <div className="form-group row">
@@ -181,10 +217,7 @@ class Handshake extends React.Component {
             type="text"
             id="email-input"
             // placeholder="Enter your email"
-            // ref={(input) => {
-            //   this[refName] = input;
-            //   return null;
-            // }}
+            ref={(input) => {this.emailFillRef = input;}}
           />
         </div>
         <div className="form-group row">
@@ -192,18 +225,15 @@ class Handshake extends React.Component {
           <input
             className="col-lg-6"
             name="email"
-            type="text"
+            type="tel"
             id="email-input"
             // placeholder="Enter your email"
-            // ref={(input) => {
-            //   this[refName] = input;
-            //   return null;
-            // }}
+            ref={(input) => {this.phoneRef = input;}}
           />
         </div>
 
         <div className="row">
-          <button className="btn btn-y btn-lg mt30 col-lg-6 offset-lg-4" onClick={() => {}}>
+          <button className="btn btn-y btn-lg mt30 col-lg-6 offset-lg-4" onClick={() => this.submitFillForm()} type="button">
             <span>Yes, I'm in</span>
           </button>
         </div>
