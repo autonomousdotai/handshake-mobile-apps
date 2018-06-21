@@ -67,10 +67,10 @@ class TopInfo extends React.Component {
           <div className="number">{marketTotal === 0 ? marketTotal : marketTotal.toFixed(3)} ETH</div>
           <div className="des">Market volume</div>
         </div>
-        <div className="boxInfo" onClick={() => this.modalWiningFeeRef.open()}>
+        {/*<div className="boxInfo" onClick={() => this.modalWiningFeeRef.open()}>
           <div className="number">{percentFee}%</div>
           <div className="des">Market fee</div>
-        </div>
+    </div>*/}
         {
           (commentNo > 0 || !this.isFirstCallCommmentCount) ? (
             <Link className="boxInfo" to={commentLink}>

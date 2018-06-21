@@ -167,6 +167,9 @@ export const API_URL = {
   ADMIN: {
     BASE: 'admin/',
   },
+  CHAT: {
+    GET_USER_NAME: 'user/username'
+  }
 };
 
 export const HANDSHAKE_STATUS = {
@@ -389,7 +392,7 @@ export const URL = {
 
   HANDSHAKE_CHAT: '/chat',
   HANDSHAKE_CHAT_INDEX: '/chat',
-  HANDSHAKE_CHAT_DETAIL: '/chat/:username',
+  HANDSHAKE_CHAT_DETAIL: '/chat/:userId',
 
   HANDSHAKE_WALLET: '/wallet',
   HANDSHAKE_WALLET_INDEX: '/wallet',
