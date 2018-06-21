@@ -1152,7 +1152,7 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.reject"/></Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.cancel"/></Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button block className="mt-2"
                         onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}><FormattedMessage id="btn.complete"/></Button>
