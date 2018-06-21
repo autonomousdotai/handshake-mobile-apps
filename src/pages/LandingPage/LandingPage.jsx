@@ -18,6 +18,10 @@ import petNinja2Icon from '../../assets/images/icon/landingpage/pet-ninja2.png';
 import ninjaIcon from '../../assets/images/icon/landingpage/ninja_icon.png';
 import moneyBagIcon from '../../assets/images/icon/landingpage/money-bag-icon.svg';
 import shurikenYIcon from '../../assets/images/icon/landingpage/shuriken-y-icon.svg';
+import labelIcon from '../../assets/images/icon/landingpage/label.svg';
+import screenIcon from '../../assets/images/icon/landingpage/screen.png';
+import neymarIcon from '../../assets/images/icon/landingpage/neymar.png';
+import flowerIcon from '../../assets/images/icon/landingpage/flower.svg';
 
 // style
 import './LandingPage.scss';
@@ -350,14 +354,22 @@ class Handshake extends React.Component {
     return (
       <div className="root">
         <Alert />
-        <section className="first-page mb200">
+        <section className="first-page mb160">
           {/*<div className="content-first">*/}
-            {/*<iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />*/}
+            <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
           {/*</div>*/}
-          <div className="container">
-            <div className="row">
+          {/*<div className="container">*/}
+            <div className="content-first col-lg-12">
               <div className="img-screen wow animated slideInLeft col-lg-6 text-right" data-wow-delay="6.6s">
-                <img height="500" src={petNinja2Icon}/>
+                <div className="label-100 wow animated zoomIn" data-wow-delay="8s">
+                  <img width="70" src={labelIcon} />
+                </div>
+                <div className="screen-app"><img width="210" src={screenIcon} /></div>
+                <div className="neymar wow animated slideInLeft" data-wow-delay="7s">
+                  <img width="140" src={neymarIcon} />
+                </div>
+                <div className="flower  wow animated zoomIn" data-wow-delay="7s"><img width="320" src={flowerIcon} />
+                </div>
               </div>
               <div className="col-lg-6 wow animated slideInLeft" data-wow-delay="6.7s">
                 <div className="cnt-w ">
@@ -392,7 +404,7 @@ class Handshake extends React.Component {
                   <div className=" wow animated fadeInUp" data-wow-delay="5s">
                     <p className="logo wow animated fadeInUp mt20">Coming soon. To receive updates on token sales and
                       airdrops:</p>
-                    <a className="btn-lg btn-y mt10 wow animated fadeInUp btn-block"
+                    <a className="btn-lg btn-y wow animated fadeInUp btn-block"
                        href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
                        target="_blank"
                        rel="noopener noreferrer"
@@ -425,7 +437,7 @@ class Handshake extends React.Component {
                 </div>
               </div>
             </div>
-          </div>
+          {/*</div>*/}
         </section>
 
         <div className="container">
