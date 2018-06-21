@@ -79,8 +79,7 @@ class Transfer extends React.Component {
     // clear form:
     this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
     if (this.props.amount){
-      this.setState({inputSendAmountValue: this.props.amount});
-      this.setState({inputSendMoneyValue: this.getCryptoPriceByAmount(this.props.amount)});
+      this.setState({inputSendAmountValue: this.props.amount, inputSendMoneyValue: this.getCryptoPriceByAmount(this.props.amount)});
       this.props.rfChange(nameFormSendWallet, 'amount', this.props.amount);
     }
 
@@ -94,10 +93,6 @@ class Transfer extends React.Component {
 
   resetForm(){
     this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
-  }
-
-  componentWillUnmount() {
-
   }
 
   showLoading = () => {
@@ -123,15 +118,20 @@ class Transfer extends React.Component {
   }
 
   getCryptoPriceByAmount = (amount) => {
-    const cryptoCurrency = "ETH";
-
-    var data = {amount: amount, currency: cryptoCurrency};
+    var data = {amount: amount, currency: "ETH"};
 
     this.props.getCryptoPrice({
       PATH_URL: API_URL.EXCHANGE.GET_CRYPTO_PRICE,
       qs: data,
-      successFn: this.handleGetCryptoPriceSuccess,
-      errorFn: this.handleGetCryptoPriceFailed,
+      successFn(response) {
+        const { userCcLimit } = this.props;
+        const cryptoPrice = CryptoPrice.cryptoPrice(response.data);
+        const price = new BigNumber(userCcLimit.amount).plus(new BigNumber(cryptoPrice.fiatAmount)).toNumber();
+        this.setState({inputSendAmountValue: amount, inputSendAmountValue: price});
+      },
+      errorFn (){
+        console.error(e);
+      },
     });
   }
 
@@ -147,7 +147,7 @@ class Transfer extends React.Component {
     }
 
     if (coinName){
-        walletDefault = MasterWallet.getWalletDefault(coinName);
+      walletDefault = MasterWallet.getWalletDefault(coinName);
     }
     if (!walletDefault){
       if (wallets.length > 0){
@@ -185,7 +185,6 @@ class Transfer extends React.Component {
     }
 
     this.setState({wallets: wallets, walletDefault: walletDefault, walletSelected: walletDefault});
-
   }
 
   sendCoin = () => {
@@ -208,9 +207,8 @@ class Transfer extends React.Component {
   }
 
   updateSendAmountValue = (evt) => {
-    this.setState({
-      inputSendAmountValue: evt.target.value,
-    });
+    let amount = evt.target.value;
+    this.getCryptoPriceByAmount(amount);
   }
 
   updateSendAddressValue = (evt) => {
@@ -350,7 +348,7 @@ renderScanQRCode = () => (
                   type={isIOs ? "number" : "tel"}
                   className="form-control"
                   component={fieldInput}
-                  value={this.state.inputSendAmountValue}
+                  value={this.state.inputSendMoneyValue}
                   onChange={evt => this.updateSendAmountValue(evt)}
                   validate={[required, amountValid]}
                 />

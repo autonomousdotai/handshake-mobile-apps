@@ -68,7 +68,7 @@ class Refers extends React.Component {
     this.setState({referCollapse:!this.state.referCollapse});
     let info = await this.getInfoRefer();
     if(info && info.firstbet)
-      this.setState({"total" : info.referral.total, "amount": info.referral.amount});
+      this.setState({"total" : info.firstbet.total, "amount": info.firstbet.amount});
   }
 
   render() {
