@@ -37,9 +37,9 @@ class ReceiveCoin extends React.Component {
     this.state = {
       wallets: [],
       walletDefault: false,
-      walletSelected: false,     
-      inputSendAmountValue: '', 
-    }    
+      walletSelected: false,
+      inputSendAmountValue: '',
+    }
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -66,8 +66,8 @@ class ReceiveCoin extends React.Component {
     this.props.hideLoading();
   }
 
-  componentDidMount() {    
-    // clear form:    
+  componentDidMount() {
+    // clear form:
     this.getWalletDefault();
   }
 
@@ -76,7 +76,7 @@ class ReceiveCoin extends React.Component {
   }
 
   componentWillUnmount() {
-    
+
   }
 
   showLoading = () => {
@@ -89,15 +89,15 @@ class ReceiveCoin extends React.Component {
 
 
   onFinish = () => {
-    
+
     const { onFinish } = this.props;
-    
+
 
     if (onFinish) {
       let result = {"fromWallet": this.state.walletSelected, "amount": this.state.inputSendAmountValue}
       onFinish(result);
     } else {
-      
+
     }
   }
 
@@ -110,7 +110,7 @@ class ReceiveCoin extends React.Component {
     if (!wallets){
       wallets = MasterWallet.getMasterWallet();
     }
-    
+
     if (coinName){
         walletDefault = MasterWallet.getWalletDefault(coinName);
     }
@@ -122,23 +122,23 @@ class ReceiveCoin extends React.Component {
     // set name + value for list:
     if (wallets.length > 0){
       wallets.forEach((wallet) => {
-        wallet.value = wallet.getShortAddress() + " (" + wallet.name + "-" + wallet.getNetworkName() + ")";        
+        wallet.value = wallet.getShortAddress() + " (" + wallet.name + "-" + wallet.getNetworkName() + ")";
         if (process.env.isLive){
           wallet.value = wallet.getShortAddress() + " (" + wallet.className + " " + wallet.name + ")";
         }
-        wallet.id = wallet.address + "-" + wallet.getNetworkName();        
-        
+        wallet.id = wallet.address + "-" + wallet.getNetworkName();
+
       });
     }
 
     // set name for walletDefault:
     MasterWallet.log(walletDefault, "walletDefault");
-    if (walletDefault){      
-      walletDefault.value = walletDefault.getShortAddress() + " (" + walletDefault.name + "-" + walletDefault.getNetworkName() + ")";         
+    if (walletDefault){
+      walletDefault.value = walletDefault.getShortAddress() + " (" + walletDefault.name + "-" + walletDefault.getNetworkName() + ")";
       if (process.env.isLive){
         walletDefault.value = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
-      walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName();   
+      walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName();
 
       // get balance for first item + update to local store:
       walletDefault.getBalance().then(result => {
@@ -147,7 +147,7 @@ class ReceiveCoin extends React.Component {
         MasterWallet.UpdateBalanceItem(walletDefault);
       });
 
-    }    
+    }
 
     this.setState({wallets: wallets, walletDefault: walletDefault, walletSelected: walletDefault});
 
@@ -160,7 +160,7 @@ class ReceiveCoin extends React.Component {
   }
 
 onItemSelectedWallet = (item) =>{
-  
+
   // I don't know why the item is not object class ?????
   let wallet = MasterWallet.convertObject(item);
 
@@ -168,15 +168,15 @@ onItemSelectedWallet = (item) =>{
 
 }
 
-  
+
   render() {
 
-    const {formAddress, toAddress, amount, coinName } = this.props;  
-    
-    return ( 
+    const {formAddress, toAddress, amount, coinName } = this.props;
+
+    return (
       <div className="receive-coins">
         {/* Modal for Copy address : */}
-        
+
           <div className="bodyTitle"><span>Share your public wallet address to receive { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div>
           <div className={['bodyBackup bodySahreAddress']}>
 
@@ -202,7 +202,7 @@ onItemSelectedWallet = (item) =>{
             Copy to share
             </Button>
           </div>
-        
+
 
           {/* Modal for Custom amount : */}
           <Modal title="Custom Amount" onRef={modal => this.modalCustomAmountRef = modal}>
@@ -224,7 +224,7 @@ onItemSelectedWallet = (item) =>{
                   <InputGroupAddon addonType="prepend">Amount</InputGroupAddon>
                   <Input2
                   placeholder="Specify amount ..."
-                  type={isIOs ? "number" : "tel"}
+                  type="text"
                   value={this.state.inputSendAmountValue} onChange={evt => this.updateSendAmountValue(evt)}/>
                   <InputGroupAddon addonType="append">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ""}</InputGroupAddon>
                 </InputGroup>
@@ -242,10 +242,10 @@ onItemSelectedWallet = (item) =>{
 }
 
 const mapStateToProps = (state) => ({
-  
+
 });
 
-const mapDispatchToProps = (dispatch) => ({    
+const mapDispatchToProps = (dispatch) => ({
   showAlert: bindActionCreators(showAlert, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),

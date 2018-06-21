@@ -30,10 +30,20 @@ class WalletHistory extends React.Component {
 
   cooked_transaction(data){
     const wallet = this.props.wallet;
+
     if(wallet.name == "ETH"){//for ETH json
-      let value = Number(data.value / 1000000000000000000),
-      transaction_date = new Date(data.timeStamp*1000),addresses = [],
-      is_sent = String(data.from).toLowerCase() == wallet.address.toLowerCase();
+      let value = 0, transaction_date = new Date(), addresses = [],
+      is_sent = true, is_error = false;
+
+      try{
+        value = Number(data.value / 1000000000000000000);
+        transaction_date = new Date(data.timeStamp*1000);
+        is_sent = String(data.from).toLowerCase() == wallet.address.toLowerCase();
+        is_error = Boolean(data.isError == "1");
+      }
+      catch(e){
+        console.error(e);
+      }
 
       let cssLabel = `label-${is_sent ? "sent" : "received"}`,
           cssValue = `value-${is_sent ? "sent" : "received"}`;
@@ -49,6 +59,7 @@ class WalletHistory extends React.Component {
         transaction_relative_time:  moment(transaction_date).fromNow(),
         addresses: addresses,
         is_sent: is_sent,
+        is_error: is_error,
         cssLabel: cssLabel,
         cssValue: cssValue
       };
@@ -113,13 +124,13 @@ class WalletHistory extends React.Component {
 
       return this.state.transactions.map((res) => {
         let tran = this.cooked_transaction(res);
-
         return (
         <div key={tran.transaction_no} className="row" onClick={() =>{this.show_transaction(res)}}>
           <div className="col3">
             <div className="time">{tran.transaction_relative_time}</div>
             <div className={tran.cssValue}>{tran.is_sent ? "-" : ""} {Number(tran.value)} {wallet.name}</div>
             {tran.confirmations <= 0 ? <div className="unconfirmation">Unconfirmed</div> : ""}
+            {tran.is_error ? <div className="unconfirmation">Failed</div> : ""}
           </div>
           <div className="col1"><img className="iconDollar" src={tran.is_sent ? iconSent : iconReceived} /></div>
           <div className="col2 address">
