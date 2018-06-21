@@ -42,6 +42,15 @@ export function formatMoneyByLocale(price = 0, locale = 'USD') {
   }
 }
 
+export function roundNumberByLocale(price = 0, locale = 'USD') {
+  switch (locale.toLowerCase()) {
+    case 'vnd':
+      return new BigNumber(price).dividedBy(1000).decimalPlaces(0).times(1000).toNumber();
+    default:
+      return new BigNumber(price).decimalPlaces(PRICE_DECIMAL);
+  }
+}
+
 
 export function formatAmountCurrency(amount = 0) {
   return amount.toString();
