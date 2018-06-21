@@ -68,11 +68,13 @@ export default {
   'ex.create.label.stationInfo': 'Station information',
 
   'ex.createLocal.label.iWantTo': 'I want to',
+  'ex.createLocal.label.something': 'What is it called?',
   'ex.createLocal.placeholder.anyItem': 'any item or service',
   'ex.createLocal.label.coin': 'Coin',
   'ex.createLocal.label.amount': 'Amount',
   'ex.createLocal.label.phone': 'Phone',
   'ex.createLocal.label.address': 'Meet-up place',
+  'ex.createLocal.label.uploadImage': 'Upload an image of your product',
 
   'ex.discover.label.priceBuy': 'BUY',
   'ex.discover.label.priceSell': 'SELL',

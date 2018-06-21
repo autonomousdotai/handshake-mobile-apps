@@ -24,7 +24,7 @@ import {
   API_URL,
   CRYPTO_CURRENCY,
   CRYPTO_CURRENCY_DEFAULT,
-  CRYPTO_CURRENCY_LIST,
+  // CRYPTO_CURRENCY_LIST,
   CRYPTO_CURRENCY_NAME,
   DEFAULT_FEE,
   EXCHANGE_ACTION,
@@ -49,7 +49,8 @@ import {BigNumber} from "bignumber.js/bignumber";
 import {authUpdate} from "@/reducers/auth/action";
 import axios from "axios/index";
 import {getErrorMessageFromCode} from "../utils";
-
+import iconBitcoin from '@/assets/images/icon/coin/icon-btc.svg';
+import iconEthereum from '@/assets/images/icon/coin/icon-eth.svg';
 const nameFormExchangeCreateLocal = "exchangeCreateLocal";
 const FormExchangeCreateLocal = createForm({
   propsReduxForm: {
@@ -62,7 +63,7 @@ const FormExchangeCreateLocal = createForm({
 });
 const selectorFormExchangeCreateLocal = formValueSelector(nameFormExchangeCreateLocal);
 
-const textColor = "#ffffff";
+const textColor = "#000000";
 
 class Component extends React.Component {
   constructor(props) {
@@ -73,8 +74,13 @@ class Component extends React.Component {
       currency: CRYPTO_CURRENCY_DEFAULT,
       lat: 0,
       lng: 0,
+      CRYPTO_CURRENCY_LIST: [
+        { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: false},
+        { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: false},
+      ]
     };
     this.mainColor = "#1F2B34";
+
   }
 
   setAddressFromLatLng = (lat, lng) => {
@@ -313,112 +319,127 @@ class Component extends React.Component {
     const { type, currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, total, totalFormatted, intl } = this.props;
     const modalContent = this.state.modalContent;
 
+    const { CRYPTO_CURRENCY_LIST } = this.state;
+
     return (
       <div className="create-exchange-local">
         <FormExchangeCreateLocal onSubmit={this.handleSubmit}>
-          <Feed className="feed my-2 p-0" background={this.mainColor}>
-            <div style={{ color: "white", padding: "20px" }}>
-
-              <div className="d-flex mb-4">
-                <label className="col-form-label mr-auto label-create head-label"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.iWantTo"/></span></label>
-                <div className='input-group'>
-                  <Field
-                    name="type"
-                    // containerClass="radio-container-old"
-                    component={fieldRadioButton}
-                    type="tab"
-                    list={EXCHANGE_ACTION_LIST}
-                    color={textColor}
-                    validate={[required]}
-                    onChange={this.onCurrencyChange}
-                  />
-                </div>
-              </div>
-
-              <div className="d-flex mb-3">
-                <label className="col-form-label mr-auto label-create"></label>
-                <div className='input-group'>
-                  <Field
-                    name="physical_item"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldInput}
-                    placeholder={intl.formatMessage({ id: 'ex.createLocal.placeholder.anyItem' })}
-                    // onChange={this.onAmountChange}
-                    validate={[required]}
-                  />
-                  <hr className="hrLine w-100"/>
-                </div>
-              </div>
-
-              <div className="d-flex mb-2">
-                <label className="col-form-label mr-auto label-create" style={{ width: "190px" }}><span
-                  className="align-middle"><FormattedMessage id="ex.createLocal.label.coin"/></span></label>
-                <div className='input-group'>
-                  <Field
-                    name="currency"
-                    // containerClass="radio-container-old"
-                    component={fieldRadioButton}
-                    type="radio-1"
-                    list={CRYPTO_CURRENCY_LIST}
-                    color={textColor}
-                    validate={[required]}
-                  />
-                </div>
-              </div>
-
-              <hr className="hrLine"/>
-
-              <div className="d-flex">
-                <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.amount"/></span></label>
-                <div className='input-group'>
-                  <Field
-                    name="amount"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldInput}
-                    placeholder={MIN_AMOUNT[currency]}
-                    // onChange={this.onAmountChange}
-                    validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
-                  />
-                </div>
-              </div>
-
-              <hr className="hrLine"/>
-
-              <div className="d-flex mt-2">
-                <label className="col-form-label mr-auto label-create"><span
-                  className="align-middle"><FormattedMessage id="ex.createLocal.label.phone"/></span></label>
-                <div className="input-group w-100">
-                  <Field
-                    name="phone"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldPhoneInput}
-                    color={textColor}
-                    type="tel"
-                    placeholder="4995926433"
-                    // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
-                  />
-                </div>
-              </div>
-
-              <hr className="hrLine"/>
-
-              <div className="d-flex mt-2">
-                <label className="col-form-label mr-auto label-create"><span
-                  className="align-middle"><FormattedMessage id="ex.createLocal.label.address"/></span></label>
-                <div className="w-100">
-                  <Field
-                    name="address"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldInput}
-                    validate={[required]}
-                    placeholder="81 E. Augusta Ave. Salinas"
-                  />
-                </div>
-              </div>
-
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.iWantTo"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="type"
+                // containerClass="radio-container-old"
+                component={fieldRadioButton}
+                type="tab"
+                list={EXCHANGE_ACTION_LIST}
+                // color={textColor}
+                validate={[required]}
+                onChange={this.onCurrencyChange}
+              />
             </div>
-          </Feed>
-          <Button block type="submit"><FormattedMessage id="btn.initiate"/></Button>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.something"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="physical_item"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                placeholder={intl.formatMessage({ id: 'ex.createLocal.placeholder.anyItem' })}
+                // onChange={this.onAmountChange}
+                validate={[required]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.coin"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="currency"
+                // containerClass="radio-container-old"
+                component={fieldRadioButton}
+                type="tab-4"
+                list={CRYPTO_CURRENCY_LIST}
+                // color={textColor}
+                validate={[required]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex">
+            <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.amount"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="amount"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                placeholder={MIN_AMOUNT[currency]}
+                // onChange={this.onAmountChange}
+                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mt-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.phone"/></span></label>
+            <div className="input-group w-100">
+              <Field
+                name="phone"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldPhoneInput}
+                color={textColor}
+                type="tel"
+                placeholder="4995926433"
+                // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mt-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.address"/></span></label>
+            <div className="w-100">
+              <Field
+                name="address"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                validate={[required]}
+                placeholder="81 E. Augusta Ave. Salinas"
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.uploadImage"/></span></label>
+            <div className="w-100">
+              <Field
+                name="image"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                validate={[required]}
+                placeholder="81 E. Augusta Ave. Salinas"
+              />
+            </div>
+          </div>
+          <Button block type="submit" className="mt-3"><FormattedMessage id="btn.initiate"/></Button>
         </FormExchangeCreateLocal>
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
