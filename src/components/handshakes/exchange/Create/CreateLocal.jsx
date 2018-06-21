@@ -19,6 +19,7 @@ import {minValueBTC, minValueETH} from "./validation";
 import {change, Field, formValueSelector} from "redux-form";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import ImageUploader from '../components/ImageUploader';
 // import {MasterWallet} from '@/models/MasterWallet';
 import {
   API_URL,
@@ -430,13 +431,7 @@ class Component extends React.Component {
             <label className="col-form-label mr-auto label-create"><span
               className="align-middle"><FormattedMessage id="ex.createLocal.label.uploadImage"/></span></label>
             <div className="w-100">
-              <Field
-                name="image"
-                className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                component={fieldInput}
-                validate={[required]}
-                placeholder="81 E. Augusta Ave. Salinas"
-              />
+              <ImageUploader onSuccess={(res) => console.log('abcdde', res)} imgSample={null} multiple={false} />
             </div>
           </div>
           <Button block type="submit" className="mt-3"><FormattedMessage id="btn.initiate"/></Button>

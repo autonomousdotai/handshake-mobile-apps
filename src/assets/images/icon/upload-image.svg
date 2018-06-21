@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="74px" height="48px" viewBox="0 0 74 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-upload_2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="New-UI/UX" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Create-a-station" transform="translate(-258.000000, -642.000000)" fill-rule="nonzero">
+            <g id="icons8-upload_2" transform="translate(258.000000, 642.000000)">
+                <circle id="Oval" fill="#B3E5FC" cx="16.8181818" cy="30.2727273" r="16.8181818"></circle>
+                <circle id="Oval" fill="#B3E5FC" cx="37" cy="20.1818182" r="20.1818182"></circle>
+                <circle id="Oval" fill="#B3E5FC" cx="59.7045455" cy="32.7954545" r="14.2954545"></circle>
+                <rect id="Rectangle-path" fill="#B3E5FC" x="16.8181818" y="30.2727273" width="42.0454545" height="16.8181818"></rect>
+                <rect id="Rectangle-path" fill="#3F51B5" x="33.6363636" y="21.8636364" width="6.72727273" height="16.8181818"></rect>
+                <polygon id="Shape" fill="#3F51B5" points="37 13.4545455 26.9090909 25.2272727 47.0909091 25.2272727"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
