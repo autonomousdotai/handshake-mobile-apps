@@ -351,9 +351,9 @@ class Handshake extends React.Component {
       <div className="root">
         <Alert />
         <section className="first-page mb200">
-          <div className="content-first">
-            <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
-          </div>
+          {/*<div className="content-first">*/}
+            {/*<iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />*/}
+          {/*</div>*/}
           <div className="container">
             <div className="row">
               <div className="img-screen wow animated slideInLeft col-lg-6 text-right" data-wow-delay="6.6s">
@@ -382,12 +382,21 @@ class Handshake extends React.Component {
                       whitepaper
                     </a> wasn’t written to confuse.
                       <br/>
-                      Our <a className="text-link" href="#">telegram</a> discusses the actual working product</p>
+                      Our <a className="text-link"
+                             href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
+                             target="_blank"
+                             rel="noopener noreferrer">
+                      telegram
+                    </a> discusses the actual working product</p>
                   </div>
                   <div className=" wow animated fadeInUp" data-wow-delay="5s">
                     <p className="logo wow animated fadeInUp mt20">Coming soon. To receive updates on token sales and
                       airdrops:</p>
-                    <a className="btn-lg btn-y mt10 wow animated fadeInUp btn-block" href="#">
+                    <a className="btn-lg btn-y mt10 wow animated fadeInUp btn-block"
+                       href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                    >
                       <img height="25" src={telegramIcon}/> Join the conversation on telegram
                     </a>
                   </div>
