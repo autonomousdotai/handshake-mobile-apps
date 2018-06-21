@@ -8,6 +8,8 @@ import DetailBettingEvent from '@/components/handshakes/betting-event/Detail/Det
 
 const moment = require('moment');
 
+const yesterday = Datetime.moment().subtract(1, 'day');
+
 class DatePicker extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -16,6 +18,7 @@ class DatePicker extends React.PureComponent {
     // };
     this.onChangeDate = this.onChangeDate.bind(this);
   }
+
   selectedDate = moment();
 
   get value() {
@@ -35,14 +38,31 @@ class DatePicker extends React.PureComponent {
       onChange && onChange(unixDate);
     } else {}
   }
+  // separate date validitiy based on type of form = reporting will have closing time and type will be reporting similarly dispute will have reporting time
+  valid = (current) => {
+    switch (this.props.name) {
+      case 'closingTime':
+        return current.isAfter(yesterday);
 
+      case 'reportingTime':
+        return current.isAfter(moment.unix(this.props.startDate));
+
+      case 'disputeTime':
+        return current.isAfter(moment.unix(this.props.startDate));
+
+      default:
+        return current.isAfter(yesterday);
+    }
+  };
   render() {
     const { className, onChange, ...props } = this.props;
     return (<Datetime
       onChange={this.onChangeDate}
       {...props}
+      isValidDate={this.valid}
+      style
       inputProps={{
-      placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true,
+      placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
       }}
     />);
   }

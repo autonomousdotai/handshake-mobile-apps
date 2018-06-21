@@ -241,9 +241,31 @@ class CreateBettingEvent extends React.Component {
               value={this.state.resolutionSource}
               onChange={evt => this.updateFormField(evt, 'resolutionSource')}
             />
-            <DatePicker onChange={(date) => { this.changeDate(date, 'closingTime'); }} className="form-control input-field" placeholder="Closing Time" required />
-            <DatePicker onChange={(date) => { this.changeDate(date, 'reportingTime'); }} className="form-control input-field" placeholder="Reporting Time" required />
-            <DatePicker onChange={(date) => { this.changeDate(date, 'disputeTime'); }} className="form-control input-field" placeholder="Dispute Time" required />
+            <DatePicker
+              onChange={(date) => { this.changeDate(date, 'closingTime'); }}
+              className="form-control input-field"
+              placeholder="Closing Time"
+              required
+              name="closingTime"
+            />
+            <DatePicker
+              onChange={(date) => { this.changeDate(date, 'reportingTime'); }}
+              name="reportingTime"
+              className={`form-control input-field${!this.state.closingTime ? ' disabled-datePicker' : ' active-DatePicker'}`}
+              placeholder="Reporting Time"
+              required
+              disabled={!this.state.closingTime}
+              startDate={this.state.closingTime}
+            />
+            <DatePicker
+              onChange={(date) => { this.changeDate(date, 'disputeTime'); }}
+              className={`form-control input-field${!this.state.reportingTime ? ' disabled-datePicker' : ' active-DatePicker'}`}
+              placeholder="Dispute Time"
+              required
+              name="disputeTime"
+              startDate={this.state.reportingTime}
+              disabled={!this.state.reportingTime}
+            />
           </div>
         )}
           {
