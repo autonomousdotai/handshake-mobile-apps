@@ -5,6 +5,7 @@ body {
 }
 
 .root {
+  padding-bottom: rem-calc(50px);
   .mt0 {
     margin-top: 0;
   }
@@ -229,13 +230,13 @@ body {
         font-size: rem-calc(20px);
         color: #9B9B9B;
         letter-spacing: 0;
-         width: 30%;
+         //width: 30%;
       }
       label + input {
         border: 1px solid #979797;
         border-radius: 3px;
         color: white;
-        width: 50%;
+        //width: 50%;
         background: inherit;
         height: rem-calc(50px);
       }

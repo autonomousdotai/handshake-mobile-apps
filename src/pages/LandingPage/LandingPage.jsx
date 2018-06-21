@@ -145,11 +145,11 @@ class Handshake extends React.Component {
   renderFillInForm() {
     return (
       <form className="fillInForm" onSubmit={() => {}}>
-        <div className="form-group">
-          <label>Ninja alias</label>
+        <div className="form-group row">
+          <label className="col-lg-4">Ninja alias</label>
           <input
-            className="email"
-            name="email"
+            className="col-lg-6"
+            name="alias"
             type="text"
             id="email-input"
             // placeholder="Enter your email"
@@ -159,11 +159,11 @@ class Handshake extends React.Component {
             // }}
           />
         </div>
-        <div className="form-group">
-          <label>Telegram handle</label>
+        <div className="form-group row">
+          <label className="col-lg-4">Telegram handle</label>
           <input
-            className="email"
-            name="email"
+            className="col-lg-6"
+            name="telegram"
             type="text"
             id="alias-input"
             // placeholder="Enter your email"
@@ -173,28 +173,28 @@ class Handshake extends React.Component {
             // }}
           />
         </div>
-        <div className="form-group">
-          <label>Email</label>
+        <div className="form-group row">
+          <label className="col-lg-4">Email</label>
           <input
-            className="email"
-            name="email"
+            className="col-lg-6"
+            name="email-fill"
             type="text"
             id="email-input"
-            placeholder="Enter your email"
+            // placeholder="Enter your email"
             // ref={(input) => {
             //   this[refName] = input;
             //   return null;
             // }}
           />
         </div>
-        <div className="form-group">
-          <label>Please fill in this form</label>
+        <div className="form-group row">
+          <label className="col-lg-4">Phone number</label>
           <input
-            className="email"
+            className="col-lg-6"
             name="email"
             type="text"
             id="email-input"
-            placeholder="Enter your email"
+            // placeholder="Enter your email"
             // ref={(input) => {
             //   this[refName] = input;
             //   return null;
@@ -202,9 +202,11 @@ class Handshake extends React.Component {
           />
         </div>
 
-        <button className="btn btn-y" onClick={() => {}}>
-          <span>Yes, I'm in</span>
-        </button>
+        <div className="row">
+          <button className="btn btn-y btn-lg mt30 col-lg-6 offset-lg-4" onClick={() => {}}>
+            <span>Yes, I'm in</span>
+          </button>
+        </div>
       </form>
     );
   }
@@ -384,15 +386,15 @@ class Handshake extends React.Component {
               </div>
             </div>
 
-            <div className="col-lg-12 wow animated fadeInUp text-center mw810 mb160">
-              <h3 className="h3-y mb48">Wanna join a clan... of Ninjas?</h3>
+            <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
+              <h3 className="h3-y mb48 text-center">Wanna join a clan... of Ninjas?</h3>
               <div className="row">
                 <div className="col-lg-6 col-md-12 content-header">
                   There’s some loot with your name on it.
                 </div>
                 <div className="col-lg-6 col-md-12">
                   <p className="content-main mb30">All you gotta do is make some noise. The more you like us, the more we like you. As a Ninja ambassador, you’re one of the team. Build the product with us, help us grow Ninja and.. </p>
-                  <buton className="btn btn-y btn-lg">Make us as cool as you are</buton>
+                  <a className="btn btn-y btn-lg" href="#fillInForm">Make us as cool as you are</a>
                 </div>
               </div>
             </div>
@@ -421,7 +423,7 @@ class Handshake extends React.Component {
                 </div>
                 <div className="col-lg-6 col-md-12">
                   <p className="content-header mb23">Wanna play a real part in one of the most exciting platforms on the crypto market?</p>
-                  <buton className="btn btn-y btn-lg">Hell yeah!</buton>
+                  <a className="btn btn-y btn-lg" href="#fillInForm">Hell yeah!</a>
                 </div>
               </div>
             </div>
@@ -433,7 +435,7 @@ class Handshake extends React.Component {
               </div>
             </div>
 
-            <div className="col-lg-12 wow animated fadeInUp mw810">
+            <div className="col-lg-12 wow animated fadeInUp mw810" id="fillInForm">
               <h3 className="h3-gray mb60 text-center">Please fill in this form</h3>
               {this.renderFillInForm()}
             </div>
