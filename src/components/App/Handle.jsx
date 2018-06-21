@@ -51,6 +51,7 @@ class Handle extends React.Component {
 
     this.state = {
       auth: this.props.auth,
+      isLoading: true,
     };
   }
 
@@ -82,7 +83,7 @@ class Handle extends React.Component {
       PATH_URL: `/user/free-rinkeby-eth?address=xxxxxx${wallet.address}`,
       METHOD: 'POST',
       successFn: () => {
-        this.setState({ isLoading: false, loadingText: '' });
+        this.setState({ loadingText: '' });
         // run cron alert user when got 1eth:
         this.timeOutCheckGotETHFree = setInterval(() => {
           wallet.getBalance().then((result) => {
@@ -100,7 +101,7 @@ class Handle extends React.Component {
           });
         }, 20 * 60 * 1000); // 20'
       },
-      errorFn: () => { this.setState({ isLoading: false, loadingText: '' }); },
+      errorFn: () => { this.setState({ loadingText: '' }); },
     });
   }
 
@@ -178,7 +179,7 @@ class Handle extends React.Component {
         if (listWallet === false) {
           this.setState({ loadingText: 'Creating your local wallets' });
           createMasterWallets().then(() => {
-            this.setState({ isLoading: false, loadingText: '' });
+            this.setState({ loadingText: '' });
             this.updateRewardAddress();
             // if (!process.env.isProduction) {
             //   const wallet = MasterWallet.getWalletDefault('ETH');
@@ -200,6 +201,8 @@ class Handle extends React.Component {
         // core
         this.firebase();
         this.notification();
+
+        this.setState({ isLoading: false });
         // /core
       },
     });
@@ -238,6 +241,7 @@ class Handle extends React.Component {
   }
 
   render() {
+    console.log('test - contructor', this.state.isLoading);
     if (this.state.isLoading) {
       return <Loading message={this.state.loadingText} />;
     }

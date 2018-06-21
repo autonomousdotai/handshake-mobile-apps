@@ -29,6 +29,17 @@ class WalletTransaction extends React.Component {
     const wallet = this.props.wallet;
     if(wallet && data){
       if(wallet.name == "ETH"){
+        let gas_gwei = 0, gas_price = 0, tx_fee = 0;
+
+        try{
+          gas_gwei = Number(data.gasPrice) / 1000000000;
+          gas_price = Number(gas_gwei / 1000000000).toFixed(10- gas_gwei.toString().length);
+          tx_fee = Number(Number(data.gasUsed) * gas_gwei / 1000000000);
+        }
+        catch(e){
+          console.error(e);
+        }
+
         return {
           header: {
             value: Number(data.value / 1000000000000000000),
@@ -43,7 +54,8 @@ class WalletTransaction extends React.Component {
             from: data.from,
             to: data.to,
             gas: data.gas,
-            gas_price: Number(data.gasPrice / 1000000000000000000).toFixed(data.gasPrice.length) + wallet.name,
+            gas_price: `${gas_price} Ether (${gas_gwei} Gwei)` ,
+            tx_fee: tx_fee + " Ether",
             gas_used: data.gasUsed,
             nouce: data.nouce,
             transaction_index: data.transactionIndex,
