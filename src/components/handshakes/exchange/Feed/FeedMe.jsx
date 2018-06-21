@@ -986,7 +986,12 @@ class FeedMe extends React.PureComponent {
       fiatAmount = offer.fiatAmount;
     } else {
       if (listOfferPrice) {
-        let offerPrice = getOfferPrice(listOfferPrice, offer.type, offer.currency);
+        let checkType = offer.type;
+        if (this.userType === HANDSHAKE_USER.SHAKED) {
+          checkType = offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
+        }
+
+        let offerPrice = getOfferPrice(listOfferPrice, checkType, offer.currency);
         if (offerPrice) {
           fiatAmount = offer.amount * offerPrice.price || 0;
           fiatAmount = fiatAmount + fiatAmount * offer.percentage / 100;
