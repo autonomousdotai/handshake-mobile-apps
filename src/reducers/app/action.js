@@ -36,6 +36,9 @@ export const APP_ACTION = {
   BAN_CASH: 'BAN_CASH',
   BAN_PREDICTION: 'BAN_PREDICTION',
   BAN_CHECKED: 'BAN_CHECKED',
+
+  SET_FIRECHAT: 'SET_FIRECHAT',
+  SET_FIREBASE_USER: 'SET_FIREBASE_USER',
 };
 
 // Loading
@@ -77,3 +80,7 @@ export const changeLocale = (data, autoDetect) => ({ type: APP_ACTION.CHANGE_LOC
 export const setBannedCash = () => ({ type: APP_ACTION.BAN_CASH });
 export const setBannedPrediction = () => ({ type: APP_ACTION.BAN_PREDICTION });
 export const setCheckBanned = () => ({ type: APP_ACTION.BAN_CHECKED });
+
+// Chat
+export const setFirechat = (payload) => ({ type: APP_ACTION.SET_FIRECHAT, payload });
+export const setFirebaseUser = (payload) => ({ type: APP_ACTION.SET_FIREBASE_USER, payload });
