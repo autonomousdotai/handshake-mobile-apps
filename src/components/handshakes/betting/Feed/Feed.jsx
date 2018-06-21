@@ -9,7 +9,7 @@ import {MasterWallet} from '@/models/MasterWallet';
 
 import local from '@/services/localStore';
 import {FIREBASE_PATH, HANDSHAKE_ID, API_URL, APP} from '@/constants';
-import { uninitItem, collect, refund, collectFree } from '@/reducers/handshake/action';
+import { uninitItem, collect, refund, collectFree, rollback } from '@/reducers/handshake/action';
 import { loadMyHandshakeList, updateBettingChange} from '@/reducers/me/action';
 
 
@@ -314,6 +314,7 @@ class FeedBetting extends React.Component {
       case BETTING_STATUS_LABEL.WITHDRAW:
         // TO DO: WITHDRAW
         this.collect(id);
+        //this.rollback(id);
         break;
       case BETTING_STATUS_LABEL.REFUND:
       this.refund(realId);
@@ -489,7 +490,18 @@ class FeedBetting extends React.Component {
       const {itemInfo} = this.state;
       let offchain = id;
       if(isUserShake){
-        offchain = betHandshakeHandler.getShakeOffchain(itemInfo.id);
+        //offchain = betHandshakeHandler.getShakeOffchain(itemInfo.id);
+        const extraData = this.extraData;
+      const {shakers} = extraData;
+      const idOffchain = betHandshakeHandler.getId(id);
+
+      if(shakers){
+        const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
+        //console.log('Found Shaked Item:', foundShakedItem);
+        if(foundShakedItem){
+          offchain = betHandshakeHandler.getShakeOffchain(foundShakedItem.id);
+        }
+      }
       }
       let updateInfo = Object.assign({}, itemInfo);
       updateInfo.bkStatus = itemInfo.status;
@@ -586,7 +598,7 @@ class FeedBetting extends React.Component {
 
   }
 
-  /*
+  
   rollback(offchain){
     const params = {
       offchain
@@ -602,7 +614,7 @@ class FeedBetting extends React.Component {
   rollbackFailed = (error) => {
     console.log('rollbackFailed', error);
   }
-  */
+  
 }
 
 const mapState = state => ({
@@ -615,7 +627,7 @@ const mapDispatch = ({
   collect,
   collectFree,
   refund,
-  //rollback,
+  rollback,
   showAlert
 });
 export default connect(mapState, mapDispatch)(FeedBetting);
