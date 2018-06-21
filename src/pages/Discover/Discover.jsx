@@ -129,6 +129,7 @@ class DiscoverPage extends React.Component {
           handshakeIdActive,
           query,
         } = prevState;
+        const { ipInfo } = nextProps;
         const qs = { };
 
         // const pt = `${prevState.lat},${prevState.lng}`;
@@ -140,6 +141,10 @@ class DiscoverPage extends React.Component {
 
         if (handshakeIdActive) {
           qs.type = handshakeIdActive;
+
+          if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
+            qs.custom_query = ` fiat_currency_s:${ipInfo?.currency} AND -offline_i:1 `;
+          }
         }
 
         if (query) {
