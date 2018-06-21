@@ -276,7 +276,7 @@ class Component extends React.Component {
 
   handleCreateOfferSuccess = async (res) => {
     const { data } = res;
-    const { currency, type, system_address, amount } = data;
+    const { currency, type, system_address, amount, id } = data;
 
     console.log('handleCreateOfferSuccess', data);
 
@@ -291,7 +291,7 @@ class Component extends React.Component {
       } else if (currency === CRYPTO_CURRENCY.ETH) {
         const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
-        const result = await exchangeHandshake.initByCoinOwner(wallet.address, data.amount, data.id);
+        const result = await exchangeHandshake.initByCoinOwner(amount, id);
         console.log('handleCreateOfferSuccess', result);
       }
     }
