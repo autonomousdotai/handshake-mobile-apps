@@ -75,6 +75,7 @@ class DatePicker extends React.PureComponent {
           {...props}
           isValidDate={this.valid}
           style
+          closeOnSelect
           viewDate={`${new Date(this.props.startDate * 1000)}`}
           inputProps={{
       placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
@@ -87,6 +88,7 @@ class DatePicker extends React.PureComponent {
           {...props}
           isValidDate={this.valid}
           style
+          closeOnSelect
           viewDate={`${new Date(this.props.startDate * 1000)}`}
           inputProps={{
       placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
@@ -97,6 +99,7 @@ class DatePicker extends React.PureComponent {
         return (<Datetime
           onChange={this.onChangeDate}
           {...props}
+          closeOnSelect
           isValidDate={this.valid}
           style
           inputProps={{
