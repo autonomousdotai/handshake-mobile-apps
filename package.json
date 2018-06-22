@@ -59,6 +59,7 @@
     "formik": "^0.11.11",
     "handlebars": "^4.0.11",
     "handlebars-loader": "^1.7.0",
+    "handshake-i18n": "github:ninjadotorg/handshake-i18n",
     "hdkey": "^0.8.0",
     "history": "^4.7.2",
     "html-loader": "^0.5.5",
