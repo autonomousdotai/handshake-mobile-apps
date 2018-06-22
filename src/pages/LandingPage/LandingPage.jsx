@@ -31,6 +31,7 @@ import './LandingPage.scss';
 const inputRefOne = 'emailRef';
 const inputRefTwo = 'emailRefTwo';
 let left = 0;
+let isMoveBack = false;
 
 class Handshake extends React.Component {
   constructor(props) {
@@ -68,8 +69,13 @@ class Handshake extends React.Component {
       this.imageRef.style.transform = `rotate(${theta}rad)`;
       this.imageRef.style.position = 'relative';
       this.imageRef.style.left = `${left}%`;
-      if (left === 100) {
-        left = 0;
+      if (left === 105) {
+        isMoveBack = true;
+      } else if (left === -55) {
+        isMoveBack = false;
+      }
+      if(isMoveBack) {
+        left -= 1;
       } else {
         left += 1;
       }
