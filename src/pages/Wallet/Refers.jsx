@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // components
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import Button from '@/components/core/controls/Button';
 import {
     fieldInput
@@ -41,6 +42,10 @@ window.Clipboard = (function (window, document, navigator) {
 }(window, document, navigator));
 
 class Refers extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -142,8 +147,10 @@ class Refers extends React.Component {
 
   submitStep1 = async () => {
     let result = await this.checkJoinTelegram(this.state.step1_value);
+    const { messages } = this.props.intl;
+
     if(!result){
-      this.showError("Couldn't find you on Telegram. Please exit the group and try again.")
+      this.showError(messages.wallet.refers.error.submit_telegram);
     }
     else{
       this.setState({step1: true});
@@ -154,11 +161,13 @@ class Refers extends React.Component {
       refers.step1 = this.state.step1;
       refers.step1_value = this.state.step1_value;
       local.save(APP.REFERS, refers);
-      this.showSuccess("You joined our community telegram!")
+      this.showSuccess(messages.wallet.refers.sucess.submit_telegram);
     }
   }
 
   submitStep2 = async() => {
+    const { messages } = this.props.intl;
+
     if(await this.checkFollowTwitter()){
       this.setState({step2: true});
       let refers = local.get(APP.REFERS);
@@ -168,14 +177,15 @@ class Refers extends React.Component {
       refers.step2 = true;
       refers.step2_value = this.state.step2_value;
       local.save(APP.REFERS, refers);
-      this.showSuccess("You followed our Twitter!");
+      this.showSuccess(messages.wallet.refers.sucess.submit_twitter);
     }
     else{
-      this.showError("You haven't followed us yet. Please try again.")
+      this.showError(messages.wallet.refers.error.submit_twitter);
     }
   }
 
   submitStep3 = () => {
+    const { messages } = this.props.intl;
     let refers = local.get(APP.REFERS);
     if(!refers) refers = {};
 
@@ -204,17 +214,17 @@ class Refers extends React.Component {
               this.setState({isShowVerificationEmailCode: false, step3: refers.step3, step3_value: refers.step3_value, referLink: profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : ''});
 
               this.props.rfChange(nameFormStep3, 'refer_email', email);
-              this.showSuccess("Your email has been verified.");
+              this.showSuccess(messages.wallet.refers.error.verify_code);
             },
             errorFn: (e) => {
               console.error(e);
-              this.showError("Verification code is wrong. Please try again!");
+              this.showError(messages.wallet.refers.error.verify_code);
             },
           });
         },
         errorFn: (e) => {
           console.error(e);
-          this.showError("Verification code is wrong. Please try again!");
+          this.showError();
         },
       });
     }
@@ -279,7 +289,6 @@ class Refers extends React.Component {
       let result = false;
       this.props.checkFollowTwitter({
         PATH_URL: 'twitter/'+ this.state.step2_value,
-        //qs: { user_name: username, chat_id: '-1001320226748'},
         successFn: (res) => {
           if(res && res.data){
             resolve(true);
@@ -516,4 +525,4 @@ const mapDispatchToProps = (dispatch) => ({
   authUpdate: bindActionCreators(authUpdate, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Refers);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Refers));

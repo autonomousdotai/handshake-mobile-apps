@@ -428,6 +428,43 @@ export default {
     },
   },
 
+  wallet: {
+    top_banner: {
+      message: "Shuriken Airdrop (limited)",
+      button: "Click here"
+    },
+    refers_dashboard: {
+      header: "3 Shuriken Airdrop hoops",
+
+    },
+    refers: {
+      header: "3 Shuriken Airdrop hoops",
+      error: {
+        submit_telegram: "Couldn't find you on Telegram. Please exit the group and try again.",
+        submit_twitter: "You haven't followed us yet. Please try again.",
+        verify_code: "Verification code is wrong. Please try again!"
+      },
+      success: {
+        submit_telegram: "You joined our community telegram!",
+        submit_twitter: "You followed our Twitter!",
+        verify_code: "Your email has been verified."
+      }
+    },
+    action: {
+      remove: {
+        header: "Are you sure?",
+        message: "This will permanently delete your wallet.",
+        button_yes: "Yes, remove",
+        button_cancel: "Cancel"
+      },
+      transfer: {
+        header: "Transfer coins",
+        to_address: {
+          placeholder: "Specify receiving..."
+        }
+      }
+    }
+  },
   /*
   *
   * White Paper
