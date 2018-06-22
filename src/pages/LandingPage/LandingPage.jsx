@@ -497,14 +497,14 @@ class Handshake extends React.Component {
                       type="text"
                       className="form-control"
                       placeholder="Enter your email"
-                      ref={input => this[inputRefOne] = input}
+                      ref={input => this[inputRefTwo] = input}
                     />
                     <span className="input-group-btn">
                         <button
                           className="btn btn-y btn-lg"
                           type="button"
                           onClick={() => {
-                            this.submitEmail(inputRefOne)
+                            this.submitEmail(inputRefTwo)
                           }}
                         >
                           I'm in
