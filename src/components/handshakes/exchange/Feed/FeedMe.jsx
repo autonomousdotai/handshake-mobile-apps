@@ -831,8 +831,8 @@ class FeedMe extends React.PureComponent {
     const { offer } = this;
     const { buyAmount, sellAmount, currency, buyPercentage, sellPercentage } = offer;
     let message = '';
-    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.SELL, currency, buyPercentage);
-    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.BUY, currency, sellPercentage);
+    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.BUY, currency, buyPercentage);
+    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.SELL, currency, sellPercentage);
     switch (status) {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
@@ -986,7 +986,12 @@ class FeedMe extends React.PureComponent {
       fiatAmount = offer.fiatAmount;
     } else {
       if (listOfferPrice) {
-        let offerPrice = getOfferPrice(listOfferPrice, offer.type, offer.currency);
+        let checkType = offer.type;
+        if (this.userType === HANDSHAKE_USER.SHAKED) {
+          checkType = offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
+        }
+
+        let offerPrice = getOfferPrice(listOfferPrice, checkType, offer.currency);
         if (offerPrice) {
           fiatAmount = offer.amount * offerPrice.price || 0;
           fiatAmount = fiatAmount + fiatAmount * offer.percentage / 100;
@@ -1152,7 +1157,7 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.reject"/></Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.cancel"/></Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button block className="mt-2"
                         onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}><FormattedMessage id="btn.complete"/></Button>

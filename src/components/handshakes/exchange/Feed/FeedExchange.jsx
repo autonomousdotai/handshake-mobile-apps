@@ -271,8 +271,7 @@ class FeedExchange extends React.PureComponent {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
-        const { id } = this.offer;
-        this.props.history.push(`${URL.HANDSHAKE_CHAT}/${id}`);
+        this.props.history.push(`${URL.HANDSHAKE_ME}`);
       },
     });
   }
@@ -313,24 +312,28 @@ class FeedExchange extends React.PureComponent {
 
   getPrices = () => {
     const { listOfferPrice } = this.props;
+    const { offer } = this;
 
     let priceBuyBTC;
     let priceSellBTC;
     let priceBuyETH;
     let priceSellETH;
 
+    const eth = offer.items.ETH;
+    const btc = offer.items.BTC;
+
     if (listOfferPrice) {
       let offerPrice = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, CRYPTO_CURRENCY.BTC);
-      priceBuyBTC = offerPrice.price;
+      priceBuyBTC = offerPrice.price * (1 + btc?.buyPercentage / 100);
 
       offerPrice = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.SELL, CRYPTO_CURRENCY.BTC);
-      priceSellBTC = offerPrice.price;
+      priceSellBTC = offerPrice.price * (1 + btc?.sellPercentage / 100);
 
       offerPrice = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, CRYPTO_CURRENCY.ETH);
-      priceBuyETH = offerPrice.price;
+      priceBuyETH = offerPrice.price * (1 + eth?.buyPercentage / 100);
 
       offerPrice = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.SELL, CRYPTO_CURRENCY.ETH);
-      priceSellETH = offerPrice.price;
+      priceSellETH = offerPrice.price * (1 + eth?.sellPercentage / 100);
     }
 
     return {

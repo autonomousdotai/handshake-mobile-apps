@@ -53,6 +53,8 @@ function appReducter(state = {
 
   isNerworkError: false,
 
+  firechat: {},
+
 }, action) {
   switch (action.type) {
     case APP_ACTION.HEADER_TITLE_SET:
@@ -234,6 +236,20 @@ function appReducter(state = {
         ...state,
         isBannedChecked: true,
       };
+    }
+
+    case APP_ACTION.SET_FIRECHAT: {
+      return {
+        ...state,
+        firechat: action.payload,
+      }
+    }
+
+    case APP_ACTION.SET_FIREBASE_USER: {
+      return {
+        ...state,
+        firebaseUser: action.payload,
+      }
     }
 
     default:

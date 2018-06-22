@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 // services, constants
-import  { BetHandshakeHandler, SIDE, BETTING_STATUS_LABEL, ROLE, MESSAGE} from './BetHandshakeHandler.js';
+import  { BetHandshakeHandler, SIDE, BETTING_STATUS_LABEL, ROLE, MESSAGE, BET_BLOCKCHAIN_STATUS} from './BetHandshakeHandler.js';
 import momment from 'moment';
 import {MasterWallet} from '@/models/MasterWallet';
 
@@ -327,9 +327,10 @@ class FeedBetting extends React.Component {
     const balance = await betHandshakeHandler.getBalance();
     const estimatedGas = await betHandshakeHandler.getEstimateGas();
     let message = null;
-    const {id, shakeUserIds, freeBet} = this.props; // new state
+    const {id, shakeUserIds, freeBet, fromAddress} = this.props; // new state
     let idCryptosign = id;
     let isFreeBet = freeBet;
+    let userFromAddress = fromAddress;
     const profile = local.get(APP.AUTH_PROFILE);
     const isUserShake = this.isShakeUser(shakeUserIds, profile.id);
     if(isUserShake){
@@ -343,13 +344,18 @@ class FeedBetting extends React.Component {
         if(foundShakedItem){
           idCryptosign = betHandshakeHandler.getShakeOffchain(foundShakedItem.id);
           isFreeBet = foundShakedItem.free_bet;
+          userFromAddress = foundShakedItem.from_address;
         }
+        
       }
     }
-    console.log("idCryptosign, isFreeBet, isUserShaker: ", idCryptosign, isFreeBet, isUserShake);
-
+    console.log("idCryptosign, isFreeBet, isUserShaker, fromAddress: ", idCryptosign, 
+    isFreeBet, isUserShake, userFromAddress);
+    //userFromAddress = "abc";
     if(!betHandshakeHandler.isRightNetwork()){
       message = MESSAGE.RIGHT_NETWORK;
+    }else if (!betHandshakeHandler.isSameAddress(userFromAddress)){
+      message = MESSAGE.DIFFERENCE_ADDRESS;
     }
     else {
       if(isFreeBet){
@@ -453,6 +459,12 @@ class FeedBetting extends React.Component {
         callBack: () => {
         }
       });
+      const {itemInfo} = this.state;
+
+      let updateInfo = Object.assign({}, itemInfo);
+      updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING;
+      this.props.updateBettingChange(updateInfo);
+
     }
   }
   collectFreeFailed = (error) => {
