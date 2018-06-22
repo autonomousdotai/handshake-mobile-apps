@@ -516,8 +516,9 @@ class FeedBetting extends React.Component {
       }
       }
       let updateInfo = Object.assign({}, itemInfo);
-      updateInfo.bkStatus = itemInfo.status;
-      updateInfo.status = status;
+      //updateInfo.bkStatus = itemInfo.status;
+      updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING;
+      
 
       //this.handleStatus(updateInfo);
       this.props.updateBettingChange(updateInfo);

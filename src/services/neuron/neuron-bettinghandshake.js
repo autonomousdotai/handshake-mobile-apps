@@ -40,11 +40,14 @@ export default class BettingHandshake extends BaseHandshake {
     const payloadData = this.handshakeInstance.methods
       .init(hid, side, oddsValue, bytesOffchain)
       .encodeABI();
+      /*
     const estimateGas = await this.neuron.caculateEstimatGasWithEthUnit(
       payloadData,
       this.address,
       this.gasPrice,
     );
+    */
+    const estimateGas = await this.neuron.caculateLimitGasWithEthUnit(this.gasPrice);
     return estimateGas;
   }
   initBet = async (hid, side, stake, odds, offchain) => {

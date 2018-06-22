@@ -64,7 +64,7 @@ class Handshake extends React.Component {
   productIdFillForm = 1300;
 
   handleScroll() {
-    const theta = (window.scrollY / 200) % Math.PI;
+    const theta = (window.scrollY / 250) % Math.PI;
     if (this.imageRef) {
       this.imageRef.style.transform = `rotate(${theta}rad)`;
       this.imageRef.style.position = 'relative';
@@ -398,7 +398,7 @@ class Handshake extends React.Component {
               </div>
             </div>
             <div className="col-lg-6 col-md-12 wow animated slideInLeft" data-wow-delay="6.7s">
-              <div className="col-lg-9">
+              <div className="col-lg-9 mw600">
                 <div className="logo wow animated fadeInUp" data-wow-delay="0.2s">
                   <img height="45" src={logoNinjaIcon}/>
                 </div>

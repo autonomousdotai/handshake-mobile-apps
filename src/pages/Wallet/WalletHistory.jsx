@@ -45,9 +45,6 @@ class WalletHistory extends React.Component {
         console.error(e);
       }
 
-      let cssLabel = `label-${is_sent ? "sent" : "received"}`,
-          cssValue = `value-${is_sent ? "sent" : "received"}`;
-
       let addr = data.from;
       if(is_sent) addr = data.to;
       addresses.push(addr.replace(addr.substr(4, 34), '...'));
@@ -59,14 +56,12 @@ class WalletHistory extends React.Component {
         transaction_relative_time:  moment(transaction_date).fromNow(),
         addresses: addresses,
         is_sent: is_sent,
-        is_error: is_error,
-        cssLabel: cssLabel,
-        cssValue: cssValue
+        is_error: is_error
       };
     }
     else{//for BTC json
       let vin = data.vin, vout = data.vout,
-        is_sent = false, value = 0, cssLabel = "", cssValue = "",
+        is_sent = false, value = 0,
         addresses = [], confirmations = data.confirmations,
         transaction_date = data.time ? new Date(data.time*1000) : "";
 
@@ -105,9 +100,6 @@ class WalletHistory extends React.Component {
             }
           }
         }
-
-        cssLabel = `label-${is_sent ? "sent" : "received"}`;
-        cssValue = `value-${is_sent ? "sent" : "received"}`;
       }
       catch(e){
         console.error(e);
@@ -120,9 +112,7 @@ class WalletHistory extends React.Component {
         addresses: addresses,
         transaction_relative_time:  transaction_date ? moment(transaction_date).fromNow() : "",
         confirmations: confirmations,
-        is_sent: is_sent,
-        cssLabel: cssLabel,
-        cssValue: cssValue
+        is_sent: is_sent
       };
     }
   }
@@ -131,20 +121,29 @@ class WalletHistory extends React.Component {
     const wallet = this.props.wallet;
     if (wallet && this.state.transactions.length==0)
       return <div className="history-no-trans">No transactions yet</div>;
-
+      let arr = [];
       return this.state.transactions.map((res) => {
         let tran = this.cooked_transaction(res);
+        if(arr.indexOf(tran.transaction_no) < 0)
+          arr.push(tran.transaction_no);
+        else
+          tran.is_sent = true;
+
+        let cssLabel = `label-${tran.is_sent ? "sent" : "received"}`,
+          cssValue = `value-${tran.is_sent ? "sent" : "received"}`;
+        res.is_sent = tran.is_sent;
+
         return (
         <div key={tran.transaction_no} className="row" onClick={() =>{this.show_transaction(res)}}>
           <div className="col3">
             <div className="time">{tran.transaction_relative_time}</div>
-            <div className={tran.cssValue}>{tran.is_sent ? "-" : ""} {Number(tran.value)} {wallet.name}</div>
+            <div className={cssValue}>{tran.is_sent ? "-" : ""} {Number(tran.value)} {wallet.name}</div>
             {tran.confirmations <= 0 ? <div className="unconfirmation">Unconfirmed</div> : ""}
             {tran.is_error ? <div className="unconfirmation">Failed</div> : ""}
           </div>
           <div className="col1"><img className="iconDollar" src={tran.is_sent ? iconSent : iconReceived} /></div>
           <div className="col2 address">
-            <div className={tran.cssLabel}>{tran.is_sent ? "Sent" : "Received"}</div>
+            <div className={cssLabel}>{tran.is_sent ? "Sent" : "Received"}</div>
             {
               tran.addresses.map((addr) => {
                 return <div key={addr}>{addr}</div>
