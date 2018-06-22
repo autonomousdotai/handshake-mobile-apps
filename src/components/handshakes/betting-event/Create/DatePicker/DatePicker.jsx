@@ -54,17 +54,56 @@ class DatePicker extends React.PureComponent {
         return current.isAfter(yesterday);
     }
   };
+
   render() {
     const { className, onChange, ...props } = this.props;
-    return (<Datetime
-      onChange={this.onChangeDate}
-      {...props}
-      isValidDate={this.valid}
-      style
-      inputProps={{
+    switch (this.props.name) {
+      case 'closingTime':
+        return (<Datetime
+          onChange={this.onChangeDate}
+          {...props}
+          isValidDate={this.valid}
+          style
+          inputProps={{
       placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
       }}
-    />);
+        />);
+
+      case 'reportingTime':
+        return (<Datetime
+          onChange={this.onChangeDate}
+          {...props}
+          isValidDate={this.valid}
+          style
+          viewDate={`${new Date(this.props.startDate * 1000)}`}
+          inputProps={{
+      placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
+      }}
+        />);
+
+      case 'disputeTime':
+        return (<Datetime
+          onChange={this.onChangeDate}
+          {...props}
+          isValidDate={this.valid}
+          style
+          viewDate={`${new Date(this.props.startDate * 1000)}`}
+          inputProps={{
+      placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
+      }}
+        />);
+
+      default:
+        return (<Datetime
+          onChange={this.onChangeDate}
+          {...props}
+          isValidDate={this.valid}
+          style
+          inputProps={{
+      placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
+      }}
+        />);
+    }
   }
 }
 
