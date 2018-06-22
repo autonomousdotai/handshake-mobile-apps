@@ -1,5 +1,7 @@
 import nacl from 'tweetnacl';
 import naclUtil from 'tweetnacl-util';
+import logo from '@/assets/images/app/logo.png';
+import Push from 'push.js';
 
 export class Firechat {
   constructor(firebaseInstance, firebaseRef, options) {
@@ -43,8 +45,19 @@ export class Firechat {
     // The number of historical messages to load per room.
     this.options.numMaxMessages = this.options.numMaxMessages || 50;
     this.keyPairLocalStorageKey = 'chat_encryption_keypair';
+    this.shouldShowNotification = true;
 
     this.encryptionKeyPair = this.generateEncryptionKeyPair();
+  }
+
+  enableNotification() {
+    console.log('enable notification');
+    this.shouldShowNotification = true;
+  }
+
+  disableNotification() {
+    console.log('disable notification');
+    this.shouldShowNotification = false;
   }
 
   loadEncryptionKeyPairFromLocalStorage() {
@@ -127,19 +140,23 @@ export class Firechat {
 
     // Register our username in the public user listing.
     const usernameRef = this.usersOnlineRef.child(this.userId);
-    this.queuePresenceOperation(usernameRef, {
-      name: this.userName,
-      shortName: this.userName.toLowerCase(),
-      sessionId: this.sessionId,
-      publicKey: this.user.publicKey,
-      online: true,
-    }, {
+    this.queuePresenceOperation(
+      usernameRef,
+      {
+        name: this.userName,
+        shortName: this.userName.toLowerCase(),
+        sessionId: this.sessionId,
+        publicKey: this.user.publicKey,
+        online: true,
+      },
+      {
         name: this.userName,
         shortName: this.userName.toLowerCase(),
         sessionId: this.sessionId,
         publicKey: this.user.publicKey,
         online: false,
-      });
+      },
+    );
     // const usernameSessionRef = usernameRef.child(this.sessionId);
     // this.queuePresenceOperation(usernameSessionRef, {
     //   id: this.userId,
@@ -226,9 +243,11 @@ export class Firechat {
   onNewMessage(roomId, snapshot) {
     const message = snapshot.val();
     message.id = snapshot.key;
-    const { nonce, message: messageContent } = message;
+    const { nonce, message: messageContent, userId: fromUserId } = message;
     const room = this.rooms[roomId];
     let publicKey;
+    const fromUserName = room.authorizedUsers[fromUserId].name;
+    const notified = message.actions ? message.actions[this.user.id] ?.notified : false;
 
     room.messages = room.messages || [];
 
@@ -243,6 +262,22 @@ export class Firechat {
     messageContent.message = this.decryptMessage(messageContent.message, nonce, publicKey);
     message.message = messageContent;
     room.messages.push(message);
+
+    const currentTime = new Date();
+    const messageTime = new Date(message.timestamp);
+    const diffTime = (currentTime - messageTime) / 1000;
+
+    if (!notified && diffTime <= 60) {
+      this.showNotification(fromUserName, messageContent.message);
+    }
+
+    if (!notified) {
+      this.messageRef.child(roomId).child(message.id).child('actions').child(this.user.id)
+        .set({
+          notified: true,
+        });
+    }
+
     this.invokeEventCallbacks('message-add', roomId, message);
     this.onRoomUpdate(roomId, room);
   }
@@ -520,6 +555,12 @@ export class Firechat {
     const nonce = this.generateMessageNonce();
     messageContent.message = this.encryptMessage(messageContent.message, nonce, publicKey);
     const message = {
+      actions: {
+        [self.userId]: {
+          seen: true,
+          notified: true,
+        },
+      },
       userId: self.userId,
       name: self.userName,
       timestamp: this.firebaseInstance.database.ServerValue.TIMESTAMP,
@@ -799,6 +840,50 @@ export class Firechat {
         console.log(warnMsg);
       }
     }
+  }
+
+  showNotification(from, message) {
+    if (!this.shouldShowNotification) {
+      return;
+    }
+    console.log('show notification', from, message);
+    Push.create(`${from} says`, {
+      body: message,
+      icon: logo,
+      onClick: () => {
+        window.focus();
+      },
+      onError: (e) => {
+        console.log('notification error', e);
+      },
+    });
+  }
+
+  markMessagesAsRead(roomId) {
+    const originalMessages = this.rooms[roomId].messages || [];
+    const updateValues = {};
+    originalMessages.forEach((message, i) => {
+      const isRead = message.actions ? message.actions[this.user.id] ?.seen : false;
+      if (isRead) {
+        return true;
+      }
+
+      updateValues[`/${roomId}/${message.id}/actions/${this.user.id}/seen`] = true;
+      message.actions[this.userId] = {
+        ...message.actions[this.userId],
+        ...{
+          seen: true,
+        },
+      };
+      originalMessages[i] = message;
+    });
+
+    if (Object.keys(updateValues).length > 0) {
+      this.messageRef.update(updateValues);
+    }
+
+    this.rooms[roomId].messages = originalMessages;
+    this.onRoomUpdate(roomId, this.rooms[roomId]);
   }
 }
 
