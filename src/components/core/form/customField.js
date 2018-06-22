@@ -94,6 +94,11 @@ export const fieldRadioButton = customField(({
       fullWidth = true;
       hasPrefixIcon = false;
       break;
+    case 'tab-4':
+      containerClass = 'tab-4';
+      fullWidth = true;
+      hasPrefixIcon = true;
+      break;
     case 'radio-big':
       containerClass = 'big';
       hasPrefixIcon = false;

@@ -15,7 +15,6 @@ import authReducer from '@/reducers/auth';
 import reducers from '@/reducers';
 
 firebase.initializeApp(process.env.firebase);
-firebase.auth().signInAnonymously();
 
 const AppReducers = combineReducers({
   app: appReducer,

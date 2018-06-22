@@ -501,10 +501,12 @@ class Component extends React.Component {
     const haveProfile = this.offer ? true : false;
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
-    const { price } = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, currency);
-    const priceDisplayed = formatMoneyByLocale(price,fiatCurrency)
-    const estimatedPriceBuy = formatMoneyByLocale(price * (1 + parseFloat(customizePriceBuy, 10)/100),fiatCurrency)
-    const estimatedPriceSell = formatMoneyByLocale(price * (1 + parseFloat(customizePriceSell, 10)/100),fiatCurrency)
+    const { price: priceBuy } = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, currency);
+    const { price: priceSell } = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.SELL, currency);
+    const priceBuyDisplayed = formatMoneyByLocale(priceBuy,fiatCurrency)
+    const priceSellDisplayed = formatMoneyByLocale(priceSell,fiatCurrency)
+    const estimatedPriceBuy = formatMoneyByLocale(priceBuy * (1 + parseFloat(customizePriceBuy, 10)/100),fiatCurrency)
+    const estimatedPriceSell = formatMoneyByLocale(priceSell * (1 + parseFloat(customizePriceSell, 10)/100),fiatCurrency)
 
     const wantToBuy = amountBuy && amountBuy > 0
     const wantToSell = amountSell && amountSell > 0
@@ -547,7 +549,7 @@ class Component extends React.Component {
             <div className="d-flex">
               <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.marketPrice"/></span></label>
               <div className='input-group'>
-                <div><span className="form-text">{priceDisplayed} {fiatCurrency}</span></div>
+                <div><span className="form-text">{priceSellDisplayed} {fiatCurrency}</span></div>
               </div>
             </div>
             <hr className="hrLine"/>
@@ -602,7 +604,7 @@ class Component extends React.Component {
             <div className="d-flex">
               <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.marketPrice"/></span></label>
               <div className='input-group'>
-                <div><span className="form-text">{priceDisplayed} {fiatCurrency}</span></div>
+                <div><span className="form-text">{priceBuyDisplayed} {fiatCurrency}</span></div>
               </div>
             </div>
             <hr className="hrLine"/>

@@ -29,6 +29,17 @@ class WalletTransaction extends React.Component {
     const wallet = this.props.wallet;
     if(wallet && data){
       if(wallet.name == "ETH"){
+        let gas_gwei = 0, gas_price = 0, tx_fee = 0;
+
+        try{
+          gas_gwei = Number(data.gasPrice) / 1000000000;
+          gas_price = Number(gas_gwei / 1000000000).toFixed(10- gas_gwei.toString().length);
+          tx_fee = Number(Number(data.gasUsed) * gas_gwei / 1000000000);
+        }
+        catch(e){
+          console.error(e);
+        }
+
         return {
           header: {
             value: Number(data.value / 1000000000000000000),
@@ -43,7 +54,8 @@ class WalletTransaction extends React.Component {
             from: data.from,
             to: data.to,
             gas: data.gas,
-            gas_price: Number(data.gasPrice / 1000000000000000000).toFixed(data.gasPrice.length) + wallet.name,
+            gas_price: `${gas_price} Ether (${gas_gwei} Gwei)` ,
+            tx_fee: tx_fee + " Ether",
             gas_used: data.gasUsed,
             nouce: data.nouce,
             transaction_index: data.transactionIndex,
@@ -54,36 +66,41 @@ class WalletTransaction extends React.Component {
       else{
         let result = {}, is_sent = false, value = 0;
 
-        result = {
-          header: {
-            coin: "BTC",
-            confirmations: data.confirmations
-          },
-          body: {
-            size: data.size,
-            received_time: moment(data.time).format('llll'),
-            mined_time: moment(data.blocktime).format('llll'),
-            block_hash: data.blockhash,
-            fees: data.fees + " BTC",
+        try{
+          result = {
+            header: {
+              coin: "BTC",
+              confirmations: data.confirmations
+            },
+            body: {
+              size: data.size,
+              received_time: moment(data.time).format('llll'),
+              mined_time: moment(data.blocktime).format('llll'),
+              block_hash: data.blockhash,
+              fees: data.fees + " BTC",
+            }
+          };
+
+          for(let i in data.vin){
+            if(String(data.vin[i].addr).toLowerCase() == wallet.address.toLowerCase())
+              is_sent = true;
+
+            let no = Number(i) + 1;
+            result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
+            value += Number(data.vin[i].value);
           }
-        };
 
-        for(let i in data.vin){
-          if(String(data.vin[i].addr).toLowerCase() == wallet.address.toLowerCase())
-            is_sent = true;
+          for(let i in data.vout){
+            let no = Number(i) + 1;
+            result.body["to_addr_"+no] = (data.vout[i].scriptPubKey.addresses ? data.vout[i].scriptPubKey.addresses.join(" ") : "") + " " + data.vout[i].value + " BTC";
+          }
 
-          let no = Number(i) + 1;
-          result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
-          value += Number(data.vin[i].value);
+          result.header.value = value;
+          result.header.is_sent = is_sent;
         }
-
-        for(let i in data.vout){
-          let no = Number(i) + 1;
-          result.body["to_addr_"+no] = data.vout[i].scriptPubKey.addresses.join(" ") + " " + data.vout[i].value + " BTC";
+        catch(e){
+          console.error(e);
         }
-
-        result.header.value = value;
-        result.header.is_sent = is_sent;
 
         return result;
       }

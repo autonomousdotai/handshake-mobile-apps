@@ -167,6 +167,9 @@ export const API_URL = {
   ADMIN: {
     BASE: 'admin/',
   },
+  CHAT: {
+    GET_USER_NAME: 'user/username'
+  }
 };
 
 export const HANDSHAKE_STATUS = {
@@ -203,11 +206,14 @@ export const HANDSHAKE_EXCHANGE_STATUS = {
   SHAKE: 5,
   COMPLETING: 6,
   COMPLETED: 7,
-  WITHDRAWING: 8,
-  WITHDRAW: 9,
+  PRE_SHAKING: 8,
+  PRE_SHAKE: 9,
   REJECTING: 10,
   REJECTED: 11,
+  CANCELLING: 12,
+  CANCELLED: 13,
 };
+
 
 export const HANDSHAKE_EXCHANGE_STATUS_NAME = {
   [HANDSHAKE_EXCHANGE_STATUS.CREATED]: <FormattedMessage id="ex.exchange.status.created" />,
@@ -218,10 +224,12 @@ export const HANDSHAKE_EXCHANGE_STATUS_NAME = {
   [HANDSHAKE_EXCHANGE_STATUS.SHAKE]: <FormattedMessage id="ex.exchange.status.shake" />,
   [HANDSHAKE_EXCHANGE_STATUS.COMPLETING]: <FormattedMessage id="ex.exchange.status.completing" />,
   [HANDSHAKE_EXCHANGE_STATUS.COMPLETED]: <FormattedMessage id="ex.exchange.status.completed" />,
-  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING]: <FormattedMessage id="ex.exchange.status.withdrawing" />,
-  [HANDSHAKE_EXCHANGE_STATUS.WITHDRAW]: <FormattedMessage id="ex.exchange.status.withdraw" />,
+  [HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKING]: <FormattedMessage id="ex.exchange.status.pre_shaking" />,
+  [HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE]: <FormattedMessage id="ex.exchange.status.pre_shake" />,
   [HANDSHAKE_EXCHANGE_STATUS.REJECTING]: <FormattedMessage id="ex.exchange.status.rejecting" />,
   [HANDSHAKE_EXCHANGE_STATUS.REJECTED]: <FormattedMessage id="ex.exchange.status.rejected" />,
+  [HANDSHAKE_EXCHANGE_STATUS.CANCELLING]: <FormattedMessage id="ex.exchange.status.cancelling" />,
+  [HANDSHAKE_EXCHANGE_STATUS.CANCELLED]: <FormattedMessage id="ex.exchange.status.cancelled" />,
 };
 
 export const HANDSHAKE_EXCHANGE_STATUS_VALUE = {
@@ -233,10 +241,12 @@ export const HANDSHAKE_EXCHANGE_STATUS_VALUE = {
   shake: HANDSHAKE_EXCHANGE_STATUS.SHAKE,
   completing: HANDSHAKE_EXCHANGE_STATUS.COMPLETING,
   completed: HANDSHAKE_EXCHANGE_STATUS.COMPLETED,
-  withdrawing: HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING,
-  withdraw: HANDSHAKE_EXCHANGE_STATUS.WITHDRAW,
+  pre_shaking: HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKING,
+  pre_shake: HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE,
   rejecting: HANDSHAKE_EXCHANGE_STATUS.REJECTING,
   rejected: HANDSHAKE_EXCHANGE_STATUS.REJECTED,
+  cancelling: HANDSHAKE_EXCHANGE_STATUS.CANCELLING,
+  cancelled: HANDSHAKE_EXCHANGE_STATUS.CANCELLED,
 };
 
 export const HANDSHAKE_EXCHANGE_CC_STATUS = {
@@ -382,7 +392,7 @@ export const URL = {
 
   HANDSHAKE_CHAT: '/chat',
   HANDSHAKE_CHAT_INDEX: '/chat',
-  HANDSHAKE_CHAT_DETAIL: '/chat/:username',
+  HANDSHAKE_CHAT_DETAIL: '/chat/:userId',
 
   HANDSHAKE_WALLET: '/wallet',
   HANDSHAKE_WALLET_INDEX: '/wallet',

@@ -19,12 +19,13 @@ import {minValueBTC, minValueETH} from "./validation";
 import {change, Field, formValueSelector} from "redux-form";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
+import ImageUploader from '../components/ImageUploader';
 // import {MasterWallet} from '@/models/MasterWallet';
 import {
   API_URL,
   CRYPTO_CURRENCY,
   CRYPTO_CURRENCY_DEFAULT,
-  CRYPTO_CURRENCY_LIST,
+  // CRYPTO_CURRENCY_LIST,
   CRYPTO_CURRENCY_NAME,
   DEFAULT_FEE,
   EXCHANGE_ACTION,
@@ -49,7 +50,8 @@ import {BigNumber} from "bignumber.js/bignumber";
 import {authUpdate} from "@/reducers/auth/action";
 import axios from "axios/index";
 import {getErrorMessageFromCode} from "../utils";
-
+import iconBitcoin from '@/assets/images/icon/coin/icon-btc.svg';
+import iconEthereum from '@/assets/images/icon/coin/icon-eth.svg';
 const nameFormExchangeCreateLocal = "exchangeCreateLocal";
 const FormExchangeCreateLocal = createForm({
   propsReduxForm: {
@@ -62,7 +64,7 @@ const FormExchangeCreateLocal = createForm({
 });
 const selectorFormExchangeCreateLocal = formValueSelector(nameFormExchangeCreateLocal);
 
-const textColor = "#ffffff";
+const textColor = "#000000";
 
 class Component extends React.Component {
   constructor(props) {
@@ -73,8 +75,13 @@ class Component extends React.Component {
       currency: CRYPTO_CURRENCY_DEFAULT,
       lat: 0,
       lng: 0,
+      CRYPTO_CURRENCY_LIST: [
+        { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: false},
+        { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: false},
+      ]
     };
     this.mainColor = "#1F2B34";
+
   }
 
   setAddressFromLatLng = (lat, lng) => {
@@ -155,9 +162,21 @@ class Component extends React.Component {
     this.props.hideLoading();
   }
 
+  showAlert = (message) => {
+    this.props.showAlert({
+      message: <div className="text-center">
+        {message}
+      </div>,
+      timeOut: 5000,
+      type: 'danger',
+      callBack: () => {
+      }
+    });
+  }
+
   handleSubmit = async (values) => {
-    const { totalAmount, price } = this.props;
     const {ipInfo: {currency: fiat_currency}, authProfile} = this.props;
+    const { amount, currency, type, phone, physical_item, address } = values;
 
     const wallet = MasterWallet.getWalletDefault(values.currency);
 
@@ -165,39 +184,37 @@ class Component extends React.Component {
       return;
     }
 
-    const balance = new BigNumber(await wallet.getBalance());
-    const fee = new BigNumber(await wallet.getFee(10, true));
-    let amount = new BigNumber(values.amount);
+    const balance = await wallet.getBalance();
+    const fee = await wallet.getFee(10, true);
+    let checkAmount = amount;
 
-    if (values.currency === CRYPTO_CURRENCY.ETH && values.type === EXCHANGE_ACTION.BUY) {
-      amount = 0;
+    const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
+
+    if (currency === CRYPTO_CURRENCY.ETH && shopType === EXCHANGE_ACTION.BUY) {
+      checkAmount = 0;
     }
 
-    const shopType = values.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
-
-    if ((values.currency === CRYPTO_CURRENCY.ETH || (shopType === EXCHANGE_ACTION.SELL && values.currency === CRYPTO_CURRENCY.BTC))
-      && this.showNotEnoughCoinAlert(balance, amount, fee, values.currency)) {
+    if ((currency === CRYPTO_CURRENCY.ETH || (shopType === EXCHANGE_ACTION.SELL && currency === CRYPTO_CURRENCY.BTC))
+      && this.showNotEnoughCoinAlert(balance, checkAmount, fee, values.currency)) {
 
       return;
     }
 
-    const address = wallet.address;
+    let phones = phone.trim().split('-');
 
-    let phones = values.phone.trim().split('-');
-
-    let phone = '';
+    let newPhone = '';
     if (phones.length > 1) {
-      phone = phones[1].length > 0 ? values.phone : '';
+      newPhone = phones[1].length > 0 ? phone : '';
     }
 
     const offer = {
-      amount: values.amount,
+      amount: amount,
       price: '0',
-      physical_item: values.physical_item,
-      currency: values.currency,
-      type: values.type,
-      contact_info: values.address,
-      contact_phone: phone,
+      physical_item: physical_item,
+      currency: currency,
+      type: shopType,
+      contact_info: address,
+      contact_phone: newPhone,
       fiat_currency: fiat_currency,
       latitude: this.state.lat,
       longitude: this.state.lng,
@@ -206,20 +223,19 @@ class Component extends React.Component {
       chat_username: authProfile?.username || '',
     };
 
-    if (values.type === EXCHANGE_ACTION.BUY) {
-      offer.user_address = address;
+    if (shopType === EXCHANGE_ACTION.BUY) {
+      offer.user_address = wallet.address;
     } else {
-      offer.refund_address = address;
+      offer.refund_address = wallet.address;
     }
 
     console.log('handleSubmit', offer);
     const message = <FormattedMessage id="createOfferConfirm"
                                       values={ {
-                                        type: EXCHANGE_ACTION_NAME[values.type],
-                                        amount: formatAmountCurrency(values.amount),
-                                        currency: values.currency,
-                                        currency_symbol: fiat_currency,
-                                        total: formatMoney(totalAmount),
+                                        type: EXCHANGE_ACTION_NAME[type],
+                                        something: physical_item,
+                                        amount: amount,
+                                        currency: currency,
                                       } } />;
 
     this.setState({
@@ -231,8 +247,8 @@ class Component extends React.Component {
                 <div>{message}</div>
               </div>
             </Feed>
-            <Button className="mt-2" block onClick={() => this.createOffer(offer)}>Confirm</Button>
-            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}>Not now</Button>
+            <Button className="mt-2" block onClick={() => this.createOffer(offer)}><FormattedMessage id="ex.btn.confirm" /></Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelCreateOffer}><FormattedMessage id="ex.btn.notNow" /></Button>
           </div>
         ),
     }, () => {
@@ -243,7 +259,6 @@ class Component extends React.Component {
   createOffer = (offer) => {
     this.modalRef.close();
     console.log('createOffer', offer);
-    const { currency } = this.props;
 
     this.showLoading();
     this.props.createOffer({
@@ -259,33 +274,26 @@ class Component extends React.Component {
     this.modalRef.close();
   }
 
-  handleCreateOfferSuccess = async (responseData) => {
-    const data = responseData.data;
-
-    const currency = data.currency;
+  handleCreateOfferSuccess = async (res) => {
+    const { data } = res;
+    const { currency, type, system_address, amount, id } = data;
 
     console.log('handleCreateOfferSuccess', data);
 
-    const wallet = MasterWallet.getWalletDefault(currency);
+    if (type === EXCHANGE_ACTION.SELL) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+      console.log('wallet', wallet);
 
-    console.log('data', data);
-    console.log('wallet', wallet);
+      if (currency === CRYPTO_CURRENCY.BTC) {
+        wallet.transfer(system_address, amount, 10).then(success => {
+          console.log('transfer', success);
+        });
+      } else if (currency === CRYPTO_CURRENCY.ETH) {
+        const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
-    if (currency === CRYPTO_CURRENCY.BTC) {
-      wallet.transfer(data.system_address, data.amount, 10).then(success => {
-        console.log('transfer', success);
-      });
-    } else if (currency === CRYPTO_CURRENCY.ETH) {
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
-
-      let result = null;
-      if (data.type === EXCHANGE_ACTION.BUY) {
-        result = await exchangeHandshake.initByCashOwner(wallet.address, data.amount, data.id);
-      } else {
-        result = await exchangeHandshake.initByCoinOwner(wallet.address, data.amount, data.id);
+        const result = await exchangeHandshake.initByCoinOwner(amount, id);
+        console.log('handleCreateOfferSuccess', result);
       }
-
-      console.log('handleCreateOfferSuccess', result);
     }
 
     this.hideLoading();
@@ -312,112 +320,121 @@ class Component extends React.Component {
     const { type, currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, total, totalFormatted, intl } = this.props;
     const modalContent = this.state.modalContent;
 
+    const { CRYPTO_CURRENCY_LIST } = this.state;
+
     return (
       <div className="create-exchange-local">
         <FormExchangeCreateLocal onSubmit={this.handleSubmit}>
-          <Feed className="feed my-2 p-0" background={this.mainColor}>
-            <div style={{ color: "white", padding: "20px" }}>
-
-              <div className="d-flex mb-4">
-                <label className="col-form-label mr-auto label-create head-label"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.iWantTo"/></span></label>
-                <div className='input-group'>
-                  <Field
-                    name="type"
-                    // containerClass="radio-container-old"
-                    component={fieldRadioButton}
-                    type="tab"
-                    list={EXCHANGE_ACTION_LIST}
-                    color={textColor}
-                    validate={[required]}
-                    onChange={this.onCurrencyChange}
-                  />
-                </div>
-              </div>
-
-              <div className="d-flex mb-3">
-                <label className="col-form-label mr-auto label-create"></label>
-                <div className='input-group'>
-                  <Field
-                    name="physical_item"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldInput}
-                    placeholder={intl.formatMessage({ id: 'ex.createLocal.placeholder.anyItem' })}
-                    // onChange={this.onAmountChange}
-                    validate={[required]}
-                  />
-                  <hr className="hrLine w-100"/>
-                </div>
-              </div>
-
-              <div className="d-flex mb-2">
-                <label className="col-form-label mr-auto label-create" style={{ width: "190px" }}><span
-                  className="align-middle"><FormattedMessage id="ex.createLocal.label.coin"/></span></label>
-                <div className='input-group'>
-                  <Field
-                    name="currency"
-                    // containerClass="radio-container-old"
-                    component={fieldRadioButton}
-                    type="radio-1"
-                    list={CRYPTO_CURRENCY_LIST}
-                    color={textColor}
-                    validate={[required]}
-                  />
-                </div>
-              </div>
-
-              <hr className="hrLine"/>
-
-              <div className="d-flex">
-                <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.amount"/></span></label>
-                <div className='input-group'>
-                  <Field
-                    name="amount"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldInput}
-                    placeholder={MIN_AMOUNT[currency]}
-                    // onChange={this.onAmountChange}
-                    validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
-                  />
-                </div>
-              </div>
-
-              <hr className="hrLine"/>
-
-              <div className="d-flex mt-2">
-                <label className="col-form-label mr-auto label-create"><span
-                  className="align-middle"><FormattedMessage id="ex.createLocal.label.phone"/></span></label>
-                <div className="input-group w-100">
-                  <Field
-                    name="phone"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldPhoneInput}
-                    color={textColor}
-                    type="tel"
-                    placeholder="4995926433"
-                    // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
-                  />
-                </div>
-              </div>
-
-              <hr className="hrLine"/>
-
-              <div className="d-flex mt-2">
-                <label className="col-form-label mr-auto label-create"><span
-                  className="align-middle"><FormattedMessage id="ex.createLocal.label.address"/></span></label>
-                <div className="w-100">
-                  <Field
-                    name="address"
-                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                    component={fieldInput}
-                    validate={[required]}
-                    placeholder="81 E. Augusta Ave. Salinas"
-                  />
-                </div>
-              </div>
-
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.iWantTo"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="type"
+                // containerClass="radio-container-old"
+                component={fieldRadioButton}
+                type="tab"
+                list={EXCHANGE_ACTION_LIST}
+                // color={textColor}
+                validate={[required]}
+                onChange={this.onCurrencyChange}
+              />
             </div>
-          </Feed>
-          <Button block type="submit"><FormattedMessage id="btn.initiate"/></Button>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.something"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="physical_item"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                placeholder={intl.formatMessage({ id: 'ex.createLocal.placeholder.anyItem' })}
+                // onChange={this.onAmountChange}
+                validate={[required]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.coin"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="currency"
+                // containerClass="radio-container-old"
+                component={fieldRadioButton}
+                type="tab-4"
+                list={CRYPTO_CURRENCY_LIST}
+                // color={textColor}
+                validate={[required]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex">
+            <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.createLocal.label.amount"/></span></label>
+            <div className='input-group'>
+              <Field
+                name="amount"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                placeholder={MIN_AMOUNT[currency]}
+                // onChange={this.onAmountChange}
+                validate={[required, currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mt-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.phone"/></span></label>
+            <div className="input-group w-100">
+              <Field
+                name="phone"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldPhoneInput}
+                color={textColor}
+                type="tel"
+                placeholder="4995926433"
+                // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mt-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.address"/></span></label>
+            <div className="w-100">
+              <Field
+                name="address"
+                className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                component={fieldInput}
+                validate={[required]}
+                placeholder="81 E. Augusta Ave. Salinas"
+              />
+            </div>
+          </div>
+
+          <hr className="hrLine"/>
+
+          <div className="d-flex mb-2">
+            <label className="col-form-label mr-auto label-create"><span
+              className="align-middle"><FormattedMessage id="ex.createLocal.label.uploadImage"/></span></label>
+            <div className="w-100">
+              <ImageUploader onSuccess={(res) => console.log('abcdde', res)} imgSample={null} multiple={false} />
+            </div>
+          </div>
+          <Button block type="submit" className="mt-3"><FormattedMessage id="btn.initiate"/></Button>
         </FormExchangeCreateLocal>
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}

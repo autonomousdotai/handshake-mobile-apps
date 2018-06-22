@@ -8,11 +8,6 @@
   //line-height: 32px;
   margin-top: 5px;
 }
-.head-label {
-  font-weight: 600;
-  font-size: 16px;
-  text-transform: none;
-}
 
 .create-exchange {
   font-weight: 500;
@@ -90,5 +85,16 @@
 }
 
 .create-exchange-local {
-
+  background: #ffffff;
+  color: #000000;
+  font-weight: 500;
+  padding: 20px;
+  input {
+    font-weight: 500;
+    font-size: 16px;
+    color: #000000;
+    letter-spacing: 0;
+    text-align: left;
+    padding: 0;
+  }
 }

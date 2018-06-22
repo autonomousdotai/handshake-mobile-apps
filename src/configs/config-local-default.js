@@ -26,7 +26,7 @@ const config = {
       // predictionHandshakeAddress: '0xb90a6b2d5b6dd306b9350304fe6fe88636847298',
       predictionHandshakeAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
       predictionHandshakeDevAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
-      exchangeHandshakeAddress: '0xc238bd0d37b7e1e8d1cb3acb2068ebed211b4a9c',
+      exchangeHandshakeAddress: '0x4e86f7226c95bcb103dd8b6f5a12176ea3978e33',
       exchangeShopAddress: '0xa849f62cacb770dd1aac0dceb9fc7ec53cffde84',
       cryptosignOwnerAddress: '',
       cryptosignOwnerPrivateKey: '',
