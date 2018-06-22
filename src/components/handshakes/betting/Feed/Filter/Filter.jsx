@@ -103,7 +103,7 @@ class BettingFilter extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { matches, support, against } = nextProps;
-    console.log(`${TAG} Matches:`, matches);
+    //console.log(`${TAG} Matches:`, matches);
     // const selectedMatch = this.defaultMatch;
     // const selectedOutcome = this.defaultOutcome;
     this.setState({
@@ -303,7 +303,7 @@ class BettingFilter extends React.Component {
   }
 
   getInfoShare(selectedMatch, selectedOutcome) {
-    const profile = local.get(APP.AUTH_PROFILE);    
+    const profile = local.get(APP.AUTH_PROFILE);
     let ref = profile ? "&ref=" + profile.username : ''
     return {
       title: `I put a bet on ${selectedMatch.value}. ${selectedOutcome.value}! Put your coin where your mouth is.`,

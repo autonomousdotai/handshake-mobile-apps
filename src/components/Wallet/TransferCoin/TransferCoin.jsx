@@ -43,6 +43,7 @@ class Transfer extends React.Component {
       qrCodeOpen: false,
       delay: 300,
       walletsData: false,
+      rate: 0,
     }
   }
 
@@ -84,6 +85,7 @@ class Transfer extends React.Component {
     }
 
     this.getWalletDefault();
+    this.getRate();
   }
 
   resetForm(){
@@ -112,20 +114,20 @@ class Transfer extends React.Component {
     }
   }
 
-  getCryptoPriceByAmount = (amount) => {
-    var data = {amount: amount, currency: "ETH"};
-    console.log("amount", amount);
+  getRate = () => {
+    var data = {amount: 1, currency: this.state.walletSelected.name};
+    console.log(data, API_URL.EXCHANGE.GET_CRYPTO_PRICE);
     this.props.getCryptoPrice({
       PATH_URL: API_URL.EXCHANGE.GET_CRYPTO_PRICE,
       qs: data,
-      successFn: (response) => {
-        const cryptoPrice = CryptoPrice.cryptoPrice(response.data);
-        const price = new BigNumber(amount).plus(new BigNumber(cryptoPrice.fiatAmount)).toNumber();
-        console.log("cryptoPrice", price);
-        this.setState({inputSendMoneyValue: price});
+      successFn: (res) => {console.log("response", res);
+        const cryptoPrice = CryptoPrice.cryptoPrice(res.data);
+        const price = new BigNumber(cryptoPrice.fiatAmount).toNumber();
+        console.log("price", price);
+        //this.setState({rate: price});
       },
-      errorFn: (e) => {
-        console.error(e);
+      errorFn: (err) => {
+        console.log("Error", err);
       },
     });
   }
@@ -202,8 +204,16 @@ class Transfer extends React.Component {
   }
 
   updateSendAmountValue = (evt) => {
-    let amount = evt.target.value;
-    this.getCryptoPriceByAmount(amount);
+    let amount = evt.target.value, rate = 0, money = 0;
+    if(!isNaN(amount)){
+      rate = this.state.rate;
+      money = amount * rate;
+      console.log(rate, money);
+      this.setState({
+        inputAddressAmountValue: amount,
+        inputAddressMoneyValue: money
+      });
+    }
   }
 
   updateSendAddressValue = (evt) => {
@@ -341,10 +351,10 @@ renderScanQRCode = () => (
                   key="1"
                   name="amount-money"
                   placeholder={"0.0"}
-                  type={isIOs ? "number" : "tel"}
+                  type="text"
                   className="form-control"
                   component={fieldInput}
-                  value={this.state.inputSendMoneyValue}
+                  value={this.state.inputAddressMoneyValue}
                   //onChange={evt => this.updateSendAmountValue(evt)}
                   validate={[required, amountValid]}
                 />
@@ -357,7 +367,7 @@ renderScanQRCode = () => (
                   key="2"
                   name="amount-coin"
                   placeholder={"0.0"}
-                  type={isIOs ? "number" : "tel"}
+                  type="text"
                   className="form-control"
                   component={fieldInput}
                   value={this.state.inputSendAmountValue}

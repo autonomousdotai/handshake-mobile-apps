@@ -112,7 +112,7 @@ class BettingCreate extends React.Component {
   componentWillReceiveProps(nextProps){
     //console.log('Receive Props: ', nextProps);
     const {matches} = nextProps;
-    console.log(`${TAG} Matches:`, matches);
+    //console.log(`${TAG} Matches:`, matches);
 
     this.setState({
         matches
@@ -137,9 +137,9 @@ get foundMatch(){
 get matchNames() {
   const {matches} = this.state;
   //return matches.map((item) => ({ id: item.id, value: `${item.homeTeamName} - ${item.awayTeamName} (${this.getStringDate(item.date)})` }));
-  const mathNamesList = matches.map((item) => ({ id: item.id, 
-                                                value: `Event: ${item.name} (${this.getStringDate(item.date)})`, 
-                                                marketFee: item.market_fee, 
+  const mathNamesList = matches.map((item) => ({ id: item.id,
+                                                value: `Event: ${item.name} (${this.getStringDate(item.date)})`,
+                                                marketFee: item.market_fee,
                                                 date: item.date}));
   return [
     ...mathNamesList,
@@ -253,7 +253,7 @@ get defaultOutcome() {
       message = MESSAGE.RIGHT_NETWORK;
 
     }
-    
+
     if(selectedMatch && selectedOutcome){
       if (betHandshakeHandler.isExpiredDate(date)){
         message = MESSAGE.MATCH_OVER;
