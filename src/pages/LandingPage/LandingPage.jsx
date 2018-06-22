@@ -546,7 +546,7 @@ class Handshake extends React.Component {
                 </div>
               </div>
 
-              <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
+              <div className="col-lg-12 wow animated fadeInUp mw810 mb120">
                 <h3 className="h3-y text-center">Plus we’ll give you free stuff.</h3>
                 <div className="row">
                   <div className="col-lg-6 col-md-12">

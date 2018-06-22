@@ -63,6 +63,10 @@ body {
     margin-bottom: rem-calc(160px) !important;
   }
 
+  .mb120 {
+    margin-bottom: rem-calc(120px) !important;
+  }
+
   .mb80 {
     margin-bottom: rem-calc(80px);
   }
@@ -137,6 +141,7 @@ body {
     top: 60px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
   }
   .icon-text {
     margin-right: rem-calc(23px);
@@ -146,6 +151,7 @@ body {
     letter-spacing: 0;
     line-height: 38px;
     color: #9B9B9B;
+    font-weight: 900;
     font-family: motiva-sans, sans-serif !important;
   }
   p {
