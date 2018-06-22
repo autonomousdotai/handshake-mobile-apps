@@ -328,6 +328,10 @@ body {
       opacity: 0.7;
     }
   }
+
+  .mw600 {
+    max-width: rem-calc(600px) !important;
+  }
 }
 
 @media (max-width: 767px) {

@@ -540,4 +540,7 @@ export default {
   WHITE_PAPER_SUMMARY_4: 'Build PEX with us. Join the conversation at',
   WHITE_PAPER_END: 'And it actually works',
   WHITE_PAPER_END_1: 'Hey, thanks for reading. Ninja will go live on the testnet on 5 June! We’re excited to hear your thoughts.',
+
+  // betting
+
 };
