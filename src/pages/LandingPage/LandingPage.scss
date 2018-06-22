@@ -316,7 +316,9 @@ body {
     margin-bottom: -80px;
   }
   .second-page {
-    background: url("../../assets/images/icon/landingpage/shuriken_backgroud.svg") no-repeat;
+    .shuriken-background {
+      position: absolute;
+    }
   }
 }
 

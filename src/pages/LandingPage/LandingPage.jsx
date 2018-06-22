@@ -23,12 +23,14 @@ import labelIcon from '../../assets/images/icon/landingpage/label.svg';
 import screenIcon from '../../assets/images/icon/landingpage/screen.png';
 import neymarIcon from '../../assets/images/icon/landingpage/neymar.png';
 import flowerIcon from '../../assets/images/icon/landingpage/flower.svg';
+import shurikenBackground from '../../assets/images/icon/landingpage/shuriken-background.svg';
 
 // style
 import './LandingPage.scss';
 
 const inputRefOne = 'emailRef';
 const inputRefTwo = 'emailRefTwo';
+let left = 0;
 
 class Handshake extends React.Component {
   constructor(props) {
@@ -40,19 +42,39 @@ class Handshake extends React.Component {
     this.isEmail = this.isEmail.bind(this);
     this.renderFillInForm = this.renderFillInForm.bind(this);
     this.submitFillForm = this.submitFillForm.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
     this.injectFontPage();
     // if (window.addEventListener) { window.addEventListener('load', this.injectFontPage, false); } else if (window.attachEvent) { window.attachEvent('onload', this.injectFontPage); } else window.onload = this.injectFontPage;
+    window.addEventListener('scroll', this.handleScroll)
   }
 
   componentWillReceiveProps() {
     this.injectFontPage();
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
   productId = 1296;
   productIdFillForm = 1300;
+
+  handleScroll() {
+    const theta = (window.scrollY / 200) % Math.PI;
+    if (this.imageRef) {
+      this.imageRef.style.transform = `rotate(${theta}rad)`;
+      this.imageRef.style.position = 'relative';
+      this.imageRef.style.left = `${left}%`;
+      if (left === 100) {
+        left = 0;
+      } else {
+        left += 1;
+      }
+    }
+  }
 
   showAlertMessage({ message, type = 'danger' }) {
     this.props.showAlert({
@@ -528,6 +550,9 @@ class Handshake extends React.Component {
         </div>
 
         <section className="second-page">
+          <div className="shuriken-background">
+            <img src={shurikenBackground} ref={imag => this.imageRef = imag}/>
+          </div>
           <div className="container">
             <div className="row">
 
