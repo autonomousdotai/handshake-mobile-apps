@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import qs from 'qs';
 import { showAlert } from '@/reducers/app/action';
-import Helper from '@/services/Helper';
+// import Helper from '@/services/Helper';
 
 import Alert from '@/components/core/presentation/Alert';
 import ninjaStarHtml from '../../assets/images/ninja-star/index.html';
@@ -93,7 +93,7 @@ class Handshake extends React.Component {
     // ga('send', 'event', 'ShakeNinja', 'submit register email');
     const backOrder = axios({
       method: 'post',
-      url: `https://dev.autonomous.ai/api-v2/order-api/order/back-order/${this.productId}?${qs.stringify(params)}`,
+      url: `https://www.autonomous.ai/api-v2/order-api/order/back-order/${this.productId}?${qs.stringify(params)}`,
       data: {},
     });
     backOrder.then((backOrderResult) => {
@@ -134,7 +134,7 @@ class Handshake extends React.Component {
     // ga('send', 'event', 'ShakeNinja', 'submit register email');
     const backOrder = axios({
       method: 'post',
-      url: `https://dev.autonomous.ai/api-v2/order-api/order/back-order/${this.productIdFillForm}?${qs.stringify(params)}`,
+      url: `https://www.autonomous.ai/api-v2/order-api/order/back-order/${this.productIdFillForm}?${qs.stringify(params)}`,
       data: {},
     });
     backOrder.then((backOrderResult) => {
