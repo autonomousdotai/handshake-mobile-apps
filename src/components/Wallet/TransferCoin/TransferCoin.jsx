@@ -43,7 +43,10 @@ class Transfer extends React.Component {
       qrCodeOpen: false,
       delay: 300,
       walletsData: false,
-      rate: 0,
+      rateBTC: 0,
+      rateETH: 0,
+      inputSendAmountValue: 0,
+      inputSendMoneyValue: 0
     }
   }
 
@@ -85,7 +88,8 @@ class Transfer extends React.Component {
     }
 
     this.getWalletDefault();
-    this.getRate();
+    this.getRate("BTC");
+    this.getRate("ETH");
   }
 
   resetForm(){
@@ -114,20 +118,21 @@ class Transfer extends React.Component {
     }
   }
 
-  getRate = () => {
-    var data = {amount: 1, currency: this.state.walletSelected.name};
-    console.log(data, API_URL.EXCHANGE.GET_CRYPTO_PRICE);
+  getRate = (currency) => {
+    var data = {amount: 1, currency: currency};
     this.props.getCryptoPrice({
       PATH_URL: API_URL.EXCHANGE.GET_CRYPTO_PRICE,
       qs: data,
-      successFn: (res) => {console.log("response", res);
+      successFn: (res) => {
         const cryptoPrice = CryptoPrice.cryptoPrice(res.data);
         const price = new BigNumber(cryptoPrice.fiatAmount).toNumber();
-        console.log("price", price);
-        //this.setState({rate: price});
+        if(currency == "BTC")
+          this.setState({rateBTC: price});
+        else
+          this.setState({rateETH: price});
       },
       errorFn: (err) => {
-        console.log("Error", err);
+        console.error("Error", err);
       },
     });
   }
@@ -203,15 +208,34 @@ class Transfer extends React.Component {
     return errors
   }
 
-  updateSendAmountValue = (evt) => {
+  updateAddressAmountValue = (evt) => {
     let amount = evt.target.value, rate = 0, money = 0;
+    if(this.state.walletSelected && this.state.walletSelected.name == "BTC")
+      rate = this.state.rateBTC;
+    else
+      rate = this.state.rateETH;
+
     if(!isNaN(amount)){
-      rate = this.state.rate;
       money = amount * rate;
-      console.log(rate, money);
       this.setState({
-        inputAddressAmountValue: amount,
-        inputAddressMoneyValue: money
+        inputSendAmountValue: amount,
+        inputSendMoneyValue: money.toFixed(2)
+      });
+    }
+  }
+
+  updateAddressMoneyValue = (evt) => {
+    let money = evt.target.value, rate = 0, amount = 0;
+    if(this.state.walletSelected && this.state.walletSelected.name == "BTC")
+      rate = this.state.rateBTC;
+    else
+      rate = this.state.rateETH;
+
+    if(!isNaN(money)){
+      amount = money / rate;
+      this.setState({
+        inputSendAmountValue: amount,
+        inputSendMoneyValue: money
       });
     }
   }
@@ -281,7 +305,7 @@ handleScan=(data) =>{
   }
 }
 handleError(err) {
-  console.log('error wc', err);
+  consolelog('error wc', err);
 }
 
 oncloseQrCode=() => {
@@ -354,8 +378,8 @@ renderScanQRCode = () => (
                   type="text"
                   className="form-control"
                   component={fieldInput}
-                  value={this.state.inputAddressMoneyValue}
-                  //onChange={evt => this.updateSendAmountValue(evt)}
+                  value={this.state.inputSendMoneyValue}
+                  onChange={evt => this.updateAddressMoneyValue(evt)}
                   validate={[required, amountValid]}
                 />
               </InputGroup>
@@ -371,7 +395,7 @@ renderScanQRCode = () => (
                   className="form-control"
                   component={fieldInput}
                   value={this.state.inputSendAmountValue}
-                  onChange={evt => this.updateSendAmountValue(evt)}
+                  onChange={evt => this.updateAddressAmountValue(evt)}
                   validate={[required, amountValid]}
                 />
               </InputGroup>
