@@ -254,7 +254,7 @@ body {
         color: white;
         //width: 50%;
         background: inherit;
-        height: rem-calc(36px);
+        height: rem-calc(40px);
         padding-left: rem-calc(5px);
         &:focus {
           outline: none;
@@ -316,6 +316,9 @@ body {
 
 @media (max-width: 767px) {
   .root {
+    .first-page {
+      margin-bottom: rem-calc(20px);
+    }
     .content-header + div, p.content-header {
        margin-top: rem-calc(20px);
     }
@@ -333,6 +336,9 @@ body {
         margin-left: 0;
         margin-right: 0;
       }
+    }
+    .line-down span {
+      margin-bottom: -95px;
     }
   }
 }

@@ -72,7 +72,7 @@ class Helper {
     const decode = s => decodeURIComponent(s.replace(/\+/g, ' '));
     const queryString = text.substring(1);
     const keyValues = queryString.split('&');
-  
+
     for(let i in keyValues) {
       const key = keyValues[i].split('=');
       if (key.length > 1) {
@@ -91,6 +91,17 @@ class Helper {
   static isFloat(number) {
     return Number(number) === number && number % 1 !== 0;
   }
+
+    /**
+   * Small devices (mobile, 768px and down)
+  */
+  static get isSmallScreen() {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    const width = window.innerWidth || document.body.clientWidth;
+    return width < 768;
+  };
 }
 
 export class StringHelper {

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import qs from 'qs';
 import { showAlert } from '@/reducers/app/action';
-// import Helper from '@/services/Helper';
+import Helper from '@/services/helper';
 
 import Alert from '@/components/core/presentation/Alert';
 import ninjaStarHtml from '../../assets/images/ninja-star/index.html';
@@ -160,7 +160,7 @@ class Handshake extends React.Component {
     }
 
     // add wowJS
-    if (!document.getElementById('wowjs')) {
+    if (!document.getElementById('wowjs') && !Helper.isSmallScreen) {
       const wowJS = document.createElement('script');
       wowJS.id = 'wowjs';
       wowJS.src = 'https://wowjs.uk/dist/wow.min.js';
@@ -351,12 +351,12 @@ class Handshake extends React.Component {
   // }
 
   render() {
-    if(typeof WOW === 'undefined') return <div />;
+    if(!Helper.isSmallScreen && typeof WOW === 'undefined') return <div />;
     return (
       <div className="root">
         <Alert />
-        <section className="first-page">
-          <iframe width="100%" className="fadeIn" src="/ninja-star/index.html"/>
+        <section className="first-page d-none d-lg-block">
+          <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
           <div className="content-first col-lg-12 col-md-12">
             <div className="img-screen wow animated slideInLeft col-lg-6 col-md-12 text-right d-none d-lg-block" data-wow-delay="6.6s">
               <div className="label-100 wow animated zoomIn" data-wow-delay="8s">
@@ -370,7 +370,7 @@ class Handshake extends React.Component {
               </div>
             </div>
             <div className="col-lg-6 col-md-12 wow animated slideInLeft" data-wow-delay="6.7s">
-              <div className="cnt-w ">
+              <div className="col-lg-9">
                 <div className="logo wow animated fadeInUp" data-wow-delay="0.2s">
                   <img height="45" src={logoNinjaIcon}/>
                 </div>
@@ -412,6 +412,84 @@ class Handshake extends React.Component {
                 </div>
 
                 <div className=" wow animated fadeInUp mt20" data-wow-delay="6s">
+                  <p>We’ll send you an airdrop invitation.</p>
+
+                  <div className="input-group email-frm">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Enter your email"
+                      ref={input => this[inputRefOne] = input}
+                    />
+                    <span className="input-group-btn">
+                        <button
+                          className="btn btn-y btn-lg"
+                          type="button"
+                          onClick={() => {
+                            this.submitEmail(inputRefOne)
+                          }}
+                        >
+                          I'm in
+                        </button>
+                      </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="line-down wow animated fadeIn" data-wow-delay="2s">
+            <span></span>
+          </div>
+        </section>
+
+        {/* mobile */}
+        <section className="first-page d-lg-none">
+          <iframe width="100%" className="fadeIn" src="/ninja-star/index.html"/>
+          <div className="content-first col-lg-12 col-md-12">
+            <div className="col-lg-6 col-md-12">
+              <div className="cnt-w ">
+                <div className="logo wow animated fadeInUp">
+                  <img height="45" src={logoNinjaIcon}/>
+                </div>
+                <h2 className="text-up text-y mt20 wow animated fadeInUp">Our token is the
+                  Shuriken (SHURI). <br/>
+                  No, there is no ICO.</h2>
+                <div className="mt20  wow animated fadeInUp">
+                  <p className="logo">Use it to slash fees. Increase your likelihood of matching bets. Unlock first
+                    access to bounties, bonuses and new features.
+                  </p>
+                </div>
+                <div className="mt20 wow animated fadeInUp">
+                  <p className="logo">
+                    Our <a className="text-link"
+                           href="https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                  >
+                    whitepaper
+                  </a> wasn’t written to confuse.
+                    <br/>
+                    <br/>
+                    Our <a className="text-link"
+                           href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                    telegram
+                  </a> discusses the actual working product</p>
+                </div>
+                <div className="wow animated fadeInUp">
+                  <p className="logo mt20">Coming soon. To receive updates on token sales and
+                    airdrops:</p>
+                  <a className="btn-lg btn-y wow animated fadeInUp btn-block"
+                     href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
+                     target="_blank"
+                     rel="noopener noreferrer"
+                  >
+                    <img height="25" src={telegramIcon}/> Join the conversation on telegram
+                  </a>
+                </div>
+
+                <div className="mt20 wow animated fadeInUp">
                   <p>We’ll send you an airdrop invitation.</p>
 
                   <div className="input-group email-frm">
