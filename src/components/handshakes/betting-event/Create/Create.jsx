@@ -102,11 +102,11 @@ class CreateBettingEvent extends React.Component {
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
       },
       errorFn: (response) => {
-        this.props.showAlert({
-          message: <div className="text-center">Incorrect outcome, please check again.</div>,
+        response.message && this.props.showAlert({
+          message: <div className="text-center">{response.message}</div>,
           timeOut: 3000,
           type: 'danger',
-          callBack: () => { },
+          callBack: () => {},
         });
       },
     });
@@ -151,8 +151,8 @@ class CreateBettingEvent extends React.Component {
         console.log(result);
       },
       errorFn: (response) => {
-        response.data && response.data.message && this.props.showAlert({
-          message: <div className="text-center">{response.data.message}</div>,
+        response.message && this.props.showAlert({
+          message: <div className="text-center">{response.message}</div>,
           timeOut: 3000,
           type: 'danger',
           callBack: () => {},
@@ -269,7 +269,6 @@ class CreateBettingEvent extends React.Component {
               onChange={(date) => { this.changeDate(date, 'closingTime'); }}
               className="form-control input-field"
               placeholder="Closing Time"
-              required
               name="closingTime"
             />
             <DatePicker
@@ -277,7 +276,6 @@ class CreateBettingEvent extends React.Component {
               name="reportingTime"
               className={`form-control input-field${!this.state.closingTime ? ' disabled-datePicker' : ' active-DatePicker'}`}
               placeholder="Reporting Time"
-              required
               disabled={!this.state.closingTime}
               startDate={this.state.closingTime}
             />
@@ -285,7 +283,6 @@ class CreateBettingEvent extends React.Component {
               onChange={(date) => { this.changeDate(date, 'disputeTime'); }}
               className={`form-control input-field${!this.state.reportingTime ? ' disabled-datePicker' : ' active-DatePicker'}`}
               placeholder="Dispute Time"
-              required
               name="disputeTime"
               startDate={this.state.reportingTime}
               disabled={!this.state.reportingTime}
