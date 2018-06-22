@@ -45,7 +45,7 @@ class WalletTransaction extends React.Component {
             value: Number(data.value / 1000000000000000000),
             coin: wallet.name,
             confirmations: data.confirmations,
-            is_sent: wallet.address.toLowerCase() == String(data.from).toLowerCase(),
+            is_sent: data.is_sent,
             status: Number(data.txreceipt_status) > 0 ? "success" : "failed"
           },
           body: {
@@ -70,7 +70,8 @@ class WalletTransaction extends React.Component {
           result = {
             header: {
               coin: "BTC",
-              confirmations: data.confirmations
+              confirmations: data.confirmations,
+              is_sent: data.is_sent
             },
             body: {
               size: data.size,
@@ -82,8 +83,6 @@ class WalletTransaction extends React.Component {
           };
 
           for(let i in data.vin){
-            if(String(data.vin[i].addr).toLowerCase() == wallet.address.toLowerCase())
-              is_sent = true;
 
             let no = Number(i) + 1;
             result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
@@ -96,7 +95,6 @@ class WalletTransaction extends React.Component {
           }
 
           result.header.value = value;
-          result.header.is_sent = is_sent;
         }
         catch(e){
           console.error(e);
