@@ -52,6 +52,7 @@ class Chat extends Component {
       transferCoin: {},
       isMounted: false,
       notFoundUser: false,
+      currentMessage: '',
     };
 
     this.firechat = this.props.app.firechat;
@@ -740,15 +741,20 @@ class Chat extends Component {
           onFocus={() => { this.scrollToBottom(); }}
           onKeyDown={(e) => {
             if (e.keyCode === 13) {
-              this.sendMessage(e.target.value);
+              this.sendMessage(this.state.currentMessage);
               e.preventDefault();
               return false;
             }
           }}
+          onChange={(e) => {
+            this.setState({
+              currentMessage: e.target.value,
+            });
+          }}
           rightButtons={
             <img
               src={IconBtnSend}
-              onClick={this.sendMessage}
+              onClick={() => { this.sendMessage(this.state.currentMessage); }}
               alt=""
             />
           }

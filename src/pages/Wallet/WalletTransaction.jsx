@@ -66,36 +66,41 @@ class WalletTransaction extends React.Component {
       else{
         let result = {}, is_sent = false, value = 0;
 
-        result = {
-          header: {
-            coin: "BTC",
-            confirmations: data.confirmations
-          },
-          body: {
-            size: data.size,
-            received_time: moment(data.time).format('llll'),
-            mined_time: moment(data.blocktime).format('llll'),
-            block_hash: data.blockhash,
-            fees: data.fees + " BTC",
+        try{
+          result = {
+            header: {
+              coin: "BTC",
+              confirmations: data.confirmations
+            },
+            body: {
+              size: data.size,
+              received_time: moment(data.time).format('llll'),
+              mined_time: moment(data.blocktime).format('llll'),
+              block_hash: data.blockhash,
+              fees: data.fees + " BTC",
+            }
+          };
+
+          for(let i in data.vin){
+            if(String(data.vin[i].addr).toLowerCase() == wallet.address.toLowerCase())
+              is_sent = true;
+
+            let no = Number(i) + 1;
+            result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
+            value += Number(data.vin[i].value);
           }
-        };
 
-        for(let i in data.vin){
-          if(String(data.vin[i].addr).toLowerCase() == wallet.address.toLowerCase())
-            is_sent = true;
+          for(let i in data.vout){
+            let no = Number(i) + 1;
+            result.body["to_addr_"+no] = (data.vout[i].scriptPubKey.addresses ? data.vout[i].scriptPubKey.addresses.join(" ") : "") + " " + data.vout[i].value + " BTC";
+          }
 
-          let no = Number(i) + 1;
-          result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
-          value += Number(data.vin[i].value);
+          result.header.value = value;
+          result.header.is_sent = is_sent;
         }
-
-        for(let i in data.vout){
-          let no = Number(i) + 1;
-          result.body["to_addr_"+no] = data.vout[i].scriptPubKey.addresses.join(" ") + " " + data.vout[i].value + " BTC";
+        catch(e){
+          console.error(e);
         }
-
-        result.header.value = value;
-        result.header.is_sent = is_sent;
 
         return result;
       }
