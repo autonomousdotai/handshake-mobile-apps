@@ -66,42 +66,52 @@ class WalletHistory extends React.Component {
     }
     else{//for BTC json
       let vin = data.vin, vout = data.vout,
-        is_sent = false, value = 0,
+        is_sent = false, value = 0, cssLabel = "", cssValue = "",
         addresses = [], confirmations = data.confirmations,
         transaction_date = data.time ? new Date(data.time*1000) : "";
 
-      //check transactions are send
-      for(let tin of vin){
-        if(tin.addr.toLowerCase() == wallet.address.toLowerCase()){
-          is_sent = true;
+      try{
+        //check transactions are send
+        for(let tin of vin){
+          if(tin.addr.toLowerCase() == wallet.address.toLowerCase()){
+            is_sent = true;
 
+            for(let tout of vout){
+              if(tout.scriptPubKey.addresses){
+                let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
+                if(tout_addresses.indexOf(wallet.address.toLowerCase()) < 0){
+                  value += Number(tout.value);
+                  addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
+                }
+              }
+
+            }
+
+            break;
+          }
+        }
+
+        //check transactions are receive
+        if(!is_sent){
           for(let tout of vout){
-            let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
-            if(tout_addresses.indexOf(wallet.address.toLowerCase()) < 0){
-              value += Number(tout.value);
-              addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
+            if(tout.scriptPubKey.addresses){
+              let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
+              if(tout_addresses.indexOf(wallet.address.toLowerCase()) >= 0){
+                value += tout.value;
+              }
+              else{
+                addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
+              }
             }
           }
-
-          break;
         }
-      }
 
-      //check transactions are receive
-      if(!is_sent){
-        for(let tout of vout){
-          let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
-          if(tout_addresses.indexOf(wallet.address.toLowerCase()) >= 0){
-            value += tout.value;
-          }
-          else{
-            addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
-          }
-        }
+        cssLabel = `label-${is_sent ? "sent" : "received"}`;
+        cssValue = `value-${is_sent ? "sent" : "received"}`;
       }
-
-      let cssLabel = `label-${is_sent ? "sent" : "received"}`,
-          cssValue = `value-${is_sent ? "sent" : "received"}`;
+      catch(e){
+        console.error(e);
+      }
 
       return {
         value: value,

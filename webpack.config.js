@@ -12,6 +12,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PwaManifestPlugin = require('webpack-pwa-manifest');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const OfflinePlugin = require('offline-plugin');
 
 // configs
@@ -185,6 +186,9 @@ module.exports = function webpackConfig(env, argv) {
             },
           ],
         }),
+        new CopyWebpackPlugin([
+          {from: 'src/assets/images/ninja-star', to: 'ninja-star'},
+        ])
       ],
       module: {
         rules: [

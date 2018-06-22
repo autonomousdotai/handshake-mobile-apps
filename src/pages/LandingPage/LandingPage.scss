@@ -1,529 +1,376 @@
 @import './src/styles/style';
 
+body {
+  background: black;
+}
+
 .root {
-  height: 100%;
-  background: url('../../assets/images/icon/landingpage/banner.svg') no-repeat;
-  background-size: cover;
-  .banner {
-
+  font-family: motiva-sans, sans-serif !important;
+  padding-bottom: rem-calc(50px);
+  .mt0 {
+    margin-top: 0;
   }
-  .rowEqHeight {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
+  .mb0 {
+    margin-bottom: 0;
+  }
+  .ml0 {
+    margin-left: 0
+  }
+  .mr0 {
+    margin-right: 0
+  }
+
+  .mt10 {
+    margin-top: 10px;
+  }
+  .mb10 {
+    margin-bottom: 10px;
+  }
+  .ml10 {
+    margin-left: 10px
+  }
+  .mr10 {
+    margin-right: 10px
+  }
+
+  .mt20 {
+    margin-top: 20px;
+  }
+  .mb20 {
+    margin-bottom: 20px;
+  }
+  .ml20 {
+    margin-left: 20px
+  }
+  .mr20 {
+    margin-right: 20px
+  }
+
+  .mt30 {
+    margin-top: rem-calc(30px);
+  }
+  .mb30 {
+    margin-bottom: rem-calc(30px);
+  }
+  .ml30 {
+    margin-left: 30px
+  }
+  .mr30 {
+    margin-right: 30px
+  }
+
+  .mb160 {
+    margin-bottom: rem-calc(160px) !important;
+  }
+
+  .mb120 {
+    margin-bottom: rem-calc(120px) !important;
+  }
+
+  .mb80 {
+    margin-bottom: rem-calc(80px);
+  }
+
+  .mb94 {
+    margin-bottom: rem-calc(94px);
+  }
+
+  .mb50 {
+    margin-bottom: rem-calc(50px);
+  }
+
+  .mb60 {
+    margin-bottom: rem-calc(60px);
+  }
+
+  .mb200 {
+    margin-bottom: rem-calc(200px);
+  }
+
+  .mw810 {
+    max-width: 37rem;
+    margin: 0 auto;
+  }
+
+  .btn-lg {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    display: inline-block;
+  }
+  .btn-lg:hover {
+    text-decoration: none;
+    color: #000;
+  }
+  .btn-y {
+    color: #333;
+    background: #FFD402;
+    width: 100%;
+  }
+
+  .text-y {
+    color: #FFD402;
+  }
+  .bg-y {
+    background: #FFD402;
+    color: #333;
+  }
+
+  .text-up {
+    text-transform: uppercase;
+  }
+  .first-page {
+    width: 100%;
+    min-height: 100vh;
+    background: black;
+    position: relative;
+  }
+  .first-page iframe {
+    min-height: 100vh;
+    border: none;
+    opacity: 0.2;
+    position: relative;
+    z-index: 1;
+  }
+  .logo {
+  }
+  .content-first {
+    z-index: 2;
+    position: absolute;
+    top: 60px;
     display: flex;
-    //align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  .mainContent {
-    padding: 50px 0 54px;
-    .headerLandingpage {
-      align-items: center;
-      margin-bottom: 30px;
-      display: flex;
-      & > img {
-        margin-right: 20px;
-        height: 60px;
-        position: relative;
-        top: -9px;
-      }
-      & > div {
-        img {
-          width: 82px;
-          margin-bottom: 5px;
-        }
-        p {
-          font-family: azo-sans-web, sans-serif;
-          font-style: normal;
-          opacity: 0.9;
-          font-size: 14px;
-          color: #FFFFFF;
-          letter-spacing: 0.76px;
-        }
-      }
-    }
-    .appScreen {
-      width: 374px;
-      height: 663px;
-      margin: 0 auto;
-      background: url('../../assets/images/icon/landingpage/app_screen.svg');
-    }
-    .appScreenVideo {
-      width: 293px;
-      height: 101%;
-      position: relative;
-      left: 19.31%;
-      top: 7px;
-    }
-    h1 {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-weight: $semi-bold;
-      font-size: 30px;
-      letter-spacing: 0;
-      margin-bottom: 27px;
-      margin-top: 0;
-      line-height: 44px;
-      color: #FFFFFF;
-      .blue {
-        color: #5EEE44;
-      }
-    }
-    .subTitle {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-size: 17px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      line-height: 25px;
-      margin-bottom: 23px;
-      width: 98%;
-    }
-    .readTheWhitePaper {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-size: 14px;
-      color: #5EEE44;
-      letter-spacing: 0;
-      span {
-        text-decoration: underline;
-      }
-      img {
-        margin-left: 8px;
-      }
-    }
-    .btnTelegram {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-weight: $medium;
-      border-radius: 4px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      font-size: 20px;
-      background-image: linear-gradient(-269deg, #7740FF 0%, #1E4EFF 100%);
-      padding: 11px;
-      text-align: center;
-      width: 100%;
-      display: block;
-      //margin: 0 auto;
-      img {
-        margin-right: 9px;
-        position: relative;
-        top: -3px;
-      }
-      &:hover {
-        text-decoration: none;
-      }
-    }
-    .telegramDescription {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      margin-bottom: 12px;
-      margin-top: 62px;
-      font-size: 14px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      line-height: 27px;
-      .orange {
-        color: #F46A48;
-        font-weight: $medium;
-      }
-      strong {
-        font-weight: $medium;
-      }
-    }
-    .registerEmail {
-      display: flex;
-      flex-wrap: wrap;
-      margin: 0 auto 98px;
-      .email {
-        width: 100%;
-        padding: 15px 26px;
-        text-align: left;
-        border: 1px solid #FAFAFA;
-        box-shadow: 1px 1px 10px #c2c2c238;
-        font-weight: $normal;
-        font-size: 18px;
-        font-family: azo-sans-web, sans-serif;
-        font-style: normal;
-        letter-spacing: 0;
-        background: #FFFFFF;
-        border-radius: 4px;
-        &::placeHolder {
-          color: #959595;
-          letter-spacing: 0;
-        }
-      }
-      .btnSubmit {
-        width: 46%;
-        font-family: azo-sans-web, sans-serif;
-        font-style: normal;
-        font-weight: $medium;
-        font-size: 16px;
-        color: #FFFFFF;
-        letter-spacing: 0;
-        position: relative;
-        right: -53%;
-        top: -50px;
-        background-image: linear-gradient(-269deg, #7740FF 0%, #1E4EFF 100%);
-        border-radius: 4px;
-        padding: 8px 24px;
-        border: none;
-      }
-    }
+  .icon-text {
+    margin-right: rem-calc(23px);
   }
-  .blockChainContent {
-    max-width: 1026px;
-    margin-top: 30px;
-    margin-bottom: 50px;
-    h3 {
-      font-size: 32px;
-      letter-spacing: 0;
-      margin-bottom: 33px;
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-weight: $semi-bold;
-      color: #5EEE44;
-    }
-    p {
-      font-size: 18px;
-      letter-spacing: 0;
-      line-height: 34px;
-      width: 95%;
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      color: #FFFFFF;
-      .green {
-        color: #5EEE44;
-      }
-    }
-  }
-  .countdownBlock {
-    margin-top: 135px;
-    margin-bottom: 280px;
-    h3 {
-      font-size: 32px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      line-height: 54px;
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-weight: $semi-bold;
-      margin-bottom: 33px;
-    }
-    .countDownSubTitle {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-size: 20px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      line-height: 32px;
-      margin-bottom: 70px;
-    }
-    .countDown {
-      margin-bottom: 80px;
-    }
-    .countDownTitle {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-size: 22px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      margin-bottom: 16px;
-    }
-    .btnTelegram {
-      font-family: azo-sans-web, sans-serif;
-      font-style: normal;
-      font-weight: $medium;
-      border-radius: 4px;
-      font-size: 24px;
-      color: #FFFFFF;
-      letter-spacing: 0;
-      background-image: linear-gradient(-269deg, #7740FF 0%, #1E4EFF 100%);
-      padding: 12px 40px;
-      text-align: center;
-      width: 54%;
-      display: block;
-      margin: 0 auto;
-      img {
-        margin-right: 20px;
-        position: relative;
-        top: -3px;
-      }
-      &:hover {
-        text-decoration: none;
-      }
-    }
-    .registerEmail {
-      display: flex;
-      flex-wrap: wrap;
-      margin: 0 auto 98px;
-      width: 54%;
-      margin-top: 28px;
-      .email {
-        width: 100%;
-        padding: 15px 26px;
-        text-align: left;
-        border: 1px solid #FAFAFA;
-        box-shadow: 1px 1px 10px #c2c2c238;
-        font-weight: $normal;
-        font-size: 18px;
-        font-family: azo-sans-web, sans-serif;
-        font-style: normal;
-        letter-spacing: 0;
-        background: #FFFFFF;
-        border-radius: 4px;
-        &::placeHolder {
-          color: #959595;
-          letter-spacing: 0;
-        }
-      }
-      .btnSubmit {
-        width: 46%;
-        font-family: azo-sans-web, sans-serif;
-        font-style: normal;
-        font-weight: $medium;
-        font-size: 16px;
-        color: #FFFFFF;
-        letter-spacing: 0;
-        position: relative;
-        right: -53%;
-        top: -50px;
-        background-image: linear-gradient(-269deg, #7740FF 0%, #1E4EFF 100%);
-        border-radius: 4px;
-        padding: 8px 24px;
-        border: none;
-      }
-    }
-  }
-  .or {
-    opacity: 0.7;
-    font-family: azo-sans-web, sans-serif;
-    font-style: normal;
-    font-size: 18px;
-    color: #FFFFFF;
+  h2 {
+    font-size: 30px;
     letter-spacing: 0;
-    padding: 15px;
+    line-height: 38px;
+    color: #9B9B9B;
+    font-weight: 900;
+    font-family: motiva-sans, sans-serif !important;
   }
-}
+  p {
+    color: #9B9B9B;
+    font-size: 14px;
+    line-height: 20px;
+    font-family: motiva-sans, sans-serif !important;
+  }
+  a.text-link {
+    color: #ababab;
+    border-bottom: 1px #FFD402 solid;
+    display: inline-block;
+  }
+  a.text-link:hover {
+    color: #FFD402;
+    text-decoration: none;
+  }
+  .email-frm input {
+    display: inline-block;
+    height: 46px;
+    font-size: 16px;
+  }
+  .email-frm {
+    button {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #FFD402;
+  }
+  .cnt-w {
+    max-width: 400px;
+  }
+  .line-ninja {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    text-align: center;
+  }
+  .ico-ninja {
+    background: url('../../assets/images/icon/landingpage/ninja-ico.svg') no-repeat center bottom;
+    width: 100%;
+    height: 70px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .line- {
+    background: url('../../assets/images/icon/landingpage/line-.svg') no-repeat center top;
+    width: 100%;
+    height: 80px;
+    margin: 0 auto;
+    position: relative;
+    margin-top: -10px;
+  }
 
-@media (min-width: 1000px) and (max-width: 1680px) {
-  .root {
-    .mainContent {
-      .appScreen {
-        /*max-width: 400px;*/
+  .h3-y {
+    font-size: rem-calc(30px);
+    color: #FFD402;
+    letter-spacing: 0;
+    margin-bottom: rem-calc(40px);
+    text-transform: uppercase;
+    font-weight: $heavy;
+  }
+
+  .h3-gray {
+    font-size: rem-calc(30px);
+    color: #4A4A4A;
+    letter-spacing: 0;
+    font-weight: $heavy;
+  }
+
+  .content-header {
+    font-size: rem-calc(20px);
+    color: #575757;
+    letter-spacing: 0;
+    font-weight: $heavy;
+    line-height: 1.4;
+  }
+
+  .content-main {
+    font-size: rem-calc(14px);
+    color: #9B9B9B;
+    letter-spacing: 0;
+    line-height: rem-calc(20px);
+    font-weight: $normal;
+  }
+
+  .fillInForm {
+    button {
+      margin-top: rem-calc(10px);
+    }
+    .form-group {
+      align-items: center;
+      label {
+        font-size: rem-calc(14px);
+        color: #9B9B9B;
+        letter-spacing: 0;
+        margin-bottom: 0;
+        text-align: right;
+        //width: 30%;
+      }
+      label + input {
+        border: 1px solid #979797;
+        border-radius: 3px;
+        color: white;
+        //width: 50%;
+        background: inherit;
+        height: rem-calc(40px);
+        padding-left: rem-calc(5px);
+        &:focus {
+          outline: none;
+        }
+      }
+      .required {
+        &::after {
+          content: "*";
+          color: #FF1B43;
+        }
       }
     }
   }
-}
 
-@media (min-width: 767px) and (max-width: 1200px) {
-  .root {
-    .mainContent {
-      .btnTelegram {
-        padding: 15px 30px;
-      }
-    }
-    .countdownBlock {
-      .btnTelegram {
-        width: 100%;
-      }
-      .registerEmail {
-        width: 100%;
-      }
+  .flower {
+    position: absolute;
+    right: 40px;
+    top: 235px;
+    opacity: 0.8;
+  }
+  .neymar {
+    position: absolute;
+    right: 220px;
+    top: 180px;
+    z-index: 3;
+  }
+  .screen-app {
+    position: absolute;
+    right: 80px;
+    top: 0;
+    z-index: 2;
+  }
+  .label-100 {
+    position: absolute;
+    right: 50px;
+    top: -20px;
+    z-index: 10;
+  }
+  .img-screen {
+    position: relative;
+    padding-right: 100px;
+    margin-top: 50px;
+  }
+  .line-down {
+    text-align: center;
+  }
+  .line-down span {
+    display: inline-block;
+    margin-bottom: 80px;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: -12px;
+    border-left: 1px solid #4e4e4e;
+    border-bottom: 1px solid #4e4e4e;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    box-sizing: border-box;
+  }
+  .second-page {
+    .shuriken-background {
+      position: absolute;
+      opacity: 0.7;
     }
   }
 }
 
 @media (max-width: 767px) {
   .root {
-    .mainContent {
-      padding: 20px;
-      .headerLandingpage {
-        margin-bottom: 20px;
-        & > img {
-          width: 38px;
-          margin-right: 9px;
-          top: -6px;
-        }
-        & > div {
-          img {
-            width: 45px;
-          }
-          p {
-            font-size: 12px;
-          }
-        }
-      }
-      h1 {
-        font-size: 28px;
-        margin-bottom: 15px;
-        line-height: 42px;
-      }
-      .subTitle {
-        font-size: 16px;
-        line-height: 27px;
-        margin-bottom: 20px;
-        width: 100%;
-      }
-      .btnTelegram {
-        font-size: 18px;
-        padding: 18px;
-        img {
-          height: 30px;
-          width: 30px;
-          margin-right: 9px;
-          position: relative;
-          top: -3px;
-        }
-      }
-      .registerEmail {
-        .btnSubmit {
-          width: 100%;
-          position: inherit;
-          margin-top: 10px;
-          border: none;
-        }
-      }
-      .telegramDescription {
-        font-size: 16px;
-        letter-spacing: 0;
-        line-height: 27px;
-        margin-bottom: 10px;
-        margin-top: 20px;
-      }
+    .first-page {
+      margin-bottom: rem-calc(20px);
     }
-    .blockChainContent {
-      margin-top: 20px;
-      margin-bottom: 20px;
-      h3 {
-        font-size: 30px;
-        line-height: 42px;
-        margin-bottom: 10px;
-        span {
-          background: initial;
-          color: #F46A48 !important;
-          -webkit-text-fill-color: unset;
-          -webkit-background-clip: unset;
-        }
-      }
-      p {
-        font-size: 18px;
-        line-height: 27px;
-        margin-bottom: 40px;
-        width: 100%;
-      }
+    .content-header + div, p.content-header {
+       margin-top: rem-calc(20px);
     }
-    .countdownBlock {
-      margin-top: 60px;
-      margin-bottom: 140px;
-      h3 {
-        font-size: 30px;
-        line-height: 42px;
-        margin-bottom: 10px;
-      }
-      .countDownSubTitle {
-        font-size: 18px;
-        color: #FFFFFF;
-        letter-spacing: 0;
-        line-height: 27px;
-        margin-bottom: 50px;
-      }
-      .countDown {
-        margin-bottom: 60px;
-      }
-      .countDownTitle {
-        font-size: 18px;
-        color: #FFFFFF;
-        letter-spacing: 0;
-        margin-bottom: 16px;
-      }
-      .btnTelegram {
-        font-family: azo-sans-web, sans-serif;
-        font-style: normal;
-        font-weight: $medium;
-        border-radius: 4px;
-        font-size: 18px;
-        color: #FFFFFF;
-        letter-spacing: 0;
-        width: 100%;
-        background-image: linear-gradient(-269deg, #7740FF 0%, #1E4EFF 100%);
-        padding: 17px 10px;
-        img {
-          margin-right: 9px;
-        }
-      }
-      .registerEmail {
-        width: 100%;
-        .btnSubmit {
-          width: 100%;
-          position: inherit;
-          margin-top: 10px;
-          border: none;
-        }
-      }
-    }
-  }
-}
 
-@media (max-width: 500px) {
-  .root {
-    .countdownBlock {
-      .btnTelegram {
-        font-size: 16px;
-        padding: 17px 8px;
+    .fillInForm {
+      .form-group {
+        margin-right: 0;
+        margin-left: 0;
+        label {
+          text-align: left;
+          padding-left: 0;
+        }
+      }
+      div[class="row"]:last-child {
+        margin-left: 0;
+        margin-right: 0;
       }
     }
-  }
-}
-
-@media (max-width: 375px) {
-  .root {
-    .mainContent {
-      .headerLandingpage {
-        margin-bottom: 30px;
-        & > img {
-          width: 35px;
-          margin-right: 9px;
-          top: -7px;
-        }
-        & > div {
-          img {
-            width: 40px;
-          }
-          p {
-            font-size: 10px;
-          }
-        }
-      }
-      .btnTelegram {
-        font-size: 15px;
-        padding: 15px;
+    .line-down span {
+      margin-bottom: -95px;
+    }
+    .second-page {
+      .shuriken-background {
+        overflow: hidden;
         img {
-          margin-right: 5px;
-        }
-      }
-      .registerEmail {
-        .btnSubmit {
-          width: 100%;
-          position: inherit;
-          margin-top: 10px;
-          border: none;
+          width: 100px;
         }
       }
     }
-    .countdownBlock {
-      .btnTelegram {
-        font-size: 12px;
-        padding: 17px 8px;
-      }
-      .registerEmail {
-        .btnSubmit {
-          width: 100%;
-          position: inherit;
-          margin-top: 10px;
-          border: none;
-        }
-      }
+
+    .h3-y {
+      text-align: left !important;
+    }
+
+    .h3-gray {
+      text-align: left !important;
     }
   }
 }
