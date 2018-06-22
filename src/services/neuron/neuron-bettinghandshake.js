@@ -27,7 +27,8 @@ export default class BettingHandshake extends BaseHandshake {
   }
   get gasPrice(){
     const wallet = MasterWallet.getWalletDefault('ETH');
-    return wallet.chainId === 4 ? 100 : 20;
+   // return wallet.chainId === 4 ? 100 : 20;
+   return wallet.chainId === 4 ? 20 : 20;
 
   }
   async getEstimateGas(hid=0, side=1, odds=3) {

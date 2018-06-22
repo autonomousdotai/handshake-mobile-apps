@@ -42,7 +42,8 @@ export const MESSAGE = {
   MATCH_OVER: 'Time travel is hard. Please bet on a future or ongoing match.',
   RIGHT_NETWORK: 'You must set your wallet on Mainnet',
   ROLLBACK: `Something did not go according to plan. Please try again.`,
-  WITHDRAW_SUCCESS: 'Success! Your winnings have been withdrawn to your wallet.'
+  WITHDRAW_SUCCESS: 'Success! Your winnings have been withdrawn to your wallet.',
+  DIFFERENCE_ADDRESS: `Current address isn't same as which you used to create bet`
 };
 
 export const BET_BLOCKCHAIN_STATUS = {
@@ -100,7 +101,7 @@ export const BETTING_STATUS_LABEL =
       DONE: 'Completed',
       WITHDRAW: 'Withdraw winnings',
       CANCELLING: 'Your bet is being cancelled.',
-      PROGRESSING: 'Your bet is progressing.',
+      PROGRESSING: 'Your bet is progressing a transaction. Please wait..',
       BET_WAIT_MATCHING: 'Bet placed. Matching..',
       BET_MACHED_WAIT_RESULT: 'Bet matched. Waiting for result..',
       REFUND: 'Refund your bet',
@@ -133,6 +134,13 @@ export class BetHandshakeHandler {
   }
   constructor() {
 
+  }
+  isSameAddress(address){
+    const currentAddress = this.getAddress();
+    if(address !== currentAddress){
+      return false
+    }
+    return true;
   }
   isRightNetwork(){
 
@@ -186,7 +194,7 @@ export class BetHandshakeHandler {
     strStatus = BETTING_STATUS_LABEL.PROGRESSING;
     isAction = false;
 } 
-    if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_PENDING) {
+    else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_PENDING) {
       strStatus = BETTING_STATUS_LABEL.INITING;
       isAction = false;
     } else if (blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINITED) {

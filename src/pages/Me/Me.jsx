@@ -32,6 +32,7 @@ const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
   [HANDSHAKE_ID.BETTING]: FeedBetting,
   [HANDSHAKE_ID.EXCHANGE]: FeedExchange,
+  [HANDSHAKE_ID.EXCHANGE_LOCAL]: FeedExchange,
   [HANDSHAKE_ID.SEED]: FeedSeed,
 };
 

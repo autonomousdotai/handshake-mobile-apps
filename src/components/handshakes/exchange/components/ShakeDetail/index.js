@@ -7,20 +7,16 @@ import {change, Field, formValueSelector} from "redux-form";
 import Button from '@/components/core/controls/Button';
 
 import {fieldCleave, fieldDropdown, fieldInput, fieldRadioButton} from '@/components/core/form/customField'
-import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
-import iconEthereum from '@/assets/images/icon/coin/eth.svg';
 import iconApproximate from '@/assets/images/icon/icons8-approximately_equal.svg';
 import {CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_NAME} from "@/constants";
 import {connect} from "react-redux";
-import {injectIntl} from "react-intl";
-import {formatMoney, getOfferPrice} from "@/services/offer-util";
+import {FormattedMessage, injectIntl} from "react-intl";
+import {formatMoney, formatMoneyByLocale, getOfferPrice, roundNumberByLocale} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {bindActionCreators} from "redux";
-import {FormattedMessage} from 'react-intl';
-import { minValueBTC, minValueETH } from "../../Create/validation";
-import {formatMoneyByLocale} from "@/services/offer-util";
+import {minValueBTC, minValueETH} from "../../Create/validation";
 import {BigNumber} from "bignumber.js";
-import { countDecimals } from "../../utils";
+import {countDecimals} from "../../utils";
 
 export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -40,13 +36,20 @@ const fixed6 = (value) => {
 }
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {enableShake: false, currency: CRYPTO_CURRENCY.ETH};
+  state = {enableShake: false, currency: CRYPTO_CURRENCY.ETH, type: EXCHANGE_ACTION.BUY};
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
     if (handleShake) {
       handleShake(values);
     }
+  }
+
+  onTypeChange = (e, newValue) => {
+    const { fiatAmount } = this.props;
+    this.setState({ type: newValue }, () => {
+      this.onFiatAmountChange(e, fiatAmount);
+    });
   }
 
   onCurrencyChange = (e, newValue) => {
@@ -83,15 +86,16 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     //Calculate fiatAmount
     let fiatAmount = 0;
 
+    const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
     if (listOfferPrice && type && currency) {
-      const offerPrice = getOfferPrice(listOfferPrice, type, CRYPTO_CURRENCY_NAME[currency]);
+      const offerPrice = getOfferPrice(listOfferPrice, shopType, CRYPTO_CURRENCY_NAME[currency]);
       fiatAmount = amount * offerPrice?.price || 0;
     }
 
     let percentage = 0;
     let balance = 0;
     if (currency === CRYPTO_CURRENCY.ETH) {
-      if (type === EXCHANGE_ACTION.SELL) {
+      if (shopType === EXCHANGE_ACTION.BUY) {
         percentage = eth?.buyPercentage;
         balance = eth?.buyBalance;
       } else {
@@ -99,7 +103,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
         balance = eth?.sellBalance;
       }
     } else if (currency === CRYPTO_CURRENCY.BTC) {
-      if (type === EXCHANGE_ACTION.SELL) {
+      if (shopType === EXCHANGE_ACTION.BUY) {
         percentage = btc?.buyPercentage;
         balance = btc?.buyBalance;
       } else {
@@ -112,7 +116,8 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     this.setState({enableShake});
 
     fiatAmount += fiatAmount * percentage / 100;
-    fiatAmount = Math.round(fiatAmount);
+    fiatAmount = roundNumberByLocale(fiatAmount, offer.fiatCurrency);
+    console.log('onAmountChange',fiatAmount);
     rfChange(nameFormShakeDetail, 'amountFiat', fiatAmount);
   }
 
@@ -129,8 +134,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
     let percentage = 0;
     let balance = 0;
+    const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
     if (currency === CRYPTO_CURRENCY.ETH) {
-      if (type === EXCHANGE_ACTION.SELL) {
+      if (shopType === EXCHANGE_ACTION.BUY) {
         percentage = eth?.buyPercentage;
         balance = eth?.buyBalance;
       } else {
@@ -138,7 +144,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
         balance = eth?.sellBalance;
       }
     } else if (currency === CRYPTO_CURRENCY.BTC) {
-      if (type === EXCHANGE_ACTION.SELL) {
+      if (shopType === EXCHANGE_ACTION.BUY) {
         percentage = btc?.buyPercentage;
         balance = btc?.buyBalance;
       } else {
@@ -151,7 +157,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
     let newAmount = 0;
     if (listOfferPrice && type && currency) {
-      const offerPrice = getOfferPrice(listOfferPrice, type, CRYPTO_CURRENCY_NAME[currency]);
+      const offerPrice = getOfferPrice(listOfferPrice, shopType, CRYPTO_CURRENCY_NAME[currency]);
       newAmount =  fiatAmount / offerPrice?.price || 0;
     }
 
@@ -207,6 +213,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               list={EXCHANGE_ACTION_LIST}
               // color={textColor}
               // validate={[required]}
+              onChange={this.onTypeChange}
             />
           </div>
           <div className='input-group mt-3'>
@@ -269,7 +276,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
           </div>
           */}
           <Button block type="submit" className="mt-3 btn-shake-detail" disabled={!this.state.enableShake}>
-            {EXCHANGE_ACTION_NAME[type]} {CRYPTO_CURRENCY[currency]} - {formatMoneyByLocale(fiatAmount)} {fiat}
+            {EXCHANGE_ACTION_NAME[type]} {CRYPTO_CURRENCY[currency]} - {formatMoneyByLocale(fiatAmount, fiat)} {fiat}
           </Button>
         </FormShakeDetail>
       </div>

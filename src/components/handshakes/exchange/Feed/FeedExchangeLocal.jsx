@@ -10,56 +10,30 @@ import Feed from "@/components/core/presentation/Feed/Feed";
 import Button from "@/components/core/controls/Button/Button";
 import {
   API_URL,
-  APP_USER_NAME,
   CRYPTO_CURRENCY,
-  DEFAULT_FEE,
   EXCHANGE_ACTION,
   EXCHANGE_ACTION_NAME,
-  EXCHANGE_ACTION_PAST_NAME,
-  EXCHANGE_ACTION_PERSON,
   EXCHANGE_ACTION_PRESENT_NAME,
   EXCHANGE_FEED_TYPE,
-  EXCHANGE_METHOD_PAYMENT,
-  HANDSHAKE_EXCHANGE_CC_STATUS_NAME,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME,
   HANDSHAKE_EXCHANGE_STATUS,
   HANDSHAKE_EXCHANGE_STATUS_NAME,
-  HANDSHAKE_STATUS_NAME,
   HANDSHAKE_USER,
   URL
 } from "@/constants";
 import ModalDialog from "@/components/core/controls/ModalDialog";
 import {connect} from "react-redux";
-import {
-  acceptOfferItem,
-  cancelOfferItem,
-  cancelShakedOffer,
-  closeOffer,
-  completeOfferItem,
-  completeShakedOffer,
-  deleteOfferItem,
-  rejectOfferItem,
-  shakeOffer,
-  withdrawShakedOffer
-} from "@/reducers/exchange/action";
-// import getSymbolFromCurrency from 'currency-symbol-map';
+import {shakeOffer,} from "@/reducers/exchange/action";
 import Offer from "@/models/Offer";
 import {MasterWallet} from "@/models/MasterWallet";
-import {formatAmountCurrency, formatMoney, getHandshakeUserType, getOfferPrice} from "@/services/offer-util";
+import {formatAmountCurrency, getHandshakeUserType} from "@/services/offer-util";
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
 import {Link} from "react-router-dom";
-import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from '../utils'
-import {ExchangeHandshake, ExchangeShopHandshake} from '@/services/neuron';
+import {getDistanceFromLatLonInKm} from '../utils'
+import {ExchangeHandshake,} from '@/services/neuron';
 import _sample from "lodash/sample";
 import {feedBackgroundColors} from "@/components/handshakes/exchange/config";
-import {updateOfferStatus} from "@/reducers/discover/action";
 import {BigNumber} from "bignumber.js";
 import "./FeedMe.scss"
-import {getLocalizedDistance} from "@/services/util"
-import {responseExchangeDataChange} from "@/reducers/me/action";
 
 class FeedExchangeLocal extends React.PureComponent {
   constructor(props) {
@@ -70,6 +44,7 @@ class FeedExchangeLocal extends React.PureComponent {
 
     this.userType = getHandshakeUserType(initUserId, shakeUserIds);
     this.offer = offer;
+    console.log('FeedExchangeLocal', this.offer);
 
     this.state = {
       modalContent: '',
@@ -130,7 +105,7 @@ class FeedExchangeLocal extends React.PureComponent {
   checkMainNetDefaultWallet = (wallet) => {
     let result = true;
 
-    if (process.env.isProduction && !process.env.isStaging) {
+    if (process.env.isLive) {
       if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
         result = true;
       } else {
@@ -169,200 +144,47 @@ class FeedExchangeLocal extends React.PureComponent {
     return condition;
   }
 
-  responseExchangeDataChange = (offerShake) => {
-    const { id, status, } = offerShake;
-    let data = {};
-    let firebaseOffer = {};
-
-    firebaseOffer.id = id;
-    firebaseOffer.status = status;
-    firebaseOffer.type = 'offer_store_shake';
-
-    data[`offer_store_shake_${id}`] = firebaseOffer;
-
-    console.log('responseExchangeDataChange', data);
-
-    this.props.responseExchangeDataChange(data);
-  }
-
-  responseExchangeDataChangeOfferStore = (offerStore) => {
-    const { id, status } = offerStore;
-    const { currency } = this.offer;
-    let data = {};
-    let firebaseOffer = {};
-
-    firebaseOffer.id = id;
-    firebaseOffer.status = `${currency.toLowerCase()}_${status}`;
-    firebaseOffer.type = 'offer_store';
-
-
-    data[`offer_store_${id}`] = firebaseOffer;
-
-    console.log('responseExchangeDataChangeOfferStore', data);
-
-    this.props.responseExchangeDataChange(data);
-  }
-
   ///Exchange
   ////////////////////////
 
-  getFromExchange = () => {
-    const {status} = this.props;
-
-    let from = '';
-    switch (status) {
-      case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
-      case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
-      case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-      case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-        switch (this.userType) {
-          case HANDSHAKE_USER.SHAKED: {
-            from = <FormattedMessage id="ex.me.label.with"/>;
-
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            from = <FormattedMessage id="ex.me.label.from"/>;
-
-            break;
-          }
-        }
-
-        break;
-      }
-      default: {
-        switch (this.userType) {
-          case HANDSHAKE_USER.SHAKED: {
-            from = <FormattedMessage id="ex.me.label.with"/>;
-
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            from = <FormattedMessage id="ex.me.label.from"/>;
-
-            break;
-          }
-        }
-        break;
-      }
-    }
-
-    return from;
-  }
-
-  getContentExchange(fiatAmount) {
-    const {status} = this.props;
-    console.log('thisss', this.offer)
+  getContentExchange() {
     const { offer } = this;
-    let message = '';
-
+    const { type, physicalItem, amount, currency } = offer;
     let offerType = '';
-    switch (status) {
-      case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
-      case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
-      case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-      case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-        switch (this.userType) {
-          case HANDSHAKE_USER.SHAKED: {
-            if (offer.type === EXCHANGE_ACTION.BUY) {
-              offerType = EXCHANGE_ACTION_PAST_NAME[EXCHANGE_ACTION.SELL];
-            } else if (offer.type === EXCHANGE_ACTION.SELL) {
-              offerType = EXCHANGE_ACTION_PAST_NAME[EXCHANGE_ACTION.BUY];
-            }
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            offerType = EXCHANGE_ACTION_PAST_NAME[offer.type];
 
-            break;
-          }
-        }
-
-        // offerType = EXCHANGE_ACTION_PAST_NAME[offer.type];
-        message = <FormattedMessage id="offerHandShakeExchangeContentMeDone"
-                                    values={ {
-                                      offerType: offerType,
-                                      something: offer.physicalItem,
-                                      amount: formatAmountCurrency(offer.amount),
-                                      currency: offer.currency,
-                                      currency_symbol: offer.fiatCurrency,
-                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
-                                      fee: offer.feePercentage,
-                                      payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
-                                    } } />;
-
-        break;
-      }
-      default: {
-        switch (this.userType) {
-          case HANDSHAKE_USER.SHAKED: {
-            if (offer.type === EXCHANGE_ACTION.BUY) {
-              offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.SELL];
-            } else if (offer.type === EXCHANGE_ACTION.SELL) {
-              offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.BUY];
-            }
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            offerType = EXCHANGE_ACTION_PRESENT_NAME[offer.type];
-
-            break;
-          }
-        }
-
-        message = <FormattedMessage id="offerHandShakeExchangeContentMe"
-                                    values={ {
-                                      offerType: offerType,
-                                      something: offer.physicalItem,
-                                      amount: formatAmountCurrency(offer.amount),
-                                      currency: offer.currency,
-                                      currency_symbol: offer.fiatCurrency,
-                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
-                                      fee: offer.feePercentage,
-                                      payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
-                                    } } />;
-
-        break;
-      }
+    if (type === EXCHANGE_ACTION.BUY) {
+      offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.SELL];
+    } else if (type === EXCHANGE_ACTION.SELL) {
+      offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.BUY];
     }
-    console.log('offferes', offer.physical_item)
+
+    const message = <FormattedMessage id="offerHandShakeExchangeContentMe"
+                                values={ {
+                                  offerType: offerType,
+                                  something: physicalItem,
+                                  amount: formatAmountCurrency(amount),
+                                  currency: currency,
+                                } } />;
+
     return message;
   }
 
   getActionButtonsExchange = () => {
     const {status} = this.props;
     const offer = this.offer;
-    const fiatAmount = this.fiatAmount;
-    let actionButtons = null;
-    let message = '';
-
-    switch (this.userType) {
-      case HANDSHAKE_USER.NORMAL: {
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            message = <FormattedMessage id="handshakeOfferConfirm"
-                                        values={ {
-                                          type: offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL] : EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
-                                          amount: formatAmountCurrency(offer.amount),
-                                          currency: offer.currency,
-                                          currency_symbol: offer.fiatCurrency,
-                                          total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
-                                        } } />;
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}><FormattedMessage id="btn.shake"/></Button>
-              </div>
-            );
-            break;
-          }
-        }
-        break;
-      }
-    }
+    const { type, physicalItem, amount, currency } = offer;
+    const message = <FormattedMessage id="handshakeOfferConfirm"
+                                values={ {
+                                  type: type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL] : EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
+                                  something: physicalItem,
+                                  amount: formatAmountCurrency(amount),
+                                  currency: currency,
+                                } } />;
+    const actionButtons = (
+      <div>
+        <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}><FormattedMessage id="btn.shake"/></Button>
+      </div>
+    );
 
     return actionButtons;
   }
@@ -370,10 +192,12 @@ class FeedExchangeLocal extends React.PureComponent {
   ////////////////////////
   handleShakeOfferExchange = async () => {
     const { authProfile } = this.props;
-    const offer = this.offer;
-    const fiatAmount = this.fiatAmount;
+    const { offer } = this;
+    const { currency, amount, type } = offer;
 
-    const wallet = MasterWallet.getWalletDefault(offer.currency);
+    console.log('handleShakeOfferExchange', offer);
+
+    const wallet = MasterWallet.getWalletDefault(currency);
     const balance = await wallet.getBalance();
     const fee = await wallet.getFee(10, true);
 
@@ -381,17 +205,20 @@ class FeedExchangeLocal extends React.PureComponent {
       return;
     }
 
-    if (offer.type === EXCHANGE_ACTION.BUY && this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
-      return;
-    } else if (offer.currency === CRYPTO_CURRENCY.ETH && this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
+    let checkAmount = amount;
+    if (currency === CRYPTO_CURRENCY.ETH && type === EXCHANGE_ACTION.SELL) {
+      checkAmount = 0;
+    }
+
+    if ((currency === CRYPTO_CURRENCY.ETH || (type === EXCHANGE_ACTION.BUY && currency === CRYPTO_CURRENCY.BTC))
+      && this.showNotEnoughCoinAlert(balance, checkAmount, fee, currency)) {
+
       return;
     }
 
-    const address = wallet.address;
-
     let offerShake = {
-      fiat_amount: fiatAmount.toString(),
-      address: address,
+      fiat_amount: '0',
+      address: wallet.address,
       email: authProfile.email || '',
       username: authProfile.username || '',
     };
@@ -406,29 +233,33 @@ class FeedExchangeLocal extends React.PureComponent {
     });
   }
 
-  handleShakeOfferExchangeSuccess = async (responseData) => {
+  handleShakeOfferExchangeSuccess = async (res) => {
     const { refreshPage } = this.props;
-    const { data } = responseData;
-    const { currency } = data;
-
     const { offer } = this;
-    if (currency === CRYPTO_CURRENCY.ETH) {
-      const wallet = MasterWallet.getWalletDefault(currency);
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
-      let amount = 0;
+    const { data } = res;
+    const { currency, type, system_address, amount, id, hid} = data;
 
-      if (offer.type === EXCHANGE_ACTION.BUY) {
-        amount = data.total_amount;
+    if (type === EXCHANGE_ACTION.SELL) {
+      if (currency === CRYPTO_CURRENCY.ETH) {
+        const wallet = MasterWallet.getWalletDefault(currency);
+        const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+        const result = await exchangeHandshake.shake(hid, id);
+
+        console.log('handleShakeOfferExchangeSuccess', result);
       }
-      const result = await exchangeHandshake.shake(data.hid, amount, data.id);
+    } else {
+      const wallet = MasterWallet.getWalletDefault(currency);
 
-      console.log('handleShakeOfferExchangeSuccess', result);
-    } else if (currency === CRYPTO_CURRENCY.BTC) {
-      if (offer.type === EXCHANGE_ACTION.BUY) {
-        const wallet = MasterWallet.getWalletDefault(offer.currency);
-        wallet.transfer(offer.systemAddress, offer.totalAmount, 10).then(success => {
+      if (currency === CRYPTO_CURRENCY.BTC) {
+        wallet.transfer(system_address, amount, 10).then(success => {
           console.log('transfer', success);
         });
+      } else if (currency === CRYPTO_CURRENCY.ETH) {
+        const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+        const result = await exchangeHandshake.initByCoinOwner(amount, id);
+        console.log('handleShakeOfferExchangeSuccess', result);
       }
     }
 
@@ -438,7 +269,6 @@ class FeedExchangeLocal extends React.PureComponent {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
-        // this.props.updateOfferStatus({ [`exchange_${data.id}`]: data });
         this.props.history.push(URL.HANDSHAKE_ME);
       }
     });
@@ -448,254 +278,32 @@ class FeedExchangeLocal extends React.PureComponent {
     this.handleActionFailed(e);
   }
 
-  getMessageMovingCoin = () => {
-    const { status } = this.props;
-    const { offer } = this;
-
-    let idMessage = '';
-
-    switch (offer.feedType) {
-      case EXCHANGE_FEED_TYPE.INSTANT: {
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_CC_STATUS.PROCESSING: {
-            idMessage = 'movingCoinFromEscrow';
-            break;
-          }
-        }
-        break;
-      }
-      case EXCHANGE_FEED_TYPE.OFFER_STORE: {
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED: {
-            idMessage = 'movingCoinToEscrow';
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING: {
-            idMessage = 'movingCoinFromEscrow';
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
-
-            break;
-          }
-        }
-
-        break;
-      }
-      case EXCHANGE_FEED_TYPE.OFFER_STORE_SHAKE: {
-
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLING: {
-
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {//user shake
-                if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
-                  idMessage = 'movingCoinToEscrow';
-                }
-
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {//shop
-                if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
-                  idMessage = 'movingCoinToEscrow';
-                }
-
-                break;
-              }
-            }
-
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTING: {
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {//user shake
-                if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {//shop
-                if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-            }
-
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTED:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLED:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETED: {
-
-            break;
-          }
-        }
-
-        break;
-      }
-      case EXCHANGE_FEED_TYPE.EXCHANGE: {
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_STATUS.CREATED:
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETING: {
-
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {//user shake
-                if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
-                  idMessage = 'movingCoinToEscrow';
-                }
-
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {//shop
-                if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
-                  idMessage = 'movingCoinToEscrow';
-                }
-
-                break;
-              }
-            }
-
-            break;
-          }
-
-          case HANDSHAKE_EXCHANGE_STATUS.CLOSING:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTING: {
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {//user shake
-                if (offer.type === EXCHANGE_ACTION.BUY) {//shop buy
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {//shop
-                if (offer.type === EXCHANGE_ACTION.SELL) {//shop sell
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-            }
-
-            break;
-          }
-
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING: {
-
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {//user shake
-                if (offer.type === EXCHANGE_ACTION.SELL) {//shop buy
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {//shop
-                if (offer.type === EXCHANGE_ACTION.BUY) {//shop sell
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-            }
-
-            break;
-          }
-
-          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE:
-          case HANDSHAKE_EXCHANGE_STATUS.CLOSED:
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTED: {
-            break;
-          }
-        }
-
-        break;
-      }
-    }
-
-    let message = '';
-    if (idMessage) {
-      message = <FormattedMessage id={idMessage} values={ {} } />;
-    }
-
-    return message;
-  }
-
-
   render() {
     const {intl, initUserId, shakeUserIds, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, ...props} = this.props;
     const offer = this.offer;
-    // console.log('render',offer);
-    const {listOfferPrice} = this.props;
-
     let modalContent = this.state.modalContent;
 
     let email = '';
     let statusText = '';
     let message = '';
-    let message2 = '';
     let actionButtons = null;
     let from = <FormattedMessage id="ex.me.label.from"/>;
     let showChat = false;
     let chatUsername = '';
-    // let buyerSeller = this.getBuyerSeller();
     let nameShop = offer.username;
 
     switch (offer.feedType) {
       case EXCHANGE_FEED_TYPE.EXCHANGE: {
         statusText = HANDSHAKE_EXCHANGE_STATUS_NAME[status];
         nameShop = <FormattedMessage id="ex.me.label.about"/>;
-        const fiatAmount = this.calculateFiatAmount(offer);
 
-        from = this.getFromExchange();
+        from = <FormattedMessage id="ex.me.label.from"/>;
 
-        message = this.getContentExchange(fiatAmount);
+        message = this.getContentExchange();
 
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTING:
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTED: {
+        showChat = true;
 
-            showChat = true;
-
-            chatUsername = this.getChatUserName();
-
-            break;
-          }
-        }
+        chatUsername = initUserId;
 
         actionButtons = this.getActionButtonsExchange();
         break;
@@ -704,7 +312,6 @@ class FeedExchangeLocal extends React.PureComponent {
 
     /*const phone = offer.contactPhone;*/
     const address = offer.contactInfo;
-
 
     let distanceKm = 0;
 
@@ -717,16 +324,14 @@ class FeedExchangeLocal extends React.PureComponent {
     const phone = offer.contactPhone;
     const phoneDisplayed = phone.replace(/-/g, '');
 
-    const messageMovingCoin = this.getMessageMovingCoin();
-
     return (
       <div className="feed-me-exchange">
         {/*<div>userType: {this.userType}</div>*/}
         {/*<div>status: {status}</div>*/}
-        <div className="mb-1">
-          <span style={{ color: '#C8C7CC' }}>{from}</span> <span style={{ color: '#666666' }}>{email}</span>
-          <span className="float-right" style={{ color: '#4CD964' }}>{statusText}</span>
-        </div>
+        {/*<div className="mb-1">*/}
+          {/*<span style={{ color: '#C8C7CC' }}>{from}</span> <span style={{ color: '#666666' }}>{email}</span>*/}
+          {/*<span className="float-right" style={{ color: '#4CD964' }}>{statusText}</span>*/}
+        {/*</div>*/}
         <Feed
           className="feed text-white"
           // background={`${mode === 'discover' ? '#FF2D55' : '#50E3C2'}`}
@@ -787,7 +392,6 @@ class FeedExchangeLocal extends React.PureComponent {
               </div>
             )
           }
-          { messageMovingCoin && (<div className="mt-2">{messageMovingCoin}</div>) }
 
           {/*
             !isCreditCard && (
@@ -834,8 +438,6 @@ const mapDispatch = ({
   showAlert,
   showLoading,
   hideLoading,
-
-  responseExchangeDataChange,
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedExchangeLocal));
