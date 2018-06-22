@@ -442,12 +442,38 @@ export default {
       error: {
         submit_telegram: "Couldn't find you on Telegram. Please exit the group and try again.",
         submit_twitter: "You haven't followed us yet. Please try again.",
-        verify_code: "Verification code is wrong. Please try again!"
+        confirm_code: "Verification code is wrong. Please try again!",
+        verify_code: "Can\'t send verify email",
+        get_token: "Failed! Your reffers are not complete.",
       },
       success: {
         submit_telegram: "You joined our community telegram!",
         submit_twitter: "You followed our Twitter!",
-        verify_code: "Your email has been verified."
+        confirm_code: "Your email has been verified.",
+        verify_code: "Verification code is sent to your email. Please check!",
+        get_token: "Complete success! You will receive 80 shurikens in few seconds.",
+        copy_link: "Referral link copied to clipboard."
+      },
+      button: {
+        verified: "verified",
+        verify: "verify",
+        confirm: "confirm",
+        reset_email: "Reset email",
+        get_token: "just give me tokens"
+      },
+      text: {
+        title: "80 shiny Shurikens (SHURI).",
+        telegram: "Insult us on telegram",
+        telegram2: "Be creative. There’s a leaderboard.",
+        twitter: "twitter",
+        twitter2: "Our social media guy says we need followers on ",
+        referral_link: "This is your super sexy referral link. You get 20 shurikens for every new ninja."
+      },
+      placeholder: {
+        telegram_username: "Your telegram alias",
+        twitter_username: "Your twitter username",
+        email: "Verification code",
+        email2: "Your favourite fake email"
       }
     },
     action: {
