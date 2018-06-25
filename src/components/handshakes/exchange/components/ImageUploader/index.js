@@ -1,12 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components'
-import _keys from 'lodash/keys'
 import Dropzone from 'react-dropzone';
-// import firebase from 'firebase'
 import PreviewImage from './PreviewImage'
 
 import placeHolder from '@/assets/images/icon/upload-image.svg';
+import $http from "@/services/api";
+import {BASE_API} from "@/constants";
+
 // const line = require('static/images/line.svg')
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
@@ -14,7 +13,54 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     files: []
   }
   onDrop = acceptedFiles => {
-    console.log('access', acceptedFiles)
+    const {onSuccess, multiple} = this.props;
+
+    const file = acceptedFiles[0];
+    let newFiles = this.state.files
+
+    $http({
+      url: `${BASE_API.BASE_URL}/storage/user/upload?file=${Date.now()}-${file.name}`,
+      data: {
+        file,
+      },
+      method: 'POST',
+    })
+    // axios.post(`https://staging.ninja.org/api/storage/user/upload?file=${Date.now()}-${file.name}`, file,
+    //   {
+    //     headers: {
+    //       Payload: 'C3m4t-lmiqrMIV-QD9F6LVPcqlZF7AYS5tVBMbklvlECBqiC2ay7BS3QcA=='
+    //     },
+    //     onUploadProgress: (progressEvent) => {
+    //       const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+    //       const correspondingFile = newFiles.find(item => item.name === file.name);
+    //       if (correspondingFile) {
+    //         correspondingFile.percent = percentCompleted
+    //       }
+    //       this.setState({ files: newFiles })
+    //       this.forceUpdate();
+    //     },
+    //   })
+      .then((res) => {
+        const correspondingFile = newFiles.find(item => item.name === file.name);
+        if (correspondingFile) {
+          correspondingFile.url = `https://cdn-handshake-staging.autonomous.ai/${res.data.data}`
+          delete correspondingFile.percent
+          this.setState({ files: newFiles })
+          this.forceUpdate();
+          onSuccess(newFiles);
+        }
+      })
+      .catch((err) => {
+        console.log('err upload image', err)
+      });
+
+    newFiles = [{
+      name: file.name,
+      percent: file.percent,
+    }];
+    this.setState({ files: newFiles })
+    this.forceUpdate()
+
     return
     // const {onSuccess} = this.props;
     // // const newUploadFiles = [acceptedFiles[0]]
@@ -157,17 +203,16 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
                 /* Rectangle 12: */
                 background: '#F9F9F9',
                 border: '2px dashed #CBCBCB',
-                height: '110px',
+                height: '169px',
                 width: '100%',
                 borderRadius: '6px',
               }}
-              className='d-flex align-items-center justify-content-center'
               ref={e => (this.dropzone = e)}
               onDrop={this.onDrop}
               // disableClick
               {...rest}
             >
-              <div>
+              <div className='w-100 h-100 d-flex align-items-center justify-content-center'>
                 {
                   files.length > 0 ? files.map((file, index) => (
                     <PreviewImage

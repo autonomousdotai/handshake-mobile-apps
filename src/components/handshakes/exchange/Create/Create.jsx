@@ -39,7 +39,7 @@ import { validate } from './validation';
 import "../styles.scss";
 import ModalDialog from "@/components/core/controls/ModalDialog/ModalDialog";
 // import {MasterWallet} from '@/models/MasterWallet';
-import {URL} from "@/constants";
+import {URL,NB_BLOCKS} from "@/constants";
 import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
 import {MasterWallet} from "@/models/MasterWallet";
 import {ExchangeShopHandshake} from "@/services/neuron";
@@ -119,7 +119,7 @@ class Component extends React.Component {
   }
 
   componentDidMount() {
-    const { ipInfo, rfChange, authProfile } = this.props;
+    const { ipInfo, rfChange, authProfile, freeETH } = this.props;
     navigator.geolocation.getCurrentPosition((location) => {
       const { coords: { latitude, longitude } } = location
       this.setAddressFromLatLng(latitude, longitude) // better precision
@@ -137,10 +137,23 @@ class Component extends React.Component {
     rfChange(nameFormExchangeCreate, 'nameShop', authProfile.name || '');
     rfChange(nameFormExchangeCreate, 'address', authProfile.address || '');
 
+    if (freeETH > 0) {
+      rfChange(nameFormExchangeCreate, 'amountSell', freeETH);
+    }
+
     this.props.getOfferStores({
       PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${authProfile.id}`,
-
+      successFn: this.handleGetOfferStoresSuccess,
+      errorFn: this.handleGetOfferStoresFailed,
     });
+  }
+
+  handleGetOfferStoresSuccess = (res) => {
+    console.log('handleGetOfferStoresSuccess', res);
+  }
+
+  handleGetOfferStoresFailed = (e) => {
+    console.log('handleGetOfferStoresFailed', e);
   }
 
   componentWillReceiveProps(nextProps){
@@ -211,7 +224,16 @@ class Component extends React.Component {
   }
 
   onCurrencyChange = (e, newValue) => {
-    console.log('onCurrencyChange', newValue);
+    console.log('onCurrencyChange newValue', newValue);
+    const { rfChange, amountSell, freeETH } = this.props;
+    // console.log('onCurrencyChange currency', currency);
+
+    if (newValue === CRYPTO_CURRENCY.ETH) {
+      if (amountSell > freeETH && freeETH > 0) {
+        rfChange(nameFormExchangeCreate, 'amountSell', freeETH);
+      }
+    }
+
     // const currency = e.target.textContent || e.target.innerText;
     // const { amount } = this.props;
     // this.setState({ currency: newValue }, () => {
@@ -274,7 +296,7 @@ class Component extends React.Component {
   }
 
   handleSubmit = async (values) => {
-    const { authProfile, ipInfo } = this.props;
+    const { authProfile, ipInfo, freeETH } = this.props;
     const { lat, lng } = this.state;
     console.log('handleSubmit', values);
     const {
@@ -289,12 +311,14 @@ class Component extends React.Component {
     }
 
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(10, true);
+    const fee = await wallet.getFee(NB_BLOCKS, true);
 
-    const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
+    if (freeETH <= 0 || currency !== CRYPTO_CURRENCY.ETH) {
+      const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
 
-    if (condition) {
-      return;
+      if (condition) {
+        return;
+      }
     }
 
     const phones = phone.trim().split('-');
@@ -395,7 +419,7 @@ class Component extends React.Component {
 
   handleCreateOfferSuccess = async (responseData) => {
     console.log('handleCreateOfferSuccess', responseData);
-    const { rfChange, currency, amountSell } = this.props;
+    const { rfChange, currency, amountSell, freeETH } = this.props;
     const data = responseData.data;
     const offer = OfferShop.offerShop(data);
     this.offer = offer;
@@ -407,16 +431,16 @@ class Component extends React.Component {
     if (currency === CRYPTO_CURRENCY.BTC) {
       console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
       if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, amountSell, 10).then(success => {
+        wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then(success => {
           console.log('transfer', success);
         });
       }
     } else if (currency === CRYPTO_CURRENCY.ETH) {
-      if (amountSell > 0) {
+      if (amountSell > 0 && freeETH <= 0) {
         const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
 
         let result = null;
-        result = await exchangeHandshake.initByShopOwner(amountSell, offer.id);
+        result = await exchangeHandshake.initByShopOwner(offer.items.ETH.sellTotalAmount, offer.id);
         console.log('handleCreateOfferSuccess', result);
       }
     }
@@ -453,9 +477,7 @@ class Component extends React.Component {
       rfChange(nameFormExchangeCreate, 'currency', CRYPTO_CURRENCY.ETH);
     }
 
-    if (!haveOfferETH || !haveOfferBTC) {
-      this.updateUserProfile(offer);
-    }
+    this.updateUserProfile(offer);
   }
 
   handleCreateOfferFailed = (e) => {
@@ -496,9 +518,8 @@ class Component extends React.Component {
   }
 
   render() {
-    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell, } = this.props;
+    const { currency, listOfferPrice, ipInfo: { currency: fiatCurrency }, customizePriceBuy, customizePriceSell, amountBuy, amountSell, freeETH} = this.props;
     const modalContent = this.state.modalContent;
-    const haveProfile = this.offer ? true : false;
     const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
     const { price: priceBuy } = getOfferPrice(listOfferPrice, EXCHANGE_ACTION.BUY, currency);
@@ -538,6 +559,7 @@ class Component extends React.Component {
                   className="form-control-custom form-control-custom-ex w-100 input-no-border"
                   component={fieldInput}
                   placeholder={MIN_AMOUNT[currency]}
+                  disabled={freeETH > 0 && currency === CRYPTO_CURRENCY.ETH}
                   // onChange={this.onAmountChange}
                   // validate={[requiredOneOfAmounts, currency === CRYPTO_CURRENCY.BTC ? minValue001 : minValue01]}
                 />
@@ -630,59 +652,56 @@ class Component extends React.Component {
             </div>
           </div>
 
-          {
-            !haveProfile && (
-              <div>
-                <div className="label"><FormattedMessage id="ex.create.label.stationInfo"/></div>
-                <div className="section">
-                  {/*
-                  <div className="d-flex">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.nameStation"/></span></label>
-                    <div className='input-group'>
-                      <Field
-                        name="nameShop"
-                        className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                        component={fieldInput}
-                        placeholder={'Apple store'}
-                        // onChange={this.onAmountChange}
-                        // validate={[required]}
-                      />
-                    </div>
-                  </div>
-                  <hr className="hrLine"/>*/}
-
-                  <div className="d-flex mt-2">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.phone"/></span></label>
-                    <div className="input-group w-100">
-                      <Field
-                        name="phone"
-                        className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                        component={fieldPhoneInput}
-                        color={textColor}
-                        type="tel"
-                        placeholder="4995926433"
-                        // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
-                      />
-                    </div>
-                  </div>
-                  <hr className="hrLine"/>
-
-                  <div className="d-flex mt-2">
-                    <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.address"/></span></label>
-                    <div className="w-100">
-                      <Field
-                        name="address"
-                        className="form-control-custom form-control-custom-ex w-100 input-no-border"
-                        component={fieldInput}
-                        validate={[required]}
-                        placeholder="81 E. Augusta Ave. Salinas"
-                      />
-                    </div>
-                  </div>
+          <div>
+            <div className="label"><FormattedMessage id="ex.create.label.stationInfo"/></div>
+            <div className="section">
+              {/*
+              <div className="d-flex">
+                <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.nameStation"/></span></label>
+                <div className='input-group'>
+                  <Field
+                    name="nameShop"
+                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                    component={fieldInput}
+                    placeholder={'Apple store'}
+                    // onChange={this.onAmountChange}
+                    // validate={[required]}
+                  />
                 </div>
               </div>
-            )
-          }
+              <hr className="hrLine"/>*/}
+
+              <div className="d-flex mt-2">
+                <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.phone"/></span></label>
+                <div className="input-group w-100">
+                  <Field
+                    name="phone"
+                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                    component={fieldPhoneInput}
+                    color={textColor}
+                    type="tel"
+                    placeholder="4995926433"
+                    // validate={[required, currency === 'BTC' ? minValue001 : minValue01]}
+                  />
+                </div>
+              </div>
+              <hr className="hrLine"/>
+
+              <div className="d-flex mt-2">
+                <label className="col-form-label mr-auto label-create"><span className="align-middle"><FormattedMessage id="ex.create.label.address"/></span></label>
+                <div className="w-100">
+                  <Field
+                    name="address"
+                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                    component={fieldInput}
+                    validate={[required]}
+                    placeholder="81 E. Augusta Ave. Salinas"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
           <Button block type="submit" disabled={!allowInitiate} className="mt-3"><FormattedMessage id="btn.initiate"/></Button>
         </FormExchangeCreate>
         <ModalDialog onRef={modal => this.modalRef = modal}>
@@ -713,7 +732,8 @@ const mapStateToProps = (state) => {
     ipInfo: state.app.ipInfo,
     authProfile: state.auth.profile,
     offerStores: state.exchange.offerStores,
-    listOfferPrice: state.exchange.listOfferPrice
+    listOfferPrice: state.exchange.listOfferPrice,
+    freeETH: state.exchange.freeETH || 0,
   };
 };
 

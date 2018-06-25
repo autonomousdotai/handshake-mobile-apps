@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import iconLocation from '@/assets/images/icon/icons8-geo_fence.svg';
-import iconChat from '@/assets/images/icon/icons8-chat.svg';
 import iconPhone from '@/assets/images/icon/icons8-phone.svg';
 // style
-import './FeedExchange.scss';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import Feed from "@/components/core/presentation/Feed/Feed";
 import Button from "@/components/core/controls/Button/Button";
@@ -18,7 +16,8 @@ import {
   HANDSHAKE_EXCHANGE_STATUS,
   HANDSHAKE_EXCHANGE_STATUS_NAME,
   HANDSHAKE_USER,
-  URL
+  URL,
+  NB_BLOCKS
 } from "@/constants";
 import ModalDialog from "@/components/core/controls/ModalDialog";
 import {connect} from "react-redux";
@@ -33,7 +32,9 @@ import {ExchangeHandshake,} from '@/services/neuron';
 import _sample from "lodash/sample";
 import {feedBackgroundColors} from "@/components/handshakes/exchange/config";
 import {BigNumber} from "bignumber.js";
-import "./FeedMe.scss"
+import "./FeedExchangeLocal.scss"
+import StarsRating from "@/components/core/presentation/StarsRating";
+import iconChat from '@/assets/images/icon/chat-icon.svg';
 
 class FeedExchangeLocal extends React.PureComponent {
   constructor(props) {
@@ -151,12 +152,8 @@ class FeedExchangeLocal extends React.PureComponent {
     const { offer } = this;
     const { type, physicalItem, amount, currency } = offer;
     let offerType = '';
+    offerType = EXCHANGE_ACTION_PRESENT_NAME[type];
 
-    if (type === EXCHANGE_ACTION.BUY) {
-      offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.SELL];
-    } else if (type === EXCHANGE_ACTION.SELL) {
-      offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.BUY];
-    }
 
     const message = <FormattedMessage id="offerHandShakeExchangeContentMe"
                                 values={ {
@@ -199,7 +196,7 @@ class FeedExchangeLocal extends React.PureComponent {
 
     const wallet = MasterWallet.getWalletDefault(currency);
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(10, true);
+    const fee = await wallet.getFee(NB_BLOCKS, true);
 
     if (!this.checkMainNetDefaultWallet(wallet)) {
       return;
@@ -221,6 +218,10 @@ class FeedExchangeLocal extends React.PureComponent {
       address: wallet.address,
       email: authProfile.email || '',
       username: authProfile.username || '',
+      email: authProfile?.email || '',
+      username: authProfile?.name || '',
+      chat_username: authProfile?.username || '',
+      user_address: wallet.address,
     };
 
     this.showLoading();
@@ -239,6 +240,8 @@ class FeedExchangeLocal extends React.PureComponent {
     const { data } = res;
     const { currency, type, system_address, amount, id, hid} = data;
 
+    console.log('handleShakeOfferExchangeSuccess',res);
+
     if (type === EXCHANGE_ACTION.SELL) {
       if (currency === CRYPTO_CURRENCY.ETH) {
         const wallet = MasterWallet.getWalletDefault(currency);
@@ -252,7 +255,7 @@ class FeedExchangeLocal extends React.PureComponent {
       const wallet = MasterWallet.getWalletDefault(currency);
 
       if (currency === CRYPTO_CURRENCY.BTC) {
-        wallet.transfer(system_address, amount, 10).then(success => {
+        wallet.transfer(system_address, amount, NB_BLOCKS).then(success => {
           console.log('transfer', success);
         });
       } else if (currency === CRYPTO_CURRENCY.ETH) {
@@ -325,99 +328,121 @@ class FeedExchangeLocal extends React.PureComponent {
     const phoneDisplayed = phone.replace(/-/g, '');
 
     return (
-      <div className="feed-me-exchange">
-        {/*<div>userType: {this.userType}</div>*/}
-        {/*<div>status: {status}</div>*/}
-        {/*<div className="mb-1">*/}
-          {/*<span style={{ color: '#C8C7CC' }}>{from}</span> <span style={{ color: '#666666' }}>{email}</span>*/}
-          {/*<span className="float-right" style={{ color: '#4CD964' }}>{statusText}</span>*/}
-        {/*</div>*/}
-        <Feed
-          className="feed text-white"
-          // background={`${mode === 'discover' ? '#FF2D55' : '#50E3C2'}`}
-          background="linear-gradient(-225deg, #EE69FF 0%, #955AF9 100%)"
-        >
-          <div className="d-flex mb-4">
-            <div className="headline">{message}</div>
-            {
-              !isCreditCard && showChat && (
-                <div className="ml-auto pl-2 pt-2" style={{ width: '50px' }}>                {/* to-do chat link */}
-                  <Link to={`${URL.HANDSHAKE_CHAT_INDEX}/${chatUsername}`}>
-                    <img src={iconChat} width='35px' />
-                  </Link>
-                </div>
-              )
-            }
-
-          </div>
-
-          <div className="mb-1 name-shop">{nameShop}</div>
-          {/*
-          {
-            phone && phone.split('-')[1] !== '' && ( // no phone number
-              <div className="media mb-1 detail">
-                <img className="mr-2" src={iconPhone} width={20}/>
-                <div className="media-body">
-                  <div><a href={`tel:${phoneDisplayed}`} className="text-white">{phoneDisplayed}</a></div>
-                </div>
-              </div>
-            )
-          }
-
-          <div className="media mb-1 detail">
-            <img className="mr-2" src={iconLocation} width={20}/>
-            <div className="media-body">
-              <div>{address}</div>
+      <div className="feed-exchange-local">
+        <div>
+          <span className="message"><span>I want to sell</span> <strong>a pack of cocaine</strong></span>
+          <span className="image text-right"><img src={'https://www.gettyimages.ie/gi-resources/images/Homepage/Hero/UK/CMS_Creative_164657191_Kingfisher.jpg'} /></span>
+        </div>
+        <div className="wrapper-info">
+          <span className="info-ex-local">
+            <div className="amount">0.1 ETH</div>
+            <div className="rating"><StarsRating className="d-inline-block" starPoint={2.3} startNum={5} /> (25 reviews)</div>
+            <div className="distance">800 meters away</div>
+          </span>
+          <span className="chat-address">
+            <div className="btn-chat">
+              <button className="btn" onClick={this.handleChat}>
+                <img src={iconChat} />
+              </button>
             </div>
-          </div>
-          */}
-
-          {
-            phone && phone.split('-')[1] !== '' && ( // no phone number
-              <div className="media mb-1 detail">
-                <img className="mr-2" src={iconPhone} width={20}/>
-                <div className="media-body">
-                  <div><a href={`tel:${phoneDisplayed}`} className="text-white">{phoneDisplayed}</a></div>
-                </div>
-              </div>
-            )
-          }
-          {
-            address && (
-              <div className="media mb-1 detail">
-                <img className="mr-2" src={iconLocation} width={20}/>
-                <div className="media-body">
-                  <div>{address}</div>
-                </div>
-              </div>
-            )
-          }
-
-          {/*
-            !isCreditCard && (
-              <div className="media detail">
-                <img className="mr-2" src={iconLocation} width={20} />
-                <div className="media-body">
-                  <div>
-                    <FormattedMessage id="offerDistanceContent" values={{
-                      // offerType: offer.type === 'buy' ? 'Buyer' : 'Seller',
-                      distance: getLocalizedDistance(distanceKm, country_code)
-                      // distanceKm: distanceKm > 1 || distanceMiles === 0 ? distanceKm.toFixed(0) : distanceKm.toFixed(3),
-                      // distanceMiles: distanceMiles === 0 ? distanceKm.toFixed(0) : distanceMiles.toFixed(1),
-                    }}/>
-                  </div>
-                </div>
-              </div>
-            )
-          */}
-        </Feed>
-        {/*<Button block className="mt-2">Accept</Button>*/}
-        {actionButtons}
-        <ModalDialog onRef={modal => this.modalRef = modal}>
-          {modalContent}
-        </ModalDialog>
+            <div className="address">Seller: 0x322</div>
+          </span>
+        </div>
       </div>
-    );
+    )
+
+    // return (
+    //   <div className="feed-discover-exchange-local">
+    //     <div>
+    //       <div className="d-flex mb-4">
+    //         <div className="headline">{message}</div>
+    //         {
+    //           !isCreditCard && showChat && (
+    //             <div className="ml-auto pl-2 pt-2" style={{ width: '50px' }}>                {/* to-do chat link */}
+    //               <Link to={`${URL.HANDSHAKE_CHAT_INDEX}/${chatUsername}`}>
+    //                 <img src={iconChat} width='35px' />
+    //               </Link>
+    //             </div>
+    //           )
+    //         }
+    //
+    //       </div>
+    //
+    //       <div className="mb-1 name-shop">{nameShop}</div>
+    //       {/*
+    //       {
+    //         phone && phone.split('-')[1] !== '' && ( // no phone number
+    //           <div className="media mb-1 detail">
+    //             <img className="mr-2" src={iconPhone} width={20}/>
+    //             <div className="media-body">
+    //               <div><a href={`tel:${phoneDisplayed}`} className="text-white">{phoneDisplayed}</a></div>
+    //             </div>
+    //           </div>
+    //         )
+    //       }
+    //
+    //       <div className="media mb-1 detail">
+    //         <img className="mr-2" src={iconLocation} width={20}/>
+    //         <div className="media-body">
+    //           <div>{address}</div>
+    //         </div>
+    //       </div>
+    //       */}
+    //
+    //       {
+    //         phone && phone.split('-')[1] !== '' && ( // no phone number
+    //           <div className="media mb-1 detail">
+    //             <img className="mr-2" src={iconPhone} width={20}/>
+    //             <div className="media-body">
+    //               <div><a href={`tel:${phoneDisplayed}`} className="text-white">{phoneDisplayed}</a></div>
+    //             </div>
+    //           </div>
+    //         )
+    //       }
+    //       {
+    //         address && (
+    //           <div className="media mb-1 detail">
+    //             <img className="mr-2" src={iconLocation} width={20}/>
+    //             <div className="media-body">
+    //               <div>{address}</div>
+    //             </div>
+    //           </div>
+    //         )
+    //       }
+    //
+    //       {/*
+    //         !isCreditCard && (
+    //           <div className="media detail">
+    //             <img className="mr-2" src={iconLocation} width={20} />
+    //             <div className="media-body">
+    //               <div>
+    //                 <FormattedMessage id="offerDistanceContent" values={{
+    //                   // offerType: offer.type === 'buy' ? 'Buyer' : 'Seller',
+    //                   distance: getLocalizedDistance(distanceKm, country_code)
+    //                   // distanceKm: distanceKm > 1 || distanceMiles === 0 ? distanceKm.toFixed(0) : distanceKm.toFixed(3),
+    //                   // distanceMiles: distanceMiles === 0 ? distanceKm.toFixed(0) : distanceMiles.toFixed(1),
+    //                 }}/>
+    //               </div>
+    //             </div>
+    //           </div>
+    //         )
+    //       */}
+    //       {/*<Button block className="mt-2">Accept</Button>*/}
+    //       {actionButtons}
+    //       <ModalDialog onRef={modal => this.modalRef = modal}>
+    //         {modalContent}
+    //       </ModalDialog>
+    //     </div>
+    //     {/*<div>id: {this.offer.id}</div>*/}
+    //     {/*<div>userType: {this.userType}</div>*/}
+    //     {/*<div>status: {status}</div>*/}
+    //     {/*<div className="mb-1">*/}
+    //       {/*<span style={{ color: '#C8C7CC' }}>{from}</span> <span style={{ color: '#666666' }}>{email}</span>*/}
+    //       {/*<span className="float-right" style={{ color: '#4CD964' }}>{statusText}</span>*/}
+    //     {/*</div>*/}
+    //
+    //   </div>
+    // );
   }
 }
 

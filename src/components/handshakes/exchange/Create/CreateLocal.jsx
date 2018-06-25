@@ -36,6 +36,7 @@ import {
   MIN_AMOUNT,
   SELL_PRICE_TYPE_DEFAULT,
   URL,
+  NB_BLOCKS
 } from '@/constants';
 import '../styles.scss';
 import ModalDialog from '@/components/core/controls/ModalDialog/ModalDialog';
@@ -195,7 +196,7 @@ class Component extends React.Component {
     }
 
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(10, true);
+    const fee = await wallet.getFee(NB_BLOCKS, true);
     let checkAmount = amount;
 
     const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
@@ -288,7 +289,7 @@ class Component extends React.Component {
   handleCreateOfferSuccess = async (res) => {
     const { data } = res;
     const {
-      currency, type, system_address, amount, id,
+      currency, type, system_address, total_amount, id,
     } = data;
 
     console.log('handleCreateOfferSuccess', data);
@@ -298,13 +299,13 @@ class Component extends React.Component {
       console.log('wallet', wallet);
 
       if (currency === CRYPTO_CURRENCY.BTC) {
-        wallet.transfer(system_address, amount, 10).then((success) => {
+        wallet.transfer(system_address, total_amount, NB_BLOCKS).then((success) => {
           console.log('transfer', success);
         });
       } else if (currency === CRYPTO_CURRENCY.ETH) {
         const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
-        const result = await exchangeHandshake.initByCoinOwner(amount, id);
+        const result = await exchangeHandshake.initByCoinOwner(total_amount, id);
         console.log('handleCreateOfferSuccess', result);
       }
     }

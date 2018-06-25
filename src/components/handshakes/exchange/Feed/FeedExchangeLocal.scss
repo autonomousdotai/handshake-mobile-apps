@@ -1,0 +1,72 @@
+.feed-exchange-local {
+  background: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(201, 201, 201, 0.5);
+  border-radius: 6px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px;
+  .message {
+    display: table-cell;
+    font-weight: 400;
+    font-size: 18px;
+    color: #000000;
+    letter-spacing: 0.32px;
+    line-height: 26px;
+    padding-right: 10px;
+    vertical-align: top;
+  }
+  .image {
+    width: 125px;
+    height: 125px;
+    display: table-cell;
+    background: #efefef;
+    vertical-align: middle;
+    img {
+      width: 100%;
+    }
+  }
+  .wrapper-info {
+    display: table;
+    width: 100%;
+    margin-top: 10px;
+    .info-ex-local {
+      display: table-cell;
+      .amount {
+        font-weight: 600;
+        font-size: 18px;
+        color: #BB051B;
+        letter-spacing: 0.32px;
+      }
+      .rating {
+        font-size: 12px;
+      }
+      .distance {
+        opacity: 0.5;
+        font-weight: 400;
+        font-size: 12px;
+        color: #22292F;
+        letter-spacing: 0.21px;
+      }
+    }
+    .chat-address {
+      display: table-cell;
+      width: 100px;
+      text-align: right;
+      .btn-chat {
+        width: 100px;
+        .btn {
+          background: transparent;
+          padding: 0;
+        }
+      }
+      .address {
+        margin-top: 10px;
+        font-weight: 400;
+        font-size: 13px;
+        color: #1F2B34;
+        letter-spacing: 0.23px;
+      }
+    }
+  }
+
+}

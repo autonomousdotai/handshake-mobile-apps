@@ -1,0 +1,112 @@
+.feed-me-exchange-local {
+
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.12);
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 10px;
+  .top-part {
+    display: table;
+    width: 100%;
+    margin-bottom: 10px;
+    .type {
+      display: table-cell;
+      text-align: left;
+      font-weight: 400;
+      font-size: 14px;
+      color: #6F6F6F;
+      letter-spacing: 0;
+    }
+    .status {
+      display: table-cell;
+      text-align: right;
+      font-weight: 500;
+      font-size: 14px;
+      color: #4CD964;
+      letter-spacing: 0.25px;
+    }
+  }
+  .left-part {
+    display: table-cell;
+    font-weight: 400;
+    font-size: 18px;
+    color: #000000;
+    letter-spacing: 0.32px;
+    line-height: 26px;
+    padding-right: 10px;
+    vertical-align: top;
+    .amount {
+      font-weight: 600;
+      font-size: 18px;
+      color: #BB051B;
+      letter-spacing: 0.32px;
+    }
+    .rating {
+      font-size: 12px;
+    }
+  }
+  .right-part {
+    width: 125px;
+    height: 125px;
+    display: table-cell;
+    background: #efefef;
+    vertical-align: middle;
+    img {
+      width: 100%;
+    }
+  }
+  .bottom-part {
+    border-top: 1px solid #efefef;
+    margin-left: -10px;
+    padding-left: 10px;
+    margin-right: -10px;
+    padding-right: 10px;
+    margin-top: 15px;
+    & > div {
+      padding-top: 10px;
+      display: table;
+      width: 100%;
+    }
+    .info-ex-local {
+      vertical-align: middle;
+      display: table-cell;
+      .address {
+        font-weight: 400;
+        font-size: 13px;
+        color: #1F2B34;
+        letter-spacing: 0.23px;
+      }
+      .distance {
+        opacity: 0.5;
+        font-weight: 400;
+        font-size: 12px;
+        color: #22292F;
+        letter-spacing: 0.21px;
+      }
+    }
+    .btn-chat {
+      vertical-align: middle;
+      display: table-cell;
+      width: 50px;
+      .btn {
+        background: transparent;
+        padding: 0;
+      }
+    }
+    .buttons {
+      display: table-cell;
+      width: 100px;
+      text-align: right;
+      button {
+        min-width: 100px;
+        background: #000000;
+        padding: 5px;
+        border-radius: 3px;
+        color: #ffffff;
+        &:not(:first-of-type) {
+          margin-top: 5px;
+        }
+      }
+    }
+  }
+
+}

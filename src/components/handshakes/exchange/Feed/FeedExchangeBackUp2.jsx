@@ -28,6 +28,7 @@ import {
   HANDSHAKE_STATUS_NAME,
   HANDSHAKE_USER,
   URL,
+  NB_BLOCKS
 } from '@/constants';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import {connect} from 'react-redux';
@@ -159,7 +160,7 @@ class FeedExchange extends React.PureComponent {
 
     if (shopType === EXCHANGE_ACTION.BUY) { // shop buy
       const balance = await wallet.getBalance();
-      const fee = await wallet.getFee(10, true);
+      const fee = await wallet.getFee(NB_BLOCKS, true);
 
       if (this.showNotEnoughCoinAlert(balance, values.amount, fee, values.currency)) {
         return;
@@ -210,7 +211,7 @@ class FeedExchange extends React.PureComponent {
     } else if (currency === CRYPTO_CURRENCY.BTC) {
       if (type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(currency);
-        wallet.transfer(systemAddress, totalAmount, 10).then((success) => {
+        wallet.transfer(systemAddress, totalAmount, NB_BLOCKS).then((success) => {
           console.log('transfer', success);
         });
       }
