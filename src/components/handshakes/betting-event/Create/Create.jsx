@@ -49,6 +49,7 @@ class CreateBettingEvent extends React.Component {
       creatorFee: null,
       referralFee: null,
       eventType: '',
+      newEventType: '',
       key: 1,
     };
   }
@@ -202,6 +203,7 @@ class CreateBettingEvent extends React.Component {
       messageType: null,
       message: '',
       key: this.state.key + 1,
+      newEventType: '',
     });
   }
   eventsDropdown=() => {
@@ -244,6 +246,23 @@ class CreateBettingEvent extends React.Component {
             validate={[required]}
             onChange={evt => this.updateFormField(evt, 'eventName')}
           />}
+          {this.state.eventType === 'new' && <div className="dropdown-new-event-type">
+            <Field
+              name="walletSelected"
+              component={fieldDropdown}
+                  // className="dropdown-wallet-tranfer"
+              placeholder="Select Event Type"
+              defaultText="Select Event Type"
+              list={[{ id: 1, text: 'Public' }, { id: 2, text: 'Private' }]}
+              onChange={(item) => {
+                      this.setState({
+                        newEventType: item.text,
+                      });
+                    }
+                    }
+            />
+          </div>
+        }
           {this.state.eventType && <Field
             name="outcome"
             type="text"
