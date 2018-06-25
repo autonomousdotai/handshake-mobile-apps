@@ -85,6 +85,13 @@ class CreateBettingEvent extends React.Component {
 
   submitOutCome = (values) => {
     const url = API_URL.CRYPTOSIGN.ADD_OUTCOME.concat(`/${this.state.selectedMatch.id}`);
+    const activeMatchDetailsArray = this.state.matches.filter((item) => {
+      if (this.state.selectedMatch.id === item.id) {
+        return item;
+      }
+      return null;
+    });
+    const activeMatchDetails = activeMatchDetailsArray[0];
     this.props.addMatch({
       PATH_URL: url,
       METHOD: 'post',
@@ -98,7 +105,7 @@ class CreateBettingEvent extends React.Component {
           type: 'success',
           callBack: () => { },
         });
-        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
+        const result = predictionhandshake.createMarket(activeMatchDetails.market_fee, activeMatchDetails.source, activeMatchDetails.date, activeMatchDetails.reportTime, activeMatchDetails.disputeTime, response.data[0].id);
         console.log(result);
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
       },
@@ -149,7 +156,7 @@ class CreateBettingEvent extends React.Component {
           callBack: () => { },
         });
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
-        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
+        const result = predictionhandshake.createMarket(Number(this.state.creatorFee), this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
         console.log(result);
       },
       errorFn: (response) => {
