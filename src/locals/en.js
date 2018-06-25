@@ -435,6 +435,10 @@ export default {
     },
   },
 
+  discover: {
+    noDataMessage: 'No vendors near you yet. Be the first',
+  },
+
   wallet: {
     top_banner: {
       message: 'Shuriken Airdrop (limited)',

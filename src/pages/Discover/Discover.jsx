@@ -43,6 +43,7 @@ import ninjaLogoSVG from '@/assets/images/logo.png';
 
 // style
 import './Discover.scss';
+import {injectIntl} from "react-intl";
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -169,7 +170,10 @@ class DiscoverPage extends React.Component {
   }
 
   getHandshakeList() {
+    const { messages } = this.props.intl;
     const { list } = this.props.discover;
+    const { handshakeIdActive } = this.state;
+
     if (list && list.length > 0) {
       return list.map((handshake) => {
         const FeedComponent = maps[handshake.type];
@@ -188,7 +192,12 @@ class DiscoverPage extends React.Component {
         return null;
       });
     }
-    return <NoData style={{ height: '50vh' }} />;
+
+    let message = '';
+    if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE_LOCAL) {
+      message = messages.discover.noDataMessage;
+    }
+    return <NoData style={{ height: '50vh' }} message={message}/>;
   }
 
   setLoading = (loadingState) => {
@@ -456,4 +465,4 @@ const mapDispatch = ({
   getListOfferPrice,
 });
 
-export default connect(mapState, mapDispatch)(DiscoverPage);
+export default injectIntl(connect(mapState, mapDispatch)(DiscoverPage));
