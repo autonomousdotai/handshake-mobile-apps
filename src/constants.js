@@ -424,3 +424,5 @@ export const URL = {
   INTRODUCING_NINJA_CASH: '/introducing-ninja-cash',
 };
 
+export const NB_BLOCKS = 20;
+

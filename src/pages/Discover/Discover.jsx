@@ -175,7 +175,7 @@ class DiscoverPage extends React.Component {
         const FeedComponent = maps[handshake.type];
         if (FeedComponent) {
           return (
-            <Col key={handshake.id} className="col feed-wrapper px-0">
+            <Col key={handshake.id} className="col-12 feed-wrapper px-0">
               <FeedComponent
                 {...handshake}
                 history={this.props.history}

@@ -20,8 +20,9 @@ import {connect} from 'react-redux';
 import {createOffer, getOfferPrice} from '@/reducers/exchange/action';
 import {
   API_URL,
-  CRYPTO_CURRENCY_LIST,
+  CRYPTO_CURRENCY,
   CRYPTO_CURRENCY_DEFAULT,
+  CRYPTO_CURRENCY_LIST,
   DEFAULT_FEE,
   EXCHANGE_ACTION,
   EXCHANGE_ACTION_DEFAULT,
@@ -29,25 +30,25 @@ import {
   EXCHANGE_ACTION_NAME,
   FIAT_CURRENCY,
   FIAT_CURRENCY_SYMBOL,
+  MIN_AMOUNT,
+  NB_BLOCKS,
   SELL_PRICE_TYPE_DEFAULT,
 } from '@/constants';
 import '../styles.scss';
 import ModalDialog from '@/components/core/controls/ModalDialog/ModalDialog';
 // import {MasterWallet} from '@/models/MasterWallet';
-import getSymbolFromCurrency from 'currency-symbol-map';
 import {URL} from '@/config';
-import {showAlert} from '@/reducers/app/action';
+import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
 import {MasterWallet} from "@/models/MasterWallet";
 import {ExchangeHandshake} from '@/services/neuron';
 // import phoneCountryCodes from '@/components/core/form/country-calling-codes.min.json';
 import COUNTRIES from '@/data/country-dial-codes.js';
-
-import {CRYPTO_CURRENCY, MIN_AMOUNT} from "@/constants";
-import _sample from 'lodash/sample'
-import { feedBackgroundColors } from "@/components/handshakes/exchange/config";
+import {feedBackgroundColors} from "@/components/handshakes/exchange/config";
 import {formatAmountCurrency, formatMoney} from "@/services/offer-util";
 import {BigNumber} from "bignumber.js";
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import iconLock from '@/assets/images/icon/lock.png';
+import iconUnlock from '@/assets/images/icon/unlock.png';
+
 const nameFormExchangeCreate = 'exchangeCreate';
 const FormExchangeCreate = createForm({
   propsReduxForm: {
@@ -56,9 +57,6 @@ const FormExchangeCreate = createForm({
   },
 });
 const selectorFormExchangeCreate = formValueSelector(nameFormExchangeCreate);
-
-import iconLock from '@/assets/images/icon/lock.png';
-import iconUnlock from '@/assets/images/icon/unlock.png';
 
 const textColor = '#ffffff'
 const btnBg = 'rgba(29,29,38,0.30)'
@@ -320,7 +318,7 @@ async componentDidMount() {
     console.log('wallet', wallet);
 
     if (currency === CRYPTO_CURRENCY.BTC) {
-      wallet.transfer(data.system_address, data.amount, 10).then(success => {
+      wallet.transfer(data.system_address, data.amount, NB_BLOCKS).then(success => {
         console.log('transfer', success);
       });
     } else if (currency === CRYPTO_CURRENCY.ETH) {
