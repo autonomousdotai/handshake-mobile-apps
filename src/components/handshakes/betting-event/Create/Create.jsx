@@ -49,7 +49,10 @@ class CreateBettingEvent extends React.Component {
       creatorFee: null,
       referralFee: null,
       eventType: '',
+<<<<<<< HEAD
       newEventType: '',
+=======
+>>>>>>> develop
       key: 1,
     };
   }
@@ -203,7 +206,10 @@ class CreateBettingEvent extends React.Component {
       messageType: null,
       message: '',
       key: this.state.key + 1,
+<<<<<<< HEAD
       newEventType: '',
+=======
+>>>>>>> develop
     });
   }
   eventsDropdown=() => {
