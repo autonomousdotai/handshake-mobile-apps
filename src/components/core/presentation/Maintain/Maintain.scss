@@ -1,5 +1,5 @@
 @import './src/styles/style';
-.blockCountry {
+.maintain-tab {
   height: 100vh;
   max-width: $app-width;
   margin: 0 auto;
@@ -11,11 +11,30 @@
   line-height: 25px;
   text-align: center;
   color: $white;
-  img {
+  position: relative;
+
+  .spider {
+    position: absolute;
+    top: 0;
+    &.spider-1 {
+      left: 10%;
+    }
+    &.spider-2 {
+      left: 80%;
+    }
+  }
+  .img-center {
     margin-top: 35%;
+    margin-bottom: 20px;
   }
   p {
-    margin: 0;
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .title {
+    margin-bottom: 10px;
+    font-size: 30px;
   }
   h2 {
     font-size: rem-calc(36px);
