@@ -4,7 +4,7 @@
   "main": "",
   "private": true,
   "scripts": {
-    "start": "webpack-dev-server --mode development",
+    "start": "yarn add github:ninjadotorg/handshake-i18n && webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "lint": "eslint --fix src/**",
     "test": "jest",

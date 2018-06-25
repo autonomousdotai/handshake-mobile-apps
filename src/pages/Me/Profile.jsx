@@ -412,7 +412,7 @@ class Profile extends React.Component {
             </div>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col md={12}>
             <div className="collapse-custom">
               <div className="head" onClick={() => this.setState(state => ({ phoneCollapse: !state.phoneCollapse }))}>
@@ -490,7 +490,7 @@ class Profile extends React.Component {
               </div>
             </div>
           </Col>
-        </Row>
+        </Row> */}
         <Row>
           <Col md={12}>
             <div className="collapse-custom">
