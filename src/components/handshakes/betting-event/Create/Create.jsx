@@ -98,7 +98,7 @@ class CreateBettingEvent extends React.Component {
           type: 'success',
           callBack: () => { },
         });
-        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data.id);
+        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
         console.log(result);
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
       },
@@ -126,6 +126,7 @@ class CreateBettingEvent extends React.Component {
         disputeTime: this.state.disputeTime,
         name: this.state.eventName,
         source: this.state.resolutionSource,
+        public: 0,
         market_fee: this.state.creatorFee,
         outcomes: [
           {
@@ -148,7 +149,7 @@ class CreateBettingEvent extends React.Component {
           callBack: () => { },
         });
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
-        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data.id);
+        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
         console.log(result);
       },
       errorFn: (response) => {
@@ -246,7 +247,7 @@ class CreateBettingEvent extends React.Component {
             validate={[required]}
             onChange={evt => this.updateFormField(evt, 'eventName')}
           />}
-          {this.state.eventType === 'new' && <div className="dropdown-new-event-type">
+          {/* {this.state.eventType === 'new' && <div className="dropdown-new-event-type">
             <Field
               name="walletSelected"
               component={fieldDropdown}
@@ -261,8 +262,8 @@ class CreateBettingEvent extends React.Component {
                     }
                     }
             />
-                                             </div>
-        }
+          </div>
+        } */}
           {this.state.eventType && <Field
             name="outcome"
             type="text"
