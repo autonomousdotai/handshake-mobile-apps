@@ -54,6 +54,8 @@ import {APP} from '@/constants';
 import _ from 'lodash';
 import qs from 'querystring';
 
+import AddToken from '@/components/Wallet/AddToken/AddToken';
+
 // style
 import './Wallet.scss';
 import CoinTemp from '@/pages/Wallet/CoinTemp';
@@ -125,6 +127,7 @@ class Wallet extends React.Component {
       isNewCCOpen: false,
       stepProtected: 1,
       activeProtected: false,
+      formAddTokenIsActive: false,
       isHistory: false,
       pagenoHistory: 1,
       transactions: [],
@@ -306,7 +309,7 @@ class Wallet extends React.Component {
   creatSheetMenuItem(wallet){
     let obj = [];
 
-      if (wallet.name != "SHURI"){
+      if (wallet.name != "SHURI" && !wallet.customToken){
         obj.push({
           title: 'Transfer coins',
           handler: () => {
@@ -355,7 +358,7 @@ class Wallet extends React.Component {
         },
       });
     }
-    if (wallet.name != "SHURI")
+    if (wallet.name != "SHURI" || !wallet.isToken)
       obj.push({
         title: 'View transaction history',
         handler: async () => {
@@ -563,6 +566,16 @@ class Wallet extends React.Component {
         this.toggleBottomSheet();
       },
     });
+    
+    obj.push({
+      title: 'Add custom token',
+      handler: () => {        
+        this.setState({formAddTokenIsActive: true});
+        this.modalAddNewTokenRef.open(); 
+        this.toggleBottomSheet();
+      },
+    });
+
     obj.push({
       title: 'Backup wallets',
       handler: () => {
@@ -586,6 +599,16 @@ class Wallet extends React.Component {
       },
     });
     return obj;
+  }
+
+  // add custom token:
+  addedCustomToken = () =>{
+    let masterWallet = MasterWallet.getMasterWallet();
+    this.getListBalace(masterWallet);
+    
+    this.splitWalletData(masterWallet);
+    this.modalAddNewTokenRef.close();
+    this.setState({formAddTokenIsActive: false});
   }
 
   // on select type of wallet to create:
@@ -768,10 +791,15 @@ class Wallet extends React.Component {
     return (
       <div className="wallet-page">
 
+        
+        <Modal title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
+            <AddToken formAddTokenIsActive={this.state.formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
+        </Modal>
+
         {/* Header for refers ... */}
         <div className="headerRefers" >
           <p className="hTitle">Shuriken Airdrop (limited)</p>
-          <p className="hLink" onClick={() => this.openRefers()}>Click here</p>
+          <p className="hLink" onClick={() => {this.openRefers()}}>Click here</p>
         </div>
         <Modal title="3 Shuriken Airdrop hoops" onRef={modal => this.modalRefersRef = modal}>
             <Refers />

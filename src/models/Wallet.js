@@ -15,6 +15,7 @@ export class Wallet {
     this.isReward = false;
     this.chainId = -1;
     this.isToken = false;
+    this.customToken = false;
   }
 
   getShortAddress() {
@@ -35,7 +36,7 @@ export class Wallet {
     return Number((parseFloat(this.balance)).toFixed(8));
   }
   getBackgroundImg(){
-    return StringHelper.format("{0}-{1}{2}.svg", this.name.toLowerCase(), this.getNetworkName().toLowerCase(), this.isReward ? "-reward" : '' );    
+    return StringHelper.format("{0}-{1}{2}.svg", this.className.toLowerCase(), this.getNetworkName().toLowerCase(), this.isReward ? "-reward" : '' );    
   }
 }
 
