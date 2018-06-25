@@ -426,6 +426,13 @@ export default {
         },
       },
     },
+    feed: {
+      profileTitle: 'The face behind the mask',
+      profileDescription: 'You, glorious you',
+      shopTitle: 'Your station',
+      shopDescription: 'Open for business',
+      noDataMessage: 'Start a mission.',
+    },
   },
 
   wallet: {
@@ -487,10 +494,22 @@ export default {
         header: "Transfer coins",
         to_address: {
           placeholder: "Specify receiving..."
-        }
-      }
-    }
+        },
+      },
+    },
   },
+
+
+  /**
+   * Chat page
+   */
+  chat: {
+    emptyMessage: 'Trade secrets here. All communication is encrypted and no one is listening.',
+    notFoundUser: 'The Ninja you are looking for is not here. Perhaps you have their name wrong.',
+    lastMessageContent: 'You lost the key to this secret message.',
+    searchPlaceHolder: 'Enter a ninja’s name or alias.',
+  },
+
   /*
   *
   * White Paper

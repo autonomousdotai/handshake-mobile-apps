@@ -315,6 +315,7 @@ export class Firechat {
     invite.id = invite.id || snapshot.key;
     self.getRoom(invite.roomId, (room) => {
       invite.toRoomName = room.name;
+      self.acceptInvite(invite.id);
       self.invokeEventCallbacks('room-invite', invite);
     });
   }
