@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 
 // service, constant
 import { Grid, Row, Col } from 'react-bootstrap';
@@ -94,6 +96,10 @@ var topOfElement = function(element) {
 };
 
 class Wallet extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -764,20 +770,22 @@ class Wallet extends React.Component {
   }
 
   render() {
-    const {intl, cryptoPrice, amount, userCcLimit, ccLimits} = this.props;
+    const {cryptoPrice, amount, userCcLimit, ccLimits} = this.props;
+    const { messages } = this.props.intl;
+
     return (
       <div className="wallet-page">
 
         {/* Header for refers ... */}
         <div className="headerRefers" >
-          <p className="hTitle">Shuriken Airdrop (limited)</p>
-          <p className="hLink" onClick={() => this.openRefers()}>Click here</p>
+          <p className="hTitle">{messages.wallet.top_banner.message}</p>
+          <p className="hLink" onClick={() => this.openRefers()}>{messages.wallet.top_banner.button}</p>
         </div>
-        <Modal title="3 Shuriken Airdrop hoops" onRef={modal => this.modalRefersRef = modal}>
-            <Refers />
+        <Modal title={messages.wallet.refers.header} onRef={modal => this.modalRefersRef = modal}>
+          <Refers />
         </Modal>
 
-        <Modal title="3 Shuriken Airdrop hoops" onRef={modal => this.modalRefersDashboardRef = modal}>
+        <Modal title={messages.wallet.refers_dashboard.header} onRef={modal => this.modalRefersDashboardRef = modal}>
             <RefersDashboard />
         </Modal>
 
@@ -792,16 +800,16 @@ class Wallet extends React.Component {
           />
 
           {/* ModalDialog for confirm remove wallet */}
-          <ModalDialog title="Are you sure?" onRef={modal => this.modalBetRef = modal}>
-            <div className="bodyConfirm"><span>This will permanently delete your wallet.</span></div>
+          <ModalDialog title={messages.wallet.action.remove.header} onRef={modal => this.modalBetRef = modal}>
+            <div className="bodyConfirm"><span>{messages.wallet.action.remove.message}</span></div>
             <div className="bodyConfirm">
-              <Button className="left" cssType="danger" onClick={this.removeWallet} >Yes, remove</Button>
-              <Button className="right" cssType="secondary" onClick={() => { this.modalBetRef.close(); }}>Cancel</Button>
+              <Button className="left" cssType="danger" onClick={this.removeWallet} >{messages.wallet.action.remove.button_yes}</Button>
+              <Button className="right" cssType="secondary" onClick={() => { this.modalBetRef.close(); }}>{messages.wallet.action.remove.button_cancel}</Button>
             </div>
           </ModalDialog>
 
           {/* ModalDialog for transfer coin */}
-          <Modal title="Transfer coins" onRef={modal => this.modalSendRef = modal}>
+          <Modal title={messages.wallet.action.transfer.header} onRef={modal => this.modalSendRef = modal}>
             <SendWalletForm className="sendwallet-wrapper" onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
             <p className="labelText">Receiving address</p>
             <div className="div-address-qr-code">
@@ -810,17 +818,13 @@ class Wallet extends React.Component {
                     name="to_address"
                     type="text"
                     className="form-control input-address-qr-code"
-                    placeholder="Specify receiving..."
+                    placeholder={messages.wallet.action.transfer.to_address.placeholder}
                     component={fieldInput}
                     value={this.state.inputAddressAmountValue}
                     onChange={evt => this.updateSendAddressValue(evt)}
                     validate={[required]}
                   />
 
-              {/* <Input name="to_address" placeholder="Specify receiving..." required className="input-address-qr-code"
-                type="text" value={this.state.inputAddressAmountValue}
-                onChange={evt => this.updateSendAddressValue(evt)}
-              /> */}
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeBlack} /> : ""}
             </div>
             <p className="labelText">{ this.state.walletSelected ? StringHelper.format("Amount ({0})", this.state.walletSelected.name) : "Amount "}</p>
@@ -838,7 +842,7 @@ class Wallet extends React.Component {
 
                   <label className='label-balance'>Your balance: { this.state.walletSelected ? StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name) : ""}</label>
 
-              <Button className="button-wallet" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>Transfer</Button>
+              <Button className="button-wallet" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button}</Button>
             </SendWalletForm>
           </Modal>
 
@@ -1059,4 +1063,4 @@ const mapDispatch = ({
 });
 
 
-export default connect(mapState, mapDispatch)(Wallet);
+export default injectIntl(connect(mapState, mapDispatch)(Wallet));

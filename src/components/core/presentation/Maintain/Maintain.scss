@@ -1,0 +1,27 @@
+@import './src/styles/style';
+.blockCountry {
+  height: 100vh;
+  max-width: $app-width;
+  margin: 0 auto;
+  padding: 0 15px;
+  background-color: $titan-black;
+  font-family: $semi-bold;
+  font-size: rem-calc(18px);
+  text-align: center;
+  line-height: 25px;
+  text-align: center;
+  color: $white;
+  img {
+    margin-top: 35%;
+  }
+  p {
+    margin: 0;
+  }
+  h2 {
+    font-size: rem-calc(36px);
+    margin: rem-calc(39px 0 20px 0);
+  }
+  .bottom {
+    margin-top: rem-calc(20px);
+  }
+}

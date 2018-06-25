@@ -95,6 +95,7 @@ class Chat extends Component {
     this.isInChatTab = false;
     this.componentMounted = false;
     if (this.initialized) {
+      this.firechat.enableNotification();
       this.unBindDataEvents();
     }
   }
@@ -140,8 +141,6 @@ class Chat extends Component {
           chatSource: prevChatSource,
         };
       });
-
-      console.log('enter here', room);
 
       this.enterMessageRoom(this.generateMessageRoomData(room.id, invitation.fromUserId, invitation.fromUserName, room));
     } else {
@@ -199,6 +198,16 @@ class Chat extends Component {
       this.setCustomState({
         chatSource,
       });
+    }
+  }
+
+  onNewMessage(roomId, message) {
+    console.log('onNewMessage', roomId, message);
+    const { chatDetail } = this.state;
+    if (chatDetail && chatDetail === roomId) {
+      setTimeout(() => {
+        this.firechat.markMessagesAsRead(roomId);
+      }, 0);
     }
   }
 
@@ -271,6 +280,7 @@ class Chat extends Component {
 
         const lastMessageTime = lastMessage ? lastMessage.timestamp : null;
         const lastMessageContent = lastMessage ? (lastMessage.message.message || 'You lost the key to this secret message.') : '';
+        const isRead = lastMessage && lastMessage.actions ? (lastMessage.actions[this.user.id]?.seen) : true;
 
         return {
           id: room.id,
@@ -281,7 +291,7 @@ class Chat extends Component {
           title: fromNames,
           date: new Date(),
           subtitle: lastMessageContent,
-          unread: 0,
+          className: !isRead ? 'un-read' : '',
           dateString: lastMessageTime ? moment(new Date(lastMessageTime)).format('HH:mm') : '',
         };
       });
@@ -344,19 +354,21 @@ class Chat extends Component {
   initChatRooms() {
     this.user = this.firechat.getCurrentUser();
     this.props.showLoading();
+    this.updateHeaderLeft();
+    this.updateHeaderTitle();
+
+    // TODO: load state from local storage and display when component bound
+    const historyState = this.loadDataFromLocalStorage();
+    if (historyState && isComponentBound) {
+      this.setCustomState(historyState, () => {
+        this.updateHeaderLeft();
+        this.updateHeaderTitle();
+      });
+    }
 
     this.setCustomState({
       chatSource: this.firechat.getRooms(),
     }, () => {
-      // TODO: load state from local storage and display when component bound
-      const historyState = this.loadDataFromLocalStorage();
-      if (historyState && isComponentBound) {
-        this.setCustomState(historyState, () => {
-          this.updateHeaderLeft();
-          this.updateHeaderTitle();
-        });
-      }
-
       if (this.chatWithUserId) {
         this.props.getUserName({
           PATH_URL: `${API_URL.CHAT.GET_USER_NAME}/${this.chatWithUserId}`,
@@ -388,6 +400,7 @@ class Chat extends Component {
     if (this.props && this.props.auth && Object.keys(this.firechat).length > 0 && this.componentMounted) {
       console.log('chat initialized');
       this.initialized = true;
+      this.firechat.disableNotification();
       this.initChatRooms();
       this.bindDataEvents();
     } else {
@@ -445,14 +458,18 @@ class Chat extends Component {
   }
 
   enterMessageRoom(room) {
+    const roomId = room.id;
     this.setCustomState({
-      chatDetail: room.id,
+      chatDetail: roomId,
       notFoundUser: false,
     }, () => {
       this.updateHeaderLeft();
       this.scrollToBottom();
       this.clearSearch();
       this.updateHeaderTitle();
+      setTimeout(() => {
+        this.firechat.markMessagesAsRead(roomId);
+      }, 0);
     });
   }
 
@@ -639,7 +656,7 @@ class Chat extends Component {
     // // Bind events for new messages, enter / leaving rooms, and user metadata.
     // this.firechat.on('room-enter', this.onEnterRoom.bind(this));
     // this.firechat.on('room-exit', this.onLeaveRoom.bind(this));
-    // this.firechat.on('message-add', this.onNewMessage.bind(this));
+    this.firechat.bind('message-add', ::this.onNewMessage);
     // this.firechat.on('message-remove', this.onRemoveMessage.bind(this));
 
     // // Bind events related to chat invitations.
@@ -650,6 +667,7 @@ class Chat extends Component {
 
   unBindDataEvents() {
     console.log('unbound data events');
+    this.firechat.unbind('message-add', this.onNewMessage.bind(this));
     this.firechat.unbind('user-update');
     this.firechat.unbind('room-invite');
     this.firechat.unbind('room-invite-response');

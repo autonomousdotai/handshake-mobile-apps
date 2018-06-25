@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 // components
-import axios from 'axios';
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import Button from '@/components/core/controls/Button';
 import {
     fieldInput
@@ -41,6 +42,10 @@ window.Clipboard = (function (window, document, navigator) {
 }(window, document, navigator));
 
 class Refers extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -142,8 +147,10 @@ class Refers extends React.Component {
 
   submitStep1 = async () => {
     let result = await this.checkJoinTelegram(this.state.step1_value);
+    const { messages } = this.props.intl;
+
     if(!result){
-      this.showError("Couldn't find you on Telegram. Please exit the group and try again.")
+      this.showError(messages.wallet.refers.error.submit_telegram);
     }
     else{
       this.setState({step1: true});
@@ -154,11 +161,13 @@ class Refers extends React.Component {
       refers.step1 = this.state.step1;
       refers.step1_value = this.state.step1_value;
       local.save(APP.REFERS, refers);
-      this.showSuccess("You joined our community telegram!")
+      this.showSuccess(messages.wallet.refers.success.submit_telegram);
     }
   }
 
   submitStep2 = async() => {
+    const { messages } = this.props.intl;
+
     if(await this.checkFollowTwitter()){
       this.setState({step2: true});
       let refers = local.get(APP.REFERS);
@@ -168,14 +177,15 @@ class Refers extends React.Component {
       refers.step2 = true;
       refers.step2_value = this.state.step2_value;
       local.save(APP.REFERS, refers);
-      this.showSuccess("You followed our Twitter!");
+      this.showSuccess(messages.wallet.refers.sucess.submit_twitter);
     }
     else{
-      this.showError("You haven't followed us yet. Please try again.")
+      this.showError(messages.wallet.refers.error.submit_twitter);
     }
   }
 
   submitStep3 = () => {
+    const { messages } = this.props.intl;
     let refers = local.get(APP.REFERS);
     if(!refers) refers = {};
 
@@ -201,20 +211,22 @@ class Refers extends React.Component {
               refers.step3 = 2;
               refers.step3_value = email;
               local.save(APP.REFERS, refers);
-              this.setState({isShowVerificationEmailCode: false, step3: refers.step3, step3_value: refers.step3_value, referLink: profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : ''});
+              this.setState({isShowVerificationEmailCode: false,
+                step3: refers.step3, step3_value: refers.step3_value,
+                referLink: profile && profile.username ? "https://ninja.org/wallet?ref=" + profile.username : ''});
 
               this.props.rfChange(nameFormStep3, 'refer_email', email);
-              this.showSuccess("Your email has been verified.");
+              this.showSuccess(messages.wallet.refers.success.confirm_code);
             },
             errorFn: (e) => {
               console.error(e);
-              this.showError("Verification code is wrong. Please try again!");
+              this.showError(messages.wallet.refers.error.confirm_code);
             },
           });
         },
         errorFn: (e) => {
           console.error(e);
-          this.showError("Verification code is wrong. Please try again!");
+          this.showError();
         },
       });
     }
@@ -225,13 +237,9 @@ class Refers extends React.Component {
         METHOD: 'POST',
         successFn: (data) => {
           if (data.status) {
-            this.showToast("Verification code is sent to your email. Please check!");
+            this.showToast(messages.wallet.refers.success.verify_code);
             local.save(APP.EMAIL_NEED_VERIFY, email);
             this.setState({step3: 1, email: email});
-
-            // refers.step3 = 1;
-            // refers.step3_value = "";
-            // local.save(APP.REFERS, refers);
 
             this.props.rfChange(nameFormStep3, 'refer_email', "");
             this.props.clearFields(nameFormStep3, false, false, "refer_email");
@@ -239,17 +247,10 @@ class Refers extends React.Component {
         },
         errorFn: (e) => {
           console.error(e);
-          this.showError("Can\'t send verify email");
+          this.showError(messages.wallet.refers.error.verify_code);
         },
       });
     }
-    // if(old_count >= new_count && 1 != 1){
-    //   this.showError("Not found your telegram in our community. Please reload page and try again.")
-    // }
-    // else{
-    //   this.setState({step1: true});
-    //   this.showSuccess("You joined our community telegram!")
-    // }
   }
 
 
@@ -279,7 +280,6 @@ class Refers extends React.Component {
       let result = false;
       this.props.checkFollowTwitter({
         PATH_URL: 'twitter/'+ this.state.step2_value,
-        //qs: { user_name: username, chat_id: '-1001320226748'},
         successFn: (res) => {
           if(res && res.data){
             resolve(true);
@@ -324,19 +324,21 @@ class Refers extends React.Component {
     local.save(APP.REFERS, refers);
   }
 
-renderStep1 = () => (
-  !(this.state.end) ?
+renderStep1 = () => {
+  const { messages } = this.props.intl;
+
+  return (!(this.state.end) ?
   <Step1Form onSubmit={this.submitStep1} className="refers-wrapper">
-    <h6><a href="https://t.me/ninja_org" target="_blank">Insult us on telegram</a>. Be creative. There’s a leaderboard.</h6>
+    <h6><a href="https://t.me/ninja_org" target="_blank">{messages.wallet.refers.text.telegram}</a> {messages.wallet.refers.text.telegram2}</h6>
     <div className="col2">
-      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? "verified" : "verify"}</Button>
+      <Button isLoading={this.state.isLoading} disabled={this.state.step1} block type="submit">{this.state.step1 ? messages.wallet.refers.button.verified :messages.wallet.refers.button.verify}</Button>
     </div>
     <div className="col1">
       <Field
         name="telegram_username"
         type="text"
         className="form-control"
-        placeholder="Your telegram alias"
+        placeholder={messages.wallet.refers.placeholder.telegram_username}
         component={fieldInput}
         value={this.state.step1_value}
         onChange={evt => this.updateTelegramUsernameValue(evt)}
@@ -345,22 +347,24 @@ renderStep1 = () => (
       />
     </div>
   </Step1Form>
-  :""
-)
+  :"")
+}
 
-renderStep2= () => (
-  !(this.state.end) ?
+renderStep2= () => {
+  const { messages } = this.props.intl;
+
+  return (!(this.state.end) ?
   <Step2Form onSubmit={this.submitStep2} className="refers-wrapper">
-    <h6>Our social media guy says we need followers on <a href="https://twitter.com/ninja_org" target="_blank">twitter</a>.</h6>
+    <h6>{messages.wallet.refers.text.twitter2} <a href="https://twitter.com/ninja_org" target="_blank">{messages.wallet.refers.text.twitter}</a>.</h6>
     <div className="col2">
-        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? "verified" : "verify"}</Button>
+        <Button isLoading={this.state.isLoading} block disabled={this.state.step2} type="submit">{this.state.step2 ? messages.wallet.refers.button.verified :messages.wallet.refers.button.verify}</Button>
     </div>
     <div className="col1">
       <Field
         name="twitter_username"
         type="text"
         className="form-control"
-        placeholder="Your twitter username"
+        placeholder={messages.wallet.refers.placeholder.twitter_username}
         component={fieldInput}
         value={this.state.step2_value}
         onChange={evt => this.updateTwitterUsernameValue(evt)}
@@ -369,11 +373,12 @@ renderStep2= () => (
       />
     </div>
   </Step2Form>
-  : ""
-)
+  : "")
+}
 
-renderStep3= () => (
-  !(this.state.end) ?
+renderStep3= () => {
+  const { messages } = this.props.intl;
+  return (!(this.state.end) ?
   <Step3Form onSubmit={this.submitStep3} className="refers-wrapper">
     <h6>Receive your randomly generated ninja name.</h6>
     <div className="col2"> {this.renderStep3_labelButton()}</div>
@@ -382,7 +387,7 @@ renderStep3= () => (
           name="refer_email"
           type="text"
           className="form-control padding-right-10"
-          placeholder={this.state.step3 > 0 ? "Verification code" : "Your favourite fake email"}
+          placeholder={this.state.step3 > 0 ? messages.wallet.refers.placeholder.email : messages.wallet.refers.placeholder.email2}
           component={fieldInput}
           value={this.state.step3_value}
           onChange={evt => this.updateEmailValue(evt)}
@@ -393,19 +398,19 @@ renderStep3= () => (
     {
       this.state.step3 == 1 ?
       <div className="col100">
-        <a className="reset-link" onClick={() => {this.resetStep3()}}>Reset email</a>
+        <a className="reset-link" onClick={() => {this.resetStep3()}}>{messages.wallet.refers.button.reset_email}</a>
       </div> : ""
     }
     {
       this.state.step1 && this.state.step2 && this.state.step3 > 1 && !this.state.end ?
       <div className="col100 token">
-        <Button block type="button" onClick={() => {this.submitEndStep()}}>just give me tokens</Button>
+        <Button block type="button" onClick={() => {this.submitEndStep()}}>{messages.wallet.refers.button.get_token}</Button>
       </div> : ""
     }
 
   </Step3Form>
-  :""
-)
+  :"")
+}
 
 completeRefers() {
   return new Promise((resolve, reject) => {
@@ -429,6 +434,8 @@ completeRefers() {
 }
 
 submitEndStep= async () => {
+  const { messages } = this.props.intl;
+
   let result = await this.completeRefers();
   console.log(result);
   if(result){
@@ -440,32 +447,36 @@ submitEndStep= async () => {
       refers.end = 1;
       local.save(APP.REFERS, refers);
 
-      this.showSuccess("Complete success! You will receive 80 shurikens in few seconds.");
+      this.showSuccess(messages.wallet.refers.success.get_token);
     }
     else{
       this.showError(result.message);
     }
   }
   else{
-    this.showError("Failed! Your reffers are not complete.");
+    this.showError(messages.wallet.refers.error.get_token);
   }
 }
 
 renderStep3_labelButton= () => {
+  const { messages } = this.props.intl;
+
   switch(this.state.step3) {
     case 1:
-      return <Button isLoading={this.state.isLoading} block type="submit">confirm</Button>
+      return <Button isLoading={this.state.isLoading} block type="submit">{messages.wallet.refers.button.confirm}</Button>
     case 2:
-      return <Button isLoading={this.state.isLoading} block disabled type="submit">verified</Button>
+      return <Button isLoading={this.state.isLoading} block disabled type="submit">{messages.wallet.refers.button.verified}</Button>
     default:
-      return <Button isLoading={this.state.isLoading} block type="submit">verify</Button>
+      return <Button isLoading={this.state.isLoading} block type="submit">{messages.wallet.refers.button.verify}</Button>
   }
 }
 
-renderLinkRefer = () => (
-  (this.state.end) ?
+renderLinkRefer = () => {
+  const { messages } = this.props.intl;
+
+  return (this.state.end ?
   <Step4Form className="refers-wrapper refers-wrapper-border">
-    <h6>This is your super sexy referral link. You get 20 shurikens for every new ninja.</h6>
+    <h6>{messages.wallet.refers.text.referral_link}</h6>
     <div className="col100">
         <Field
             name="refer_link"
@@ -474,25 +485,24 @@ renderLinkRefer = () => (
             placeholder=""
             component={fieldInput}
             validate={[required]}
-            onFocus={() => { Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
+            onFocus={() => { Clipboard.copy(this.state.referLink); this.showToast(messages.wallet.refers.success.copy_link); }}
         />
     </div>
   </Step4Form> :
-  ""
-)
+  "")
+}
 
   render() {
 
     const {formAddress, toAddress, amount, coinName } = this.props;
-
+    const { messages } = this.props.intl;
     return (
       <div className="refers">
-          <h5>80 shiny Shurikens (SHURI).</h5>
+          <h5>{messages.wallet.refers.text.title}</h5>
           {this.renderStep1()}
           {this.renderStep2()}
           {this.renderStep3()}
           {this.renderLinkRefer()}
-
         </div>
     )
   }
@@ -516,4 +526,4 @@ const mapDispatchToProps = (dispatch) => ({
   authUpdate: bindActionCreators(authUpdate, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Refers);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Refers));

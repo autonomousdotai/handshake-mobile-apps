@@ -153,6 +153,7 @@ class BetingShake extends React.Component {
     //const side = parseInt(this.toggleRef.value);
     const balance = await betHandshakeHandler.getBalance();
     const estimatedGas = await betHandshakeHandler.getEstimateGas();
+    //const estimatedGas = await betHandshakeHandler.getGasPriceDefaultWithEthUnit();
     //const estimatedGas = 0.00001;
     const total = amount + parseFloat(estimatedGas);
     console.log('Balance, estimate gas, total, date:', balance, estimatedGas, total, closingDate);
@@ -205,6 +206,8 @@ class BetingShake extends React.Component {
         callBack: () => {
         }
       });
+      this.props.onSubmitClick();
+
     }
 
 
@@ -572,6 +575,8 @@ class BetingShake extends React.Component {
     this.setState({
       disable: false
     })
+    this.props.onSubmitClick();
+
   }
 }
 const mapDispatch = ({
