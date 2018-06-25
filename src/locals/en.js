@@ -161,6 +161,8 @@ export default {
   'btn.close': 'Close',
   'btn.accept': 'Accept',
 
+  product_info: 'Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!',
+
   // FAQ
   FAQ_TITLE: 'FAQ',
   FAQ_HEADER_YELLOW: 'Decentralized',
@@ -436,7 +438,8 @@ export default {
   },
 
   discover: {
-    noDataMessage: 'No vendors near you yet. Be the first',
+    noDataMessageCash: 'No stations near you yet. Be the first.',
+    noDataMessageSwap: 'No vendors near you yet. Be the first',
   },
 
   wallet: {

@@ -194,9 +194,18 @@ class DiscoverPage extends React.Component {
     }
 
     let message = '';
-    if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE_LOCAL) {
-      message = messages.discover.noDataMessage;
+    switch (handshakeIdActive) {
+      case HANDSHAKE_ID.EXCHANGE:
+        message = messages.discover.noDataMessageCash;
+        break;
+      case HANDSHAKE_ID.EXCHANGE_LOCAL:
+        message = messages.discover.noDataMessageSwap;
+        break;
+
+      default:
+      // is promise
     }
+
     return <NoData style={{ height: '50vh' }} message={message}/>;
   }
 
@@ -354,6 +363,7 @@ class DiscoverPage extends React.Component {
       // tabIndexActive,
       modalContent,
     } = this.state;
+    const { messages } = this.props.intl;
 
     return (
       <React.Fragment>
@@ -439,7 +449,7 @@ class DiscoverPage extends React.Component {
             }
           </Row>
           <Row className="info">
-            Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!
+            {messages.product_info}
           </Row>
         </Grid>
         <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} className="discover-popup" isDismiss={false} >
