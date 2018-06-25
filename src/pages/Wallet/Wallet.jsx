@@ -358,7 +358,7 @@ class Wallet extends React.Component {
         },
       });
     }
-    if (wallet.name != "SHURI" || !wallet.isToken)
+    if (wallet.name != "SHURI" && !wallet.isToken)
       obj.push({
         title: 'View transaction history',
         handler: async () => {
@@ -388,7 +388,7 @@ class Wallet extends React.Component {
       },
     });
 
-    if (!wallet.isReward && wallet.name != "SHURI") {
+    if (!wallet.isReward && wallet.name != "SHURI"  && !wallet.isToken) {
         obj.push({
           title: StringHelper.format('Set as default {0} wallet ', wallet.name) + (wallet.default ? "✓ " : ""),
           handler: () => {
