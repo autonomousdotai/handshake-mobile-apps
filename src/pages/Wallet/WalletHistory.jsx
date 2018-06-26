@@ -4,6 +4,7 @@ import {Ethereum} from '@/models/Ethereum.js'
 import iconSent from '@/assets/images/icon/icon-sent.svg';
 import iconReceived from '@/assets/images/icon/icon-received.svg';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import './Wallet.scss';
 import WalletTransaction from './WalletTransaction';
 import { showLoading, hideLoading } from '@/reducers/app/action';
@@ -12,6 +13,10 @@ import Modal from '@/components/core/controls/Modal';
 const moment = require('moment');
 
 class WalletHistory extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
 	constructor(props) {
 
     super(props);
@@ -119,6 +124,8 @@ class WalletHistory extends React.Component {
 
   get list_transaction() {
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
+
     if (wallet && this.state.transactions.length==0)
       return <div className="history-no-trans">No transactions yet</div>;
       let arr = [];
@@ -138,8 +145,8 @@ class WalletHistory extends React.Component {
           <div className="col3">
             <div className="time">{tran.transaction_relative_time}</div>
             <div className={cssValue}>{tran.is_sent ? "-" : ""} {Number(tran.value)} {wallet.name}</div>
-            {tran.confirmations <= 0 ? <div className="unconfirmation">Unconfirmed</div> : ""}
-            {tran.is_error ? <div className="unconfirmation">Failed</div> : ""}
+            {tran.confirmations <= 0 ? <div className="unconfirmation">{messages.wallet.action.history.label.unconfirmed}</div> : ""}
+            {tran.is_error ? <div className="unconfirmation">{messages.wallet.action.history.label.failed}</div> : ""}
           </div>
           <div className="col1"><img className="iconDollar" src={tran.is_sent ? iconSent : iconReceived} /></div>
           <div className="col2 address">
@@ -178,9 +185,10 @@ class WalletHistory extends React.Component {
 
   get detail_transaction() {
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
 
     return (
-      <Modal title="Transaction details" onRef={modal => this.modalTransactionRef = modal} onClose={this.closeDetail}>
+      <Modal title={messages.wallet.action.history.header} onRef={modal => this.modalTransactionRef = modal} onClose={this.closeDetail}>
         <WalletTransaction wallet={wallet} transaction_detail={this.state.transaction_detail}  />
       </Modal>
     );
@@ -188,12 +196,14 @@ class WalletHistory extends React.Component {
 
   get load_balance(){
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
+
     return wallet ?
     (
       <div className="history-balance">
-        Balance: {wallet.balance} {wallet.name}
+        {messages.wallet.action.history.label.balance}: {wallet.balance} {wallet.name}
         <br/>
-        Transactions: {wallet.transaction_count}
+        {messages.wallet.action.history.label.transactions}: {wallet.transaction_count}
       </div>
     ) : "";
   }
@@ -227,4 +237,4 @@ const mapDispatch = ({
   hideLoading,
 });
 
-export default connect(mapState, mapDispatch)(WalletHistory);
+export default injectIntl(connect(mapState, mapDispatch)(WalletHistory));

@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import iconSent from '@/assets/images/icon/icon-sent.svg';
 import iconReceived from '@/assets/images/icon/icon-received.svg';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import './Wallet.scss';
 
 const _ = require('lodash');
 const moment = require('moment');
 
 class WalletTransaction extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
 	constructor(props) {
 
     super(props);
@@ -27,6 +32,8 @@ class WalletTransaction extends React.Component {
 
   cooked_transaction(data){
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
+
     if(wallet && data){
       if(wallet.name == "ETH"){
         let gas_gwei = 0, gas_price = 0, tx_fee = 0;
@@ -46,7 +53,7 @@ class WalletTransaction extends React.Component {
             coin: wallet.name,
             confirmations: data.confirmations,
             is_sent: data.is_sent,
-            status: Number(data.txreceipt_status) > 0 ? "success" : "failed"
+            status: Number(data.txreceipt_status) > 0 ? messages.wallet.action.history.label.success : messages.wallet.action.history.label.failed
           },
           body: {
             hash: data.hash,
@@ -108,6 +115,7 @@ class WalletTransaction extends React.Component {
   }
 
   get detail_transaction() {
+    const { messages } = this.props.intl;
     let detail = this.cooked_transaction(this.state.transaction_detail);
     let css_status = detail ? "status-" + detail.header.status : "";
 
@@ -121,9 +129,9 @@ class WalletTransaction extends React.Component {
         </div>
         <div className="confirmation">
           {
-            detail.header.status ? <div className={css_status}>Status {detail.header.status}</div> : ""
+            detail.header.status ? <div className={css_status}>{messages.wallet.action.history.label.status} {detail.header.status}</div> : ""
           }
-          <div>{detail.header.confirmations} confirmations</div>
+          <div>{detail.header.confirmations} {messages.wallet.action.history.label.confirmations}</div>
         </div>
 
         {
@@ -161,4 +169,4 @@ const mapState = (state) => ({
 const mapDispatch = ({
 });
 
-export default connect(mapState, mapDispatch)(WalletTransaction);
+export default injectIntl(connect(mapState, mapDispatch)(WalletTransaction));
