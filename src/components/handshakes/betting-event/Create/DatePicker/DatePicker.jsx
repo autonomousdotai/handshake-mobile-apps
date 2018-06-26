@@ -14,31 +14,47 @@ const yesterday = Datetime.moment().subtract(1, 'day');
 class DatePicker extends React.PureComponent {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   selectedDate: moment(),
-    // };
+    this.state = {
+      selectedTime: moment().format('h:mm a'),
+      selectedDateValue: '',
+      finalDateTime: '',
+    };
     this.onChangeDate = this.onChangeDate.bind(this);
   }
 
-  selectedDate = moment();
 
+  onChangeDate(date) {
+    this.selectedDate = date;
+    this.setState({ selectedDateValue: date }, this.findFinalDateTime);
+  }
+
+
+  onChangeTime=(time) => {
+    console.log(time);
+    this.setState({
+      selectedTime: time.format('h:mm a'),
+    }, this.findFinalDateTime);
+  }
   get value() {
     return this.selectedDate;
   }
 
+  callOnChangeProps() {
+    const { onChange } = this.props;
+    onChange && onChange(this.state.finalDateTime);
+  }
+
+  findFinalDateTime() {
+    console.log(this.state.selectedDateValue.format('YYYY-MM-DD'), this.state.selectedTime);
+    this.setState({
+      finalDateTime: moment(`${this.state.selectedDateValue.format('YYYY-MM-DD')} ${this.state.selectedTime}`, 'YYYY-MM-DD h:mm a').unix(),
+    }, this.callOnChangeProps);
+  }
+  selectedDate = moment();
+
   isDate = date => (!!((new Date(date) !== 'Invalid Date' && !isNaN(new Date(date)))))
 
-  onChangeDate(date) {
-    // this.setState({ selectedDate: date });
-    this.selectedDate = date;
-    console.log('Date:', this.selectedDate);
-    const { onChange } = this.props;
-    console.log('test');
-    const unixDate = this.isDate(date) ? date.unix() : date;
-    if (this.isDate(date)) {
-      onChange && onChange(unixDate);
-    } else {}
-  }
+
   // separate date validitiy based on type of form = reporting will have closing time and type will be reporting similarly dispute will have reporting time
   valid = (current) => {
     switch (this.props.name) {
@@ -56,6 +72,7 @@ class DatePicker extends React.PureComponent {
     }
   };
 
+
   render() {
     const { className, onChange, ...props } = this.props;
     return (
@@ -72,7 +89,7 @@ class DatePicker extends React.PureComponent {
 placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
 }}
         />
-        <TimePickerComponent disabled={this.props.disabled} />
+        <TimePickerComponent disabled={this.props.disabled} onChangeTime={this.onChangeTime} />
       </div>);
   }
 }

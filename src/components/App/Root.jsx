@@ -97,7 +97,7 @@ class Root extends React.Component {
   // /locale
 
   ipInfo() {
-    console.log('app - handle - ipinfo');
+    //console.log('app - handle - ipinfo');
     $http({
       url: 'https://ipapi.co/json',
       qs: {

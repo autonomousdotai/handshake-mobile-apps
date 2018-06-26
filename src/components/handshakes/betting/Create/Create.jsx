@@ -97,15 +97,18 @@ class BettingCreate extends React.Component {
     });
     this.props.loadMatches({ PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES });
   }
+
   componentWillReceiveProps(nextProps) {
     // console.log('Receive Props: ', nextProps);
     const { matches } = nextProps;
     console.log(`${TAG} Matches:`, matches);
 
+
     this.setState({
       matches,
     });
   }
+
   getStringDate(date) {
     const formattedDate = moment.unix(date).format('MMM DD');
     return formattedDate;
@@ -242,8 +245,9 @@ class BettingCreate extends React.Component {
       message = MESSAGE.RIGHT_NETWORK;
     }
 
-    if (selectedMatch && selectedOutcome) {
-      if (betHandshakeHandler.isExpiredDate(date)) {
+    if(selectedMatch && selectedOutcome){
+      if (betHandshakeHandler.isExpiredDate(date)){
+
         message = MESSAGE.MATCH_OVER;
       } else if (eventBet > 0) {
         if (total <= balance) {

@@ -100,7 +100,7 @@ class CreateBettingEvent extends React.Component {
       successFn: (response) => {
         console.log(response.data);
         this.props.showAlert({
-          message: <div className="text-center">Outcome added successfully.</div>,
+          message: <div className="text-center">Outcome added successfully. Please wait a few minutes for the Blockchain to update.</div>,
           timeOut: 3000,
           type: 'success',
           callBack: () => { },
@@ -142,32 +142,43 @@ class CreateBettingEvent extends React.Component {
         ],
       },
     ];
-    this.props.addMatch({
-      PATH_URL: API_URL.CRYPTOSIGN.ADD_MATCH,
-      METHOD: 'post',
-      data,
-      headers: { 'Content-Type': 'application/json' },
-      successFn: (response) => {
-        console.log(response.data);
-        this.props.showAlert({
-          message: <div className="text-center">Event added successfully.</div>,
-          timeOut: 3000,
-          type: 'success',
-          callBack: () => { },
-        });
-        this.props.history.push(URL.HANDSHAKE_DISCOVER);
-        const result = predictionhandshake.createMarket(Number(this.state.creatorFee), this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
-        console.log(result);
-      },
-      errorFn: (response) => {
-        response.message && this.props.showAlert({
-          message: <div className="text-center">{response.message}</div>,
-          timeOut: 3000,
-          type: 'danger',
-          callBack: () => {},
-        });
-      },
-    });
+    if (this.state.closingTime && this.state.disputeTime && this.state.reportingTime !== '') {
+      this.props.addMatch({
+        PATH_URL: API_URL.CRYPTOSIGN.ADD_MATCH,
+        METHOD: 'post',
+        data,
+        headers: { 'Content-Type': 'application/json' },
+        successFn: (response) => {
+          console.log(response.data);
+          this.props.showAlert({
+            message: <div className="text-center">Event added successfully. Please wait a few minutes for the Blockchain to update.</div>,
+            timeOut: 3000,
+            type: 'success',
+            callBack: () => { },
+          });
+          this.props.history.push(URL.HANDSHAKE_DISCOVER);
+          const result = predictionhandshake.createMarket(Number(this.state.creatorFee), this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
+          console.log(result);
+        },
+        errorFn: (response) => {
+          response.message && this.props.showAlert({
+            message: <div className="text-center">{response.message}</div>,
+            timeOut: 3000,
+            type: 'danger',
+            callBack: () => {},
+          });
+        },
+      });
+    } else {
+      let message = 'Please select Closing Time';
+      if (this.state.closingTime !== '' && this.state.reportingTime === '') { message = 'Please select Reporting Time'; } else if (this.state.closingTime !== '' && this.state.reportingTime !== '' && this.state.disputeTime === '') { message = 'Please select Dispute Time'; }
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {},
+      });
+    }
   }
   submitBettingEvent= (values) => {
     console.log(values);
@@ -289,6 +300,7 @@ class CreateBettingEvent extends React.Component {
               className="form-control input-field"
               placeholder="Resolution source"
               component={fieldInput}
+              validate={[required]}
               value={this.state.resolutionSource}
               onChange={evt => this.updateFormField(evt, 'resolutionSource')}
             />
@@ -297,6 +309,7 @@ class CreateBettingEvent extends React.Component {
               className="form-control input-field"
               placeholder="Closing Time"
               name="closingTime"
+              required
             />
             <DatePicker
               onChange={(date) => { this.changeDate(date, 'reportingTime'); }}
@@ -305,6 +318,7 @@ class CreateBettingEvent extends React.Component {
               placeholder="Reporting Time"
               disabled={!this.state.closingTime}
               startDate={this.state.closingTime}
+              required
             />
             <DatePicker
               onChange={(date) => { this.changeDate(date, 'disputeTime'); }}
@@ -313,6 +327,7 @@ class CreateBettingEvent extends React.Component {
               name="disputeTime"
               startDate={this.state.reportingTime}
               disabled={!this.state.reportingTime}
+              required
             />
           </div>
         )}
@@ -328,6 +343,7 @@ class CreateBettingEvent extends React.Component {
                   className="form-control input-field"
                   placeholder="Creator Fee"
                   component={fieldInput}
+                  validate={[required]}
                   value={this.state.creatorFee}
                   onChange={evt => this.updateFormField(evt, 'creatorFee')}
                 />

@@ -109,7 +109,7 @@ class Handle extends React.Component {
   }
 
   updateRewardAddress() {
-    console.log('app - handle - wallet - updateRewardAddress');
+    //console.log('app - handle - wallet - updateRewardAddress');
     const walletReward = MasterWallet.getShurikenWalletJson();
     const data = new FormData();
     data.append('reward_wallet_addresses', walletReward);

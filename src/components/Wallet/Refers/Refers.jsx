@@ -48,7 +48,6 @@ class Refers extends React.Component {
         PATH_URL: 'user/referred',
         METHOD: 'GET',
         successFn: (res) => {
-          console.log(res);
           if(res && res.data){
             resolve(res.data);
           }

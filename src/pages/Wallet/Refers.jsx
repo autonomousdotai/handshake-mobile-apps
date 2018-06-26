@@ -296,8 +296,10 @@ class Refers extends React.Component {
   }
 
   updateTelegramUsernameValue = (evt) => {
+    let txt = evt.target.value.trim();
+    if(txt) txt = txt.replace("@", "");
     this.setState({
-      step1_value: evt.target.value.trim(),
+      step1_value: txt,
     });
   }
 
@@ -308,8 +310,11 @@ class Refers extends React.Component {
   }
 
   updateTwitterUsernameValue = (evt) => {
+    let txt = evt.target.value.trim();
+    if(txt) txt = txt.replace("@", "");
+
     this.setState({
-      step2_value: evt.target.value.trim(),
+      step2_value: txt,
     });
   }
 
