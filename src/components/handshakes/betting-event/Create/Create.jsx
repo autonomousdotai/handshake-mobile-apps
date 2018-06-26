@@ -49,6 +49,7 @@ class CreateBettingEvent extends React.Component {
       creatorFee: null,
       referralFee: null,
       eventType: '',
+      newEventType: '',
       key: 1,
     };
   }
@@ -84,6 +85,13 @@ class CreateBettingEvent extends React.Component {
 
   submitOutCome = (values) => {
     const url = API_URL.CRYPTOSIGN.ADD_OUTCOME.concat(`/${this.state.selectedMatch.id}`);
+    const activeMatchDetailsArray = this.state.matches.filter((item) => {
+      if (this.state.selectedMatch.id === item.id) {
+        return item;
+      }
+      return null;
+    });
+    const activeMatchDetails = activeMatchDetailsArray[0];
     this.props.addMatch({
       PATH_URL: url,
       METHOD: 'post',
@@ -97,7 +105,7 @@ class CreateBettingEvent extends React.Component {
           type: 'success',
           callBack: () => { },
         });
-        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data.id);
+        const result = predictionhandshake.createMarket(activeMatchDetails.market_fee, activeMatchDetails.source, activeMatchDetails.date, activeMatchDetails.reportTime, activeMatchDetails.disputeTime, response.data[0].id);
         console.log(result);
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
       },
@@ -125,6 +133,7 @@ class CreateBettingEvent extends React.Component {
         disputeTime: this.state.disputeTime,
         name: this.state.eventName,
         source: this.state.resolutionSource,
+        public: 0,
         market_fee: this.state.creatorFee,
         outcomes: [
           {
@@ -147,7 +156,7 @@ class CreateBettingEvent extends React.Component {
           callBack: () => { },
         });
         this.props.history.push(URL.HANDSHAKE_DISCOVER);
-        const result = predictionhandshake.createMarket(this.state.creatorFee, this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data.id);
+        const result = predictionhandshake.createMarket(Number(this.state.creatorFee), this.state.resolutionSource, this.state.closingTime, this.state.reportingTime, this.state.disputeTime, response.data[0].id);
         console.log(result);
       },
       errorFn: (response) => {
@@ -202,6 +211,7 @@ class CreateBettingEvent extends React.Component {
       messageType: null,
       message: '',
       key: this.state.key + 1,
+      newEventType: '',
     });
   }
   eventsDropdown=() => {
@@ -244,6 +254,23 @@ class CreateBettingEvent extends React.Component {
             validate={[required]}
             onChange={evt => this.updateFormField(evt, 'eventName')}
           />}
+          {/* {this.state.eventType === 'new' && <div className="dropdown-new-event-type">
+            <Field
+              name="walletSelected"
+              component={fieldDropdown}
+                  // className="dropdown-wallet-tranfer"
+              placeholder="Select Event Type"
+              defaultText="Select Event Type"
+              list={[{ id: 1, text: 'Public' }, { id: 2, text: 'Private' }]}
+              onChange={(item) => {
+                      this.setState({
+                        newEventType: item.text,
+                      });
+                    }
+                    }
+            />
+          </div>
+        } */}
           {this.state.eventType && <Field
             name="outcome"
             type="text"

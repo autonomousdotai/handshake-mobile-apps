@@ -1,15 +1,16 @@
 import i18n from 'handshake-i18n';
+import { merge } from 'lodash';
 import en from './en';
 
 const languages = {
   en: { ...en },
-  fr: { ...en, ...i18n.fr },
-  zh: { ...en, ...i18n.zh },
-  de: { ...en, ...i18n.de },
-  ja: { ...en, ...i18n.ja },
-  ko: { ...en, ...i18n.ko },
-  ru: { ...en, ...i18n.ru },
-  es: { ...en, ...i18n.es },
+  fr: merge(en, i18n.fr),
+  zh: merge(en, i18n.zh),
+  de: merge(en, i18n.de),
+  ja: merge(en, i18n.ja),
+  ko: merge(en, i18n.ko),
+  ru: merge(en, i18n.ru),
+  es: merge(en, i18n.es),
 };
 
 export default languages;
