@@ -173,7 +173,7 @@ class DiscoverPage extends React.Component {
   getHandshakeList() {
     const { messages } = this.props.intl;
     const { list } = this.props.discover;
-    const { handshakeIdActive } = this.state;
+    const { handshakeIdActive, lat, lng } = this.state;
 
     if (list && list.length > 0) {
       return list.map((handshake) => {
@@ -186,6 +186,8 @@ class DiscoverPage extends React.Component {
                 history={this.props.history}
                 onFeedClick={() => this.clickFeedDetail(handshake.id)}
                 refreshPage={this.loadDiscoverList}
+                latitude={lat}
+                longitude={lng}
               />
             </Col>
           );

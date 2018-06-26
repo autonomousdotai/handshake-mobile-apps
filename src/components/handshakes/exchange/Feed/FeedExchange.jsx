@@ -294,7 +294,7 @@ class FeedExchange extends React.PureComponent {
   }
 
   getOfferDistance = () => {
-    const { ipInfo: { latitude, longitude, country }, location } = this.props;
+    const { ipInfo: { country }, latitude, longitude, location } = this.props;
     const { offer } = this;
     // let distanceKm = 0;
     // let distanceMiles = 0;
