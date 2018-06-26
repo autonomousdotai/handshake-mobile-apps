@@ -3,8 +3,13 @@ import Dropzone from 'react-dropzone';
 import PreviewImage from './PreviewImage';
 
 import placeHolder from '@/assets/images/icon/upload-image.svg';
+
 import $http from '@/services/api';
 import { BASE_API } from '@/constants';
+import {injectIntl} from "react-intl";
+import {connect} from "react-redux";
+
+import axios from 'axios';
 
 // const line = require('static/images/line.svg')
 
@@ -12,17 +17,16 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   state = {
     files: [],
   }
-  onDrop = (acceptedFiles) => {
-    const { onSuccess, multiple } = this.props;
+
+  onDrop = acceptedFiles => {
+    const { onSuccess, multiple, authProfile } = this.props;
 
     const file = acceptedFiles[0];
     let newFiles = this.state.files;
 
     $http({
-      url: `${BASE_API.BASE_URL}/storage/user/upload?file=${Date.now()}-${file.name}`,
-      data: {
-        file,
-      },
+      url: `${BASE_API.BASE_URL}/storage/user/upload?file=${authProfile?.id}-${Date.now()}-${file.name}`,
+      data: {file},
       method: 'POST',
     })
     // axios.post(`https://staging.ninja.org/api/storage/user/upload?file=${Date.now()}-${file.name}`, file,
@@ -244,4 +248,11 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 Component.propTypes = {
 };
 
-export default Component;
+const mapState = state => ({
+  authProfile: state.auth.profile,
+});
+
+const mapDispatch = ({
+});
+
+export default injectIntl(connect(mapState, mapDispatch)(Component));

@@ -153,6 +153,11 @@ export default {
   'ex.error.309': 'You already have a listing! To change your rates, please cancel your current listing.',
   'ex.error.default': 'Oops! Something went wrong.',
 
+  'ex.earlyBird.label.1': 'WELCOME TO OUR <br/> EARLY BIRD PROGRAM!',
+  'ex.earlyBird.label.2': 'Create your station with <br /><span class="intro-amount">{freeETH} ETH</span> free now!',
+  'ex.earlyBird.btn': 'Open Station',
+
+
   'error.required': 'Required',
   'error.requiredOne': 'You need to fill in one of these!',
   'error.greaterThan': 'Must be greater than {min}',
@@ -166,6 +171,8 @@ export default {
   'btn.cancel': 'Cancel',
   'btn.close': 'Close',
   'btn.accept': 'Accept',
+
+  product_info: 'Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!',
 
   // FAQ
   FAQ_TITLE: 'FAQ',
@@ -439,6 +446,11 @@ export default {
       shopDescription: 'Open for business',
       noDataMessage: 'Start a mission.',
     },
+  },
+
+  discover: {
+    noDataMessageCash: 'No stations near you yet. Be the first.',
+    noDataMessageSwap: 'No vendors near you yet. Be the first',
   },
 
   wallet: {

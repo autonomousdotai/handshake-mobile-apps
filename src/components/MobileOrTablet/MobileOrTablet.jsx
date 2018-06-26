@@ -119,7 +119,7 @@ class MobileOrTablet extends React.PureComponent {
             </p>
           </div>
           <div className="col-lg-12">
-            <div>
+            <div className="motListContent">
               <ul>
                 {
                   locale === 'en' && (

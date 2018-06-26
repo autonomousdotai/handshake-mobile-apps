@@ -1,0 +1,175 @@
+.iconSuccessChecked{
+  margin-bottom: 1px;
+  margin-right: 5px;
+}
+.addtoken-wrapper{
+
+  margin-bottom: 60px;
+
+    .bgBox{
+      // background-image: url('../../../assets/images/pages/wallet/bg-box-wallet-coin.svg');
+      // background-repeat: no-repeat;
+      // background-size: cover;      
+      padding: 12px;
+      // color: #fff;
+      border-radius: 6px;
+      // margin-top: 20px;
+      ::placeholder{
+        // color: #ffffff;
+      }
+      background-color: #ffffff;
+    }
+    
+  
+    .text-danger{
+      font-size: 14px;
+  
+    }
+  
+    .label-balance{
+      margin-top: 9px;
+      // color: #ffffff;
+      font-size: 16px;
+      display: block;
+    }
+  
+    input[type=text], input[type=tel], input[type=number]{      
+      font-size: 16px;
+      line-height: 22px;      
+      height: 45px;
+      // background: #4869D1;
+      // border: 1px solid #6485F6;
+
+      // border: 1px solid #6c95ea;
+      // background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      // color: #fff;
+      font-weight: 300;
+      ::placeholder{
+        // color: #ffffff;
+      }
+    }
+    .button-wallet-cpn{
+      // position: fixed;
+      // bottom: 0;
+      // width: 100%;
+      // left: 0;
+      // border-radius: 0;
+      padding: 0.9625rem 0;  
+      margin-top: 30px;
+    }
+
+
+    .bodyTitle{
+      margin-left: 15px;
+      margin-right: 15px;
+      margin-top: 15px;
+    }
+      
+    .div-address-qr-code{
+      position: relative;
+      margin-bottom: 15px;
+      font-size: 18px;
+      line-height: 22px;
+      // border: 1px solid #EFEFEF;
+      // overflow: hidden;
+      // height: 54px;
+      .input-address-qr-code{
+        // border: 0 !important;
+        margin: 0 !important;
+        padding-right: 60px;
+      }
+      .icon-qr-code-black{
+        width: 35px;
+        position: absolute;
+        top: 12px;
+        right: 10px;
+        opacity: 0.6;
+      }
+    }
+
+
+    .labelText{
+      margin-bottom: 10px;
+      font-weight: 400;
+      margin-top: 10px;
+    }
+    .textCenter{
+      text-align: center;
+    }
+    .dropdown-wallet-tranfer{
+      margin: 0!important;
+      margin-bottom: 10px!important;
+      .btn{
+        padding-left: 10px;
+        text-align: left;
+        // border: 0!important;
+        // background: transparent!important;
+        // box-shadow: none!important;
+        // color: #ffffff;
+      };
+      .btn-group{
+        // background: #4869D1;
+        // border: 1px solid #6485F6;
+        
+        // border: 1px solid #6c95ea;
+        // background: rgba(255, 255, 255, 0.15);
+        border: 1px solid #ced4da;
+        background: #ffffff;
+        
+        padding: 5px;
+        border-radius: 5px;
+        padding-left: 1px;
+        button{
+          background-color:transparent;
+          border: none;
+        }
+        button:hover{
+          background-color:transparent;
+          border: none;
+        }
+      }
+      .dropdown-custom-item{
+        margin-left: 10px!important;
+      };
+      .dropdown-toggle::after{
+        float: right;
+        margin-top: 10px;
+      }
+      .dropdown-item{
+        border-bottom: 1px solid #ededed;
+        padding: 0.6rem 1.5rem;
+      }
+      .dropdown-menu{
+        width: 100%;
+      }
+      .dropdown-item:last-child{
+        border: 0;
+      }
+    }
+    
+    .bodyConfirm .left{
+        float: left;
+        width: auto;
+        padding-left: 30px;
+        padding-right: 30px;
+        min-width: 125px;
+      }
+      .bodyConfirm .right{
+        float: right;
+        width: auto;
+        padding-left: 30px;
+        padding-right: 30px;
+        min-width: 125px;
+      }
+      .bodyConfirm{
+        padding: 15px;
+        overflow: hidden;
+        margin: auto;
+        width: 100%;
+        margin-bottom: 5px;
+      
+      }
+
+
+  }

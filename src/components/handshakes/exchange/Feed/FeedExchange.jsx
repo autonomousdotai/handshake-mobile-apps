@@ -95,7 +95,15 @@ class FeedExchange extends React.PureComponent {
 
   handleOnShake = (name) => {
     const { offer } = this;
-    this.modalRef.open();
+
+    this.setState({
+      modalContent: (
+        <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
+      ),
+    }, () => {
+      this.modalRef.open();
+    });
+
     this.setState({CRYPTO_CURRENCY_LIST: [
       { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
       { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
@@ -294,7 +302,7 @@ class FeedExchange extends React.PureComponent {
   }
 
   getOfferDistance = () => {
-    const { ipInfo: { latitude, longitude, country }, location } = this.props;
+    const { ipInfo: { country }, latitude, longitude, location } = this.props;
     const { offer } = this;
     // let distanceKm = 0;
     // let distanceMiles = 0;
@@ -368,14 +376,11 @@ class FeedExchange extends React.PureComponent {
     this.handleOnShake(name)
   }
 
-  handleCreateExchange = () => {
-    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
-  }
-
 
   render() {
     const { offer } = this;
     const { review, reviewCount } = this.props;
+    const { modalContent } = this.state;
     const currency = offer.fiatCurrency;
 
     let coins = [];
@@ -445,13 +450,8 @@ class FeedExchange extends React.PureComponent {
           </div>
         </div>
         {/*<Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>*/}
-
-        <div className="ex-sticky-note">
-          <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
-          <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
-        </div>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
-          <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
+          {modalContent}
         </ModalDialog>
       </div>
     );

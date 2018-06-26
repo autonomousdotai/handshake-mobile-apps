@@ -12,6 +12,7 @@ initListOfferPrice.updatedAt = Date.now();
 
 function exchangeReducter(state = {
   listOfferPrice: initListOfferPrice,
+  freeStart: false,
 }, action) {
   // console.log('exchangeReducter', JSON.stringify(action));
   switch (action.type) {
@@ -53,8 +54,11 @@ function exchangeReducter(state = {
     case `${EXCHANGE_ACTIONS.GET_OFFER_STORES}_SUCCESS`: {
       return { ...state, offerStores: OfferShop.offerShop(action.payload.data) };
     }
-    case `${EXCHANGE_ACTIONS.IS_NEW_USER}_SUCCESS`: {
-      return { ...state, freeETH: action.payload.data };
+    case `${EXCHANGE_ACTIONS.GET_FREE_START_INFO}_SUCCESS`: {
+      return { ...state, freeETH: action.payload.data?.reward };
+    }
+    case `${EXCHANGE_ACTIONS.SET_FREE_START}`: {
+      return { ...state, freeStart: action.payload.data };
     }
     default:
       return state;

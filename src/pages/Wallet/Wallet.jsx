@@ -56,6 +56,8 @@ import {APP} from '@/constants';
 import _ from 'lodash';
 import qs from 'querystring';
 
+import AddToken from '@/components/Wallet/AddToken/AddToken';
+
 // style
 import './Wallet.scss';
 import CoinTemp from '@/pages/Wallet/CoinTemp';
@@ -129,6 +131,7 @@ class Wallet extends React.Component {
       isNewCCOpen: false,
       stepProtected: 1,
       activeProtected: false,
+      formAddTokenIsActive: false,
       isHistory: false,
       pagenoHistory: 1,
       transactions: [],
@@ -311,7 +314,7 @@ class Wallet extends React.Component {
     const { messages } = this.props.intl;
     let obj = [];
 
-    if (wallet.name != "SHURI"){
+    // if (wallet.name != "SHURI"){
       obj.push({
         title: messages.wallet.action.transfer.title,
         handler: () => {
@@ -329,7 +332,7 @@ class Wallet extends React.Component {
 
         }
       })
-    }
+    // }
     obj.push({
       title: messages.wallet.action.receive.title,
       handler: () => {
@@ -349,7 +352,7 @@ class Wallet extends React.Component {
         },
       });
     }
-    if (wallet.name != "SHURI")
+    if (wallet.name != "SHURI" && !wallet.isToken)
       obj.push({
         title: messages.wallet.action.history.title,
         handler: async () => {
@@ -379,7 +382,10 @@ class Wallet extends React.Component {
       },
     });
 
-    if (!wallet.isReward && wallet.name != "SHURI") {
+    let canRemove = (wallet.isToken &&  wallet.customToken) || !wallet.isReward;
+    let cansetDefault = !wallet.isToken && !wallet.isReward;
+
+    if (cansetDefault) {
         obj.push({
           title: StringHelper.format(messages.wallet.action.default.title, wallet.name) + (wallet.default ? "✓ " : ""),
           handler: () => {
@@ -392,7 +398,8 @@ class Wallet extends React.Component {
             MasterWallet.UpdateLocalStore(lstWalletTemp);
           }
         })
-
+      }
+      if (canRemove) {
         obj.push({
           title: messages.wallet.action.remove.title,
           handler: () => {
@@ -509,7 +516,7 @@ class Wallet extends React.Component {
 
   submitSendCoin=()=>{
     this.setState({isRestoreLoading: true});
-    this.modalConfirmSendRef.close();
+    this.modalConfirmSendRef.close();    
       this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue).then(success => {
           //console.log(success);
           this.setState({isRestoreLoading: false});
@@ -537,7 +544,7 @@ class Wallet extends React.Component {
     alert(`evt.target.value${evt.target.value}`);
   }
 
-  updateSendAddressValue = (evt) => {
+  updateSendAddressValue = (evt) => {    
     this.setState({
       inputAddressAmountValue: evt.target.value,
     });
@@ -556,6 +563,18 @@ class Wallet extends React.Component {
         this.toggleBottomSheet();
       },
     });
+    
+    obj.push({
+      title: 'Add custom token',
+      handler: () => {      
+        
+        this.setState({formAddTokenIsActive: true}, () => {
+          this.modalAddNewTokenRef.open(); 
+          this.toggleBottomSheet();
+        });        
+      },
+    });
+
     obj.push({
       title: messages.wallet.action.backup.title,
       handler: () => {
@@ -579,6 +598,16 @@ class Wallet extends React.Component {
       },
     });
     return obj;
+  }
+
+  // add custom token:
+  addedCustomToken = () =>{
+    let masterWallet = MasterWallet.getMasterWallet();
+    this.getListBalace(masterWallet);
+    
+    this.splitWalletData(masterWallet);
+    this.modalAddNewTokenRef.close();
+    this.setState({formAddTokenIsActive: false});
   }
 
   // on select type of wallet to create:
@@ -765,6 +794,11 @@ class Wallet extends React.Component {
     return (
       <div className="wallet-page">
 
+        
+        <Modal onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
+            <AddToken formAddTokenIsActive={this.state.formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
+        </Modal>
+
         {/* Header for refers ... */}
         <div className="headerRefers" >
           <p className="hTitle">{messages.wallet.top_banner.message}</p>
@@ -844,14 +878,14 @@ class Wallet extends React.Component {
             </div>
           </ModalDialog>
 
-          <Modal title="Buy coins" onRef={modal => this.modalFillRef = modal}>
+          {/* <Modal title="Buy coins" onRef={modal => this.modalFillRef = modal}>
             <FeedCreditCard
               buttonTitle="Buy coins"
               currencyForced={this.state.walletSelected ? this.state.walletSelected.name : ''}
               callbackSuccess={this.afterWalletFill}
               addressForced={this.state.walletSelected ? this.state.walletSelected.address : ''}
             />
-          </Modal>
+          </Modal> */}
 
           <Modal title="Secure your wallet" onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
             <WalletProtect onCopy={this.onCopyProtected} step={this.state.stepProtected} active={this.state.activeProtected} wallet={this.state.walletSelected} callbackSuccess={() => { this.successWalletProtect(this.state.walletSelected); }} />
