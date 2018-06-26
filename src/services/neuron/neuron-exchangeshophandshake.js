@@ -53,8 +53,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
     const payloadData = this.handshakeInstance.methods
       .initByShopOwner(
         // payoutValue,
-        bytesOffchain,
-      )
+        bytesOffchain)
       .encodeABI();
 
     // this.neuron.caculateEstimatGasWithEthUnit(payloadData, address, 20).then((gas) => {
@@ -71,7 +70,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
     });
   }
 
-  //CoinOwner close the transaction after init
+  // CoinOwner close the transaction after init
   closeByShopOwner = (hid, offchain) => {
     console.log(TAG, ' closeByShopOwner = ', hid, offchain);
 
@@ -90,7 +89,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
     });
   }
 
-  //CoinOwner releaseFundByShopOwner transaction
+  // CoinOwner releaseFundByShopOwner transaction
   releasePartialFund = (hid, customer, value, offchainP, offchainC) => {
     console.log(TAG, ' releasePartialFund = ', hid, customer, value, offchainP, offchainC);
 
@@ -140,7 +139,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
 
   // coinOwner cancel the handshake
   cancel = (hid, offchain) => {
-    console.log( TAG, ' cancel = ', hid, offchain);
+    console.log(TAG, ' cancel = ', hid, offchain);
 
     const bytesOffchain = this.web3.utils.fromAscii(offchain);
 
@@ -157,7 +156,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
     });
   }
 
-  //shopOwner agree and make a handshake
+  // shopOwner agree and make a handshake
   shake = (hid, offchain) => {
     console.log(TAG, ' shake = ', hid, offchain);
 
@@ -195,7 +194,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
     });
   }
 
-  //customer finish transaction for sending the coin to shopOwner
+  // customer finish transaction for sending the coin to shopOwner
   finish = (hid, offchain) => {
     console.log(TAG, ' finish = ', hid, offchain);
 
@@ -216,7 +215,7 @@ export default class ExchangeShopHandshake extends BaseHandshake {
 
   // get handshake stage by hid
   getState = (hid) => {
-    console.log(TAG, ' getState = ', hid,);
+    console.log(TAG, ' getState = ', hid);
     const payloadData = this.handshakeInstance.methods
       .getState(hid)
       .encodeABI();

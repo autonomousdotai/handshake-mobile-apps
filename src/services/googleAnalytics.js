@@ -48,7 +48,7 @@ class GoogleAnalyticsService {
         '/create': EVENT_CATEGORY.CREATE,
       };
       return categoryByPathName[pathName];
-    } catch (err){
+    } catch (err) {
       return '';
     }
   }
@@ -61,7 +61,9 @@ class GoogleAnalyticsService {
    * @param value
    * @param options
    */
-  sendGAEvent({category, action, label, value = 0, options = {}}) {
+  sendGAEvent({
+    category, action, label, value = 0, options = {},
+  }) {
     try {
       ga('send', 'event', category, action, label, value, options);
     } catch (err) {
@@ -148,7 +150,7 @@ class GoogleAnalyticsService {
    */
   clickGoButtonCreatePage(selectedMatch, selectedOutcome, sideName) {
     try {
-      console.log("sele", selectedMatch, selectedOutcome);
+      console.log('sele', selectedMatch, selectedOutcome);
       this.sendGAEvent({
         category: EVENT_CATEGORY.CREATE,
         action: EVENT_ACTION.CLICK_GO_BUTTON,
@@ -165,7 +167,7 @@ class GoogleAnalyticsService {
    */
   clickGoButton(matchName, matchOutCome, sideName) {
     try {
-      console.log("matchName", matchName, matchOutCome, sideName);
+      console.log('matchName', matchName, matchOutCome, sideName);
       this.sendGAEvent({
         category: EVENT_CATEGORY.DISCOVER_BETTING,
         action: EVENT_ACTION.CLICK_GO_BUTTON,
@@ -213,10 +215,12 @@ class GoogleAnalyticsService {
    * @param amount
    * @param message
    */
-  createBetNotMatchFail({side, odds, amount, message}) {
+  createBetNotMatchFail({
+    side, odds, amount, message,
+  }) {
     try {
       const category = this.eventCategory;
-      if (!!category) {
+      if (category) {
         this.sendGAEvent({
           category,
           action: EVENT_CATEGORY.CREATE_BET_NOT_MATCH_FAIL,
@@ -226,16 +230,16 @@ class GoogleAnalyticsService {
     } catch (err) {}
   }
 
-   /**z
+  /** z
    *
    * @param side
    * @param odds
    * @param amount
    */
-  createBetNotMatchSuccess({side, odds, amount}) {
+  createBetNotMatchSuccess({ side, odds, amount }) {
     try {
       const category = this.eventCategory;
-      if (!!category) {
+      if (category) {
         this.sendGAEvent({
           category,
           action: EVENT_CATEGORY.CREATE_BET_NOT_MATCH_SUCCESS,
@@ -252,10 +256,12 @@ class GoogleAnalyticsService {
    * @param amount
    * @param message
    */
-  createBetMatchedFail({side, odds, amount, message}) {
+  createBetMatchedFail({
+    side, odds, amount, message,
+  }) {
     try {
       const category = this.eventCategory;
-      if (!!category) {
+      if (category) {
         this.sendGAEvent({
           category,
           action: EVENT_CATEGORY.CREATE_BET_MATCHED_FAIL,
@@ -271,10 +277,10 @@ class GoogleAnalyticsService {
    * @param odds
    * @param amount
    */
-  createBetMatchedSuccess({side, odds, amount}) {
+  createBetMatchedSuccess({ side, odds, amount }) {
     try {
       const category = this.eventCategory;
-      if (!!category) {
+      if (category) {
         this.sendGAEvent({
           category,
           action: EVENT_CATEGORY.CREATE_BET_MATCHED_SUCCESS,
@@ -291,13 +297,15 @@ class GoogleAnalyticsService {
    * @param title
    * @param shareUrl
    */
-  createShareButton({ category = EVENT_CATEGORY.DISCOVER_BETTING, shareType, title, shareUrl }) {
+  createShareButton({
+    category = EVENT_CATEGORY.DISCOVER_BETTING, shareType, title, shareUrl,
+  }) {
     try {
       this.sendGAEvent({
         category: category || EVENT_CATEGORY.DISCOVER_BETTING,
         action: `${EVENT_ACTION.CLICK_SHARE_BUTTON}: ${shareType}`,
         label: `${title} - (${shareUrl})`,
-      })
+      });
     } catch (err) {}
   }
 }

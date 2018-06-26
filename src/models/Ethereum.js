@@ -8,6 +8,7 @@ const EthereumTx = require('ethereumjs-tx');
 const hdkey = require('hdkey');
 const ethUtil = require('ethereumjs-util');
 const bip39 = require('bip39');
+
 const BN = Web3.utils.BN;
 
 export class Ethereum extends Wallet {
@@ -53,48 +54,46 @@ export class Ethereum extends Wallet {
     }
 
     async getBalance() {
-      try{
+      try {
         const web3 = this.getWeb3();
         const balance = await web3.eth.getBalance(this.address);
         return Web3.utils.fromWei(balance.toString());
-      } catch (error) { return 0}
+      } catch (error) { return 0; }
     }
 
-  async getFee() {
-    const web3 = new Web3(new Web3.providers.HttpProvider(this.network));
-    const gasPrice = new BN(await web3.eth.getGasPrice());
+    async getFee() {
+      const web3 = new Web3(new Web3.providers.HttpProvider(this.network));
+      const gasPrice = new BN(await web3.eth.getGasPrice());
 
-    const limitedGas = new BN(3000000);
+      const limitedGas = new BN(3000000);
 
-    const estimatedGas = limitedGas.mul(gasPrice);
+      const estimatedGas = limitedGas.mul(gasPrice);
 
-    // console.log('getFee, gasPrice', gasPrice.toString());
-    // console.log('getFee, estimateGas', estimatedGas.toString());
+      // console.log('getFee, gasPrice', gasPrice.toString());
+      // console.log('getFee, estimateGas', estimatedGas.toString());
 
-    return Web3.utils.fromWei(estimatedGas);
-  }
-
-  checkAddressValid(toAddress){
-    const web3 = new Web3(new Web3.providers.HttpProvider(this.network));
-    if (!web3.utils.isAddress(toAddress)){
-        return "You can only send tokens to Ethereum address";
+      return Web3.utils.fromWei(estimatedGas);
     }
-    else return true;
-  }
+
+    checkAddressValid(toAddress) {
+      const web3 = new Web3(new Web3.providers.HttpProvider(this.network));
+      if (!web3.utils.isAddress(toAddress)) {
+        return 'You can only send tokens to Ethereum address';
+      }
+      return true;
+    }
 
     async transfer(toAddress, amountToSend) {
-
-      let insufficientMsg = "You have insufficient coin to make the transfer. Please top up and try again."
+      const insufficientMsg = 'You have insufficient coin to make the transfer. Please top up and try again.';
 
       try {
-
         console.log(`transfered from address:${this.address}`);
 
 
         const web3 = new Web3(new Web3.providers.HttpProvider(this.network));
 
-        if (!web3.utils.isAddress(toAddress)){
-            return {"status": 0, "message": "Please enter a valid receiving address."};
+        if (!web3.utils.isAddress(toAddress)) {
+          return { status: 0, message: 'Please enter a valid receiving address.' };
         }
         // check amount:
         let balance = await web3.eth.getBalance(this.address);
@@ -103,7 +102,7 @@ export class Ethereum extends Wallet {
         console.log(StringHelper.format('Your wallet balance is currently {0} ETH', balance));
 
         if (balance == 0 || balance <= amountToSend) {
-          return {"status": 0, "message": insufficientMsg};
+          return { status: 0, message: insufficientMsg };
         }
 
         const gasPrice = new BN(await web3.eth.getGasPrice());
@@ -132,43 +131,41 @@ export class Ethereum extends Wallet {
         const addr = transaction.from.toString('hex');
         console.log('Based on your private key, your wallet address is', addr);
         const transactionId = web3.eth.sendSignedTransaction(`0x${serializedTransaction.toString('hex')}`);
-        console.log("transactionId:", transactionId);
+        console.log('transactionId:', transactionId);
         const url = StringHelper.format('{0}/tx/{1}', this.network, transactionId);
-        console.log("url", url);
+        console.log('url', url);
 
-        return {"status": 1, "message": "Your transaction will appear on etherscan.io in about 30 seconds."};
-
+        return { status: 1, message: 'Your transaction will appear on etherscan.io in about 30 seconds.' };
       } catch (error) {
-          //return {"status": 0, "message": error};
-          return {"status": 0, "message": insufficientMsg};
+        // return {"status": 0, "message": error};
+        return { status: 0, message: insufficientMsg };
       }
     }
 
 
-  async getTransactionHistory(pageno) {
-    let result = [];
-    const API_KEY = configs.network[4].apikeyEtherscan;
-    const url =this.constructor.API[this.getNetworkName()] + `?module=account&action=txlist&address=${this.address}&startblock=0&endblock=99999999&page=${pageno}&offset=20&sort=desc&apikey=${API_KEY}`;
-    const response = await axios.get(url);
-    if (response.status == 200) {
-      result = response.data.result;
+    async getTransactionHistory(pageno) {
+      let result = [];
+      const API_KEY = configs.network[4].apikeyEtherscan;
+      const url = `${this.constructor.API[this.getNetworkName()]}?module=account&action=txlist&address=${this.address}&startblock=0&endblock=99999999&page=${pageno}&offset=20&sort=desc&apikey=${API_KEY}`;
+      const response = await axios.get(url);
+      if (response.status == 200) {
+        result = response.data.result;
+      }
+      return result;
     }
-    return result;
-  }
 
-  async getTransactionCount() {
-    let result = [];
-    const API_KEY = configs.network[4].apikeyEtherscan;
-    const url =this.constructor.API[this.getNetworkName()] + `?module=proxy&action=eth_getTransactionCount&address=${this.address}&tag=latest&apikey=${API_KEY}`;
-    const response = await axios.get(url);
-    if (response.status == 200) {
-      const web3 = this.getWeb3();
-      result = web3.utils.hexToNumber(response.data.result);
+    async getTransactionCount() {
+      let result = [];
+      const API_KEY = configs.network[4].apikeyEtherscan;
+      const url = `${this.constructor.API[this.getNetworkName()]}?module=proxy&action=eth_getTransactionCount&address=${this.address}&tag=latest&apikey=${API_KEY}`;
+      const response = await axios.get(url);
+      if (response.status == 200) {
+        const web3 = this.getWeb3();
+        result = web3.utils.hexToNumber(response.data.result);
+      }
+      return result;
     }
-    return result;
-  }
 }
-
 
 
 export default { Ethereum };

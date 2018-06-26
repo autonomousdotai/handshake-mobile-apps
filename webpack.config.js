@@ -139,7 +139,7 @@ module.exports = function webpackConfig(env, argv) {
       },
       output: {
         filename: '[name].js',
-        chunkFilename: '[hash].[name].chunk.js',
+        chunkFilename: '[name].chunk.js',
         publicPath: '/',
         globalObject: 'this',
       },
@@ -187,8 +187,8 @@ module.exports = function webpackConfig(env, argv) {
           ],
         }),
         new CopyWebpackPlugin([
-          {from: 'src/assets/images/ninja-star', to: 'ninja-star'},
-        ])
+          { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
+        ]),
       ],
       module: {
         rules: [

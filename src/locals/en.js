@@ -437,8 +437,8 @@ export default {
 
   wallet: {
     top_banner: {
-      message: "Shuriken Airdrop (limited)",
-      button: "Click here"
+      message: 'Shuriken Airdrop (limited)',
+      button: 'Click here',
     },
     refers: {
       header: '3 Shuriken Airdrop hoops',
@@ -473,104 +473,104 @@ export default {
         referral_link: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
       },
       placeholder: {
-        telegram_username: "Your telegram alias",
-        twitter_username: "Your twitter username",
-        email: "Verification code",
-        email2: "Your favourite fake email"
-      }
+        telegram_username: 'Your telegram alias',
+        twitter_username: 'Your twitter username',
+        email: 'Verification code',
+        email2: 'Your favourite fake email',
+      },
     },
     refers_dashboard: {
-      header: "3 Shuriken Airdrop hoops",
-      title: "This is your super sexy referral link. You get 20 shurikens for every new ninja.",
+      header: '3 Shuriken Airdrop hoops',
+      title: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
       text: {
-        copy_link: "Referral link copied to clipboard.",
-        note: "Do not change your alias or this link will be unvalid",
-        number_ninjas: "You brought {0} ninjas to the dojo.",
-        number_total: "Total reward: {0} SHURI"
-      }
+        copy_link: 'Referral link copied to clipboard.',
+        note: 'Do not change your alias or this link will be unvalid',
+        number_ninjas: 'You brought {0} ninjas to the dojo.',
+        number_total: 'Total reward: {0} SHURI',
+      },
     },
     action: {
       remove: {
-        title: "Remove",
-        header: "Are you sure?",
-        message: "This will permanently delete your wallet.",
-        button_yes: "Yes, remove",
-        button_cancel: "Cancel"
+        title: 'Remove',
+        header: 'Are you sure?',
+        message: 'This will permanently delete your wallet.',
+        button_yes: 'Yes, remove',
+        button_cancel: 'Cancel',
       },
       transfer: {
-        title: "Transfer coins",
-        header: "Transfer coins",
+        title: 'Transfer coins',
+        header: 'Transfer coins',
         to_address: {
-          placeholder: "Specify receiving..."
+          placeholder: 'Specify receiving...',
         },
-        error: "Insufficient balance: ",
-        button: "Transfer"
+        error: 'Insufficient balance: ',
+        button: 'Transfer',
 
       },
       copy: {
-        title: "Copy address to clipboard",
-        message: "Copy address to clipboard",
-        success: "Copied to clipboard"
+        title: 'Copy address to clipboard',
+        message: 'Copy address to clipboard',
+        success: 'Copied to clipboard',
       },
       default: {
-        title: "Set as default {0} wallet ",
+        title: 'Set as default {0} wallet ',
       },
       cancel: {
-        title: "Cancel",
+        title: 'Cancel',
       },
       restore: {
-        title: "Restore wallets",
-        message: "Your Wallet restore success",
-        error: "Invalid wallets"
+        title: 'Restore wallets',
+        message: 'Your Wallet restore success',
+        error: 'Invalid wallets',
       },
       import: {
-        title: "Add new / Import"
+        title: 'Add new / Import',
       },
       backup: {
-        title: "Backup wallets"
+        title: 'Backup wallets',
       },
       protect: {
-        title: "Secure this wallet",
+        title: 'Secure this wallet',
         text: {
-          step1_msg1: "This passphrase will allow you to recover your funds if your phone is ever lost or stolen.",
-          step1_msg2: "Please make sure nobody has access to your passphrase. You can use a password manager or write it down and hide it under your mattress.",
-          step1_label: "I understand that if I lose my passphrase, I lose access to my account.",
-          step2_msg1: "Record these words carefully. Don't email it or screenshot it.",
-          step3_msg1: "Tap to put these words in the correct order."
+          step1_msg1: 'This passphrase will allow you to recover your funds if your phone is ever lost or stolen.',
+          step1_msg2: 'Please make sure nobody has access to your passphrase. You can use a password manager or write it down and hide it under your mattress.',
+          step1_label: 'I understand that if I lose my passphrase, I lose access to my account.',
+          step2_msg1: 'Record these words carefully. Don\'t email it or screenshot it.',
+          step3_msg1: 'Tap to put these words in the correct order.',
         },
         button: {
-          "continue": "Continue",
-          "verify": "Verify your passsphrase",
-          "copy_clipboard": "Copy to clipboard",
-          "ok": "OK"
+          continue: 'Continue',
+          verify: 'Verify your passsphrase',
+          copy_clipboard: 'Copy to clipboard',
+          ok: 'OK',
         },
         error: {
-          confirm: "These words are in the wrong order. Please try again."
+          confirm: 'These words are in the wrong order. Please try again.',
         },
-        success: "Your wallet has been secured!"
+        success: 'Your wallet has been secured!',
       },
       receive: {
-        title: "Receive coins"
+        title: 'Receive coins',
       },
       scan_qrcode: {
-        header: "Scan QR code"
+        header: 'Scan QR code',
       },
       history: {
-        title: "View transaction history",
-        header: "Transaction details",
+        title: 'View transaction history',
+        header: 'Transaction details',
         label: {
-          failed: "Failed",
-          unconfirmed: "Unconfirmed",
-          balance: "Balance",
-          transactions: "Transactions",
-          status: "Status",
-          confirmations: "confirmations",
-          success: "success",
-          failed: "failed",
-        }
+          failed: 'Failed',
+          unconfirmed: 'Unconfirmed',
+          balance: 'Balance',
+          transactions: 'Transactions',
+          status: 'Status',
+          confirmations: 'confirmations',
+          success: 'success',
+          failed: 'failed',
+        },
 
-      }
-    }
+      },
+    },
   },
   /*
   *

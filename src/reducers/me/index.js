@@ -11,7 +11,7 @@ import { ACTIONS } from './action';
 function handlePreProcessForOfferStore(handshake) {
   const extraData = JSON.parse(handshake.extra_data);
   const { id } = handshake;
-  let result = [];
+  const result = [];
 
   if (extraData.items.BTC) {
     const handledHandshake = Object.assign({}, handshake);
@@ -212,7 +212,7 @@ const meReducter = (
 
         if (handledHandshake.id === item.id) {
           handledHandshake.status = item.status;
-          //handledHandshake.result = resultI;
+          // handledHandshake.result = resultI;
         }
         return handledHandshake;
       });

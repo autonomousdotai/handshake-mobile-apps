@@ -82,5 +82,5 @@ export const setBannedPrediction = () => ({ type: APP_ACTION.BAN_PREDICTION });
 export const setCheckBanned = () => ({ type: APP_ACTION.BAN_CHECKED });
 
 // Chat
-export const setFirechat = (payload) => ({ type: APP_ACTION.SET_FIRECHAT, payload });
-export const setFirebaseUser = (payload) => ({ type: APP_ACTION.SET_FIREBASE_USER, payload });
+export const setFirechat = payload => ({ type: APP_ACTION.SET_FIRECHAT, payload });
+export const setFirebaseUser = payload => ({ type: APP_ACTION.SET_FIREBASE_USER, payload });
