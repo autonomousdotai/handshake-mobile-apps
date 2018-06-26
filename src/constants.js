@@ -18,6 +18,7 @@ export const APP = {
   COUNTRY_PHONE_NEED_VERIFY: 'country_phone_need_verify',
   REFERS: 'refers',
   OFFLINE_STATUS: 'offline_status',
+  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'],
 };
 
 export const UNSELECTED = 'UNSELECTED';
@@ -426,3 +427,59 @@ export const URL = {
 
 export const NB_BLOCKS = 20;
 
+
+export const blockchainNetworks = {
+  rinkeby: {
+    type: 'ERC20',
+    endpoint: 'https://rinkeby.infura.io/LLJy74SjotuIMxZJMUvf',
+    name: 'Rinkeby',
+    isTest: true,
+    unit: 'ETH',
+    chainId: 4,
+    contracts: {
+      predictionHandshakeAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
+      predictionHandshakeDevAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
+      exchangeHandshakeAddress: '0x6d86cf435978cb75aecc43d0a4e3a379af7667d8',
+      exchangeShopAddress: '0xa849f62cacb770dd1aac0dceb9fc7ec53cffde84',
+      shurikenTokenAddress: '0xc2f227834af7b44a11a9286f1771cade7ecd316c',
+    },
+    contractFiles: {
+      basic: 'BasicHandshake',
+      prediction: 'PredictionHandshake',
+      exchange: 'ExchangeHandshake',
+    },
+  },
+  ethereum: {
+    type:
+    'ERC20',
+    endpoint: 'https://mainnet.infura.io/',
+    name: 'Ethereum',
+    unit: 'ETH',
+    chainId: 1,
+    contracts: {
+      predictionHandshakeAddress: '0x2730da6188a35a5a384f4a3127036bb90f3721b5',
+      predictionHandshakeDevAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
+      exchangeHandshakeAddress: '0x5fa2e0d96dbe664beb502407bf46ea85b131fb86',
+      exchangeShopAddress: '0x05914192cbbaae87a910f79e012b4091a39cc85c',
+      shurikenTokenAddress: '0xca0fed76b5807557ce38e65cab83be3373cc2e7d',
+    },
+    contractFiles: {
+      basic: 'BasicHandshake',
+      prediction: 'PredictionHandshake',
+      exchange: 'ExchangeHandshake',
+    },
+  },
+  bitcoin: {
+    type: 'BTC',
+    endpoint: 'https://insight.bitpay.com/api',
+    name: 'Bitcoin',
+    unit: 'BTC',
+  },
+  bitcoinTest: {
+    type: 'BTC',
+    endpoint: 'https://test-insight.bitpay.com/api',
+    name: 'Bitcoin Test',
+    isTest: true,
+    unit: 'BTC',
+  },
+};

@@ -117,6 +117,25 @@ module.exports = function webpackConfig(env, argv) {
         filename: 'css/[name].css',
         chunkFilename: 'css/[hash].[name].css',
       }),
+      new PwaManifestPlugin({
+        name: appEnvConfig.title,
+        short_name: 'Ninja',
+        description: '',
+        background_color: '#1A1919',
+        theme_color: '#1A1919',
+        'theme-color': '#1A1919',
+        start_url: '/',
+        icons: [
+          {
+            src: xPath('src/assets/images/logo.png'),
+            sizes: [192, 256, 384, 512],
+            destination: path.join('assets', 'icons'),
+          },
+        ],
+      }),
+      new CopyWebpackPlugin([
+        { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
+      ]),
       // new OfflinePlugin({
       //   appShell: '/',
       //   responseStrategy: 'network-first',
@@ -124,6 +143,7 @@ module.exports = function webpackConfig(env, argv) {
       // }),
     ],
     performance: { hints: false },
+    devtool: false,
   };
 
   if (isProduction && fs.existsSync(xPath('.env.production.js'))) {
@@ -171,25 +191,6 @@ module.exports = function webpackConfig(env, argv) {
           favicon: xPath('src/assets/favicon.png'),
           env: appEnvConfig,
         }),
-        new PwaManifestPlugin({
-          name: appEnvConfig.title,
-          short_name: 'Ninja',
-          description: '',
-          background_color: '#1A1919',
-          theme_color: '#1A1919',
-          'theme-color': '#1A1919',
-          start_url: '/',
-          icons: [
-            {
-              src: xPath('src/assets/images/logo.png'),
-              sizes: [192, 256, 384, 512],
-              destination: path.join('assets', 'icons'),
-            },
-          ],
-        }),
-        new CopyWebpackPlugin([
-          { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
-        ]),
       ],
       module: {
         rules: [
@@ -253,7 +254,7 @@ module.exports = function webpackConfig(env, argv) {
         ],
       },
       stats,
-      devtool: 'source-map',
+      devtool: false, // 'source-map',
     },
     isProduction ? production : development,
   );

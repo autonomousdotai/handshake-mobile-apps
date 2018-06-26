@@ -1,4 +1,10 @@
 export default {
+  app: {
+    name: 'Ninja',
+    fullname: 'Ninja: Anonymous Peer-to-Peer Prediction Exchange',
+    description: 'Anonymous Peer-to-Peer Prediction Exchange',
+    loading: 'Loading...',
+  },
   buy: 'Buy',
   sell: 'Sell',
   amount: 'amount',
@@ -566,7 +572,6 @@ export default {
           status: 'Status',
           confirmations: 'confirmations',
           success: 'success',
-          failed: 'failed',
         },
       },
     },

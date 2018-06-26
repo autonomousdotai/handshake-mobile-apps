@@ -22,7 +22,6 @@ const $http = ({
     if (token) {
       completedHeaders.Payload = token;
     }
-
     const wallet = MasterWallet.getWalletDefault('ETH');
     if (wallet && wallet.chainId) {
       completedHeaders.ChainId = wallet.chainId;

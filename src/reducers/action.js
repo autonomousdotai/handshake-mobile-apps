@@ -20,7 +20,7 @@ export const createAPI = INIT => ({
   dispatch({ type: INIT });
 
   const url = `${BASE_URL}/${PATH_URL}`;
-  const requestUuid = Date.now(); // uuid();
+  // const requestUuid = Date.now(); // uuid();
 
   // console.log(`app - api - calling - id${requestUuid}`, `${METHOD}:${PATH_URL}`);
 
