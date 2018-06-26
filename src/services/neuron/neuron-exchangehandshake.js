@@ -1,5 +1,5 @@
 import BaseHandshake from './BaseHandshake';
-import {MasterWallet} from '@/models/MasterWallet';
+import { MasterWallet } from '@/models/MasterWallet';
 
 const TAG = 'ExchangeHandshake';
 export default class ExchangeHandshake extends BaseHandshake {
@@ -42,9 +42,7 @@ export default class ExchangeHandshake extends BaseHandshake {
     const bytesOffchain = this.web3.utils.fromAscii(offchain);
 
     const payloadData = this.handshakeInstance.methods
-      .initByCoinOwner(
-        bytesOffchain,
-      )
+      .initByCoinOwner(bytesOffchain)
       .encodeABI();
 
     return this.neuron.makeRawTransaction(this.address, this.privateKey, payloadData, {

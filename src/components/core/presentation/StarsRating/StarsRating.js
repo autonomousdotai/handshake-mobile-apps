@@ -8,7 +8,6 @@ import Helper from '@/services/helper';
 import './StarsRating.scss';
 
 class StarsRating extends React.PureComponent {
-
   constructor(props) {
     super(props);
     this.startNum = props.startNum || 5;
@@ -20,7 +19,7 @@ class StarsRating extends React.PureComponent {
     const roundStarPoint = Math.ceil(starPoint * 2) / 2;
     const starts = [];
     let hasHalfStart = false;
-    for ( let i = 1; i <= this.startNum; i++) {
+    for (let i = 1; i <= this.startNum; i++) {
       let classStart = '';
       if (i <= roundStarPoint) {
         classStart = 'full';
@@ -38,12 +37,14 @@ class StarsRating extends React.PureComponent {
   }
 
   render() {
-    const { className, starPoint, startNum, ...newProps } = this.props;
+    const {
+      className, starPoint, startNum, ...newProps
+    } = this.props;
     return (
       <div className={`stars-rating ${className || ''}`} {...newProps}>
         {this.htmlStar}
       </div>
-    )
+    );
   }
 }
 

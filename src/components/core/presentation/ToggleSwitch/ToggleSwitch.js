@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 // style
 import './ToggleSwitch.scss';
 
-class ToggleSwitch extends PureComponent { 
+class ToggleSwitch extends PureComponent {
   render() {
     const { className, defaultChecked, onChange } = this.props;
     return (
@@ -11,7 +11,7 @@ class ToggleSwitch extends PureComponent {
         <input type="checkbox" onChange={e => onChange(e.target.checked)} defaultChecked={defaultChecked} />
         <span className="slider round" />
       </label>
-    )
+    );
   }
 }
 
@@ -25,6 +25,6 @@ ToggleSwitch.defaultProps = {
   className: '',
   defaultChecked: false,
   onChange: () => {},
-}
+};
 
 export default ToggleSwitch;

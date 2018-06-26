@@ -1,6 +1,6 @@
 // import { Trans } from 'react-i18next'
-import {minValue, required} from '@/components/core/form/validation';
-import {CRYPTO_CURRENCY, MIN_AMOUNT} from "@/constants";
+import { minValue, required } from '@/components/core/form/validation';
+import { CRYPTO_CURRENCY, MIN_AMOUNT } from '@/constants';
 
 export const validate = (values, state, props) => {
   const {

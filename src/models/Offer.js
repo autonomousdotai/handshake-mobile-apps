@@ -39,7 +39,7 @@ class Offer {
       physicalItem: data.physical_item || '',
 
 
-      //Offer store
+      // Offer store
       sellAmountMin: data.sell_amount_min || '',
       sellAmount: data.sell_amount || '',
       sellBalance: data.sell_balance || '',
