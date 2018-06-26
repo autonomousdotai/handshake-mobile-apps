@@ -48,11 +48,12 @@ class AddToken extends React.Component {
       inputTokenNameValue: '',
       inputTokenSymbolValue: '',
       tokenTypeSelected: false,
+      formAddTokenIsActive: false,
       // Qrcode
       qrCodeOpen: false,
       delay: 300,
       walletsData: false,
-      tokenType: false
+      tokenType: false,       
     }    
   }
 
@@ -93,10 +94,17 @@ class AddToken extends React.Component {
   componentWillUnmount() {
     
   }
-  componentWillReceiveProps() {
-    if (!this.props.formAddTokenIsActive){
-      console.log("reset form ....");
+  componentDidUpdate (){
+  
+  }
+  componentWillReceiveProps() {       
+    if (!this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){    
       this.props.clearFields(nameFormAddToken, false, false, "contractAddress", "tokenName", "tokenSymbol", "tokenDecimals");
+      this.setState({formAddTokenIsActive: this.props.formAddTokenIsActive});
+    }
+    if (this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){      
+      this.getWalletDefault();
+      this.setState({formAddTokenIsActive: this.props.formAddTokenIsActive});
     }
   }
 
@@ -124,7 +132,8 @@ class AddToken extends React.Component {
 
     let coinDefault = 'ETH';
 
-    let wallets = MasterWallet.getMasterWallet();    
+    let wallets = MasterWallet.getMasterWallet();
+    
     let listWalletETH = [];
     let walletDefault = false;
     
@@ -138,7 +147,7 @@ class AddToken extends React.Component {
           }
           wallet.id = wallet.address + "-" + wallet.getNetworkName()+ wallet.name;  
 
-          if (!walletDefault &&  wallet.default){
+          if (walletDefault === false &&  wallet.default){
               walletDefault = wallet;                          
           }
           listWalletETH.push(wallet);
@@ -146,22 +155,23 @@ class AddToken extends React.Component {
       });
     }
     
-    if (!walletDefault && listWalletETH.length > 0)
+    if (walletDefault === false && listWalletETH.length > 0)
       walletDefault = listWalletETH[0];
     
     this.setState({wallets: listWalletETH, walletSelected: walletDefault});
+    this.props.rfChange(nameFormAddToken, 'walletSelected', walletDefault);
 
   }
 
   loadTokenInfo = (contractAddress) =>{
 
-    if (contractAddress == ''){
-      return;
+    if (this.state.walletSelected && this.state.walletSelected.checkAddressValid(contractAddress) !== true){
+      return false;
     }
 
     this.setState({isRestoreLoading: true});
         
-    this.props.clearFields(nameFormAddToken, false, false, "contractAddress", "tokenName", "tokenSymbol", "tokenDecimals");
+    this.props.clearFields(nameFormAddToken, false, false, "tokenName", "tokenSymbol", "tokenDecimals");
     
     let tokenTypeSelected = this.state.tokenTypeSelected;
     if (tokenTypeSelected == false){
@@ -180,7 +190,7 @@ class AddToken extends React.Component {
         rfChange(nameFormAddToken, 'tokenName', tokenType.title);
         rfChange(nameFormAddToken, 'tokenSymbol', tokenType.name);
         rfChange(nameFormAddToken, 'tokenDecimals', tokenType.decimals);        
-        this.setState({isRestoreLoading: false, tokenType: tokenType});        
+        this.setState({isRestoreLoading: false, tokenType: tokenType, tokenTypeSelected: tokenTypeSelected});        
       }
       else this.setState({isRestoreLoading: false, tokenType: false});        
     });    
@@ -253,15 +263,18 @@ submitAddToken=()=>{
 onItemSelectedWallet = (item) =>{
   
   // I don't know why the item is not object ?????
-  let wallet = MasterWallet.convertObject(item);
-  this.setState({walletSelected: wallet});
-  this.loadTokenInfo(this.state.inputContractAddressValue);
-  
+  let wallet = MasterWallet.convertObject(item);  
+  this.setState({walletSelected: wallet}, () => {
+      this.loadTokenInfo(this.state.inputContractAddressValue);
+  });  
 }
 
-onItemSelectedTokenType = (item) =>{  
-  this.setState({tokenTypeSelected: item});
-  this.loadTokenInfo(this.state.inputContractAddressValue);
+onItemSelectedTokenType = (item) =>{    
+  if (this.state.tokenTypeSelected.id != item.id)  {
+    this.setState({tokenTypeSelected: item}, () => {
+      this.loadTokenInfo(this.state.inputContractAddressValue);
+    });
+  }
 }
 
 // For Qrcode:
@@ -299,7 +312,7 @@ renderScanQRCode = () => (
 )
 
  listTokenType(){
-   return [{"id": "ERC20", "text": "ERC20", "class": TokenERC20}, ]
+   return [{"id": "ERC20", "text": "ERC-20", "class": TokenERC20}, ]
  }
 
   

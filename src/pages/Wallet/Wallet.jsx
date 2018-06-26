@@ -388,7 +388,10 @@ class Wallet extends React.Component {
       },
     });
 
-    if (!wallet.isReward && wallet.name != "SHURI"  && !wallet.isToken) {
+    let canRemove = (wallet.isToken &&  wallet.customToken) || !wallet.isReward;
+    let cansetDefault = !wallet.isToken && !wallet.isReward;
+
+    if (cansetDefault) {
         obj.push({
           title: StringHelper.format('Set as default {0} wallet ', wallet.name) + (wallet.default ? "✓ " : ""),
           handler: () => {
@@ -401,7 +404,8 @@ class Wallet extends React.Component {
             MasterWallet.UpdateLocalStore(lstWalletTemp);
           }
         })
-
+      }
+      if (canRemove) {
         obj.push({
           title: 'Remove',
           handler: () => {
@@ -569,10 +573,12 @@ class Wallet extends React.Component {
     
     obj.push({
       title: 'Add custom token',
-      handler: () => {        
-        this.setState({formAddTokenIsActive: true});
-        this.modalAddNewTokenRef.open(); 
-        this.toggleBottomSheet();
+      handler: () => {      
+        
+        this.setState({formAddTokenIsActive: true}, () => {
+          this.modalAddNewTokenRef.open(); 
+          this.toggleBottomSheet();
+        });        
       },
     });
 
@@ -792,7 +798,7 @@ class Wallet extends React.Component {
       <div className="wallet-page">
 
         
-        <Modal title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
+        <Modal onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
             <AddToken formAddTokenIsActive={this.state.formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
         </Modal>
 

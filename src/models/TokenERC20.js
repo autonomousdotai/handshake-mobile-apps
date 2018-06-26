@@ -20,7 +20,7 @@ export class TokenERC20 extends Ethereum {
     }
 
     async init(contractAddress, wallet){            
-      
+
       this.network = wallet.network;      
       this.address = wallet.address;
       this.chainId = wallet.chainId;
