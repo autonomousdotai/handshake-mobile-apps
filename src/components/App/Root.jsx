@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import qs from 'querystring';
 // contants
-import { URL, APP, API_URL } from '@/constants';
+import { API_URL, APP, HANDSHAKE_ID, URL } from '@/constants';
 // actions
-import { setIpInfo, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
+import { changeLocale, setBannedCash, setBannedPrediction, setCheckBanned, setIpInfo } from '@/reducers/app/action';
 // services
 import $http from '@/services/api';
 import { createDynamicImport } from '@/services/app';
@@ -54,6 +54,7 @@ class Root extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       messages,
       app: this.props.app,

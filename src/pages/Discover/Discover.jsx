@@ -6,11 +6,9 @@ import { loadDiscoverList } from '@/reducers/discover/action';
 import {
   API_URL,
   DISCOVER_GET_HANDSHAKE_RADIUS,
-  // EXCHANGE_ACTION,
-  // EXCHANGE_ACTION_NAME,
+  EXCHANGE_COOKIE_READ_INSTRUCTION,
   HANDSHAKE_ID,
   URL,
-  EXCHANGE_COOKIE_READ_INSTRUCTION,
 } from '@/constants';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -27,24 +25,21 @@ import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedExchange from '@/components/handshakes/exchange/Feed/FeedExchange';
 import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchangeLocal';
 import FeedSeed from '@/components/handshakes/seed/Feed';
-import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import BlockCountry from '@/components/core/presentation/BlockCountry';
 import Maintain from '@/components/core/presentation/Maintain';
 import MultiLanguage from '@/components/core/controls/MultiLanguage';
-
 // import Tabs from '@/components/handshakes/exchange/components/Tabs';
 import NoData from '@/components/core/presentation/NoData';
 import BettingFilter from '@/components/handshakes/betting/Feed/Filter';
-import { getListOfferPrice } from '@/reducers/exchange/action';
+import { getFreeStartInfo, getListOfferPrice, setFreeStart } from '@/reducers/exchange/action';
 import Image from '@/components/core/presentation/Image';
 import loadingSVG from '@/assets/images/icon/loading.gif';
 import ninjaLogoSVG from '@/assets/images/logo.png';
-// import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
-
 // style
 import '@/components/handshakes/exchange/Feed/FeedExchange.scss';
 import './Discover.scss';
-import { FormattedMessage, injectIntl } from "react-intl";
+import { FormattedMessage, FormattedHTMLMessage, injectIntl } from "react-intl";
+// import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -65,12 +60,14 @@ class DiscoverPage extends React.Component {
     ipInfo: PropTypes.any.isRequired,
     isBannedCash: PropTypes.bool.isRequired,
     isBannedPrediction: PropTypes.bool.isRequired,
+    setFreeStart: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props);
     console.log('discover - contructor - init');
     const handshakeDefault = this.getDefaultHandShakeId();
+    const utm = this.getUtm();
 
     this.state = {
       handshakeIdActive: handshakeDefault,
@@ -79,10 +76,15 @@ class DiscoverPage extends React.Component {
       isLoading: true,
       exchange: this.props.exchange,
       modalContent: <div />, // type is node
+      propsModal: {
+        // className: "discover-popup",
+        // isDismiss: false
+      },
       lat: 0,
       lng: 0,
       isBannedCash: this.props.isBannedCash,
       isBannedPrediction: this.props.isBannedPrediction,
+      utm,
     };
 
     if (this.state.isBannedPrediction) {
@@ -98,16 +100,51 @@ class DiscoverPage extends React.Component {
     this.clickCategoryItem = this.clickCategoryItem.bind(this);
     this.clickTabItem = this.clickTabItem.bind(this);
     this.searchChange = this.searchChange.bind(this);
+    this.getUtm = this.getUtm.bind(this);
+    this.onFreeStartClick = this.onFreeStartClick.bind(this);
   }
 
   componentDidMount() {
-    const { ipInfo } = this.props;
+    const { ipInfo, } = this.props;
     navigator.geolocation.getCurrentPosition((location) => {
       const { coords: { latitude, longitude } } = location;
       this.setAddressFromLatLng(latitude, longitude); // better precision
     }, () => {
       this.setAddressFromLatLng(ipInfo?.latitude, ipInfo?.longitude); // fallback
     });
+
+    if (this.state.utm === 'early_bird') {
+      this.props.getFreeStartInfo({
+        PATH_URL: `exchange/info/offer-store-free-start/ETH`,
+        successFn: (res) => {
+          const { data } = res;
+          if (data.reward) {
+            this.setState({
+              propsModal: {
+                className: 'popup-intro-free-coin',
+              },
+              modalContent: (
+                <div className="text-center">
+                  <div className="intro-header">
+                    <FormattedHTMLMessage id="ex.earlyBird.label.1" />
+                  </div>
+                  <div className="intro-text mt-2">
+                    <FormattedHTMLMessage id="ex.earlyBird.label.2"  values={{ freeETH: data.reward }}/>
+                  </div>
+                  <button className="btn btn-open-station" onClick={this.onFreeStartClick}>
+                    <FormattedMessage id="ex.earlyBird.btn" />
+                  </button>
+                </div>
+              ),
+            }, () => {
+              this.modalRef.open();
+            });
+          }
+
+        },
+        errorFn: () => {  },
+      });
+    }
   }
 
   setAddressFromLatLng = (lat, lng) => {
@@ -122,6 +159,17 @@ class DiscoverPage extends React.Component {
       seletedId = id;
     }
     return seletedId;
+  }
+
+  getUtm() {
+    let { utm } = Helper.getQueryStrings(window.location.search);
+
+    return utm;
+  }
+
+  onFreeStartClick() {
+    this.props.setFreeStart({ data: true });
+    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -368,6 +416,7 @@ class DiscoverPage extends React.Component {
     const {
       handshakeIdActive,
       // tabIndexActive,
+      propsModal,
       modalContent,
     } = this.state;
     const { messages } = this.props.intl;
@@ -471,7 +520,7 @@ class DiscoverPage extends React.Component {
             {messages.product_info}
           </Row>
         </Grid>
-        <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} className="discover-popup" isDismiss={false} >
+        <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} {...propsModal}>
           {modalContent}
         </ModalDialog>
       </React.Fragment>
@@ -487,11 +536,14 @@ const mapState = state => ({
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
   firebaseApp: state.firebase.data,
+  freeETH: state.exchange.freeETH || 0,
 });
 
 const mapDispatch = ({
   loadDiscoverList,
   getListOfferPrice,
+  setFreeStart,
+  getFreeStartInfo,
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(DiscoverPage));

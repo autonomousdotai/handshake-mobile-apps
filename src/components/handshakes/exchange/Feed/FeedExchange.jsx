@@ -95,7 +95,15 @@ class FeedExchange extends React.PureComponent {
 
   handleOnShake = (name) => {
     const { offer } = this;
-    this.modalRef.open();
+
+    this.setState({
+      modalContent: (
+        <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
+      ),
+    }, () => {
+      this.modalRef.open();
+    });
+
     this.setState({CRYPTO_CURRENCY_LIST: [
       { value: CRYPTO_CURRENCY.ETH, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.ETH], icon: <img src={iconEthereum} width={22} />, hide: !offer.itemFlags.ETH},
       { value: CRYPTO_CURRENCY.BTC, text: CRYPTO_CURRENCY_NAME[CRYPTO_CURRENCY.BTC], icon: <img src={iconBitcoin} width={22} />, hide: !offer.itemFlags.BTC},
@@ -372,6 +380,7 @@ class FeedExchange extends React.PureComponent {
   render() {
     const { offer } = this;
     const { review, reviewCount } = this.props;
+    const { modalContent } = this.state;
     const currency = offer.fiatCurrency;
 
     let coins = [];
@@ -442,7 +451,7 @@ class FeedExchange extends React.PureComponent {
         </div>
         {/*<Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>*/}
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
-          <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
+          {modalContent}
         </ModalDialog>
       </div>
     );
