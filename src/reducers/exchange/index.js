@@ -53,8 +53,8 @@ function exchangeReducter(state = {
     case `${EXCHANGE_ACTIONS.GET_OFFER_STORES}_SUCCESS`: {
       return { ...state, offerStores: OfferShop.offerShop(action.payload.data) };
     }
-    case `${EXCHANGE_ACTIONS.IS_NEW_USER}_SUCCESS`: {
-      return { ...state, freeETH: action.payload.data };
+    case `${EXCHANGE_ACTIONS.GET_FREE_START_INFO}_SUCCESS`: {
+      return { ...state, freeETH: action.payload.data?.reward };
     }
     default:
       return state;

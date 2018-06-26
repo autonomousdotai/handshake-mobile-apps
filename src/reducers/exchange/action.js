@@ -35,7 +35,7 @@ export const EXCHANGE_ACTIONS = {
   GET_OFFER_STORES: 'GET_OFFER_STORES',
   REVIEW_OFFER: 'REVIEW_OFFER',
 
-  IS_NEW_USER: 'IS_NEW_USER',
+  GET_FREE_START_INFO: 'GET_FREE_START_INFO',
 };
 
 export const getCryptoPrice = createAPI(EXCHANGE_ACTIONS.GET_CRYPTO_PRICE);
@@ -85,5 +85,5 @@ export const cancelOfferItem = createAPI(EXCHANGE_ACTIONS.CANCEL_OFFER_ITEM);
 export const getOfferStores = createAPI(EXCHANGE_ACTIONS.GET_OFFER_STORES);
 export const reviewOffer = createAPI(EXCHANGE_ACTIONS.REVIEW_OFFER);
 
-export const isNewUser = createAPI(EXCHANGE_ACTIONS.IS_NEW_USER);
+export const getFreeStartInfo = createAPI(EXCHANGE_ACTIONS.GET_FREE_START_INFO);
 
