@@ -11,7 +11,7 @@ import { ACTIONS } from './action';
 function handlePreProcessForOfferStore(handshake) {
   const extraData = JSON.parse(handshake.extra_data);
   const { id } = handshake;
-  let result = [];
+  const result = [];
 
   if (extraData.items.BTC) {
     const handledHandshake = Object.assign({}, handshake);
@@ -154,7 +154,14 @@ const meReducter = (
           } else if (offer.type === EXCHANGE_FEED_TYPE.OFFER_STORE) {
             const values = offer.status.split('_');
             id = `${id}_${values[0].toUpperCase()}`;
-            status = HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE[values[1]];
+            status = values[1];
+
+            const extraData = JSON.parse(handledHandshake.extraData);
+            if (handledHandshake.id.includes(id) && extraData.status !== status) {
+              extraData.status = status;
+              handledHandshake.extraData = JSON.stringify(extraData);
+              return handledHandshake;
+            }
           }
 
           if (handledHandshake.id.includes(id) && handledHandshake.status !== status) {
@@ -163,6 +170,8 @@ const meReducter = (
           return handledHandshake;
         });
       });
+
+      console.log('handledMylist', handledMylist);
 
       return {
         ...state,
@@ -212,7 +221,7 @@ const meReducter = (
 
         if (handledHandshake.id === item.id) {
           handledHandshake.status = item.status;
-          //handledHandshake.result = resultI;
+          // handledHandshake.result = resultI;
         }
         return handledHandshake;
       });

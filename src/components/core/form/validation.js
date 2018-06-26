@@ -1,16 +1,16 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-export const required = value => (value ? undefined : <FormattedMessage id="error.required"/>);
+export const required = value => (value ? undefined : <FormattedMessage id="error.required" />);
 
-export const requiredOne = (fieldNames) => (value, allValues) => {
+export const requiredOne = fieldNames => (value, allValues) => {
   for (let i = 0; i < fieldNames.length; ++i) {
-    const fieldName = fieldNames[i]
+    const fieldName = fieldNames[i];
     if (allValues[fieldName]) return undefined;
   }
-  return <FormattedMessage id="error.requiredOne"/>;
+  return <FormattedMessage id="error.requiredOne" />;
   // return (value && value < min ? `Must be greater than ${min}` : undefined);
-}
+};
 
 // const maxLength = max => value =>
 //     value && value.length > max ? `Must be ${max} characters or less` : undefined
@@ -21,9 +21,9 @@ export const requiredOne = (fieldNames) => (value, allValues) => {
 // const number = value =>
 //     value && isNaN(Number(value)) ? 'Must be a number' : undefined
 export const minValue = min => value =>
-  (value && value < min ? <FormattedMessage id="error.greaterThan" values={{ min }}/> : undefined);
+  (value && value < min ? <FormattedMessage id="error.greaterThan" values={{ min }} /> : undefined);
 export const maxValue = max => value =>
-  (value && value > max ? <FormattedMessage id="error.lessThan" values={{ max }}/> : undefined);
+  (value && value > max ? <FormattedMessage id="error.lessThan" values={{ max }} /> : undefined);
 // const minValue13 = minValue(13)
 export const email = value =>
   (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)

@@ -31,13 +31,16 @@ import {
   HANDSHAKE_EXCHANGE_STATUS_NAME,
   HANDSHAKE_STATUS_NAME,
   HANDSHAKE_USER,
+  NB_BLOCKS,
   URL
 } from "@/constants";
 import ModalDialog from "@/components/core/controls/ModalDialog";
 import Rate from "@/components/core/controls/Rate";
 import {connect} from "react-redux";
 import {
+  acceptOffer,
   acceptOfferItem,
+  cancelOffer,
   cancelOfferItem,
   cancelShakedOffer,
   closeOffer,
@@ -66,6 +69,7 @@ import {getLocalizedDistance} from "@/services/util"
 import {responseExchangeDataChange} from "@/reducers/me/action";
 import {Ethereum} from '@/models/Ethereum.js';
 import {Bitcoin} from '@/models/Bitcoin';
+import OfferShop from "@/models/OfferShop";
 
 class FeedMe extends React.PureComponent {
   constructor(props) {
@@ -176,6 +180,22 @@ class FeedMe extends React.PureComponent {
     return condition;
   }
 
+  responseExchangeDataChangeSwap = (offerShake) => {
+    const { id, status, } = offerShake;
+    let data = {};
+    let firebaseOffer = {};
+
+    firebaseOffer.id = id;
+    firebaseOffer.status = status;
+    firebaseOffer.type = 'exchange';
+
+    data[`exchange_${id}`] = firebaseOffer;
+
+    console.log('responseExchangeDataChange', data);
+
+    this.props.responseExchangeDataChange(data);
+  }
+
   responseExchangeDataChange = (offerShake) => {
     const { id, status, } = offerShake;
     let data = {};
@@ -193,10 +213,11 @@ class FeedMe extends React.PureComponent {
   }
 
   responseExchangeDataChangeOfferStore = (offerStore) => {
-    const { id, status } = offerStore;
+    const { id, } = offerStore;
     const { currency } = this.offer;
     let data = {};
     let firebaseOffer = {};
+    const status = offerStore.items[`${currency}`].status;
 
     firebaseOffer.id = id;
     firebaseOffer.status = `${currency.toLowerCase()}_${status}`;
@@ -218,19 +239,23 @@ class FeedMe extends React.PureComponent {
 
     let from = '';
     switch (status) {
+      case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKING:
+      case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE:
       case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
       case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
+      case HANDSHAKE_EXCHANGE_STATUS.REJECTING:
+      case HANDSHAKE_EXCHANGE_STATUS.REJECTED:
+      case HANDSHAKE_EXCHANGE_STATUS.CANCELLING:
+      case HANDSHAKE_EXCHANGE_STATUS.CANCELLED:
       case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-      case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
+      case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
         switch (this.userType) {
-          case HANDSHAKE_USER.SHAKED: {
+          case HANDSHAKE_USER.OWNER: {
             from = <FormattedMessage id="ex.me.label.with"/>;
 
             break;
           }
-          case HANDSHAKE_USER.OWNER: {
+          case HANDSHAKE_USER.SHAKED: {
             from = <FormattedMessage id="ex.me.label.from"/>;
 
             break;
@@ -240,18 +265,7 @@ class FeedMe extends React.PureComponent {
         break;
       }
       default: {
-        switch (this.userType) {
-          case HANDSHAKE_USER.SHAKED: {
-            from = <FormattedMessage id="ex.me.label.with"/>;
-
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            from = <FormattedMessage id="ex.me.label.from"/>;
-
-            break;
-          }
-        }
+        from = <FormattedMessage id="ex.me.label.from"/>;
         break;
       }
     }
@@ -259,32 +273,31 @@ class FeedMe extends React.PureComponent {
     return from;
   }
 
-  getContentExchange(fiatAmount) {
+  getContentExchange() {
     const {status} = this.props;
-    console.log('thisss', this.offer)
+    // console.log('thisss', this.offer)
     const { offer } = this;
     let message = '';
 
     let offerType = '';
     switch (status) {
+      case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKING:
+      case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE:
       case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
       case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
       case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-      case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-      case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
+      case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
         switch (this.userType) {
           case HANDSHAKE_USER.SHAKED: {
+            offerType = EXCHANGE_ACTION_PAST_NAME[offer.type];
+            break;
+          }
+          case HANDSHAKE_USER.OWNER: {
             if (offer.type === EXCHANGE_ACTION.BUY) {
               offerType = EXCHANGE_ACTION_PAST_NAME[EXCHANGE_ACTION.SELL];
             } else if (offer.type === EXCHANGE_ACTION.SELL) {
               offerType = EXCHANGE_ACTION_PAST_NAME[EXCHANGE_ACTION.BUY];
             }
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            offerType = EXCHANGE_ACTION_PAST_NAME[offer.type];
-
             break;
           }
         }
@@ -296,26 +309,29 @@ class FeedMe extends React.PureComponent {
                                       something: offer.physicalItem,
                                       amount: formatAmountCurrency(offer.amount),
                                       currency: offer.currency,
-                                      currency_symbol: offer.fiatCurrency,
-                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
-                                      fee: offer.feePercentage,
-                                      payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
                                     } } />;
 
         break;
       }
-      default: {
+      case HANDSHAKE_EXCHANGE_STATUS.CREATED:
+      case HANDSHAKE_EXCHANGE_STATUS.ACTIVE:
+      case HANDSHAKE_EXCHANGE_STATUS.CLOSING:
+      case HANDSHAKE_EXCHANGE_STATUS.CLOSED:
+      case HANDSHAKE_EXCHANGE_STATUS.REJECTING:
+      case HANDSHAKE_EXCHANGE_STATUS.REJECTED:
+      case HANDSHAKE_EXCHANGE_STATUS.CANCELLING:
+      case HANDSHAKE_EXCHANGE_STATUS.CANCELLED: {
         switch (this.userType) {
           case HANDSHAKE_USER.SHAKED: {
+            offerType = EXCHANGE_ACTION_PRESENT_NAME[offer.type];
+            break;
+          }
+          case HANDSHAKE_USER.OWNER: {
             if (offer.type === EXCHANGE_ACTION.BUY) {
               offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.SELL];
             } else if (offer.type === EXCHANGE_ACTION.SELL) {
               offerType = EXCHANGE_ACTION_PRESENT_NAME[EXCHANGE_ACTION.BUY];
             }
-            break;
-          }
-          case HANDSHAKE_USER.OWNER: {
-            offerType = EXCHANGE_ACTION_PRESENT_NAME[offer.type];
 
             break;
           }
@@ -327,41 +343,64 @@ class FeedMe extends React.PureComponent {
                                       something: offer.physicalItem,
                                       amount: formatAmountCurrency(offer.amount),
                                       currency: offer.currency,
-                                      currency_symbol: offer.fiatCurrency,
-                                      total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
-                                      fee: offer.feePercentage,
-                                      payment_method: EXCHANGE_METHOD_PAYMENT[EXCHANGE_FEED_TYPE.EXCHANGE],
                                     } } />;
-
+        break;
+      }
+      default: {
         break;
       }
     }
-    console.log('offferes', offer.physical_item)
+
     return message;
   }
 
   getActionButtonsExchange = () => {
     const {status} = this.props;
     const offer = this.offer;
-    const fiatAmount = this.fiatAmount;
     let actionButtons = null;
     let message = '';
 
     switch (this.userType) {
       case HANDSHAKE_USER.NORMAL: {
+        break;
+      }
+      case HANDSHAKE_USER.OWNER: {
         switch (status) {
           case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            message = <FormattedMessage id="handshakeOfferConfirm"
-                                        values={ {
-                                          type: offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL] : EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY],
-                                          amount: formatAmountCurrency(offer.amount),
-                                          currency: offer.currency,
-                                          currency_symbol: offer.fiatCurrency,
-                                          total: formatMoneyByLocale(fiatAmount,offer.fiatCurrency),
-                                        } } />;
+            message = <FormattedMessage id="cancelOfferConfirm" values={ {} } />;
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleShakeOfferExchange)}><FormattedMessage id="btn.shake"/></Button>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}><FormattedMessage id="btn.close"/></Button>
+              </div>
+            );
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE: {
+            message = <FormattedMessage id="acceptOfferConfirm" values={ { } } />;
+            actionButtons = (
+              <div>
+                {offer.type === EXCHANGE_ACTION.BUY &&
+                <Button block className="mt-2"
+                        onClick={() => this.confirmOfferAction(message, this.handleAcceptOfferExchange)}><FormattedMessage id="btn.accept"/></Button>
+                }
+                {offer.type === EXCHANGE_ACTION.BUY &&
+                <Button block className="mt-2"
+                        onClick={() => this.confirmOfferAction(message, this.handleCancelOfferExchange)}><FormattedMessage id="btn.cancel"/></Button>
+                }
+
+              </div>
+            );
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
+            message = <FormattedMessage id="rejectOfferConfirm" values={ {} } />;
+            let message2 = <FormattedMessage id="completeOfferConfirm" values={ {} } />;
+            actionButtons = (
+              <div>
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject"/></Button>
+                {offer.type === EXCHANGE_ACTION.SELL &&
+                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}><FormattedMessage id="btn.complete"/></Button>
+                }
               </div>
             );
             break;
@@ -371,7 +410,16 @@ class FeedMe extends React.PureComponent {
       }
       case HANDSHAKE_USER.SHAKED: {
         switch (status) {
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
+          case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE: {
+            message = <FormattedMessage id="cancelOfferConfirm" values={ { } } />;
+            actionButtons = (
+              <div>
+                {offer.type === EXCHANGE_ACTION.BUY &&
+                <Button block className="mt-2"
+                        onClick={() => this.confirmOfferAction(message, this.handleCancelOfferExchange)}><FormattedMessage id="btn.cancel"/></Button>
+                }
+              </div>
+            );
             break;
           }
           case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
@@ -388,73 +436,10 @@ class FeedMe extends React.PureComponent {
 
             break;
           }
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
-            if (offer.type === EXCHANGE_ACTION.SELL) {
-              message = <FormattedMessage id="withdrawOfferConfirm" values={ {} } />;
-              actionButtons = (
-                <div>
-                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}><FormattedMessage id="btn.withdraw"/></Button>
-                </div>
-              );
-            }
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-            break;
-          }
         }
         break;
       }
-      case HANDSHAKE_USER.OWNER: {
-        switch (status) {
-          case HANDSHAKE_EXCHANGE_STATUS.CREATED: {
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.ACTIVE: {
-            message = <FormattedMessage id="cancelOfferConfirm" values={ {} } />;
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}><FormattedMessage id="btn.cancel"/></Button>
-              </div>
-            );
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.CLOSED: {
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKING: {
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.SHAKE: {
-            message = <FormattedMessage id="rejectOfferConfirm" values={ {} } />;
-            let message2 = <FormattedMessage id="completeOfferConfirm" values={ {} } />;
-            actionButtons = (
-              <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject"/></Button>
-                {offer.type === EXCHANGE_ACTION.SELL &&
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}><FormattedMessage id="btn.complete"/></Button>
-                }
-              </div>
-            );
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
-            if (offer.type === EXCHANGE_ACTION.BUY) {
-              message = <FormattedMessage id="withdrawOfferConfirm" values={ {} } />;
-              actionButtons = (
-                <div>
-                  <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleWithdrawShakedOfferExchange)}><FormattedMessage id="btn.withdraw"/></Button>
-                </div>
-              );
-            }
-            break;
-          }
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW: {
-            break;
-          }
-        }
-        break;
-      }
+
     }
 
     return actionButtons;
@@ -468,7 +453,7 @@ class FeedMe extends React.PureComponent {
 
     const wallet = MasterWallet.getWalletDefault(offer.currency);
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(10, true);
+    const fee = await wallet.getFee(NB_BLOCKS, true);
 
     if (!this.checkMainNetDefaultWallet(wallet)) {
       return;
@@ -519,7 +504,7 @@ class FeedMe extends React.PureComponent {
     } else if (currency === CRYPTO_CURRENCY.BTC) {
       if (offer.type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(offer.currency);
-        wallet.transfer(offer.systemAddress, offer.totalAmount, 10).then(success => {
+        wallet.transfer(offer.systemAddress, offer.totalAmount, NB_BLOCKS).then(success => {
           console.log('transfer', success);
         });
       }
@@ -561,17 +546,23 @@ class FeedMe extends React.PureComponent {
 
     this.showLoading();
     this.props.cancelShakedOffer({
-      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/${API_URL.EXCHANGE.SHAKE}`,
-      METHOD: 'DELETE',
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/reject`,
+      METHOD: 'POST',
       successFn: this.handleRejectShakedOfferExchangeSuccess,
       errorFn: this.handleRejectShakedOfferExchangeFailed,
     });
   }
 
-  handleRejectShakedOfferExchangeSuccess = async (responseData) => {
+  handleRejectShakedOfferExchangeSuccess = async (res) => {
     const { refreshPage } = this.props;
-    const { data } = responseData;
-    const { currency } = data;
+    const { data } = res;
+    const { currency, type, hid, id } = data;
+
+    console.log('handleRejectShakedOfferExchangeSuccess', res);
+
+    const offerShake = Offer.offer(data);
+
+    this.responseExchangeDataChangeSwap(offerShake);
 
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
@@ -580,15 +571,16 @@ class FeedMe extends React.PureComponent {
 
       let result = null;
 
-      if ((data.type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.OWNER) ||
-        (data.type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.SHAKED)
-      ) {
-        result = await exchangeHandshake.reject(data.hid, data.id);
-      } else {
-        result = await exchangeHandshake.cancel(data.hid, data.id);
-      }
+      // if ((data.type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.OWNER) ||
+      //   (data.type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.SHAKED)
+      // ) {
+      //   result = await exchangeHandshake.reject(data.hid, data.id);
+      // } else {
+      //   result = await exchangeHandshake.cancel(data.hid, data.id);
+      // }
+      result = await exchangeHandshake.cancel(hid, id);
 
-      console.log('handleCancelShakedOfferSuccess', result);
+      console.log('handleRejectShakedOfferExchangeSuccess', result);
     }
 
     this.hideLoading();
@@ -628,26 +620,31 @@ class FeedMe extends React.PureComponent {
 
     this.showLoading();
     this.props.completeShakedOffer({
-      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/${API_URL.EXCHANGE.SHAKE}`,
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/complete`,
       METHOD: 'POST',
       successFn: this.handleCompleteShakedOfferExchangeSuccess,
       errorFn: this.handleCompleteShakedOfferExchangeFailed,
     });
   }
 
-  handleCompleteShakedOfferExchangeSuccess = async (responseData) => {
+  handleCompleteShakedOfferExchangeSuccess = async (res) => {
     const { refreshPage } = this.props;
-    const { data } = responseData;
-    const { currency } = data;
+    const { data } = res;
+    const { currency, hid, id } = data;
+    console.log('handleCompleteShakedOfferExchangeSuccess', res);
+
+    const offerShake = Offer.offer(data);
+
+    this.responseExchangeDataChangeSwap(offerShake);
 
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
 
       const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
-      let result = await exchangeHandshake.accept(data.hid, data.id);
+      let result = await exchangeHandshake.accept(hid, id);
 
-      console.log('handleCompleteShakedOfferSuccess', result);
+      console.log('handleCompleteShakedOfferExchangeSuccess', result);
     }
 
     // console.log('data', data);
@@ -665,6 +662,72 @@ class FeedMe extends React.PureComponent {
   }
 
   handleCompleteShakedOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
+  }
+
+  ////////////////////////
+  handleCancelOfferExchange = async () => {
+    const offer = this.offer;
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(offer.currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee();
+
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        return;
+      }
+
+      if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
+        return;
+      }
+    }
+
+    this.showLoading();
+    this.props.cancelOffer({
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/cancel`,
+      METHOD: 'POST',
+      successFn: this.handleCancelOfferExchangeSuccess,
+      errorFn: this.handleCancelOfferExchangeFailed,
+    });
+  }
+
+  handleCancelOfferExchangeSuccess = async (res) => {
+    const { refreshPage } = this.props;
+    const { data } = res;
+    const { currency, hid, id } = data;
+
+    console.log('handleCancelOfferExchangeSuccess', res);
+
+    const offerShake = Offer.offer(data);
+
+    this.responseExchangeDataChangeSwap(offerShake);
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+      let result = await exchangeHandshake.cancel(hid, id);
+
+      console.log('handleCompleteShakedOfferExchangeSuccess', result);
+    }
+
+    // console.log('data', data);
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="cancelShakedfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // if (refreshPage) {
+        //   refreshPage();
+        // }
+      }
+    });
+  }
+
+  handleCancelOfferExchangeFailed = (e) => {
     this.handleActionFailed(e);
   }
 
@@ -727,10 +790,73 @@ class FeedMe extends React.PureComponent {
   }
 
   ////////////////////////
-  handleCloseOfferExchange = async () => {
+  handleAcceptOfferExchange = async () => {
     const offer = this.offer;
 
     if (offer.currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(offer.currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee();
+
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        return;
+      }
+
+      if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
+        return;
+      }
+    }
+
+    this.showLoading();
+    this.props.acceptOffer({
+      PATH_URL: `${API_URL.EXCHANGE.OFFERS}/${offer.id}/accept`,
+      METHOD: 'POST',
+      successFn: this.handleAcceptOfferExchangeSuccess,
+      errorFn: this.handleAcceptOfferExchangeFailed,
+    });
+  }
+
+  handleAcceptOfferExchangeSuccess = async (res) => {
+    const { refreshPage } = this.props;
+    const { data } = res;
+    const { currency, hid, id, type } = data;
+    console.log('handleAcceptOfferExchangeSuccess', res);
+
+    const offerShake = Offer.offer(data);
+
+    this.responseExchangeDataChangeSwap(offerShake);
+
+    if (currency === CRYPTO_CURRENCY.ETH) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+
+      let result = '';
+
+      result = await exchangeHandshake.shake(hid, id);
+
+      console.log('handleAcceptOfferExchangeSuccess', result);
+    }
+
+    this.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center"><FormattedMessage id="shakeOfferSuccessMessage"/></div>,
+      timeOut: 2000,
+      type: 'success',
+      callBack: () => {
+        // this.props.fireBaseDataChange( { [`exchange_${data.id}`]: data });
+      }
+    });
+  }
+
+  handleAcceptOfferExchangeFailed = (e) => {
+    this.handleActionFailed(e);
+  }
+
+  ////////////////////////
+  handleCloseOfferExchange = async () => {
+    const offer = this.offer;
+
+    if (offer.currency === CRYPTO_CURRENCY.ETH && offer.type === EXCHANGE_ACTION.SELL) {
       const wallet = MasterWallet.getWalletDefault(offer.currency);
       const balance = await wallet.getBalance();
       const fee = await wallet.getFee();
@@ -753,22 +879,21 @@ class FeedMe extends React.PureComponent {
     });
   }
 
-  handleCloseOfferExchangeSuccess = async (responseData) => {
+  handleCloseOfferExchangeSuccess = async (res) => {
     const { refreshPage } = this.props;
-    const { data } = responseData;
-    const { currency } = data;
+    const { data } = res;
+    const { currency, type } = data;
+    const offerShake = Offer.offer(data);
 
-    const { offer } = this;
-    if (currency === CRYPTO_CURRENCY.ETH) {
+    this.responseExchangeDataChangeSwap(offerShake);
+
+    if (currency === CRYPTO_CURRENCY.ETH && type === EXCHANGE_ACTION.SELL) {
       const wallet = MasterWallet.getWalletDefault(currency);
       const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
       let result = '';
-      if (offer.type === EXCHANGE_ACTION.BUY) {
-        result = await exchangeHandshake.closeByCashOwner(data.hid, data.id);
-      } else {
-        result = await exchangeHandshake.cancel(data.hid, data.id);
-      }
+
+      result = await exchangeHandshake.cancel(data.hid, data.id);
 
       console.log('handleCloseOfferExchangeSuccess', result);
     }
@@ -831,8 +956,8 @@ class FeedMe extends React.PureComponent {
     const { offer } = this;
     const { buyAmount, sellAmount, currency, buyPercentage, sellPercentage } = offer;
     let message = '';
-    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.SELL, currency, buyPercentage);
-    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.BUY, currency, sellPercentage);
+    let fiatAmountBuy = this.calculateFiatAmountOfferStore(buyAmount, EXCHANGE_ACTION.BUY, currency, buyPercentage);
+    let fiatAmountSell = this.calculateFiatAmountOfferStore(sellAmount, EXCHANGE_ACTION.SELL, currency, sellPercentage);
     switch (status) {
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED:
       case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
@@ -932,7 +1057,7 @@ class FeedMe extends React.PureComponent {
 
     console.log('handleDeleteOfferItemSuccess', responseData);
 
-    const offerStore = Offer.offer(data);
+    const offerStore = OfferShop.offerShop(data);
 
     //Update status to redux
     this.responseExchangeDataChangeOfferStore(offerStore);
@@ -986,7 +1111,12 @@ class FeedMe extends React.PureComponent {
       fiatAmount = offer.fiatAmount;
     } else {
       if (listOfferPrice) {
-        let offerPrice = getOfferPrice(listOfferPrice, offer.type, offer.currency);
+        let checkType = offer.type;
+        if (this.userType === HANDSHAKE_USER.SHAKED) {
+          checkType = offer.type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
+        }
+
+        let offerPrice = getOfferPrice(listOfferPrice, checkType, offer.currency);
         if (offerPrice) {
           fiatAmount = offer.amount * offerPrice.price || 0;
           fiatAmount = fiatAmount + fiatAmount * offer.percentage / 100;
@@ -1152,7 +1282,7 @@ class FeedMe extends React.PureComponent {
             actionButtons = (
               <div>
                 <Button block className="mt-2"
-                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.reject"/></Button>
+                        onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}><FormattedMessage id="btn.cancel"/></Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button block className="mt-2"
                         onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOffer)}><FormattedMessage id="btn.complete"/></Button>
@@ -1215,7 +1345,7 @@ class FeedMe extends React.PureComponent {
         break;
       }
       case HANDSHAKE_USER.OWNER: {
-        chatUserName = shakeUserIds[0];
+        chatUserName = shakeUserIds && shakeUserIds.length > 0 ? shakeUserIds[0] : '';
         break;
       }
     }
@@ -1433,7 +1563,7 @@ class FeedMe extends React.PureComponent {
     const { initUserId, refreshPage } = this.props;
     const { data } = responseData;
     const offerShake = Offer.offer(data);
-    const { hid, currency, type, offChainId, totalAmount } = offerShake;
+    const { hid, currency, type, offChainId, amount } = offerShake;
 
     console.log('handleDeleteOfferItemSuccess', responseData);
 
@@ -1448,7 +1578,7 @@ class FeedMe extends React.PureComponent {
         let result = null;
 
         if (type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER) {
-          result = await exchangeHandshake.releasePartialFund(hid, offer.userAddress , totalAmount, initUserId, offChainId);
+          result = await exchangeHandshake.releasePartialFund(hid, offer.userAddress , amount, initUserId, offChainId);
         } else if (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED){
           result = await exchangeHandshake.finish(hid, offChainId);
         }
@@ -1719,36 +1849,10 @@ class FeedMe extends React.PureComponent {
             break;
           }
 
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING: {
-
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: {//user shake
-                if (offer.type === EXCHANGE_ACTION.SELL) {//shop buy
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: {//shop
-                if (offer.type === EXCHANGE_ACTION.BUY) {//shop sell
-                  idMessage = 'movingCoinFromEscrow';
-                }
-
-                break;
-              }
-            }
-
-            break;
-          }
-
           case HANDSHAKE_EXCHANGE_STATUS.ACTIVE:
           case HANDSHAKE_EXCHANGE_STATUS.CLOSED:
           case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
           case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW:
           case HANDSHAKE_EXCHANGE_STATUS.REJECTED: {
             break;
           }
@@ -1767,11 +1871,16 @@ class FeedMe extends React.PureComponent {
   }
 
   render() {
-    const {initUserId, shakeUserIds, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, review, reviewCount, ...props} = this.props;
-    const offer = this.offer;
+    const {initUserId, shakeUserIds, extraData, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, review, reviewCount, ...props} = this.props;
+
+    const offer = Offer.offer(JSON.parse(extraData));
+
+    this.offer = offer;
+    // const offer = this.offer;
+
     // console.log('render',offer);
-    const {listOfferPrice} = this.props;
-    console.log('review, reviewCount',review, reviewCount);
+    // const {listOfferPrice} = this.props;
+    // console.log('review, reviewCount',review, reviewCount);
     let modalContent = this.state.modalContent;
 
     let email = '';
@@ -1827,8 +1936,22 @@ class FeedMe extends React.PureComponent {
         from = <FormattedMessage id="ex.me.label.with"/>;
         email = this.getEmail();
         statusText = HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME[status];
-        showChat = true;
-        chatUsername = this.getChatUserName();
+
+        switch (status) {
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING:
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE:
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING:
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE:
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING:
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETED: {
+
+            chatUsername = this.getChatUserName();
+
+            showChat = chatUsername.length > 0;
+
+            break;
+          }
+        }
 
         let fiatAmount = this.calculateFiatAmount(offer);
 
@@ -1840,25 +1963,22 @@ class FeedMe extends React.PureComponent {
       case EXCHANGE_FEED_TYPE.EXCHANGE: {
         statusText = HANDSHAKE_EXCHANGE_STATUS_NAME[status];
         nameShop = <FormattedMessage id="ex.me.label.about"/>;
-        const fiatAmount = this.calculateFiatAmount(offer);
-
         from = this.getFromExchange();
+        email = this.getEmail();
 
-        message = this.getContentExchange(fiatAmount);
+        message = this.getContentExchange();
 
         switch (status) {
+          case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKING:
+          case HANDSHAKE_EXCHANGE_STATUS.PRE_SHAKE:
           case HANDSHAKE_EXCHANGE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAWING:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTING:
           case HANDSHAKE_EXCHANGE_STATUS.SHAKE:
-          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED:
-          case HANDSHAKE_EXCHANGE_STATUS.WITHDRAW:
-          case HANDSHAKE_EXCHANGE_STATUS.REJECTED: {
-
-            showChat = true;
+          case HANDSHAKE_EXCHANGE_STATUS.COMPLETING:
+          case HANDSHAKE_EXCHANGE_STATUS.COMPLETED: {
 
             chatUsername = this.getChatUserName();
+
+            showChat = chatUsername.length > 0;
 
             break;
           }
@@ -1886,8 +2006,15 @@ class FeedMe extends React.PureComponent {
 
     const messageMovingCoin = this.getMessageMovingCoin();
 
+    // if (mode === 'me) {
+    //   return (
+    //     <FeedMeExchangeLocal />
+    //   )
+    // }
+
     return (
       <div className="feed-me-exchange">
+        {/*<div>id: {this.offer.id}</div>*/}
         {/*<div>userType: {this.userType}</div>*/}
         {/*<div>status: {status}</div>*/}
         <div className="mb-1">
@@ -2015,6 +2142,8 @@ const mapDispatch = ({
   deleteOfferItem,
   responseExchangeDataChange,
   reviewOffer,
+  acceptOffer,
+  cancelOffer,
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedMe));

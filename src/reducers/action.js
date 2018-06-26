@@ -22,12 +22,12 @@ export const createAPI = INIT => ({
   const url = `${BASE_URL}/${PATH_URL}`;
   const requestUuid = Date.now(); // uuid();
 
-  console.log(`app - api - calling - id${requestUuid}`, `${METHOD}:${PATH_URL}`);
+  // console.log(`app - api - calling - id${requestUuid}`, `${METHOD}:${PATH_URL}`);
 
   $http({
     url, data, id, qs, headers, method: METHOD,
   }).then((response) => {
-    console.log(`app - api - called - id${requestUuid}`);
+    // console.log(`app - api - called - id${requestUuid}`);
     dispatch({ type: APP_ACTION.CALLED });
 
     if (response.data.status === 1 || response.data.status === 200) {
@@ -38,7 +38,7 @@ export const createAPI = INIT => ({
       if (errorFn) errorFn(response.data);
     }
   }).catch((e) => {
-    console.log(`app - api - called - id${requestUuid}`);
+    // console.log(`app - api - called - id${requestUuid}`);
     dispatch({ type: APP_ACTION.CALLED });
     if (e.message === 'Network Error') { dispatch({ type: APP_ACTION.NETWORK_ERROR }); }
 

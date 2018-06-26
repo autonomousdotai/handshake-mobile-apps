@@ -8,12 +8,13 @@ import { Wallet } from '@/models/Wallet.js';
 import { TokenERC20 } from '@/models/TokenERC20';
 import { APP } from '@/constants';
 import { StringHelper } from '@/services/helper';
+import Neuron from '@/services/neuron/Neutron';
 
 const bip39 = require('bip39');
 
 export class MasterWallet {
+    
     // list coin is supported, can add some more Ripple ...
-
     static ListDefaultCoin = {
       Ethereum, Shuriken, Bitcoin, BitcoinTestnet,
     };
@@ -23,6 +24,9 @@ export class MasterWallet {
     };
 
     static ListCoinReward = { Ethereum, Bitcoin };
+
+    static neutronMainNet = new Neuron(1);
+    static neutronTestNet = new Neuron(4);
 
     static KEY = 'wallets';
 
@@ -34,7 +38,7 @@ export class MasterWallet {
       // let mnemonic = 'canal marble trend ordinary rookie until combine hire rescue cousin issue that';
       // let mnemonic = 'book trial moral hunt riot ranch yard trap tool horse good barely';
 
-      let mnemonic = bip39.generateMnemonic(); // generates string
+      const mnemonic = bip39.generateMnemonic(); // generates string
 
       const masterWallet = [];
 
@@ -62,8 +66,7 @@ export class MasterWallet {
       }
 
       // set default item:
-      if (masterWallet.length > 1)
-      {
+      if (masterWallet.length > 1) {
         masterWallet[defaultWallet[0]].default = true;
         masterWallet[defaultWallet[1]].default = true;
       }
@@ -138,8 +141,7 @@ export class MasterWallet {
       let wallets = localStore.get(MasterWallet.KEY);
       if (wallets == false) return false;
 
-      wallets.push(JSON.parse(JSON.stringify(newToken)));
-      console.log("wallets->", wallets);
+      wallets.push(JSON.parse(JSON.stringify(newToken)));      
       MasterWallet.UpdateLocalStore(wallets);      
       return true;
     }
@@ -170,7 +172,6 @@ export class MasterWallet {
 
     // create shuriken if not exists:
     static createShuriWallet() {
-
       const wallets = MasterWallet.getMasterWallet();
 
       let hasUpdateMain = false;
@@ -202,7 +203,6 @@ export class MasterWallet {
           shuriWalletTest.default = false;
           shuriWalletTest = MasterWallet.convertObject(shuriWalletTest);
           hasUpdateTest = true;
-
         }
       });
       if (hasUpdateMain && shuriWalletMain) {
@@ -300,8 +300,7 @@ export class MasterWallet {
                 if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
                   wallet = MasterWallet.convertObject(walletJson);
                 }
-              } else
-                {wallet = MasterWallet.convertObject(walletJson);}
+              } else { wallet = MasterWallet.convertObject(walletJson); }
             }
           });
           return wallet;
@@ -316,8 +315,7 @@ export class MasterWallet {
               if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
                 lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);
               }
-            } else
-              {lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);}
+            } else { lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson); }
           }
         });
         return lstDefault;
@@ -439,8 +437,11 @@ export class MasterWallet {
       const walletReward = MasterWallet.getMasterWallet();
       const reward_wallet_string = {};
       walletReward.forEach((reward_wallet) => {
-        if (reward_wallet.isReward)
-          {reward_wallet_string[reward_wallet.name] = { address: reward_wallet.address, name: reward_wallet.name, network: reward_wallet.network, chainId: reward_wallet.chainId};}
+        if (reward_wallet.isReward) {
+          reward_wallet_string[reward_wallet.name] = {
+            address: reward_wallet.address, name: reward_wallet.name, network: reward_wallet.network, chainId: reward_wallet.chainId,
+          };
+        }
       });
       return JSON.stringify(reward_wallet_string);
     }

@@ -1,5 +1,4 @@
 export default {
-  HELLO: 'hello {name}',
   buy: 'Buy',
   sell: 'Sell',
   amount: 'amount',
@@ -22,8 +21,8 @@ export default {
   instantOfferHandShakeContent: 'You{just}{offerType} {amount} {currency} for {total} {currency_symbol} on your card - fee {fee}%',
   offerDistanceContent: '{distance} away',
   transactonOfferInfo: 'Successful ({success}) / Failed ({failed})',
-  createOfferConfirm: 'You are about to {type} {amount} {currency} for {total} {currency_symbol}',
-  handshakeOfferConfirm: 'You are about to {type} {amount} {currency} for {total} {currency_symbol}',
+  createOfferConfirm: 'You are about to {type} {something} by {amount} {currency}',
+  handshakeOfferConfirm: 'You are about to {type} {something} for {amount} {currency}',
   rejectOfferConfirm: 'Do you want to Reject this handshake? You will not be able to make transactions for 4 hours.',
   completeOfferConfirm: 'Finish shaking?',
   withdrawOfferConfirm: 'Are you sure you want to withdraw?',
@@ -68,11 +67,13 @@ export default {
   'ex.create.label.stationInfo': 'Station information',
 
   'ex.createLocal.label.iWantTo': 'I want to',
+  'ex.createLocal.label.something': 'What is it called?',
   'ex.createLocal.placeholder.anyItem': 'any item or service',
   'ex.createLocal.label.coin': 'Coin',
   'ex.createLocal.label.amount': 'Amount',
   'ex.createLocal.label.phone': 'Phone',
   'ex.createLocal.label.address': 'Meet-up place',
+  'ex.createLocal.label.uploadImage': 'Upload an image of your product',
 
   'ex.discover.label.priceBuy': 'BUY',
   'ex.discover.label.priceSell': 'SELL',
@@ -98,18 +99,20 @@ export default {
   'ex.label.buyer': 'buyer',
   'ex.label.seller': 'seller',
 
-  'ex.exchange.status.created': 'created',
-  'ex.exchange.status.active': 'active',
-  'ex.exchange.status.closing': 'closing',
-  'ex.exchange.status.closed': 'closed',
-  'ex.exchange.status.shaking': 'shaking',
-  'ex.exchange.status.shake': 'shake',
-  'ex.exchange.status.completing': 'completing',
-  'ex.exchange.status.completed': 'completed',
-  'ex.exchange.status.withdrawing': 'withdrawing',
-  'ex.exchange.status.withdraw': 'withdraw',
-  'ex.exchange.status.rejecting': 'rejecting',
-  'ex.exchange.status.rejected': 'rejected',
+  'ex.exchange.status.created': 'Verifying...',
+  'ex.exchange.status.active': 'Active',
+  'ex.exchange.status.closing': 'Pending...',
+  'ex.exchange.status.closed': 'Closed',
+  'ex.exchange.status.shaking': 'Shake pending...',
+  'ex.exchange.status.shake': 'Shook',
+  'ex.exchange.status.completing': 'Completing...',
+  'ex.exchange.status.completed': 'Done',
+  'ex.exchange.status.pre_shaking': 'Shake pending',
+  'ex.exchange.status.pre_shake': 'Shook',
+  'ex.exchange.status.rejecting': 'Rejecting',
+  'ex.exchange.status.rejected': 'Rejected',
+  'ex.exchange.status.cancelling': 'Cancelling',
+  'ex.exchange.status.cancelled': 'Cancelled',
 
   'ex.cc.status.processing': 'Processing',
   'ex.cc.status.success': 'Done',
@@ -120,10 +123,10 @@ export default {
   'ex.shop.status.closing': 'Pending...',
   'ex.shop.status.closed': 'Closed',
 
-  'ex.shop.shake.status.pre_shaking': 'Shake pending',
-  'ex.shop.shake.status.pre_shake': 'Shook',
-  'ex.shop.shake.status.shaking': 'Shake pending...',
-  'ex.shop.shake.status.shake': 'Shook',
+  'ex.shop.shake.status.pre_shaking': 'Requesting',
+  'ex.shop.shake.status.pre_shake': 'Requested',
+  'ex.shop.shake.status.shaking': 'Requesting',
+  'ex.shop.shake.status.shake': 'Requested',
   'ex.shop.shake.status.rejecting': 'Rejecting',
   'ex.shop.shake.status.rejected': 'Rejected',
   'ex.shop.shake.status.completing': 'Completing...',
@@ -158,6 +161,8 @@ export default {
   'btn.close': 'Close',
   'btn.accept': 'Accept',
 
+  product_info: 'Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!',
+
   // FAQ
   FAQ_TITLE: 'FAQ',
   FAQ_HEADER_YELLOW: 'Decentralized',
@@ -173,7 +178,7 @@ export default {
     },
     {
       question: 'Do I need Ether? Does it support other cryptocurrencies?',
-      answer: 'It allows parties to directly bet against each other without going through a central authority or bookmaker. This makes it 100% anonymous, no signs up no downloads required. The management of bets and the settlement of winnings are carried out collectively by the blockchain network, protecting users from any single point of failure. You can also create your own prediction markets.',
+      answer: 'Yes. Ninja only accepts ETH for now, but support will be added for other currencies very soon.',
     },
     {
       question: 'How do I start with Ninja?',
@@ -423,8 +428,163 @@ export default {
         },
       },
     },
+    feed: {
+      profileTitle: 'The face behind the mask',
+      profileDescription: 'You, glorious you',
+      shopTitle: 'Your station',
+      shopDescription: 'Open for business',
+      noDataMessage: 'Start a mission.',
+    },
   },
 
+  discover: {
+    noDataMessageCash: 'No stations near you yet. Be the first.',
+    noDataMessageSwap: 'No vendors near you yet. Be the first',
+  },
+
+  wallet: {
+    top_banner: {
+      message: 'Shuriken Airdrop (limited)',
+      button: 'Click here',
+    },
+    refers: {
+      header: '3 Shuriken Airdrop hoops',
+      error: {
+        submit_telegram: 'Couldn\'t find you on Telegram. Please exit the group and try again.',
+        submit_twitter: 'You haven\'t followed us yet. Please try again.',
+        confirm_code: 'Verification code is wrong. Please try again!',
+        verify_code: 'Can\'t send verify email',
+        get_token: 'Referral incomplete. Please try again.',
+      },
+      success: {
+        submit_telegram: 'Welcome to our telegram group!',
+        submit_twitter: 'Thanks for following us on Twitter.',
+        confirm_code: 'Your email has been verified.',
+        verify_code: 'Verification code has been sent to your email.',
+        get_token: 'Success! 80 shurikens have been added to your wallet.',
+        copy_link: 'Referral link copied to clipboard.',
+      },
+      button: {
+        verified: 'Verified',
+        verify: 'Verify',
+        confirm: 'Confirm',
+        reset_email: 'Reset email',
+        get_token: 'Just give me tokens',
+      },
+      text: {
+        title: '80 shiny Shurikens (SHURI).',
+        telegram: 'Say hello on telegram.',
+        telegram2: 'Leave your best joke for a chance to win more Shuri.',
+        twitter: 'Twitter',
+        twitter2: 'Our social media guy says we need followers on ',
+        referral_link: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
+      },
+      placeholder: {
+        telegram_username: 'Your telegram alias',
+        twitter_username: 'Your twitter username',
+        email: 'Verification code',
+        email2: 'Your favourite fake email',
+      },
+    },
+    refers_dashboard: {
+      header: '3 Shuriken Airdrop hoops',
+      title: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
+      text: {
+        copy_link: 'Referral link copied to clipboard.',
+        note: 'Do not change your alias or this link will be unvalid',
+        number_ninjas: 'You brought {0} ninjas to the dojo.',
+        number_total: 'Total reward: {0} SHURI',
+      },
+    },
+    action: {
+      remove: {
+        title: 'Remove',
+        header: 'Are you sure?',
+        message: 'This will permanently delete your wallet.',
+        button_yes: 'Yes, remove',
+        button_cancel: 'Cancel',
+      },
+      transfer: {
+        title: 'Transfer coins',
+        header: 'Transfer coins',
+        to_address: {
+          placeholder: 'Specify receiving...',
+        },
+        error: 'Insufficient balance: ',
+        button: 'Transfer',
+
+      },
+      copy: {
+        title: 'Copy address to clipboard',
+        message: 'Copy address to clipboard',
+        success: 'Copied to clipboard',
+      },
+      default: {
+        title: 'Set as default {0} wallet ',
+      },
+      cancel: {
+        title: 'Cancel',
+      },
+      restore: {
+        title: 'Restore wallets',
+        message: 'Your Wallet restore success',
+        error: 'Invalid wallets',
+      },
+      import: {
+        title: 'Add new / Import',
+      },
+      backup: {
+        title: 'Backup wallets',
+      },
+      protect: {
+        title: 'Secure this wallet',
+        text: {
+          step1_msg1: 'This passphrase will allow you to recover your funds if your phone is ever lost or stolen.',
+          step1_msg2: 'Please make sure nobody has access to your passphrase. You can use a password manager or write it down and hide it under your mattress.',
+          step1_label: 'I understand that if I lose my passphrase, I lose access to my account.',
+          step2_msg1: 'Record these words carefully. Don\'t email it or screenshot it.',
+          step3_msg1: 'Tap to put these words in the correct order.',
+        },
+        button: {
+          continue: 'Continue',
+          verify: 'Verify your passsphrase',
+          copy_clipboard: 'Copy to clipboard',
+          ok: 'OK',
+        },
+        error: {
+          confirm: 'These words are in the wrong order. Please try again.',
+        },
+        success: 'Your wallet has been secured!',
+      },
+      receive: {
+        title: 'Receive coins',
+      },
+      scan_qrcode: {
+        header: 'Scan QR code',
+      },
+      history: {
+        title: 'View transaction history',
+        header: 'Transaction details',
+        label: {
+          failed: 'Failed',
+          unconfirmed: 'Unconfirmed',
+          balance: 'Balance',
+          transactions: 'Transactions',
+          status: 'Status',
+          confirmations: 'confirmations',
+          success: 'success',
+          failed: 'failed',
+        },
+      },
+    },
+  },
+
+  chat: {
+    emptyMessage: 'Trade secrets here. All communication is encrypted and no one is listening.',
+    notFoundUser: 'The Ninja you are looking for is not here. Perhaps you have their name wrong?',
+    lastMessageContent: 'You lost the key to this secret message.',
+    searchPlaceHolder: 'Enter a ninja’s name or alias.',
+  },
   /*
   *
   * White Paper
@@ -537,4 +697,7 @@ export default {
   WHITE_PAPER_SUMMARY_4: 'Build PEX with us. Join the conversation at',
   WHITE_PAPER_END: 'And it actually works',
   WHITE_PAPER_END_1: 'Hey, thanks for reading. Ninja will go live on the testnet on 5 June! We’re excited to hear your thoughts.',
+
+  // betting
+
 };

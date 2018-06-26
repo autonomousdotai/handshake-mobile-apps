@@ -1,11 +1,11 @@
 class CoinOffer {
   static coinOffer(data) {
-    console.log('coinOffer',data);
     return {
       currency: data.currency || '',
       status: data.status || '',
       sellAmountMin: data.sell_amount_min || '',
       sellAmount: data.sell_amount || '',
+      sellTotalAmount: data.sell_total_amount || '',
       sellBalance: data.sell_balance || '',
       sellPercentage: data.sell_percentage || '',
       buyAmountMin: data.buy_amount_min || '',

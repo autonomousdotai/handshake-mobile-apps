@@ -1,4 +1,5 @@
 import { StringHelper } from '@/services/helper';
+
 export class Wallet {
   constructor() {
     this.mnemonic = '';
@@ -26,13 +27,13 @@ export class Wallet {
   }
   getNetworkName() {
     for (const k in this.constructor.Network) {
-      if (this.constructor.Network[k] == this.network) {        
+      if (this.constructor.Network[k] == this.network) {
         return k;
       }
     }
     return this.title;
   }
-  getShortBalance(){
+  getShortBalance() {
     return Number((parseFloat(this.balance)).toFixed(8));
   }
   getBackgroundImg(){

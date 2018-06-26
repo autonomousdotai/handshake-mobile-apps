@@ -2,6 +2,7 @@ import axios from 'axios';
 import satoshi from 'satoshi-bitcoin';
 import { StringHelper } from '@/services/helper';
 import { Wallet } from '@/models/Wallet';
+import { NB_BLOCKS } from '@/constants';
 
 const moment = require('moment');
 const bitcore = require('bitcore-lib');
@@ -48,7 +49,6 @@ export class Bitcoin extends Wallet {
     }
 
     async getBalance() {
-
       this.setDefaultNetwork();
 
       const url = `${this.network}/addr/${this.address}/balance`;
@@ -60,29 +60,26 @@ export class Bitcoin extends Wallet {
       return false;
     }
 
-    checkAddressValid(toAddress){
-
-      if (!bitcore.Address.isValid(toAddress)){
-          return "You can only send tokens to Bitcoin address";
+    checkAddressValid(toAddress) {
+      if (!bitcore.Address.isValid(toAddress)) {
+        return 'You can only send tokens to Bitcoin address';
       }
-      else return true;
+      return true;
     }
 
 
-    async transfer(toAddress, amountToSend, blocks = 4) {
-
-      let insufficientMsg = "You have insufficient coin to make the transfer. Please top up and try again."
+    async transfer(toAddress, amountToSend, blocks = NB_BLOCKS) {
+      const insufficientMsg = 'You have insufficient coin to make the transfer. Please top up and try again.';
 
       try {
-
-        if (!bitcore.Address.isValid(toAddress)){
-          return {"status": 0, "message": "Please enter a valid receiving address."};
+        if (!bitcore.Address.isValid(toAddress)) {
+          return { status: 0, message: 'Please enter a valid receiving address.' };
         }
 
         console.log(`transfered from address:${this.address}`);
 
         // Check balance:
-        let balance = await this.getBalance();
+        const balance = await this.getBalance();
 
         console.log('bitcore.Networks.defaultNetwork', bitcore.Networks.defaultNetwork);
         console.log('server', this.network);
@@ -91,7 +88,7 @@ export class Bitcoin extends Wallet {
         console.log(StringHelper.format('Your wallet balance is currently {0} ETH', balance));
 
         if (!balance || balance == 0 || balance <= amountToSend) {
-          return {"status": 0, "message": insufficientMsg};
+          return { status: 0, message: insufficientMsg };
         }
 
         // each BTC can be split into 100,000,000 units. Each unit of bitcoin, or 0.00000001 bitcoin, is called a satoshi
@@ -128,19 +125,15 @@ export class Bitcoin extends Wallet {
 
             console.log(txHash);
 
-            return {"status": 1, "message": "Your transaction will appear on blockchain in about 30 seconds."};
-          }
-          else{
-            return {"status": 0, "message": insufficientMsg};
+            return { status: 1, message: 'Your transaction will appear on blockchain in about 30 seconds.' };
           }
 
-
+          return { status: 0, message: insufficientMsg };
         }
       } catch (error) {
         // return {"status": 0, "message": error};
-        return {"status": 0, "message": "Insufficient funds"};
+        return { status: 0, message: 'Insufficient funds' };
       }
-
     }
 
     async retrieveUtxos() {
@@ -180,7 +173,7 @@ export class Bitcoin extends Wallet {
       return this.findUtxos(utxos, pos + 1, amount, result);
     }
 
-    async getFee(blocks = 4, toBTC) {
+    async getFee(blocks = NB_BLOCKS, toBTC) {
       const url = `${this.network}/utils/estimatefee?nbBlocks=${blocks}`;
       const response = await axios.get(url);
 
@@ -209,13 +202,13 @@ export class Bitcoin extends Wallet {
     }
 
     async getTransactionHistory(pageno) {
-      const from = (pageno-1) * 20;
+      const from = (pageno - 1) * 20;
       const to = from + 20;
       const url = `${this.network}/addrs/${this.address}/txs/?from=${from}&to=${to}`;
-      const response = await axios.get(url);console.log(url);
+      const response = await axios.get(url); console.log(url);
       let result = [];
       if (response.status == 200) {
-        if(response.data && response.data.items){
+        if (response.data && response.data.items) {
           result = response.data.items;
         }
       }
@@ -228,7 +221,7 @@ export class Bitcoin extends Wallet {
       const response = await axios.get(url);
       let result = 0;
       if (response.status == 200) {
-        if(response.data && response.data.totalItems){
+        if (response.data && response.data.totalItems) {
           result = response.data.totalItems;
         }
       }

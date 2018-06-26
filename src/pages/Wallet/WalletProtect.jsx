@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import './Wallet.scss';
 
 import Button from '@/components/core/controls/Button';
@@ -10,6 +11,10 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import { differenceWith } from 'lodash';
 
 class WalletProtect extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
 	constructor(props) {
 
     super(props);
@@ -22,27 +27,25 @@ class WalletProtect extends React.Component {
     };
   }
 
-	async componentDidmount() {
-
-	}
-
   componentWillReceiveProps() {
     if (!this.props.active)
       this.setState({step1_confirm: false, step: this.props.step, arr_confirm: []});
   }
 
   get showStep1() {
+    const { messages } = this.props.intl;
+
     return this.state.step == 1 ?
     (
       <div className="protectwallet-wrapper" >
           <div className="msg1">
-          This passphrase will allow you to recover your funds if your phone is ever lost or stolen.
+            {messages.wallet.action.protect.text.msg1}
           </div>
           <div className="msg2">
-          Please make sure nobody has access to your passphrase. You can use a password manager or write it down and hide it under your mattress.
+            {messages.wallet.action.protect.text.step1_msg2}
           </div>
           <div className="msg3">
-            <Checkbox name="checkBoxProtected" label="I understand that if I lose my passphrase, I lose access to my account."
+            <Checkbox name="checkBoxProtected" label={messages.wallet.action.protect.text.step1_label}
               checked={this.state.step1_confirm}
               onClick={() => { this.setState({step1_confirm: !this.state.step1_confirm}); }} />
           </div>
@@ -54,12 +57,14 @@ class WalletProtect extends React.Component {
 
   get showStep2() {
     const {wallet, onCopy} = this.props;
+    const { messages } = this.props.intl;
+
     let arr_phrase  = wallet && wallet.mnemonic ? wallet.mnemonic.split(' ') : [];
     return this.state.step == 2 ?
     (
       <div className="protectwallet-wrapper" >
           <div className="msg1">
-            Record these words carefully. Don't email it or screenshot it.
+            {messages.wallet.action.protect.text.step2_msg1}
           </div>
           <div className="pass_phrase">
             {/* fill pass phrase */}
@@ -67,20 +72,21 @@ class WalletProtect extends React.Component {
               return <div key={str} className="btn cursor-initial bg-light">{str}</div>
             })}
           </div>
-          <div onClick={onCopy} className="pass-phrase-link-copy">Copy to clipboard</div>
-          <Button className="button-wallet" block type="submit" onClick={this.doStep2}>Verify your passsphrase</Button>
+          <div onClick={onCopy} className="pass-phrase-link-copy">{messages.wallet.action.protect.button.copy_clipboard}</div>
+          <Button className="button-wallet" block type="submit" onClick={this.doStep2}>{messages.wallet.action.protect.button.verify}</Button>
         </div>
     )
     : "";
   }
 
   get showStep3() {
+    const { messages } = this.props.intl;
 
     return this.state.step == 3 ?
     (
       <div className="protectwallet-wrapper" >
           <div className="msg1">
-          Tap to put these words in the correct order.
+          {messages.wallet.action.protect.text.step3_msg1}
           </div>
           <div className="confirm_pass_phrase">
             {this.state.arr_confirm.map((str) => {
@@ -93,7 +99,7 @@ class WalletProtect extends React.Component {
               return <div key={str}  className="btn btn-light" onClick={() => this.pickPassPhrase(str, true)}>{str}</div>
             })}
           </div>
-          <Button className="button-wallet" block type="submit" onClick={this.doStep3} >Verify your passsphrase</Button>
+          <Button className="button-wallet" block type="submit" onClick={this.doStep3}>{messages.wallet.action.protect.button.verify}</Button>
         </div>
     )
     : "";
@@ -191,6 +197,7 @@ class WalletProtect extends React.Component {
 
 
 	render(){
+    const { messages } = this.props.intl;
 
 		return (
       <div>
@@ -198,9 +205,9 @@ class WalletProtect extends React.Component {
         {this.showStep2}
         {this.showStep3}
         <ModalDialog title="Try again" onRef={modal => this.modalConfirmRef = modal}>
-          <div className="wrong-pass-phrase">These words are in the wrong order. Please try again.</div>
+          <div className="wrong-pass-phrase">{messages.wallet.action.protect.error.confirm}</div>
           <div className="text-center p-3 ">
-            <button className="btn-block btn btn-secondary p-2" onClick={this.tryDoStep3} >OK</button>
+            <button className="btn-block btn btn-secondary p-2" onClick={this.tryDoStep3}>{messages.wallet.action.protect.button.ok}</button>
           </div>
         </ModalDialog>
       </div>
@@ -222,4 +229,4 @@ const mapState = (state) => ({
 const mapDispatch = ({
 });
 
-export default connect(mapState, mapDispatch)(WalletProtect);
+export default injectIntl(connect(mapState, mapDispatch)(WalletProtect));

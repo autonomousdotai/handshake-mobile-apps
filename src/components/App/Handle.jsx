@@ -8,15 +8,17 @@ import { APP, API_URL } from '@/constants';
 // services
 import local from '@/services/localStore';
 // actions
-import { showAlert } from '@/reducers/app/action';
-import { signUp, fetchProfile, authUpdate, getFreeETH } from '@/reducers/auth/action';
-import { getUserProfile } from '@/reducers/exchange/action';
+import { setFirebaseUser, setFirechat, showAlert } from '@/reducers/app/action';
+import { authUpdate, fetchProfile, getFreeETH, signUp } from '@/reducers/auth/action';
+import { getFreeStartInfo, getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
 import { createMasterWallets } from '@/reducers/wallet/action';
-import { getListOfferPrice } from '@/reducers/exchange/action';
 // components
 import { MasterWallet } from '@/models/MasterWallet';
 import Loading from '@/components/core/presentation/Loading';
 import Router from '@/components/Router/Router';
+// chat
+import md5 from 'md5';
+import Firechat from '@/pages/Chat/Firechat';
 
 class Handle extends React.Component {
   static propTypes = {
@@ -43,14 +45,16 @@ class Handle extends React.Component {
   constructor(props) {
     super(props);
 
-    this.checkRegistry = ::this.checkRegistry;
-    this.authSuccess = ::this.authSuccess;
-    this.firebase = ::this.firebase;
-    this.notification = ::this.notification;
-    this.updateRewardAddress = ::this.updateRewardAddress;
+    this.checkRegistry = :: this.checkRegistry;
+    this.authSuccess = :: this.authSuccess;
+    this.firebase = :: this.firebase;
+    this.firechat = :: this.firechat;
+    this.notification = :: this.notification;
+    this.updateRewardAddress = :: this.updateRewardAddress;
 
     this.state = {
       auth: this.props.auth,
+      isLoading: true,
     };
   }
 
@@ -82,7 +86,7 @@ class Handle extends React.Component {
       PATH_URL: `/user/free-rinkeby-eth?address=xxxxxx${wallet.address}`,
       METHOD: 'POST',
       successFn: () => {
-        this.setState({ isLoading: false, loadingText: '' });
+        this.setState({ loadingText: '' });
         // run cron alert user when got 1eth:
         this.timeOutCheckGotETHFree = setInterval(() => {
           wallet.getBalance().then((result) => {
@@ -92,7 +96,7 @@ class Handle extends React.Component {
                 timeOut: false,
                 isShowClose: true,
                 type: 'success',
-                callBack: () => {},
+                callBack: () => { },
               });
               // notify user:
               clearInterval(this.timeOutCheckGotETHFree);
@@ -100,12 +104,12 @@ class Handle extends React.Component {
           });
         }, 20 * 60 * 1000); // 20'
       },
-      errorFn: () => { this.setState({ isLoading: false, loadingText: '' }); },
+      errorFn: () => { this.setState({ loadingText: '' }); },
     });
   }
 
   updateRewardAddress() {
-    console.log('app - handle - wallet - updateRewardAddress');
+    //console.log('app - handle - wallet - updateRewardAddress');
     const walletReward = MasterWallet.getShurikenWalletJson();
     const data = new FormData();
     data.append('reward_wallet_addresses', walletReward);
@@ -159,7 +163,7 @@ class Handle extends React.Component {
             timeOut: false,
             isShowClose: true,
             type: 'danger',
-            callBack: () => {},
+            callBack: () => { },
           });
         }
       },
@@ -171,6 +175,11 @@ class Handle extends React.Component {
         this.getListOfferPrice();
         this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
 
+        // get free start
+        this.props.getFreeStartInfo({
+          PATH_URL: `exchange/info/offer-store-free-start/ETH`,
+        });
+
         // wallet
         const listWallet = MasterWallet.getMasterWallet();
         // console.log('app - handle - wallet - listWallet - ', listWallet);
@@ -178,7 +187,7 @@ class Handle extends React.Component {
         if (listWallet === false) {
           this.setState({ loadingText: 'Creating your local wallets' });
           createMasterWallets().then(() => {
-            this.setState({ isLoading: false, loadingText: '' });
+            this.setState({ loadingText: '' });
             this.updateRewardAddress();
             // if (!process.env.isProduction) {
             //   const wallet = MasterWallet.getWalletDefault('ETH');
@@ -199,7 +208,9 @@ class Handle extends React.Component {
 
         // core
         this.firebase();
+        this.firechat();
         this.notification();
+        this.setState({ isLoading: false });
         // /core
       },
     });
@@ -210,6 +221,44 @@ class Handle extends React.Component {
     console.log('app - handle - core - firebase');
     this.props.firebase.watchEvent('value', `/users/${this.state.auth.profile.id}`);
     this.props.firebase.watchEvent('value', `/config`);
+  }
+
+  firechat() {
+    this.signInFirebase((firebaseUser) => {
+      const chatInstance = new Firechat(this.props.firebase, this.props.firebase.database().ref('chat'));
+      this.props.setFirechat(chatInstance);
+
+      // initialize firechat with signed in firebase user
+      const firebaseAuth = this.props.firebaseApp.auth;
+      const { profile } = this.props.auth;
+      const userId = firebaseAuth.uid || '';
+      const userName = profile ? profile.username : `${userId.substr(10, 8)}`;
+
+      if (userId && userName) {
+        chatInstance.setUser(userId, userName, true, (firechatUser) => {
+          this.props.setFirebaseUser(firechatUser);
+          chatInstance.resumeSession();
+        });
+      }
+    });
+  }
+
+  signInFirebase(cb) {
+    const { profile, token } = this.props.auth;
+    const username = `${md5(`${token}_${profile.id}`)}@handshake.autonomous.nyc`;
+    const password = md5(token);
+    this.props.firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        if (cb) {
+          cb(user);
+        }
+      }
+    });
+
+    this.props.firebase.auth().signInWithEmailAndPassword(username, password)
+      .catch((error) => {
+        this.props.firebase.auth().createUserWithEmailAndPassword(username, password);
+      });
   }
 
   notification() {
@@ -238,6 +287,7 @@ class Handle extends React.Component {
   }
 
   render() {
+    console.log('test - contructor', this.state.isLoading);
     if (this.state.isLoading) {
       return <Loading message={this.state.loadingText} />;
     }
@@ -250,12 +300,16 @@ class Handle extends React.Component {
 export default compose(withFirebase, connect(state => ({
   auth: state.auth,
   app: state.app,
+  firebaseApp: state.firebase,
 }), {
-  showAlert,
-  signUp,
-  fetchProfile,
-  authUpdate,
-  getUserProfile,
-  getFreeETH,
-  getListOfferPrice,
-}))(Handle);
+    showAlert,
+    signUp,
+    fetchProfile,
+    authUpdate,
+    getUserProfile,
+    getFreeETH,
+    getListOfferPrice,
+    setFirechat,
+    setFirebaseUser,
+    getFreeStartInfo,
+  }))(Handle);

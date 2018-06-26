@@ -1,5 +1,6 @@
 import chipSVG from '@/assets/images/categories/chip.svg';
 import exchangeSVG from '@/assets/images/categories/exchange.svg';
+import exchangeLocalSVG from '@/assets/images/categories/exchange-local.svg';
 // import handPlantingSVG from '@/assets/images/categories/hand-planting.svg';
 // import shoppingCartSVG from '@/assets/images/categories/shopping-cart.svg';
 
@@ -26,7 +27,7 @@ const CATEGORIES = [{
 // {
 //   id: HANDSHAKE_ID.EXCHANGE_LOCAL,
 //   name: 'Swap',
-//   image: exchangeSVG,
+//   image: exchangeLocalSVG,
 //   priority: 3,
 // },
 // {

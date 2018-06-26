@@ -9,6 +9,7 @@ const EthereumTx = require('ethereumjs-tx');
 const hdkey = require('hdkey');
 const ethUtil = require('ethereumjs-util');
 const bip39 = require('bip39');
+
 const BN = Web3.utils.BN;
 const compiled = require('@/contracts/Shuriken.json');
 var erc20Abi = compiled.abi;

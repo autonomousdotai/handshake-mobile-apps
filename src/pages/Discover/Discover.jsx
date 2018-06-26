@@ -29,6 +29,7 @@ import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchang
 import FeedSeed from '@/components/handshakes/seed/Feed';
 import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import BlockCountry from '@/components/core/presentation/BlockCountry';
+import Maintain from '@/components/core/presentation/Maintain';
 import MultiLanguage from '@/components/core/controls/MultiLanguage';
 
 // import Tabs from '@/components/handshakes/exchange/components/Tabs';
@@ -41,7 +42,9 @@ import ninjaLogoSVG from '@/assets/images/logo.png';
 // import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
 
 // style
+import '@/components/handshakes/exchange/Feed/FeedExchange.scss';
 import './Discover.scss';
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -129,6 +132,7 @@ class DiscoverPage extends React.Component {
           handshakeIdActive,
           query,
         } = prevState;
+        const { ipInfo } = nextProps;
         const qs = { };
 
         // const pt = `${prevState.lat},${prevState.lng}`;
@@ -140,6 +144,10 @@ class DiscoverPage extends React.Component {
 
         if (handshakeIdActive) {
           qs.type = handshakeIdActive;
+
+          if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
+            qs.custom_query = ` fiat_currency_s:${ipInfo?.currency} AND -offline_i:1 `;
+          }
         }
 
         if (query) {
@@ -153,22 +161,33 @@ class DiscoverPage extends React.Component {
       }
       return { exchange: nextProps.exchange };
     }
+
+    if (nextProps.firebaseApp.config?.maintainChild?.betting && prevState.handshakeIdActive === HANDSHAKE_ID.BETTING) {
+      return {
+        isLoading: false,
+      };
+    }
     return null;
   }
 
   getHandshakeList() {
+    const { messages } = this.props.intl;
     const { list } = this.props.discover;
+    const { handshakeIdActive, lat, lng } = this.state;
+
     if (list && list.length > 0) {
       return list.map((handshake) => {
         const FeedComponent = maps[handshake.type];
         if (FeedComponent) {
           return (
-            <Col key={handshake.id} className="col feed-wrapper px-0">
+            <Col key={handshake.id} className="col-12 feed-wrapper px-0">
               <FeedComponent
                 {...handshake}
                 history={this.props.history}
                 onFeedClick={() => this.clickFeedDetail(handshake.id)}
                 refreshPage={this.loadDiscoverList}
+                latitude={lat}
+                longitude={lng}
               />
             </Col>
           );
@@ -176,7 +195,21 @@ class DiscoverPage extends React.Component {
         return null;
       });
     }
-    return <NoData style={{ height: '50vh' }} />;
+
+    let message = '';
+    switch (handshakeIdActive) {
+      case HANDSHAKE_ID.EXCHANGE:
+        message = messages.discover.noDataMessageCash;
+        break;
+      case HANDSHAKE_ID.EXCHANGE_LOCAL:
+        message = messages.discover.noDataMessageSwap;
+        break;
+
+      default:
+      // is promise
+    }
+
+    return <NoData style={{ height: '50vh' }} message={message}/>;
   }
 
   setLoading = (loadingState) => {
@@ -289,6 +322,10 @@ class DiscoverPage extends React.Component {
     });
   }
 
+  handleCreateExchange = () => {
+    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
+  }
+
   loadDiscoverList = () => {
     const { ipInfo } = this.props;
     const {
@@ -333,6 +370,7 @@ class DiscoverPage extends React.Component {
       // tabIndexActive,
       modalContent,
     } = this.state;
+    const { messages } = this.props.intl;
 
     return (
       <React.Fragment>
@@ -362,41 +400,53 @@ class DiscoverPage extends React.Component {
           </Row>
 
           {
-            // handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
-            //   <React.Fragment>
-            //     {/*<Row>
-            //       <Col md={12} className="exchange-intro">
-            //         <span className="icon-shop">
-            //           <img src={icon2KuNinja} alt="" />
-            //         </span>
-            //         <span className="text-intro">
-            //           <div>Sell coin for cash, buy coin with cash. Set your own rates.</div>
-            //           <div><span className="money">1 ETH welcome bonus.</span></div>
-            //           <div className="my-3">
-            //             <Link className="btn btn-sm btn-join-now" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
-            //               <span>Open your station</span>
-            //             </Link>
-            //           </div>
-            //         </span>
-            //       </Col>
-            //     </Row>*/}
-            //     <Row>
-            //       <Col md={12} className="feed-wrapper">
-            //         <FeedCreditCard history={this.props.history} />
-            //       </Col>
-            //     </Row>
-            //   </React.Fragment>
-            // )
+            handshakeIdActive === HANDSHAKE_ID.EXCHANGE && (
+              <React.Fragment>
+                {/*
+                <Row>
+                  <Col md={12} className="exchange-intro">
+                    <span className="icon-shop">
+                      <img src={icon2KuNinja} alt="" />
+                    </span>
+                    <span className="text-intro">
+                      <div>Sell coin for cash, buy coin with cash. Set your own rates.</div>
+                      <div><span className="money">1 ETH welcome bonus.</span></div>
+                      <div className="my-3">
+                        <Link className="btn btn-sm btn-join-now" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
+                          <span>Open your station</span>
+                        </Link>
+                      </div>
+                    </span>
+                  </Col>
+                </Row>
+                */}
+                {/*
+                  !this.state.isBannedCash && (
+                    <Row>
+                      <Col md={12} className="feed-wrapper">
+                        <FeedCreditCard history={this.props.history} />
+                      </Col>
+                    </Row>
+                  )
+                */}
+                <div>
+                  <div className="ex-sticky-note">
+                    <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
+                    <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
+                  </div>
+                </div>
+              </React.Fragment>
+            )
           }
           {
               handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction
               ? (
                 <BlockCountry />
               )
-              : null
+              : handshakeIdActive === HANDSHAKE_ID.BETTING && this.props.firebaseApp.config?.maintainChild?.betting ? <Maintain /> : null
             }
           {
-            handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && (
+            handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && !this.props.firebaseApp.config?.maintainChild?.betting && (
               <React.Fragment>
                 <BettingFilter setLoading={this.setLoading} />
                 <Row>
@@ -408,17 +458,17 @@ class DiscoverPage extends React.Component {
             )
           }
           <Row>
-            {[HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
+            {[HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && !this.props.firebaseApp.config?.maintainChild?.exchange && this.getHandshakeList()}
             {
               [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
               ? (
                 <BlockCountry />
               )
-              : null
+              : [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.props.firebaseApp.config?.maintainChild?.exchange ? <Maintain /> : null
             }
           </Row>
           <Row className="info">
-            Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!
+            {messages.product_info}
           </Row>
         </Grid>
         <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} className="discover-popup" isDismiss={false} >
@@ -436,6 +486,7 @@ const mapState = state => ({
   exchange: state.exchange,
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
+  firebaseApp: state.firebase.data,
 });
 
 const mapDispatch = ({
@@ -443,4 +494,4 @@ const mapDispatch = ({
   getListOfferPrice,
 });
 
-export default connect(mapState, mapDispatch)(DiscoverPage);
+export default injectIntl(connect(mapState, mapDispatch)(DiscoverPage));

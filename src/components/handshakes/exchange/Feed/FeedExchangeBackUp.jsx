@@ -25,7 +25,8 @@ import {
   APP_USER_NAME,
   EXCHANGE_ACTION_PAST_NAME,
   EXCHANGE_ACTION_PRESENT_NAME,
-  EXCHANGE_ACTION_PERSON
+  EXCHANGE_ACTION_PERSON,
+  NB_BLOCKS
 } from "@/constants";
 import ModalDialog from "@/components/core/controls/ModalDialog";
 import {connect} from "react-redux";
@@ -190,7 +191,7 @@ class FeedExchange extends React.PureComponent {
 
     const wallet = MasterWallet.getWalletDefault(offer.currency);
     const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(10, true);
+    const fee = await wallet.getFee(NB_BLOCKS, true);
 
     if ((offer.currency === CRYPTO_CURRENCY.ETH || (offer.type === EXCHANGE_ACTION.BUY && offer.currency === CRYPTO_CURRENCY.BTC))
       && this.showNotEnoughCoinAlert(balance, offer.totalAmount, fee, offer.currency)) {
@@ -228,7 +229,7 @@ class FeedExchange extends React.PureComponent {
     } else if (currency === CRYPTO_CURRENCY.BTC) {
       if (offer.type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(offer.currency);
-        wallet.transfer(offer.systemAddress, offer.totalAmount, 10).then(success => {
+        wallet.transfer(offer.systemAddress, offer.totalAmount, NB_BLOCKS).then(success => {
           console.log('transfer', success);
         });
       }
