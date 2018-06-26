@@ -26,9 +26,11 @@ import ShopSVG from '@/assets/images/icon/icons8-shop_filled.svg';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { setOfflineStatus } from '@/reducers/auth/action';
 import local from '@/services/localStore';
+
+import Helper from '@/services/helper';
+import Rate from '@/components/core/controls/Rate/Rate';
+
 import './Me.scss';
-import Helper from "@/services/helper";
-import Rate from "@/components/core/controls/Rate/Rate";
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -58,10 +60,10 @@ class Me extends React.Component {
 
     console.log('me - contructor - init');
 
-    let { s, sh } = Helper.getQueryStrings(window.location.search);
+    const { s, sh } = Helper.getQueryStrings(window.location.search);
 
-    let initUserId = s;
-    let offerId = sh;
+    const initUserId = s;
+    const offerId = sh;
 
     this.state = {
       initUserId,
@@ -134,9 +136,9 @@ class Me extends React.Component {
     console.log('handleSetOfflineStatusFailed', e);
   }
 
-  //Review offer when receive notification after shop complete
+  // Review offer when receive notification after shop complete
   handleOnClickRating = (numStars) => {
-    this.setState({numStars});
+    this.setState({ numStars });
   }
 
   handleSubmitRating = () => {
@@ -163,6 +165,9 @@ class Me extends React.Component {
     const { list } = this.props.me;
     const { messages } = this.props.intl;
     const online = !this.props.auth.offline;
+
+    console.log('this.props.intl', this.props.intl);
+    console.log('messages.me.feed', messages.me.feed);
 
     return (
       <Grid className="me">
@@ -221,7 +226,7 @@ class Me extends React.Component {
             }
           </Col>
         </Row>
-        <Rate onRef={e => this.rateRef = e} startNum={5} onSubmit={this.handleSubmitRating} ratingOnClick={this.handleOnClickRating}/>
+        <Rate onRef={e => this.rateRef = e} startNum={5} onSubmit={this.handleSubmitRating} ratingOnClick={this.handleOnClickRating} />
       </Grid>
     );
   }

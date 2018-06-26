@@ -30,6 +30,7 @@ class Root extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    console.log('i18n - nextProps.app.locale', nextProps.app.locale);
     if (nextProps.app.locale !== prevState.locale) {
       return { locale: nextProps.app.locale, messages: messages[nextProps.app.locale] };
     }
@@ -37,8 +38,9 @@ class Root extends React.Component {
   }
 
   render() {
+    console.log('i18n - this.state.locale', this.state.locale);
     return (
-      <IntlProvider locale={this.state.locale} messages={this.state.messages}>
+      <IntlProvider locale={this.state.locale} messages={this.state.messages} key={this.state.locale}>
         {this.props.children}
       </IntlProvider>
     );
