@@ -69,7 +69,7 @@ class Neuron {
     return estimatedGas;
   };
   caculateLimitGasWithEthUnit = async (
-    gasPrice = undefined
+    gasPrice = undefined,
   ) => {
     gasPrice = new BN(gasPrice
       ? Web3.utils.toWei(String(gasPrice), 'gwei')
@@ -77,7 +77,7 @@ class Neuron {
 
     return Web3.utils.fromWei(String(LIMIT_GAS * gasPrice));
   }
-  
+
   caculateEstimatGasWithEthUnit = async (
     payloadData,
     toAddress,
@@ -139,7 +139,7 @@ class Neuron {
       const balance = new BN(await web3.eth.getBalance(address));
 
       const estimateGas = balance.div(gasPrice);
-      //const limitedGas = 3000000; // await this.getEstimateGas(payloadData, address);
+      // const limitedGas = 3000000; // await this.getEstimateGas(payloadData, address);
       const limitedGas = LIMIT_GAS;
 
       const estimatedGas = await BN.min(estimateGas, limitedGas);
@@ -212,8 +212,8 @@ class Neuron {
       : await web3.eth.getGasPrice());
     const balance = new BN(await web3.eth.getBalance(address));
     const estimateGas = balance.div(gasPrice);
-    //const limitedGas = 3000000;
-    //const limitedGas = 350000;
+    // const limitedGas = 3000000;
+    // const limitedGas = 350000;
     const limitedGas = LIMIT_GAS;
     const estimatedGas = await BN.min(estimateGas, limitedGas);
     const chainId = await web3.eth.net.getId();
@@ -262,12 +262,12 @@ class Neuron {
           })
           .on('error', error => ({
             hash: -1,
-            error: error,
+            error,
           }));
       })
       .catch(error => ({
         hash: -1,
-        error: error,
+        error,
       }));
   };
   makeRawTransfer = (address, privateKey, options) => {
@@ -288,7 +288,7 @@ class Neuron {
         }
         console.log(parseInt(gasPrice));
         const nonce = await web3.eth.getTransactionCount(address);
-        //const gasLimit = 3000000;
+        // const gasLimit = 3000000;
         const gasLimit = LIMIT_GAS;
         const estimatedGas = 3000000;
         const rawTx = {

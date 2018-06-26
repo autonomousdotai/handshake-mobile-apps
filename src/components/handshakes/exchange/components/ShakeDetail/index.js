@@ -1,22 +1,22 @@
 import React from 'react';
-import './styles.scss'
+import './styles.scss';
 import createForm from '@/components/core/form/createForm';
-import {required} from '@/components/core/form/validation';
+import { required } from '@/components/core/form/validation';
 
-import {change, Field, formValueSelector} from "redux-form";
+import { change, Field, formValueSelector } from 'redux-form';
 import Button from '@/components/core/controls/Button';
 
-import {fieldCleave, fieldDropdown, fieldInput, fieldRadioButton} from '@/components/core/form/customField'
+import { fieldCleave, fieldDropdown, fieldInput, fieldRadioButton } from '@/components/core/form/customField';
 import iconApproximate from '@/assets/images/icon/icons8-approximately_equal.svg';
-import {CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_NAME} from "@/constants";
-import {connect} from "react-redux";
-import {FormattedMessage, injectIntl} from "react-intl";
-import {formatMoney, formatMoneyByLocale, getOfferPrice, roundNumberByLocale} from "@/services/offer-util";
-import {hideLoading, showAlert, showLoading} from "@/reducers/app/action";
-import {bindActionCreators} from "redux";
-import {minValueBTC, minValueETH} from "../../Create/validation";
-import {BigNumber} from "bignumber.js";
-import {countDecimals} from "../../utils";
+import { CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, EXCHANGE_ACTION, EXCHANGE_ACTION_NAME } from '@/constants';
+import { connect } from 'react-redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { formatMoney, formatMoneyByLocale, getOfferPrice, roundNumberByLocale } from '@/services/offer-util';
+import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
+import { bindActionCreators } from 'redux';
+import { minValueBTC, minValueETH } from '../../Create/validation';
+import { BigNumber } from 'bignumber.js';
+import { countDecimals } from '../../utils';
 
 export const nameFormShakeDetail = 'shakeDetail';
 const FormShakeDetail = createForm({
@@ -31,12 +31,12 @@ const FormShakeDetail = createForm({
 const selectorFormShakeDetail = formValueSelector(nameFormShakeDetail);
 
 const fixed6 = (value) => {
-  if (countDecimals(value) > 6) return parseFloat(value).toFixed(6)
+  if (countDecimals(value) > 6) return parseFloat(value).toFixed(6);
   return value;
-}
+};
 
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  state = {enableShake: false, currency: CRYPTO_CURRENCY.ETH, type: EXCHANGE_ACTION.BUY};
+  state = { enableShake: false, currency: CRYPTO_CURRENCY.ETH, type: EXCHANGE_ACTION.BUY };
   handleSubmit = (values) => {
     const { handleShake } = this.props;
 
@@ -53,7 +53,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   onCurrencyChange = (e, newValue) => {
-    const { offer, type, rfChange, fiatAmount } = this.props;
+    const {
+      offer, type, rfChange, fiatAmount,
+    } = this.props;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
@@ -71,19 +73,21 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
     rfChange(nameFormShakeDetail, 'type', newType);
 
-    this.setState({ currency: newValue}, () => {
+    this.setState({ currency: newValue }, () => {
       this.onFiatAmountChange(e, fiatAmount);
     });
   }
 
   onAmountChange = (e, amount) => {
     // console.log('onAmountChange', amount);
-    const { offer, listOfferPrice, currency, type, rfChange } = this.props;
+    const {
+      offer, listOfferPrice, currency, type, rfChange,
+    } = this.props;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
 
-    //Calculate fiatAmount
+    // Calculate fiatAmount
     let fiatAmount = 0;
 
     const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
@@ -113,23 +117,25 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     }
 
     const enableShake = +balance >= +amount;
-    this.setState({enableShake});
+    this.setState({ enableShake });
 
     fiatAmount += fiatAmount * percentage / 100;
     fiatAmount = roundNumberByLocale(fiatAmount, offer.fiatCurrency);
-    console.log('onAmountChange',fiatAmount);
+    console.log('onAmountChange', fiatAmount);
     rfChange(nameFormShakeDetail, 'amountFiat', fiatAmount);
   }
 
   onFiatAmountChange = (e, amount) => {
     console.log('onFiatAmountChange', amount);
 
-    const { offer, listOfferPrice, currency, type, rfChange } = this.props;
+    const {
+      offer, listOfferPrice, currency, type, rfChange,
+    } = this.props;
 
     const eth = offer.items.ETH;
     const btc = offer.items.BTC;
 
-    //Calculate fiatAmount
+    // Calculate fiatAmount
     let fiatAmount = 0;
 
     let percentage = 0;
@@ -158,14 +164,14 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     let newAmount = 0;
     if (listOfferPrice && type && currency) {
       const offerPrice = getOfferPrice(listOfferPrice, shopType, CRYPTO_CURRENCY_NAME[currency]);
-      newAmount =  fiatAmount / offerPrice?.price || 0;
+      newAmount = fiatAmount / offerPrice?.price || 0;
     }
 
     newAmount = new BigNumber(newAmount).decimalPlaces(6).toNumber();
 
     const enableShake = +balance >= +newAmount;
 
-    this.setState({enableShake});
+    this.setState({ enableShake });
 
     rfChange(nameFormShakeDetail, 'amount', newAmount);
   }
@@ -196,7 +202,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   render() {
-    const { offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST, type } = this.props;
+    const {
+      offer, currency, fiatAmount, enableShake, EXCHANGE_ACTION_LIST, CRYPTO_CURRENCY_LIST, type,
+    } = this.props;
 
     const fiat = offer.fiatCurrency;
     const balance = this.getBalance();
@@ -204,7 +212,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     return (
       <div className="shake-detail">
         <FormShakeDetail onSubmit={this.handleSubmit}>
-          <div className='input-group'>
+          <div className="input-group">
             <Field
               name="type"
               // containerClass="radio-container-old"
@@ -216,7 +224,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
               onChange={this.onTypeChange}
             />
           </div>
-          <div className='input-group mt-3'>
+          <div className="input-group mt-3">
             <Field
               name="currency"
               // containerClass="radio-container-old"
@@ -229,9 +237,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
             />
           </div>
           <div className="mt-3">
-            <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount"/></div>
+            <div className="text"><FormattedMessage id="ex.discover.shakeDetail.label.amount" /></div>
             <div className="form-group">
-              <div className='input-group-shake-detail'>
+              <div className="input-group-shake-detail">
                 <Field
                   name="amountFiat"
                   // containerClass="radio-container-old"
@@ -248,7 +256,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
               <div className="approximate-icon"><img src={iconApproximate} /></div>
 
-              <div className='input-group-shake-detail'>
+              <div className="input-group-shake-detail">
                 <Field
                   name="amount"
                   // containerClass="radio-container-old"
@@ -268,9 +276,9 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
           </div>
           <div>
-            <span className="text"><FormattedMessage id="ex.discover.shakeDetail.label.maximum"/> </span><strong className="text-white">{balance} {currency}</strong>
+            <span className="text"><FormattedMessage id="ex.discover.shakeDetail.label.maximum" /> </span><strong className="text-white">{balance} {currency}</strong>
           </div>
-          {/*<hr className="hl" />
+          {/* <hr className="hl" />
           <div className="text-total">
             <FormattedMessage id="ex.discover.shakeDetail.label.total"/> ({fiat}) <img src={iconApproximate} /> <span className="float-right">{formatMoney(fiatAmount)}</span>
           </div>
@@ -295,7 +303,7 @@ const mapState = (state, prevProps) => {
   const fiatAmount = selectorFormShakeDetail(state, 'amountFiat');
 
 
-  //Calculate fiatAmount
+  // Calculate fiatAmount
   // let fiatAmount = 0;
 
   // if (listOfferPrice && type && currency) {
@@ -334,28 +342,28 @@ const mapState = (state, prevProps) => {
 
   // console.log('offer', offer);
 
-  //Enable Shake or not
+  // Enable Shake or not
   // console.log('currency',currency);
   // console.log('type',type);
   // console.log('check', balance, amount, balance > amount);
   // const enableShake = +balance > +amount;
 
   const EXCHANGE_ACTION_LIST = [
-    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.sellBalance <= 0 : eth.sellBalance <= 0},
-    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0},
+    { value: EXCHANGE_ACTION.BUY, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.BUY], hide: currency === CRYPTO_CURRENCY.BTC ? btc.sellBalance <= 0 : eth.sellBalance <= 0 },
+    { value: EXCHANGE_ACTION.SELL, text: EXCHANGE_ACTION_NAME[EXCHANGE_ACTION.SELL], hide: currency === CRYPTO_CURRENCY.BTC ? btc.buyBalance <= 0 : eth.buyBalance <= 0 },
   ];
 
   return {
-    listOfferPrice: listOfferPrice,
+    listOfferPrice,
     fiatAmount: fiatAmount || 0,
     // enableShake,
     EXCHANGE_ACTION_LIST,
     type,
-    currency
-  }
+    currency,
+  };
 };
 
-const mapDispatch = (dispatch) => ({
+const mapDispatch = dispatch => ({
   showAlert: bindActionCreators(showAlert, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),

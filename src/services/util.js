@@ -247,9 +247,9 @@ export const getLocalizedDistance = (distanceKm, countryCode) => {
     return result;
   }
   result = distanceKm > 1 || distanceKm === 0 ? distanceKm.toFixed(0) : distanceKm.toFixed(3);
-  result += ' km'
+  result += ' km';
   return result;
-}
+};
 
 
 export default { states };

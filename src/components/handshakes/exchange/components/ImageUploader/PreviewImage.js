@@ -2,9 +2,11 @@ import React, { PropTypes } from 'react';
 import { Progress } from 'reactstrap';
 import './styles.scss';
 
-const PreviewImage = props => {
-  const { className, file , onSelectFile, selected, disabled, ...rest } = props;
-  const { url, percent } = file
+const PreviewImage = (props) => {
+  const {
+    className, file, onSelectFile, selected, disabled, ...rest
+  } = props;
+  const { url, percent } = file;
   return (
     <div {...rest} className="w-100 h-100 d-flex align-items-center justify-content-center">
       {

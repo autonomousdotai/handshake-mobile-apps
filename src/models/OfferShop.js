@@ -1,4 +1,4 @@
-import CoinOffer from "./CoinOffer";
+import CoinOffer from './CoinOffer';
 
 class OfferShop {
   static offerShop(data) {

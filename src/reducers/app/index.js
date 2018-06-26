@@ -242,14 +242,14 @@ function appReducter(state = {
       return {
         ...state,
         firechat: action.payload,
-      }
+      };
     }
 
     case APP_ACTION.SET_FIREBASE_USER: {
       return {
         ...state,
         firebaseUser: action.payload,
-      }
+      };
     }
 
     default:

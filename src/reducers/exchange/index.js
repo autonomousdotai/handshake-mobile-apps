@@ -5,7 +5,7 @@ import CryptoPrice from '@/models/CryptoPrice';
 import OfferPrice from '@/models/OfferPrice';
 import OfferShop from '@/models/OfferShop';
 import { EXCHANGE_ACTIONS } from './action';
-import {EXCHANGE_ACTION} from "@/constants";
+import { EXCHANGE_ACTION } from '@/constants';
 
 const initListOfferPrice = [];
 initListOfferPrice.updatedAt = Date.now();
@@ -34,8 +34,8 @@ function exchangeReducter(state = {
       return { ...state, userTransaction: action.payload };
     }
     case `${EXCHANGE_ACTIONS.GET_LIST_OFFER_PRICE}_SUCCESS`: {
-      const listOfferPrice = action.payload.data.map(offerPrice => {
-        let price = OfferPrice.offerPrice(offerPrice);
+      const listOfferPrice = action.payload.data.map((offerPrice) => {
+        const price = OfferPrice.offerPrice(offerPrice);
 
         price.type = price.type === EXCHANGE_ACTION.SELL ? EXCHANGE_ACTION.BUY : EXCHANGE_ACTION.SELL;
 
