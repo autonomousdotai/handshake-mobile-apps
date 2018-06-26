@@ -31,8 +31,8 @@ import {
   HANDSHAKE_EXCHANGE_STATUS_NAME,
   HANDSHAKE_STATUS_NAME,
   HANDSHAKE_USER,
-  URL,
-  NB_BLOCKS
+  NB_BLOCKS,
+  URL
 } from "@/constants";
 import ModalDialog from "@/components/core/controls/ModalDialog";
 import Rate from "@/components/core/controls/Rate";
@@ -52,7 +52,6 @@ import {
   shakeOffer,
   withdrawShakedOffer
 } from "@/reducers/exchange/action";
-import FeedMeExchangeLocal from '@/components/handshakes/exchange/Feed/FeedMeExchangeLocal'
 // import getSymbolFromCurrency from 'currency-symbol-map';
 import Offer from "@/models/Offer";
 import {MasterWallet} from "@/models/MasterWallet";
@@ -70,6 +69,7 @@ import {getLocalizedDistance} from "@/services/util"
 import {responseExchangeDataChange} from "@/reducers/me/action";
 import {Ethereum} from '@/models/Ethereum.js';
 import {Bitcoin} from '@/models/Bitcoin';
+import OfferShop from "@/models/OfferShop";
 
 class FeedMe extends React.PureComponent {
   constructor(props) {
@@ -213,10 +213,11 @@ class FeedMe extends React.PureComponent {
   }
 
   responseExchangeDataChangeOfferStore = (offerStore) => {
-    const { id, status } = offerStore;
+    const { id, } = offerStore;
     const { currency } = this.offer;
     let data = {};
     let firebaseOffer = {};
+    const status = offerStore.items[`${currency}`].status;
 
     firebaseOffer.id = id;
     firebaseOffer.status = `${currency.toLowerCase()}_${status}`;
@@ -1056,7 +1057,7 @@ class FeedMe extends React.PureComponent {
 
     console.log('handleDeleteOfferItemSuccess', responseData);
 
-    const offerStore = Offer.offer(data);
+    const offerStore = OfferShop.offerShop(data);
 
     //Update status to redux
     this.responseExchangeDataChangeOfferStore(offerStore);
@@ -1562,7 +1563,7 @@ class FeedMe extends React.PureComponent {
     const { initUserId, refreshPage } = this.props;
     const { data } = responseData;
     const offerShake = Offer.offer(data);
-    const { hid, currency, type, offChainId, totalAmount } = offerShake;
+    const { hid, currency, type, offChainId, amount } = offerShake;
 
     console.log('handleDeleteOfferItemSuccess', responseData);
 
@@ -1577,7 +1578,7 @@ class FeedMe extends React.PureComponent {
         let result = null;
 
         if (type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER) {
-          result = await exchangeHandshake.releasePartialFund(hid, offer.userAddress , totalAmount, initUserId, offChainId);
+          result = await exchangeHandshake.releasePartialFund(hid, offer.userAddress , amount, initUserId, offChainId);
         } else if (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED){
           result = await exchangeHandshake.finish(hid, offChainId);
         }
