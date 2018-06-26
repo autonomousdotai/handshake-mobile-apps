@@ -309,7 +309,7 @@ class Wallet extends React.Component {
   creatSheetMenuItem(wallet){
     let obj = [];
 
-      if (wallet.name != "SHURI" && !wallet.customToken){
+      // if (wallet.name != "SHURI" && !wallet.customToken){
         obj.push({
           title: 'Transfer coins',
           handler: () => {
@@ -327,7 +327,7 @@ class Wallet extends React.Component {
 
           }
         })
-      }
+      // }
       obj.push({
         title: 'Receive coins',
         handler: () => {
@@ -525,7 +525,7 @@ class Wallet extends React.Component {
 
   submitSendCoin=()=>{
     this.setState({isRestoreLoading: true});
-    this.modalConfirmSendRef.close();
+    this.modalConfirmSendRef.close();    
       this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue).then(success => {
           //console.log(success);
           this.setState({isRestoreLoading: false});
@@ -553,7 +553,7 @@ class Wallet extends React.Component {
   }
 
 
-  updateSendAddressValue = (evt) => {
+  updateSendAddressValue = (evt) => {    
     this.setState({
       inputAddressAmountValue: evt.target.value,
     });

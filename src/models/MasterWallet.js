@@ -374,11 +374,12 @@ export class MasterWallet {
         wallet.title = walletJson.title;
         wallet.protected = walletJson.protected;
         wallet.isReward = walletJson.isReward;
-        wallet.chainId = walletJson.chainId;
-        wallet.isToken = walletJson.isToken;
-        wallet.decimals = walletJson.decimals;
-        wallet.contractAddress = walletJson.contractAddress;
-        wallet.customToken = walletJson.customToken;
+        wallet.chainId = walletJson.chainId;        
+        if (walletJson.isToken) wallet.isToken = walletJson.isToken;
+        if (walletJson.decimals) wallet.decimals = walletJson.decimals;
+        if (walletJson.contractAddress) wallet.contractAddress = walletJson.contractAddress;
+        if (walletJson.customToken) wallet.customToken = walletJson.customToken;
+      
         return wallet;
       } catch (e) {
         return false;
