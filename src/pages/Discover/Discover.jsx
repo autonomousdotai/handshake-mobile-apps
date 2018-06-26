@@ -42,8 +42,9 @@ import ninjaLogoSVG from '@/assets/images/logo.png';
 // import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
 
 // style
+import '@/components/handshakes/exchange/Feed/FeedExchange.scss';
 import './Discover.scss';
-import {injectIntl} from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -319,6 +320,10 @@ class DiscoverPage extends React.Component {
     });
   }
 
+  handleCreateExchange = () => {
+    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
+  }
+
   loadDiscoverList = () => {
     const { ipInfo } = this.props;
     const {
@@ -393,31 +398,43 @@ class DiscoverPage extends React.Component {
           </Row>
 
           {
-            // handshakeIdActive === HANDSHAKE_ID.EXCHANGE && !this.state.isBannedCash && (
-            //   <React.Fragment>
-            //     {/*<Row>
-            //       <Col md={12} className="exchange-intro">
-            //         <span className="icon-shop">
-            //           <img src={icon2KuNinja} alt="" />
-            //         </span>
-            //         <span className="text-intro">
-            //           <div>Sell coin for cash, buy coin with cash. Set your own rates.</div>
-            //           <div><span className="money">1 ETH welcome bonus.</span></div>
-            //           <div className="my-3">
-            //             <Link className="btn btn-sm btn-join-now" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
-            //               <span>Open your station</span>
-            //             </Link>
-            //           </div>
-            //         </span>
-            //       </Col>
-            //     </Row>*/}
-            //     <Row>
-            //       <Col md={12} className="feed-wrapper">
-            //         <FeedCreditCard history={this.props.history} />
-            //       </Col>
-            //     </Row>
-            //   </React.Fragment>
-            // )
+            handshakeIdActive === HANDSHAKE_ID.EXCHANGE && (
+              <React.Fragment>
+                {/*
+                <Row>
+                  <Col md={12} className="exchange-intro">
+                    <span className="icon-shop">
+                      <img src={icon2KuNinja} alt="" />
+                    </span>
+                    <span className="text-intro">
+                      <div>Sell coin for cash, buy coin with cash. Set your own rates.</div>
+                      <div><span className="money">1 ETH welcome bonus.</span></div>
+                      <div className="my-3">
+                        <Link className="btn btn-sm btn-join-now" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
+                          <span>Open your station</span>
+                        </Link>
+                      </div>
+                    </span>
+                  </Col>
+                </Row>
+                */}
+                {/*
+                  !this.state.isBannedCash && (
+                    <Row>
+                      <Col md={12} className="feed-wrapper">
+                        <FeedCreditCard history={this.props.history} />
+                      </Col>
+                    </Row>
+                  )
+                */}
+                <div>
+                  <div className="ex-sticky-note">
+                    <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
+                    <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
+                  </div>
+                </div>
+              </React.Fragment>
+            )
           }
           {
               handshakeIdActive === HANDSHAKE_ID.BETTING && this.state.isBannedPrediction

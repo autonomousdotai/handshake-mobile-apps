@@ -368,10 +368,6 @@ class FeedExchange extends React.PureComponent {
     this.handleOnShake(name)
   }
 
-  handleCreateExchange = () => {
-    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
-  }
-
 
   render() {
     const { offer } = this;
@@ -445,11 +441,6 @@ class FeedExchange extends React.PureComponent {
           </div>
         </div>
         {/*<Button block className="mt-2" onClick={this.handleOnShake}><FormattedMessage id="btn.shake"/></Button>*/}
-
-        <div className="ex-sticky-note">
-          <div className="mb-2"><FormattedMessage id="ex.discover.banner.text"/></div>
-          <div><button className="btn btn-become" onClick={this.handleCreateExchange}><FormattedMessage id="ex.discover.banner.btnText"/></button></div>
-        </div>
         <ModalDialog onRef={modal => this.modalRef = modal} className="dialog-shake-detail">
           <ShakeDetail offer={this.offer} handleShake={this.shakeOfferItem} CRYPTO_CURRENCY_LIST={this.state.CRYPTO_CURRENCY_LIST} />
         </ModalDialog>
