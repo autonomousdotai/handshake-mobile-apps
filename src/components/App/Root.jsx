@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import qs from 'querystring';
 // contants
-import { URL, APP, API_URL } from '@/constants';
+import { API_URL, APP, HANDSHAKE_ID, URL } from '@/constants';
 // actions
-import { setIpInfo, changeLocale, setBannedPrediction, setBannedCash, setCheckBanned } from '@/reducers/app/action';
+import { changeLocale, setBannedCash, setBannedPrediction, setCheckBanned, setIpInfo } from '@/reducers/app/action';
 // services
 import $http from '@/services/api';
 import { createDynamicImport } from '@/services/app';
@@ -29,6 +29,8 @@ import ko from 'react-intl/locale-data/ko';
 import ru from 'react-intl/locale-data/ru';
 import es from 'react-intl/locale-data/es';
 import messages from '@/locals';
+import { getFreeStartInfo, setFreeStart } from "@/reducers/exchange/action";
+import Helper from "@/services/helper";
 
 addLocaleData([...en, ...fr, ...zh, ...de, ...ja, ...ko, ...ru, ...es]);
 
@@ -50,10 +52,13 @@ class Root extends React.Component {
     setCheckBanned: PropTypes.func.isRequired,
     //
     setIpInfo: PropTypes.func.isRequired,
+    setFreeStart: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props);
+    let { utm } = Helper.getQueryStrings(window.location.search);
+
     this.state = {
       messages,
       app: this.props.app,
@@ -62,6 +67,11 @@ class Root extends React.Component {
 
     this.setLanguage = ::this.setLanguage;
     this.ipInfo = ::this.ipInfo;
+    this.onFreeStartClick = ::this.onFreeStartClick;
+
+    if (utm === 'early_bird') {
+      this.onFreeStartClick();
+    }
 
     this.isSupportedLanguages = ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'];
 
@@ -142,6 +152,18 @@ class Root extends React.Component {
     return <Handle setLanguage={this.setLanguage} refer={this.refer} />;
   }
 
+  onFreeStartClick() {
+    this.props.setFreeStart({ data: true });
+    // get free start
+    this.props.getFreeStartInfo({
+      PATH_URL: `exchange/info/offer-store-free-start/ETH`,
+      successFn: () => {
+        this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
+      },
+      errorFn: () => {  },
+    });
+  }
+
   render() {
     return (
       <IntlProvider
@@ -168,5 +190,7 @@ export default connect(state => ({
   setBannedPrediction,
   setBannedCash,
   setCheckBanned,
+  setFreeStart,
+  getFreeStartInfo,
 })(Root);
 

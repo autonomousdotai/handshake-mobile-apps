@@ -10,7 +10,7 @@ import local from '@/services/localStore';
 // actions
 import { setFirebaseUser, setFirechat, showAlert } from '@/reducers/app/action';
 import { authUpdate, fetchProfile, getFreeETH, signUp } from '@/reducers/auth/action';
-import { getFreeStartInfo, getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
+import { getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
 import { createMasterWallets } from '@/reducers/wallet/action';
 // components
 import { MasterWallet } from '@/models/MasterWallet';
@@ -175,11 +175,6 @@ class Handle extends React.Component {
         this.getListOfferPrice();
         this.timeOutGetPrice = setInterval(() => this.getListOfferPrice(), 2 * 60 * 1000); // 2'
 
-        // get free start
-        this.props.getFreeStartInfo({
-          PATH_URL: `exchange/info/offer-store-free-start/ETH`,
-        });
-
         // wallet
         const listWallet = MasterWallet.getMasterWallet();
         // console.log('app - handle - wallet - listWallet - ', listWallet);
@@ -311,5 +306,4 @@ export default compose(withFirebase, connect(state => ({
     getListOfferPrice,
     setFirechat,
     setFirebaseUser,
-    getFreeStartInfo,
   }))(Handle);
