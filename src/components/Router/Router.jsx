@@ -36,6 +36,14 @@ const rootRouterMap = [
   { path: URL.ADMIN, component: RouterAdmin },
 ];
 
+const routers = rootRouterMap.map(router => (
+  <Route
+    key={Date.now()}
+    path={router.path}
+    component={router.component}
+  />
+));
+
 const Page404 = createDynamicImport(() => import('@/pages/Error/Page404'), Loading, true);
 
 class Router extends React.Component {
@@ -51,6 +59,8 @@ class Router extends React.Component {
     this.state = {
       firebaseApp: initFirebaseApp,
     };
+
+    console.log('root-router - contructor - init');
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -63,16 +73,6 @@ class Router extends React.Component {
       }
     }
     return null;
-  }
-
-  routers() {
-    return rootRouterMap.map(router => (
-      <Route
-        key={Date.now()}
-        path={router.path}
-        component={router.component}
-      />
-    ));
   }
 
   render() {
@@ -96,7 +96,7 @@ class Router extends React.Component {
                             <Redirect to={{ pathname: URL.HANDSHAKE_DISCOVER }} />
                           )}
                         />
-                        {this.routers()}
+                        {routers}
                         <Route component={Page404} />
                       </Switch>
                     </ScrollToTop>

@@ -2,6 +2,7 @@ import axios from 'axios';
 import satoshi from 'satoshi-bitcoin';
 import { StringHelper } from '@/services/helper';
 import { Wallet } from '@/models/Wallet';
+import { NB_BLOCKS } from '@/constants';
 
 const moment = require('moment');
 const bitcore = require('bitcore-lib');
@@ -69,7 +70,7 @@ export class Bitcoin extends Wallet {
     }
 
 
-    async transfer(toAddress, amountToSend, blocks = 4) {
+    async transfer(toAddress, amountToSend, blocks = NB_BLOCKS) {
 
       let insufficientMsg = "You have insufficient coin to make the transfer. Please top up and try again."
 
@@ -180,7 +181,7 @@ export class Bitcoin extends Wallet {
       return this.findUtxos(utxos, pos + 1, amount, result);
     }
 
-    async getFee(blocks = 4, toBTC) {
+    async getFee(blocks = NB_BLOCKS, toBTC) {
       const url = `${this.network}/utils/estimatefee?nbBlocks=${blocks}`;
       const response = await axios.get(url);
 

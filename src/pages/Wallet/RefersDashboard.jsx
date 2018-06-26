@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 // components
 import {
     fieldInput
@@ -15,7 +16,7 @@ import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import local from '@/services/localStore';
 import {APP} from '@/constants';
 import createForm from '@/components/core/form/createForm';
-
+import { StringHelper } from '@/services/helper';
 import "./Refers.scss"
 
 const nameFormStep4 = 'referStep4';
@@ -30,6 +31,10 @@ window.Clipboard = (function (window, document, navigator) {
 }(window, document, navigator));
 
 class RefersDashboard extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -78,7 +83,6 @@ class RefersDashboard extends React.Component {
         PATH_URL: 'user/referred',
         METHOD: 'GET',
         successFn: (res) => {
-          console.log(res);
           if(res && res.data){
             resolve(res.data);
           }
@@ -101,20 +105,25 @@ class RefersDashboard extends React.Component {
     this.props.rfChange(nameFormStep4, 'refer_link', referLink);
   }
 
-  showInfoRefer = () => (
+  showInfoRefer = () => {
+    const { messages } = this.props.intl;
+    return (
     <div className="info">
-      <div>You brought {this.state.number_ninjas} ninjas to the dojo.</div>
-      <div>Total reward: {this.state.number_token} SHURI</div>
+      <div>{StringHelper.format(messages.wallet.refers_dashboard.text.number_ninjas, this.state.number_ninjas)}</div>
+      <div>{StringHelper.format(messages.wallet.refers_dashboard.text.number_total, this.state.number_token)}</div>
     </div>
-  )
+  )}
+
   handleFocus = (event) =>{
     event.target.select();
   }
 
 
-  renderLinkRefer = () => (
-    <Step4Form className="refers-wrapper">
-      <h6>This is your super sexy referral link. You get 20 shurikens for every new ninja.</h6>
+  renderLinkRefer = () => {
+    const { messages } = this.props.intl;
+
+    return (<Step4Form className="refers-wrapper">
+      <h6>{messages.wallet.refers_dashboard.title}</h6>
       <div className="col100">
           <Field
               name="refer_link"
@@ -123,13 +132,12 @@ class RefersDashboard extends React.Component {
               placeholder=""
               component={fieldInput}
               validate={[required]}
-              onFocus={() => { evt => this.handleFocus(evt); Clipboard.copy(this.state.referLink); this.showToast('Referral link copied to clipboard.'); }}
+              onFocus={() => { evt => this.handleFocus(evt); Clipboard.copy(this.state.referLink); this.showToast(messages.wallet.refers_dashboard.text.copy_link); }}
           />
-          <div className="note"> Do not change your alias or this link will be unvalid</div>
+          <div className="note">{messages.wallet.refers_dashboard.text.note}</div>
       </div>
-    </Step4Form>
-  )
-
+    </Step4Form>)
+  }
 
   render() {
 
@@ -156,4 +164,5 @@ const mapDispatchToProps = (dispatch) => ({
   referredInfo: bindActionCreators(referredInfo, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(RefersDashboard);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(RefersDashboard));
+

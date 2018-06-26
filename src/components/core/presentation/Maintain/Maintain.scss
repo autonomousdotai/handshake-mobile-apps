@@ -1,0 +1,46 @@
+@import './src/styles/style';
+.maintain-tab {
+  height: 100vh;
+  max-width: $app-width;
+  margin: 0 auto;
+  padding: 0 15px;
+  background-color: $titan-black;
+  font-family: $semi-bold;
+  font-size: rem-calc(18px);
+  text-align: center;
+  line-height: 25px;
+  text-align: center;
+  color: $white;
+  position: relative;
+
+  .spider {
+    position: absolute;
+    top: 0;
+    &.spider-1 {
+      left: 10%;
+    }
+    &.spider-2 {
+      left: 80%;
+    }
+  }
+  .img-center {
+    margin-top: 35%;
+    margin-bottom: 20px;
+  }
+  p {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .title {
+    margin-bottom: 10px;
+    font-size: 30px;
+  }
+  h2 {
+    font-size: rem-calc(36px);
+    margin: rem-calc(39px 0 20px 0);
+  }
+  .bottom {
+    margin-top: rem-calc(20px);
+  }
+}

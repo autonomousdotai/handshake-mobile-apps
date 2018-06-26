@@ -3,12 +3,17 @@ import { connect } from 'react-redux';
 import iconSent from '@/assets/images/icon/icon-sent.svg';
 import iconReceived from '@/assets/images/icon/icon-received.svg';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import './Wallet.scss';
 
 const _ = require('lodash');
 const moment = require('moment');
 
 class WalletTransaction extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
 	constructor(props) {
 
     super(props);
@@ -27,15 +32,28 @@ class WalletTransaction extends React.Component {
 
   cooked_transaction(data){
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
+
     if(wallet && data){
       if(wallet.name == "ETH"){
+        let gas_gwei = 0, gas_price = 0, tx_fee = 0;
+
+        try{
+          gas_gwei = Number(data.gasPrice) / 1000000000;
+          gas_price = Number(gas_gwei / 1000000000).toFixed(10- gas_gwei.toString().length);
+          tx_fee = Number(Number(data.gasUsed) * gas_gwei / 1000000000);
+        }
+        catch(e){
+          console.error(e);
+        }
+
         return {
           header: {
             value: Number(data.value / 1000000000000000000),
             coin: wallet.name,
             confirmations: data.confirmations,
-            is_sent: wallet.address.toLowerCase() == String(data.from).toLowerCase(),
-            status: Number(data.txreceipt_status) > 0 ? "success" : "failed"
+            is_sent: data.is_sent,
+            status: Number(data.txreceipt_status) > 0 ? messages.wallet.action.history.label.success : messages.wallet.action.history.label.failed
           },
           body: {
             hash: data.hash,
@@ -43,7 +61,8 @@ class WalletTransaction extends React.Component {
             from: data.from,
             to: data.to,
             gas: data.gas,
-            gas_price: Number(data.gasPrice / 1000000000000000000).toFixed(data.gasPrice.length) + wallet.name,
+            gas_price: `${gas_price} Ether (${gas_gwei} Gwei)` ,
+            tx_fee: tx_fee + " Ether",
             gas_used: data.gasUsed,
             nouce: data.nouce,
             transaction_index: data.transactionIndex,
@@ -54,36 +73,39 @@ class WalletTransaction extends React.Component {
       else{
         let result = {}, is_sent = false, value = 0;
 
-        result = {
-          header: {
-            coin: "BTC",
-            confirmations: data.confirmations
-          },
-          body: {
-            size: data.size,
-            received_time: moment(data.time).format('llll'),
-            mined_time: moment(data.blocktime).format('llll'),
-            block_hash: data.blockhash,
-            fees: data.fees + " BTC",
+        try{
+          result = {
+            header: {
+              coin: "BTC",
+              confirmations: data.confirmations,
+              is_sent: data.is_sent
+            },
+            body: {
+              size: data.size,
+              received_time: moment(data.time).format('llll'),
+              mined_time: moment(data.blocktime).format('llll'),
+              block_hash: data.blockhash,
+              fees: data.fees + " BTC",
+            }
+          };
+
+          for(let i in data.vin){
+
+            let no = Number(i) + 1;
+            result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
+            value += Number(data.vin[i].value);
           }
-        };
 
-        for(let i in data.vin){
-          if(String(data.vin[i].addr).toLowerCase() == wallet.address.toLowerCase())
-            is_sent = true;
+          for(let i in data.vout){
+            let no = Number(i) + 1;
+            result.body["to_addr_"+no] = (data.vout[i].scriptPubKey.addresses ? data.vout[i].scriptPubKey.addresses.join(" ") : "") + " " + data.vout[i].value + " BTC";
+          }
 
-          let no = Number(i) + 1;
-          result.body["from_addr_"+no] = data.vin[i].addr + " " + data.vin[i].value + " BTC";
-          value += Number(data.vin[i].value);
+          result.header.value = value;
         }
-
-        for(let i in data.vout){
-          let no = Number(i) + 1;
-          result.body["to_addr_"+no] = data.vout[i].scriptPubKey.addresses.join(" ") + " " + data.vout[i].value + " BTC";
+        catch(e){
+          console.error(e);
         }
-
-        result.header.value = value;
-        result.header.is_sent = is_sent;
 
         return result;
       }
@@ -93,6 +115,7 @@ class WalletTransaction extends React.Component {
   }
 
   get detail_transaction() {
+    const { messages } = this.props.intl;
     let detail = this.cooked_transaction(this.state.transaction_detail);
     let css_status = detail ? "status-" + detail.header.status : "";
 
@@ -106,9 +129,9 @@ class WalletTransaction extends React.Component {
         </div>
         <div className="confirmation">
           {
-            detail.header.status ? <div className={css_status}>Status {detail.header.status}</div> : ""
+            detail.header.status ? <div className={css_status}>{messages.wallet.action.history.label.status} {detail.header.status}</div> : ""
           }
-          <div>{detail.header.confirmations} confirmations</div>
+          <div>{detail.header.confirmations} {messages.wallet.action.history.label.confirmations}</div>
         </div>
 
         {
@@ -146,4 +169,4 @@ const mapState = (state) => ({
 const mapDispatch = ({
 });
 
-export default connect(mapState, mapDispatch)(WalletTransaction);
+export default injectIntl(connect(mapState, mapDispatch)(WalletTransaction));

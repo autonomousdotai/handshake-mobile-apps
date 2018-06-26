@@ -90,6 +90,7 @@ class Transfer extends React.Component {
     this.getWalletDefault();
     this.getRate("BTC");
     this.getRate("ETH");
+
   }
 
   resetForm(){
@@ -164,7 +165,6 @@ class Transfer extends React.Component {
           wallet.text = wallet.getShortAddress() + " (" + wallet.className + " " + wallet.name + ")";
         }
         wallet.id = wallet.address + "-" + wallet.getNetworkName() + wallet.name;
-
       });
     }
 
@@ -368,6 +368,7 @@ renderScanQRCode = () => (
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeWhite} /> : ""}
             </div>
             <p className="labelText">Amount</p>
+
             <div className="div-amount-money">
             <InputGroup>
                 <InputGroupAddon addonType="prepend">USD</InputGroupAddon>
@@ -400,8 +401,6 @@ renderScanQRCode = () => (
                 />
               </InputGroup>
             </div>
-
-
 
             { this.state.walletDefault ?
               <div className ="dropdown-wallet-tranfer">

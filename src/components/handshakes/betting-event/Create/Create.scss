@@ -3,8 +3,8 @@
 .save-betting-event{
   margin: rem-calc(0px) 0 rem-calc(0px) 0;
 }
-.reporting-label,.event-label,.fees-label{
-  margin:rem-calc(30px) 0 rem-calc(10px) 0;
+.reporting-label,.fees-label,.event-label{
+  margin:rem-calc(30px) 0 1rem 0;
 }
 .input-field{
   margin-bottom: 5px;
@@ -15,8 +15,74 @@
 }
 .submit-button{
   margin-top: rem-calc(10px);
-  margin-bottom: rem-calc(30px);
+  margin-bottom: rem-calc(20px);
 }
 .dropDown {
   margin: rem-calc(7px 0);
+}
+.text-danger{
+  display: block;
+}
+.events-label-button-block-col{
+ padding : 0;
+}
+.dateField{
+  background-color:#fff;
+}
+.or-label{
+  margin:1em auto;
+}
+.cancel-button{
+  background-color: #a0a0a0;
+  border-color:#a0a0a0;
+}
+.dropdown-new-event-type{
+  margin-top: 10px;
+  margin-bottom: 10px!important;
+  .btn{
+    padding-left: 10px;
+    text-align: left;
+    // border: 0!important;
+    // background: transparent!important;
+    // box-shadow: none!important;
+    // color: #ffffff;
+  };
+  .btn-group{
+    // background: #4869D1;
+    // border: 1px solid #6485F6;
+
+    // border: 1px solid #6c95ea;
+    // background: rgba(255, 255, 255, 0.15);
+    border: 1px solid #ced4da;
+    background: #ffffff;
+
+    padding: 5px;
+    border-radius: 5px;
+    padding-left: 1px;
+    button{
+      background-color:transparent;
+      border: none;
+    }
+    button:hover{
+      background-color:transparent;
+      border: none;
+    }
+  }
+  .dropdown-custom-item{
+    margin-left: 10px!important;
+  };
+  .dropdown-toggle::after{
+    float: right;
+    margin-top: 10px;
+  }
+  .dropdown-item{
+    border-bottom: 1px solid #ededed;
+    padding: 0.6rem 1.5rem;
+  }
+  .dropdown-menu{
+    width: 100%;
+  }
+  .dropdown-item:last-child{
+    border: 0;
+  }
 }

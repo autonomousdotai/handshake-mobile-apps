@@ -39,6 +39,7 @@ class Profile extends React.Component {
     verifyEmail: PropTypes.func.isRequired,
     submitEmail: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
+    app: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -330,6 +331,10 @@ class Profile extends React.Component {
                   type: 'success',
                 });
                 // chatInstance.updateUserName(values.username);
+                if (this.props.app.firechat) {
+                  this.props.app.firechat.updateUserName(values.username);
+                }
+
               },
             });
           } else {
@@ -407,7 +412,7 @@ class Profile extends React.Component {
             </div>
           </Col>
         </Row>
-        <Row>
+        {/* <Row>
           <Col md={12}>
             <div className="collapse-custom">
               <div className="head" onClick={() => this.setState(state => ({ phoneCollapse: !state.phoneCollapse }))}>
@@ -485,7 +490,7 @@ class Profile extends React.Component {
               </div>
             </div>
           </Col>
-        </Row>
+        </Row> */}
         <Row>
           <Col md={12}>
             <div className="collapse-custom">
@@ -575,6 +580,7 @@ class Profile extends React.Component {
 
 const mapState = state => ({
   auth: state.auth,
+  app: state.app,
 });
 
 const mapDispatch = ({

@@ -7,12 +7,14 @@ import { Shuriken } from '@/models/Shuriken.js';
 import { Wallet } from '@/models/Wallet.js';
 import { APP } from '@/constants';
 import { StringHelper } from '@/services/helper';
+import Neuron from '@/services/neuron/Neutron';
 
 const bip39 = require('bip39');
 
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
-
+    static neutronMainNet = new Neuron(1);
+    static neutronTestNet = new Neuron(4);
     static ListCoin = {
       Ethereum, Shuriken, Bitcoin, BitcoinTestnet,
     };

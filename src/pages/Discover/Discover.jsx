@@ -29,6 +29,7 @@ import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchang
 import FeedSeed from '@/components/handshakes/seed/Feed';
 import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import BlockCountry from '@/components/core/presentation/BlockCountry';
+import Maintain from '@/components/core/presentation/Maintain';
 import MultiLanguage from '@/components/core/controls/MultiLanguage';
 
 // import Tabs from '@/components/handshakes/exchange/components/Tabs';
@@ -129,6 +130,7 @@ class DiscoverPage extends React.Component {
           handshakeIdActive,
           query,
         } = prevState;
+        const { ipInfo } = nextProps;
         const qs = { };
 
         // const pt = `${prevState.lat},${prevState.lng}`;
@@ -140,6 +142,10 @@ class DiscoverPage extends React.Component {
 
         if (handshakeIdActive) {
           qs.type = handshakeIdActive;
+
+          if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
+            qs.custom_query = ` fiat_currency_s:${ipInfo?.currency} AND -offline_i:1 `;
+          }
         }
 
         if (query) {
@@ -153,6 +159,12 @@ class DiscoverPage extends React.Component {
       }
       return { exchange: nextProps.exchange };
     }
+
+    if (nextProps.firebaseApp.config?.maintainChild?.betting && prevState.handshakeIdActive === HANDSHAKE_ID.BETTING) {
+      return {
+        isLoading: false,
+      };
+    }
     return null;
   }
 
@@ -163,7 +175,7 @@ class DiscoverPage extends React.Component {
         const FeedComponent = maps[handshake.type];
         if (FeedComponent) {
           return (
-            <Col key={handshake.id} className="col feed-wrapper px-0">
+            <Col key={handshake.id} className="col-12 feed-wrapper px-0">
               <FeedComponent
                 {...handshake}
                 history={this.props.history}
@@ -393,10 +405,10 @@ class DiscoverPage extends React.Component {
               ? (
                 <BlockCountry />
               )
-              : null
+              : handshakeIdActive === HANDSHAKE_ID.BETTING && this.props.firebaseApp.config?.maintainChild?.betting ? <Maintain /> : null
             }
           {
-            handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && (
+            handshakeIdActive === HANDSHAKE_ID.BETTING && !this.state.isBannedPrediction && !this.props.firebaseApp.config?.maintainChild?.betting && (
               <React.Fragment>
                 <BettingFilter setLoading={this.setLoading} />
                 <Row>
@@ -408,13 +420,13 @@ class DiscoverPage extends React.Component {
             )
           }
           <Row>
-            {[HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && this.getHandshakeList()}
+            {[HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && !this.state.isBannedCash && !this.props.firebaseApp.config?.maintainChild?.exchange && this.getHandshakeList()}
             {
               [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.state.isBannedCash
               ? (
                 <BlockCountry />
               )
-              : null
+              : [HANDSHAKE_ID.EXCHANGE, HANDSHAKE_ID.EXCHANGE_LOCAL].indexOf(handshakeIdActive) >= 0 && this.props.firebaseApp.config?.maintainChild?.exchange ? <Maintain /> : null
             }
           </Row>
           <Row className="info">
@@ -436,6 +448,7 @@ const mapState = state => ({
   exchange: state.exchange,
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
+  firebaseApp: state.firebase.data,
 });
 
 const mapDispatch = ({

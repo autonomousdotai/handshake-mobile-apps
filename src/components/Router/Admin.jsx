@@ -108,7 +108,7 @@ class Admin extends React.Component {
     const data = new FormData(event.target);
 
     const email = data.get('email');
-    const password = md5(`${data.get('password')}Autonomous`);
+    const password = data.get('password');
 
     const auth = $http({
       url: `${BASE_API.BASE_URL}/cryptosign/auth`,
@@ -157,8 +157,6 @@ class Admin extends React.Component {
     const submit = $http({
       url,
       data: {
-        homeScore: Number(this.state.activeMatchData.homeScore),
-        awayScore: Number(this.state.activeMatchData.awayScore),
         result: { outcome_id: this.state.selectedOutcome, side: this.state.selectedResult },
       },
       headers: { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' },
@@ -222,7 +220,7 @@ class Admin extends React.Component {
               <option value="2">Against</option>
             </Input>
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <Label for="homescore">Home Score</Label>
             <Input
               type="number"
@@ -245,7 +243,7 @@ class Admin extends React.Component {
               disabled={this.state.disable}
               onChange={(event) => { this.onChangeScore(event, 'awayScore'); }}
             />
-          </FormGroup>
+          </FormGroup> */}
           <Button disabled={this.state.disable} onClick={this.toggle}>Submit</Button>
 
           {this.state.disable && <div><br /><Alert color="success">
@@ -259,8 +257,8 @@ class Admin extends React.Component {
                 <Label>Selected Match - {this.state.selectedMatch}</Label> <br />
                 <Label>Selected Outcome {this.state.selectedOutcome}</Label> <br />
                 <Label>Selected Result {this.state.selectedResult}</Label> <br />
-                <Label>HomeScore {this.state.activeMatchData.homeScore}</Label> <br />
-                <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br />
+                {/* <Label>HomeScore {this.state.activeMatchData.homeScore}</Label> <br />
+                <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br /> */}
                 {this.state.errorMessage && <Alert color="danger">
                     {this.state.errorMessage}
                                             </Alert>}

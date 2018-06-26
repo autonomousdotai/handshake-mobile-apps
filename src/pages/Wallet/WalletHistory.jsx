@@ -4,6 +4,7 @@ import {Ethereum} from '@/models/Ethereum.js'
 import iconSent from '@/assets/images/icon/icon-sent.svg';
 import iconReceived from '@/assets/images/icon/icon-received.svg';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import './Wallet.scss';
 import WalletTransaction from './WalletTransaction';
 import { showLoading, hideLoading } from '@/reducers/app/action';
@@ -12,6 +13,10 @@ import Modal from '@/components/core/controls/Modal';
 const moment = require('moment');
 
 class WalletHistory extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
 	constructor(props) {
 
     super(props);
@@ -30,13 +35,20 @@ class WalletHistory extends React.Component {
 
   cooked_transaction(data){
     const wallet = this.props.wallet;
-    if(wallet.name == "ETH"){//for ETH json
-      let value = Number(data.value / 1000000000000000000),
-      transaction_date = new Date(data.timeStamp*1000),addresses = [],
-      is_sent = String(data.from).toLowerCase() == wallet.address.toLowerCase();
 
-      let cssLabel = `label-${is_sent ? "sent" : "received"}`,
-          cssValue = `value-${is_sent ? "sent" : "received"}`;
+    if(wallet.name == "ETH"){//for ETH json
+      let value = 0, transaction_date = new Date(), addresses = [],
+      is_sent = true, is_error = false;
+
+      try{
+        value = Number(data.value / 1000000000000000000);
+        transaction_date = new Date(data.timeStamp*1000);
+        is_sent = String(data.from).toLowerCase() == wallet.address.toLowerCase();
+        is_error = Boolean(data.isError == "1");
+      }
+      catch(e){
+        console.error(e);
+      }
 
       let addr = data.from;
       if(is_sent) addr = data.to;
@@ -49,8 +61,7 @@ class WalletHistory extends React.Component {
         transaction_relative_time:  moment(transaction_date).fromNow(),
         addresses: addresses,
         is_sent: is_sent,
-        cssLabel: cssLabel,
-        cssValue: cssValue
+        is_error: is_error
       };
     }
     else{//for BTC json
@@ -59,38 +70,45 @@ class WalletHistory extends React.Component {
         addresses = [], confirmations = data.confirmations,
         transaction_date = data.time ? new Date(data.time*1000) : "";
 
-      //check transactions are send
-      for(let tin of vin){
-        if(tin.addr.toLowerCase() == wallet.address.toLowerCase()){
-          is_sent = true;
+      try{
+        //check transactions are send
+        for(let tin of vin){
+          if(tin.addr.toLowerCase() == wallet.address.toLowerCase()){
+            is_sent = true;
 
+            for(let tout of vout){
+              if(tout.scriptPubKey.addresses){
+                let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
+                if(tout_addresses.indexOf(wallet.address.toLowerCase()) < 0){
+                  value += Number(tout.value);
+                  addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
+                }
+              }
+
+            }
+
+            break;
+          }
+        }
+
+        //check transactions are receive
+        if(!is_sent){
           for(let tout of vout){
-            let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
-            if(tout_addresses.indexOf(wallet.address.toLowerCase()) < 0){
-              value += Number(tout.value);
-              addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
+            if(tout.scriptPubKey.addresses){
+              let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
+              if(tout_addresses.indexOf(wallet.address.toLowerCase()) >= 0){
+                value += tout.value;
+              }
+              else{
+                addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
+              }
             }
           }
-
-          break;
         }
       }
-
-      //check transactions are receive
-      if(!is_sent){
-        for(let tout of vout){
-          let tout_addresses = tout.scriptPubKey.addresses.join(" ").toLowerCase();
-          if(tout_addresses.indexOf(wallet.address.toLowerCase()) >= 0){
-            value += tout.value;
-          }
-          else{
-            addresses.push(tout_addresses.replace(tout_addresses.substr(4, 26), '...'));
-          }
-        }
+      catch(e){
+        console.error(e);
       }
-
-      let cssLabel = `label-${is_sent ? "sent" : "received"}`,
-          cssValue = `value-${is_sent ? "sent" : "received"}`;
 
       return {
         value: value,
@@ -99,31 +117,40 @@ class WalletHistory extends React.Component {
         addresses: addresses,
         transaction_relative_time:  transaction_date ? moment(transaction_date).fromNow() : "",
         confirmations: confirmations,
-        is_sent: is_sent,
-        cssLabel: cssLabel,
-        cssValue: cssValue
+        is_sent: is_sent
       };
     }
   }
 
   get list_transaction() {
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
+
     if (wallet && this.state.transactions.length==0)
       return <div className="history-no-trans">No transactions yet</div>;
-
+      let arr = [];
       return this.state.transactions.map((res) => {
         let tran = this.cooked_transaction(res);
+        if(arr.indexOf(tran.transaction_no) < 0)
+          arr.push(tran.transaction_no);
+        else
+          tran.is_sent = true;
+
+        let cssLabel = `label-${tran.is_sent ? "sent" : "received"}`,
+          cssValue = `value-${tran.is_sent ? "sent" : "received"}`;
+        res.is_sent = tran.is_sent;
 
         return (
         <div key={tran.transaction_no} className="row" onClick={() =>{this.show_transaction(res)}}>
           <div className="col3">
             <div className="time">{tran.transaction_relative_time}</div>
-            <div className={tran.cssValue}>{tran.is_sent ? "-" : ""} {Number(tran.value)} {wallet.name}</div>
-            {tran.confirmations <= 0 ? <div className="unconfirmation">Unconfirmed</div> : ""}
+            <div className={cssValue}>{tran.is_sent ? "-" : ""} {Number(tran.value)} {wallet.name}</div>
+            {tran.confirmations <= 0 ? <div className="unconfirmation">{messages.wallet.action.history.label.unconfirmed}</div> : ""}
+            {tran.is_error ? <div className="unconfirmation">{messages.wallet.action.history.label.failed}</div> : ""}
           </div>
           <div className="col1"><img className="iconDollar" src={tran.is_sent ? iconSent : iconReceived} /></div>
           <div className="col2 address">
-            <div className={tran.cssLabel}>{tran.is_sent ? "Sent" : "Received"}</div>
+            <div className={cssLabel}>{tran.is_sent ? "Sent" : "Received"}</div>
             {
               tran.addresses.map((addr) => {
                 return <div key={addr}>{addr}</div>
@@ -158,9 +185,10 @@ class WalletHistory extends React.Component {
 
   get detail_transaction() {
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
 
     return (
-      <Modal title="Transaction details" onRef={modal => this.modalTransactionRef = modal} onClose={this.closeDetail}>
+      <Modal title={messages.wallet.action.history.header} onRef={modal => this.modalTransactionRef = modal} onClose={this.closeDetail}>
         <WalletTransaction wallet={wallet} transaction_detail={this.state.transaction_detail}  />
       </Modal>
     );
@@ -168,12 +196,14 @@ class WalletHistory extends React.Component {
 
   get load_balance(){
     const wallet = this.props.wallet;
+    const { messages } = this.props.intl;
+
     return wallet ?
     (
       <div className="history-balance">
-        Balance: {wallet.balance} {wallet.name}
+        {messages.wallet.action.history.label.balance}: {wallet.balance} {wallet.name}
         <br/>
-        Transactions: {wallet.transaction_count}
+        {messages.wallet.action.history.label.transactions}: {wallet.transaction_count}
       </div>
     ) : "";
   }
@@ -207,4 +237,4 @@ const mapDispatch = ({
   hideLoading,
 });
 
-export default connect(mapState, mapDispatch)(WalletHistory);
+export default injectIntl(connect(mapState, mapDispatch)(WalletHistory));
