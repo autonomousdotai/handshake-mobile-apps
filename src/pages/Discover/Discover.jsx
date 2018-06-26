@@ -105,7 +105,7 @@ class DiscoverPage extends React.Component {
   }
 
   componentDidMount() {
-    const { ipInfo, freeETH } = this.props;
+    const { ipInfo, } = this.props;
     navigator.geolocation.getCurrentPosition((location) => {
       const { coords: { latitude, longitude } } = location;
       this.setAddressFromLatLng(latitude, longitude); // better precision
@@ -116,27 +116,31 @@ class DiscoverPage extends React.Component {
     if (this.state.utm === 'early_bird') {
       this.props.getFreeStartInfo({
         PATH_URL: `exchange/info/offer-store-free-start/ETH`,
-        successFn: () => {
-          this.setState({
-            propsModal: {
-              className: 'popup-intro-free-coin',
-            },
-            modalContent: (
-              <div className="text-center">
-                <div className="intro-header">
-                  <FormattedHTMLMessage id="ex.earlyBird.label.1" />
+        successFn: (res) => {
+          const { data } = res;
+          if (data.reward) {
+            this.setState({
+              propsModal: {
+                className: 'popup-intro-free-coin',
+              },
+              modalContent: (
+                <div className="text-center">
+                  <div className="intro-header">
+                    <FormattedHTMLMessage id="ex.earlyBird.label.1" />
+                  </div>
+                  <div className="intro-text mt-2">
+                    <FormattedHTMLMessage id="ex.earlyBird.label.2"  values={{ freeETH: data.reward }}/>
+                  </div>
+                  <button className="btn btn-open-station" onClick={this.onFreeStartClick}>
+                    <FormattedMessage id="ex.earlyBird.btn" />
+                  </button>
                 </div>
-                <div className="intro-text mt-2">
-                  <FormattedHTMLMessage id="ex.earlyBird.label.2"  values={{ freeETH }}/>
-                </div>
-                <button className="btn btn-open-station" onClick={this.onFreeStartClick}>
-                  <FormattedMessage id="ex.earlyBird.btn" />
-                </button>
-              </div>
-            ),
-          }, () => {
-            this.modalRef.open();
-          });
+              ),
+            }, () => {
+              this.modalRef.open();
+            });
+          }
+
         },
         errorFn: () => {  },
       });
