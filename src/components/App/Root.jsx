@@ -29,8 +29,6 @@ import ko from 'react-intl/locale-data/ko';
 import ru from 'react-intl/locale-data/ru';
 import es from 'react-intl/locale-data/es';
 import messages from '@/locals';
-import { getFreeStartInfo, setFreeStart } from "@/reducers/exchange/action";
-import Helper from "@/services/helper";
 
 addLocaleData([...en, ...fr, ...zh, ...de, ...ja, ...ko, ...ru, ...es]);
 
@@ -52,12 +50,10 @@ class Root extends React.Component {
     setCheckBanned: PropTypes.func.isRequired,
     //
     setIpInfo: PropTypes.func.isRequired,
-    setFreeStart: PropTypes.func.isRequired,
   }
 
   constructor(props) {
     super(props);
-    let { utm } = Helper.getQueryStrings(window.location.search);
 
     this.state = {
       messages,
@@ -67,11 +63,6 @@ class Root extends React.Component {
 
     this.setLanguage = ::this.setLanguage;
     this.ipInfo = ::this.ipInfo;
-    this.onFreeStartClick = ::this.onFreeStartClick;
-
-    if (utm === 'early_bird') {
-      this.onFreeStartClick();
-    }
 
     this.isSupportedLanguages = ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'];
 
@@ -152,18 +143,6 @@ class Root extends React.Component {
     return <Handle setLanguage={this.setLanguage} refer={this.refer} />;
   }
 
-  onFreeStartClick() {
-    this.props.setFreeStart({ data: true });
-    // get free start
-    this.props.getFreeStartInfo({
-      PATH_URL: `exchange/info/offer-store-free-start/ETH`,
-      successFn: () => {
-        this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
-      },
-      errorFn: () => {  },
-    });
-  }
-
   render() {
     return (
       <IntlProvider
@@ -190,7 +169,5 @@ export default connect(state => ({
   setBannedPrediction,
   setBannedCash,
   setCheckBanned,
-  setFreeStart,
-  getFreeStartInfo,
 })(Root);
 
