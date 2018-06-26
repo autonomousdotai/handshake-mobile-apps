@@ -470,8 +470,8 @@ export default {
       },
       text: {
         title: '80 shiny Shurikens (SHURI).',
-        telegram: 'Insult us on telegram',
-        telegram2: 'Be creative. There’s a leaderboard.',
+        telegram: 'Say hello on telegram.',
+        telegram2: 'Leave your best joke for a chance to win more Shuri.',
         twitter: 'Twitter',
         twitter2: 'Our social media guy says we need followers on ',
         referral_link: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
