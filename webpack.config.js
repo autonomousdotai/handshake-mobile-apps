@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+const packageConfig = require('./package.json');
 
 const xPath = filepath => path.resolve(__dirname, filepath);
 
@@ -138,8 +139,8 @@ module.exports = function webpackConfig(env, argv) {
         'firebase-messaging-sw': xPath('src/sw-fcm.js'),
       },
       output: {
-        filename: '[name].js',
-        chunkFilename: '[name].chunk.js',
+        filename: `[name].js?v=${packageConfig.version}`,
+        chunkFilename: `[name].chunk.js?v=${packageConfig.version}`,
         publicPath: '/',
         globalObject: 'this',
       },
