@@ -79,6 +79,10 @@ class DiscoverPage extends React.Component {
       isLoading: true,
       exchange: this.props.exchange,
       modalContent: <div />, // type is node
+      propsModal: {
+        // className: "discover-popup",
+        // isDismiss: false
+      },
       lat: 0,
       lng: 0,
       isBannedCash: this.props.isBannedCash,
@@ -107,6 +111,21 @@ class DiscoverPage extends React.Component {
       this.setAddressFromLatLng(latitude, longitude); // better precision
     }, () => {
       this.setAddressFromLatLng(ipInfo?.latitude, ipInfo?.longitude); // fallback
+    });
+
+    this.setState({
+      propsModal: {
+        className: 'popup-intro-free-coin',
+      },
+      modalContent: (
+        <div className="text-center">
+          <div className="intro-header">WELCOME TO OUR <br />EARLY BIRD PROGRAM!</div>
+          <div className="intro-text mt-2">Create your station with <br /><span className="intro-amount">0.5 ETH</span> free now!</div>
+          <button className="btn btn-open-station">Open Station</button>
+        </div>
+      ),
+    }, () => {
+      this.modalRef.open();
     });
   }
 
@@ -368,6 +387,7 @@ class DiscoverPage extends React.Component {
     const {
       handshakeIdActive,
       // tabIndexActive,
+      propsModal,
       modalContent,
     } = this.state;
     const { messages } = this.props.intl;
@@ -471,7 +491,7 @@ class DiscoverPage extends React.Component {
             {messages.product_info}
           </Row>
         </Grid>
-        <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} className="discover-popup" isDismiss={false} >
+        <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} {...propsModal}>
           {modalContent}
         </ModalDialog>
       </React.Fragment>

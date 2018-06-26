@@ -130,3 +130,34 @@
     padding: 0 !important;
   }
 }
+.popup-intro-free-coin {
+  .modal-custom-body {
+    color: #e0dfea;
+    border-radius: 6px;
+    background: #242560 !important;
+    padding: 20px !important;
+    .intro-header {
+      font-weight: 500;
+      font-size: 20px;
+      letter-spacing: 0;
+      text-align: center;
+      line-height: 32px;
+    }
+    .intro-text {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 36px;
+    }
+    .intro-amount {
+      font-weight: 900;
+      font-size: 24px;
+    }
+    .btn-open-station {
+      margin-top: 20px;
+      background: #2456FB;
+      border-radius: 6px;
+      color: #FFFFFF;
+      letter-spacing: 0.42px;
+    }
+  }
+}
