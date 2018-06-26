@@ -222,9 +222,11 @@ export const initApp = (language, ref) => (dispatch) => {
       // https://ipapi.co/api/#complete-location
       if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
         ipInfoRes.bannedPrediction = true;
+        dispatch(setBannedPrediction());
       }
       if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
         ipInfoRes.bannedCash = true;
+        dispatch(setBannedCash());
       }
     }
 
