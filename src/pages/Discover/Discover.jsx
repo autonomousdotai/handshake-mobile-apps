@@ -38,7 +38,7 @@ import ninjaLogoSVG from '@/assets/images/logo.png';
 // style
 import '@/components/handshakes/exchange/Feed/FeedExchange.scss';
 import './Discover.scss';
-import { FormattedMessage, injectIntl } from "react-intl";
+import { FormattedMessage, FormattedHTMLMessage, injectIntl } from "react-intl";
 // import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
 
 const maps = {
@@ -123,9 +123,15 @@ class DiscoverPage extends React.Component {
             },
             modalContent: (
               <div className="text-center">
-                <div className="intro-header">WELCOME TO OUR <br />EARLY BIRD PROGRAM!</div>
-                <div className="intro-text mt-2">Create your station with <br /><span className="intro-amount">{freeETH} ETH</span> free now!</div>
-                <button className="btn btn-open-station" onClick={this.onFreeStartClick}>Open Station</button>
+                <div className="intro-header">
+                  <FormattedHTMLMessage id="ex.earlyBird.label.1" />
+                </div>
+                <div className="intro-text mt-2">
+                  <FormattedHTMLMessage id="ex.earlyBird.label.2"  values={{ freeETH }}/>
+                </div>
+                <button className="btn btn-open-station" onClick={this.onFreeStartClick}>
+                  <FormattedMessage id="ex.earlyBird.btn" />
+                </button>
               </div>
             ),
           }, () => {
