@@ -1871,11 +1871,16 @@ class FeedMe extends React.PureComponent {
   }
 
   render() {
-    const {initUserId, shakeUserIds, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, review, reviewCount, ...props} = this.props;
-    const offer = this.offer;
+    const {initUserId, shakeUserIds, extraData, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, review, reviewCount, ...props} = this.props;
+
+    const offer = Offer.offer(JSON.parse(extraData));
+
+    this.offer = offer;
+    // const offer = this.offer;
+
     // console.log('render',offer);
-    const {listOfferPrice} = this.props;
-    console.log('review, reviewCount',review, reviewCount);
+    // const {listOfferPrice} = this.props;
+    // console.log('review, reviewCount',review, reviewCount);
     let modalContent = this.state.modalContent;
 
     let email = '';

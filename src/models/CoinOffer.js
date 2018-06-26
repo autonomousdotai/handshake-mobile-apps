@@ -1,6 +1,5 @@
 class CoinOffer {
   static coinOffer(data) {
-    console.log('coinOffer',data);
     return {
       currency: data.currency || '',
       status: data.status || '',
