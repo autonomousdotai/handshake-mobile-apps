@@ -8,10 +8,11 @@ import { injectIntl } from 'react-intl';
 
 // import Identicon from 'identicon.js';
 // import TransferCoin from '@/components/Wallet/TransferCoin';
-import Modal from '@/components/core/controls/Modal';
+// import Modal from '@/components/core/controls/Modal';
 import { getUserName } from '@/reducers/chat/action';
 import { bindActionCreators } from 'redux';
-import { API_URL } from '@/constants';
+import { API_URL, URL } from '@/constants';
+import _ from 'lodash';
 
 import { setHeaderLeft, setHeaderTitle, showLoading, hideLoading } from '@/reducers/app/action';
 import IconBtnSend from '@/assets/images/icon/ic-btn-send.svg';
@@ -34,6 +35,7 @@ class Chat extends Component {
     match: PropTypes.object,
     hideLoading: PropTypes.func.isRequired,
     showLoading: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
   }
 
   static defaultProps = {
@@ -105,8 +107,10 @@ class Chat extends Component {
   onBackButtonClicked() {
     this.setCustomState({
       chatDetail: null,
+      notFoundUser: false,
     }, () => {
       this.updateHeaderLeft();
+      window.history.pushState('', '', URL.HANDSHAKE_CHAT);
     });
     this.setCurrentUserName();
   }
@@ -115,6 +119,7 @@ class Chat extends Component {
     // Update our current user state and render latest user name.
     console.log('update user', user);
     this.user = user;
+    this.updateCurrentUsername();
     if (!this.state.chatDetail) {
       this.setCurrentUserName();
     }
@@ -126,7 +131,7 @@ class Chat extends Component {
 
     const { chatSource } = this.state;
 
-    if (Object.prototype.hasOwnProperty.call(chatSource, invitation.roomId)) {
+    if (_.has(chatSource, invitation.roomId)) {
       const room = chatSource[invitation.roomId];
       room.froms = room.froms || {};
       room.froms[invitation.fromUserId] = invitation.fromUserName;
@@ -141,7 +146,8 @@ class Chat extends Component {
 
       this.enterMessageRoom(this.generateMessageRoomData(room.id, invitation.fromUserId, invitation.fromUserName, room));
     } else {
-      this.firechat.getRoom(invitation.roomId, (room) => {
+      this.firechat.getRoom(invitation.roomId, (foundRoom) => {
+        const room = foundRoom;
         room.messages = room.messages || [];
         room.froms = room.froms || {};
         room.froms[invitation.toUserId] = invitation.toUserName;
@@ -176,11 +182,8 @@ class Chat extends Component {
     });
     this.firechat.getUsersByPrefix(query, null, null, this.maxUserSearchResult, (userListFiltered) => {
       // console.log(userListFiltered);
-      if (!query) {
-        userListFiltered = [];
-      }
       this.setCustomState({
-        searchUsers: userListFiltered,
+        searchUsers: query ? userListFiltered : [],
       });
     });
     e.preventDefault();
@@ -212,7 +215,7 @@ class Chat extends Component {
     const coinsTest = (new RegExp(this.coinTextRegEx)).exec(coinText.replace(/[\s]{2,}/g, ' '));
 
     if (coinsTest && coinsTest.length > 0) {
-      let [_, amount, coinName] = coinsTest;
+      let [, amount, coinName] = coinsTest;
       amount = Number.parseFloat(amount);
       coinName = coinName.replace(/ethereum|ether|eth/i, 'ETH').replace(/bitcoin|btc/i, 'BTC');
 
@@ -258,7 +261,7 @@ class Chat extends Component {
     const { chatSource } = this.state;
     const { messages } = this.props.intl;
     const rooms = { ...chatSource };
-    return Object.values(rooms)
+    return _.values(rooms)
       .reverse()
       .filter(room => room.froms && room.messages && room.messages.length > 0)
       .sort((prevRoom, nextRoom) => {
@@ -271,14 +274,14 @@ class Chat extends Component {
         return nextCompareTime - prevCompareTime;
       })
       .map((room) => {
-        const fromNamesFiltered = Object.keys(room.froms).filter(userId => (userId !== this.user.id));
+        const fromNamesFiltered = _.keys(room.froms).filter(userId => (userId !== this.user.id));
         const fromNames = fromNamesFiltered.map(userId => (room.froms[userId])).join(', ');
         const fromUserIds = fromNamesFiltered.map(userId => (userId)).join(',');
         const lastMessage = this.getLastMessage(room.messages);
 
         const lastMessageTime = lastMessage ? lastMessage.timestamp : null;
         const lastMessageContent = lastMessage ? (lastMessage.message.message || messages.chat.lastMessageContent) : '';
-        const isRead = lastMessage && lastMessage.actions ? (lastMessage.actions[this.user.id]?.seen) : true;
+        const isRead = lastMessage && lastMessage.actions ? (lastMessage.actions[this.user.id] ?.seen) : true;
 
         return {
           id: room.id,
@@ -322,7 +325,7 @@ class Chat extends Component {
 
   getRoom(roomId) {
     const { chatSource } = this.state;
-    if (Object.prototype.hasOwnProperty.call(chatSource, roomId)) {
+    if (_.has(chatSource, roomId)) {
       return chatSource[roomId];
     }
 
@@ -352,6 +355,7 @@ class Chat extends Component {
   initChatRooms() {
     this.user = this.firechat.getCurrentUser();
     this.props.showLoading();
+    this.updateCurrentUsername();
     this.updateHeaderLeft();
     this.updateHeaderTitle();
 
@@ -395,7 +399,7 @@ class Chat extends Component {
       return;
     }
 
-    if (this.props && this.props.auth && Object.keys(this.firechat).length > 0 && this.componentMounted) {
+    if (this.props && this.props.auth && !_.isEmpty(this.firechat) && this.componentMounted) {
       console.log('chat initialized');
       this.initialized = true;
       this.firechat.disableNotification();
@@ -428,7 +432,7 @@ class Chat extends Component {
   }
 
   updateHeaderLeft() {
-    this.props.setHeaderLeft(this.state.chatDetail ? this.renderBackButton() : this.renderSearchButton());
+    this.props.setHeaderLeft(this.state.chatDetail || (this.chatWithUserId && this.state.notFoundUser) ? this.renderBackButton() : this.renderSearchButton());
   }
 
   updateHeaderTitle() {
@@ -439,9 +443,19 @@ class Chat extends Component {
       if (!roomData) {
         return;
       }
-      this.props.setHeaderTitle(Object.keys(roomData.froms).filter(userId => (userId !== this.user.id)).map(userId => (roomData.froms[userId])).join(', '));
+      this.props.setHeaderTitle(_.keys(roomData.froms).filter(userId => (userId !== this.user.id)).map(userId => (roomData.froms[userId])).join(', '));
     } else if (this.user) {
       this.props.setHeaderTitle(this.user.name);
+    }
+  }
+
+  updateCurrentUsername() {
+    if (this.firechat && this.props.auth && !_.isEmpty(this.user)) {
+      const { username } = this.props.auth.profile;
+      if (username !== this.user.name) {
+        this.user.name = username;
+        this.firechat.updateUserName(username);
+      }
     }
   }
 
@@ -483,7 +497,7 @@ class Chat extends Component {
       let publicKey;
 
       // get group public keys
-      Object.keys(authorizedUsers).forEach((userId) => {
+      _.forIn(authorizedUsers, (user, userId) => {
         if (userId === this.user.id) {
           return true;
         }
@@ -513,11 +527,13 @@ class Chat extends Component {
       // TODO: show not found user message
       this.setCustomState({
         notFoundUser: true,
+      }, () => {
+        this.updateHeaderLeft();
       });
       return;
     }
 
-    if (!this.user) {
+    if (_.isEmpty(this.user)) {
       setTimeout(() => {
         this.chatWithUser(user);
       }, 100);
@@ -534,7 +550,7 @@ class Chat extends Component {
 
     const roomId = md5(this.mixString(userId, this.user.id));
 
-    if (Object.prototype.hasOwnProperty.call(this.state.chatSource, roomId)) {
+    if (_.has(this.state.chatSource, roomId)) {
       this.enterMessageRoom(this.generateMessageRoomData(roomId, userId, userName, this.state.chatSource[roomId]));
     } else {
       const usersInGroup = {};
@@ -568,16 +584,16 @@ class Chat extends Component {
   }
 
   processSpecialMessage(message) {
-    let specialKeywordTest;
     const specialKeywordRegEx = new RegExp(/\[(\w+):(.+?)\]/ig);
     const replacementKeywords = {};
-    while (specialKeywordTest = specialKeywordRegEx.exec(message)) {
+    let specialKeywordTest = specialKeywordRegEx.exec(message);
+    while (_.isEmpty(specialKeywordTest)) {
       let [wholeText, keyword, value] = specialKeywordTest;
       keyword = keyword.toLowerCase();
 
       switch (keyword) {
-        case 'user_id':
-          const { chatDetail } = this.state;
+        case 'user_id': {
+          // const { chatDetail } = this.state;
           // if (this.user && value == this.user.id) {
           //   value = "You";
           // } else if (chatDetail) {
@@ -588,17 +604,23 @@ class Chat extends Component {
           // }
           value = 'I';
           break;
+        }
         case 'amount':
         case 'coin_name':
-        case 'to_address':
+        case 'to_address': {
           break;
+        }
+        default: {
+          break;
+        }
       }
       replacementKeywords[wholeText] = value;
+      specialKeywordTest = specialKeywordRegEx.exec(message);
     }
 
     const messageArr = [];
 
-    Object.keys(replacementKeywords).forEach((wholeText, i) => {
+    _.keys(replacementKeywords).forEach((wholeText, i) => {
       const value = replacementKeywords[wholeText];
       const searchTextIndex = message.indexOf(wholeText);
       const key = `special-text-${i}`;
@@ -615,28 +637,29 @@ class Chat extends Component {
   }
 
   processMessage(messageId, messageContent, messageType = 'plain_text') {
+    let returnMessageContent = messageContent;
     switch (messageType) {
       case 'special': {
-        messageContent = this.processSpecialMessage(messageContent);
+        returnMessageContent = this.processSpecialMessage(returnMessageContent);
         break;
       }
       case 'plain_text': {
-        const coinsTest = messageContent.match(this.coinTextRegEx);
+        const coinsTest = returnMessageContent.match(this.coinTextRegEx);
         if (coinsTest && coinsTest.length > 0) {
           const messageArr = [];
           coinsTest.forEach((coinMessage, i) => {
-            const coinMessageIndex = messageContent.indexOf(coinMessage);
+            const coinMessageIndex = returnMessageContent.indexOf(coinMessage);
             const key = `coin-highlight-${messageId}-${i}`;
-            messageArr.push(messageContent.substr(0, coinMessageIndex));
+            messageArr.push(returnMessageContent.substr(0, coinMessageIndex));
             messageArr.push(<span id={key} className="coin-highlight" key={key} onClick={() => { this.onCoinTextClicked(key, coinMessage); }}>{coinMessage}</span>);
-            messageContent = messageContent.substr(coinMessageIndex + coinMessage.length);
+            returnMessageContent = returnMessageContent.substr(coinMessageIndex + coinMessage.length);
           });
 
-          if (messageContent) {
-            messageArr.push(messageContent);
+          if (returnMessageContent) {
+            messageArr.push(returnMessageContent);
           }
 
-          messageContent = messageArr;
+          returnMessageContent = messageArr;
         }
         break;
       }
@@ -644,7 +667,7 @@ class Chat extends Component {
         break;
     }
 
-    return messageContent;
+    return returnMessageContent;
   }
 
   bindDataEvents() {
@@ -654,7 +677,7 @@ class Chat extends Component {
     // // Bind events for new messages, enter / leaving rooms, and user metadata.
     // this.firechat.on('room-enter', this.onEnterRoom.bind(this));
     // this.firechat.on('room-exit', this.onLeaveRoom.bind(this));
-    this.firechat.bind('message-add', ::this.onNewMessage);
+    this.firechat.bind('message-add', :: this.onNewMessage);
     // this.firechat.on('message-remove', this.onRemoveMessage.bind(this));
 
     // // Bind events related to chat invitations.

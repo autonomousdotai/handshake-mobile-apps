@@ -168,6 +168,7 @@ class DiscoverPage extends React.Component {
   }
 
   onFreeStartClick() {
+    this.modalRef.close();
     this.props.setFreeStart({ data: true });
     this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
   }
