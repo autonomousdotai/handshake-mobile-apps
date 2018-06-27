@@ -41,5 +41,9 @@ class BrowserDetect {
   get isDesktop() {
     return !this.isMobile && !this.isTablet;
   }
+
+  get isBot() {
+    return /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
+  }
 }
 export default new BrowserDetect();

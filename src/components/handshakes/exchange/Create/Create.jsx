@@ -15,7 +15,7 @@ import {
   fieldPhoneInput,
   fieldRadioButton
 } from "@/components/core/form/customField";
-import {maxValue, minValue, required} from "@/components/core/form/validation";
+import {maxValue, minValue, required, number} from "@/components/core/form/validation";
 import {change, Field, formValueSelector, clearFields} from "redux-form";
 import {bindActionCreators} from "redux";
 import {connect} from "react-redux";
@@ -566,6 +566,7 @@ class Component extends React.Component {
                   disabled={freeStart && freeETH > 0 && currency === CRYPTO_CURRENCY.ETH}
                   // onChange={this.onAmountChange}
                   // validate={[requiredOneOfAmounts, currency === CRYPTO_CURRENCY.BTC ? minValue001 : minValue01]}
+                  validate={[number]}
                 />
               </div>
             </div>
@@ -622,6 +623,7 @@ class Component extends React.Component {
                   placeholder={MIN_AMOUNT[currency]}
                   // onChange={this.onAmountChange}
                   // validate={[requiredOneOfAmounts, currency === CRYPTO_CURRENCY.BTC ? minValue001 : minValue01]}
+                  validate={[number]}
                 />
               </div>
             </div>
