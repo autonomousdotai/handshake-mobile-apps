@@ -1,3 +1,6 @@
+/* eslint no-restricted-globals: 1 */
+/* global screen */
+
 import { blockchainNetworks as blockchains } from '@/constants';
 import Blockchain from '@/services/blockchain';
 
@@ -41,11 +44,11 @@ class Helper {
   static popupCenter(url, title, w, h) {
     if (typeof window !== 'undefined') {
       // Fixes dual-screen position                         Most browsers      Firefox
-      const dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
-      const dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+      const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen?.left;
+      const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen?.top;
 
-      const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-      const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+      const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen?.width;
+      const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen?.height;
 
       const left = ((width / 2) - (w / 2)) + dualScreenLeft;
       const top = ((height / 2) - (h / 2)) + dualScreenTop;
@@ -76,12 +79,14 @@ class Helper {
     const queryString = text.substring(1);
     const keyValues = queryString.split('&');
 
-    for (const i in keyValues) {
-      const key = keyValues[i].split('=');
-      if (key.length > 1) {
-        assoc[decode(key[0])] = decode(key[1]);
+    const keys = Object.keys(keyValues);
+    keys.map((key) => {
+      const i = keyValues[key].split('=');
+      if (i.length > 1) {
+        assoc[decode(i[0])] = decode(i[1]);
       }
-    }
+      return null;
+    });
     return assoc;
   }
 

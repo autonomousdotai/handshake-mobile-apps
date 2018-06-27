@@ -161,7 +161,7 @@ class Create extends React.Component {
       };
     }).filter(a => a);
     if (handshakes.length && !handshakes.filter(item => item.id === this.state.seletedId).length) {
-      //console.log('create page - handshakeList - set seletedId at notfound item', handshakes[0].id);
+      // console.log('create page - handshakeList - set seletedId at notfound item', handshakes[0].id);
       this.setState({ seletedId: handshakes[0].id });
     }
     return [
@@ -182,7 +182,7 @@ class Create extends React.Component {
   render() {
     const { seletedId } = this.state;
     const CreateComponent = maps[seletedId];
-    //console.log('create page - render - seletedId', seletedId);
+    // console.log('create page - render - seletedId', seletedId);
     return (
       <Grid className="create-page">
         <Row>
