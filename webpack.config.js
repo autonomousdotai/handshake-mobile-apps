@@ -254,7 +254,7 @@ module.exports = function webpackConfig(env, argv) {
         ],
       },
       stats,
-      devtool: false, // 'source-map',
+      devtool: 'eval-source-map', // 'source-map',
     },
     isProduction ? production : development,
   );

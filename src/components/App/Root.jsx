@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import qs from 'querystring';
 
+import { URL } from '@/constants';
 import { initApp } from '@/reducers/app/action';
 import I18n from '@/components/App/I18n';
 import Splash from '@/components/App/Splash';
