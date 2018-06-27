@@ -98,7 +98,6 @@ class BettingCreate extends React.Component {
     this.setState({
 
     });
-    this.props.loadMatches({ PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -110,6 +109,13 @@ class BettingCreate extends React.Component {
     this.setState({
       matches,
     });
+  }
+  loadMatches(){
+    let params = {
+      public: 1,
+    }
+    this.props.loadMatches({ PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES, METHOD:'POST', data: params});
+
   }
 
   getStringDate(date) {

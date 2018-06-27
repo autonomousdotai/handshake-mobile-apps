@@ -84,22 +84,7 @@ class BettingFilter extends React.Component {
 
     */
 
-    this.props.loadMatches({
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
-      successFn: (res) => {
-        const { data } = res;
-        console.log('loadMatches success', data);
-        if (data.length === 0) {
-          this.setState({ errorMessage: `Matches are empty`, isError: true });
-          this.props.setLoading(false);
-        }
-      },
-      errorFn: (e) => {
-        console.log('loadMatches failed', e);
-        this.props.setLoading(false);
-        this.setState({ errorMessage: `Can't load matches`, isError: true });
-      },
-    });
+    this.loadMatches();
     this.checkShowFreeBanner();
   }
 
@@ -119,6 +104,30 @@ class BettingFilter extends React.Component {
 
   }
 
+  loadMatches(){
+    const {isPrivate, outComeId} = this.props;
+    let params = {
+      public: !isPrivate,
+      outcome_id: outComeId
+    }
+    this.props.loadMatches({
+      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
+      METHOD:'POST', data: params,
+      successFn: (res) => {
+        const { data } = res;
+        console.log('loadMatches success', data);
+        if (data.length === 0) {
+          this.setState({ errorMessage: `Matches are empty`, isError: true });
+          this.props.setLoading(false);
+        }
+      },
+      errorFn: (e) => {
+        console.log('loadMatches failed', e);
+        this.props.setLoading(false);
+        this.setState({ errorMessage: `Can't load matches`, isError: true });
+      },
+    });
+  }
   get oddSpread() {
     const { support, against } = this.state;
     if (support && support.length > 0 && against && against.length > 0) {
