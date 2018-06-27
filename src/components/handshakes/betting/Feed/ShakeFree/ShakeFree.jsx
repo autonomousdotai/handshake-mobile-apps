@@ -19,7 +19,7 @@ import Button from '@/components/core/controls/Button';
 import Toggle from './../Toggle';
 import {showAlert} from '@/reducers/app/action';
 import {getMessageWithCode, isExpiredDate, getChainIdDefaultWallet,getBalance, 
-  getEstimateGas, getAddress, isExistMatchBet, isRightNetwork} from '@/components/handshakes/betting/utils.js';
+  getEstimateGas, getAddress, isRightNetwork} from '@/components/handshakes/betting/utils.js';
 
 import './ShakeFree.scss';
 import { BetHandshakeHandler, MESSAGE, SIDE } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
@@ -455,8 +455,8 @@ class BetingShakeFree extends React.Component {
 
      const {outcomeHid} = this.props;
       console.log('OutcomeHid:', outcomeHid);
-
-      const isExist = isExistMatchBet(data);
+      const {match} = data
+      const isExist = match;
      let message = MESSAGE.CREATE_BET_NOT_MATCH;
      if(isExist){
        message = MESSAGE.CREATE_BET_MATCHED;

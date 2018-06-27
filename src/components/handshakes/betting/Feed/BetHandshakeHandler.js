@@ -331,19 +331,20 @@ export class BetHandshakeHandler {
     return dataBlockchain;
   };
 
-  async shakeContract(item, hid, markerOdds) {
+  async shakeContract(item, hid) {
     console.log('shakeContract, hid:', item, hid);
 
     const {
-      amount, id, odds, side, from_address,
+      amount, id, odds, side,maker_address, maker_odds, offchain
     } = item;
     // hid = 10000;
     const stake = Math.floor(amount * 10 ** 18) / 10 ** 18;
     // const payout = stake * odds;
     // const payout = Math.round(stake * odds * 10 ** 18) / 10 ** 18;
-    const offchain = `cryptosign_s${id}`;
+    //const offchain = `cryptosign_s${id}`;
     console.log('offchain:', offchain);
-    const maker = from_address;
+    const maker = maker_address;
+    const makerOdds = maker_odds;
     // const hid = outcome_id;
     const chainId = getChainIdDefaultWallet();
     const bettinghandshake = new BettingHandshake(chainId);
@@ -358,7 +359,7 @@ export class BetHandshakeHandler {
         stake,
         odds,
         maker,
-        markerOdds,
+        makerOdds,
         offchain,
       );
       const {blockHash, logs, hash, error} = result;
@@ -400,9 +401,11 @@ export class BetHandshakeHandler {
       console.log('Time out:');
       const { offchain, odds } = element;
       const isInit = isInitBet(element);
+      console.log('Is Init Bet:', isInit);
       if (isInit) {
         this.addContract(element, hid);
       } else {
+        /*
         const shakeItem = foundShakeItem(element, offchain);
         console.log('Found shake Item:', shakeItem);
         
@@ -410,6 +413,9 @@ export class BetHandshakeHandler {
         this.shakeContract(shakeItem, hid, odds);
 
        }
+       */
+      this.shakeContract(element, hid);
+
       }
     }, 3000 * i);
   }

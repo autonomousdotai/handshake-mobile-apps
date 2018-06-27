@@ -546,6 +546,7 @@ class BetingShake extends React.Component {
       console.log('OutcomeHid:', outcomeHid);
      betHandshakeHandler.controlShake(data, outcomeHid);
      const isExist = isExistMatchBet(data);
+     console.log('Sa isExist:', isExist);
      let message = MESSAGE.CREATE_BET_NOT_MATCH;
      if(isExist){
        message = MESSAGE.CREATE_BET_MATCHED;
