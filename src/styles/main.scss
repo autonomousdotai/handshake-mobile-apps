@@ -6,17 +6,19 @@
 @import "functions";
 @import "animate";
 
-html {
-  font-size: $font-size-base;
-}
-
 body {
   font-family: $font-family-base;
   font-style: normal;
+  font-size: $font-size-base;
   font-weight: $extra-light;
   color: $black;
   background-color: $bg-gray;
 }
 
+img {
+  max-width: 100%;
+}
+
+@import "app/splash";
 @import "app";
 @import "forms/dropdown-input";

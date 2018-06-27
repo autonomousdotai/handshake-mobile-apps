@@ -1,6 +1,18 @@
+import $http from '@/services/api';
+import IpInfo from '@/models/IpInfo';
+import { APP, API_URL } from '@/constants';
+import local from '@/services/localStore';
+import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
+import COUNTRIES_BLACKLIST_CASH from '@/data/country-blacklist-exchange';
+import { signUp, fetchProfile, authUpdate } from '@/reducers/auth/action';
+import { getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
+import { MasterWallet } from '@/models/MasterWallet';
 
 export const APP_ACTION = {
   NETWORK_ERROR: 'NETWORK_ERROR',
+
+  SET_LANGUAGE: 'SET_LANGUAGE',
+  SET_ROOT_LOADING: 'SET_ROOT_LOADING',
 
   CALLING: 'CALLING',
   CALLED: 'CALLED',
@@ -30,8 +42,6 @@ export const APP_ACTION = {
   HEADER_SHOW: 'HEADER_SHOW',
 
   IP_INFO: 'IP_INFO',
-
-  CHANGE_LOCALE: 'CHANGE_LOCALE',
 
   BAN_CASH: 'BAN_CASH',
   BAN_PREDICTION: 'BAN_PREDICTION',
@@ -76,7 +86,6 @@ export const scrollToBottom = () => {
   window.scrollTo(0, document.body.scrollHeight);
 };
 
-export const changeLocale = (data, autoDetect) => ({ type: APP_ACTION.CHANGE_LOCALE, payload: data, autoDetect });
 export const setBannedCash = () => ({ type: APP_ACTION.BAN_CASH });
 export const setBannedPrediction = () => ({ type: APP_ACTION.BAN_PREDICTION });
 export const setCheckBanned = () => ({ type: APP_ACTION.BAN_CHECKED });
@@ -84,3 +93,163 @@ export const setCheckBanned = () => ({ type: APP_ACTION.BAN_CHECKED });
 // Chat
 export const setFirechat = payload => ({ type: APP_ACTION.SET_FIRECHAT, payload });
 export const setFirebaseUser = payload => ({ type: APP_ACTION.SET_FIREBASE_USER, payload });
+
+// App
+// |-- language
+export const setLanguage = (data, autoDetect = true) => ({
+  type: APP_ACTION.SET_LANGUAGE,
+  payload: data,
+  autoDetect,
+});
+// |-- loading
+export const setRootLoading = bool => ({ type: APP_ACTION.SET_ROOT_LOADING, payload: bool });
+
+const tokenHandle = ({
+  token, resolve, reject, dispatch, ipInfo,
+}) => {
+  if (resolve) {
+    if (token) {
+      dispatch(fetchProfile({
+        PATH_URL: 'user/profile',
+        errorFn: (res) => {
+          if (!process.env.isProduction) {
+            if (res.message === 'Invalid user.') {
+              local.remove(APP.AUTH_TOKEN);
+              window.location.reload();
+            }
+          } else {
+            dispatch(showAlert({
+              message: 'Have something wrong with your profile, please contact supporters',
+              timeOut: false,
+              isShowClose: true,
+              type: 'danger',
+              callBack: () => {},
+            }));
+          }
+        },
+        successFn: () => {
+          // success
+          console.log('coins - getListOfferPrice - ipInfo', ipInfo);
+          dispatch(getUserProfile({ PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE }));
+          dispatch(getListOfferPrice({
+            PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,
+            qs: { fiat_currency: ipInfo?.currency },
+            errorFn(e) {
+              console.log('coins - getListOfferPrice - redux - error', e);
+            },
+          }));
+          // wallet
+          const listWallet = MasterWallet.getMasterWallet();
+          if (listWallet === false) {
+            MasterWallet.createMasterWallets();
+          } else {
+            const shuriWallet = MasterWallet.getShurikenWalletJson();
+            if (shuriWallet === false) {
+              MasterWallet.createShuriWallet();
+            }
+          }
+          const walletReward = MasterWallet.getShurikenWalletJson();
+          const data = new FormData();
+          data.append('reward_wallet_addresses', walletReward);
+          dispatch(authUpdate({
+            PATH_URL: 'user/profile',
+            data,
+            METHOD: 'POST',
+            successFn: (res) => {
+              console.log('app - handle - wallet - success - ', res);
+            },
+            errorFn: (e) => {
+              console.log('app - handle - wallet - error - ', e);
+            },
+          }));
+          resolve(true);
+        },
+      }));
+    } else {
+      // error
+      reject(true);
+    }
+  } else {
+    // error
+    reject(true);
+  }
+};
+
+const auth = ({ ref, dispatch, ipInfo }) => new Promise((resolve, reject) => {
+  const token = local.get(APP.AUTH_TOKEN);
+  if (token) {
+    tokenHandle({
+      resolve, token, dispatch, ipInfo,
+    });
+  } else {
+    dispatch(signUp({
+      PATH_URL: `user/sign-up${ref ? `?ref=${ref}` : ''}`,
+      METHOD: 'POST',
+      successFn: (res) => {
+        const signUpToken = res.data.passpharse;
+        console.log('signUpToken', signUpToken);
+        tokenHandle({
+          resolve, token: signUpToken, dispatch, ipInfo,
+        });
+      },
+      errorFn: () => {
+        tokenHandle({ reject, token, dispatch });
+      },
+    }));
+  }
+});
+
+// |-- init
+export const initApp = (language, ref) => (dispatch) => {
+  $http({
+    url: 'https://ipapi.co/json',
+    qs: { key: process.env.ipapiKey },
+  }).then((res) => {
+    const { data } = res;
+
+    const ipInfo = IpInfo.ipInfo(data);
+    dispatch(setIpInfo(ipInfo));
+
+    const ipInfoRes = { language: 'en', bannedPrediction: false, bannedCash: false };
+    const languageSaved = local.get(APP.LOCALE);
+
+    if (!languageSaved) {
+      ipInfoRes.language = data.languages.split(',')?.[0] || 'en';
+    } else {
+      ipInfoRes.language = languageSaved;
+    }
+
+    const completedLanguage = language || ipInfoRes.language;
+
+    if (APP.isSupportedLanguages.indexOf(completedLanguage) >= 0) {
+      dispatch(setLanguage(completedLanguage, !language));
+    }
+
+    if (process.env.isProduction) {
+      // should use country code: .country ISO 3166-1 alpha-2
+      // https://ipapi.co/api/#complete-location
+      if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+        ipInfoRes.bannedPrediction = true;
+        dispatch(setBannedPrediction());
+      }
+      if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
+        ipInfoRes.bannedCash = true;
+        dispatch(setBannedCash());
+      }
+    }
+
+    auth({ ref, dispatch, ipInfo })
+      .then(() => {
+        dispatch(setRootLoading(false));
+      })
+      .catch(() => {
+        // TO-DO: handle error
+        dispatch(setRootLoading(false));
+      });
+  }).catch((e) => {
+    // TO-DO: handle error
+    console.log(e);
+    dispatch(setRootLoading(false));
+  });
+};
+

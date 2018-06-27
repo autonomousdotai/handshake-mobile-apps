@@ -9,6 +9,7 @@ class Outcome {
       hid: data.hid || '',
       id: data.id || '',
       name: data.name || '',
+      public: data.public || 0,
       handshakes: handleOutcomeListPayload(data.handshakes) || '',
     };
   }

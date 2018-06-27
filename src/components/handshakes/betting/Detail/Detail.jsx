@@ -15,6 +15,7 @@ class BettingDetail extends React.Component {
     this.state = {
       match: -1,
       outCome: -1,
+      isPrivate: 0
     };
     // set header
     props.setHeaderTitle(props.slug || 'Detail');
@@ -35,18 +36,20 @@ class BettingDetail extends React.Component {
 
   componentDidMount() {
     // init data
-    const { match, out_come:outCome } = this.parseQueryString();
+    const { match, out_come:outCome, is_private } = this.parseQueryString();
     this.setState({
       match: parseInt(match),
       outCome: parseInt(outCome),
+      isPrivate:parseInt(is_private)
     });
   }
 
   render() {
-    const { match, outCome } = this.state;
+    const { match, outCome,isPrivate } = this.state;
+    console.log('Detail: isPrivate:', isPrivate);
     return (
       <div className="beeting-detail">
-        <BettingFilter matchId={match} outComeId={outCome} setLoading={() => {}} />
+        <BettingFilter matchId={match} outComeId={outCome} isPrivate={isPrivate}/>
         <div className="faq-block">
           <FAQBetting />
         </div>

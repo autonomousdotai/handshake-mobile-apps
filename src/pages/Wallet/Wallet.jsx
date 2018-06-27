@@ -44,7 +44,8 @@ import WalletProtect from './WalletProtect';
 import WalletHistory from './WalletHistory';
 import Refers from './Refers';
 import RefersDashboard from './RefersDashboard';
-import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+//import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+import TransferCoin from '@/components/Wallet/TransferCoin';
 import ReactBottomsheet from 'react-bottomsheet';
 import { setHeaderRight } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
@@ -75,7 +76,7 @@ window.Clipboard = (function (window, document, navigator) {
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
 const nameFormSendWallet = 'sendWallet';
-const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
+//const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
 
 const nameFormCreditCard = 'creditCard';
 const FormCreditCard = createForm({
@@ -317,18 +318,19 @@ class Wallet extends React.Component {
     // if (wallet.name != "SHURI"){
       obj.push({
         title: messages.wallet.action.transfer.title,
-        handler: () => {
+        handler: async () => {
+          this.toggleBottomSheet();
+          this.showLoading();
+          wallet.balance = await wallet.getBalance();
+          this.setState({ walletSelected: wallet, activeTransfer: true });
+          this.modalSendRef.open();
+          this.hideLoading();
 
-            wallet.getBalance().then(result=>{
-              wallet.balance = result;
-              this.setState({walletSelected: wallet});
-            });
-
-            // clear form:
-            this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amount");
-            this.setState({isRestoreLoading: false, walletSelected: wallet, inputAddressAmountValue: '', inputSendAmountValue: ''}, () => {});
-            this.toggleBottomSheet();
-            this.modalSendRef.open();
+          // // clear form:
+          // this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amount");
+          // this.setState({isRestoreLoading: false, walletSelected: wallet, inputAddressAmountValue: '', inputSendAmountValue: ''}, () => {});
+          // this.toggleBottomSheet();console.log(wallet);
+          // this.modalSendRef.open();
 
         }
       })
@@ -709,6 +711,15 @@ class Wallet extends React.Component {
     this.setState({ activeProtected: false });
   }
 
+  closeTransfer = () => {
+    this.setState({ activeTransfer: false });
+  }
+
+  successTransfer = () => {
+    this.modalSendRef.close();
+    this.autoCheckBalance(this.state.walletSelected.address, this.state.inputAddressAmountValue);
+  }
+
   closeHistory = () => {
     this.setState({ transactions: [], isHistory: false });
   }
@@ -832,8 +843,12 @@ class Wallet extends React.Component {
           </ModalDialog>
 
           {/* ModalDialog for transfer coin */}
-          <Modal title={messages.wallet.action.transfer.header} onRef={modal => this.modalSendRef = modal}>
-            <SendWalletForm className="sendwallet-wrapper" onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
+
+
+          <Modal title={messages.wallet.action.transfer.header} onRef={modal => this.modalSendRef = modal}  onClose={this.closeTransfer}>
+            <TransferCoin active={this.state.activeTransfer} wallet={this.state.walletSelected} onFinish={() => { this.successTransfer() }} />
+
+            {/* <SendWalletForm className="sendwallet-wrapper" onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
             <p className="labelText">Receiving address</p>
             <div className="div-address-qr-code">
 
@@ -866,7 +881,7 @@ class Wallet extends React.Component {
                   <label className='label-balance'>Your balance: { this.state.walletSelected ? StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name) : ""}</label>
 
               <Button className="button-wallet" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button}</Button>
-            </SendWalletForm>
+            </SendWalletForm> */}
           </Modal>
 
           {/* Dialog confirm transfer coin */}

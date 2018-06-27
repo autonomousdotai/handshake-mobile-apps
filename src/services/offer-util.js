@@ -33,6 +33,7 @@ export function formatMoney(price = 0) {
 
 
 export function formatMoneyByLocale(price = 0, locale = 'USD') {
+  console.log('coins - price', price);
   switch (locale.toLowerCase()) {
     case 'vnd':
       return new BigNumber(price).dividedBy(1000).decimalPlaces(0).times(1000)

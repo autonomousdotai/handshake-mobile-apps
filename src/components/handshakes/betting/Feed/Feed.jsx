@@ -9,7 +9,7 @@ import {MasterWallet} from '@/models/MasterWallet';
 
 import local from '@/services/localStore';
 import {FIREBASE_PATH, HANDSHAKE_ID, API_URL, APP} from '@/constants';
-import { uninitItem, collect, refund, collectFree, rollback } from '@/reducers/handshake/action';
+import { uninitItem, collect, refund, collectFree, rollback, uninitItemFree } from '@/reducers/handshake/action';
 import { loadMyHandshakeList, updateBettingChange} from '@/reducers/me/action';
 
 
@@ -20,6 +20,8 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import Feed from '@/components/core/presentation/Feed';
 import BettingShake from './Shake';
 import {showAlert} from '@/reducers/app/action';
+import {getMessageWithCode, isRightNetwork, getId, 
+  getShakeOffchain, getBalance, getEstimateGas, isSameAddress} from '@/components/handshakes/betting/utils.js';
 
 
 // css, icons
@@ -127,7 +129,7 @@ class FeedBetting extends React.Component {
       const extraData = this.extraData;
       console.log('Extra data:', extraData);
       const {shakers} = extraData;
-      const idOffchain = betHandshakeHandler.getId(id);
+      const idOffchain = getId(id);
 
       if(shakers){
         const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
@@ -295,26 +297,34 @@ class FeedBetting extends React.Component {
   handleActionFree(title, id){
     switch(title){
 
+      case BETTING_STATUS_LABEL.CANCEL:
+        // TO DO: CLOSE BET
+        this.uninitItem(realId);
+        break;
       case BETTING_STATUS_LABEL.WITHDRAW:
         this.collectFree(id);
         break;
 
     }
   }
-  handleActionReal(title, id){
-    const realId = betHandshakeHandler.getId(id);
+  handleActionReal(title, offchain, hid){
+    const realId = getId(offchain);
+    const {itemInfo} = this.state;
 
     switch(title){
 
       case BETTING_STATUS_LABEL.CANCEL:
         // TO DO: CLOSE BET
-        this.uninitItem(realId);
+        const {side, amount, odds} = itemInfo;
+
+        betHandshakeHandler.cancelBet(hid, side, amount, odds, offchain);
         break;
 
       case BETTING_STATUS_LABEL.WITHDRAW:
         // TO DO: WITHDRAW
-        this.collect(id);
+        //this.collect(id);
         //this.rollback(id);
+        betHandshakeHandler.withdraw(hid, offchain);
         break;
       case BETTING_STATUS_LABEL.REFUND:
       this.refund(realId);
@@ -324,10 +334,10 @@ class FeedBetting extends React.Component {
   }
 
   async clickActionButton(title){
-    const balance = await betHandshakeHandler.getBalance();
-    const estimatedGas = await betHandshakeHandler.getEstimateGas();
+    const balance = await getBalance();
+    const estimatedGas = await getEstimateGas();
     let message = null;
-    const {id, shakeUserIds, freeBet, fromAddress} = this.props; // new state
+    const {id, shakeUserIds, freeBet, fromAddress, hid} = this.props; // new state
     let idCryptosign = id;
     let isFreeBet = freeBet;
     let userFromAddress = fromAddress;
@@ -336,13 +346,13 @@ class FeedBetting extends React.Component {
     if(isUserShake){
       const extraData = this.extraData;
       const {shakers} = extraData;
-      const idOffchain = betHandshakeHandler.getId(id);
+      const idOffchain = getId(id);
 
       if(shakers){
         const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
         console.log('Found Shaked Item:', foundShakedItem);
         if(foundShakedItem){
-          idCryptosign = betHandshakeHandler.getShakeOffchain(foundShakedItem.id);
+          idCryptosign = getShakeOffchain(foundShakedItem.id);
           isFreeBet = foundShakedItem.free_bet;
           userFromAddress = foundShakedItem.from_address;
         }
@@ -352,9 +362,9 @@ class FeedBetting extends React.Component {
     console.log("idCryptosign, isFreeBet, isUserShaker, fromAddress: ", idCryptosign, 
     isFreeBet, isUserShake, userFromAddress);
     //userFromAddress = "abc";
-    if(!betHandshakeHandler.isRightNetwork()){
+    if(!isRightNetwork()){
       message = MESSAGE.RIGHT_NETWORK;
-    }else if (!betHandshakeHandler.isSameAddress(userFromAddress)){
+    }else if (!isSameAddress(userFromAddress)){
       message = MESSAGE.DIFFERENCE_ADDRESS;
     }
     else {
@@ -366,7 +376,7 @@ class FeedBetting extends React.Component {
           message = MESSAGE.NOT_ENOUGH_GAS;
 
         }else {
-          this.handleActionReal(title, idCryptosign);
+          this.handleActionReal(title, idCryptosign, hid);
 
         }
       }
@@ -389,8 +399,9 @@ class FeedBetting extends React.Component {
   loadMyHandshakeList = () => {
     this.props.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE });
   }
+  /*
   async uninitItem(id){
-    const balance = await betHandshakeHandler.getBalance();
+    const balance = await getBalance();
     console.log('Balance:', balance);
     const url = API_URL.CRYPTOSIGN.UNINIT_HANDSHAKE.concat(`/${id}`);
     this.props.uninitItem({PATH_URL: url, METHOD:'POST',
@@ -406,7 +417,7 @@ class FeedBetting extends React.Component {
 
       const {itemInfo} = this.state;
       let updateInfo = Object.assign({}, itemInfo);
-      updateInfo.bkStatus = itemInfo.status;
+      //updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = status;
 
       //this.handleStatus(updateInfo);
@@ -425,8 +436,9 @@ class FeedBetting extends React.Component {
   }
   uninitHandshakeFailed = (error) => {
     console.log('uninitHandshakeFailed', error);
-    const {status, message} = error;
+    const {status, code} = error;
     if(status == 0){
+      const message = getMessageWithCode(code);
       this.props.showAlert({
         message: <div className="text-center">{message}</div>,
         timeOut: 3000,
@@ -436,6 +448,43 @@ class FeedBetting extends React.Component {
       });
     }
 
+  }
+  */
+  async uninitItemFree(id){
+    const balance = await getBalance();
+    console.log('Balance:', balance);
+    const url = API_URL.CRYPTOSIGN.UNINIT_HANDSHAKE_FREE.concat(`/${id}`);
+    this.props.uninitItemFree({PATH_URL: url, METHOD:'POST',
+    successFn: this.uninitHandshakeFreeSuccess,
+    errorFn: this.uninitHandshakeFreeFailed
+  });
+  }
+  uninitHandshakeFreeSuccess= async (successData)=>{
+    console.log("uninitHandshakeFreeSuccess", successData);
+    const {status} = successData
+    if(status){
+      const {itemInfo} = this.state;
+
+      let updateInfo = Object.assign({}, itemInfo);
+      updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING;
+      this.props.updateBettingChange(updateInfo);
+
+    }
+  }
+  uninitHandshakeFreeFailed = (error) => {
+    console.log('uninitHandshakeFreeFailed', error);
+    const {status, code} = error;
+    if(status == 0){
+      const message = getMessageWithCode(code);
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
+  
   }
   collectFree(id){
     console.log('Call Collect Free');
@@ -469,8 +518,9 @@ class FeedBetting extends React.Component {
   }
   collectFreeFailed = (error) => {
     console.log('collectFreeFailed', error);
-    const {status, message} = error;
+    const {status, code} = error;
     if(status == 0){
+      const message = getMessageWithCode(code);
       this.props.showAlert({
         message: <div className="text-center">{message}</div>,
         timeOut: 3000,
@@ -481,6 +531,7 @@ class FeedBetting extends React.Component {
     }
   }
 
+  /*
   collect(id){
     console.log('Withdraw');
     let params = {
@@ -550,8 +601,9 @@ class FeedBetting extends React.Component {
   }
   collectFailed = (error) => {
     console.log('collectFailed', error);
-    const {status, message} = error;
+    const {status, code} = error;
     if(status == 0){
+      const message = betHandshakeHandler.getMessageWithCode(code);
       this.props.showAlert({
         message: <div className="text-center">{message}</div>,
         timeOut: 3000,
@@ -562,6 +614,7 @@ class FeedBetting extends React.Component {
     }
 
   }
+  */
 
   refund(id){
     const url = API_URL.CRYPTOSIGN.REFUND.concat(`/${id}`);
@@ -598,8 +651,9 @@ class FeedBetting extends React.Component {
   }
   refundFailed = (error) => {
     console.log('refundFailed', error);
-    const {status, message} = error;
+    const {status, code} = error;
     if(status == 0){
+      const message = getMessageWithCode(code);
       this.props.showAlert({
         message: <div className="text-center">{message}</div>,
         timeOut: 3000,
@@ -626,6 +680,18 @@ class FeedBetting extends React.Component {
   }
   rollbackFailed = (error) => {
     console.log('rollbackFailed', error);
+    const {status, code} = error;
+
+    if(status == 0){
+      const message = getMessageWithCode(code);
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
   }
   
 }
@@ -641,6 +707,7 @@ const mapDispatch = ({
   collectFree,
   refund,
   rollback,
-  showAlert
+  showAlert,
+  uninitItemFree
 });
 export default connect(mapState, mapDispatch)(FeedBetting);

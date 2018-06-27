@@ -1,0 +1,24 @@
+.splash {
+  background-color: $splash-background-color;
+  height: 100vh;
+  width: 100vw;
+  color: $white;
+  position: relative;
+  .splash-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    img {
+      max-width: 170px;
+    }
+    .splash-loading-text {
+      margin-top: 30px;
+    }
+    .splash-title {
+      width: 300px;
+      font-size: 120%;
+    }
+  }
+}
