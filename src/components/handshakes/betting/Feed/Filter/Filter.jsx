@@ -19,11 +19,12 @@ import TopInfo from './../TopInfo';
 import BettingShake from './../Shake';
 import BettingShakeFree from './../ShakeFree';
 import local from '@/services/localStore';
+import {getBalance} from '@/components/handshakes/betting/utils.js';
 
 // style
 import './Filter.scss';
 
-const betHandshakeHandler = new BetHandshakeHandler();
+const betHandshakeHandler = BetHandshakeHandler.getShareManager();
 const CRYPTOSIGN_MINIMUM_MONEY = 0.00002;
 const freeAmount = 0.001;
 const ROUND_ODD = 10;
@@ -39,6 +40,7 @@ class BettingFilter extends React.Component {
     checkFreeAvailable: PropTypes.func.isRequired,
     matchId: PropTypes.number,
     outComeId: PropTypes.number,
+    isPrivate: PropTypes.any,
     setLoading: PropTypes.func.isRequired,
   }
 
@@ -47,7 +49,7 @@ class BettingFilter extends React.Component {
 
   constructor(props) {
     super(props);
-    const { odd } = props;
+    const { odd , isPrivate} = props;
     this.state = {
       matches: [],
       selectedMatch: null,
@@ -224,7 +226,8 @@ class BettingFilter extends React.Component {
     if (matches) {
       const mathNamesList = matches.map(item => ({ id: item.id,
                                                 value: `Event: ${item.name} (${this.getStringDate(item.date)})`,
-                                                    marketFee: item.market_fee , date: item.date}));
+                                                    marketFee: item.market_fee , date: item.date,
+                                                  reportTime:item.reportTime}));
       return [
         ...mathNamesList,
         {
@@ -239,20 +242,27 @@ class BettingFilter extends React.Component {
   }
 
   get matchOutcomes() {
-    const { selectedMatch, matches } = this.state;
+    const { selectedMatch } = this.state;
+    const { outComeId,isPrivate } = this.props;
+
     // console.log('matchOutcomes selectedMatch:', selectedMatch);
     if (selectedMatch) {
       const { foundMatch } = this;
       if (foundMatch) {
         const { outcomes } = foundMatch;
-        console.log(foundMatch);
-        if (outcomes) {
-          console.log('outcomes.length', outcomes.length);
-          if (outcomes.length === 0) {
+        let filterOutcome = outcomes.filter(item => item.public == 1);
+        //let filterOutcome = outcomes;
+        console.log("Is Private, outComeId: ", isPrivate, outComeId);
+        if(isPrivate && outComeId){
+          filterOutcome = outcomes.filter(item => item.id === outComeId) || outcomes;
+
+        }
+        if (filterOutcome) {
+          if (filterOutcome.length === 0) {
             // this.setState({ errorMessage: `Outcomes are empty`, isError: true });
             this.props.setLoading(false);
           }
-          return outcomes.map(item => ({
+          return filterOutcome.map(item => ({
             id: item.id, value: `Outcome: ${item.name}`, hid: item.hid, marketOdds: item.market_odds,
           }));
         }
@@ -307,7 +317,7 @@ class BettingFilter extends React.Component {
     let ref = profile ? "&ref=" + profile.username : ''
     return {
       title: `I put a bet on ${selectedMatch.value}. ${selectedOutcome.value}! Put your coin where your mouth is.`,
-      shareUrl: `${window.location.origin}/discover/${encodeURI(selectedMatch.value)}?match=${selectedMatch.id}&out_come=${selectedOutcome.id}${ref}`,
+      shareUrl: `${window.location.origin}/discover/${encodeURI(selectedMatch.value)}?match=${selectedMatch.id}&out_come=${selectedOutcome.id}${ref}?is_private=0`,
     };
   }
 
@@ -388,7 +398,7 @@ class BettingFilter extends React.Component {
 
   async checkShowFreeBanner() {
 
-    const balance = await betHandshakeHandler.getBalance();
+    const balance = await getBalance();
     console.log('checkShowFreeBanner Balance:', balance);
     if (balance == 0) {
       // Call API check if show free
@@ -419,6 +429,7 @@ class BettingFilter extends React.Component {
     const shareInfo = this.getInfoShare(selectedMatch, selectedOutcome);
     const marketFee = (selectedMatch && selectedMatch.marketFee >= 0) ? selectedMatch.marketFee : null;
     const closingDate = (selectedMatch && selectedMatch.date) ? selectedMatch.date : null;
+    const reportTime = (selectedMatch && selectedMatch.reportTime) ? selectedMatch.reportTime : null;
     console.log('defaultOutcomeId:', defaultOutcomeId);
     console.log('Market Fee:', marketFee);
     return (
@@ -595,6 +606,7 @@ class BettingFilter extends React.Component {
             marketSupportOdds={parseFloat(this.defaultSupportOdds)}
             marketAgainstOdds={parseFloat(this.defaultAgainstOdds)}
             closingDate = {closingDate}
+            reportTime = {reportTime}
             onSubmitClick={() => this.closeShakePopup()}
           />
         </ModalDialog>
@@ -608,6 +620,7 @@ class BettingFilter extends React.Component {
             marketSupportOdds={parseFloat(this.defaultSupportOdds)}
             marketAgainstOdds={parseFloat(this.defaultAgainstOdds)}
             closingDate = {closingDate}
+            reportTime = {reportTime}
             onSubmitClick={() => this.closeShakeFreePopup()}
           />
         </ModalDialog>

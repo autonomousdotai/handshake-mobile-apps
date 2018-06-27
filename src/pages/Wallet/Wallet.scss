@@ -303,11 +303,37 @@
   }
 
   input[type=text], input[type=tel], input[type=number]{
-    margin-bottom: 5px;
     font-size: 16px;
     line-height: 22px;
-    border:1px solid #EFEFEF;
     height: 54px;
+  }
+
+  .div-amount {
+    .prepend-left{
+      padding-top: 15px;
+      position: absolute;
+      right: 40px;
+      color: #7b7b7b;
+    }
+
+    .prepend-right{
+      padding-top: 15px;
+      position: absolute;
+      left: 40%;
+      color: #7b7b7b;
+    }
+
+    input[name=amountMoney]{
+      float: right;
+      width:49%;
+      padding-right: 40px;
+    }
+
+    input[name=amountCoin]{
+      float: left;
+      width:49%;
+      padding-right: 40px;
+    }
   }
 }
 

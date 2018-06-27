@@ -147,7 +147,7 @@ export class MasterWallet {
     }
 
     static UpdateLocalStore(masterWallet) {
-      console.log('masterWallet saved');
+      //console.log('masterWallet saved');
       localStore.save(MasterWallet.KEY, masterWallet);
     }
 

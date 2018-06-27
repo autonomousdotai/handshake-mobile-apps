@@ -10,7 +10,7 @@ import {
   } from '@/components/core/form/customField';
 import { verifyEmail, submitEmail, checkJoinTelegram, checkFollowTwitter, completeProfile, authUpdate } from '@/reducers/auth/action';
 import {required} from '@/components/core/form/validation';
-import {change, Field, formValueSelector, clearFields} from 'redux-form';
+import {change, Field, clearFields} from 'redux-form';
 import {bindActionCreators} from 'redux';
 import createForm from '@/components/core/form/createForm';
 import { showAlert } from '@/reducers/app/action';
@@ -385,7 +385,7 @@ renderStep3= () => {
   const { messages } = this.props.intl;
   return (!(this.state.end) ?
   <Step3Form onSubmit={this.submitStep3} className="refers-wrapper">
-    <h6>Receive your randomly generated ninja name.</h6>
+    <h6>{messages.wallet.refers.text.ninja_name}</h6>
     <div className="col2"> {this.renderStep3_labelButton()}</div>
     <div className="col1">
       <Field
@@ -442,7 +442,6 @@ submitEndStep= async () => {
   const { messages } = this.props.intl;
 
   let result = await this.completeRefers();
-  console.log(result);
   if(result){
     if(result.data){
       let refers = local.get(APP.REFERS);

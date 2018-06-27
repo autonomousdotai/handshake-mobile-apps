@@ -121,7 +121,6 @@ class Handle extends React.Component {
   }
 
   render() {
-    console.log('test - contructor', this.state.isLoading);
     if (this.state.isLoading) {
       return <Loading message={this.state.loadingText} />;
     }

@@ -19,6 +19,8 @@ import { InputField } from '@/components/handshakes/betting/form/customField';
 import Button from '@/components/core/controls/Button';
 import Toggle from './../Toggle';
 import {showAlert} from '@/reducers/app/action';
+import {getMessageWithCode, isExpiredDate, getChainIdDefaultWallet, 
+  getBalance, getEstimateGas, getAddress, isExistMatchBet, isRightNetwork} from '@/components/handshakes/betting/utils.js';
 
 import './Shake.scss';
 import { BetHandshakeHandler, MESSAGE, SIDE } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
@@ -44,6 +46,7 @@ class BetingShake extends React.Component {
     amountSupport: PropTypes.number,
     amountAgainst: PropTypes.number,
     closingDate: PropTypes.any,
+    reportTime: PropTypes.any,
     onSubmitClick: PropTypes.func,
     onCancelClick: PropTypes.func,
   }
@@ -112,6 +115,7 @@ class BetingShake extends React.Component {
     })
   }
 
+  /*
   isExpiredDate(){
     const {closingDate} = this.props;
     //console.log(moment(closingDate).format());
@@ -129,6 +133,7 @@ class BetingShake extends React.Component {
     }
     return false;
   }
+  */
 
   async onSubmit(e) {
     console.log("Submit");
@@ -136,7 +141,7 @@ class BetingShake extends React.Component {
     const values = this.refs;
     console.log('Values:', values);
     const {isShowOdds, isChangeOdds} = this.state;
-    const {matchName, matchOutcome, side, marketAgainstOdds, marketSupportOdds, closingDate} = this.props;
+    const {matchName, matchOutcome, side, marketAgainstOdds, marketSupportOdds, closingDate, reportTime} = this.props;
     const amount = parseFloat(values.amount.value);
     const odds = parseFloat(values.odds.value);
 
@@ -151,8 +156,8 @@ class BetingShake extends React.Component {
     console.log("Amount, Side, Odds", amount, side, odds);
     // this.props.onSubmitClick(amount);
     //const side = parseInt(this.toggleRef.value);
-    const balance = await betHandshakeHandler.getBalance();
-    const estimatedGas = await betHandshakeHandler.getEstimateGas();
+    const balance = await getBalance();
+    const estimatedGas = await getEstimateGas();
     //const estimatedGas = await betHandshakeHandler.getGasPriceDefaultWithEthUnit();
     //const estimatedGas = 0.00001;
     const total = amount + parseFloat(estimatedGas);
@@ -166,11 +171,11 @@ class BetingShake extends React.Component {
     } catch (err) {}
 
 
-    if(!betHandshakeHandler.isRightNetwork()){
+    if(!isRightNetwork()){
       message = MESSAGE.RIGHT_NETWORK;
 
     }
-    else if (betHandshakeHandler.isExpiredDate(closingDate)){
+    else if (isExpiredDate(reportTime)){
       message = MESSAGE.MATCH_OVER;
     }
     else if(matchName && matchOutcome){
@@ -415,8 +420,8 @@ class BetingShake extends React.Component {
         amount,
         currency: 'ETH',
         side,
-        chain_id: betHandshakeHandler.getChainIdDefaultWallet(),
-        from_address: betHandshakeHandler.getAddress()
+        chain_id: getChainIdDefaultWallet(),
+        from_address: getAddress()
       };
       console.log(params);
 
@@ -430,13 +435,6 @@ class BetingShake extends React.Component {
     console.log('shakeItemSuccess', successData);
     const {status, data, message} = successData;
     if(status){
-      /*
-      const foundShakeList = this.foundShakeItemList(data);
-      console.log('foundShakeList:', foundShakeList);
-      foundShakeList.forEach(element => {
-        this.shakeContract(element);
-      });
-      */
      const {outcomeHid} = this.props;
       betHandshakeHandler.controlShake(data, outcomeHid);
      this.props.showAlert({
@@ -502,7 +500,7 @@ class BetingShake extends React.Component {
     const {outcomeId, matchName, matchOutcome, side} = this.props;
     const {extraData} = this.state;
     //const side = this.toggleRef.value;
-    const fromAddress = betHandshakeHandler.getAddress();
+    const fromAddress = getAddress();
     extraData["event_name"] = matchName;
     extraData["event_predict"] = matchOutcome;
     extraData["event_odds"] = odds;
@@ -526,7 +524,7 @@ class BetingShake extends React.Component {
       currency: 'ETH',
       side: parseInt(side),
       from_address: fromAddress,
-      chain_id: betHandshakeHandler.getChainIdDefaultWallet(),
+      chain_id: getChainIdDefaultWallet(),
     };
     console.log("Params:", params);
 
@@ -547,7 +545,7 @@ class BetingShake extends React.Component {
      const {outcomeHid} = this.props;
       console.log('OutcomeHid:', outcomeHid);
      betHandshakeHandler.controlShake(data, outcomeHid);
-     const isExist = betHandshakeHandler.isExistMatchBet(data);
+     const isExist = isExistMatchBet(data);
      let message = MESSAGE.CREATE_BET_NOT_MATCH;
      if(isExist){
        message = MESSAGE.CREATE_BET_MATCHED;
@@ -575,6 +573,17 @@ class BetingShake extends React.Component {
     this.setState({
       disable: false
     })
+    const {status, code} = error;
+    if(status == 0){
+      const message = getMessageWithCode(code);
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        }
+      });
+    }
     this.props.onSubmitClick();
 
   }

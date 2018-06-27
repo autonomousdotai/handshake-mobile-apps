@@ -117,6 +117,7 @@ export const API_URL = {
     LOAD_HANDSHAKES: 'cryptosign/handshake',
     CHECK_FREE_AVAILABLE: 'cryptosign/handshake/check_free_bet',
     UNINIT_HANDSHAKE: 'cryptosign/handshake/uninit',
+    UNINIT_HANDSHAKE_FREE: 'cryptosign/handshake/uninit_free_bet',
     COLLECT: 'cryptosign/handshake/collect',
     COLLECT_FREE: 'cryptosign/handshake/collect_free_bet',
     ROLLBACK: 'cryptosign/handshake/rollback',

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
 import {Field, clearFields} from "redux-form";
 import {connect} from "react-redux";
@@ -7,7 +8,7 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import createForm from '@/components/core/form/createForm'
 import { change } from 'redux-form'
-import {fieldDropdown, fieldInput, fieldRadioButton} from '@/components/core/form/customField'
+import {fieldDropdown, fieldInput} from '@/components/core/form/customField'
 import { API_URL } from "@/constants";
 import {required} from '@/components/core/form/validation'
 import {MasterWallet} from "@/models/MasterWallet";
@@ -17,7 +18,6 @@ import {getCryptoPrice} from '@/reducers/exchange/action';
 import CryptoPrice from "@/models/CryptoPrice";
 import { showLoading, hideLoading } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
-import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
 import { StringHelper } from '@/services/helper';
 import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import './TransferCoin.scss';
@@ -30,8 +30,13 @@ const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefin
 
 const nameFormSendWallet = 'sendWallet';
 const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
+const isToken = false;//wait to integrate code
 
 class Transfer extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
 
@@ -39,6 +44,7 @@ class Transfer extends React.Component {
       wallets: [],
       walletDefault: false,
       walletSelected: false,
+      active: this.props.active,
       // Qrcode
       qrCodeOpen: false,
       delay: 300,
@@ -65,7 +71,7 @@ class Transfer extends React.Component {
     this.showAlert(mst, 'danger', 3000);
   }
   showSuccess(mst) {
-    this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
+    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
   showLoading(status) {
     this.props.showLoading({ message: '' });
@@ -74,12 +80,18 @@ class Transfer extends React.Component {
     this.props.hideLoading();
   }
 
+  componentWillReceiveProps() {
+    const {active} = this.props;
+    if(!active && this.state.active){
+      this.setState({active: active, inputSendAmountValue: 0, inputSendMoneyValue: 0});
+      this.resetForm();
+    }
+  }
+
   componentDidMount() {
-    // clear form:
     this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
     if (this.props.amount){
-      //this.setState({inputSendAmountValue: this.props.amount, inputSendMoneyValue: this.getCryptoPriceByAmount(this.props.amount)});
-      this.props.rfChange(nameFormSendWallet, 'amount', this.props.amount);
+      this.props.rfChange(nameFormSendWallet, 'amountCoin', this.props.amount);
     }
 
     if (this.props.toAddress){
@@ -88,12 +100,22 @@ class Transfer extends React.Component {
     }
 
     this.getWalletDefault();
-    this.getRate("BTC");
-    this.getRate("ETH");
+    if(!isToken){
+      this.getRate("BTC");
+      this.getRate("ETH");
+    }
+  }
 
+  componentDidUpdate() {
+    const {wallet} = this.props;
+    if(!this.state.active && wallet){
+      this.setState({active: true, walletDefault: wallet, walletSelected : wallet});
+    }
   }
 
   resetForm(){
+    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
+    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
     this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
   }
 
@@ -202,8 +224,9 @@ class Transfer extends React.Component {
       if (result !== true)
           errors.to_address = result;
       // check amount:
-      if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amount']))
-        errors.amount = `Insufficient balance: ${this.state.walletSelected.balance} ${this.state.walletSelected.name}`
+
+      if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amountCoin']))
+        errors.amountCoin = `Insufficient balance: ${this.state.walletSelected.balance} ${this.state.walletSelected.name}`
     }
     return errors
   }
@@ -214,13 +237,15 @@ class Transfer extends React.Component {
       rate = this.state.rateBTC;
     else
       rate = this.state.rateETH;
-
     if(!isNaN(amount)){
       money = amount * rate;
       this.setState({
         inputSendAmountValue: amount,
-        inputSendMoneyValue: money.toFixed(2)
+        inputSendMoneyValue: money.toFixed(0)
       });
+
+      this.props.rfChange(nameFormSendWallet, 'amountCoin', amount);
+      this.props.rfChange(nameFormSendWallet, 'amountMoney', money);
     }
   }
 
@@ -232,11 +257,14 @@ class Transfer extends React.Component {
       rate = this.state.rateETH;
 
     if(!isNaN(money)){
-      amount = money / rate;
+      amount = money/rate;
       this.setState({
         inputSendAmountValue: amount,
         inputSendMoneyValue: money
       });
+
+      this.props.rfChange(nameFormSendWallet, 'amountCoin', amount);
+      this.props.rfChange(nameFormSendWallet, 'amountMoney', money);
     }
   }
 
@@ -268,15 +296,8 @@ submitSendCoin=()=>{
 
 onItemSelectedWallet = (item) =>{
 
-  // I don't know why the item is not object class ?????
   let wallet = MasterWallet.convertObject(item);
-
   this.setState({walletSelected: wallet});
-
-  // this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amount");
-
-  // this.props.rfChange(nameFormSendWallet, 'amount', this.state.inputSendAmountValue);
-  // this.props.rfChange(nameFormSendWallet, 'to_address', this.state.inputAddressAmountValue);
 
   wallet.getBalance().then(result => {
     wallet.balance = result;
@@ -299,7 +320,7 @@ handleScan=(data) =>{
       this.setState({
         inputSendAmountValue: value[1],
       });
-      rfChange(nameFormSendWallet, 'amount', value[1]);
+      rfChange(nameFormSendWallet, 'amountCoin', value[1]);
     }
     this.modalScanQrCodeRef.close();
   }
@@ -332,16 +353,20 @@ renderScanQRCode = () => (
 
 
   render() {
-
-    const {formAddress, toAddress, amount, coinName } = this.props;
+    const { messages } = this.props.intl;
+    const { wallet } = this.props;
+    let isFromWallet = false;
+    if(wallet){
+      isFromWallet = true;
+    }
 
     return (
       <div>
           {/* Dialog confirm transfer coin */}
           <ModalDialog title="Confirmation" onRef={modal => this.modalConfirmTranferRef = modal}>
-          <div className="bodyConfirm"><span>Are you sure you want to transfer out {this.state.inputSendAmountValue} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
+          <div className="bodyConfirm"><span>{messages.wallet.action.transfer.text.confirm_transfer} {this.state.inputSendAmountValue} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
           <div className="bodyConfirm">
-              <Button className="left" cssType="danger" onClick={this.submitSendCoin} >Confirm</Button>
+              <Button className="left" cssType="danger" onClick={this.submitSendCoin} >{messages.wallet.action.transfer.button.confirm}</Button>
               <Button className="right" cssType="secondary" onClick={() => { this.modalConfirmTranferRef.close(); }}>Cancel</Button>
           </div>
           </ModalDialog>
@@ -352,45 +377,37 @@ renderScanQRCode = () => (
 
           {/* Box: */}
           <div className="bgBox">
-            <p className="labelText">To wallet address</p>
+            <p className="labelText">{messages.wallet.action.transfer.label.to_address}</p>
             <div className="div-address-qr-code">
-
               <Field
-                    name="to_address"
-                    type="text"
-                    className="form-control input-address-qr-code"
-                    placeholder="Wallet address..."
-                    component={fieldInput}
-                    value={this.state.inputAddressAmountValue}
-                    onChange={evt => this.updateSendAddressValue(evt)}
-                    validate={[required]}
-                  />
+                name="to_address"
+                type="text"
+                className="form-control input-address-qr-code"
+                placeholder={messages.wallet.action.transfer.placeholder.to_address}
+                component={fieldInput}
+                value={this.state.inputAddressAmountValue}
+                onChange={evt => this.updateSendAddressValue(evt)}
+                validate={[required]}
+              />
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeWhite} /> : ""}
             </div>
-            <p className="labelText">Amount</p>
-
-            <div className="div-amount-money">
-            <InputGroup>
-                <InputGroupAddon addonType="prepend">USD</InputGroupAddon>
-                <Input2
+            <p className="labelText">{messages.wallet.action.transfer.label.amount}</p>
+            <div className="div-amount">
+                <div className="prepend-left">{messages.wallet.action.transfer.label.usd}</div>
+                <Field
                   key="1"
-                  name="amount-money"
+                  name="amountMoney"
                   placeholder={"0.0"}
                   type="text"
                   className="form-control"
                   component={fieldInput}
                   value={this.state.inputSendMoneyValue}
                   onChange={evt => this.updateAddressMoneyValue(evt)}
-                  validate={[required, amountValid]}
                 />
-              </InputGroup>
-            </div>
-            <div className="div-amount-coin">
-              <InputGroup>
-                <InputGroupAddon addonType="prepend">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</InputGroupAddon>
-                <Input2
+                <div className="prepend-right">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</div>
+                <Field
                   key="2"
-                  name="amount-coin"
+                  name="amountCoin"
                   placeholder={"0.0"}
                   type="text"
                   className="form-control"
@@ -399,18 +416,15 @@ renderScanQRCode = () => (
                   onChange={evt => this.updateAddressAmountValue(evt)}
                   validate={[required, amountValid]}
                 />
-              </InputGroup>
-            </div>
-
-            { this.state.walletDefault ?
+              </div>
+              <div className="clearfix"></div>
+            { this.state.walletDefault && !isFromWallet ?
               <div className ="dropdown-wallet-tranfer">
-                <p className="labelText">From wallet</p>
+                <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>
                 <Field
                   name="walletSelected"
                   component={fieldDropdown}
-                  // className="dropdown-wallet-tranfer"
-
-                  placeholder="Sellect a wallet"
+                  placeholder={messages.wallet.action.transfer.placeholder.select_wallet}
                   defaultText={this.state.walletDefault.text}
                   list={this.state.wallets}
                   onChange={(item) => {
@@ -418,19 +432,24 @@ renderScanQRCode = () => (
                     }
                     }
                   />
-
-                  <label className='label-balance'>Wallet balance: { this.state.walletSelected ? StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name) : ""}</label>
               </div>
               :""}
 
+              <label className='label-balance'>{messages.wallet.action.transfer.label.wallet_balance} { this.state.walletSelected ? StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name) : ""}</label>
               </div>
 
-            <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>Transfer</Button>
+            <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button.transfer}</Button>
           </SendWalletForm>
         </div>
     )
   }
 }
+
+Transfer.propTypes = {
+  wallet: PropTypes.any,
+  active: PropTypes.bool,
+};
+
 
 const mapStateToProps = (state) => ({
 

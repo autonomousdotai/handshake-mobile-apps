@@ -22,6 +22,9 @@ import { MasterWallet } from '@/models/MasterWallet';
 import Dropdown from '@/components/core/controls/Dropdown';
 import Toggle from '@/components/handshakes/betting/Feed/Toggle';
 import { showAlert } from '@/reducers/app/action';
+import {isRightNetwork, isExpiredDate, getChainIdDefaultWallet, 
+  getBalance, getEstimateGas, isExistMatchBet} from '@/components/handshakes/betting/utils.js';
+
 // self
 import { InputField } from '../form/customField';
 import ErrorBox from './ErrorBox';
@@ -129,6 +132,7 @@ class BettingCreate extends React.Component {
       value: `Event: ${item.name} (${this.getStringDate(item.date)})`,
       marketFee: item.market_fee,
       date: item.date,
+      reportTime: item.reportTime,
     }));
     return [
       ...mathNamesList,
@@ -146,9 +150,11 @@ class BettingCreate extends React.Component {
       const foundMatch = this.foundMatch;
       if (foundMatch) {
         const { outcomes } = foundMatch;
-        if (outcomes) {
+        let filterOutcome = outcomes.filter(item => item.public == 1);
+
+        if (filterOutcome) {
           // return outcomes.map((item) => ({ id: item.id, value: item.name, hid: item.hid}));
-          return outcomes.map(item => ({
+          return filterOutcome.map(item => ({
             id: item.id, value: `Outcome: ${item.name}`, hid: item.hid, marketOdds: item.market_odds, marketAmount: item.market_amount,
           }));
         }
@@ -222,9 +228,9 @@ class BettingCreate extends React.Component {
     // const {toAddress, isPublic, industryId} = this.props;
 
     // const fromAddress = "0x54CD16578564b9952d645E92b9fa254f1feffee9";
-    let balance = await betHandshakeHandler.getBalance();
+    let balance = await getBalance();
     balance = parseFloat(balance);
-    const estimatedGas = await betHandshakeHandler.getEstimateGas();
+    const estimatedGas = await getEstimateGas();
     // const estimatedGas = 0.00001;
     console.log('Estimate Gas:', estimatedGas);
     const eventBet = parseFloat(values.event_bet);
@@ -235,19 +241,18 @@ class BettingCreate extends React.Component {
     const total = eventBet + parseFloat(estimatedGas);
     console.log('Event Bet, Odds, Estimate, Total:', eventBet, odds, estimatedGas, total);
 
-    const fromAddress = betHandshakeHandler.getAddress();
+    const fromAddress = getAddress();
     console.log('Match, Outcome:', selectedMatch, selectedOutcome);
 
     let message = null;
     const date = selectedMatch.date;
-    console.log('Date:', date);
-    if (!betHandshakeHandler.isRightNetwork()) {
+    const reportTime = selectedMatch.reportTime;
+    if (!isRightNetwork()) {
       message = MESSAGE.RIGHT_NETWORK;
     }
 
-    if(selectedMatch && selectedOutcome){
-      if (betHandshakeHandler.isExpiredDate(date)){
-
+    if (selectedMatch && selectedOutcome) {
+      if (isExpiredDate(reportTime)) {
         message = MESSAGE.MATCH_OVER;
       } else if (eventBet > 0) {
         if (total <= balance) {
@@ -559,7 +564,7 @@ display: 'flex', flexDirection: 'column', flex: 1, marginBottom: 10,
       currency: 'ETH',
       side: parseInt(side),
       from_address: fromAddress,
-      chain_id: betHandshakeHandler.getChainIdDefaultWallet(),
+      chain_id: getChainIdDefaultWallet(),
     };
     console.log('Go to Params:', params);
     const hid = selectedOutcome.hid;
@@ -584,7 +589,7 @@ display: 'flex', flexDirection: 'column', flex: 1, marginBottom: 10,
     const hid = selectedOutcome.hid;
 
     if (status && data) {
-      const isExist = betHandshakeHandler.isExistMatchBet(data);
+      const isExist = isExistMatchBet(data);
       let message = MESSAGE.CREATE_BET_NOT_MATCH;
       if (isExist) {
         message = MESSAGE.CREATE_BET_MATCHED;
