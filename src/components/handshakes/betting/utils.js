@@ -37,6 +37,7 @@ export const getMessageWithCode= (code)=> {
 
   export const isExpiredDate = (reportTime) => {
     //const newClosingDate = moment.unix(closingDate).add(90, 'minutes');
+    console.log('Report Time:', reportTime);
     const newClosingDate = moment.unix(reportTime);
     let dayUnit = newClosingDate.utc();
     let today = moment();

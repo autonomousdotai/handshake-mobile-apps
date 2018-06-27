@@ -20,7 +20,8 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import Feed from '@/components/core/presentation/Feed';
 import BettingShake from './Shake';
 import {showAlert} from '@/reducers/app/action';
-import {getMessageWithCode, isRightNetwork, getId, getShakeOffchain, getBalance, getEstimateGas} from '@/components/handshakes/betting/utils.js';
+import {getMessageWithCode, isRightNetwork, getId, 
+  getShakeOffchain, getBalance, getEstimateGas, isSameAddress} from '@/components/handshakes/betting/utils.js';
 
 
 // css, icons
@@ -308,19 +309,22 @@ class FeedBetting extends React.Component {
   }
   handleActionReal(title, offchain, hid){
     const realId = getId(offchain);
+    const {itemInfo} = this.state;
 
     switch(title){
 
       case BETTING_STATUS_LABEL.CANCEL:
         // TO DO: CLOSE BET
-        this.uninitItem(realId);
+        const {side, amount, odds} = itemInfo;
+
+        betHandshakeHandler.cancelBet(hid, side, amount, odds, offchain);
         break;
 
       case BETTING_STATUS_LABEL.WITHDRAW:
         // TO DO: WITHDRAW
         //this.collect(id);
         //this.rollback(id);
-        betHandshakeHandler.withdraw(hid, offchain, hid);
+        betHandshakeHandler.withdraw(hid, offchain);
         break;
       case BETTING_STATUS_LABEL.REFUND:
       this.refund(realId);
@@ -395,6 +399,7 @@ class FeedBetting extends React.Component {
   loadMyHandshakeList = () => {
     this.props.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE });
   }
+  /*
   async uninitItem(id){
     const balance = await getBalance();
     console.log('Balance:', balance);
@@ -444,6 +449,7 @@ class FeedBetting extends React.Component {
     }
 
   }
+  */
   async uninitItemFree(id){
     const balance = await getBalance();
     console.log('Balance:', balance);
