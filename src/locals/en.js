@@ -494,9 +494,11 @@ export default {
         telegram2: 'Leave your best joke for a chance to win more Shuri.',
         twitter: 'Twitter',
         twitter2: 'Our social media guy says we need followers on ',
+        ninja_name: "Receive your randomly generated ninja name.",
         referral_link: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
         menu_amount: "Shurikens straight into your pocket, when new ninjas bet through your referral link.",
-        menu_total: "ninja{0} you've brought in."
+        menu_total: "ninja{0} you've brought in.",
+        profile_link: "Share to get 20 free tokens."
       },
       placeholder: {
         telegram_username: 'Your telegram alias',
