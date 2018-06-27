@@ -157,6 +157,8 @@ export default {
   'ex.error.302': 'Sorry, that ninja does not exist.',
   'ex.error.303': 'It looks like you have reached your credit card limit.',
   'ex.error.309': 'You already have a listing! To change your rates, please cancel your current listing.',
+  'ex.error.319': 'Invalid free start amount',
+  'ex.error.320': 'Register free start failed',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': 'WELCOME TO OUR <br/> EARLY BIRD PROGRAM!',
@@ -168,6 +170,7 @@ export default {
   'error.requiredOne': 'You need to fill in one of these!',
   'error.greaterThan': 'Must be greater than {min}',
   'error.lessThan': 'Must be less than {max}',
+  'error.mustBeANumber': 'Must be a number',
 
   'btn.initiate': 'Initiate',
   'btn.shake': 'Shake',
