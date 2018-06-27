@@ -442,7 +442,6 @@ submitEndStep= async () => {
   const { messages } = this.props.intl;
 
   let result = await this.completeRefers();
-  console.log(result);
   if(result){
     if(result.data){
       let refers = local.get(APP.REFERS);

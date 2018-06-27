@@ -471,12 +471,18 @@ export default {
         twitter: 'Twitter',
         twitter2: 'Our social media guy says we need followers on ',
         referral_link: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
+        menu_amount: "Shurikens straight into your pocket, when new ninjas bet through your referral link.",
+        menu_total: "ninja{0} you've brought in."
       },
       placeholder: {
         telegram_username: "Your telegram alias",
         twitter_username: "Your twitter username",
         email: "Verification code",
         email2: "Your favourite fake email"
+      },
+      label: {
+        menu: "Your clan",
+        menu_description: "Track your referrals and rewards here."
       }
     },
     refers_dashboard: {
@@ -503,9 +509,25 @@ export default {
         to_address: {
           placeholder: "Specify receiving..."
         },
+        label: {
+          from_wallet: "From wallet",
+          to_address: "To wallet address",
+          amount: "Amount",
+          usd: "USD",
+          wallet_balance: "Wallet balance"
+        },
+        placeholder: {
+          to_address: "Wallet address...",
+          select_wallet: "Select a wallet"
+        },
+        text: {
+          confirm_transfer: "Are you sure you want to transfer out "
+        },
         error: "Insufficient balance: ",
-        button: "Transfer"
-
+        button: {
+          transfer: "Transfer",
+          confirm: "Confirm",
+        }
       },
       copy: {
         title: "Copy address to clipboard",

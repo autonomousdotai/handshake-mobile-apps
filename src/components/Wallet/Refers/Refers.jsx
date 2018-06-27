@@ -6,6 +6,7 @@ import { showLoading, hideLoading } from '@/reducers/app/action';
 import Image from '@/components/core/presentation/Image';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { referredInfo } from '@/reducers/auth/action';
+import { StringHelper } from '@/services/helper';
 
 class Refers extends React.Component {
   constructor(props) {
@@ -71,13 +72,14 @@ class Refers extends React.Component {
   }
 
   render() {
+    const { messages } = this.props.intl;
 
     return (
       <div className="collapse-custom">
         <div className="head" onClick={() => this.showInfo()}>
           <p className="label">
-            Your clan
-            <span>Track your referrals and rewards here.</span>
+            {messages.wallet.refers.label.menu}
+            <span>{messages.wallet.refers.label.menu_description}</span>
           </p>
           <div className="extend">
             <span className="badge badge-success"></span>
@@ -85,8 +87,8 @@ class Refers extends React.Component {
           </div>
         </div>
         <div className={`content ${this.state.referCollapse ? '' : 'd-none'}`}>
-          <p className="text">{this.state.total} ninja{this.state.total != 1 ? "s" : ""} you've brought in.</p>
-          <p className="text">{this.state.amount} Shurikens straight into your pocket, when new ninjas bet through your referral link.</p>
+          <p className="text">{this.state.total} {StringHelper.format(messages.wallet.refers.text.menu_total, this.state.total != 1 ? "s" : "")}</p>
+          <p className="text">{this.state.amount} {messages.wallet.refers.text.menu_amount}</p>
         </div>
       </div>
     )
