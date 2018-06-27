@@ -28,6 +28,10 @@ window.Clipboard = (function (window, document, navigator) {
 }(window, document, navigator));
 
 class Refers extends React.Component {
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+  }
+
   constructor(props) {
     super(props);
 

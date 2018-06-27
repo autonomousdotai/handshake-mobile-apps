@@ -543,7 +543,8 @@ export default {
           to_address: "To wallet address",
           amount: "Amount",
           usd: "USD",
-          wallet_balance: "Wallet balance"
+          wallet_balance: "Wallet balance",
+          scan_qrcode: "Scan QR code",
         },
         placeholder: {
           to_address: "Wallet address...",
@@ -620,6 +621,26 @@ export default {
         },
       },
     },
+  },
+  bitcoin: {
+    error: {
+      invalid_address: "You can only send tokens to Bitcoin address",
+      invalid_address2: "Please enter a valid receiving address.",
+      insufficient: "You have insufficient coin to make the transfer. Please top up and try again."
+    },
+    success: {
+      transaction: "Your transaction will appear on blockchain in about 30 seconds."
+    }
+  },
+  ethereum: {
+    error: {
+      invalid_address: "You can only send tokens to Ethereum address",
+      invalid_address2: "Please enter a valid receiving address.",
+      insufficient: "You have insufficient coin to make the transfer. Please top up and try again."
+    },
+    success: {
+      transaction: "Your transaction will appear on blockchain in about 30 seconds."
+    }
   },
 
   chat: {
