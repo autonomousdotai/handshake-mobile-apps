@@ -4,6 +4,12 @@ export default {
     fullname: 'Ninja: Anonymous Peer-to-Peer Prediction Exchange',
     description: 'Anonymous Peer-to-Peer Prediction Exchange',
     loading: 'Loading...',
+    navigation: {
+      me: 'Me',
+      exchanges: 'Exchanges',
+      whisper: 'Whisper',
+      wallet: 'Wallet',
+    },
   },
   buy: 'Buy',
   sell: 'Sell',
