@@ -1,3 +1,6 @@
+import { blockchainNetworks as blockchains } from '@/constants';
+import Blockchain from '@/services/blockchain';
+
 /**
  * Here is write function use common
  * @class Helper
@@ -68,12 +71,12 @@ class Helper {
    * @memberof Helper
    */
   static getQueryStrings(text) {
-    const assoc  = {};
+    const assoc = {};
     const decode = s => decodeURIComponent(s.replace(/\+/g, ' '));
     const queryString = text.substring(1);
     const keyValues = queryString.split('&');
 
-    for(let i in keyValues) {
+    for (const i in keyValues) {
       const key = keyValues[i].split('=');
       if (key.length > 1) {
         assoc[decode(key[0])] = decode(key[1]);
@@ -92,7 +95,7 @@ class Helper {
     return Number(number) === number && number % 1 !== 0;
   }
 
-    /**
+  /**
    * Small devices (mobile, 768px and down)
   */
   static get isSmallScreen() {
@@ -101,7 +104,7 @@ class Helper {
     }
     const width = window.innerWidth || document.body.clientWidth;
     return width < 768;
-  };
+  }
 }
 
 export class StringHelper {
@@ -115,5 +118,19 @@ export class StringHelper {
 }
 
 Helper.StringHelper = StringHelper;
+
+class Wallet {
+  static createBlockchainConnect(objectKey) {
+    return new Blockchain(blockchains[objectKey].type)
+      .connect(blockchains[objectKey].endpoint)
+      .setInitObj(blockchains[objectKey])
+      .setName(blockchains[objectKey].name)
+      .setUnit(blockchains[objectKey].unit)
+      .setTest(blockchains[objectKey].isTest)
+      .setChainId(blockchains[objectKey].chainId);
+  }
+}
+
+Helper.Wallet = Wallet;
 
 export default Helper;

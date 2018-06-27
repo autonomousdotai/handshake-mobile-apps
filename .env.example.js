@@ -3,6 +3,7 @@ module.exports = {
   BASE_API_URL: "http://localhost:8000/api",
   PUBLIC_URL: "http://localhost:8080",
   GOOGLE_API_KEY: '',
+  apikeyEtherscan: '',
   firebase: {
     apiKey: '',
     authDomain: '',

@@ -1,4 +1,10 @@
 export default {
+  app: {
+    name: 'Ninja',
+    fullname: 'Ninja: Anonymous Peer-to-Peer Prediction Exchange',
+    description: 'Anonymous Peer-to-Peer Prediction Exchange',
+    loading: 'Loading...',
+  },
   buy: 'Buy',
   sell: 'Sell',
   amount: 'amount',
@@ -147,6 +153,11 @@ export default {
   'ex.error.309': 'You already have a listing! To change your rates, please cancel your current listing.',
   'ex.error.default': 'Oops! Something went wrong.',
 
+  'ex.earlyBird.label.1': 'WELCOME TO OUR <br/> EARLY BIRD PROGRAM!',
+  'ex.earlyBird.label.2': 'Create your station with <br /><span class="intro-amount">{freeETH} ETH</span> free now!',
+  'ex.earlyBird.btn': 'Open Station',
+
+
   'error.required': 'Required',
   'error.requiredOne': 'You need to fill in one of these!',
   'error.greaterThan': 'Must be greater than {min}',
@@ -160,6 +171,8 @@ export default {
   'btn.cancel': 'Cancel',
   'btn.close': 'Close',
   'btn.accept': 'Accept',
+
+  product_info: 'Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!',
 
   // FAQ
   FAQ_TITLE: 'FAQ',
@@ -435,10 +448,15 @@ export default {
     },
   },
 
+  discover: {
+    noDataMessageCash: 'No stations near you yet. Be the first.',
+    noDataMessageSwap: 'No vendors near you yet. Be the first',
+  },
+
   wallet: {
     top_banner: {
-      message: "Shuriken Airdrop (limited)",
-      button: "Click here"
+      message: 'Shuriken Airdrop (limited)',
+      button: 'Click here',
     },
     refers: {
       header: '3 Shuriken Airdrop hoops',
@@ -475,39 +493,39 @@ export default {
         menu_total: "ninja{0} you've brought in."
       },
       placeholder: {
-        telegram_username: "Your telegram alias",
-        twitter_username: "Your twitter username",
-        email: "Verification code",
-        email2: "Your favourite fake email"
+        telegram_username: 'Your telegram alias',
+        twitter_username: 'Your twitter username',
+        email: 'Verification code',
+        email2: 'Your favourite fake email',
       },
       label: {
         menu: "Your clan",
         menu_description: "Track your referrals and rewards here."
-      }
+      },
     },
     refers_dashboard: {
-      header: "3 Shuriken Airdrop hoops",
-      title: "This is your super sexy referral link. You get 20 shurikens for every new ninja.",
+      header: '3 Shuriken Airdrop hoops',
+      title: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
       text: {
-        copy_link: "Referral link copied to clipboard.",
-        note: "Do not change your alias or this link will be unvalid",
-        number_ninjas: "You brought {0} ninjas to the dojo.",
-        number_total: "Total reward: {0} SHURI"
-      }
+        copy_link: 'Referral link copied to clipboard.',
+        note: 'Do not change your alias or this link will be unvalid',
+        number_ninjas: 'You brought {0} ninjas to the dojo.',
+        number_total: 'Total reward: {0} SHURI',
+      },
     },
     action: {
       remove: {
-        title: "Remove",
-        header: "Are you sure?",
-        message: "This will permanently delete your wallet.",
-        button_yes: "Yes, remove",
-        button_cancel: "Cancel"
+        title: 'Remove',
+        header: 'Are you sure?',
+        message: 'This will permanently delete your wallet.',
+        button_yes: 'Yes, remove',
+        button_cancel: 'Cancel',
       },
       transfer: {
-        title: "Transfer coins",
-        header: "Transfer coins",
+        title: 'Transfer coins',
+        header: 'Transfer coins',
         to_address: {
-          placeholder: "Specify receiving..."
+          placeholder: 'Specify receiving...',
         },
         label: {
           from_wallet: "From wallet",
@@ -530,69 +548,74 @@ export default {
         }
       },
       copy: {
-        title: "Copy address to clipboard",
-        message: "Copy address to clipboard",
-        success: "Copied to clipboard"
+        title: 'Copy address to clipboard',
+        message: 'Copy address to clipboard',
+        success: 'Copied to clipboard',
       },
       default: {
-        title: "Set as default {0} wallet ",
+        title: 'Set as default {0} wallet ',
       },
       cancel: {
-        title: "Cancel",
+        title: 'Cancel',
       },
       restore: {
-        title: "Restore wallets",
-        message: "Your Wallet restore success",
-        error: "Invalid wallets"
+        title: 'Restore wallets',
+        message: 'Your Wallet restore success',
+        error: 'Invalid wallets',
       },
       import: {
-        title: "Add new / Import"
+        title: 'Add new / Import',
       },
       backup: {
-        title: "Backup wallets"
+        title: 'Backup wallets',
       },
       protect: {
-        title: "Secure this wallet",
+        title: 'Secure this wallet',
         text: {
-          step1_msg1: "This passphrase will allow you to recover your funds if your phone is ever lost or stolen.",
-          step1_msg2: "Please make sure nobody has access to your passphrase. You can use a password manager or write it down and hide it under your mattress.",
-          step1_label: "I understand that if I lose my passphrase, I lose access to my account.",
-          step2_msg1: "Record these words carefully. Don't email it or screenshot it.",
-          step3_msg1: "Tap to put these words in the correct order."
+          step1_msg1: 'This passphrase will allow you to recover your funds if your phone is ever lost or stolen.',
+          step1_msg2: 'Please make sure nobody has access to your passphrase. You can use a password manager or write it down and hide it under your mattress.',
+          step1_label: 'I understand that if I lose my passphrase, I lose access to my account.',
+          step2_msg1: 'Record these words carefully. Don\'t email it or screenshot it.',
+          step3_msg1: 'Tap to put these words in the correct order.',
         },
         button: {
-          "continue": "Continue",
-          "verify": "Verify your passsphrase",
-          "copy_clipboard": "Copy to clipboard",
-          "ok": "OK"
+          continue: 'Continue',
+          verify: 'Verify your passsphrase',
+          copy_clipboard: 'Copy to clipboard',
+          ok: 'OK',
         },
         error: {
-          confirm: "These words are in the wrong order. Please try again."
+          confirm: 'These words are in the wrong order. Please try again.',
         },
-        success: "Your wallet has been secured!"
+        success: 'Your wallet has been secured!',
       },
       receive: {
-        title: "Receive coins"
+        title: 'Receive coins',
       },
       scan_qrcode: {
-        header: "Scan QR code"
+        header: 'Scan QR code',
       },
       history: {
-        title: "View transaction history",
-        header: "Transaction details",
+        title: 'View transaction history',
+        header: 'Transaction details',
         label: {
-          failed: "Failed",
-          unconfirmed: "Unconfirmed",
-          balance: "Balance",
-          transactions: "Transactions",
-          status: "Status",
-          confirmations: "confirmations",
-          success: "success",
-          failed: "failed",
-        }
+          failed: 'Failed',
+          unconfirmed: 'Unconfirmed',
+          balance: 'Balance',
+          transactions: 'Transactions',
+          status: 'Status',
+          confirmations: 'confirmations',
+          success: 'success',
+        },
+      },
+    },
+  },
 
-      }
-    }
+  chat: {
+    emptyMessage: 'Trade secrets here. All communication is encrypted and no one is listening.',
+    notFoundUser: 'The Ninja you are looking for is not here. Perhaps you have their name wrong?',
+    lastMessageContent: 'You lost the key to this secret message.',
+    searchPlaceHolder: 'Enter a ninja’s name or alias.',
   },
   /*
   *

@@ -17,6 +17,8 @@ local.save(APP.VERSION, '0.0.2');
 function appReducter(state = {
   version: local.get(APP.VERSION),
 
+  rootLoading: true,
+
   locale: local.get(APP.LOCALE) || 'en',
 
   isCalling: false,
@@ -57,6 +59,22 @@ function appReducter(state = {
 
 }, action) {
   switch (action.type) {
+    case APP_ACTION.SET_ROOT_LOADING:
+      return {
+        ...state,
+        rootLoading: action.payload,
+      };
+
+    case APP_ACTION.SET_LANGUAGE: {
+      if (!action.autoDetect) {
+        local.save(APP.LOCALE, action.payload);
+      }
+      return {
+        ...state,
+        locale: action.payload,
+      };
+    }
+
     case APP_ACTION.HEADER_TITLE_SET:
       return {
         ...state,
@@ -201,19 +219,10 @@ function appReducter(state = {
       };
 
     case APP_ACTION.IP_INFO: {
+      local.save(APP.IP_INFO, action.payload);
       return {
         ...state,
         ipInfo: action.payload,
-      };
-    }
-
-    case APP_ACTION.CHANGE_LOCALE: {
-      if (!action.autoDetect) {
-        local.save(APP.LOCALE, action.payload);
-      }
-      return {
-        ...state,
-        locale: action.payload,
       };
     }
 
@@ -242,14 +251,14 @@ function appReducter(state = {
       return {
         ...state,
         firechat: action.payload,
-      }
+      };
     }
 
     case APP_ACTION.SET_FIREBASE_USER: {
       return {
         ...state,
         firebaseUser: action.payload,
-      }
+      };
     }
 
     default:

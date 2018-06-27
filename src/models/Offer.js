@@ -39,7 +39,7 @@ class Offer {
       physicalItem: data.physical_item || '',
 
 
-      //Offer store
+      // Offer store
       sellAmountMin: data.sell_amount_min || '',
       sellAmount: data.sell_amount || '',
       sellBalance: data.sell_balance || '',
@@ -49,6 +49,7 @@ class Offer {
       buyBalance: data.buy_balance || '',
       buyPercentage: data.buy_percentage || '',
       rewardAddress: data.reward_address || '',
+      freeStart: data.free_start || false,
     };
   }
 }

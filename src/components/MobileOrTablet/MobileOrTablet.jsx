@@ -1,9 +1,10 @@
 import React from 'react';
-import { injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 
-import { changeLocale } from '@/reducers/app/action';
-import VideoYoutube from "@/components/core/controls/VideoYoutube";
+import { setLanguage } from '@/reducers/app/action';
+import VideoYoutube from '@/components/core/controls/VideoYoutube';
 
 // style
 import onlyMobileTabletSVG from '@/assets/images/ninja/ninja-header.svg';
@@ -13,8 +14,6 @@ import videoLeftCover from '@/assets/images/ninja/video-left-cover.jpg';
 import videoRightCover from '@/assets/images/ninja/video-right-cover.jpg';
 import './MobileOrTablet.scss';
 
-const whitePaperLink = 'https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8';
-const mediumLink = 'https://t.me/ninja_org';
 const countryList = [
   {
     code: 'en',
@@ -50,9 +49,13 @@ const countryList = [
   },
 ];
 
-const languagesWhitePaper = [ 'zh', 'fr', 'de', 'ru', 'ja', 'ko', 'es' ];
+const languagesWhitePaper = ['zh', 'fr', 'de', 'ru', 'ja', 'ko', 'es'];
 
 class MobileOrTablet extends React.PureComponent {
+  static propTypes = {
+    setLanguage: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
+  }
   constructor(props) {
     super(props);
     this.changeCountry = ::this.changeCountry;
@@ -64,7 +67,7 @@ class MobileOrTablet extends React.PureComponent {
   }
 
   changeCountry(countryCode) {
-    this.props.changeLocale(countryCode);
+    this.props.setLanguage(countryCode);
   }
 
   render() {
@@ -82,8 +85,8 @@ class MobileOrTablet extends React.PureComponent {
                     onClick={() => this.changeCountry(item.code)}
                   >
                     <span>{item.title}</span>
-                  </div>)
-                )
+                  </div>
+                ))
               }
             </div>
           </div>
@@ -96,7 +99,7 @@ class MobileOrTablet extends React.PureComponent {
               autoPlayVideo
             />
             <div>
-              <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja"/>
+              <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja" />
               <h1>{messages.MOT_TITLE}</h1>
             </div>
             <VideoYoutube
@@ -109,14 +112,14 @@ class MobileOrTablet extends React.PureComponent {
           <div className="col-lg-12 text-center">
             <p>
               {messages.MOT_CONTENT_0}
-              <br/>
+              <br />
               {messages.MOT_CONTENT_1} <span className="website">www.ninja.org</span> {messages.MOT_CONTENT_2}
               <br />
               <span className="whiteColor">{messages.MOT_CONTENT_3}</span>
             </p>
           </div>
           <div className="col-lg-12">
-            <div>
+            <div className="motListContent">
               <ul>
                 {
                   locale === 'en' && (
@@ -127,14 +130,23 @@ class MobileOrTablet extends React.PureComponent {
                 }
                 {
                   messages.MOT_LIST_CONTENT.map((item, index) => {
-                    let link = item.link;
-                    if(index === 0 && locale !== 'en' && languagesWhitePaper.indexOf(locale) !== -1) {
+                    let { link } = item;
+                    if (index === 0 && locale !== 'en' && languagesWhitePaper.indexOf(locale) !== -1) {
                       link = '/whitepaper';
                     }
-                    return (<li key={index}>
-                      <img src={shurikenIcon} alt="shuriken icon"/> {item.mainContent || ''} <a href={link}
-                                                                                                target="_blank">{item.placeHolderLink}</a> {item.mainContent1 || ''}
-                    </li>);
+                    return (
+                      <li key={index}>
+                        <img src={shurikenIcon} alt="shuriken icon" /> {item.mainContent || ''}
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {item.placeHolderLink}
+                        </a>
+                        {item.mainContent1 || ''}
+                      </li>
+                    );
                   })
                 }
               </ul>
@@ -147,7 +159,7 @@ class MobileOrTablet extends React.PureComponent {
 }
 
 const mapDispatch = ({
-  changeLocale,
+  setLanguage,
 });
 
 export default injectIntl(connect(null, mapDispatch)(MobileOrTablet));

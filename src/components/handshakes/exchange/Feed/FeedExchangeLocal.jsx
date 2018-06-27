@@ -238,7 +238,7 @@ class FeedExchangeLocal extends React.PureComponent {
     const { refreshPage } = this.props;
     const { offer } = this;
     const { data } = res;
-    const { currency, type, system_address, amount, id, hid} = data;
+    const { currency, type, system_address, total_amount, id, hid} = data;
 
     console.log('handleShakeOfferExchangeSuccess',res);
 
@@ -255,13 +255,13 @@ class FeedExchangeLocal extends React.PureComponent {
       const wallet = MasterWallet.getWalletDefault(currency);
 
       if (currency === CRYPTO_CURRENCY.BTC) {
-        wallet.transfer(system_address, amount, NB_BLOCKS).then(success => {
+        wallet.transfer(system_address, total_amount, NB_BLOCKS).then(success => {
           console.log('transfer', success);
         });
       } else if (currency === CRYPTO_CURRENCY.ETH) {
         const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
 
-        const result = await exchangeHandshake.initByCoinOwner(amount, id);
+        const result = await exchangeHandshake.initByCoinOwner(total_amount, id);
         console.log('handleShakeOfferExchangeSuccess', result);
       }
     }

@@ -55,6 +55,9 @@
   .imageHeader {
     min-width: rem-calc(409px);
   }
+  .motListContent {
+    display: flex;
+  }
   h1 {
     font-size: rem-calc(22px);
     color: #BCBCBC;
@@ -83,8 +86,8 @@
     color: #FFFFFF;
     letter-spacing: 0;
     list-style: none;
-    width: 40%;
     margin: 0 auto;
+    padding-left: 0;
     li {
       img {
         width: rem-calc(21px);

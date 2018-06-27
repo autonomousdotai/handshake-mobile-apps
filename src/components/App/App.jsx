@@ -7,8 +7,6 @@ import Root from '@/components/App/Root';
 // store
 import store from '@/stores';
 import history from '@/services/history';
-// styles
-import '@/styles/main';
 
 class App extends React.Component {
   render() {

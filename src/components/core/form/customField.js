@@ -50,16 +50,14 @@ export const fieldDropdown = customField(({
       </DropdownToggle>
       <DropdownMenu>
         {
-            list.map((item) => {
-              return (
-                <DropdownItem
-                  key={item.id}
-                  onClick={() => onChange(item)}
-                >
-                  {item.text}
-                </DropdownItem>
-              );
-            })
+            list.map(item => (
+              <DropdownItem
+                key={item.id}
+                onClick={() => onChange(item)}
+              >
+                {item.text}
+              </DropdownItem>
+              ))
           }
       </DropdownMenu>
     </UncontrolledButtonDropdown>
@@ -68,7 +66,7 @@ export const fieldDropdown = customField(({
 
 // type = tab|radio-big|default
 export const fieldRadioButton = customField(({
-  onChange, value, list, name, color = '', styleButton = {}, type
+  onChange, value, list, name, color = '', styleButton = {}, type,
 }) => {
   let containerClass = '';
   let fullWidth = false;
@@ -109,9 +107,11 @@ export const fieldRadioButton = customField(({
   }
   return (
     <span style={{ width: fullWidth ? '100%' : '' }}>
-    {
+      {
       list.map((item, index) => {
-        const { value: itemValue, text, icon, hide } = item;
+        const {
+ value: itemValue, text, icon, hide,
+} = item;
         if (hide) return null;
         const isChecked = itemValue === value;
         return (
@@ -128,7 +128,7 @@ export const fieldRadioButton = customField(({
               onClick={() => onChange(itemValue)}
               style={{ color, minWidth: '58px', ...styleButton }}
             >
-              {/*<span style={{ fontSize: '28px' }}>&sdot;</span> */}
+              {/* <span style={{ fontSize: '28px' }}>&sdot;</span> */}
               {
                 hasPrefixIcon && (<span>{icon || <span>&#x25cf;</span>}&nbsp;</span>)
               }
@@ -139,11 +139,11 @@ export const fieldRadioButton = customField(({
       })
     }
     </span>
-  )
+  );
 });
 
 export const fieldNumericInput = customField(({
-  onChange, onBlur, onFocus, value, list, name, color = '', step = 0.25, suffix, btnBg = ''
+  onChange, onBlur, onFocus, value, list, name, color = '', step = 0.25, suffix, btnBg = '',
 }) => {
   const valueFloat = parseFloat(value || 0, 10);
   return (
@@ -173,7 +173,7 @@ export const fieldCleave = customField(({
 ));
 
 export const fieldPhoneInput = customField(({
-  onChange, onBlur, onFocus, value, propsCleave, className, placeholder, color
+  onChange, onBlur, onFocus, value, propsCleave, className, placeholder, color,
 }) => {
   const splittedNumbers = value.split('-');
   let countryCode = '';

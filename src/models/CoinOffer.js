@@ -1,6 +1,5 @@
 class CoinOffer {
   static coinOffer(data) {
-    console.log('coinOffer',data);
     return {
       currency: data.currency || '',
       status: data.status || '',
@@ -16,6 +15,7 @@ class CoinOffer {
       systemAddress: data.system_address || '',
       userAddress: data.user_address || '',
       rewardAddress: data.reward_address || '',
+      freeStart: data.free_start || false,
     };
   }
 }

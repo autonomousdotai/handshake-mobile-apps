@@ -1,6 +1,6 @@
 import local from '@/services/localStore';
-import {AMOUNT_DECIMAL, APP, HANDSHAKE_USER, PRICE_DECIMAL} from '@/constants';
-import {BigNumber} from "bignumber.js";
+import { AMOUNT_DECIMAL, APP, HANDSHAKE_USER, PRICE_DECIMAL } from '@/constants';
+import { BigNumber } from 'bignumber.js';
 
 export function getOfferPrice(listOfferPrice = [], type = '', currency = '') {
   let result = {};
@@ -33,6 +33,7 @@ export function formatMoney(price = 0) {
 
 
 export function formatMoneyByLocale(price = 0, locale = 'USD') {
+  console.log('coins - price', price);
   switch (locale.toLowerCase()) {
     case 'vnd':
       return new BigNumber(price).dividedBy(1000).decimalPlaces(0).times(1000)
@@ -45,7 +46,8 @@ export function formatMoneyByLocale(price = 0, locale = 'USD') {
 export function roundNumberByLocale(price = 0, locale = 'USD') {
   switch (locale.toLowerCase()) {
     case 'vnd':
-      return new BigNumber(price).dividedBy(1000).decimalPlaces(0).times(1000).toNumber();
+      return new BigNumber(price).dividedBy(1000).decimalPlaces(0).times(1000)
+        .toNumber();
     default:
       return new BigNumber(price).decimalPlaces(PRICE_DECIMAL);
   }

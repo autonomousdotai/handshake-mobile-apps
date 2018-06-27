@@ -45,10 +45,11 @@ class DatePicker extends React.PureComponent {
   }
 
   findFinalDateTime() {
-    console.log(this.state.selectedDateValue.format('YYYY-MM-DD'), this.state.selectedTime);
-    this.setState({
-      finalDateTime: moment(`${this.state.selectedDateValue.format('YYYY-MM-DD')} ${this.state.selectedTime}`, 'YYYY-MM-DD h:mm a').unix(),
-    }, this.callOnChangeProps);
+    if (this.state.selectedDateValue !== '') {
+      this.setState({
+        finalDateTime: moment(`${this.state.selectedDateValue.format('YYYY-MM-DD')} ${this.state.selectedTime}`, 'YYYY-MM-DD h:mm a').unix(),
+      }, this.callOnChangeProps);
+    }
   }
   selectedDate = moment();
 

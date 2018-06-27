@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormattedMessage} from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
@@ -11,7 +11,7 @@ export const countDecimals = (value) => {
   if (!decimalsString) return 0;
   return decimalsString.length || 0;
   // return value.toString().split('.')[1].length || 0;
-}
+};
 
 export const getDistanceFromLatLonInKm = (_lat1, _lon1, _lat2, _lon2) => {
   const lat1 = parseFloat(_lat1, 10);
@@ -31,48 +31,48 @@ export const getDistanceFromLatLonInKm = (_lat1, _lon1, _lat2, _lon2) => {
 };
 
 export const getErrorMessageFromCode = (error) => {
-  let result = ''
+  let result = '';
   const messageFromApi = error.response?.data?.message;
   const code = error.response?.data?.code;
   const codeInt = parseInt(code, 10);
   switch (codeInt) {
     case -4: case -5: case -6: case -201: case -202: case -203: case -204:
     case -305: case -306: case -307: case -308: case -311:
-      result = <FormattedMessage id="ex.error.systemError"/>;
+      result = <FormattedMessage id="ex.error.systemError" />;
       break;
     case -312:
-      result = <FormattedMessage id="ex.error.312"/>
+      result = <FormattedMessage id="ex.error.312" />;
       break;
     case -313:
-      result = <FormattedMessage id="ex.error.313"/>
+      result = <FormattedMessage id="ex.error.313" />;
       break;
     case -314:
-      result = <FormattedMessage id="ex.error.314"/>
+      result = <FormattedMessage id="ex.error.314" />;
       break;
     case -315:
-      result = <FormattedMessage id="ex.error.315"/>
+      result = <FormattedMessage id="ex.error.315" />;
       break;
     case -1:
-      result = <FormattedMessage id="ex.error.1"/>
+      result = <FormattedMessage id="ex.error.1" />;
       break;
     case -3:
-      result = <FormattedMessage id="ex.error.3"/>
+      result = <FormattedMessage id="ex.error.3" />;
       break;
     case -301:
-      result = <FormattedMessage id="ex.error.301"/>
+      result = <FormattedMessage id="ex.error.301" />;
       break;
     case -302:
-      result = <FormattedMessage id="ex.error.302"/>
+      result = <FormattedMessage id="ex.error.302" />;
       break;
     case -303:
-      result = <FormattedMessage id="ex.error.303"/>
+      result = <FormattedMessage id="ex.error.303" />;
       break;
     case -309:
-      result = <FormattedMessage id="ex.error.309"/>
+      result = <FormattedMessage id="ex.error.309" />;
       break;
     default:
-      result = messageFromApi || <FormattedMessage id="ex.error.default"/>;
+      result = messageFromApi || <FormattedMessage id="ex.error.default" />;
   }
   return result;
-}
+};
 
