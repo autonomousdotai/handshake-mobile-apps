@@ -410,19 +410,8 @@ renderScanQRCode = () => {
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeWhite} /> : ""}
             </div>
             <p className="labelText">{messages.wallet.action.transfer.label.amount}</p>
-            <div className="div-amount">
-                <div className="prepend-left">{messages.wallet.action.transfer.label.usd}</div>
-                <Field
-                  key="1"
-                  name="amountMoney"
-                  placeholder={"0.0"}
-                  type="text"
-                  className="form-control"
-                  component={fieldInput}
-                  value={this.state.inputSendMoneyValue}
-                  onChange={evt => this.updateAddressMoneyValue(evt)}
-                />
-                <div className="prepend-right">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</div>
+              <div className="div-amount">
+                <div className="prepend">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</div>
                 <Field
                   key="2"
                   name="amountCoin"
@@ -435,7 +424,22 @@ renderScanQRCode = () => {
                   validate={[required, amountValid]}
                 />
               </div>
-              <div className="clearfix"></div>
+              { isToken ? "" :
+                <div className="div-amount">
+                  <div className="prepend">{messages.wallet.action.transfer.label.usd}</div>
+                  <Field
+                    key="1"
+                    name="amountMoney"
+                    placeholder={"0.0"}
+                    type="text"
+                    className="form-control"
+                    component={fieldInput}
+                    value={this.state.inputSendMoneyValue}
+                    onChange={evt => this.updateAddressMoneyValue(evt)}
+                  />
+                </div>
+              }
+
             { this.state.walletDefault && !isFromWallet ?
               <div className ="dropdown-wallet-tranfer">
                 <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>

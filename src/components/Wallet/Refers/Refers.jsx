@@ -1,6 +1,7 @@
 import React from 'react';
 import {injectIntl} from 'react-intl';
 import {connect} from "react-redux";
+import PropTypes from 'prop-types';
 import {fieldInput} from '@/components/core/form/customField';
 import {change, Field} from 'redux-form';
 import {bindActionCreators} from 'redux';
