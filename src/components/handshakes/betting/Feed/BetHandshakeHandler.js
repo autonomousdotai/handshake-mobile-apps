@@ -451,7 +451,7 @@ export class BetHandshakeHandler {
         realBlockHash = "-1";
         logJson = error.message;        
         store.dispatch(showAlert({
-          message: <div className="text-center">{MESSAGE.ROLLBACK}</div>,
+          message: MESSAGE.ROLLBACK,
           timeOut: 3000,
           type: 'danger',
           callBack: () => {
@@ -475,6 +475,7 @@ export class BetHandshakeHandler {
     const contractAddress = bettinghandshake.contractAddress;
 
     let result = null;
+    
     let logJson = "";
     let realBlockHash= "";
     try {
@@ -486,7 +487,7 @@ export class BetHandshakeHandler {
         realBlockHash = "-1";
         logJson = error.message;
         store.dispatch(showAlert({
-          message: <div className="text-center">{MESSAGE.ROLLBACK}</div>,
+          message: MESSAGE.ROLLBACK,
           timeOut: 3000,
           type: 'danger',
           callBack: () => {
@@ -495,7 +496,7 @@ export class BetHandshakeHandler {
       }else {
         
         store.dispatch(showAlert({
-          message: <div className="text-center">{MESSAGE.WITHDRAW_SUCCESS}</div>,
+          message: MESSAGE.WITHDRAW_SUCCESS,
           timeOut: 3000,
           type: 'success',
           callBack: () => {
@@ -503,12 +504,13 @@ export class BetHandshakeHandler {
         }));
       }
     }catch(err){
+      console.log("Withdraw Error:", err);
       realBlockHash = "-1";
       logJson = err.message;
     }
     
     this.saveTransaction(offchain,CONTRACT_METHOD.COLLECT, chainId, realBlockHash, contractAddress, logJson);
-
+    
     return result;
   }
   async refund(hid, offchain){
