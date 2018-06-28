@@ -551,7 +551,7 @@ display: 'flex', flexDirection: 'column', flex: 1, marginBottom: 10,
   initHandshake(fields, fromAddress) {
     const { selectedOutcome } = this.state;
     const side = this.toggleRef.value;
-    const chainId = betHandshakeHandler;
+    //const chainId = betHandshakeHandler;
     const params = {
       // to_address: toAddress ? toAddress.trim() : '',
       // public: isPublic,
