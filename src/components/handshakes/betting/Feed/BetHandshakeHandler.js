@@ -108,7 +108,7 @@ export const MESSAGE = {
     'STATUS_MAKER_INIT_ROLLBACK': -2,
 
     'STATUS_PENDING': -1,
-    
+
     'STATUS_INITED': 0,
     'STATUS_MAKER_UNINITED': 1,
     'STATUS_SHAKER_SHAKED': 2,
@@ -117,7 +117,7 @@ export const MESSAGE = {
     'STATUS_RESOLVED': 5,
     'STATUS_DONE': 6,```*/
 
-export const BET_BLOCKCHAIN_STATUS = {  
+export const BET_BLOCKCHAIN_STATUS = {
     STATUS_COLLECT_PENDING: -8,
     STATUS_DISPUTE_FAILED: -7,
     STATUS_REFUND_FAILED: -6,
@@ -204,9 +204,9 @@ export class BetHandshakeHandler {
     return this.myManager;
   }
   constructor() {
-
+    this.listOnChainLoading = {};
   }
-  getStatusLabel(blockchainStatus, resultStatus, role, side, isMatch) {
+  static getStatusLabel(blockchainStatus, resultStatus, role, side, isMatch) {
     let label = null;
     let strStatus = null;
     let isAction = false;
@@ -277,8 +277,8 @@ export class BetHandshakeHandler {
       isAction = false;
     }
     return { title: label, isAction, status: strStatus };
-  }  
-  
+  }
+
   addContract = async (item, hid) => {
     console.log('initContract, hid:', item, hid);
 
@@ -303,9 +303,9 @@ export class BetHandshakeHandler {
         realBlockHash = "-1";
         logJson = error.message;
         this.rollback(offchain);
-  
+
       }
-  
+
       // Send GA event tracking
       try {
         if(hash === -1) {
@@ -321,12 +321,12 @@ export class BetHandshakeHandler {
       } catch (err) {
         console.log(err);
       }
-  
+
     }catch(e){
       realBlockHash = "-1";
       logJson = e.message;
     }
-    
+
     this.saveTransaction(offchain,CONTRACT_METHOD.INIT, chainId, realBlockHash, contractAddress, logJson);
     return dataBlockchain;
   };
@@ -363,7 +363,7 @@ export class BetHandshakeHandler {
         offchain,
       );
       const {blockHash, logs, hash, error} = result;
-  
+
       logJson = JSON.stringify(logs);
       realBlockHash = blockHash;
       if(hash == -1){
@@ -371,7 +371,7 @@ export class BetHandshakeHandler {
         logJson = error.message;
         this.rollback(offchain);
       }
-  
+
        // Send GA event tracking
       try {
         if(hash === -1) {
@@ -385,11 +385,11 @@ export class BetHandshakeHandler {
           GA.createBetMatchedSuccess({ side, odds, amount });
         }
       } catch (err) {}
-  
+
     }catch(e){
 
     }
-    
+
     this.saveTransaction(offchain,CONTRACT_METHOD.SHAKE, chainId, realBlockHash, contractAddress, logJson);
 
     return result;
@@ -408,7 +408,7 @@ export class BetHandshakeHandler {
         /*
         const shakeItem = foundShakeItem(element, offchain);
         console.log('Found shake Item:', shakeItem);
-        
+
        if(shakeItem){
         this.shakeContract(shakeItem, hid, odds);
 
@@ -444,12 +444,12 @@ export class BetHandshakeHandler {
     try{
       result = await bettinghandshake.cancelBet(hid, side, stake, odds, offchain);
       const {blockHash, logs, hash, error} = result;
-  
+
       logJson = JSON.stringify(logs);
       realBlockHash = blockHash;
       if(hash == -1){
         realBlockHash = "-1";
-        logJson = error.message;        
+        logJson = error.message;
         store.dispatch(showAlert({
           message: <div className="text-center">{MESSAGE.ROLLBACK}</div>,
           timeOut: 3000,
@@ -463,14 +463,22 @@ export class BetHandshakeHandler {
       realBlockHash = "-1";
       logJson = err.message;
     }
-    
+
     this.saveTransaction(offchain,CONTRACT_METHOD.CANCEL, chainId, realBlockHash, contractAddress, logJson);
 
     return result;
   }
+  setItemOnChain = (offchain,isLoading = false) => {
+    if(this.listOnChainLoading){
+        this.listOnChainLoading[offchain] = {
+        isLoading: isLoading
+      }
+    }
+  }
   async withdraw(hid, offchain){
+
     const chainId = getChainIdDefaultWallet();
-    
+
     const bettinghandshake = new BettingHandshake(chainId);
     const contractAddress = bettinghandshake.contractAddress;
 
@@ -493,7 +501,7 @@ export class BetHandshakeHandler {
           }
         }));
       }else {
-        
+
         store.dispatch(showAlert({
           message: <div className="text-center">{MESSAGE.WITHDRAW_SUCCESS}</div>,
           timeOut: 3000,
@@ -506,7 +514,7 @@ export class BetHandshakeHandler {
       realBlockHash = "-1";
       logJson = err.message;
     }
-    
+
     this.saveTransaction(offchain,CONTRACT_METHOD.COLLECT, chainId, realBlockHash, contractAddress, logJson);
 
     return result;
@@ -546,7 +554,7 @@ export class BetHandshakeHandler {
     console.log('collectSuccess', successData);
     const {status} = successData
     if(status){
-      
+
       let updateInfo = Object.assign({}, itemInfo);
       updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING;
       store.dispatch(updateBettingChange(updateInfo));
@@ -557,7 +565,7 @@ export class BetHandshakeHandler {
         callBack: () => {
         }
       }));
-    
+
     }
   }
   collectFailed = (error) => {
@@ -609,7 +617,7 @@ export class BetHandshakeHandler {
         message: message,
         timeOut: 5000,
         type: 'danger',
-        
+
       }));
     }
 
@@ -646,10 +654,10 @@ export class BetHandshakeHandler {
         message: message,
         timeOut: 5000,
         type: 'danger',
-        
+
       }));
     }
-    
+
   }
 }
 
