@@ -39,7 +39,7 @@ export default {
   completeOfferConfirm: 'Finish shaking?',
   withdrawOfferConfirm: 'Are you sure you want to withdraw?',
   cancelOfferConfirm: 'Cancel this order?',
-  closeOfferConfirm: 'Are you sure you want to delete your station?',
+  closeOfferConfirm: 'Do you want to delete your offer?',
   acceptOfferConfirm: 'Accept the order?',
   createOfferSuccessMessage: 'Success! You have created an offer on Ninja.',
   shakeOfferSuccessMessage: 'Success! A ninja has shaked on your order.',
@@ -397,9 +397,9 @@ export default {
   me: {
     profile: {
       username: {
-        exist: 'Alias has existed!',
-        success: 'Your alias is recorded',
-        required: 'Alias has required!',
+        exist: 'Alias already exists',
+        success: 'Your alias has been recorded',
+        required: 'Alias required. ?',
       },
       verify: {
         alert: {
@@ -484,7 +484,7 @@ export default {
       button: 'Click here',
     },
     refers: {
-      header: '3 Shuriken Airdrop hoops',
+      header: 'Shuriken Airdrop Mission',
       error: {
         submit_telegram: 'Couldn\'t find you on Telegram. Please exit the group and try again.',
         submit_twitter: 'You haven\'t followed us yet. Please try again.',
@@ -513,11 +513,11 @@ export default {
         telegram2: 'Leave your best joke for a chance to win more Shuri.',
         twitter: 'Twitter',
         twitter2: 'Our social media guy says we need followers on ',
-        ninja_name: "Receive your randomly generated ninja name.",
+        ninja_name: 'Receive your randomly generated ninja name.',
         referral_link: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
-        menu_amount: "Shurikens straight into your pocket, when new ninjas bet through your referral link.",
-        menu_total: "ninja{0} you've brought in.",
-        profile_link: "Share to get 20 free tokens."
+        menu_amount: 'Shurikens straight into your pocket, when new ninjas bet through your referral link.',
+        menu_total: 'ninja{0} you\'ve brought in.',
+        profile_link: 'Share to get 20 free tokens.',
       },
       placeholder: {
         telegram_username: 'Your telegram alias',
@@ -526,12 +526,12 @@ export default {
         email2: 'Your favourite fake email',
       },
       label: {
-        menu: "Your clan",
-        menu_description: "Track your referrals and rewards here."
+        menu: 'Your clan',
+        menu_description: 'Track your referrals and rewards here.',
       },
     },
     refers_dashboard: {
-      header: '3 Shuriken Airdrop hoops',
+      header: 'Shuriken Airdrop Mission',
       title: 'This is your super sexy referral link. You get 20 shurikens for every new ninja.',
       text: {
         copy_link: 'Referral link copied to clipboard.',
@@ -555,25 +555,25 @@ export default {
           placeholder: 'Specify receiving...',
         },
         label: {
-          from_wallet: "From wallet",
-          to_address: "To wallet address",
-          amount: "Amount",
-          usd: "USD",
-          wallet_balance: "Wallet balance",
-          scan_qrcode: "Scan QR code",
+          from_wallet: 'From wallet',
+          to_address: 'To wallet address',
+          amount: 'Amount',
+          usd: 'USD',
+          wallet_balance: 'Wallet balance',
+          scan_qrcode: 'Scan QR code',
         },
         placeholder: {
-          to_address: "Wallet address...",
-          select_wallet: "Select a wallet"
+          to_address: 'Wallet address...',
+          select_wallet: 'Select a wallet',
         },
         text: {
-          confirm_transfer: "Are you sure you want to transfer out "
+          confirm_transfer: 'Are you sure you want to transfer out ',
         },
-        error: "Insufficient balance: ",
+        error: 'You don\'t have enough coin right now. Please top up.',
         button: {
-          transfer: "Transfer",
-          confirm: "Confirm",
-        }
+          transfer: 'Transfer',
+          confirm: 'Confirm',
+        },
       },
       copy: {
         title: 'Copy address to clipboard',
@@ -587,30 +587,30 @@ export default {
         title: 'Cancel',
       },
       restore: {
-        title: "Restore wallets",
-        error: "Invalid wallets",
-        header: "Restore wallets",
+        title: 'Restore wallets',
+        error: 'Invalid wallets',
+        header: 'Restore wallets',
         success: {
-          restore: "Your Wallet restore success"
+          restore: 'Your Wallet restore success',
         },
         button: {
-          restore: "Restore now"
+          restore: 'Restore now',
         },
-        description: "Please enter your top secret recovery data to restore your wallet."
+        description: 'Please enter your top secret recovery data to restore your wallet.',
       },
       import: {
-        title: "Add new / Import",
+        title: 'Add new / Import',
       },
       backup: {
-        title: "Backup wallets",
-        header: "Backup wallets",
-        description: "This data is the only way to restore your wallets. Keep it secret, keep it safe.",
+        title: 'Backup wallets',
+        header: 'Backup wallets',
+        description: 'This data is the only way to restore your wallets. Keep it secret, keep it safe.',
         success: {
-          copied: "Recovery data copied to clipboard."
+          copied: 'Recovery data copied to clipboard.',
         },
         button: {
-          copy: "Copy it somewhere safe"
-        }
+          copy: 'Copy it somewhere safe',
+        },
       },
       protect: {
         header: 'Secure this wallet',
@@ -635,47 +635,47 @@ export default {
       },
       receive: {
         title: 'Receive coins',
-        header: "Wallet address",
-        header2: "Custom Amount",
-        message: "Share your public wallet address to receive",
+        header: 'Wallet address',
+        header2: 'Custom Amount',
+        message: 'Share your public wallet address to receive',
         label: {
-          address: "Address",
-          amount: "Amount"
+          address: 'Address',
+          amount: 'Amount',
         },
         placeholder: {
-          amount: "Specify amount ..."
+          amount: 'Specify amount ...',
         },
         button: {
-          share: "Copy to share",
-          request_amount: "Request Specific amount ➔",
-          done: "Done"
+          share: 'Copy to share',
+          request_amount: 'Request Specific amount ➔',
+          done: 'Done',
         },
         success: {
-          share: "Wallet address copied to clipboard."
-        }
+          share: 'Wallet address copied to clipboard.',
+        },
       },
       create: {
-        header: "Create new wallet",
+        header: 'Create new wallet',
         label: {
-          select_coints: "Select coins",
-          wallet_key: "Wallet key",
-          main_net: "Mainnet wallets",
-          test_net: "Testnet wallets"
+          select_coints: 'Select coins',
+          wallet_key: 'Wallet key',
+          main_net: 'Mainnet wallets',
+          test_net: 'Testnet wallets',
         },
         placeholder: {
-          wallet_key: "Wallet key",
-          phrase: "Type your 12 secret recovery words."
+          wallet_key: 'Wallet key',
+          phrase: 'Type your 12 secret recovery words.',
         },
         button: {
-          create: "Create wallet",
-          add_new: "+ Add new",
-          request_free_eth: "Request free ETH"
-        }
+          create: 'Create wallet',
+          add_new: '+ Add new',
+          request_free_eth: 'Request free ETH',
+        },
       },
       scan_qrcode: {
         header: 'Scan QR code',
       },
-      transaction:{
+      transaction: {
         header: 'Transaction details',
       },
       history: {
@@ -695,23 +695,23 @@ export default {
   },
   bitcoin: {
     error: {
-      invalid_address: "You can only send tokens to Bitcoin address",
-      invalid_address2: "Please enter a valid receiving address.",
-      insufficient: "You have insufficient coin to make the transfer. Please top up and try again."
+      invalid_address: 'You can only send tokens to Bitcoin address',
+      invalid_address2: 'Please enter a valid receiving address.',
+      insufficient: 'You have insufficient coin to make the transfer. Please top up and try again.',
     },
     success: {
-      transaction: "Your transaction will appear on blockchain in about 30 seconds."
-    }
+      transaction: 'Your transaction will appear on blockchain in about 30 seconds.',
+    },
   },
   ethereum: {
     error: {
-      invalid_address: "You can only send tokens to Ethereum address",
-      invalid_address2: "Please enter a valid receiving address.",
-      insufficient: "You have insufficient coin to make the transfer. Please top up and try again."
+      invalid_address: 'You can only send tokens to Ethereum address',
+      invalid_address2: 'Please enter a valid receiving address.',
+      insufficient: 'You have insufficient coin to make the transfer. Please top up and try again.',
     },
     success: {
-      transaction: "Your transaction will appear on blockchain in about 30 seconds."
-    }
+      transaction: 'Your transaction will appear on blockchain in about 30 seconds.',
+    },
   },
 
   chat: {

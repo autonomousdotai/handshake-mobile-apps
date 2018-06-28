@@ -228,7 +228,7 @@ class Transfer extends React.Component {
       // check amount:
 
       if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amountCoin']))
-        errors.amountCoin = `${messages.wallet.action.transfer.error}: ${this.state.walletSelected.balance} ${this.state.walletSelected.name}`
+        errors.amountCoin = `${messages.wallet.action.transfer.error}`
     }
     return errors
   }
@@ -353,23 +353,6 @@ openQrcode = () => {
   this.modalScanQrCodeRef.open();
 }
 
-renderScanQRCode = () => {
-  const { messages } = this.props.intl;
-
-  return
-  <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeRef = modal}>
-    {this.state.qrCodeOpen ?
-      <QrReader
-        delay={this.state.delay}
-        onScan={(data) => { this.handleScan(data); }}
-        onError={this.handleError}
-        style={{ width: '100%', height: '100%' }}
-      />
-      : ''}
-  </Modal>
-}
-
-
   render() {
     const { messages } = this.props.intl;
     const { wallet } = this.props;
@@ -390,7 +373,17 @@ renderScanQRCode = () => {
           </ModalDialog>
 
           {/* QR code dialog */}
-          {this.renderScanQRCode()}
+          <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeRef = modal}>
+            {this.state.qrCodeOpen ?
+              <QrReader
+                delay={this.state.delay}
+                onScan={(data) => { this.handleScan(data); }}
+                onError={this.handleError}
+                style={{ width: '100%', height: '100%' }}
+              />
+              : ''}
+          </Modal>
+
           <SendWalletForm className="sendwallet-wrapper" onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
 
           {/* Box: */}
