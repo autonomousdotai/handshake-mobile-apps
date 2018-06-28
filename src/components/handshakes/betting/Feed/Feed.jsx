@@ -21,7 +21,7 @@ import Feed from '@/components/core/presentation/Feed';
 import BettingShake from './Shake';
 import {showAlert} from '@/reducers/app/action';
 import {getMessageWithCode, isRightNetwork, getId, 
-  getShakeOffchain, getBalance, getEstimateGas, isSameAddress} from '@/components/handshakes/betting/utils.js';
+  getShakeOffchain, getBalance, getEstimateGas, isSameAddress, foundShakeList} from '@/components/handshakes/betting/utils.js';
 
 
 // css, icons
@@ -73,8 +73,9 @@ class FeedBetting extends React.Component {
         statusTitle: null,
         isAction: false,
         role: null,
-        isMatch: false,
-        itemInfo: props
+        itemInfo: props,
+        amountMatch: 0,
+        winMatch: 0,
       };
 
 
@@ -105,32 +106,29 @@ class FeedBetting extends React.Component {
 
   handleStatus(props){
 
-    const {result, shakeUserIds, id} = props; // new state
+    const {result, shakeUserIds, id, amount, remainingAmount, odds} = props; // new state
 
-    /*
-    if(this.state.itemInfo){
-      if(this.state.itemInfo.bkStatus === props.status){
-        console.log('Not update UI');
-        return;
-
-      }
-
-
-    }
-    */
-
-    console.log('Handle Status: ', props);
-    //console.log('Props:', this.props);
     const profile = local.get(APP.AUTH_PROFILE);
     const isUserShake = this.isShakeUser(shakeUserIds, profile.id);
+    const isMatch = this.isMatch;
+    let amountMatch = 0;
+    let winMatch = 0;
     let itemInfo = props;
-
+    if(isMatch){
+      amountMatch = amount - remainingAmount;
+      winMatch = amountMatch * odds;
+    }
+    
+    console.log('Amount,RemainingAmount, AmountMatch:', amount,remainingAmount,  amountMatch);
     if(isUserShake){
+      /*
       const extraData = this.extraData;
       console.log('Extra data:', extraData);
       const {shakers} = extraData;
-      const idOffchain = getId(id);
+      */
+      //const idOffchain = getId(id);
 
+      /*
       if(shakers){
         const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.handshake_id === idOffchain);
         //console.log('Found Shaked Item:', foundShakedItem);
@@ -139,13 +137,19 @@ class FeedBetting extends React.Component {
 
         }
       }
+      */
+     const shakedItemList = foundShakeList(props, id);
+     if(shakedItemList.length > 0){
+       itemInfo = shakedItemList[0];
+       amountMatch = itemInfo.amount;
+       winMatch = amountMatch * itemInfo.odds;
+     }
     }
     const status = itemInfo.status;
     const side = itemInfo.side;
 
     const role = isUserShake ? ROLE.SHAKER : ROLE.INITER;
     //const blockchainStatusHardcode = 5;
-    const isMatch = this.isMatch;
     //const isMatch = true;
     //const hardCodeResult = 2;
     console.log('Is Match:', isMatch);
@@ -157,8 +161,9 @@ class FeedBetting extends React.Component {
       statusTitle: statusResult.status,
       isAction,
       role,
-      isMatch,
-      itemInfo
+      itemInfo,
+      amountMatch,
+      winMatch
     })
   }
 
@@ -193,13 +198,8 @@ class FeedBetting extends React.Component {
   }
 
   render() {
-    const {actionTitle , isAction, itemInfo } = this.state;
-    // const {actionTitle = "Match is ongoing...", isAction =true} = this.state;
-     /***
-     * side = SIDE.SUPPORT // SIDE.AGAINST ;ORGRANCE
-     *
-     */
-    //console.log('Item info:', itemInfo);
+    const {actionTitle , isAction, itemInfo, amountMatch, winMatch } = this.state;
+   
     const {amount, odds, side } = itemInfo;
     const {event_name, event_predict} = this.extraData;
     const winValue = amount * odds;
@@ -213,7 +213,6 @@ class FeedBetting extends React.Component {
       eventName = `Event: ${eventName}`;
     }
     let predictName = event_predict ? event_predict : '';
-    //console.log('Predict Name:', predictName);
     if(predictName.indexOf('Outcome')!== -1) {
       predictName = event_predict.slice(8);
     }
@@ -258,6 +257,8 @@ class FeedBetting extends React.Component {
             <div>
               <div className="description">You bet</div>
               <div className="value">{amount.toFixed(6)} ETH</div>
+              {amountMatch > 0 && <div className="value">{amountMatch.toFixed(6)} ETH matched</div>}
+
             </div>
             <div>
               <div className="description">On odds</div>
@@ -266,26 +267,15 @@ class FeedBetting extends React.Component {
             <div>
               <div className="description">You could win</div>
               <div className="value">{Math.floor(winValue * ROUND) / ROUND} ETH</div>
+              {winMatch > 0 && <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH matched</div>}
             </div>
           </div>
 
           <div className="bottomDiv">
             {this.renderStatus()}
-             {/* Shake */}
              {actionTitle && <Button block className={buttonClassName} disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
-             {/*{<Button block onClick={() => { this.clickActionButton(actionTitle); }} className={side === 1 ? 'cancel' : 'withdraw'}>{side === 1 ? 'cancel this bet' : 'withdraw'}</Button>}*/}
           </div>
         </Feed>
-
-        {/* Modal */}
-        {/*<ModalDialog title="Make a bet" onRef={modal => this.modalBetRef = modal}>
-          <BettingShake
-            remaining={remaining}
-            odd={0.1}
-            onCancelClick={() => this.modalBetRef.close()}
-            onSubmitClick={(amount) => this.submitShake(amount)}
-          />
-    </ModalDialog>*/}
       </div>
     );
 
@@ -344,6 +334,7 @@ class FeedBetting extends React.Component {
     const profile = local.get(APP.AUTH_PROFILE);
     const isUserShake = this.isShakeUser(shakeUserIds, profile.id);
     if(isUserShake){
+      /*
       const extraData = this.extraData;
       const {shakers} = extraData;
       const idOffchain = getId(id);
@@ -358,6 +349,14 @@ class FeedBetting extends React.Component {
         }
         
       }
+      */
+     const shakedItemList = foundShakeList(props, id);
+     if(shakedItemList.length > 0){
+       itemInfo = shakedItemList[0];
+       idCryptosign = getId(itemInfo.id);
+        isFreeBet = itemInfo.free_bet;
+        userFromAddress = itemInfo.from_address;
+     }
     }
     console.log("idCryptosign, isFreeBet, isUserShaker, fromAddress: ", idCryptosign, 
     isFreeBet, isUserShake, userFromAddress);

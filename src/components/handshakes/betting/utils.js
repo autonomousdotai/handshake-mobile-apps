@@ -92,18 +92,27 @@ export const getMessageWithCode= (code)=> {
     return bettinghandshake.address;
   }
 
-  export const foundShakeItem = (dict, offchain) => {
+  export const foundShakeList = (item, offchain) => {
     //const shakerList = [];
     const profile = local.get(APP.AUTH_PROFILE);
-    const { shakers, outcome_id, from_address } = dict;
+    const { shakers, outcome_id, from_address } = item;
+
     const idOffchain = getId(offchain);
-    const foundShakedItem = shakers.find(element => element.shaker_id === profile.id && element.id === idOffchain);
-    console.log('foundShakedItem:', foundShakedItem);
-    if (foundShakedItem) {
-      foundShakedItem.outcome_id = outcome_id;
-      foundShakedItem.from_address = from_address;
-      return foundShakedItem;
+    console.log('Id Offchain:', idOffchain);
+    if(shakers){
+      const shakersArr = JSON.parse(shakers);
+      const shakedList = shakersArr.filter(element => element.shaker_id === profile.id);
+      console.log('foundShakedList:', shakedList);
+      return shakedList;
+      /*
+      if (shakedList) {
+        foundShakedItem.outcome_id = outcome_id;
+       foundShakedItem.from_address = from_address;
+        return foundShakedItem;
+      }
+      */
     }
+    
     return null;
   }
   export const isExistMatchBet = (list) => {
