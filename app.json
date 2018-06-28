@@ -2,59 +2,7 @@
   "name": "handshake-app",
   "scripts": {
   },
-  "env": {
-    "apikeyEtherscan": {
-      "required": true
-    },
-    "BASE_API_URL": {
-      "required": true
-    },
-    "firebase_apiKey": {
-      "required": true
-    },
-    "firebase_authDomain": {
-      "required": true
-    },
-    "firebase_databaseURL": {
-      "required": true
-    },
-    "firebase_messagingSenderId": {
-      "required": true
-    },
-    "firebase_projectId": {
-      "required": true
-    },
-    "firebase_storageBucket": {
-      "required": true
-    },
-    "GOOGLE_API_KEY": {
-      "required": true
-    },
-    "ipapiKey": {
-      "required": true
-    },
-    "ipfindKey": {
-      "required": true
-    },
-    "PredictionHandshakeFileName": {
-      "required": true
-    },
-    "PUBLIC_URL": {
-      "required": true
-    },
-    "social_facebookAppId": {
-      "required": true
-    },
-    "social_facebookPixelId": {
-      "required": true
-    },
-    "social_googleAnalyticId": {
-      "required": true
-    },
-    "social_isUseSocial": {
-      "required": true
-    }
-  },
+  "env": {},
   "formation": {
     "web": {
       "quantity": 1
