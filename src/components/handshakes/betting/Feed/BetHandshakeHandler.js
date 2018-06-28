@@ -470,6 +470,7 @@ export class BetHandshakeHandler {
   }
   async withdraw(hid, offchain){
     const chainId = getChainIdDefaultWallet();
+    
     const bettinghandshake = new BettingHandshake(chainId);
     const contractAddress = bettinghandshake.contractAddress;
 

@@ -24,7 +24,7 @@ import {getBalance} from '@/components/handshakes/betting/utils.js';
 // style
 import './Filter.scss';
 
-const betHandshakeHandler = BetHandshakeHandler.getShareManager();
+//const betHandshakeHandler = BetHandshakeHandler.getShareManager();
 const CRYPTOSIGN_MINIMUM_MONEY = 0.00002;
 const freeAmount = 0.001;
 const ROUND_ODD = 10;
