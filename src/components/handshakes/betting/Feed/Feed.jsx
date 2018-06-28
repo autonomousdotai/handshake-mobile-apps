@@ -33,7 +33,7 @@ import Shake from '@/components/core/controls/Button';
 
 import GroupBook from './GroupBook';
 
-const betHandshakeHandler = new BetHandshakeHandler();
+const betHandshakeHandler = BetHandshakeHandler.getShareManager();
 const ROUND = 1000000;
 const ROUND_ODD = 10;
 const BACKGROUND_COLORS = [
@@ -200,7 +200,7 @@ class FeedBetting extends React.Component {
   render() {
     const {actionTitle , isAction, itemInfo, amountMatch, winMatch } = this.state;
    
-    const {amount, odds, side } = itemInfo;
+    const {amount, odds, side, remainingAmount } = itemInfo;
     const {event_name, event_predict} = this.extraData;
     const winValue = amount * odds;
     const styleEventName = {
@@ -255,9 +255,9 @@ class FeedBetting extends React.Component {
 
           <div className="bettingInfo">
             <div>
-              <div className="description">You bet</div>
-              <div className="value">{amount.toFixed(6)} ETH</div>
-              {amountMatch > 0 && <div className="value">{amountMatch.toFixed(6)} ETH matched</div>}
+              <div className="description">Matched bet (ETH)</div>
+              {/*<div className="value">{amount.toFixed(6)} ETH</div>*/}
+              {<div className="value">{amountMatch.toFixed(6)}</div>}
 
             </div>
             <div>
@@ -267,8 +267,11 @@ class FeedBetting extends React.Component {
             <div>
               <div className="description">You could win</div>
               <div className="value">{Math.floor(winValue * ROUND) / ROUND} ETH</div>
-              {winMatch > 0 && <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH matched</div>}
+              {/*winMatch > 0 && <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH matched</div>*/}
             </div>
+          </div>
+          <div className="bettingInfo">
+              {remainingAmount > 0 && <div className="value"> Remaining {amountMatch.toFixed(6)}/{amount.toFixed(6)}</div>}
           </div>
 
           <div className="bottomDiv">
@@ -350,12 +353,12 @@ class FeedBetting extends React.Component {
         
       }
       */
-     const shakedItemList = foundShakeList(props, id);
+     const shakedItemList = foundShakeList(this.props, id);
      if(shakedItemList.length > 0){
-       itemInfo = shakedItemList[0];
-       idCryptosign = getId(itemInfo.id);
-        isFreeBet = itemInfo.free_bet;
-        userFromAddress = itemInfo.from_address;
+       let shakeItem = shakedItemList[0];
+       idCryptosign = getShakeOffchain(shakeItem.id);
+        isFreeBet = shakeItem.free_bet;
+        userFromAddress = shakeItem.from_address;
      }
     }
     console.log("idCryptosign, isFreeBet, isUserShaker, fromAddress: ", idCryptosign, 
