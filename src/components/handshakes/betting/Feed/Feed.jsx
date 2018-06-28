@@ -72,10 +72,12 @@ class FeedBetting extends React.Component {
         actionTitle: null,
         statusTitle: null,
         isAction: false,
-        role: null,
+        role: ROLE.INITER,
         itemInfo: props,
         amountMatch: 0,
         winMatch: 0,
+        isUserShake: false,
+        shakedItemList: null
       };
 
 
@@ -118,7 +120,7 @@ class FeedBetting extends React.Component {
       amountMatch = amount - remainingAmount;
       winMatch = amountMatch * odds;
     }
-    
+    let shakedItemList = null;
     console.log('Amount,RemainingAmount, AmountMatch:', amount,remainingAmount,  amountMatch);
     if(isUserShake){
       /*
@@ -138,7 +140,7 @@ class FeedBetting extends React.Component {
         }
       }
       */
-     const shakedItemList = foundShakeList(props, id);
+     shakedItemList = foundShakeList(props, id);
      if(shakedItemList.length > 0){
        itemInfo = shakedItemList[0];
        amountMatch = itemInfo.amount;
@@ -163,7 +165,9 @@ class FeedBetting extends React.Component {
       role,
       itemInfo,
       amountMatch,
-      winMatch
+      winMatch,
+      isUserShake,
+      shakedItemList
     })
   }
 
@@ -192,36 +196,7 @@ class FeedBetting extends React.Component {
     }
   }
 
-  renderStatus = () => {
-    const { statusTitle } = this.state;
-    return <div className="statusBetting">{statusTitle || ''}</div>;
-  }
-
-  render() {
-    const {actionTitle , isAction, itemInfo, amountMatch, winMatch } = this.state;
-   
-    const {amount, odds, side, remainingAmount } = itemInfo;
-    const {event_name, event_predict} = this.extraData;
-    const winValue = amount * odds;
-    const remainingValue = remainingAmount || 0;
-    const displayAmount = Math.floor(amount * ROUND)/ROUND;
-    const displayMatchedAmount = Math.floor(amountMatch * ROUND)/ROUND;
-    const displayRemaining = Math.floor(remainingValue * ROUND)/ROUND;
-
-    const styleEventName = {
-      background: this.randomItemInList(BACKGROUND_COLORS),
-    };
-    const colorBySide = side === 1 ? `support` : 'oppose';
-
-    let eventName = event_name ? event_name: '';
-    if(eventName.indexOf('Event') === -1){
-      eventName = `Event: ${eventName}`;
-    }
-    let predictName = event_predict ? event_predict : '';
-    if(predictName.indexOf('Outcome')!== -1) {
-      predictName = event_predict.slice(8);
-    }
-    console.log('Remaining Amount:', remainingAmount);
+  getButtonClassName(actionTitle){
     let buttonClassName = "cancel";
     switch(actionTitle){
 
@@ -240,7 +215,35 @@ class FeedBetting extends React.Component {
       break;
 
     }
+    return buttonClassName;
+  }
 
+  renderStatus = () => {
+    const { statusTitle } = this.state;
+    return <div className="statusBetting">{statusTitle || ''}</div>;
+  }
+
+  render() {
+    const {actionTitle , isAction, itemInfo, role } = this.state;
+   
+    const {side } = itemInfo;
+    const {event_name, event_predict} = this.extraData;
+    
+    const styleEventName = {
+      background: this.randomItemInList(BACKGROUND_COLORS),
+    };
+    const colorBySide = side === 1 ? `support` : 'oppose';
+
+    let eventName = event_name ? event_name: '';
+    if(eventName.indexOf('Event') === -1){
+      eventName = `Event: ${eventName}`;
+    }
+    let predictName = event_predict ? event_predict : '';
+    if(predictName.indexOf('Outcome')!== -1) {
+      predictName = event_predict.slice(8);
+    }
+    const buttonClassName = this.getButtonClassName(actionTitle);
+    console.log('Sa Role:', role);
     return (
       <div>
         {/* Feed */}
@@ -257,27 +260,12 @@ class FeedBetting extends React.Component {
           <div className={`predictName`}>
             <span className={colorBySide}>{side === 1 ? `Support: ` : 'Oppose: '}</span>{predictName}
           </div>
-
           <div className="bettingInfo">
-            <div>
-              <div className="description">Matched bet (ETH)</div>
-              {/*<div className="value">{amount.toFixed(6)} ETH</div>*/}
-              {<div className="value">{displayMatchedAmount}/{displayAmount}</div>}
-
-            </div>
-            <div>
-              <div className="description">On odds</div>
-              <div className={`value ${colorBySide}`}> {Math.floor(odds*ROUND_ODD)/ROUND_ODD}</div>
-            </div>
-            <div>
-              <div className="description">You could win</div>
-              <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH</div>
-              {/*winMatch > 0 && <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH matched</div>*/}
-            </div>
-          </div>
-          {remainingAmount > 0 && <div className="bettingInfo">
-              <div className="value"> Remaining {displayRemaining} ETH</div>
-          </div>}
+            <div className="description">Matched bet (ETH)</div>
+            <div className="description">On odds</div>
+            <div className="description">You could win</div>
+        </div>
+          {role == ROLE.INITER ? this.renderMaker(): this.renderShaker()}
 
           <div className="bottomDiv">
             {this.renderStatus()}
@@ -287,6 +275,69 @@ class FeedBetting extends React.Component {
       </div>
     );
 
+  }
+  renderItem(matchedAmount,amount, colorBySide, odds, winMatch, remaining ){
+    return(
+      <div>
+      <div className="bettingInfo">
+      <div>
+        {/*<div className="description">Matched bet (ETH)</div>*/}
+        {<div className="value">{matchedAmount}/{amount}</div>}
+
+      </div>
+      <div>
+        {/*<div className="description">On odds</div>*/}
+        <div className={`value ${colorBySide}`}> {Math.floor(odds*ROUND_ODD)/ROUND_ODD}</div>
+      </div>
+      <div>
+        {/*<div className="description">You could win</div>*/}
+        <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH</div>
+        {/*winMatch > 0 && <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH matched</div>*/}
+      </div>
+    </div>
+    {remaining > 0 && <div className="bettingInfo">
+        <div className="value"> Remaining {remaining} ETH</div>
+    </div>}
+  </div>
+    );
+  }
+  renderItemShake(item){
+    const {amount, odds,side, remainingAmount } = item;
+    const remainingValue = remainingAmount || 0;
+    const colorBySide = side === 1 ? `support` : 'oppose';
+    const amountMatch = amount;
+    const winMatch = amountMatch * odds;
+    const displayAmount = Math.floor(amount * ROUND)/ROUND;
+    const displayMatchedAmount = Math.floor(amountMatch * ROUND)/ROUND;
+    const displayRemaining = Math.floor(remainingValue * ROUND)/ROUND;
+
+    return (this.renderItem(displayMatchedAmount,displayAmount, colorBySide, odds, winMatch, displayRemaining ));
+  }
+  renderMaker(){
+    console.log('Render Maker');
+    const {itemInfo, amountMatch, winMatch } = this.state;
+   
+    const {amount, odds,side, remainingAmount } = itemInfo;
+    const remainingValue = remainingAmount || 0;
+    const displayAmount = Math.floor(amount * ROUND)/ROUND;
+    const displayMatchedAmount = Math.floor(amountMatch * ROUND)/ROUND;
+    const displayRemaining = Math.floor(remainingValue * ROUND)/ROUND;
+    const colorBySide = side === 1 ? `support` : 'oppose';
+
+    return (
+      this.renderItem(displayMatchedAmount,displayAmount, colorBySide, odds, winMatch, displayRemaining )
+    );
+    
+  }
+  renderShaker(){
+    console.log('Render Maker');
+
+    const {shakedItemList} = this.state;
+    return (
+      <div>
+      {shakedItemList.map(item => this.renderItemShake(item))}
+      </div>
+    );
   }
   changeOption(value){
     //console.log('Choose option:', value)
