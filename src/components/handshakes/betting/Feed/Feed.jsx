@@ -203,6 +203,11 @@ class FeedBetting extends React.Component {
     const {amount, odds, side, remainingAmount } = itemInfo;
     const {event_name, event_predict} = this.extraData;
     const winValue = amount * odds;
+    const remainingValue = remainingAmount || 0;
+    const displayAmount = Math.floor(amount * ROUND)/ROUND;
+    const displayMatchedAmount = Math.floor(amountMatch * ROUND)/ROUND;
+    const displayRemaining = Math.floor(remainingValue * ROUND)/ROUND;
+
     const styleEventName = {
       background: this.randomItemInList(BACKGROUND_COLORS),
     };
@@ -216,7 +221,7 @@ class FeedBetting extends React.Component {
     if(predictName.indexOf('Outcome')!== -1) {
       predictName = event_predict.slice(8);
     }
-
+    console.log('Remaining Amount:', remainingAmount);
     let buttonClassName = "cancel";
     switch(actionTitle){
 
@@ -257,7 +262,7 @@ class FeedBetting extends React.Component {
             <div>
               <div className="description">Matched bet (ETH)</div>
               {/*<div className="value">{amount.toFixed(6)} ETH</div>*/}
-              {<div className="value">{amountMatch.toFixed(6)}</div>}
+              {<div className="value">{displayMatchedAmount}/{displayAmount}</div>}
 
             </div>
             <div>
@@ -266,13 +271,13 @@ class FeedBetting extends React.Component {
             </div>
             <div>
               <div className="description">You could win</div>
-              <div className="value">{Math.floor(winValue * ROUND) / ROUND} ETH</div>
+              <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH</div>
               {/*winMatch > 0 && <div className="value">{Math.floor(winMatch * ROUND) / ROUND} ETH matched</div>*/}
             </div>
           </div>
-          <div className="bettingInfo">
-              {remainingAmount > 0 && <div className="value"> Remaining {amountMatch.toFixed(6)}/{amount.toFixed(6)}</div>}
-          </div>
+          {remainingAmount > 0 && <div className="bettingInfo">
+              <div className="value"> Remaining {displayRemaining} ETH</div>
+          </div>}
 
           <div className="bottomDiv">
             {this.renderStatus()}
