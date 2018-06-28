@@ -46,20 +46,6 @@ class Handshake extends React.Component {
     this.handleScroll = this.handleScroll.bind(this);
   }
 
-  componentDidMount() {
-    this.injectFontPage();
-    // if (window.addEventListener) { window.addEventListener('load', this.injectFontPage, false); } else if (window.attachEvent) { window.attachEvent('onload', this.injectFontPage); } else window.onload = this.injectFontPage;
-    window.addEventListener('scroll', this.handleScroll)
-  }
-
-  componentWillReceiveProps() {
-    this.injectFontPage();
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-  }
-
   productId = 1296;
   productIdFillForm = 1300;
 
@@ -379,38 +365,37 @@ class Handshake extends React.Component {
   // }
 
   render() {
-    if(!Helper.isSmallScreen && typeof WOW === 'undefined') return <div />;
     return (
       <div className="root">
         <Alert />
         <section className="first-page d-none d-lg-block">
-          <iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />
+          {/*<iframe width="100%" className="fadeIn" src="/ninja-star/index.html" />*/}
           <div className="content-first col-lg-12 col-md-12">
-            <div className="img-screen wow animated slideInLeft col-lg-6 col-md-12 text-right d-none d-lg-block" data-wow-delay="6.6s">
-              <div className="label-100 wow animated zoomIn" data-wow-delay="8s">
+            <div className="img-screen col-lg-6 col-md-12 text-right d-none d-lg-block">
+              <div className="label-100" data-wow-delay="8s">
                 <img width="70" src={labelIcon}/>
               </div>
               <div className="screen-app"><img width="210" src={screenIcon}/></div>
-              <div className="neymar wow animated slideInLeft" data-wow-delay="7s">
+              <div className="neymar">
                 <img width="140" src={neymarIcon}/>
               </div>
-              <div className="flower  wow animated zoomIn" data-wow-delay="7s"><img width="320" src={flowerIcon}/>
+              <div className="flower"><img width="320" src={flowerIcon}/>
               </div>
             </div>
-            <div className="col-lg-6 col-md-12 wow animated slideInLeft" data-wow-delay="6.7s">
+            <div className="col-lg-6 col-md-12" data-wow-delay="6.7s">
               <div className="col-lg-9 mw600">
-                <div className="logo wow animated fadeInUp" data-wow-delay="0.2s">
-                  <img height="45" src={logoNinjaIcon}/>
+                <div className="logo" data-wow-delay="0.2s">
+                  <a href="/"><img height="45" src={logoNinjaIcon} /></a>
                 </div>
-                <h2 className="text-up text-y mt20 wow animated fadeInUp" data-wow-delay="1.5s">Our token is the
+                <h2 className="text-up text-y mt20">Our token is the
                   Shuriken (SHURI). <br/>
                   No, there is no ICO.</h2>
-                <div className="mt20  wow animated fadeInUp" data-wow-delay="3s">
+                <div className="mt20" data-wow-delay="3s">
                   <p className="logo">Use it to slash fees. Increase your likelihood of matching bets. Unlock first
                     access to bounties, bonuses and new features.
                   </p>
                 </div>
-                <div className="mt20  wow animated fadeInUp" data-wow-delay="4s">
+                <div className="mt20">
                   <p className="logo">
                     Our <a className="text-link"
                            href="https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8"
@@ -427,10 +412,10 @@ class Handshake extends React.Component {
                     telegram
                   </a> discusses the actual working product</p>
                 </div>
-                <div className=" wow animated fadeInUp" data-wow-delay="5s">
-                  <p className="logo wow animated fadeInUp mt20">Coming soon. To receive updates on token sales and
+                <div>
+                  <p className="logo mt20">Coming soon. To receive updates on token sales and
                     airdrops:</p>
-                  <a className="btn-lg btn-y wow animated fadeInUp btn-block"
+                  <a className="btn-lg btn-y btn-block"
                      href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
                      target="_blank"
                      rel="noopener noreferrer"
@@ -439,7 +424,7 @@ class Handshake extends React.Component {
                   </a>
                 </div>
 
-                <div className=" wow animated fadeInUp mt20" data-wow-delay="6s">
+                <div className="mt20" data-wow-delay="6s">
                   <p>We’ll send you an airdrop invitation.</p>
 
                   <div className="input-group email-frm">
@@ -465,29 +450,29 @@ class Handshake extends React.Component {
               </div>
             </div>
           </div>
-          <div className="line-down wow animated fadeIn" data-wow-delay="2s">
-            <span></span>
-          </div>
+          {/*<div className="line-down wow animated fadeIn" data-wow-delay="2s">*/}
+            {/*<span></span>*/}
+          {/*</div>*/}
         </section>
 
         {/* mobile */}
         <section className="first-page d-lg-none">
-          <iframe width="100%" className="fadeIn" src="/ninja-star/index.html"/>
+          {/*<iframe width="100%" className="fadeIn" src="/ninja-star/index.html"/>*/}
           <div className="content-first col-lg-12 col-md-12">
             <div className="col-lg-6 col-md-12">
               <div className="cnt-w ">
-                <div className="logo wow animated fadeInUp">
+                <div className="logo">
                   <img height="45" src={logoNinjaIcon}/>
                 </div>
-                <h2 className="text-up text-y mt20 wow animated fadeInUp">Our token is the
+                <h2 className="text-up text-y mt20">Our token is the
                   Shuriken (SHURI). <br/>
                   No, there is no ICO.</h2>
-                <div className="mt20  wow animated fadeInUp">
+                <div className="mt20">
                   <p className="logo">Use it to slash fees. Increase your likelihood of matching bets. Unlock first
                     access to bounties, bonuses and new features.
                   </p>
                 </div>
-                <div className="mt20 wow animated fadeInUp">
+                <div className="mt20">
                   <p className="logo">
                     Our <a className="text-link"
                            href="https://medium.com/@ninjadotorg/shakeninja-bex-1c938f18b3e8"
@@ -505,10 +490,10 @@ class Handshake extends React.Component {
                     telegram
                   </a> discusses the actual working product</p>
                 </div>
-                <div className="wow animated fadeInUp">
+                <div>
                   <p className="logo mt20">Coming soon. To receive updates on token sales and
                     airdrops:</p>
-                  <a className="btn-lg btn-y wow animated fadeInUp btn-block"
+                  <a className="btn-lg btn-y btn-block"
                      href="https://t.me/joinchat/H5Rflk6xD7xpo81BDbuOww"
                      target="_blank"
                      rel="noopener noreferrer"
@@ -517,7 +502,7 @@ class Handshake extends React.Component {
                   </a>
                 </div>
 
-                <div className="mt20 wow animated fadeInUp">
+                <div className="mt20">
                   <p>We’ll send you an airdrop invitation.</p>
 
                   <div className="input-group email-frm">
@@ -543,14 +528,11 @@ class Handshake extends React.Component {
               </div>
             </div>
           </div>
-          <div className="line-down wow animated fadeIn" data-wow-delay="7s">
-            <span></span>
-          </div>
         </section>
 
         <div className="col-lg-12 text-center mb94">
           <div className="line-ninja">
-            <div className="ico-ninja wow animated fadeInUp"/>
+            <div className="ico-ninja" />
             <div className="line-"/>
           </div>
         </div>
@@ -562,7 +544,7 @@ class Handshake extends React.Component {
           <div className="container">
             <div className="row">
 
-              <div className="col-lg-12 wow animated fadeInUp mw810 mb160">
+              <div className="col-lg-12 mw810 mb160">
                 <h3 className="h3-y mb48 text-center">Wanna join a clan... of Ninjas?</h3>
                 <div className="row">
                   <div className="col-lg-6 col-md-12 content-header">
@@ -577,7 +559,7 @@ class Handshake extends React.Component {
                 </div>
               </div>
 
-              <div className="col-lg-12 wow animated fadeInUp mw810 mb120">
+              <div className="col-lg-12 mw810 mb120">
                 <h3 className="h3-y text-center">Plus we’ll give you free stuff.</h3>
                 <div className="row">
                   <div className="col-lg-6 col-md-12">
@@ -609,12 +591,12 @@ class Handshake extends React.Component {
 
               <div className="col-lg-12 text-center mb80">
                 <div className="line-ninja">
-                  <div className="ico-ninja wow animated fadeInUp"/>
+                  <div className="ico-ninja"/>
                   <div className="line-"/>
                 </div>
               </div>
 
-              <div className="col-lg-12 wow animated fadeInUp mw810" id="fillInForm">
+              <div className="col-lg-12 mw810" id="fillInForm">
                 <h3 className="h3-gray mb30 text-center">Please fill in this form</h3>
                 {this.renderFillInForm()}
               </div>

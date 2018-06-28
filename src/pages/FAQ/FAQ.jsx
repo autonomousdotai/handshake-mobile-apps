@@ -157,7 +157,7 @@ class FAQ extends React.Component {
         <div className="row">
           <div className="col-lg-12 col-md-12 col-xs-12">
             <div className="headerPage">
-              <img src={ninjaIcon} alt="shuriken icon" />
+              <a href="/"><img src={ninjaIcon} alt="shuriken icon" /></a>
               <span><span className="yellow" hidden={locale !== 'en'}><FormattedMessage id="FAQ_HEADER_YELLOW" /></span> <FormattedMessage id="FAQ_HEADER" /></span>
             </div>
           </div>

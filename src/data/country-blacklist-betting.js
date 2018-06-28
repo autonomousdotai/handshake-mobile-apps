@@ -64,7 +64,7 @@ const COUNTRIES_BLACKLIST = [
   'Chile',
   'HongKong',
   'Japan',
-  // 'Vietnam',
+  'Vietnam',
 ];
 
 export default COUNTRIES_BLACKLIST;

@@ -12,6 +12,7 @@ import shurikenIcon from '@/assets/images/ninja/shuriken-icon.svg';
 import playVideoButton from '@/assets/images/ninja/play-video-button.svg';
 import videoLeftCover from '@/assets/images/ninja/video-left-cover.jpg';
 import videoRightCover from '@/assets/images/ninja/video-right-cover.jpg';
+import phoneIcon from '@/assets/images/ninja/phone-icon.svg';
 import './MobileOrTablet.scss';
 
 const countryList = [
@@ -74,23 +75,38 @@ class MobileOrTablet extends React.PureComponent {
     const { messages, locale } = this.props.intl;
     return (
       <div className="container mobile-tablet">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="chooseLanguage">
-              {
-                countryList.map((item, index) => (
-                  <div
-                    key={index}
-                    className={`countryName ${locale === item.code ? 'countryActive' : ''}`}
-                    onClick={() => this.changeCountry(item.code)}
-                  >
-                    <span>{item.title}</span>
-                  </div>
-                ))
-              }
-            </div>
+        <div className="row firstSection">
+          <div className="col-lg-5 d-flex">
+            <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja"/>
+            <h1>{messages.MOT_TITLE}</h1>
           </div>
-          <div className="col-lg-12 text-center topBox">
+          <div className="col-lg-7 chooseLanguage">
+            {
+              countryList.map((item, index) => (
+                <div
+                  key={index}
+                  className={`countryName ${locale === item.code ? 'countryActive' : ''}`}
+                  onClick={() => this.changeCountry(item.code)}
+                >
+                  <span>{item.title}</span>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        <div className="row secondSection animated2 fadeInUp">
+          <div className="col-lg-6">
+            <img src={phoneIcon} alt="phone icon" />
+            <p>
+              {messages.MOT_CONTENT_0}
+              <br/>
+              {messages.MOT_CONTENT_1} <a className="website" href="/">www.ninja.org</a> {messages.MOT_CONTENT_2}
+              <br/>
+              <span>{messages.MOT_CONTENT_3}</span>
+            </p>
+          </div>
+          <div className="col-lg-6">
             <VideoYoutube
               playButtonIcon={playVideoButton}
               imageUrl={videoLeftCover}
@@ -98,10 +114,11 @@ class MobileOrTablet extends React.PureComponent {
               videoUrl="https://youtu.be/YYZJlLDzeEs"
               autoPlayVideo
             />
-            <div>
-              <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja" />
-              <h1>{messages.MOT_TITLE}</h1>
-            </div>
+          </div>
+        </div>
+
+        <div className="row thirdSection animated3 fadeInUp">
+          <div className="col-lg-7">
             <VideoYoutube
               playButtonIcon={playVideoButton}
               imageUrl={videoRightCover}
@@ -109,48 +126,35 @@ class MobileOrTablet extends React.PureComponent {
               videoUrl="https://youtu.be/6bd6-XtO3Wk"
             />
           </div>
-          <div className="col-lg-12 text-center">
-            <p>
-              {messages.MOT_CONTENT_0}
-              <br />
-              {messages.MOT_CONTENT_1} <span className="website">www.ninja.org</span> {messages.MOT_CONTENT_2}
-              <br />
-              <span className="whiteColor">{messages.MOT_CONTENT_3}</span>
-            </p>
-          </div>
-          <div className="col-lg-12">
-            <div className="motListContent">
-              <ul>
-                {
-                  locale === 'en' && (
-                    <li>
-                      <img src={shurikenIcon} alt="shuriken icon" /> Jump in for <a href="/shuriken">Airdrop</a>
+          <div className="col-lg-5">
+            <ul>
+              {
+                locale === 'en' && (
+                  <li>
+                    Jump in for <a href="/shuriken" target="_blank" rel="noopener noreferrer">Airdrop</a>
+                  </li>
+                )
+              }
+              {
+                messages.MOT_LIST_CONTENT.map((item, index) => {
+                  let {link} = item;
+                  if (index === 0 && locale !== 'en' && languagesWhitePaper.indexOf(locale) !== -1) {
+                    link = '/whitepaper';
+                  }
+                  return (
+                    <li key={index}>
+                      {item.mainContent || ''} <a
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.placeHolderLink}
+                      </a> {item.mainContent1 || ''}
                     </li>
-                  )
-                }
-                {
-                  messages.MOT_LIST_CONTENT.map((item, index) => {
-                    let { link } = item;
-                    if (index === 0 && locale !== 'en' && languagesWhitePaper.indexOf(locale) !== -1) {
-                      link = '/whitepaper';
-                    }
-                    return (
-                      <li key={index}>
-                        <img src={shurikenIcon} alt="shuriken icon" /> {item.mainContent || ''}
-                        <a
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {item.placeHolderLink}
-                        </a>
-                        {item.mainContent1 || ''}
-                      </li>
-                    );
-                  })
-                }
-              </ul>
-            </div>
+                  );
+                })
+              }
+            </ul>
           </div>
         </div>
       </div>

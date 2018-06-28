@@ -244,6 +244,7 @@ class FeedBetting extends React.Component {
     }
     const buttonClassName = this.getButtonClassName(actionTitle);
     console.log('Sa Role:', role);
+
     return (
       <div>
         {/* Feed */}
@@ -283,7 +284,6 @@ class FeedBetting extends React.Component {
       <div>
         {/*<div className="description">Matched bet (ETH)</div>*/}
         {<div className="value">{matchedAmount}/{amount}</div>}
-
       </div>
       <div>
         {/*<div className="description">On odds</div>*/}
