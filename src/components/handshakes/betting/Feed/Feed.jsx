@@ -117,7 +117,7 @@ class FeedBetting extends React.Component {
     let amountMatch = 0;
     let winMatch = 0;
     let itemInfo = props;
-    let idOffchain = id;
+    let idCryptosign = id;
     if(isMatch){
       amountMatch = amount - remainingAmount;
       winMatch = amountMatch * odds;
