@@ -392,7 +392,7 @@ class FeedMe extends React.PureComponent {
             message = <FormattedMessage id="cancelOfferConfirm" values={{}} />;
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}><FormattedMessage id="btn.close" /></Button>
+                <Button block className="mt-2 btn btn-secondary" onClick={() => this.confirmOfferAction(message, this.handleCloseOfferExchange)}><FormattedMessage id="btn.close" /></Button>
               </div>
             );
             break;
@@ -412,7 +412,7 @@ class FeedMe extends React.PureComponent {
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button
                   block
-                  className="mt-2"
+                  className="mt-2 btn btn-secondary"
                   onClick={() => this.confirmOfferAction(message, this.handleCancelOfferExchange)}
                 ><FormattedMessage id="btn.cancel" />
                 </Button>
@@ -427,10 +427,10 @@ class FeedMe extends React.PureComponent {
             const message2 = <FormattedMessage id="completeOfferConfirm" values={{}} />;
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject" /></Button>
                 {offer.type === EXCHANGE_ACTION.SELL &&
                 <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}><FormattedMessage id="btn.complete" /></Button>
                 }
+                <Button block className="mt-2 btn btn-secondary" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject" /></Button>
               </div>
             );
             break;
@@ -451,7 +451,7 @@ class FeedMe extends React.PureComponent {
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button
                   block
-                  className="mt-2"
+                  className="mt-2 btn btn-secondary"
                   onClick={() => this.confirmOfferAction(message, this.handleCancelOfferExchange)}
                 ><FormattedMessage id="btn.cancel" />
                 </Button>
@@ -465,10 +465,10 @@ class FeedMe extends React.PureComponent {
             const message2 = <FormattedMessage id="completeOfferConfirm" values={{}} />;
             actionButtons = (
               <div>
-                <Button block className="mt-2" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject" /></Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button block className="mt-2" onClick={() => this.confirmOfferAction(message2, this.handleCompleteShakedOfferExchange)}><FormattedMessage id="btn.complete" /></Button>
                 }
+                <Button block className="mt-2 btn btn-secondary" onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOfferExchange)}><FormattedMessage id="btn.reject" /></Button>
               </div>
             );
 
@@ -1063,9 +1063,9 @@ class FeedMe extends React.PureComponent {
           <div>
             <Button
               block
-              className="mt-2"
+              className="mt-2 btn btn-secondary"
               onClick={() => this.confirmOfferAction(message, this.deleteOfferItem)}
-            ><FormattedMessage id="btn.close" />
+            ><FormattedMessage id="btn.delete" />
             </Button>
           </div>
         );
@@ -1126,7 +1126,7 @@ class FeedMe extends React.PureComponent {
     this.responseExchangeDataChangeOfferStore(offerStore);
 
     if (currency === CRYPTO_CURRENCY.ETH) {
-      if (sellAmount > 0 && !freeStart) {
+      if (sellAmount > 0 && !freeStart && offerStore.items.ETH.status !== 'closed') {
         const wallet = MasterWallet.getWalletDefault(currency);
 
         const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
@@ -1318,12 +1318,6 @@ class FeedMe extends React.PureComponent {
             const message2 = <FormattedMessage id="completeOfferConfirm" values={{ }} />;
             actionButtons = (
               <div>
-                <Button
-                  block
-                  className="mt-2"
-                  onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}
-                ><FormattedMessage id="btn.reject" />
-                </Button>
                 {offer.type === EXCHANGE_ACTION.SELL &&
                 <Button
                   block
@@ -1332,6 +1326,12 @@ class FeedMe extends React.PureComponent {
                 ><FormattedMessage id="btn.complete" />
                 </Button>
                 }
+                <Button
+                  block
+                  className="mt-2 btn btn-secondary"
+                  onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}
+                ><FormattedMessage id="btn.reject" />
+                </Button>
               </div>
             );
             break;
@@ -1347,7 +1347,7 @@ class FeedMe extends React.PureComponent {
               <div>
                 <Button
                   block
-                  className="mt-2"
+                  className="mt-2 btn btn-secondary"
                   onClick={() => this.confirmOfferAction(message, this.handleCancelShakeOffer)}
                 ><FormattedMessage id="btn.cancel" />
                 </Button>
@@ -1361,12 +1361,6 @@ class FeedMe extends React.PureComponent {
             const message2 = <FormattedMessage id="completeOfferConfirm" values={{ }} />;
             actionButtons = (
               <div>
-                <Button
-                  block
-                  className="mt-2"
-                  onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}
-                ><FormattedMessage id="btn.cancel" />
-                </Button>
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <Button
                   block
@@ -1375,6 +1369,12 @@ class FeedMe extends React.PureComponent {
                 ><FormattedMessage id="btn.complete" />
                 </Button>
                 }
+                <Button
+                  block
+                  className="mt-2 btn btn-secondary"
+                  onClick={() => this.confirmOfferAction(message, this.handleRejectShakedOffer)}
+                ><FormattedMessage id="btn.cancel" />
+                </Button>
               </div>
             );
             break;
@@ -1486,7 +1486,7 @@ class FeedMe extends React.PureComponent {
     const { id, currency, type } = offer;
 
     if (currency === CRYPTO_CURRENCY.ETH) {
-      if (type === EXCHANGE_ACTION.BUY) {
+      if (type === EXCHANGE_ACTION.BUY) {//shop buy
         const wallet = MasterWallet.getWalletDefault(currency);
         const balance = await wallet.getBalance();
         const fee = await wallet.getFee();
@@ -1524,7 +1524,7 @@ class FeedMe extends React.PureComponent {
     this.responseExchangeDataChange(offerShake);
 
     if (currency === CRYPTO_CURRENCY.ETH) {
-      if (type === EXCHANGE_ACTION.BUY) {
+      if (type === EXCHANGE_ACTION.BUY) {//shop buy
         const wallet = MasterWallet.getWalletDefault(currency);
 
         const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
@@ -1829,14 +1829,17 @@ class FeedMe extends React.PureComponent {
       case EXCHANGE_FEED_TYPE.OFFER_STORE: {
         switch (status) {
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CREATED: {
-            idMessage = 'movingCoinToEscrow';
+            idMessage = 'ex.exchange.explanation.created';
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE: {
+            idMessage = 'ex.exchange.explanation.active';
             break;
           }
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSING: {
-            idMessage = 'movingCoinFromEscrow';
+            idMessage = 'ex.exchange.explanation.closing';
             break;
           }
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.ACTIVE:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS.CLOSED: {
             break;
           }
@@ -1850,48 +1853,69 @@ class FeedMe extends React.PureComponent {
       }
       case EXCHANGE_FEED_TYPE.OFFER_STORE_SHAKE: {
         switch (status) {
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLING: {
-            switch (this.userType) {
-              case HANDSHAKE_USER.NORMAL: {
-                break;
-              }
-              case HANDSHAKE_USER.SHAKED: { // user shake
-                if (offer.type === EXCHANGE_ACTION.BUY) { // shop buy
-                  idMessage = 'movingCoinToEscrow';
-                }
-                break;
-              }
-              case HANDSHAKE_USER.OWNER: { // shop
-                if (offer.type === EXCHANGE_ACTION.SELL) { // shop sell
-                  idMessage = 'movingCoinToEscrow';
-                }
-                break;
-              }
-              default: {
-                // code
-                break;
-              }
-            }
-
+            idMessage = 'ex.exchange.explanation.cancelling';
             break;
           }
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTING: {
+            idMessage = 'ex.exchange.explanation.rejecting';
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING: {
+            if (this.userType === HANDSHAKE_USER.SHAKED) {
+              idMessage = 'ex.exchange.explanation.pre_shaking';
+            }
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE: {
+            if (this.userType === HANDSHAKE_USER.SHAKED) {
+              idMessage = 'ex.exchange.explanation.pre_shake';
+            }
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKING: {
+            if (this.userType === HANDSHAKE_USER.SHAKED) {
+              idMessage = 'ex.exchange.explanation.shaking';
+            }
+            break;
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE: {
             switch (this.userType) {
               case HANDSHAKE_USER.NORMAL: {
                 break;
               }
               case HANDSHAKE_USER.SHAKED: { // user shake
-                if (offer.type === EXCHANGE_ACTION.BUY) { // shop buy
-                  idMessage = 'movingCoinFromEscrow';
+                if (offer.type === EXCHANGE_ACTION.SELL) { // shop sell
+                  idMessage = 'ex.exchange.explanation.shake';
                 }
                 break;
               }
               case HANDSHAKE_USER.OWNER: { // shop
+                if (offer.type === EXCHANGE_ACTION.BUY) { // shop buy
+                  idMessage = 'ex.exchange.explanation.shake';
+                }
+                break;
+              }
+              default: {
+                // code
+                break;
+              }
+            }
+          }
+          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING: {
+            switch (this.userType) {
+              case HANDSHAKE_USER.NORMAL: {
+                break;
+              }
+              case HANDSHAKE_USER.SHAKED: { // user shake
                 if (offer.type === EXCHANGE_ACTION.SELL) { // shop sell
-                  idMessage = 'movingCoinFromEscrow';
+                  idMessage = 'ex.exchange.explanation.completing';
+                }
+                break;
+              }
+              case HANDSHAKE_USER.OWNER: { // shop
+                if (offer.type === EXCHANGE_ACTION.BUY) { // shop buy
+                  idMessage = 'ex.exchange.explanation.completing';
                 }
                 break;
               }
@@ -1903,8 +1927,6 @@ class FeedMe extends React.PureComponent {
 
             break;
           }
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE:
-          case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKE:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTED:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLED:
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETED: {

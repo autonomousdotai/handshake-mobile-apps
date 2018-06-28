@@ -30,14 +30,14 @@
   .bettingInfo {
     display: flex;
     justify-content: space-between;
-    padding: rem-calc(0 15px 24px);
+    padding: rem-calc(0 15px 10px);
     .description {
       opacity: 0.3;
       font-size: rem-calc(14px);
       color: #000000;
       letter-spacing: rem-calc(0.25px);
       font-weight: $normal;
-      margin-bottom: rem-calc(12px);
+      margin-bottom: rem-calc(2px);
     }
     .value {
       font-size: rem-calc(16px);

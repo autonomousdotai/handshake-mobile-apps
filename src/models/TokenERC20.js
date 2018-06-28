@@ -42,7 +42,13 @@ export class TokenERC20 extends Ethereum {
         );        
         this.title = await instance.methods.name().call();
         this.name = await instance.methods.symbol().call();
-        this.decimals = await instance.methods.decimals().call();        
+        try{
+          this.decimals = await instance.methods.decimals().call();        
+        }
+        catch (e){
+          console.log("error: ", e);
+          this.decimals = 0;
+        }
         return true;
 
       }

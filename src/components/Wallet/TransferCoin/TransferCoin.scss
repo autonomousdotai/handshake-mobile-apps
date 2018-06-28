@@ -109,32 +109,20 @@
 }
 
 .div-amount {
-  .prepend-left{
-    padding-top: 15px;
+  padding-bottom: 10px;
+
+  .prepend{
+    padding-top: 11px;
     position: absolute;
-    right: 40px;
+    right: 50px;
     color: #7b7b7b;
   }
 
-  .prepend-right{
-    padding-top: 10px;
-    position: absolute;
-    left: 40%;
-    color: #7b7b7b;
-  }
-
-  input[name=amountMoney]{
-    float: right;
-    width:49%;
-    padding-right: 40px;
-  }
-
-  input[name=amountCoin]{
-    float: left;
-    width:49%;
-    padding-right: 40px;
+  input {
+    padding-right: 80px;
   }
 }
+
 
 .dropdown-wallet-tranfer{
   margin: 0!important;

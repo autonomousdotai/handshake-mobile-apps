@@ -148,10 +148,10 @@ class Create extends React.Component {
   get handshakeList() {
     const handshakes = Object.entries(HANDSHAKE_NAME).map(([key, value]) => {
       const currentKey = parseInt(key, 10);
-      if (this.state.isBannedCash && (currentKey === HANDSHAKE_ID.EXCHANGE || currentKey === HANDSHAKE_ID.EXCHANGE_LOCAL)) {
+      if ((this.state.isBannedCash || this.props.firebaseApp.config?.maintainChild?.exchange) && (currentKey === HANDSHAKE_ID.EXCHANGE || currentKey === HANDSHAKE_ID.EXCHANGE_LOCAL)) {
         return null;
       }
-      if (this.state.isBannedPrediction && (currentKey === HANDSHAKE_ID.BETTING || currentKey === HANDSHAKE_ID.BETTING_EVENT)) {
+      if ((this.state.isBannedPrediction || this.props.firebaseApp.config?.maintainChild?.betting) && (currentKey === HANDSHAKE_ID.BETTING || currentKey === HANDSHAKE_ID.BETTING_EVENT)) {
         return null;
       }
       return {
@@ -212,6 +212,7 @@ class Create extends React.Component {
 }
 
 export default connect(state => ({
+  firebaseApp: state.firebase.data,
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
   isBannedChecked: state.app.isBannedChecked,
