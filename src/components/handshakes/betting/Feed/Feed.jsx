@@ -117,6 +117,7 @@ class FeedBetting extends React.Component {
     let amountMatch = 0;
     let winMatch = 0;
     let itemInfo = props;
+    let idOffchain = id;
     if(isMatch){
       amountMatch = amount - remainingAmount;
       winMatch = amountMatch * odds;
@@ -144,6 +145,7 @@ class FeedBetting extends React.Component {
      shakedItemList = foundShakeList(props, id);
      if(shakedItemList.length > 0){
        itemInfo = shakedItemList[0];
+       idCryptosign = getShakeOffchain(itemInfo.id);
        amountMatch = itemInfo.amount;
        winMatch = amountMatch * itemInfo.odds;
      }
@@ -156,7 +158,7 @@ class FeedBetting extends React.Component {
     //const isMatch = true;
     //const hardCodeResult = 2;
     console.log('Is Match:', isMatch);
-
+    const isLoading = betHandshakeHandler.listOnChainLoading[idCryptosign];
     const statusResult = BetHandshakeHandler.getStatusLabel(status, result, role,side, isMatch);
     const {title, isAction} = statusResult;
     this.setState({
@@ -168,7 +170,8 @@ class FeedBetting extends React.Component {
       amountMatch,
       winMatch,
       isUserShake,
-      shakedItemList
+      shakedItemList,
+      isLoading
     })
   }
 
@@ -225,7 +228,7 @@ class FeedBetting extends React.Component {
   }
 
   render() {
-    const {actionTitle , isAction, itemInfo, role } = this.state;
+    const {actionTitle , isAction, itemInfo, role, isLoading } = this.state;
    
     const {side } = itemInfo;
     const {event_name, event_predict} = this.extraData;
@@ -271,7 +274,7 @@ class FeedBetting extends React.Component {
 
           <div className="bottomDiv">
             {this.renderStatus()}
-             {actionTitle && <Button isLoading block className={buttonClassName} disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
+             {actionTitle && <Button isLoading={isLoading} block className={buttonClassName} disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
           </div>
         </Feed>
       </div>
@@ -357,7 +360,7 @@ class FeedBetting extends React.Component {
 
     }
   }
-  handleActionReal(title, offchain, hid){
+  async handleActionReal(title, offchain, hid){
     const realId = getId(offchain);
     const {itemInfo} = this.state;
 
@@ -366,15 +369,20 @@ class FeedBetting extends React.Component {
       case BETTING_STATUS_LABEL.CANCEL:
         // TO DO: CLOSE BET
         const {side, amount, odds} = itemInfo;
+        betHandshakeHandler.setItemOnChain(offchain, true);
+        await betHandshakeHandler.cancelBet(hid, side, amount, odds, offchain);
+        betHandshakeHandler.setItemOnChain(offchain, false);
 
-        betHandshakeHandler.cancelBet(hid, side, amount, odds, offchain);
         break;
 
       case BETTING_STATUS_LABEL.WITHDRAW:
         // TO DO: WITHDRAW
         //this.collect(id);
         //this.rollback(id);
-        betHandshakeHandler.withdraw(hid, offchain);
+        betHandshakeHandler.setItemOnChain(offchain, true);
+        await betHandshakeHandler.withdraw(hid, offchain);
+        betHandshakeHandler.setItemOnChain(offchain, false);
+
         break;
       case BETTING_STATUS_LABEL.REFUND:
       this.refund(realId);

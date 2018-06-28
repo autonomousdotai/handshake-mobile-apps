@@ -98,23 +98,29 @@ class BettingCreate extends React.Component {
     this.setState({
 
     });
+    this.loadMatches();
   }
 
   componentWillReceiveProps(nextProps) {
     // console.log('Receive Props: ', nextProps);
     const { matches } = nextProps;
-    console.log(`${TAG} Matches:`, matches);
-
-
+    let filterMatches = [];
+    matches.forEach(element => {
+      const {outcomes} = element;
+      const publicOutcomeArr = outcomes.filter(item => item.public == 1);
+      if(publicOutcomeArr.length > 0){
+        filterMatches.push(element);
+      }
+    });
     this.setState({
-      matches,
+      matches: filterMatches,
     });
   }
   loadMatches(){
     let params = {
       public: 1,
     }
-    this.props.loadMatches({ PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES, METHOD:'POST', data: params});
+    this.props.loadMatches({ PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES, METHOD:'POST'});
 
   }
 

@@ -90,11 +90,28 @@ class BettingFilter extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { matches, support, against } = nextProps;
-    //console.log(`${TAG} Matches:`, matches);
-    // const selectedMatch = this.defaultMatch;
-    // const selectedOutcome = this.defaultOutcome;
+    const {isPrivate, outComeId} = this.props;
+
+    let filterMatches = [];
+    if(isPrivate && outComeId){
+      matches.forEach(element => {
+        const {outcomes} = element;
+        const privateOutcomeArr = outcomes.filter(item => item.public == 0 && item.id == outComeId);
+        if(privateOutcomeArr.length > 0){
+          filterMatches.push(element);
+        }
+      });
+    }else {
+      matches.forEach(element => {
+        const {outcomes} = element;
+        const publicOutcomeArr = outcomes.filter(item => item.public == 1);
+        if(publicOutcomeArr.length > 0){
+          filterMatches.push(element);
+        }
+      });
+    }
     this.setState({
-      matches,
+      matches: filterMatches,
       // selectedMatch,
       // selectedOutcome,
       support,
@@ -112,7 +129,7 @@ class BettingFilter extends React.Component {
     }
     this.props.loadMatches({
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
-      METHOD:'POST', data: params,
+      METHOD:'POST',
       successFn: (res) => {
         const { data } = res;
         console.log('loadMatches success', data);
