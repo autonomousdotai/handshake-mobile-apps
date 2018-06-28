@@ -3,6 +3,9 @@
   //background-size: 8px 10px;
   cursor: pointer;
   //font-weight: 400;
+  img {
+    max-width: none !important;
+  }
 }
 .select-list-country-code-wrapper {
   position: absolute;

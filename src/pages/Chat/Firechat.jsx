@@ -2,6 +2,7 @@ import nacl from 'tweetnacl';
 import naclUtil from 'tweetnacl-util';
 import logo from '@/assets/images/app/logo.png';
 import Push from 'push.js';
+import _ from 'lodash';
 
 export class Firechat {
   constructor(firebaseInstance, firebaseRef, options) {
@@ -48,6 +49,9 @@ export class Firechat {
     this.shouldShowNotification = true;
 
     this.encryptionKeyPair = this.generateEncryptionKeyPair();
+    Push.config({
+      serviceWorker: '/main.js',
+    });
   }
 
   enableNotification() {
@@ -125,8 +129,7 @@ export class Firechat {
     connectedRef.on('value', (snapshot) => {
       if (snapshot.val() === true) {
         // We're connected (or reconnected)! Set up our presence state.
-        Object.keys(this.presenceBits).forEach((path) => {
-          const op = this.presenceBits[path];
+        _.forIn(this.presenceBits, (op) => {
           const { ref } = op;
 
           ref.onDisconnect().set(op.offlineValue);
@@ -182,7 +185,7 @@ export class Firechat {
 
   // Retrieve the list of event handlers for a given event id.
   getEventCallbacks(eventId) {
-    if (Object.prototype.hasOwnProperty.call(this.events, eventId)) {
+    if (_.has(this.events, eventId)) {
       return this.events[eventId];
     }
     return [];
@@ -251,7 +254,7 @@ export class Firechat {
 
     room.messages = room.messages || [];
 
-    Object.keys(room.authorizedUsers).forEach((userId) => {
+    _.forIn(room.authorizedUsers, (user, userId) => {
       if (userId === this.user.id) {
         return true;
       }
@@ -360,8 +363,8 @@ export class Firechat {
     const self = this;
     this.userRef.child('rooms').once('value', (snapshot) => {
       const rooms = snapshot.val() || {};
-      Object.keys(rooms).forEach((roomId) => {
-        self.enterRoom(rooms[roomId].id);
+      _.forIn(rooms, (room, roomId) => {
+        self.enterRoom(roomId);
       });
     }, /* onError */() => { }, /* context */ this);
   }
@@ -392,8 +395,7 @@ export class Firechat {
       publicKey: this.getEncodedKeyPair().publicKey,
     };
 
-    Object.keys(usersInGroup).forEach((userId) => {
-      const user = usersInGroup[userId];
+    _.forIn(usersInGroup, (user, userId) => {
       newRoom.authorizedUsers[userId] = {
         name: user.name,
         publicKey: user.publicKey,
@@ -459,7 +461,7 @@ export class Firechat {
       // Invoke our callbacks before we start listening for new messages.
       const froms = {};
 
-      Object.keys(authorizedUsers).forEach((userId) => {
+      _.forIn(authorizedUsers, (user, userId) => {
         froms[userId] = authorizedUsers[userId].name;
       });
 
@@ -692,9 +694,9 @@ export class Firechat {
       const usernames = snapshot.val() || {};
       const usernamesUnique = {};
 
-      Object.keys(usernames).forEach((username) => {
-        Object.keys(usernames[username]).forEach((session) => {
-          usernamesUnique[username] = usernames[username][session];
+      _.forIn(usernames, (usernameValue, usernameKey) => {
+        _.forIn(usernameValue, (session) => {
+          usernamesUnique[usernameKey] = session;
           return false;
         });
       });
@@ -725,8 +727,7 @@ export class Firechat {
 
       const usernamesFiltered = [];
 
-      Object.keys(usernames).forEach((userId) => {
-        const userInfo = usernames[userId];
+      _.forIn(usernames, (userInfo, userId) => {
         const { name: userName, online: isOnline, publicKey } = userInfo;
 
         if ((this.user && userId === this.user.id) || ((prefix.length > 0) && (userName.toLowerCase().indexOf(prefixLower) !== 0))) {
@@ -757,9 +758,7 @@ export class Firechat {
       const users = snapshot.val() || {};
       let foundUser = null;
 
-      Object.keys(users).forEach((userId) => {
-        const userInfo = users[userId];
-
+      _.forIn(users, (userInfo, userId) => {
         if (userInfo.shortName === userCodeLowercase) {
           foundUser = userInfo;
           foundUser.id = userId;
@@ -799,15 +798,14 @@ export class Firechat {
         self.getRoomList((rooms) => {
           const updateValues = {};
           if (rooms) {
-            Object.keys(rooms).forEach((roomId) => {
-              const room = rooms[roomId];
-              if (Object.prototype.hasOwnProperty.call(room.authorizedUsers, self.userId)) {
+            _.forIn(rooms, (room, roomId) => {
+              if (_.has(room.authorizedUsers, self.userId)) {
                 updateValues[`/${roomId}/authorizedUsers/${self.userId}/name`] = userName;
               }
             });
           }
 
-          if (Object.keys(updateValues).length > 0) {
+          if (!_.isEmpty(updateValues)) {
             self.roomRef.update(updateValues);
           }
 
@@ -880,7 +878,7 @@ export class Firechat {
         originalMessages[i] = message;
       });
 
-      if (Object.keys(updateValues).length > 0) {
+      if (!_.isEmpty(updateValues)) {
         this.messageRef.update(updateValues);
       }
       this.rooms[roomId].messages = originalMessages;

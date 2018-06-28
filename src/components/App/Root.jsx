@@ -52,6 +52,9 @@ class Root extends React.Component {
   }
 
   preRender() {
+    if (BrowserDetect.isBot) {
+      return <MobileOrTablet />;
+    }
     switch (window.location.pathname) {
       case URL.LANDING_PAGE_SHURIKEN:
         return <LandingPage />;
