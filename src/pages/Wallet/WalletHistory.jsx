@@ -188,7 +188,7 @@ class WalletHistory extends React.Component {
     const { messages } = this.props.intl;
 
     return (
-      <Modal title={messages.wallet.action.history.header} onRef={modal => this.modalTransactionRef = modal} onClose={this.closeDetail}>
+      <Modal title={messages.wallet.action.transaction.header} onRef={modal => this.modalTransactionRef = modal} onClose={this.closeDetail}>
         <WalletTransaction wallet={wallet} transaction_detail={this.state.transaction_detail}  />
       </Modal>
     );

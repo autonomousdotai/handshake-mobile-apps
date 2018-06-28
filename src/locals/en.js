@@ -39,7 +39,7 @@ export default {
   completeOfferConfirm: 'Finish shaking?',
   withdrawOfferConfirm: 'Are you sure you want to withdraw?',
   cancelOfferConfirm: 'Cancel this order?',
-  closeOfferConfirm: 'Finish your order?',
+  closeOfferConfirm: 'Are you sure you want to delete your station?',
   acceptOfferConfirm: 'Accept the order?',
   createOfferSuccessMessage: 'Success! You have created an offer on Ninja.',
   shakeOfferSuccessMessage: 'Success! A ninja has shaked on your order.',
@@ -111,20 +111,35 @@ export default {
   'ex.label.buyer': 'buyer',
   'ex.label.seller': 'seller',
 
-  'ex.exchange.status.created': 'Verifying...',
-  'ex.exchange.status.active': 'Active',
-  'ex.exchange.status.closing': 'Pending...',
-  'ex.exchange.status.closed': 'Closed',
-  'ex.exchange.status.shaking': 'Shake pending...',
-  'ex.exchange.status.shake': 'Shook',
-  'ex.exchange.status.completing': 'Completing...',
-  'ex.exchange.status.completed': 'Done',
-  'ex.exchange.status.pre_shaking': 'Shake pending',
-  'ex.exchange.status.pre_shake': 'Shook',
-  'ex.exchange.status.rejecting': 'Rejecting',
+  'ex.exchange.status.created': 'Setting up your station',
+  'ex.exchange.status.active': 'Station listed',
+  'ex.exchange.status.closing': 'Deleting your station',
+  'ex.exchange.status.closed': 'Deleted',
+  'ex.exchange.status.shaking': 'Processing',
+  'ex.exchange.status.shake': 'Processing',
+  'ex.exchange.status.completing': 'Processing',
+  'ex.exchange.status.completed': 'Success',
+  'ex.exchange.status.pre_shaking': 'Processing',
+  'ex.exchange.status.pre_shake': 'Processing',
+  'ex.exchange.status.rejecting': 'Processing',
   'ex.exchange.status.rejected': 'Rejected',
-  'ex.exchange.status.cancelling': 'Cancelling',
+  'ex.exchange.status.cancelling': 'Processing',
   'ex.exchange.status.cancelled': 'Cancelled',
+
+  'ex.exchange.explanation.created': 'This may take a few minutes. Good things come to those who wait.',
+  'ex.exchange.explanation.active': 'You can now discover your station in Cash.',
+  'ex.exchange.explanation.closing': 'Please wait a few minutes.',
+  'ex.exchange.explanation.closed': '',
+  'ex.exchange.explanation.shaking': 'Accepting the other party\'s offer...',
+  'ex.exchange.explanation.shake': 'Accepted. You will receive coin in a few minutes.',
+  'ex.exchange.explanation.completing': 'Accepted. You will receive coin in a few minutes.',
+  'ex.exchange.explanation.completed': '',
+  'ex.exchange.explanation.pre_shaking': 'Waiting for the other party to accept your offer.',
+  'ex.exchange.explanation.pre_shake': 'Waiting for the other party to accept your offer.',
+  'ex.exchange.explanation.rejecting': 'Rejecting the offer. Please wait a few minutes.',
+  'ex.exchange.explanation.rejected': '',
+  'ex.exchange.explanation.cancelling': 'Cancelling your offer. Please wait a few minutes.',
+  'ex.exchange.explanation.cancelled': '',
 
   'ex.cc.status.processing': 'Processing',
   'ex.cc.status.success': 'Done',
@@ -157,8 +172,8 @@ export default {
   'ex.error.302': 'Sorry, that ninja does not exist.',
   'ex.error.303': 'It looks like you have reached your credit card limit.',
   'ex.error.309': 'You already have a listing! To change your rates, please cancel your current listing.',
-  'ex.error.319': 'Invalid free start amount',
-  'ex.error.320': 'Register free start failed',
+  'ex.error.319': 'Please type 0.5 ETH only.',
+  'ex.error.320': 'The early bird program has ended, please cash in to trade with us.',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': 'WELCOME TO OUR <br/> EARLY BIRD PROGRAM!',
@@ -180,6 +195,7 @@ export default {
   'btn.cancel': 'Cancel',
   'btn.close': 'Close',
   'btn.accept': 'Accept',
+  'btn.delete': 'Delete',
 
   product_info: 'Ninja is open-source, decentralized software that never holds your funds. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never invest more than you are willing to lose. Play safe!',
 
@@ -543,7 +559,8 @@ export default {
           to_address: "To wallet address",
           amount: "Amount",
           usd: "USD",
-          wallet_balance: "Wallet balance"
+          wallet_balance: "Wallet balance",
+          scan_qrcode: "Scan QR code",
         },
         placeholder: {
           to_address: "Wallet address...",
@@ -570,17 +587,33 @@ export default {
         title: 'Cancel',
       },
       restore: {
-        title: 'Restore wallets',
-        message: 'Your Wallet restore success',
-        error: 'Invalid wallets',
+        title: "Restore wallets",
+        error: "Invalid wallets",
+        header: "Restore wallets",
+        success: {
+          restore: "Your Wallet restore success"
+        },
+        button: {
+          restore: "Restore now"
+        },
+        description: "Please enter your top secret recovery data to restore your wallet."
       },
       import: {
-        title: 'Add new / Import',
+        title: "Add new / Import",
       },
       backup: {
-        title: 'Backup wallets',
+        title: "Backup wallets",
+        header: "Backup wallets",
+        description: "This data is the only way to restore your wallets. Keep it secret, keep it safe.",
+        success: {
+          copied: "Recovery data copied to clipboard."
+        },
+        button: {
+          copy: "Copy it somewhere safe"
+        }
       },
       protect: {
+        header: 'Secure this wallet',
         title: 'Secure this wallet',
         text: {
           step1_msg1: 'This passphrase will allow you to recover your funds if your phone is ever lost or stolen.',
@@ -602,13 +635,52 @@ export default {
       },
       receive: {
         title: 'Receive coins',
+        header: "Wallet address",
+        header2: "Custom Amount",
+        message: "Share your public wallet address to receive",
+        label: {
+          address: "Address",
+          amount: "Amount"
+        },
+        placeholder: {
+          amount: "Specify amount ..."
+        },
+        button: {
+          share: "Copy to share",
+          request_amount: "Request Specific amount ➔",
+          done: "Done"
+        },
+        success: {
+          share: "Wallet address copied to clipboard."
+        }
+      },
+      create: {
+        header: "Create new wallet",
+        label: {
+          select_coints: "Select coins",
+          wallet_key: "Wallet key",
+          main_net: "Mainnet wallets",
+          test_net: "Testnet wallets"
+        },
+        placeholder: {
+          wallet_key: "Wallet key",
+          phrase: "Type your 12 secret recovery words."
+        },
+        button: {
+          create: "Create wallet",
+          add_new: "+ Add new",
+          request_free_eth: "Request free ETH"
+        }
       },
       scan_qrcode: {
         header: 'Scan QR code',
       },
+      transaction:{
+        header: 'Transaction details',
+      },
       history: {
         title: 'View transaction history',
-        header: 'Transaction details',
+        header: 'Transaction history',
         label: {
           failed: 'Failed',
           unconfirmed: 'Unconfirmed',
@@ -620,6 +692,26 @@ export default {
         },
       },
     },
+  },
+  bitcoin: {
+    error: {
+      invalid_address: "You can only send tokens to Bitcoin address",
+      invalid_address2: "Please enter a valid receiving address.",
+      insufficient: "You have insufficient coin to make the transfer. Please top up and try again."
+    },
+    success: {
+      transaction: "Your transaction will appear on blockchain in about 30 seconds."
+    }
+  },
+  ethereum: {
+    error: {
+      invalid_address: "You can only send tokens to Ethereum address",
+      invalid_address2: "Please enter a valid receiving address.",
+      insufficient: "You have insufficient coin to make the transfer. Please top up and try again."
+    },
+    success: {
+      transaction: "Your transaction will appear on blockchain in about 30 seconds."
+    }
   },
 
   chat: {

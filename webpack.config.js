@@ -85,7 +85,6 @@ module.exports = function webpackConfig(env, argv) {
       splitChunks: {
         chunks: 'all',
       },
-      runtimeChunk: true,
       noEmitOnErrors: true,
     },
     module: {

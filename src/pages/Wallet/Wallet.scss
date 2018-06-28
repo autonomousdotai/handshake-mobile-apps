@@ -309,31 +309,8 @@
   }
 
   .div-amount {
-    .prepend-left{
-      padding-top: 15px;
-      position: absolute;
-      right: 40px;
-      color: #7b7b7b;
-    }
-
-    .prepend-right{
-      padding-top: 15px;
-      position: absolute;
-      left: 40%;
-      color: #7b7b7b;
-    }
-
-    input[name=amountMoney]{
-      float: right;
-      width:49%;
-      padding-right: 40px;
-    }
-
-    input[name=amountCoin]{
-      float: left;
-      width:49%;
-      padding-right: 40px;
-    }
+    .prepend{
+      padding-top: 15px;}
   }
 }
 

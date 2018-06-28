@@ -44,7 +44,7 @@ class AddToken extends React.Component {
       wallets: [],      
       walletSelected: false,
       inputContractAddressValue: '',
-      inputTokenDecimalsValue: '',
+      inputTokenDecimalsValue: 0,
       inputTokenNameValue: '',
       inputTokenSymbolValue: '',
       tokenTypeSelected: false,
@@ -368,12 +368,12 @@ renderScanQRCode = () => (
                   component={fieldInput}
                   value={this.state.inputTokenDecimalsValue}
                   onChange={evt => this.updateTokenDecimalsValue(evt)}                  
-                  validate={[required]}
+                  // validate={[required]}
               />
 
                 <div className ="dropdown-wallet-tranfer">
 
-                  <p className="labelText">Choose a token type</p>
+                  {/* <p className="labelText">Choose a token type</p>
                   <Field
                         name="walletSelected"
                         component={fieldDropdown}                  
@@ -384,11 +384,11 @@ renderScanQRCode = () => (
                             this.onItemSelectedTokenType(item);
                           }
                         }
-                      />  
+                      />   */}
 
                   <p className="labelText">For wallet</p>            
                   <Field
-                      name="walletSelected"
+                      name="walletSelected"                      
                       component={fieldDropdown}                  
                       placeholder="Select a wallet"
                       defaultText={this.state.walletSelected ? this.state.walletSelected.text : ''}

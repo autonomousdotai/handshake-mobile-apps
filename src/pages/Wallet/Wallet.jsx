@@ -452,7 +452,7 @@ class Wallet extends React.Component {
         this.splitWalletData(walletData);
         this.setState({ isRestoreLoading: false });
         this.modalRestoreRef.close();
-        this.showSuccess(messages.wallet.action.restore.message);
+        this.showSuccess(messages.wallet.action.restore.success.restore);
         return;
       }
     }
@@ -518,7 +518,7 @@ class Wallet extends React.Component {
 
   submitSendCoin=()=>{
     this.setState({isRestoreLoading: true});
-    this.modalConfirmSendRef.close();    
+    this.modalConfirmSendRef.close();
       this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue).then(success => {
           //console.log(success);
           this.setState({isRestoreLoading: false});
@@ -546,7 +546,7 @@ class Wallet extends React.Component {
     alert(`evt.target.value${evt.target.value}`);
   }
 
-  updateSendAddressValue = (evt) => {    
+  updateSendAddressValue = (evt) => {
     this.setState({
       inputAddressAmountValue: evt.target.value,
     });
@@ -565,15 +565,15 @@ class Wallet extends React.Component {
         this.toggleBottomSheet();
       },
     });
-    
+
     obj.push({
       title: 'Add custom token',
-      handler: () => {      
-        
+      handler: () => {
+
         this.setState({formAddTokenIsActive: true}, () => {
-          this.modalAddNewTokenRef.open(); 
+          this.modalAddNewTokenRef.open();
           this.toggleBottomSheet();
-        });        
+        });
       },
     });
 
@@ -606,7 +606,7 @@ class Wallet extends React.Component {
   addedCustomToken = () =>{
     let masterWallet = MasterWallet.getMasterWallet();
     this.getListBalace(masterWallet);
-    
+
     this.splitWalletData(masterWallet);
     this.modalAddNewTokenRef.close();
     this.setState({formAddTokenIsActive: false});
@@ -805,7 +805,7 @@ class Wallet extends React.Component {
     return (
       <div className="wallet-page">
 
-        
+
         <Modal onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
             <AddToken formAddTokenIsActive={this.state.formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
         </Modal>
@@ -885,8 +885,8 @@ class Wallet extends React.Component {
           </Modal>
 
           {/* Dialog confirm transfer coin */}
-          <ModalDialog title="Confirmation" onRef={modal => this.modalConfirmSendRef = modal}>
-            <div className="bodyConfirm"><span>Are you sure you want to transfer out {this.state.inputSendAmountValue} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
+          <ModalDialog title={messages.wallet.action.transfer.header} onRef={modal => this.modalConfirmSendRef = modal}>
+            <div className="bodyConfirm"><span>{messages.wallet.action.transfer.text.confirm_transfer} {this.state.inputSendAmountValue} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
             <div className="bodyConfirm">
               <Button className="left" cssType="danger" onClick={this.submitSendCoin} >Confirm</Button>
               <Button className="right" cssType="secondary" onClick={() => { this.modalConfirmSendRef.close(); }}>Cancel</Button>
@@ -902,19 +902,19 @@ class Wallet extends React.Component {
             />
           </Modal> */}
 
-          <Modal title="Secure your wallet" onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
+          <Modal title={messages.wallet.action.protect.header} onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
             <WalletProtect onCopy={this.onCopyProtected} step={this.state.stepProtected} active={this.state.activeProtected} wallet={this.state.walletSelected} callbackSuccess={() => { this.successWalletProtect(this.state.walletSelected); }} />
           </Modal>
 
 
-          <Modal title="Transaction history" onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
+          <Modal title={messages.wallet.action.history.header} onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
             <WalletHistory wallet={this.state.walletSelected} transactions={this.state.transactions} />
           </Modal>
 
 
           {/* Modal for Backup wallets : */}
-          <Modal title="Backup wallets" onRef={modal => this.modalBackupRef = modal}>
-            <div className="bodyTitle">This data is the only way to restore your wallets. Keep it secret, keep it safe.</div>
+          <Modal title={messages.wallet.action.backup.header} onRef={modal => this.modalBackupRef = modal}>
+            <div className="bodyTitle">{messages.wallet.action.backup.description}</div>
             <div className="bodyBackup">
               <textarea
                 readOnly
@@ -922,13 +922,13 @@ class Wallet extends React.Component {
                 onFocus={this.handleFocus}
                 value={this.state.walletsData ? JSON.stringify(this.state.walletsData) : ''}
               />
-              <Button className="button" cssType="danger" onClick={() => { Clipboard.copy(JSON.stringify(this.state.walletsData)); this.modalBackupRef.close(); this.showToast('Recovery data copied to clipboard.'); }} >Copy it somewhere safe</Button>
+              <Button className="button" cssType="danger" onClick={() => { Clipboard.copy(JSON.stringify(this.state.walletsData)); this.modalBackupRef.close(); this.showToast(messages.wallet.action.backup.success.copied); }} >{messages.wallet.action.backup.button.copy}</Button>
             </div>
           </Modal>
 
           {/* Modal for Restore wallets : */}
-          <Modal title="Restore wallets" onRef={modal => this.modalRestoreRef = modal}>
-            <div className="bodyTitle">Please enter your top secret recovery data to restore your wallet.</div>
+          <Modal title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
+            <div className="bodyTitle">{messages.wallet.action.restore.description}</div>
             <div className="bodyBackup">
               <textarea
                 required
@@ -937,36 +937,36 @@ class Wallet extends React.Component {
                 onChange={evt => this.updateRestoreWalletValue(evt)}
               />
               <Button isLoading={this.state.isRestoreLoading} className="button" cssType="danger" onClick={() => { this.restoreWallets(); }} >
-              Restore now
+                {messages.wallet.action.restore.button.restore}
               </Button>
             </div>
           </Modal>
 
 
           {/* Modal for Copy address : */}
-          <Modal title="Wallet address" onRef={modal => this.modalShareAddressRef = modal}>
-            <div className="bodyTitle"><span>Share your public wallet address to receive { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div>
+          <Modal title={messages.wallet.action.receive.header} onRef={modal => this.modalShareAddressRef = modal}>
+            <div className="bodyTitle"><span>{messages.wallet.action.receive.message} { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div>
             <div className={['bodyBackup bodySahreAddress']}>
 
               <QRCode value={this.state.walletSelected ? this.state.walletSelected.address : ''} />
               <div className="addressDivPopup">{ this.state.walletSelected ? this.state.walletSelected.address : ''}</div>
 
-              <div className="link-request-custom-amount" onClick={() => { this.modalCustomAmountRef.open(); this.setState({ inputSendAmountValue: '' }); }}>Request Specific amount ➔</div>
+              <div className="link-request-custom-amount" onClick={() => { this.modalCustomAmountRef.open(); this.setState({ inputSendAmountValue: '' }); }}>{messages.wallet.action.receive.button.request_amount}</div>
 
-              <Button className="button" cssType="primary" onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.modalShareAddressRef.close(); this.showToast('Wallet address copied to clipboard.'); }} >
-              Copy to share
+              <Button className="button" cssType="primary" onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.modalShareAddressRef.close(); this.showToast(messages.wallet.action.receive.success.share); }} >
+                {messages.wallet.action.receive.button.share}
               </Button>
             </div>
           </Modal>
 
           {/* Modal for Custom amount : */}
-          <Modal title="Custom Amount" onRef={modal => this.modalCustomAmountRef = modal}>
+          <Modal title={messages.wallet.action.receive.header2} onRef={modal => this.modalCustomAmountRef = modal}>
             <div className={['bodyBackup bodySahreAddress']}>
 
               <QRCode value={(this.state.walletSelected ? this.state.walletSelected.address : '') + (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '')} />
               <div className="addressDivPopup">
                 <InputGroup>
-                  <InputGroupAddon addonType="prepend">Address</InputGroupAddon>
+                  <InputGroupAddon addonType="prepend">{messages.wallet.action.receive.label.address}</InputGroupAddon>
                   <Input2
                     disabled
                     value={this.state.walletSelected ? this.state.walletSelected.address : ''}
@@ -976,9 +976,9 @@ class Wallet extends React.Component {
                 <br />
 
                 <InputGroup>
-                  <InputGroupAddon addonType="prepend">Amount</InputGroupAddon>
+                  <InputGroupAddon addonType="prepend">{messages.wallet.action.receive.label.amount}</InputGroupAddon>
                   <Input2
-                  placeholder="Specify amount ..."
+                  placeholder={messages.wallet.action.receive.placeholder.amount}
                   type="text"
                   value={this.state.inputSendAmountValue} onChange={evt => this.updateSendAmountValue(evt)}/>
                   <InputGroupAddon addonType="append">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ""}</InputGroupAddon>
@@ -987,26 +987,26 @@ class Wallet extends React.Component {
 
               </div>
               <Button className="button" cssType="primary" onClick={() => { this.modalCustomAmountRef.close(); this.modalShareAddressRef.close(); }} >
-              Done
+                {messages.wallet.action.receive.button.done}
               </Button>
             </div>
           </Modal>
 
           {/* Modal for Create/Import wallet : */}
-          <Modal title="Create new wallet" onRef={modal => this.modalCreateWalletRef = modal}>
+          <Modal title={messages.wallet.action.create.header} onRef={modal => this.modalCreateWalletRef = modal}>
             <Row className="list">
-              <Header title="Select coins" hasLink={false} />
+              <Header title={messages.wallet.action.create.label.select_coins} hasLink={false} />
             </Row>
             <Row className="list">
               {this.getListCoinTempForCreate}
             </Row>
             <Row className="list">
-              <Header title="Wallet key" />
+              <Header title={messages.wallet.action.create.label.wallet_key} />
             </Row>
             <div className="wallet-create-footer">
               <Dropdown
                 className="dropdown-wallet"
-                placeholder="Wallet key"
+                placeholder={messages.wallet.action.create.placeholder.wallet_key}
                 defaultId={this.state.walletKeySelected}
                 source={[{ id: 1, value: 'Random' }, { id: 2, value: 'Specify recovery Phrase' }]}
                 onItemSelected={(item) => {
@@ -1020,7 +1020,7 @@ class Wallet extends React.Component {
               { this.state.walletKeyDefaultToCreate == 2 ?
                 <Input
                   name="phrase"
-                  placeholder="Type your 12 secret recovery words."
+                  placeholder={messages.wallet.action.create.placeholder.phrase}
                   required
                   className={this.state.erroValueBackup ? 'input12Phrase error' : 'input12Phrase'}
                   onChange={evt => this.update12PhraseValue(evt)}
@@ -1031,16 +1031,14 @@ class Wallet extends React.Component {
 
 
             <Button block isLoading={this.state.isRestoreLoading} disabled={this.state.countCheckCoinToCreate == 0 || (this.state.walletKeyDefaultToCreate == 2 && this.state.input12PhraseValue.trim().split(/\s+/g).length != 12)} className="button button-wallet" cssType="primary" onClick={() => { this.createNewWallets(); }} >
-              Create wallet
+              {messages.wallet.action.create.button.create}
             </Button>
             <Header />
-            {/* <div className="linkImportWallet">I want to import coins</div> */}
-
           </Modal>
 
           {/* QR code dialog */}
           {/* {this.renderScanQRCode()} */}
-          <Modal onClose={() => this.oncloseQrCode()} title="Scan QR code" onRef={modal => this.modalScanQrCodeRef = modal}>
+          <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.scan_qrcode.header} onRef={modal => this.modalScanQrCodeRef = modal}>
             {this.state.qrCodeOpen ?
               <QrReader
                 delay={this.state.delay}
@@ -1055,7 +1053,7 @@ class Wallet extends React.Component {
 
           <Row className="list">
             <Header
-              title={!process.env.isLive ? "Mainnet wallets" : ""}hasLink={false} linkTitle="+ Add new" onLinkClick={this.onLinkClick} />
+              title={!process.env.isLive ? messages.wallet.action.create.label.main_net : ""}hasLink={false} linkTitle={messages.wallet.action.create.button.add_new} onLinkClick={this.onLinkClick} />
             </Row>
 
           <Row className="list">
@@ -1063,7 +1061,7 @@ class Wallet extends React.Component {
           </Row>
           {!process.env.isLive ?
           <Row className="list">
-            <Header title="Testnet wallets" hasLink linkTitle="Request free ETH" onLinkClick={this.getETHFree} />
+            <Header title={messages.wallet.action.create.label.test_net} hasLink linkTitle={messages.wallet.action.create.button.request_free_eth} onLinkClick={this.getETHFree} />
           </Row>
           : ''}
           {!process.env.isLive ?

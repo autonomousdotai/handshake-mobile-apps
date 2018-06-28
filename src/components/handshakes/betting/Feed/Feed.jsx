@@ -71,6 +71,7 @@ class FeedBetting extends React.Component {
       this.state = {
         actionTitle: null,
         statusTitle: null,
+        isLoading:false,
         isAction: false,
         role: ROLE.INITER,
         itemInfo: props,
@@ -156,7 +157,7 @@ class FeedBetting extends React.Component {
     //const hardCodeResult = 2;
     console.log('Is Match:', isMatch);
 
-    const statusResult = betHandshakeHandler.getStatusLabel(status, result, role,side, isMatch);
+    const statusResult = BetHandshakeHandler.getStatusLabel(status, result, role,side, isMatch);
     const {title, isAction} = statusResult;
     this.setState({
       actionTitle: title,
@@ -244,6 +245,7 @@ class FeedBetting extends React.Component {
     }
     const buttonClassName = this.getButtonClassName(actionTitle);
     console.log('Sa Role:', role);
+
     return (
       <div>
         {/* Feed */}
@@ -269,7 +271,7 @@ class FeedBetting extends React.Component {
 
           <div className="bottomDiv">
             {this.renderStatus()}
-             {actionTitle && <Button block className={buttonClassName} disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
+             {actionTitle && <Button isLoading block className={buttonClassName} disabled={!isAction} onClick={() => { this.clickActionButton(actionTitle); }}>{actionTitle}</Button>}
           </div>
         </Feed>
       </div>
@@ -283,7 +285,6 @@ class FeedBetting extends React.Component {
       <div>
         {/*<div className="description">Matched bet (ETH)</div>*/}
         {<div className="value">{matchedAmount}/{amount}</div>}
-
       </div>
       <div>
         {/*<div className="description">On odds</div>*/}

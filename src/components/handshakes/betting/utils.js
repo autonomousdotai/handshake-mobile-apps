@@ -127,7 +127,7 @@ export const getMessageWithCode= (code)=> {
       */
      const {type} = element;
      console.log('Sa element:', element);
-     
+
      if(type == BET_TYPE.SHAKE){
        return true;
      }
