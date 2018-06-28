@@ -1,6 +1,7 @@
 import React from 'react';
 import {injectIntl} from 'react-intl';
 import {connect} from "react-redux";
+import PropTypes from 'prop-types';
 import {fieldInput} from '@/components/core/form/customField';
 import {change, Field} from 'redux-form';
 import {bindActionCreators} from 'redux';
@@ -109,20 +110,22 @@ class Refers extends React.Component {
     const { messages } = this.props.intl;
 
     return (
-    <Step4Form className="refers-wrapper">
-      <p>{messages.wallet.refers.text.profile_link}</p>
-      <div className="col100">
-          <Field
-              name="refer_link"
-              type="text"
-              className="form-control"
-              placeholder=""
-              component={fieldInput}
-              validate={[required]}
-              onFocus={() => { Clipboard.copy(this.state.referLink); this.showToast(messages.wallet.refers.success.copy_link); }}
-          />
-      </div>
-    </Step4Form>)
+    <div className="refer-link">
+      <Step4Form className="refers-wrapper">
+        <p>{messages.wallet.refers.text.profile_link}</p>
+        <div className="col100">
+            <Field
+                name="refer_link"
+                type="text"
+                className="form-control"
+                placeholder=""
+                component={fieldInput}
+                validate={[required]}
+                onFocus={() => { Clipboard.copy(this.state.referLink); this.showToast(messages.wallet.refers.success.copy_link); }}
+            />
+        </div>
+      </Step4Form>
+    </div>)
   }
 
   render() {
@@ -143,7 +146,7 @@ class Refers extends React.Component {
         <div className={`content ${this.state.referCollapse ? '' : 'd-none'}`}>
           <p className="text">{this.state.total} {StringHelper.format(messages.wallet.refers.text.menu_total, this.state.total != 1 ? "s" : "")}</p>
           <p className="text">{this.state.amount} {messages.wallet.refers.text.menu_amount}</p>
-          <p className="refer-link">{this.renderLinkRefer()}</p>
+          {this.renderLinkRefer()}
         </div>
 
       </div>

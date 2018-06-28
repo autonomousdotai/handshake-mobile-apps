@@ -587,17 +587,33 @@ export default {
         title: 'Cancel',
       },
       restore: {
-        title: 'Restore wallets',
-        message: 'Your Wallet restore success',
-        error: 'Invalid wallets',
+        title: "Restore wallets",
+        error: "Invalid wallets",
+        header: "Restore wallets",
+        success: {
+          restore: "Your Wallet restore success"
+        },
+        button: {
+          restore: "Restore now"
+        },
+        description: "Please enter your top secret recovery data to restore your wallet."
       },
       import: {
-        title: 'Add new / Import',
+        title: "Add new / Import",
       },
       backup: {
-        title: 'Backup wallets',
+        title: "Backup wallets",
+        header: "Backup wallets",
+        description: "This data is the only way to restore your wallets. Keep it secret, keep it safe.",
+        success: {
+          copied: "Recovery data copied to clipboard."
+        },
+        button: {
+          copy: "Copy it somewhere safe"
+        }
       },
       protect: {
+        header: 'Secure this wallet',
         title: 'Secure this wallet',
         text: {
           step1_msg1: 'This passphrase will allow you to recover your funds if your phone is ever lost or stolen.',
@@ -619,13 +635,52 @@ export default {
       },
       receive: {
         title: 'Receive coins',
+        header: "Wallet address",
+        header2: "Custom Amount",
+        message: "Share your public wallet address to receive",
+        label: {
+          address: "Address",
+          amount: "Amount"
+        },
+        placeholder: {
+          amount: "Specify amount ..."
+        },
+        button: {
+          share: "Copy to share",
+          request_amount: "Request Specific amount ➔",
+          done: "Done"
+        },
+        success: {
+          share: "Wallet address copied to clipboard."
+        }
+      },
+      create: {
+        header: "Create new wallet",
+        label: {
+          select_coints: "Select coins",
+          wallet_key: "Wallet key",
+          main_net: "Mainnet wallets",
+          test_net: "Testnet wallets"
+        },
+        placeholder: {
+          wallet_key: "Wallet key",
+          phrase: "Type your 12 secret recovery words."
+        },
+        button: {
+          create: "Create wallet",
+          add_new: "+ Add new",
+          request_free_eth: "Request free ETH"
+        }
       },
       scan_qrcode: {
         header: 'Scan QR code',
       },
+      transaction:{
+        header: 'Transaction details',
+      },
       history: {
         title: 'View transaction history',
-        header: 'Transaction details',
+        header: 'Transaction history',
         label: {
           failed: 'Failed',
           unconfirmed: 'Unconfirmed',
