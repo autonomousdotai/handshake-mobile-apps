@@ -76,11 +76,7 @@ class MobileOrTablet extends React.PureComponent {
     return (
       <div className="container mobile-tablet">
         <div className="row firstSection">
-          <div className="col-lg-5 d-flex">
-            <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja"/>
-            <h1>{messages.MOT_TITLE}</h1>
-          </div>
-          <div className="col-lg-7 chooseLanguage">
+          <div className="col-lg-12 chooseLanguage">
             {
               countryList.map((item, index) => (
                 <div
@@ -93,11 +89,36 @@ class MobileOrTablet extends React.PureComponent {
               ))
             }
           </div>
+          <div className="col-lg-12 text-center">
+            <img className="img-fluid imageHeader" src={onlyMobileTabletSVG} alt="ninja"/>
+            <h1>{messages.MOT_TITLE}</h1>
+          </div>
         </div>
 
-        <div className="row secondSection animated2 fadeInUp">
-          <div className="col-lg-6">
-            <img src={phoneIcon} alt="phone icon" />
+        <div className="row secondSection">
+          <div className="col-lg-5 offset-lg-1">
+            <VideoYoutube
+              playButtonIcon={playVideoButton}
+              imageUrl={videoLeftCover}
+              imageAlt="ninja place prediction"
+              videoUrl="https://youtu.be/YYZJlLDzeEs"
+              autoPlayVideo
+              mute
+            />
+          </div>
+          <div className="col-lg-5">
+            <VideoYoutube
+              playButtonIcon={playVideoButton}
+              imageUrl={videoRightCover}
+              imageAlt="prediction exchange walk thru"
+              videoUrl="https://youtu.be/6bd6-XtO3Wk"
+              mute
+            />
+          </div>
+        </div>
+
+        <div className="row thirdSection">
+          <div className="col-lg-5 offset-lg-1">
             <p>
               {messages.MOT_CONTENT_0}
               <br/>
@@ -105,26 +126,6 @@ class MobileOrTablet extends React.PureComponent {
               <br/>
               <span>{messages.MOT_CONTENT_3}</span>
             </p>
-          </div>
-          <div className="col-lg-6">
-            <VideoYoutube
-              playButtonIcon={playVideoButton}
-              imageUrl={videoLeftCover}
-              imageAlt="ninja place prediction"
-              videoUrl="https://youtu.be/YYZJlLDzeEs"
-              autoPlayVideo
-            />
-          </div>
-        </div>
-
-        <div className="row thirdSection animated3 fadeInUp">
-          <div className="col-lg-7">
-            <VideoYoutube
-              playButtonIcon={playVideoButton}
-              imageUrl={videoRightCover}
-              imageAlt="prediction exchange walk thru"
-              videoUrl="https://youtu.be/6bd6-XtO3Wk"
-            />
           </div>
           <div className="col-lg-5">
             <ul>

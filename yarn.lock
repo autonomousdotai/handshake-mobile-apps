@@ -4113,7 +4113,11 @@ expect@^23.1.0:
     jest-message-util "^23.1.0"
     jest-regex-util "^23.0.0"
 
-express@^4.14.0, express@^4.16.2:
+express-history-api-fallback@^2.2.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/express-history-api-fallback/-/express-history-api-fallback-2.2.1.tgz#3a2ad27f7bebc90fc533d110d7c6d83097bcd057"
+
+express@^4.14.0, express@^4.16.2, express@^4.16.3:
   version "4.16.3"
   resolved "https://registry.yarnpkg.com/express/-/express-4.16.3.tgz#6af8a502350db3246ecc4becf6b5a34d22f7ed53"
   dependencies:
@@ -5023,8 +5027,8 @@ handlebars@^4.0.11, handlebars@^4.0.3:
     uglify-js "^2.6"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1530206529"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/82b3222b5ab7c6a9a4a17508591dd4293fc0b98a"
+  version "0.0.1530249769"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/17e2f01542d249ebe936b73c538512c413148930"
   dependencies:
     "@babel/core" "^7.0.0-beta.51"
     "@babel/node" "^7.0.0-beta.51"

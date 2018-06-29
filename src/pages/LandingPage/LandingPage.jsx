@@ -379,15 +379,15 @@ class Handshake extends React.Component {
               <div className="neymar">
                 <img width="140" src={neymarIcon}/>
               </div>
-              <div className="flower"><img width="320" src={flowerIcon}/>
-              </div>
+              {/*<div className="flower"><img width="320" src={flowerIcon}/>*/}
+              {/*</div>*/}
             </div>
             <div className="col-lg-6 col-md-12" data-wow-delay="6.7s">
               <div className="col-lg-9 mw600">
                 <div className="logo" data-wow-delay="0.2s">
                   <a href="/"><img height="45" src={logoNinjaIcon} /></a>
                 </div>
-                <h2 className="text-up text-y mt20">Our token is the
+                <h2 className="text-up mt20">Our token is the
                   Shuriken (SHURI). <br/>
                   No, there is no ICO.</h2>
                 <div className="mt20" data-wow-delay="3s">
@@ -420,7 +420,7 @@ class Handshake extends React.Component {
                      target="_blank"
                      rel="noopener noreferrer"
                   >
-                    <img height="25" src={telegramIcon}/> Join the conversation on telegram
+                    <img height="25" src={telegramIcon} className="telegram-icon" /> Join the conversation on telegram
                   </a>
                 </div>
 
@@ -464,7 +464,7 @@ class Handshake extends React.Component {
                 <div className="logo">
                   <img height="45" src={logoNinjaIcon}/>
                 </div>
-                <h2 className="text-up text-y mt20">Our token is the
+                <h2 className="text-up mt20">Our token is the
                   Shuriken (SHURI). <br/>
                   No, there is no ICO.</h2>
                 <div className="mt20">
@@ -564,7 +564,7 @@ class Handshake extends React.Component {
                 <div className="row">
                   <div className="col-lg-6 col-md-12">
                     <div className="d-flex mb30">
-                      <img src={shurikenYIcon} className="icon-text"/>
+                      <img src={shurikenYIcon} className="icon-text" />
                       <div className="content-main">
                         Shurikens <br/>
                         -the multi <br/>
@@ -573,7 +573,7 @@ class Handshake extends React.Component {
                     </div>
 
                     <div className="d-flex">
-                      <img src={moneyBagIcon} className="icon-text"/>
+                      <img src={moneyBagIcon} className="icon-text" />
                       <div className="content-main">
                         Goodies, <br/>
                         merchandise, <br/>

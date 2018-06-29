@@ -40,3 +40,7 @@ handshake-mobile-apps
 
 -
 -
+
+## Deployment
+
+- make deploy

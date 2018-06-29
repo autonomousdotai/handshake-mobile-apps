@@ -21,29 +21,29 @@ body {
   }
 
   .mt10 {
-    margin-top: 10px;
+    margin-top: rem-calc(10px);
   }
   .mb10 {
-    margin-bottom: 10px;
+    margin-bottom: rem-calc(10px);
   }
   .ml10 {
-    margin-left: 10px
+    margin-left: rem-calc(10px);
   }
   .mr10 {
-    margin-right: 10px
+    margin-right: rem-calc(10px);
   }
 
   .mt20 {
-    margin-top: 20px;
+    margin-top: rem-calc(20px);
   }
   .mb20 {
-    margin-bottom: 20px;
+    margin-bottom: rem-calc(20px);
   }
   .ml20 {
-    margin-left: 20px
+    margin-left: rem-calc(20px);
   }
   .mr20 {
-    margin-right: 20px
+    margin-right: rem-calc(20px);
   }
 
   .mt30 {
@@ -53,10 +53,10 @@ body {
     margin-bottom: rem-calc(30px);
   }
   .ml30 {
-    margin-left: 30px
+    margin-left: rem-calc(30px)
   }
   .mr30 {
-    margin-right: 30px
+    margin-right: rem-calc(30px)
   }
 
   .mb160 {
@@ -94,9 +94,9 @@ body {
 
   .btn-lg {
     text-align: center;
-    font-size: 16px;
+    font-size: rem-calc(16px);
     font-weight: bold;
-    padding: 10px 20px;
+    padding: rem-calc(10px 20px);
     display: inline-block;
   }
   .btn-lg:hover {
@@ -105,15 +105,15 @@ body {
   }
   .btn-y {
     color: #333;
-    background: #FFD402;
+    background: #F8E71C;
     width: 100%;
   }
 
   .text-y {
-    color: #FFD402;
+    color: #F8E71C;
   }
   .bg-y {
-    background: #FFD402;
+    background: #F8E71C;
     color: #333;
   }
 
@@ -121,10 +121,12 @@ body {
     text-transform: uppercase;
   }
   .first-page {
-    width: 100%;
-    min-height: 100vh;
-    background: black;
-    position: relative;
+    //width: 100%;
+    //min-height: 90vh;
+    //background: black;
+    //position: relative;
+    padding-top: rem-calc(50px);
+    margin-bottom: rem-calc(100px);
   }
   .first-page iframe {
     min-height: 100vh;
@@ -136,9 +138,9 @@ body {
   .logo {
   }
   .content-first {
-    z-index: 2;
-    position: absolute;
-    top: 60px;
+    //z-index: 2;
+    //position: absolute;
+    //top: 60px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -147,44 +149,46 @@ body {
     margin-right: rem-calc(23px);
   }
   h2 {
-    font-size: 30px;
+    font-size: rem-calc(30px);
     letter-spacing: 0;
-    line-height: 38px;
+    line-height: rem-calc(38px);
     color: #9B9B9B;
     font-weight: 900;
     font-family: motiva-sans, sans-serif !important;
   }
   p {
     color: #9B9B9B;
-    font-size: 14px;
-    line-height: 20px;
+    font-size: rem-calc(14px);
+    line-height: rem-calc(20px);
     font-family: motiva-sans, sans-serif !important;
   }
   a.text-link {
     color: #ababab;
-    border-bottom: 1px #FFD402 solid;
+    border-bottom: 1px #F8E71C solid;
     display: inline-block;
   }
   a.text-link:hover {
-    color: #FFD402;
+    color: #F8E71C;
     text-decoration: none;
   }
   .email-frm input {
     display: inline-block;
-    height: 46px;
-    font-size: 16px;
+    height: rem-calc(46px);
+    font-size: rem-calc(16px);
   }
   .email-frm {
     button {
+      height: rem-calc(46px);
       border-radius: 0 4px 4px 0;
     }
   }
   .form-control:focus {
     box-shadow: none;
-    border-color: #FFD402;
+    border-color: #F8E71C;
   }
   .cnt-w {
     max-width: 400px;
+    margin: 0 auto;
   }
   .line-ninja {
     position: relative;
@@ -210,7 +214,7 @@ body {
 
   .h3-y {
     font-size: rem-calc(30px);
-    color: #FFD402;
+    color: #9B9B9B;
     letter-spacing: 0;
     margin-bottom: rem-calc(40px);
     text-transform: uppercase;
@@ -219,7 +223,7 @@ body {
 
   .h3-gray {
     font-size: rem-calc(30px);
-    color: #4A4A4A;
+    color: #9B9B9B;
     letter-spacing: 0;
     font-weight: $heavy;
   }
@@ -323,14 +327,26 @@ body {
     box-sizing: border-box;
   }
   .second-page {
+    //background: url("../../assets/images/icon/landingpage/shuriken_backgroud.svg") no-repeat;
     .shuriken-background {
       position: absolute;
-      opacity: 0.7;
+      opacity: 0.5;
     }
   }
 
   .mw600 {
     max-width: rem-calc(450px) !important;
+  }
+
+  .or {
+    opacity: 0.7;
+    font-size: rem-calc(18px);
+    color: #FFFFFF;
+    letter-spacing: 0;
+  }
+
+  .telegram-icon {
+    margin-right: rem-calc(20px);
   }
 }
 
@@ -376,5 +392,11 @@ body {
     .h3-gray {
       text-align: left !important;
     }
+  }
+}
+
+@media (max-width: 375px) {
+  html {
+    font-size: 14px;
   }
 }

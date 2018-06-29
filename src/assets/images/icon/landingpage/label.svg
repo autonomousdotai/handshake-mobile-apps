@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="106px" height="106px" viewBox="0 0 106 106" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="104px" height="104px" viewBox="0 0 104 104" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
     <title>Group 8</title>
     <desc>Created with Sketch.</desc>
@@ -8,20 +8,18 @@
             <stop stop-color="#555555" offset="0%"></stop>
             <stop stop-color="#000000" offset="100%"></stop>
         </linearGradient>
-        <linearGradient x1="-174.519527%" y1="-28.0006471%" x2="415.031932%" y2="326.340984%" id="linearGradient-2">
-            <stop stop-color="#DBC060" offset="0%"></stop>
-            <stop stop-color="#ED6B21" offset="100%"></stop>
-        </linearGradient>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Group-8" transform="translate(2.000000, 2.000000)">
-            <circle id="Oval" stroke="url(#linearGradient-2)" stroke-width="3" fill="url(#linearGradient-1)" cx="51" cy="51" r="51"></circle>
-            <text id="100%" font-family="MotivaSans-Black, Motiva Sans" font-size="24" font-weight="700" fill="#FFFFFF">
-                <tspan x="16" y="51">100%</tspan>
-            </text>
-            <text id="ANONYMOUS" font-family="MotivaSans-Light, Motiva Sans" font-size="12" font-weight="300" fill="#FFFFFF">
-                <tspan x="11" y="69">ANONYMOUS</tspan>
-            </text>
+        <g id="New-landing-page-Copy-5" transform="translate(-429.000000, -181.000000)">
+            <g id="Group-8" transform="translate(430.000000, 182.000000)">
+                <circle id="Oval" stroke="#F8E71C" stroke-width="2" fill="url(#linearGradient-1)" cx="51" cy="51" r="51"></circle>
+                <text id="100%" font-family="MotivaSans-Black, Motiva Sans" font-size="24" font-weight="700" fill="#FFFFFF">
+                    <tspan x="16" y="51">100%</tspan>
+                </text>
+                <text id="ANONYMOUS" font-family="MotivaSans-Light, Motiva Sans" font-size="12" font-weight="300" fill="#FFFFFF">
+                    <tspan x="11" y="69">ANONYMOUS</tspan>
+                </text>
+            </g>
         </g>
     </g>
 </svg>

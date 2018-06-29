@@ -8,3 +8,5 @@ dist
 .env.*.js
 testing
 .idea/
+deployment
+deployment.tar

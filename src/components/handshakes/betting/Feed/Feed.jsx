@@ -20,7 +20,7 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import Feed from '@/components/core/presentation/Feed';
 import BettingShake from './Shake';
 import {showAlert} from '@/reducers/app/action';
-import {getMessageWithCode, isRightNetwork, getId, 
+import {getMessageWithCode, isRightNetwork, getId,
   getShakeOffchain, getBalance, getEstimateGas, isSameAddress, foundShakeList} from '@/components/handshakes/betting/utils.js';
 
 
@@ -78,7 +78,7 @@ class FeedBetting extends React.Component {
         amountMatch: 0,
         winMatch: 0,
         isUserShake: false,
-        shakedItemList: null
+        shakedItemList: [],
       };
 
 
@@ -122,7 +122,7 @@ class FeedBetting extends React.Component {
       amountMatch = amount - remainingAmount;
       winMatch = amountMatch * odds;
     }
-    let shakedItemList = null;
+    let shakedItemList = [];
     console.log('Amount,RemainingAmount, AmountMatch:', amount,remainingAmount,  amountMatch);
     if(isUserShake){
       /*
@@ -229,10 +229,10 @@ class FeedBetting extends React.Component {
 
   render() {
     const {actionTitle , isAction, itemInfo, role, isLoading } = this.state;
-   
+
     const {side } = itemInfo;
     const {event_name, event_predict} = this.extraData;
-    
+
     const styleEventName = {
       background: this.randomItemInList(BACKGROUND_COLORS),
     };
@@ -320,7 +320,7 @@ class FeedBetting extends React.Component {
   renderMaker(){
     console.log('Render Maker');
     const {itemInfo, amountMatch, winMatch } = this.state;
-   
+
     const {amount, odds,side, remainingAmount } = itemInfo;
     const remainingValue = remainingAmount || 0;
     const displayAmount = Math.floor(amount * ROUND)/ROUND;
@@ -331,7 +331,7 @@ class FeedBetting extends React.Component {
     return (
       this.renderItem(displayMatchedAmount,displayAmount, colorBySide, odds, winMatch, displayRemaining )
     );
-    
+
   }
   renderShaker(){
     console.log('Render Maker');
@@ -415,7 +415,7 @@ class FeedBetting extends React.Component {
           isFreeBet = foundShakedItem.free_bet;
           userFromAddress = foundShakedItem.from_address;
         }
-        
+
       }
       */
      const shakedItemList = foundShakeList(this.props, id);
@@ -426,7 +426,7 @@ class FeedBetting extends React.Component {
         userFromAddress = shakeItem.from_address;
      }
     }
-    console.log("idCryptosign, isFreeBet, isUserShaker, fromAddress: ", idCryptosign, 
+    console.log("idCryptosign, isFreeBet, isUserShaker, fromAddress: ", idCryptosign,
     isFreeBet, isUserShake, userFromAddress);
     //userFromAddress = "abc";
     if(!isRightNetwork()){
@@ -551,7 +551,7 @@ class FeedBetting extends React.Component {
         }
       });
     }
-  
+
   }
   collectFree(id){
     console.log('Call Collect Free');
@@ -636,7 +636,7 @@ class FeedBetting extends React.Component {
       let updateInfo = Object.assign({}, itemInfo);
       //updateInfo.bkStatus = itemInfo.status;
       updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING;
-      
+
 
       //this.handleStatus(updateInfo);
       this.props.updateBettingChange(updateInfo);
@@ -732,7 +732,7 @@ class FeedBetting extends React.Component {
 
   }
 
-  
+
   rollback(offchain){
     const params = {
       offchain
@@ -760,7 +760,7 @@ class FeedBetting extends React.Component {
       });
     }
   }
-  
+
 }
 
 const mapState = state => ({
