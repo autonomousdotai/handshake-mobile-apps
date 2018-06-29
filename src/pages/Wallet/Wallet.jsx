@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';InputGroup
+import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
 // service, constant
