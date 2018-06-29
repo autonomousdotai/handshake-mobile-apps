@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {injectIntl} from 'react-intl';
-import {Field, clearFields} from "redux-form";
+import {Field, clearFields, change} from "redux-form";
 import {connect} from "react-redux";
 import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import createForm from '@/components/core/form/createForm'
-import { change } from 'redux-form'
 import {fieldDropdown, fieldInput} from '@/components/core/form/customField'
 import { API_URL } from "@/constants";
 import {required} from '@/components/core/form/validation'
@@ -30,7 +29,6 @@ const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefin
 
 const nameFormSendWallet = 'sendWallet';
 const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
-const isToken = false;//wait to integrate code
 
 class Transfer extends React.Component {
   static propTypes = {
@@ -89,7 +87,7 @@ class Transfer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
+    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amountCoin");
     if (this.props.amount){
       this.props.rfChange(nameFormSendWallet, 'amountCoin', this.props.amount);
     }
@@ -100,7 +98,7 @@ class Transfer extends React.Component {
     }
 
     this.getWalletDefault();
-    if(!isToken){
+    if(!this.state.walletSelected.isToken){
       this.getRate("BTC");
       this.getRate("ETH");
     }
@@ -114,9 +112,7 @@ class Transfer extends React.Component {
   }
 
   resetForm(){
-    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
-    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
-    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "from_address", "amount");
+    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amountCoin");
   }
 
   showLoading = () => {
@@ -134,7 +130,7 @@ class Transfer extends React.Component {
 
 
     if (onFinish) {
-      let result = {"toAddress": this.state.inputAddressAmountValue, "fromWallet": this.state.walletSelected, "amount": this.state.inputSendAmountValue}
+      let result = {"toAddress": this.state.inputAddressAmountValue, "fromWallet": this.state.walletSelected, "amountCoin": this.state.inputSendAmountValue}
       onFinish(result);
     } else {
 
@@ -330,16 +326,17 @@ handleScan=(data) =>{
       inputAddressAmountValue: value[0],
     });
     rfChange(nameFormSendWallet, 'to_address', value[0]);
-
     if (value.length == 2){
       this.setState({
         inputSendAmountValue: value[1],
       });
+
       rfChange(nameFormSendWallet, 'amountCoin', value[1]);
     }
     this.modalScanQrCodeRef.close();
   }
 }
+
 handleError(err) {
   consolelog('error wc', err);
 }
@@ -415,9 +412,10 @@ openQrcode = () => {
                   value={this.state.inputSendAmountValue}
                   onChange={evt => this.updateAddressAmountValue(evt)}
                   validate={[required, amountValid]}
+                  autoComplete="off"
                 />
               </div>
-              { isToken ? "" :
+              { this.state.walletSelected.isToken ? "" :
                 <div className="div-amount">
                   <div className="prepend">{messages.wallet.action.transfer.label.usd}</div>
                   <Field
@@ -429,6 +427,7 @@ openQrcode = () => {
                     component={fieldInput}
                     value={this.state.inputSendMoneyValue}
                     onChange={evt => this.updateAddressMoneyValue(evt)}
+                    autoComplete="off"
                   />
                 </div>
               }

@@ -569,7 +569,7 @@ export default {
         text: {
           confirm_transfer: 'Are you sure you want to transfer out ',
         },
-        error: 'You don\'t have enough coin right now. Please top up.',
+        error: 'You don\'t have enough coin right now.',
         button: {
           transfer: 'Transfer',
           confirm: 'Confirm',
@@ -639,11 +639,13 @@ export default {
         header2: 'Custom Amount',
         message: 'Share your public wallet address to receive',
         label: {
-          address: 'Address',
-          amount: 'Amount',
+          address: "Address",
+          amount: "Amount",
+          usd: "USD"
         },
         placeholder: {
-          amount: 'Specify amount ...',
+          amount: "Specify amount ...",
+          choose_wallet: "Choose a wallet ..."
         },
         button: {
           share: 'Copy to share',
@@ -697,7 +699,7 @@ export default {
     error: {
       invalid_address: 'You can only send tokens to Bitcoin address',
       invalid_address2: 'Please enter a valid receiving address.',
-      insufficient: 'You have insufficient coin to make the transfer. Please top up and try again.',
+      insufficient: 'You have insufficient coin to make the transfer.',
     },
     success: {
       transaction: 'Your transaction will appear on blockchain in about 30 seconds.',
@@ -707,7 +709,7 @@ export default {
     error: {
       invalid_address: 'You can only send tokens to Ethereum address',
       invalid_address2: 'Please enter a valid receiving address.',
-      insufficient: 'You have insufficient coin to make the transfer. Please top up and try again.',
+      insufficient: 'You have insufficient coin to make the transfer.',
     },
     success: {
       transaction: 'Your transaction will appear on blockchain in about 30 seconds.',

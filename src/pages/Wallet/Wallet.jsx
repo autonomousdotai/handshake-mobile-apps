@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';InputGroup
 import { injectIntl } from 'react-intl';
 
 // service, constant
@@ -44,8 +44,8 @@ import WalletProtect from './WalletProtect';
 import WalletHistory from './WalletHistory';
 import Refers from './Refers';
 import RefersDashboard from './RefersDashboard';
-//import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import TransferCoin from '@/components/Wallet/TransferCoin';
+import ReceiveCoin from '@/components/Wallet/ReceiveCoin';
 import ReactBottomsheet from 'react-bottomsheet';
 import { setHeaderRight } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
@@ -720,6 +720,11 @@ class Wallet extends React.Component {
     this.autoCheckBalance(this.state.walletSelected.address, this.state.inputAddressAmountValue);
   }
 
+  successReceive = () => {
+    this.modalShareAddressRef.close();
+    this.autoCheckBalance(this.state.walletSelected.address, this.state.inputAddressAmountValue);
+  }
+
   closeHistory = () => {
     this.setState({ transactions: [], isHistory: false });
   }
@@ -800,11 +805,9 @@ class Wallet extends React.Component {
   }
 
   render = () => {
-    const {cryptoPrice, amount, userCcLimit, ccLimits} = this.props;
     const { messages } = this.props.intl;
     return (
       <div className="wallet-page">
-
 
         <Modal onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
             <AddToken formAddTokenIsActive={this.state.formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
@@ -885,13 +888,13 @@ class Wallet extends React.Component {
           </Modal>
 
           {/* Dialog confirm transfer coin */}
-          <ModalDialog title={messages.wallet.action.transfer.header} onRef={modal => this.modalConfirmSendRef = modal}>
+          {/* <ModalDialog title={messages.wallet.action.transfer.header} onRef={modal => this.modalConfirmSendRef = modal}>
             <div className="bodyConfirm"><span>{messages.wallet.action.transfer.text.confirm_transfer} {this.state.inputSendAmountValue} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
             <div className="bodyConfirm">
               <Button className="left" cssType="danger" onClick={this.submitSendCoin} >Confirm</Button>
               <Button className="right" cssType="secondary" onClick={() => { this.modalConfirmSendRef.close(); }}>Cancel</Button>
             </div>
-          </ModalDialog>
+          </ModalDialog> */}
 
           {/* <Modal title="Buy coins" onRef={modal => this.modalFillRef = modal}>
             <FeedCreditCard
@@ -905,7 +908,6 @@ class Wallet extends React.Component {
           <Modal title={messages.wallet.action.protect.header} onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
             <WalletProtect onCopy={this.onCopyProtected} step={this.state.stepProtected} active={this.state.activeProtected} wallet={this.state.walletSelected} callbackSuccess={() => { this.successWalletProtect(this.state.walletSelected); }} />
           </Modal>
-
 
           <Modal title={messages.wallet.action.history.header} onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
             <WalletHistory wallet={this.state.walletSelected} transactions={this.state.transactions} />
@@ -945,8 +947,9 @@ class Wallet extends React.Component {
 
           {/* Modal for Copy address : */}
           <Modal title={messages.wallet.action.receive.header} onRef={modal => this.modalShareAddressRef = modal}>
-            <div className="bodyTitle"><span>{messages.wallet.action.receive.message} { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div>
-            <div className={['bodyBackup bodySahreAddress']}>
+            <ReceiveCoin active={this.state.activeReceive} wallet={this.state.walletSelected} onFinish={() => { this.successReceive() }} />
+            {/* <div className="bodyTitle"><span>{messages.wallet.action.receive.message} { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div>
+            <div className={['bodyBackup bodyShareAddress']}>
 
               <QRCode value={this.state.walletSelected ? this.state.walletSelected.address : ''} />
               <div className="addressDivPopup">{ this.state.walletSelected ? this.state.walletSelected.address : ''}</div>
@@ -956,12 +959,12 @@ class Wallet extends React.Component {
               <Button className="button" cssType="primary" onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.modalShareAddressRef.close(); this.showToast(messages.wallet.action.receive.success.share); }} >
                 {messages.wallet.action.receive.button.share}
               </Button>
-            </div>
+            </div> */}
           </Modal>
 
           {/* Modal for Custom amount : */}
-          <Modal title={messages.wallet.action.receive.header2} onRef={modal => this.modalCustomAmountRef = modal}>
-            <div className={['bodyBackup bodySahreAddress']}>
+          {/* <Modal title={messages.wallet.action.receive.header2} onRef={modal => this.modalCustomAmountRef = modal}>
+            <div className={['bodyBackup bodyShareAddress']}>
 
               <QRCode value={(this.state.walletSelected ? this.state.walletSelected.address : '') + (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '')} />
               <div className="addressDivPopup">
@@ -990,7 +993,7 @@ class Wallet extends React.Component {
                 {messages.wallet.action.receive.button.done}
               </Button>
             </div>
-          </Modal>
+          </Modal> */}
 
           {/* Modal for Create/Import wallet : */}
           <Modal title={messages.wallet.action.create.header} onRef={modal => this.modalCreateWalletRef = modal}>

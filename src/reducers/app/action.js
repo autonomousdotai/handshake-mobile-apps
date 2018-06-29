@@ -157,10 +157,10 @@ const tokenHandle = ({
             data,
             METHOD: 'POST',
             successFn: (res) => {
-              console.log('app - handle - wallet - success - ', res);
+              //console.log('app - handle - wallet - success - ', res);
             },
             errorFn: (e) => {
-              console.log('app - handle - wallet - error - ', e);
+              //console.log('app - handle - wallet - error - ', e);
             },
           }));
           resolve(true);

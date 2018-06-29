@@ -2,56 +2,81 @@
   margin-bottom: 1px;
   margin-right: 5px;
 }
+
 .receive-coins{
-    margin-top: 20px;
-    padding: 0 15px;
-    
-    .bodyBackup{
-      padding: 15px;
-      overflow: hidden;
-      margin: auto;
+  margin-top: 20px;
+  padding: 0 15px;
+
+  .div-amount {
+    padding-bottom: 10px;
+
+    .prepend{
+      padding-top: 11px;
+      position: absolute;
+      right: 50px;
+      color: #7b7b7b;
+    }
+
+    input[type=text], input[type=tel], input[type=number]{
+      font-size: 16px;
+      line-height: 22px;
+      height: 45px;
+      padding-right: 80px;
+      font-weight: 300;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+  }
+
+  .bodyBackup{
+    padding: 15px;
+    overflow: hidden;
+    margin: auto;
+    width: 100%;
+    margin-bottom: 5px;
+    .button {
       width: 100%;
-      margin-bottom: 5px;
-      .button {
-        width: 100%;
-        padding: 10px;
-        margin-top: 15px;
-      }
+      padding: 10px;
+      margin-top: 15px;
     }
-    .dropdown-custom-item{
-      margin: 0;
+  }
+  .dropdown-custom-item{
+    margin: 0;
+  }
+  .dropdown-custom-menu{
+    text-align: left;
+  }
+  .dropdown-receive{
+    margin: 0!important;
+    margin-bottom: 25px!important;
+    margin-top: 20px!important;
+  }
+  .addressDivPopup {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .link-request-custom-amount {
+    cursor: pointer;
+    color: #1e4eff;
+    margin: 10px;
+  }
+  .bodyShareAddress {
+      text-align: center;
+      .input-group {
+        height: 50px;
     }
-    .dropdown-custom-menu{
-      text-align: left;
-    }
-    .dropdown-receive{
-      margin: 0!important;
-      margin-bottom: 25px!important;
-      margin-top: 20px!important;
-    }
-    .addressDivPopup {
-      margin-top: 20px;
-      margin-bottom: 10px;
-      font-size: 13px;
-    }
-    .link-request-custom-amount {
-      cursor: pointer;
-      color: #1e4eff;
-      margin: 10px;
-    }
-    .bodySahreAddress {
-        text-align: center;
-        .input-group {
-          height: 50px;
-      }
-    }
-    
+  }
+
   .bodyTitle{
     margin-left: 15px;
     margin-right: 15px;
     margin-top: 15px;
   }
-
 
 .labelText{
   margin-bottom: 10px;
@@ -101,7 +126,7 @@
   // width: 100%;
   // left: 0;
   // border-radius: 0;
-  padding: 0.9625rem 0;  
+  padding: 0.9625rem 0;
   margin-top: 30px;
 }
 
@@ -125,6 +150,6 @@
     margin: auto;
     width: 100%;
     margin-bottom: 5px;
-  
+
   }
 }
