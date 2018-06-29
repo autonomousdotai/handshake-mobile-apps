@@ -1,0 +1,19 @@
+{
+  "name": "handshake-app",
+  "scripts": {
+  },
+  "env": {},
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/ninjadotorg/handshake-app-heroku-buildpack"
+    }
+  ]
+}

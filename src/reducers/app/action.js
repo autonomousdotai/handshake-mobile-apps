@@ -224,8 +224,11 @@ export const initApp = (language, ref) => (dispatch) => {
 
     var ipInfo = IpInfo.ipInfo(data);
     //get currency base on GPS
+    console.log('------------GPS-------------' + ipInfo);
+
     navigator.geolocation.getCurrentPosition((location) => {
       const {coords: {latitude, longitude}} = location;
+      console.log('------------GPS-------------' + latitude);
 
       axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&sensor=true`).then((response) => {
 
@@ -234,7 +237,7 @@ export const initApp = (language, ref) => (dispatch) => {
           if(country && Country[country]){
             ipInfo.currency = Country[country];
             console.log('------------GPS-------------' + ipInfo.currency);
-
+            dispatch(setIpInfo(ipInfo));
           }
         }
       });
