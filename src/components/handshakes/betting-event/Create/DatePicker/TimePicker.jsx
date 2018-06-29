@@ -8,13 +8,11 @@ import TimePicker from 'rc-time-picker';
 
 const format = 'h:mm a';
 
-const now = moment().hour(0).minute(0);
-
 class TimePickerComponent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      value: moment(),
+      value: moment().add(10, 'minutes'),
       open: false,
     };
   }
@@ -37,7 +35,6 @@ class TimePickerComponent extends React.PureComponent {
   render() {
     return (<TimePicker
       showSecond={false}
-      defaultValue={now}
       className="timepicker"
       format={format}
       use12Hours

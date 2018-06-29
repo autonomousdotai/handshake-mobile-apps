@@ -15,7 +15,7 @@ class DatePicker extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTime: moment().format('h:mm a'),
+      selectedTime: moment().add(10, 'minutes').format('h:mm a'),
       selectedDateValue: '',
       finalDateTime: '',
     };
@@ -58,15 +58,16 @@ class DatePicker extends React.PureComponent {
 
   // separate date validitiy based on type of form = reporting will have closing time and type will be reporting similarly dispute will have reporting time
   valid = (current) => {
+    const fromDate = this.props.startDate ? moment(new Date(this.props.startDate * 1000)).subtract(1, 'days') : yesterday;
     switch (this.props.name) {
       case 'closingTime':
         return current.isAfter(yesterday);
 
       case 'reportingTime':
-        return current.isAfter(moment.unix(this.props.startDate));
+        return current.isAfter(fromDate);
 
       case 'disputeTime':
-        return current.isAfter(moment.unix(this.props.startDate));
+        return current.isAfter(fromDate);
 
       default:
         return current.isAfter(yesterday);

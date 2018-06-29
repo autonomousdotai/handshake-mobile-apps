@@ -47,18 +47,6 @@ class Admin extends React.Component {
     });
   }
 
-  fetchMatches() {
-    this.props.loadMatches({
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
-      successFn: (res) => {
-        const { data } = res;
-        console.log('loadMatches success', data);
-      },
-      errorFn: (e) => {
-        console.log('loadMatches failed', e);
-      },
-    });
-  }
 
   toggle() {
     this.setState({
@@ -173,6 +161,23 @@ class Admin extends React.Component {
       });
     });
   }
+  fetchMatches() {
+    const params = {
+      public: 1,
+    };
+    this.props.loadMatches({
+      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
+      METHOD: 'POST',
+      data: params,
+      successFn: (res) => {
+        const { data } = res;
+        console.log('loadMatches success', data);
+      },
+      errorFn: (e) => {
+        console.log('loadMatches failed', e);
+      },
+    });
+  }
   render() {
     return (!this.state.login ?
       <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }} onSubmit={this.loginUser}>
@@ -248,8 +253,8 @@ class Admin extends React.Component {
 
           {this.state.disable && <div><br /><Alert color="success">
             Match details submitted. Please wait.
-                                            </Alert>
-                                 </div>}
+          </Alert>
+          </div>}
           <div>
             <Modal isOpen={this.state.modal} toggle={this.toggle} className="modal-sm">
               <ModalHeader toggle={this.toggle}>Update Match Data</ModalHeader>
@@ -261,7 +266,7 @@ class Admin extends React.Component {
                 <Label>AwayScore {this.state.activeMatchData.awayScore}</Label> <br /> */}
                 {this.state.errorMessage && <Alert color="danger">
                     {this.state.errorMessage}
-                                            </Alert>}
+                </Alert>}
               </ModalBody>
               <ModalFooter>
                 <Button color="primary" onClick={this.onSubmit}>Confirm</Button>{' '}
