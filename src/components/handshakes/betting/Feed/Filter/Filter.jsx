@@ -8,7 +8,7 @@ import local from '@/services/localStore';
 import { APP, API_URL } from '@/constants';
 import { loadMatches, loadHandshakes, checkFreeAvailable } from '@/reducers/betting/action';
 import { SIDE } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
-import { getBalance,parseBigNumber } from '@/components/handshakes/betting/utils';
+import { getBalance, parseBigNumber } from '@/components/handshakes/betting/utils';
 import GA from '@/services/googleAnalytics';
 // components
 import Dropdown from '@/components/core/controls/Dropdown';
@@ -24,7 +24,7 @@ import BettingShakeFree from './../ShakeFree';
 // style
 import './Filter.scss';
 
-////
+// //
 
 
 const CRYPTOSIGN_MINIMUM_MONEY = 0.00002;
@@ -126,10 +126,10 @@ class BettingFilter extends React.Component {
     const { against } = this.state;
     if (against && against.length > 0) {
       const element = against[against.length - 1];
-      // const guessAmout = element.amount * (element.odds - 1); 
+      // const guessAmout = element.amount * (element.odds - 1);
       const guessAmout = parseBigNumber(element.amount).times(parseBigNumber(element.odds).minus(1));
-      console.log(TAG," defaultSupportAmount = ",guessAmout.toNumber());
-      return guessAmout.toNumber()||0;
+      console.log(TAG, ' defaultSupportAmount = ', guessAmout.toNumber());
+      return guessAmout.toNumber() || 0;
     }
     return 0;
   }
@@ -139,10 +139,10 @@ class BettingFilter extends React.Component {
     if (support && support.length > 0) {
       console.log('Sorted Support:', support);
       const element = support[support.length - 1];
-      // const guessAmout = element.amount * (element.odds - 1); 
+      // const guessAmout = element.amount * (element.odds - 1);
       const guessAmout = parseBigNumber(element.amount).times(parseBigNumber(element.odds).minus(1));
-      console.log(TAG," defaultAgainstAmount = ",guessAmout.toNumber());
-      return guessAmout.toNumber()||0;
+      console.log(TAG, ' defaultAgainstAmount = ', guessAmout.toNumber());
+      return guessAmout.toNumber() || 0;
     }
     return 0;
   }
@@ -152,11 +152,11 @@ class BettingFilter extends React.Component {
     if (against && against.length > 0) {
       console.log('Sorted Against:', against);
       const element = against[against.length - 1];
-      // const againstOdds = element.odds / (element.odds - 1); 
+      // const againstOdds = element.odds / (element.odds - 1);
       const odds = parseBigNumber(element.odds);
       const againstOdds = odds.div(odds.minus(1));
-      console.log(TAG," defaultSupportOdds = ",againstOdds.toNumber());
-      return againstOdds?.toNumber()||0;
+      console.log(TAG, ' defaultSupportOdds = ', againstOdds.toNumber());
+      return againstOdds?.toNumber() || 0;
     }
     return 0;
   }
@@ -169,8 +169,8 @@ class BettingFilter extends React.Component {
       // const supportOdds = element.odds / (element.odds - 1);
       const odds = parseBigNumber(element.odds);
       const supportOdds = odds.div(odds.minus(1));
-      console.log(TAG," defaultAgainstOdds = ",supportOdds.toNumber());
-      return supportOdds.toNumber()||0;
+      console.log(TAG, ' defaultAgainstOdds = ', supportOdds.toNumber());
+      return supportOdds.toNumber() || 0;
     }
     return 0;
   }
@@ -430,6 +430,7 @@ class BettingFilter extends React.Component {
     console.log('Market Fee:', marketFee);
     return (
       <div className="wrapperBettingFilter">
+        {this.state.matches && this.state.matches.length > 0 &&
         <div className="share-block">
           <p className="text">Share to get 20 free coins</p>
           <ShareSocial
@@ -437,7 +438,7 @@ class BettingFilter extends React.Component {
             title={shareInfo.title}
             shareUrl={shareInfo.shareUrl}
           />
-        </div>
+        </div>}
         {
           this.state.isError
           ? (
