@@ -11,7 +11,7 @@ import {
 } from "@/constants";
 import {MasterWallet} from '@/services/Wallets/MasterWallet';
 import OfferShop from "@/models/OfferShop";
-import {ExchangeShopHandshake} from "@/services/neuron";
+import {ExchangeCashHandshake} from "@/services/neuron";
 import {FormattedMessage} from "react-intl";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
@@ -233,11 +233,11 @@ class FeedMeOfferStoreContainer extends React.PureComponent {
         try {
           const wallet = MasterWallet.getWalletDefault(currency);
 
-          const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
           let result = null;
 
-          result = await exchangeHandshake.closeByShopOwner(data.hid, data.id);
+          result = await cashHandshake.closeByStationOwner(data.hid, data.id);
 
           console.log('handleDeleteOfferItemSuccess', result);
 

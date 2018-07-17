@@ -60,7 +60,7 @@ import { MasterWallet } from '@/models/MasterWallet';
 import { formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice } from '@/services/offer-util';
 import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
 
-import { ExchangeHandshake, ExchangeShopHandshake } from '@/services/neuron';
+import { ExchangeHandshake, ExchangeCashHandshake } from '@/services/neuron';
 import { feedBackgroundColors } from '@/components/handshakes/exchange/config';
 import { updateOfferStatus } from '@/reducers/discover/action';
 import { responseExchangeDataChange } from '@/reducers/me/action';
@@ -537,13 +537,13 @@ class FeedMe extends React.PureComponent {
     const { offer } = this;
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
       let amount = 0;
 
       if (offer.type === EXCHANGE_ACTION.BUY) {
         amount = data.total_amount;
       }
-      const result = await exchangeHandshake.shake(data.hid, amount, data.id);
+      const result = await cashHandshake.shake(data.hid, amount, data.id);
 
       console.log('handleShakeOfferExchangeSuccess', result);
     } else if (currency === CRYPTO_CURRENCY.BTC) {
@@ -614,18 +614,18 @@ class FeedMe extends React.PureComponent {
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
 
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
 
       let result = null;
 
       // if ((data.type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.OWNER) ||
       //   (data.type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.SHAKED)
       // ) {
-      //   result = await exchangeHandshake.reject(data.hid, data.id);
+      //   result = await cashHandshake.reject(data.hid, data.id);
       // } else {
-      //   result = await exchangeHandshake.cancel(data.hid, data.id);
+      //   result = await cashHandshake.cancel(data.hid, data.id);
       // }
-      result = await exchangeHandshake.cancel(hid, id);
+      result = await cashHandshake.cancel(hid, id);
 
       console.log('handleRejectShakedOfferExchangeSuccess', result);
     }
@@ -687,9 +687,9 @@ class FeedMe extends React.PureComponent {
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
 
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
 
-      const result = await exchangeHandshake.accept(hid, id);
+      const result = await cashHandshake.accept(hid, id);
 
       console.log('handleCompleteShakedOfferExchangeSuccess', result);
     }
@@ -753,9 +753,9 @@ class FeedMe extends React.PureComponent {
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
 
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
 
-      const result = await exchangeHandshake.cancel(hid, id);
+      const result = await cashHandshake.cancel(hid, id);
 
       console.log('handleCompleteShakedOfferExchangeSuccess', result);
     }
@@ -812,9 +812,9 @@ class FeedMe extends React.PureComponent {
 
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
 
-      const result = await exchangeHandshake.withdraw(data.hid, data.id);
+      const result = await cashHandshake.withdraw(data.hid, data.id);
 
       console.log('handleWithdrawShakedOfferExchangeSuccess', result);
     }
@@ -877,11 +877,11 @@ class FeedMe extends React.PureComponent {
 
     if (currency === CRYPTO_CURRENCY.ETH) {
       const wallet = MasterWallet.getWalletDefault(currency);
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
 
       let result = '';
 
-      result = await exchangeHandshake.shake(hid, id);
+      result = await cashHandshake.shake(hid, id);
 
       console.log('handleAcceptOfferExchangeSuccess', result);
     }
@@ -938,11 +938,11 @@ class FeedMe extends React.PureComponent {
 
     if (currency === CRYPTO_CURRENCY.ETH && type === EXCHANGE_ACTION.SELL) {
       const wallet = MasterWallet.getWalletDefault(currency);
-      const exchangeHandshake = new ExchangeHandshake(wallet.chainId);
+      const cashHandshake = new ExchangeHandshake(wallet.chainId);
 
       let result = '';
 
-      result = await exchangeHandshake.cancel(data.hid, data.id);
+      result = await cashHandshake.cancel(data.hid, data.id);
 
       console.log('handleCloseOfferExchangeSuccess', result);
     }
@@ -1129,11 +1129,11 @@ class FeedMe extends React.PureComponent {
       if (sellAmount > 0 && !freeStart && offerStore.items.ETH.status !== 'closed') {
         const wallet = MasterWallet.getWalletDefault(currency);
 
-        const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+        const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
         let result = null;
 
-        result = await exchangeHandshake.closeByShopOwner(data.hid, data.id);
+        result = await cashHandshake.closeByStationOwner(data.hid, data.id);
 
         console.log('handleDeleteOfferItemSuccess', result);
       }
@@ -1526,11 +1526,11 @@ class FeedMe extends React.PureComponent {
       if (type === EXCHANGE_ACTION.BUY) {//shop buy
         const wallet = MasterWallet.getWalletDefault(currency);
 
-        const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+        const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
         let result = null;
 
-        result = await exchangeHandshake.reject(hid, offChainId);
+        result = await cashHandshake.reject(hid, offChainId);
 
         console.log('handleRejectShakedOfferSuccess', result);
       }
@@ -1601,11 +1601,11 @@ class FeedMe extends React.PureComponent {
       if (type === EXCHANGE_ACTION.BUY) { // shop buy
         const wallet = MasterWallet.getWalletDefault(currency);
 
-        const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+        const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
         let result = null;
 
-        result = await exchangeHandshake.cancel(hid, offChainId);
+        result = await cashHandshake.cancel(hid, offChainId);
 
         console.log('handleCancelShakeOfferSuccess', result);
       }
@@ -1682,13 +1682,13 @@ class FeedMe extends React.PureComponent {
       if ((type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER && !freeStart) ||
         (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED)) {
         const wallet = MasterWallet.getWalletDefault(currency);
-        const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+        const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
         let result = null;
 
         if (type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER) {
-          result = await exchangeHandshake.releasePartialFund(hid, offer.userAddress, amount, initUserId, offChainId);
+          result = await cashHandshake.releasePartialFund(hid, offer.userAddress, amount, initUserId, offChainId);
         } else if (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED) {
-          result = await exchangeHandshake.finish(hid, offChainId);
+          result = await cashHandshake.finish(hid, offChainId);
         }
 
         console.log('handleCompleteShakedOfferSuccess', result);
@@ -1764,9 +1764,9 @@ class FeedMe extends React.PureComponent {
       if (type === EXCHANGE_ACTION.BUY) {
         const wallet = MasterWallet.getWalletDefault(currency);
 
-        const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+        const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
-        const result = await exchangeHandshake.shake(hid, offChainId);
+        const result = await cashHandshake.shake(hid, offChainId);
 
         console.log('handleAcceptShakedOfferSuccess', result);
       }

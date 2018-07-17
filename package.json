@@ -123,6 +123,7 @@
     "redux-devtools-extension": "^2.13.2",
     "redux-form": "^7.4.2",
     "redux-thunk": "^2.2.0",
+    "resolve-url-loader": "^2.3.0",
     "sass-loader": "^7.0.3",
     "satoshi-bitcoin": "^1.0.4",
     "sprintf-js": "^1.1.1",
@@ -141,6 +142,6 @@
     "webpack-pwa-manifest": "^3.6.2"
   },
   "engines": {
-    "node": ">=8.10.0"
+    "node": "10.4.0"
   }
 }

@@ -18,6 +18,7 @@ class CoinOffer {
       freeStart: data.free_start || '',
       createdAt: data.created_at || '',
       updatedAt: data.updated_at || '',
+      subStatus: data.sub_status || '',
     };
   }
 }

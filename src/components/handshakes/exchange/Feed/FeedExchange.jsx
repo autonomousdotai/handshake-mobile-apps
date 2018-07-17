@@ -47,7 +47,7 @@ import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice } from '@/services/offer-util';
 import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
 import { getDistanceFromLatLonInKm, getErrorMessageFromCode } from '../utils';
-import { ExchangeHandshake, ExchangeShopHandshake } from '@/services/neuron';
+import { ExchangeHandshake, ExchangeCashHandshake } from '@/services/neuron';
 import { feedBackgroundColors } from '@/components/handshakes/exchange/config';
 import { updateOfferStatus } from '@/reducers/discover/action';
 import OfferShop from '@/models/OfferShop';
@@ -287,8 +287,8 @@ class FeedExchange extends React.PureComponent {
         // const amount = totalAmount;
         try {
           const wallet = MasterWallet.getWalletDefault(currency);
-          const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
-          const result = await exchangeHandshake.initByCustomer(offer.items.ETH.userAddress, amount, offChainId);
+          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
+          const result = await cashHandshake.initByCustomer(offer.items.ETH.userAddress, amount, offChainId);
 
           console.log('handleShakeOfferSuccess', result);
 

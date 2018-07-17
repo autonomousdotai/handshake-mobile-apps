@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import Feed from '@/components/core/presentation/Feed'
 import Button from '@/components/core/controls/Button'
 import createForm from '@/components/core/form/createForm'
-import { ExchangeHandshake, ExchangeShopHandshake } from '@/services/neuron'
+import { ExchangeHandshake } from '@/services/neuron'
 import {
   formatAmountCurrency,
   formatMoney,

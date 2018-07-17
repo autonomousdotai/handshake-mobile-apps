@@ -483,7 +483,7 @@ export const blockchainNetworks = {
       predictionHandshakeAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
       predictionHandshakeDevAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
       exchangeHandshakeAddress: '0x6d86cf435978cb75aecc43d0a4e3a379af7667d8',
-      exchangeShopAddress: '0xa849f62cacb770dd1aac0dceb9fc7ec53cffde84',
+      exchangeCashAddress: '0xa849f62cacb770dd1aac0dceb9fc7ec53cffde84',
       shurikenTokenAddress: '0xc2f227834af7b44a11a9286f1771cade7ecd316c',
     },
     contractFiles: {
@@ -503,7 +503,7 @@ export const blockchainNetworks = {
       predictionHandshakeAddress: '0x2730da6188a35a5a384f4a3127036bb90f3721b5',
       predictionHandshakeDevAddress: '0x6f25814d49bcf8345f8afd2a3bf9d5fd95079f84',
       exchangeHandshakeAddress: '0x5fa2e0d96dbe664beb502407bf46ea85b131fb86',
-      exchangeShopAddress: '0x05914192cbbaae87a910f79e012b4091a39cc85c',
+      exchangeCashAddress: '0x8b52cf985f6814662acdc07ecdfadd1a41afd8b8',
       shurikenTokenAddress: '0xca0fed76b5807557ce38e65cab83be3373cc2e7d',
     },
     contractFiles: {

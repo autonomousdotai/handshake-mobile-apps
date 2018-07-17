@@ -15,7 +15,7 @@ import {
   EXCHANGE_ACTION_ORDER,
 } from '@/constants';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
-import { ExchangeShopHandshake } from '@/services/neuron';
+import { ExchangeCashHandshake } from '@/services/neuron';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -405,21 +405,21 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     const { offer } = this;
     const { initUserId } = this.props;
 
-    if (offer.currency === CRYPTO_CURRENCY.ETH) {
-      if (offer.type === EXCHANGE_ACTION.BUY) {
-        const wallet = MasterWallet.getWalletDefault(offer.currency);
-        const balance = await wallet.getBalance();
-        const fee = await wallet.getFee();
-
-        if (!this.checkMainNetDefaultWallet(wallet)) {
-          return;
-        }
-
-        if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
-          return;
-        }
-      }
-    }
+    // if (offer.currency === CRYPTO_CURRENCY.ETH) {
+    //   if (offer.type === EXCHANGE_ACTION.BUY) {
+    //     const wallet = MasterWallet.getWalletDefault(offer.currency);
+    //     const balance = await wallet.getBalance();
+    //     const fee = await wallet.getFee();
+    //
+    //     if (!this.checkMainNetDefaultWallet(wallet)) {
+    //       return;
+    //     }
+    //
+    //     if (this.showNotEnoughCoinAlert(balance, 0, fee, offer.currency)) {
+    //       return;
+    //     }
+    //   }
+    // }
 
     this.props.showLoading({ message: '' });
     this.props.acceptOfferItem({
@@ -442,24 +442,24 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     // Update status to redux
     this.responseExchangeDataChange(offerShake);
 
-    if (currency === CRYPTO_CURRENCY.ETH) {
-      if (type === EXCHANGE_ACTION.BUY) {
-        try {
-          const wallet = MasterWallet.getWalletDefault(currency);
-
-          const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
-
-          const result = await exchangeHandshake.shake(hid, offChainId);
-
-          console.log('handleAcceptShakedOfferSuccess', result);
-
-          this.trackingOnchain(initUserId, offerShake.id, result.hash, status, '', currency);
-        } catch (e) {
-          this.trackingOnchain(initUserId, offerShake.id, '', status, e.toString(), currency);
-          console.log('handleAcceptShakedOfferSuccess', e.toString());
-        }
-      }
-    }
+    // if (currency === CRYPTO_CURRENCY.ETH) {
+    //   if (type === EXCHANGE_ACTION.BUY) {
+    //     try {
+    //       const wallet = MasterWallet.getWalletDefault(currency);
+    //
+    //       const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
+    //
+    //       const result = await cashHandshake.shake(hid, offChainId);
+    //
+    //       console.log('handleAcceptShakedOfferSuccess', result);
+    //
+    //       this.trackingOnchain(initUserId, offerShake.id, result.hash, status, '', currency);
+    //     } catch (e) {
+    //       this.trackingOnchain(initUserId, offerShake.id, '', status, e.toString(), currency);
+    //       console.log('handleAcceptShakedOfferSuccess', e.toString());
+    //     }
+    //   }
+    // }
 
     // console.log('data', data);
     this.props.hideLoading();
@@ -534,13 +534,13 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
         (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED)) {
         try {
           const wallet = MasterWallet.getWalletDefault(currency);
-          const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
           let result = null;
 
           if (type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER) {
-            result = await exchangeHandshake.releasePartialFund(hid, offer.userAddress, amount, initUserId, offChainId);
+            result = await cashHandshake.releasePartialFund(hid, offer.userAddress, amount, initUserId, offChainId);
           } else if (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED) {
-            result = await exchangeHandshake.finish(hid, offChainId);
+            result = await cashHandshake.finish(hid, offChainId);
           }
 
           console.log('handleCompleteShakedOfferSuccess', result);
@@ -624,11 +624,11 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
         try {
           const wallet = MasterWallet.getWalletDefault(currency);
 
-          const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
           let result = null;
 
-          result = await exchangeHandshake.reject(hid, offChainId);
+          result = await cashHandshake.reject(hid, offChainId);
 
           console.log('handleRejectShakedOfferSuccess', result);
 
@@ -707,11 +707,11 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
         try {
           const wallet = MasterWallet.getWalletDefault(currency);
 
-          const exchangeHandshake = new ExchangeShopHandshake(wallet.chainId);
+          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
 
           let result = null;
 
-          result = await exchangeHandshake.cancel(hid, offChainId);
+          result = await cashHandshake.cancel(hid, offChainId);
 
           console.log('handleCancelShakeOfferSuccess', result);
 
@@ -819,31 +819,31 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
       //     }
       //   }
       // }
-      // case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING: {
-      //   switch (this.userType) {
-      //     case HANDSHAKE_USER.NORMAL: {
-      //       break;
-      //     }
-      //     case HANDSHAKE_USER.SHAKED: { // user shake
-      //       if (offer.type === EXCHANGE_ACTION.SELL) { // shop sell
-      //         idMessage = 'ex.exchange.explanation.completing';
-      //       }
-      //       break;
-      //     }
-      //     case HANDSHAKE_USER.OWNER: { // shop
-      //       if (offer.type === EXCHANGE_ACTION.BUY) { // shop buy
-      //         idMessage = 'ex.exchange.explanation.completing';
-      //       }
-      //       break;
-      //     }
-      //     default: {
-      //       // code
-      //       break;
-      //     }
-      //   }
-      //
-      //   break;
-      // }
+      case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETING: {
+        switch (this.userType) {
+          case HANDSHAKE_USER.NORMAL: {
+            break;
+          }
+          case HANDSHAKE_USER.OWNER: { // shop
+            if (offer.type === EXCHANGE_ACTION.BUY) { // shop buy
+              idMessage = 'ex.shop.explanation.completing';
+            }
+            break;
+          }
+          case HANDSHAKE_USER.SHAKED: { // user shake
+            if (offer.type === EXCHANGE_ACTION.SELL) { // shop sell
+              idMessage = 'ex.shop.explanation.completing';
+            }
+            break;
+          }
+          default: {
+            // code
+            break;
+          }
+        }
+
+        break;
+      }
       // case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.REJECTED:
       // case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.CANCELLED:
       // case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.COMPLETED: {
