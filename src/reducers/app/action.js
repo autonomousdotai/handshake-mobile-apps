@@ -1,11 +1,11 @@
 import $http from '@/services/api';
 import IpInfo from '@/models/IpInfo';
 import axios from 'axios';
-import { APP, API_URL, Country } from '@/constants';
+import { API_URL, APP, Country, LOCATION_METHODS } from '@/constants';
 import local from '@/services/localStore';
 import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
 import COUNTRIES_BLACKLIST_CASH from '@/data/country-blacklist-exchange';
-import { signUp, fetchProfile, authUpdate, getFreeETH } from '@/reducers/auth/action';
+import { authUpdate, fetchProfile, getFreeETH, signUp } from '@/reducers/auth/action';
 import { getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 
@@ -143,7 +143,7 @@ const tokenHandle = ({
           const listWallet = MasterWallet.getMasterWallet();
           if (listWallet === false) {
             MasterWallet.createMasterWallets();
-            console.log("create wallet success");
+            console.log('create wallet success');
           } else {
             const shuriWallet = MasterWallet.getShuriWallet();
             if (shuriWallet === false) {
@@ -160,10 +160,10 @@ const tokenHandle = ({
             METHOD: 'POST',
             successFn: (res) => {
               // console.log('app - handle - wallet - success - ', res);
-              if (isSignup && process.env.isDojo && !process.env.isLive){
+              if (isSignup && process.env.isDojo && !process.env.isLive) {
                 // console.log('call request free eth ...');
                 dispatch(getFreeETH({
-                  PATH_URL: '/user/free-rinkeby-eth?address=' + shuriWallet.address,          
+                  PATH_URL: `/user/free-rinkeby-eth?address=${shuriWallet.address}`,
                   METHOD: 'POST',
                   successFn(e) {
                     console.log('request free eth success', e);
@@ -228,6 +228,56 @@ function getCountry(addrComponents) {
   }
   return false;
 }
+
+export const getUserLocation = ({ successFn, errorFn }) => (dispatch) => {
+  $http({
+    url: 'https://ipapi.co/json',
+    qs: { key: process.env.ipapiKey },
+  }).then((res) => {
+    const { data } = res;
+
+    const ipInfo = IpInfo.ipInfo(data);
+    ipInfo.locationMethod = LOCATION_METHODS.IP;
+    // get currency base on GPS
+    navigator.geolocation.getCurrentPosition((location) => {
+      const { coords: { latitude, longitude } } = location;
+      ipInfo.latitude = latitude;
+      ipInfo.longitude = longitude;
+      ipInfo.locationMethod = LOCATION_METHODS.GPS;
+      console.log(`------------GPS-------------${latitude}`);
+
+      axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&sensor=true`).then((response) => {
+        if (response.data.results[0] && response.data.results[0].address_components) {
+          const country = getCountry(response.data.results[0].address_components);
+
+          ipInfo.addressDefault = response.data.results[0].formatted_address;
+
+          if (country && Country[country]) {
+            ipInfo.currency = Country[country];
+            console.log(`------------GPS-------------${ipInfo.currency}`);
+          }
+        }
+        dispatch(setIpInfo(ipInfo));
+      });
+      if (successFn) {
+        successFn(ipInfo);
+      }
+    }, () => {
+      // console.log('zon')// fallback
+      if (successFn) {
+        successFn(ipInfo);
+      }
+    });
+
+    dispatch(setIpInfo(ipInfo));
+  }).catch((e) => {
+    // TO-DO: handle error
+    console.log(e);
+    if (errorFn) {
+      errorFn(e);
+    }
+  });
+};
 
 // |-- init
 export const initApp = (language, ref) => (dispatch) => {

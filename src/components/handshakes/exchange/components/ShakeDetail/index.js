@@ -14,8 +14,10 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatMoney, formatMoneyByLocale, getOfferPrice, roundNumberByLocale } from '@/services/offer-util';
 import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
 import { bindActionCreators } from 'redux';
-import { minValueBTC, minValueETH } from '../../Create/validation';
+import * as gtag from '@/services/ga-utils';
+import taggingConfig from '@/services/tagging-config';
 import { BigNumber } from 'bignumber.js';
+import { minValueBTC, minValueETH } from '../../Create/validation';
 import { countDecimals } from '../../utils';
 
 export const nameFormShakeDetail = 'shakeDetail';
@@ -38,6 +40,12 @@ const fixed6 = (value) => {
 export class Component extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   state = { enableShake: false, currency: CRYPTO_CURRENCY.ETH, type: EXCHANGE_ACTION.BUY };
   handleSubmit = (values) => {
+    const { offer } = this.props
+    gtag.event({
+      category: taggingConfig.cash.category,
+      action: taggingConfig.cash.action.clickSubmit,
+      label: offer.id
+    })
     const { handleShake } = this.props;
 
     if (handleShake) {
@@ -46,6 +54,12 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   onTypeChange = (e, newValue) => {
+    gtag.event({
+      category: taggingConfig.cash.category,
+      action: taggingConfig.cash.action.clickBuySell,
+      label: newValue
+    })
+
     const { fiatAmount } = this.props;
     this.setState({ type: newValue }, () => {
       this.onFiatAmountChange(e, fiatAmount);
@@ -56,6 +70,12 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   }
 
   onCurrencyChange = (e, newValue) => {
+    gtag.event({
+      category: taggingConfig.cash.category,
+      action: taggingConfig.cash.action.clickCoin,
+      label: newValue
+    })
+
     const {
       offer, type, rfChange, fiatAmount,
     } = this.props;

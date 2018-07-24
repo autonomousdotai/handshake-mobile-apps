@@ -39,7 +39,7 @@ import {
 import { validate } from './validation';
 import '../styles.scss';
 import ModalDialog from '@/components/core/controls/ModalDialog/ModalDialog';
-import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
+import { getUserLocation, hideLoading, showAlert, showLoading } from '@/reducers/app/action';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { ExchangeCashHandshake } from '@/services/neuron';
 // import phoneCountryCodes from '@/components/core/form/country-calling-codes.min.json';
@@ -132,9 +132,14 @@ class Component extends React.Component {
 
   componentDidMount() {
     const {
-      ipInfo, rfChange, authProfile, freeStartInfo, isChooseFreeStart,
+      ipInfo, rfChange, authProfile, freeStartInfo, isChooseFreeStart, getUserLocation,
     } = this.props;
     this.setAddressFromLatLng(ipInfo?.latitude, ipInfo?.longitude, ipInfo?.addressDefault);
+    getUserLocation({
+      successFn: (ipInfo2) => {
+        this.setAddressFromLatLng(ipInfo2?.latitude, ipInfo2?.longitude, ipInfo2?.addressDefault);
+      },
+    });
 
     // auto fill phone number from user profile
     let detectedCountryCode = '';
@@ -379,16 +384,23 @@ class Component extends React.Component {
   }
 
   checkMainNetDefaultWallet = (wallet) => {
-    let result = true;
+    let result = false;
 
-    if (process.env.isLive) {
-      if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
-        result = true;
-      } else {
-        const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
-        this.showAlert(message);
-        result = false;
+    try {
+      if (process.env.isLive) {
+        if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
+          result = true;
+        } else {
+          result = false;
+        }
       }
+    } catch (e) {
+      result = false;
+    }
+
+    if (!result) {
+      const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
+      this.showAlert(message);
     }
 
     return result;
@@ -1075,5 +1087,6 @@ const mapDispatchToProps = dispatch => ({
   trackingOnchain: bindActionCreators(trackingOnchain, dispatch),
   updateOfferStores: bindActionCreators(updateOfferStores, dispatch),
   offerItemRefill: bindActionCreators(offerItemRefill, dispatch),
+  getUserLocation: bindActionCreators(getUserLocation, dispatch),
 });
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Component));

@@ -86,4 +86,13 @@ export function daysBetween(date1 = new Date(), date2 = new Date()) {
   return `${days > 0 ? days + textDays : ''} ${hours >= 10 ? hours : `0${hours}`}:${minutes >= 10 ? minutes : `0${minutes}`}:${seconds >= 10 ? seconds : `0${seconds}`}`;
 }
 
+export function getLatLongHash(method, lat, lng) {
+  const latValues = new BigNumber(lat).toFormat(7).split('.');
+  const lngValues = new BigNumber(lng).toFormat(7).split('.');
+
+  const result = `${method}${latValues[0].length}${latValues[0]}${latValues[1].length}${latValues[1]}${lngValues[0].length}${lngValues[0]}${lngValues[1].length}${lngValues[1]}`;
+
+  return result;
+}
+
 export default { getOfferPrice };

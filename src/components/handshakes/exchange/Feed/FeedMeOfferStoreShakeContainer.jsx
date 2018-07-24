@@ -4,6 +4,7 @@ import {
   API_URL,
   CRYPTO_CURRENCY,
   EXCHANGE_ACTION,
+  EXCHANGE_ACTION_ORDER,
   EXCHANGE_ACTION_PAST_NAME,
   EXCHANGE_ACTION_PERSON,
   EXCHANGE_ACTION_PRESENT_NAME,
@@ -12,18 +13,23 @@ import {
   HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS_NAME,
   HANDSHAKE_USER,
-  EXCHANGE_ACTION_ORDER,
 } from '@/constants';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { ExchangeCashHandshake } from '@/services/neuron';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
+import { getUserLocation, hideLoading, showAlert, showLoading } from '@/reducers/app/action';
 import { responseExchangeDataChange } from '@/reducers/me/action';
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
 import { Bitcoin } from '@/services/Wallets/Bitcoin';
-import { formatAmountCurrency, formatMoneyByLocale, getHandshakeUserType, getOfferPrice } from '@/services/offer-util';
+import {
+  formatAmountCurrency,
+  formatMoneyByLocale,
+  getHandshakeUserType,
+  getLatLongHash,
+  getOfferPrice,
+} from '@/services/offer-util';
 import Offer from '@/models/Offer';
 import {
   acceptOfferItem,
@@ -31,6 +37,7 @@ import {
   completeOfferItem,
   rejectOfferItem,
   reviewOffer,
+  trackingLocation,
 } from '@/reducers/exchange/action';
 import Rate from '@/components/core/controls/Rate/Rate';
 
@@ -73,6 +80,24 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     if (showNotEnoughCoinAlert) {
       return showNotEnoughCoinAlert(balance, amount, fee, currency);
     }
+  }
+
+  trackingLocation = (offerStoreId, offerStoreShakeId, action) => {
+    const { trackingLocation, getUserLocation } = this.props;
+    getUserLocation({
+      successFn: (ipInfo) => {
+        const data = {
+          data: getLatLongHash(ipInfo?.locationMethod, ipInfo?.latitude, ipInfo?.longitude),
+          ip: ipInfo?.ip,
+          action,
+        };
+        trackingLocation({
+          PATH_URL: `exchange/offer-stores/${offerStoreId}/shakes/${offerStoreShakeId}/7tHCLp8XpajPJaVh`,
+          METHOD: 'POST',
+          data,
+        });
+      },
+    });
   }
 
   calculateFiatAmount = () => {
@@ -462,6 +487,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     // }
 
     // console.log('data', data);
+    this.trackingLocation(initUserId, offerShake.id, status);
     this.props.hideLoading();
     this.props.showAlert({
       message: <div className="text-center"><FormattedMessage id="acceptOfferItemSuccessMassage" /></div>,
@@ -553,6 +579,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     }
 
     // console.log('data', data);
+    this.trackingLocation(initUserId, offerShake.id, status);
     this.props.hideLoading();
     this.props.showAlert({
       message: <div className="text-center"><FormattedMessage id="completeOfferItemSuccessMassage" /></div>,
@@ -640,6 +667,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
       }
     }
 
+    this.trackingLocation(initUserId, offerShake.id, status);
     this.props.hideLoading();
     this.props.showAlert({
       message: <div className="text-center"><FormattedMessage id="rejectOfferItemSuccessMassage" /></div>,
@@ -723,6 +751,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
       }
     }
 
+    this.trackingLocation(initUserId, offerShake.id, status);
     this.props.hideLoading();
     this.props.showAlert({
       message: <div className="text-center"><FormattedMessage id="cancelOfferItemSuccessMassage" /></div>,
@@ -977,6 +1006,8 @@ const mapDispatch = ({
   cancelOfferItem,
 
   responseExchangeDataChange,
+  trackingLocation,
+  getUserLocation,
 });
 
 export default connect(mapState, mapDispatch)(FeedMeOfferStoreShakeContainer);

@@ -423,6 +423,10 @@ export const MIN_AMOUNT = {
   [CRYPTO_CURRENCY.BTC]: 0.001,
 };
 
+export const LOCATION_METHODS = {
+  GPS: 'G',
+  IP: 'I',
+};
 
 // API
 

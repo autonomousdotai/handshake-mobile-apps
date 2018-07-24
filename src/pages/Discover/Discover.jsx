@@ -42,6 +42,7 @@ import ninjaLogoSVG from '@/assets/images/logo.png';
 import DiscoverBetting from '@/components/handshakes/betting/Discover/Discover';
 import LuckyLanding from '@/pages/LuckyLanding/LuckyLanding';
 import * as gtag from '@/services/ga-utils';
+import taggingConfig from '@/services/tagging-config';
 
 
 // style
@@ -340,12 +341,12 @@ class DiscoverPage extends React.Component {
     const { type } = handshake;
     switch (type) {
       case HANDSHAKE_ID.EXCHANGE: {
-        gtag.event({
-          category: 'Cash',
-          action: 'click_feed',
-          // label: ''
-        })
         const { modalContent, modalClassName } = extraData;
+        gtag.event({
+          category: taggingConfig.cash.category,
+          action: taggingConfig.cash.action.clickFeed,
+          label: handshake.id
+        })
         if (modalContent) {
           this.setState({ modalContent, propsModal: { className: modalClassName } }, () => {
             this.modalRef.open();
@@ -404,6 +405,11 @@ class DiscoverPage extends React.Component {
 
   clickCategoryItem(category) {
     const { id } = category;
+    gtag.event({
+      category: taggingConfig.common.category,
+      action: taggingConfig.common.action.chooseCategory,
+      label: id
+    })
     if (this.state.handshakeIdActive !== id) {
       this.setLoading(true);
     }

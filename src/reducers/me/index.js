@@ -9,33 +9,33 @@ import {
 import { ACTIONS } from './action';
 
 const TAG = 'MeReducer';
-function handlePreProcessForOfferStore(handshake) {
-  const extraData = JSON.parse(handshake.extra_data);
-  const { id } = handshake;
-  const result = [];
-
-  if (extraData.items.BTC) {
-    const handledHandshake = Object.assign({}, handshake);
-    const extraDataBTC = { ...extraData, ...extraData.items.BTC };
-    delete extraDataBTC.items;
-    handledHandshake.extra_data = JSON.stringify(extraDataBTC);
-    handledHandshake.id = `${id}_BTC`;
-
-    result.push(Handshake.handshake(handledHandshake));
-  }
-
-  if (extraData.items.ETH) {
-    const handledHandshake = Object.assign({}, handshake);
-    const extraDataETH = { ...extraData, ...extraData.items.ETH };
-    delete extraDataETH.items;
-    handledHandshake.extra_data = JSON.stringify(extraDataETH);
-    handledHandshake.id = `${id}_ETH`;
-
-    result.push(Handshake.handshake(handledHandshake));
-  }
-
-  return result;
-}
+// function handlePreProcessForOfferStore(handshake) {
+//   const extraData = JSON.parse(handshake.extra_data);
+//   const { id } = handshake;
+//   const result = [];
+//
+//   if (extraData.items.BTC) {
+//     const handledHandshake = Object.assign({}, handshake);
+//     const extraDataBTC = { ...extraData, ...extraData.items.BTC };
+//     delete extraDataBTC.items;
+//     handledHandshake.extra_data = JSON.stringify(extraDataBTC);
+//     handledHandshake.id = `${id}_BTC`;
+//
+//     result.push(Handshake.handshake(handledHandshake));
+//   }
+//
+//   if (extraData.items.ETH) {
+//     const handledHandshake = Object.assign({}, handshake);
+//     const extraDataETH = { ...extraData, ...extraData.items.ETH };
+//     delete extraDataETH.items;
+//     handledHandshake.extra_data = JSON.stringify(extraDataETH);
+//     handledHandshake.id = `${id}_ETH`;
+//
+//     result.push(Handshake.handshake(handledHandshake));
+//   }
+//
+//   return result;
+// }
 
 const handleListPayload = (payload) => {
   const result = [];
