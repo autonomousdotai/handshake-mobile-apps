@@ -51,7 +51,6 @@ const foundCancelHanshake = (handshake, item) => {
 
 };
 const foundRefundHanshake = (handshake, item, hid) => {
-  console.log(TAG, 'foundRefundHanshake', 'hid:', hid, 'item hid', item.hid);
   const handledHandshake = handshake;
   if (hid === item.hid) {
     console.log(TAG, 'foundRefundHanshake:','handledHandshake', handledHandshake);
@@ -64,13 +63,35 @@ const foundRefundHanshake = (handshake, item, hid) => {
 const foundWithdrawHanshake = (handshake, item, hid) => {
   const handledHandshake = handshake;
 
-  console.log(TAG, 'foundWithdrawHanshake', 'hid:', hid, 'item hid', item.hid, 'side', handledHandshake.side, 'item side', item.side);
-
   if (hid === item.hid && handledHandshake.side === item.side) {
     console.log(TAG, 'foundWithdrawHanshake:','handledHandshake', handledHandshake);
     handledHandshake.status = item.status;
   }
   return handledHandshake;
+};
+
+const foundDisputeHandshake = (handshake, item, hid) => {
+  const handledHandshake = handshake;
+  if (hid === item.hid) {
+    console.log(TAG, 'foundDisputeHandshake:','handledHandshake', handledHandshake);
+    handledHandshake.status = item.status;
+  }
+  return handledHandshake;
+};
+
+const foundUpdateHandshake = (status, handshake, item, hid) => {
+  switch (status) {
+    case BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING:
+      return foundCancelHanshake(handshake, item);
+    case BET_BLOCKCHAIN_STATUS.STATUS_REFUND_PENDING:
+      return foundRefundHanshake(handshake, item, hid);
+    case BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING:
+      return foundWithdrawHanshake(handshake, item, hid);
+    case BET_BLOCKCHAIN_STATUS.STATUS_DISPUTE_PENDING:
+      return foundDisputeHandshake(handshake, item, hid);
+    default:
+      return handshake;
+  }
 };
 
 
@@ -347,6 +368,7 @@ const meReducter = (
       //STATUS_MAKER_UNINIT_PENDING
       //STATUS_REFUND_PENDING
       //STATUS_COLLECT_PENDING
+      //STATUS_DISPUTE_PENDING
 
       const item = action.payload;
       console.log('Item changed:', item);
@@ -357,37 +379,13 @@ const meReducter = (
         let handledHandshake = handshake;
         const isUserShake = isShakeUser(shakeUserIds);
         if (!isUserShake) {
-          switch (status) {
-            case BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING:
-              handledHandshake = foundCancelHanshake(handledHandshake, item);
-              break;
-            case BET_BLOCKCHAIN_STATUS.STATUS_REFUND_PENDING:
-              handledHandshake = foundRefundHanshake(handledHandshake, item, hid);
-              break;
-            case BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING:
-              handledHandshake = foundWithdrawHanshake(handledHandshake, item, hid);
-              break;
-            default:
-              break;
-          }
+          handledHandshake = foundUpdateHandshake(status, handledHandshake, item, hid);
         } else {
           const shakerArr = parseJsonString(shakers) || [];
           if (shakerArr && shakerArr.length > 0) {
             const newShakers = shakerArr.map((shakerItem) => {
               let handleShaker = shakerItem;
-              switch (status) {
-                case BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING:
-                  handleShaker = foundCancelHanshake(handleShaker, item);
-                  break;
-                case BET_BLOCKCHAIN_STATUS.STATUS_REFUND_PENDING:
-                  handleShaker = foundRefundHanshake(handleShaker, item, hid);
-                  break;
-                case BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING:
-                  handleShaker = foundWithdrawHanshake(handleShaker, item, hid);
-                  break;
-                default:
-                  break;
-              }
+              handleShaker = foundUpdateHandshake(status, handleShaker, item, hid);
               return handleShaker;
             });
             handledHandshake.shakers = JSON.stringify(newShakers);
@@ -395,7 +393,6 @@ const meReducter = (
         }
         return handledHandshake;
       });
-      console.log(TAG, 'handledMylist:', handledMylist.length);
 
       return {
         ...state,

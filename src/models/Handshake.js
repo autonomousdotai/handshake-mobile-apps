@@ -17,7 +17,6 @@ class Handshake {
       initAt: data.init_at,
       lastUpdateAt: data.last_update_at,
       extraData: data.extra_data,
-      hid: data.hid || '',
       fromAddress: data.from_address || '',
       odds: data.odds || 0,
       outComeId: data.outcome_id || '',
@@ -37,6 +36,8 @@ class Handshake {
       closingTime: data.closing_time,
       reportTime: data.reporting_time,
       disputeTime: data.disputing_time,
+      totalAmount: data.outcome_total_amount || 0,
+      totalDisputeAmount: data.outcome_total_dispute_amount || 0,
       fiatCurrency: data.fiat_currency,
     };
   }

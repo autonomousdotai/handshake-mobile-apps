@@ -156,7 +156,7 @@ export const parseJsonString = (extraData) => {
 export const findUserBet = (handshake) => {
   const {
     result, shakeUserIds, closingTime,
-    reportTime, disputeTime, initUserId, side, hid,
+    reportTime, disputeTime, initUserId, side, hid, type,
   } = handshake;
 
   let findItem = handshake;
@@ -190,6 +190,8 @@ export const findUserBet = (handshake) => {
   const newItem = Object.assign(cloneItem, {
     role: isUserShake ? ROLE.SHAKER : ROLE.INITER,
     matched,
+    type,
+
   });
 
   console.log(TAG, 'findUserBet:', newItem);
