@@ -5,6 +5,7 @@ import { reduxForm, Field, FieldArray } from 'redux-form';
 import IconPlus from '@/assets/images/icon/icon-plus.svg';
 import IconTrash from '@/assets/images/icon/icon-trash.svg';
 import Dropdown from '@/components/core/controls/Dropdown';
+import RangeSlider from '@/components/RangeSlider/RangeSlider';
 import moment from 'moment';
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker';
 import { renderField } from './form';
@@ -192,10 +193,16 @@ class CreateEventForm extends Component {
   renderFee = ({ isNew }) => {
     const title = 'CREATOR FEE';
     const textNote = 'The creator fee is a percentage of the total winnings of the market.';
+    const optionSlider = {
+      min: 1,
+      max: 99,
+      tooltip: false,
+      orientation: 'horizontal',
+    };
     return (
       <div className="CreateEventFormBlock">
         {this.renderGroupTitle(title)}
-        <Field
+        {/* <Field
           name="creatorFee"
           type="number"
           className="form-group"
@@ -203,6 +210,15 @@ class CreateEventForm extends Component {
           component={renderField}
           validate={[required, (n) => intValidator(n, 0, 100)]}
           disabled={!isNew}
+        /> */}
+        <Field
+          name="creatorFee"
+          type="number"
+          unit="%"
+          className="input-value"
+          disabled={!isNew}
+          options={optionSlider}
+          component={RangeSlider}
         />
         {this.renderGroupNote(textNote)}
       </div>
