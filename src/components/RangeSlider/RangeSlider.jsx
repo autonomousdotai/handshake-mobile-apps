@@ -44,6 +44,8 @@ class RangeSlider extends Component {
     return (
       <div className={htmlClassName}>
         <input {...inputProps} className={props.className} disabled={props.disabled} />{unit}
+        <span className="rangeLimit minValue">{options.min}{props.unit}</span>
+        <span className="rangeLimit maxValue">{options.max}{props.unit}</span>
         <Slider {...optionSlider} />
       </div>
     );

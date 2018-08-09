@@ -92,6 +92,7 @@
 }
 
 .RangeSlider {
+  position: relative;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -102,11 +103,25 @@
   .input-value {
     width: 46px;
     text-align: right;
+    border: none;
+    background-color: transparent;
+    -webkit-appearance: none;
   }
   .unit {
     display: inline-block;
     vertical-align: middle;
     margin-top: 2px;
+  }
+  .rangeLimit {
+    position: absolute;
+    bottom: 40px;
+    font-size: rem-calc(14px);
+    &.minValue {
+      left: 0;
+    }
+    &.maxValue {
+      right: 0;
+    }
   }
   .rangeslider-horizontal {
     width: 100%;
