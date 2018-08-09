@@ -2,6 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import $http from '@/services/api';
 import { BASE_API } from '@/constants';
 import apiAction from '@/stores/api-action';
+import { isFunction } from '@/utils/is';
 
 /**
  * Call API
@@ -14,12 +15,12 @@ import apiAction from '@/stores/api-action';
  * @param data The payload sent to server
  * @returns {*}
  */
-function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_URL, PATH_URL }) {
+function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_URL, PATH_URL, successFn, errorFn }) {
   if (!PATH_URL) throw new Error('URL is required');
   if (!type) throw new Error('Action type is required');
   if (_path) yield put(apiAction.preFetch({ _path, type }));
   const url = `${BASE_URL}/${PATH_URL}`;
-  let respondedData; // { status, result, error }
+  let respondedData = {}; // { status, result, error }
   try {
     const response = yield call($http, { url, data, method });
     const { status } = response.data;
@@ -35,6 +36,11 @@ function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_UR
     respondedData = { error };
     return respondedData;
   } finally {
+    if (respondedData.error) {
+      if (errorFn && isFunction(errorFn)) errorFn(respondedData);
+    } else if (successFn && isFunction(successFn)) {
+      successFn(respondedData);
+    }
     if (_path) {
       yield put(apiAction.postFetch({
         _path,

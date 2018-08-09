@@ -6,10 +6,8 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import Loading from '@/components/Loading';
 import LuckyReal from '@/components/handshakes/betting/LuckyPool/LuckyReal/LuckyReal';
 import LuckyLanding from '@/pages/LuckyLanding/LuckyLanding';
-
 import GA from '@/services/googleAnalytics';
 import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/LuckyFree';
-
 import { eventSelector, isLoading, showedLuckyPoolSelector } from './selector';
 import { loadMatches, updateShowedLuckyPool } from './action';
 import EventItem from './EventItem';
@@ -40,10 +38,12 @@ class Prediction extends React.Component {
     this.props.dispatch(loadMatches());
   }
 
-  componentWillUnmount() {
+  onCountdownComplete = () => {
+    this.props.dispatch(loadMatches({ cache: false }));
+    this.closeOrderPlace();
   }
 
-  openOrderPlace(selectedOutcome) {
+  openOrderPlace = (selectedOutcome) => {
     this.openFilter(selectedOutcome);
     this.modalOrderPlace.open();
   }
@@ -54,22 +54,15 @@ class Prediction extends React.Component {
 
   showLuckyPool() {
     const { showedLuckyPool } = this.props;
-
-    if (showedLuckyPool === false) {
-      console.log('Action Lucky Pool:', showedLuckyPool);
-      this.props.dispatch(updateShowedLuckyPool());
-      setTimeout(() => {
-        this.modalLuckyPoolRef.open();
-
-      }, 2 * 1000);
-    }
+    if (showedLuckyPool) return;
+    console.log('Action Lucky Pool:', showedLuckyPool);
+    this.props.dispatch(updateShowedLuckyPool());
+    setTimeout(() => {
+      this.modalLuckyPoolRef.open();
+    }, 2 * 1000);
   }
 
-  handleScroll = () => {
-    //this.showLuckyPool();
-  }
-
-  handleClickEventItem = (id, e, props, itemData) => {
+  handleClickEventItem = (props, itemData) => {
     const { event } = props;
     const selectedOutcome = {
       hid: itemData.hid,
@@ -99,11 +92,6 @@ class Prediction extends React.Component {
     }
   };
 
-  onCountdownComplete = () => {
-    this.props.dispatch(loadMatches());
-    this.closeOrderPlace();
-  }
-
   renderEventList = (props) => {
     if (!props.eventList || !props.eventList.length) return null;
     return (
@@ -124,7 +112,8 @@ class Prediction extends React.Component {
 
   renderShareToWin = () => {
     return (
-      <div className="ShareToWin"
+      <div
+        className="ShareToWin"
         onClick={() => {
           GA.clickBannerWin();
         }}

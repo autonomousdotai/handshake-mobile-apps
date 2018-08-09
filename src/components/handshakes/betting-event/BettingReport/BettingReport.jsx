@@ -1,10 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { loadMatches } from '@/reducers/betting/action';
 import { BETTING_RESULT } from '@/components/handshakes/betting/constants.js';
-
-import { BASE_API, API_URL } from '@/constants';
+import { BASE_API } from '@/constants';
 import { Alert } from 'reactstrap';
 import $http from '@/services/api';
 import { showAlert } from '@/reducers/app/action';
@@ -12,7 +11,16 @@ import { showAlert } from '@/reducers/app/action';
 import './BettingReport.scss';
 
 let token = null;
+const TAG = 'BETTING_REPORT';
 class BettingReport extends React.Component {
+  static propTypes = {
+    matches: PropTypes.array.isRequired,
+    resolved: PropTypes.bool,
+    onReportSuccess: PropTypes.func,
+  }
+  static defaultProps = {
+    resolved: false,
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +31,6 @@ class BettingReport extends React.Component {
       matches: [],
       outcomes: [],
       activeMatchData: {},
-      login: false,
       disable: false,
       final: [],
       errorMessage: '',
@@ -33,20 +40,24 @@ class BettingReport extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Test Report");
-    if (this.checkToken() != null) {
-      this.setState({
-        login: true,
-      });
-    }
-    this.fetchMatches();
+
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { matches } = nextProps;
+
+    this.setInitials(matches);
+
   }
 
   setInitials(matches) {
+    const { resolved } = this.props;
     if (matches.length > 0) {
+      const newOutcome = resolved ? matches[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : matches[0].outcomes;
+
       this.setState({
         matches,
-        outcomes: matches[0].outcomes,
+        outcomes: newOutcome,
         activeMatchData: matches[0],
         selectedMatch: matches[0].name,
       });
@@ -60,29 +71,19 @@ class BettingReport extends React.Component {
     }
   }
 
-  fetchMatches() {
-    console.log('fetchMatches');
-
-    this.props.loadMatches({
-      PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES}?report=1`,
-      successFn: (res) => {
-        const { data } = res;
-        this.setInitials(data);
-        console.log('loadMatches success', data);
-      },
-      errorFn: (e) => {
-        console.log('loadMatches failed', e);
-      },
-    });
-  }
 
   toggle() {
     this.setState({
       modal: !this.state.modal,
     });
   }
+  isDisputeOutcome(result) {
+    return result === BETTING_RESULT.DISPUTED;
+  }
 
   fillOutcome() {
+
+    const { resolved } = this.props;
     const updatedMatch = this.state.matches.filter((item) => {
       if (item.id === this.state.selectedMatch) {
         return item;
@@ -98,8 +99,10 @@ class BettingReport extends React.Component {
         final.push(obj);
         return final;
       });
+      const newOutcome = resolved ? updatedMatch[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : updatedMatch[0].outcomes;
+      console.log(TAG, 'newOutcome:', newOutcome);
       this.setState({
-        outcomes: updatedMatch[0].outcomes,
+        outcomes: newOutcome,
         activeMatchData: updatedMatch[0],
         selectedOutcome: updatedMatch[0].outcomes[0].id,
         final,
@@ -134,40 +137,14 @@ class BettingReport extends React.Component {
     });
   }
 
-  loginUser=(event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-
-    const email = data.get('email');
-    const password = data.get('password');
-
-    const auth = $http({
-      url: `${BASE_API.BASE_URL}/cryptosign/auth`,
-      data: {
-        email,
-        password,
-      },
-      headers: { 'Content-Type': 'application/json' },
-      method: 'post',
-    });
-    auth.then((response) => {
-      if (response.data.status === 1) {
-        token = response.data.data.access_token;
-        localStorage.setItem('Token', token);
-        localStorage.setItem('TokenInit', new Date());
-        this.setState({
-          login: true,
-        });
-      }
-    });
-  }
 
   disablePage() {
     console.log('Disable Page');
     localStorage.setItem('disable', true);
     setTimeout(() => {
       localStorage.setItem('disable', false);
-      this.fetchMatches();
+      //this.fetchMatches();
+      this.props.onReportSuccess();
       this.setState({
         disable: false,
       });
@@ -213,6 +190,7 @@ class BettingReport extends React.Component {
       });
     } else {
       const tokenValue = token || this.checkToken();
+      const { resolved } = this.props;
       console.log('Final State:', this.state.final);
 
       const url = `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
@@ -221,6 +199,7 @@ class BettingReport extends React.Component {
         data: {
           result: this.state.final,
         },
+        qs: { dispute: resolved ? 1 : 0 },
         headers: { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' },
         method: 'post',
       });
@@ -275,30 +254,7 @@ class BettingReport extends React.Component {
   }
 
   render() {
-    return (!this.state.login ?
-      <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }} onSubmit={this.loginUser}>
-        <FormGroup>
-          <Label for="login">Login</Label>
-          <Input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Enter Email"
-            required
-          />
-          <br />
-          <Input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Enter Password"
-          />
-          <br />
-          <Button type="submit">Submit</Button>
-          <br />
-        </FormGroup>
-      </Form>
-      :
+    return (
       <div className="form-admin">
         <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }}>
           <FormGroup disabled={this.state.disable}>
@@ -349,13 +305,7 @@ class BettingReport extends React.Component {
   }
 }
 
-const mapState = state => ({
-  matches: state.betting.matches,
-});
-
 const mapDispatch = ({
-  loadMatches,
   showAlert,
 });
-
-export default connect(mapState, mapDispatch)(BettingReport);
+export default connect(null, mapDispatch)(BettingReport);

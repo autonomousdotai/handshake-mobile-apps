@@ -1,0 +1,13 @@
+@import "./src/styles/style";
+
+.Tabs {
+  .TabList {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .TabItem {
+    color: #efefef;
+    font-size: rem-calc(12px);
+  }
+}

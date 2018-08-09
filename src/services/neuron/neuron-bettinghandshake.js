@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import BaseHandshake from './BaseHandshake';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 
-const TAG = 'BettingHandshake';
+const TAG = 'NEURON-BETTING';
 export default class BettingHandshake extends BaseHandshake {
   constructor(chainId) {
     super(chainId);
@@ -133,7 +133,7 @@ export default class BettingHandshake extends BaseHandshake {
   // Cancel Bet when it isn't matched
   cancelBet = async (hid, side, stake, odds, offchain) => {
     console.log(
-      'cancelBet address, privateKey, hid, side, stake, odds, offchain',
+      TAG, 'cancelBet address, privateKey, hid, side, stake, odds, offchain',
       this.address,
       this.privateKey,
       hid,
@@ -167,7 +167,7 @@ export default class BettingHandshake extends BaseHandshake {
   // Refund if outcome draw
   refund = async (hid, offchain) => {
     console.log(
-      'refund address, privateKey, hid, offchain',
+      TAG, 'refund address, privateKey, hid, offchain',
       this.address,
       this.privateKey,
       hid,
@@ -194,7 +194,7 @@ export default class BettingHandshake extends BaseHandshake {
 
   withdraw = async (hid, offchain) => {
     console.log(
-      'withdraw address, privateKey, hid, offchain',
+      TAG, 'withdraw address, privateKey, hid, offchain',
       this.address,
       this.privateKey,
       hid,
@@ -219,10 +219,39 @@ export default class BettingHandshake extends BaseHandshake {
 
     return dataBlockChain;
   };
+
+  dispute = async (hid, offchain) => {
+    console.log(
+      TAG, 'dispute address, privateKey, hid, offchain',
+      this.address,
+      this.privateKey,
+      hid,
+      offchain,
+    );
+    const bytesOffchain = this.web3.utils.asciiToHex(offchain);
+
+    const payloadData = this.handshakeInstance.methods
+      .dispute(hid, bytesOffchain)
+      .encodeABI();
+    const dataBlockChain = await this.neuron.sendRawTransaction(
+      this.address,
+      this.privateKey,
+      payloadData,
+      {
+        // amount,
+        gasPrice: this.gasPrice,
+        toAddress: this.contractAddress,
+      },
+    );
+    console.log('Data Blockchain:', dataBlockChain);
+
+    return dataBlockChain;
+  };
+
   createMarket = async (fee, source, closingWindow, reportWindow, disputeWindow, offchain) => {
     console.log(fee, source, closingWindow, reportWindow, disputeWindow, offchain);
-    const bytesOffchain = this.web3.utils.asciiToHex(`cryptosign_createMarket${offchain}`);
-    const sourceBytes = this.web3.utils.asciiToHex(source);
+    const bytesOffchain = this.web3.utils.fromUtf8(offchain);
+    const sourceBytes = this.web3.utils.fromUtf8(source || '-');
     const payloadData = this.handshakeInstance.methods
       .createMarket(fee, sourceBytes, closingWindow, reportWindow, disputeWindow, bytesOffchain)
       .encodeABI();

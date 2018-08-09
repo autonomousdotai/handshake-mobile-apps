@@ -35,7 +35,7 @@ class ScrollableList extends Component {
       selectedID: itemData.id,
     });
     if (props.onClickItem) {
-      props.onClickItem(itemData.id, e, props, itemData);
+      props.onClickItem(props, itemData);
     }
   }
 

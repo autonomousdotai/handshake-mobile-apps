@@ -12,10 +12,11 @@ class TimePickerComponent extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      value: moment().add(10, 'minutes'),
+      value: props.value ? props.value : undefined, // moment().add(10, 'minutes'),
       open: false,
     };
   }
+
   onTimeChange = (newValue) => {
     // `value` & `this.state.value` are both moment objects so we can use moment's `diff()` method
     const timeDifference = Math.abs(newValue.diff(this.state.value));
@@ -33,19 +34,21 @@ class TimePickerComponent extends React.PureComponent {
   }
 
   render() {
-    return (<TimePicker
-      showSecond={false}
-      className="timepicker"
-      format={format}
-      use12Hours
-      disabled={this.props.disabled}
-      inputReadOnly
-      open={this.state.open}
-      onOpen={this.setOpen}
-      onClose={this.setOpen}
-      onChange={this.onTimeChange}
-      value={this.state.value}
-    />
+    return (
+      <TimePicker
+        showSecond={false}
+        className="timepicker"
+        format={format}
+        use12Hours
+        disabled={this.props.disabled}
+        inputReadOnly
+        open={this.state.open}
+        onOpen={this.setOpen}
+        onClose={this.setOpen}
+        onChange={this.onTimeChange}
+        value={this.state.value}
+        {...this.props.inputProps}
+      />
     );
   }
 }

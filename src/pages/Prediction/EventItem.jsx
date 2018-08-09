@@ -9,7 +9,7 @@ import { formatAmount } from '@/utils/number';
 import OutcomeList from './OutcomeList';
 import GA from '@/services/googleAnalytics';
 
-function renderEventName(event) {
+function renderEventName({ event }) {
   return (
     <div className="EventName">
       {event.name}
@@ -17,7 +17,7 @@ function renderEventName(event) {
   );
 }
 
-function renderEventNumberOfPlayers(event) {
+function renderEventNumberOfPlayers({ event }) {
   const s = event.total_users > 1 ? 'ninjas are' : 'ninja is';
   return (
     <div className="EventNumberOfPlayer">
@@ -26,7 +26,7 @@ function renderEventNumberOfPlayers(event) {
   );
 }
 
-function renderEvenTimeLeft(event, onCountdownComplete) {
+function renderEvenTimeLeft({ event, onCountdownComplete }) {
   return (
     <div className="EventTimeLeft">
       <span className="EventTimeLeftText">Time left</span>
@@ -37,7 +37,7 @@ function renderEvenTimeLeft(event, onCountdownComplete) {
   );
 }
 
-function renderEventTotalBets(event) {
+function renderEventTotalBets({ event }) {
   const totalBets = !event.total_bets ? 0 : formatAmount(event.total_bets);
   return (
     <div className="EventTotalBet">
@@ -47,10 +47,12 @@ function renderEventTotalBets(event) {
   );
 }
 
-function renderEventMessages(event) {
+function renderEventMessages({ event }) {
   const commentLink = `${URL.COMMENTS_BY_SHAKE_INDEX}?objectId=event_${event.id}`;
   return (
-    <Link className="EventMessage" to={commentLink}
+    <Link
+      className="EventMessage"
+      to={commentLink}
       onClick={() => {
         GA.clickComment(event.name);
       }}
@@ -61,25 +63,31 @@ function renderEventMessages(event) {
   );
 }
 
-function renderOutcomeList(event, onClickOutcome) {
+function renderOutcomeList({ event, onClickOutcome }) {
   return (
     <OutcomeList event={event} onClick={onClickOutcome} />
   );
 }
 
-function EventItem({ event, onClickOutcome, onCountdownComplete }) {
+function renderDetails(props) {
+  return (
+    <div className="EventDetails">
+      <div className="EvenFirstGroup">
+        {renderEvenTimeLeft(props)}
+        {renderEventTotalBets(props)}
+      </div>
+      {renderEventMessages(props)}
+    </div>
+  );
+}
+
+function EventItem(props) {
   return (
     <div className="EventItem">
-      {renderEventName(event)}
-      {renderEventNumberOfPlayers(event)}
-      {renderOutcomeList(event, onClickOutcome)}
-      <div className="EventDetails">
-        <div className="EvenFirstGroup">
-          {renderEvenTimeLeft(event, onCountdownComplete)}
-          {renderEventTotalBets(event)}
-        </div>
-        {renderEventMessages(event)}
-      </div>
+      {renderEventName(props)}
+      {renderEventNumberOfPlayers(props)}
+      {renderOutcomeList(props)}
+      {renderDetails(props)}
     </div>
   );
 }

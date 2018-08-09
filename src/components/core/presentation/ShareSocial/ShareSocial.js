@@ -8,9 +8,9 @@ import { showAlert } from '@/reducers/app/action';
 // import GA from '@/services/googleAnalytics';
 
 // style
-// import CopyLink from '@/assets/images/share/link.svg';
-// import FacebookSVG from '@/assets/images/share/facebook.svg';
-// import TwitterSVG from '@/assets/images/share/twitter.svg';
+import CopyLink from '@/assets/images/share/link.svg';
+import FacebookSVG from '@/assets/images/share/facebook.svg';
+import TwitterSVG from '@/assets/images/share/twitter.svg';
 import './ShareSocial.scss';
 
 const Clipboard = (function (window, document, navigator) {
@@ -61,18 +61,18 @@ class ShareSocial extends PureComponent {
   constructor(props) {
     super(props);
     this.clickShare = ::this.clickShare;
-    this.socialList = [{
-      img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/facebook.svg',
-      title: 'FACEBOOK',
-    }, {
-      img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/twitter.svg',
-      title: 'TWITTER',
-    },
-    {
-      img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/linkedin.svg',
-      title: 'LINKEDIN',
-    },
-    ];
+  //   this.socialList = [{
+  //     img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/facebook.svg',
+  //     title: 'FACEBOOK',
+  //   }, {
+  //     img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/twitter.svg',
+  //     title: 'TWITTER',
+  //   },
+  //   {
+  //     img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/linkedin.svg',
+  //     title: 'LINKEDIN',
+  //   },
+  //   ];
   }
 
   converToShortLink(longUrl) {
@@ -140,13 +140,13 @@ class ShareSocial extends PureComponent {
   }
 
   render() {
-    const { className } = this.props;
+    const { socialList, className } = this.props;
 
     return (
       <div className={`share-social ${className}`}>
         {
-          this.socialList.map((social, index) => (
-            <img key={index + 1} src={social.img} alt={social.title} onClick={(e) => { e.preventDefault(); this.clickShare(e, social.title); }} />
+          socialList.map((social, index) => (
+            <img key={index + 1} src={social.img} alt={social.title} onClick={(e) => { this.clickShare(e, social.title); }} />
           ))
         }
       </div>
@@ -159,10 +159,24 @@ ShareSocial.propTypes = {
   title: PropTypes.string.isRequired,
   showAlert: PropTypes.func.isRequired,
   className: PropTypes.string,
+  socialList: PropTypes.instanceOf(Array),
 };
 
 ShareSocial.defaultProps = {
   className: '',
+  socialList: [
+    {
+      img: FacebookSVG,
+      title: 'FACEBOOK',
+    }, {
+      img: TwitterSVG,
+      title: 'TWITTER',
+    },
+    {
+      img: CopyLink,
+      title: 'COPY',
+    },
+  ],
 };
 
 const mapDispatch = ({

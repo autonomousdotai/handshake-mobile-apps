@@ -91,7 +91,6 @@ class Handle extends React.Component {
 
     this.props.firebase.auth().signOut().then(() => {
       this.props.firebase.auth().onAuthStateChanged((user) => {
-        console.log('auth change', user);
         if (user) {
           if (cb) {
             cb(user);

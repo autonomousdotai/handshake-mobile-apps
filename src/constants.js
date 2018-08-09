@@ -36,9 +36,10 @@ export const HANDSHAKE_ID = { // important
   EXCHANGE_LOCAL: 6,
   BETTING_EVENT: 7,
   WALLET_RECEIVE: 8,
+  CREATE_EVENT: 9,
 };
 
-export const HANDSHAKE_ID_DEFAULT = 3;
+export const HANDSHAKE_ID_DEFAULT = 9; // @TODO: change to 3
 
 export const HANDSHAKE_NAME = {
   // [HANDSHAKE_ID.PROMISE]: { name: 'Promise', priority: 3 },
@@ -48,6 +49,7 @@ export const HANDSHAKE_NAME = {
   [HANDSHAKE_ID.WALLET_TRANSFER]: { name: 'Transfer coins', priority: 4 },
   [HANDSHAKE_ID.WALLET_RECEIVE]: { name: 'Receive coins', priority: 5 },
   [HANDSHAKE_ID.EXCHANGE]: { name: 'Manage your station', priority: 6 },
+  [HANDSHAKE_ID.CREATE_EVENT]: { name: 'Create your own market', priority: 7 },
   // [HANDSHAKE_ID.EXCHANGE_LOCAL]: { name: 'Make swaps', priority: 7 },
   // UNSELECTED: { name: 'Create a prediction market', priority: 100 },
 };
@@ -178,11 +180,14 @@ export const SELL_PRICE_TYPE_DEFAULT = 'fix';
 // path
 export const API_URL = {
   CRYPTOSIGN: {
+    ADMIN_AUTH: '/cryptosign/auth',
     INIT_HANDSHAKE: 'cryptosign/handshake/init',
     INIT_HANDSHAKE_FREE: 'cryptosign/handshake/create_free_bet',
     SHAKE: 'cryptosign/handshake/shake',
     LOAD_MATCHES: 'cryptosign/match',
+    MATCHES_REPORT: 'cryptosign/match/report',
     LOAD_HANDSHAKES: 'cryptosign/handshake',
+    LOAD_REPORTS: 'cryptosign/source',
     CHECK_FREE_AVAILABLE: 'cryptosign/handshake/check_free_bet',
     UNINIT_HANDSHAKE: 'cryptosign/handshake/uninit',
     UNINIT_HANDSHAKE_FREE: 'cryptosign/handshake/uninit_free_bet',
@@ -191,9 +196,12 @@ export const API_URL = {
     ROLLBACK: 'cryptosign/handshake/rollback',
     REFUND: 'cryptosign/handshake/refund',
     REFUND_FREE: 'cryptosign/handshake/refund_free_bet',
+    DISPUTE: 'cryptosign/handshake/dispute',
+    DISPUTE_FREE: 'cryptosign/handshake/dispute_free_bet',
     ADD_MATCH: 'cryptosign/match/add',
     ADD_OUTCOME: 'cryptosign/outcome/add',
     SAVE_TRANSACTION: 'cryptosign/tx/add',
+    GENERATE_LINK: 'cryptosign/outcome/generate_link',
   },
   DISCOVER: {
     INDEX: 'handshake/discover',
@@ -241,6 +249,9 @@ export const API_URL = {
   },
   CHAT: {
     GET_USER_NAME: 'user/username',
+  },
+  USER: {
+    PROFILE: 'user/profile',
   },
 };
 
@@ -466,6 +477,7 @@ export const URL = {
 
   ADMIN: '/admin',
   REPORT: '/report',
+  RESOLVE: '/resolve',
   LUCKY_POOL: '/lucky',
   HANDSHAKE_ME: '/me',
   HANDSHAKE_ME_INDEX: '/me',

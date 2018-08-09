@@ -77,26 +77,27 @@ export const MESSAGE = {
 
 export const BETTING_STATUS_LABEL =
     {
+      //LABEL
       INITING: 'Placing a bet..',
-      CANCEL: 'Cancel this bet',
-      RETRY: 'Retry',
       ROLLBACK: 'There is something wrong with blockchain. The bet is cancelled',
       COLLECT_FAILED: 'There is something wrong with withdraw. Please cancel to get back money',
       SHOULD_CANCEL: 'There is no bet matched. Please cancel to get back money',
       MATCH_POSTPONSE: 'Event is postponsed',
       ACTION_FAILED: `There is something wrong with blockchain. Your action is cancelled`,
       INIT_FAILED: `There is something wrong with blockchain. Your bet is cancelled`,
+      DISPUTE_FAILED: `There is something wrong with blockchain. You can't dispute this bet`,
       SOLVE: 'Please retry to solve problem',
       LOSE: 'Better luck next time.',
       WIN: `You're a winner!`,
       WIN_WAIT: `<br/> It's not time to withdraw. Please wait..`,
+      DISPUTE_CLICK: `<br/>Don't agree the result? Dispute it.`,
+      DISPUTE_WAIT: `<br/> You disputed the bet. Please wait resolving`,
+      DISPUTE_RESOVING: `There are many people disputed result. Please wait resolving`,
       DONE: ` The bet is done.`,
-      WITHDRAW: 'Withdraw winnings',
       CANCELLING: 'Your bet is being cancelled.',
       CANCEL_PROGRESSING: 'The blockchain is processing your cancelling. Please wait.',
       BET_WAIT_MATCHING: 'Bet placed. Matching..',
       BET_MACHED_WAIT_RESULT: 'Bet matched. Waiting for result..',
-      REFUND: 'Refund your bet',
       CANCELLED: 'Your bet was cancelled.',
       REFUNDING: 'Your coin is being refunded to you.',
       REFUND_WAIT: `<br/> It's not time to refund. Please wait..`,
@@ -104,6 +105,12 @@ export const BETTING_STATUS_LABEL =
       COLLECT_PENDING: 'The blockchain is processing your withdrawal. Please wait.',
       COLLECT_DONE: 'Your winnings have been withdrawn to your wallet!',
       REFUND_PENDING: 'The blockchain is processing your refund. Please wait.',
-
+      DISPUTE_PENDING: 'The blockchain is processing your dispute. Please wait.',
+      //BUTTON
+      REFUND: 'Refund your bet',
+      WITHDRAW: 'Withdraw winnings',
+      CANCEL: 'Cancel this bet',
+      RETRY: 'Retry',
+      DISPUTE: 'Dispute',
     };
 

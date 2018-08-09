@@ -2,7 +2,34 @@
 
 .create-page {
     //height: 100vh;
-    background:  $gray;
+    // background:  $gray;
+    background-color: #F6F9FA;
+    margin-top: -10px;
+    min-height: 100vh;
+    .dropdown-custom {
+        position: relative;
+        margin: 0 -15px;
+        padding: 15px;
+        width: auto;
+        background-color: #F4F5F7;
+        .dropdown-custom-menu {
+            position: absolute;
+            top: 58px;
+            left: 15px;
+            right: 15px;
+            border: 2px solid #E9E9E9;
+            border-radius: 6px;
+            border-top: none;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+            z-index: 5;
+            width: auto;
+          }
+        button {
+            background-color: #ffffff;
+            padding: 0.563rem 1.3125rem;
+        }
+    }
     .margin-top-20 {
         margin-top: rem-calc(20px);
     }

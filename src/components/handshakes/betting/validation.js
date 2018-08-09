@@ -5,6 +5,7 @@ import moment from 'moment';
 
 import {getAddress, getEstimateGas, parseBigNumber, getBalance } from '@/components/handshakes/betting/utils.js';
 
+const TAG = 'VALIDATION';
 export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
@@ -46,8 +47,14 @@ export const isSameAddress = (address) => {
 };
 
 export const validateBet = async (amount = 0, odds = 0, closingDate, matchName = '', matchOutcome = '', freeBet=false) => {
+  const t0 = performance.now();
   const balance = await getBalance();
+  const t1 = performance.now();
+  console.log(TAG, 'Time getBalance:', (t1-t0));
+  const t2 = performance.now();
   const estimateGas = await getEstimateGas();
+  const t3 = performance.now();
+  console.log(TAG, 'Time getEstimateGas:', (t3-t2));
   const estimatedGasBN = parseBigNumber(estimateGas.toString()||0);
   const total = amount.plus(estimatedGasBN).toNumber()||0;
   let result = { status: true, message: '' };
@@ -85,5 +92,6 @@ export const validateBet = async (amount = 0, odds = 0, closingDate, matchName =
     result.status = false;
     return result;
   }
+
   return result;
 };

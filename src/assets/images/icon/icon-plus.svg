@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-plus copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Select-an-event-(from-our-template)" transform="translate(-16.000000, -500.000000)" fill="#2456FB" fill-rule="nonzero">
+            <g id="icons8-plus-copy" transform="translate(16.000000, 500.000000)">
+                <path d="M13,0 C5.82699283,0 0,5.82699283 0,13 C0,20.1730072 5.82699283,26 13,26 C20.1730072,26 26,20.1730072 26,13 C26,5.82699283 20.1730072,0 13,0 Z M13,1.13043478 C19.5620744,1.13043478 24.8695652,6.43792557 24.8695652,13 C24.8695652,19.5620744 19.5620744,24.8695652 13,24.8695652 C6.43792557,24.8695652 1.13043478,19.5620744 1.13043478,13 C1.13043478,6.43792557 6.43792557,1.13043478 13,1.13043478 Z M12.4347826,6.2173913 L12.4347826,12.4347826 L6.2173913,12.4347826 L6.2173913,13.5652174 L12.4347826,13.5652174 L12.4347826,19.7826087 L13.5652174,19.7826087 L13.5652174,13.5652174 L19.7826087,13.5652174 L19.7826087,12.4347826 L13.5652174,12.4347826 L13.5652174,6.2173913 L12.4347826,6.2173913 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

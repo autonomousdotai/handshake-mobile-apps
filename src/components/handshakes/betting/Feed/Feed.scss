@@ -96,13 +96,16 @@
     }
   }
   .bottomDiv {
-    display: flex;
-    justify-content: space-between;
     background: #FAFAFA;
-    align-items: center;
     margin-top: 5px;
     padding: rem-calc(15px 15px 15px);
     border-top: 1px solid #f1f1f1;
+
+    .bottomStatus {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
     .statusBetting {
       font-size: rem-calc(14px);
       letter-spacing: rem-calc(0.25px);
@@ -111,15 +114,26 @@
       padding-right: rem-calc(10px);
       flex: 1;
     }
+    .progressBar {
+      height: rem-calc(7px);
+    }
+    .progressText {
+      font-size: rem-calc(14px);
+      font-weight: $normal;
+      color: #333;
+      letter-spacing: rem-calc(0.25px);
+      margin-top: rem-calc(5px);
+      margin-bottom: rem-calc(10px);
+    }
     button {
       width: rem-calc(170px);
       padding: rem-calc(10px);
       font-size: rem-calc(14px);
       letter-spacing: rem-calc(0.25px);
       border-radius: rem-calc(6px);
-      font-weight: $bold;
-      border: none;
-      color: #fff;
+      //font-weight: $bold;
+      //border: none;
+      //color: #fff;
       background: #000000;
       font-weight: normal;
       text-overflow: ellipsis;
@@ -140,6 +154,11 @@
     }
     .refund {
       background: transparent !important;
+    }
+    .dispute {
+      background: #FF9500;
+      border: none !important;
+      color: #fff !important;
     }
   }
 }

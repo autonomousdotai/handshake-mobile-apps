@@ -1,0 +1,338 @@
+@import './src/styles/style';
+
+.form-error {
+  border: none;
+  font-size: rem-calc(13px);
+  color: #d9534f;
+  input {
+    border: 1px solid #d9534f;
+  }
+}
+.ErrorMsg {
+  display: inline-block;
+  margin-top: 5px;
+}
+.EmailRequiredContainer {
+  display: flex;
+  padding: 10px 20px;
+  align-self: stretch;
+  flex-direction: column;
+  font-size: rem-calc(16px);
+  text-align: center;
+  // background-color: #F6F9FA;
+  .EmailRequiredTitle {
+    color: #000000;
+    font-size: rem-calc(18px);
+    font-weight: 700;
+    margin: -15px 0 10px 0;
+  }
+  .EmailRequiredNoted {
+    margin-bottom: 15px;
+  }
+  .EmailRequiredForm {
+    input[name="email"] {
+      outline: none;
+      display: block;
+      width: 100%;
+      color: #000000;
+      text-align: center;
+      margin-bottom: 10px;
+      padding: 13px 10px;
+      border: 2px solid #E9E9E9;
+      border-radius: 6px;
+    }
+    input[name="email"]::placeholder {
+      color: #8A8A8F;
+      font-weight: 300;
+    }
+    button {
+      padding: 0.563rem 1.3125rem;
+    }
+  }
+}
+
+.CreateMarket {
+  margin: 0 -15px;
+  padding: 0 15px;
+  .form-control {
+    height: 46px;
+  }
+  button[type="submit"] {
+    height: 46px;
+  }
+  .counter {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+    &.disabled > span {
+      opacity: 0.65;
+    }
+    > span {
+      display: inline-flex;
+      font-size: rem-calc(32px);
+      width: 46px;
+      height: 46px;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+      border-radius: 4px;
+      color: #ffffff;
+      background-color: #007bff;
+    }
+    input {
+      width: 92px;
+      height: 46px;
+      margin: 0 1rem;
+      text-align: center;
+      border: 1px solid #ced4da;
+      border-radius: rem-calc(4px);
+    }
+  }
+}
+
+.RangeSlider {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  &.disabled {
+    opacity: 0.65;
+  }
+  .input-value {
+    width: 46px;
+    text-align: right;
+  }
+  .unit {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 2px;
+  }
+  .rangeslider-horizontal {
+    width: 100%;
+    .rangeslider__fill {
+      background-color: #007bff;
+    }
+  }
+}
+
+.CreateEventFormGroupTitle {
+  text-transform: uppercase;
+  font-size: rem-calc(14px);
+  font-weight: 700;
+  margin: 0 0 5px 0;
+}
+
+.CreateEventFormGroupNote {
+  font-size: rem-calc(14px);
+  color: #8A8A8F;
+  margin-bottom: 1rem;
+}
+
+.create-page {
+  .EventDropdown {
+    position: relative;
+    padding: 0 15px;
+    margin-bottom: 30px;
+    background-color: transparent;
+    .dropdown-custom-menu {
+      position: absolute;
+      top: 40px;
+      left: 15px;
+      right: 15px;
+      border: 2px solid #E9E9E9;
+      border-radius: 6px;
+      border-top: none;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      z-index: 5;
+      width: auto;
+    }
+    button {
+      border: 2px solid #E9E9E9;
+      border-radius: 6px;
+      p {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+  }
+  select {
+    outline: none;
+    height: 46px;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 2px solid #E9E9E9;
+    border-radius: 6px;
+    background-color: #ffffff;
+  }
+  .date-time-block {
+    border: 2px solid #E9E9E9;
+    border-radius: 6px;
+    background-color: #ffffff;
+    margin-bottom: 1rem;
+    .rdt input[readonly] {
+      background-color: #e9ecef;
+    }
+    .form-control {
+      border: none;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right: 2px solid #E9E9E9;
+    }
+    .rc-time-picker-input {
+      height: auto;
+      background-color: #ffffff;
+      border: none;
+      padding: 0.375rem 0.75rem;
+    }
+  }
+}
+
+.form-group-custom {
+  position: relative;
+  button.trash {
+    position: absolute;
+    top: 9px;
+    right: 5px;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+  }
+  .form-control {
+    padding-right: 40px;
+  }
+}
+
+.CreateEventOption {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: rem-calc(18px);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-top: -1rem;
+  span {
+    position: relative;
+    display: inline-block;
+    padding: 0 15px;
+    margin: 5px 0;
+    background-color: #ffffff;
+    z-index: 2;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100px;
+    height: 1px;
+    margin-left: -50px;
+    background-color: #D5D5D5;
+    z-index: 1;
+  }
+}
+
+.CreateEventFormBlock {
+  margin: 0 -15px 5px -15px;
+  padding: 15px;
+  background-color: #ffffff;
+  > .CreateEventFormGroupTitle:first-child {
+    font-size: rem-calc(16px);
+  }
+  button.AddMoreOutCome {
+    color: #2456FB;
+    font-size: rem-calc(16px);
+    padding: 1px 0 2px;
+    border: none;
+    background: transparent;
+    -webkit-appearance: none;
+    .IconPlus, span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .IconPlus {
+      margin-right: 10px;
+    }
+  }
+}
+
+
+// Share Market
+.ShareMarketContainer {
+  padding: 40px 20px;
+  text-align: center;
+
+  .checkmark {
+    display:inline-block;
+    width: 48px;
+    height: 48px;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+    margin-bottom: 20px;
+  }
+
+  .checkmark_circle {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background-color: #E0FFE1;
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+    border: 2px solid #C1F9C7;
+  }
+
+  .checkmark_stem {
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background-color: #4CDB52;
+    left: 26px;
+    top: 8px;
+  }
+
+  .checkmark_kick {
+    position: absolute;
+    width: 12px;
+    height: 3px;
+    background-color: #4CDB52;
+    left: 15px;
+    top: 29px;
+  }
+
+  .ShareEventMessage {
+    position: relative;
+    padding-bottom: 80px;
+    &:after {
+      content: '';
+      display: inline-block;
+      height: 1px;
+      background-color: #E4E4E4;
+      width: 100px;
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      margin-left: -50px;
+    }
+  }
+
+  .ShareEventToBuddies {
+    .ShareEventToBuddiesTitle {
+      margin-bottom: 20px;
+    }
+    .share-social {
+      display: flex;
+      justify-content: space-around;
+      img {
+        width: auto;
+        margin-right: 0;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

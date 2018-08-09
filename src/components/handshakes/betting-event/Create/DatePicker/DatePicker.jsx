@@ -30,7 +30,6 @@ class DatePicker extends React.PureComponent {
 
 
   onChangeTime=(time) => {
-    console.log(time);
     this.setState({
       selectedTime: time.format('h:mm a'),
     }, this.findFinalDateTime);
@@ -88,10 +87,22 @@ class DatePicker extends React.PureComponent {
           timeFormat={false}
           viewDate={this.props.startDate ? `${new Date(this.props.startDate * 1000)}` : new Date()}
           inputProps={{
-placeholder: this.props.placeholder, className: this.props.className, required: this.props.required, readOnly: true, disabled: this.props.disabled,
-}}
+            placeholder: this.props.placeholder,
+            className: this.props.className,
+            required: this.props.required,
+            readOnly: true, disabled:
+            this.props.disabled,
+          }}
         />
-        <TimePickerComponent disabled={this.props.disabled} onChangeTime={this.onChangeTime} />
+        <TimePickerComponent
+          disabled={this.props.disabled}
+          onChangeTime={this.onChangeTime}
+          value={props.value}
+          inputProps={{
+            placeholder: this.props.timePlaceholder,
+            required: this.props.required,
+          }}
+        />
       </div>);
   }
 }

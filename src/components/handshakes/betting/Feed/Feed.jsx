@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ProgressBar } from 'react-bootstrap';
 
 // services, constants
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
@@ -8,14 +9,14 @@ import { BET_BLOCKCHAIN_STATUS, ROLE } from '@/components/handshakes/betting/con
 import GA from '@/services/googleAnalytics';
 
 import { API_URL } from '@/constants';
-import { uninitItem, collect, collectFree, uninitItemFree, refundFree, refund } from '@/reducers/handshake/action';
+import { uninitItem, collect, collectFree, uninitItemFree, refundFree, refund, dispute } from '@/reducers/handshake/action';
 import { loadMyHandshakeList, updateBettingChange } from '@/reducers/me/action';
 import { MESSAGE, BETTING_STATUS_LABEL } from '@/components/handshakes/betting/message.js';
 import { getStatusLabel } from '@/components/handshakes/betting/StatusAction.js';
 import {
   getMessageWithCode, getId,
   getBalance, getEstimateGas, foundShakeList, parseBigNumber,
-  formatAmount, findUserBet, parseJsonString,
+  formatAmount, findUserBet, parseJsonString
 } from '@/components/handshakes/betting/utils.js';
 
 // components
@@ -87,8 +88,12 @@ class FeedBetting extends React.Component {
         break;
       case BETTING_STATUS_LABEL.REFUND:
         buttonClassName = 'refund';
-
         break;
+
+      case BETTING_STATUS_LABEL.DISPUTE:
+        buttonClassName = 'dispute';
+        break;
+
       default:
         break;
     }
@@ -162,8 +167,8 @@ class FeedBetting extends React.Component {
       message = MESSAGE.RIGHT_NETWORK;
     } else if (!isSameAddress(fromAddress)) {
       message = MESSAGE.DIFFERENCE_ADDRESS;
-    } else if (freeBet) {
-      this.handleActionFree(title, id);
+    } else if (freeBet && title !== BETTING_STATUS_LABEL.DISPUTE) {
+      this.handleActionFree(title, id, hid);
     } else if (estimatedGas > balance) {
       message = MESSAGE.NOT_ENOUGH_GAS;
     } else {
@@ -180,7 +185,7 @@ class FeedBetting extends React.Component {
     }
   }
 
-  handleActionFree(title, offchain) {
+  handleActionFree(title, offchain, hid) {
     const realId = getId(offchain);
     switch (title) {
       case BETTING_STATUS_LABEL.CANCEL:
@@ -191,6 +196,9 @@ class FeedBetting extends React.Component {
         break;
       case BETTING_STATUS_LABEL.REFUND:
         this.refundFree(offchain);
+        break;
+      case BETTING_STATUS_LABEL.DISPUTE:
+        this.disputeOnChain(offchain, hid);
         break;
       default:
         break;
@@ -212,10 +220,12 @@ class FeedBetting extends React.Component {
       case BETTING_STATUS_LABEL.REFUND:
         this.refundOnChain(offchain, hid);
         break;
+      case BETTING_STATUS_LABEL.DISPUTE:
+        this.disputeOnChain(offchain, hid);
+        break;
       default:
         break;
     }
-
   }
 
 
@@ -258,6 +268,22 @@ class FeedBetting extends React.Component {
       this.props.updateBettingChange(oldInfo);
     }
     */
+  }
+  async disputeOnChain(offchain, hid) {
+    const { itemInfo } = this.state;
+    const oldInfo = Object.assign({}, itemInfo);
+    const updateInfo = Object.assign({}, itemInfo);
+    updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_DISPUTE_PENDING;
+    betHandshakeHandler.setItemOnChain(offchain, updateInfo);
+    this.props.updateBettingChange(updateInfo);
+
+    const result = await betHandshakeHandler.dispute(hid, offchain);
+    const { hash } = result;
+    if (hash) {
+      this.disputeReal(offchain);
+    } else {
+      this.props.updateBettingChange(oldInfo);
+    }
   }
 
   loadMyHandshakeList = () => {
@@ -423,6 +449,16 @@ class FeedBetting extends React.Component {
       data: params,
     });
   }
+  disputeReal(id) {
+    const params = {
+      offchain: id,
+    };
+    this.props.dispute({
+      PATH_URL: API_URL.CRYPTOSIGN.DISPUTE,
+      METHOD: 'POST',
+      data: params,
+    });
+  }
 
   renderStatus = () => {
     const { statusTitle } = this.state;
@@ -542,6 +578,39 @@ class FeedBetting extends React.Component {
 
     );
   }
+  renderProgressBar(itemInfo) {
+    const { totalAmount, totalDisputeAmount } = itemInfo;
+    //totalDisputeAmount = 50;
+    //totalAmount = 100;
+
+    const progress = totalDisputeAmount / totalAmount * 100;
+    const pgText = `${formatAmount(totalDisputeAmount)} ETH of ${formatAmount(totalAmount)} ETH outcome pool`;
+    console.log(TAG, 'renderProgressBar', 'totalAmount:', totalAmount,'totalDisputeAmount:', totalDisputeAmount);
+    console.log(TAG, 'renderProgressBar', 'totalAmount:', formatAmount(totalAmount),'totalDisputeAmount:', formatAmount(totalDisputeAmount));
+
+    return (
+      <div>
+        <ProgressBar className="progressBar" striped bsStyle="info" now={progress} />
+        <div className="progressText">{pgText}</div>
+      </div>
+    );
+  }
+  renderBottom(itemInfo) {
+    const { status } = itemInfo;
+    const { actionTitle } = this.state;
+    const buttonClassName = this.getButtonClassName(actionTitle);
+
+    return (
+      <div className="bottomDiv">
+        {status === BET_BLOCKCHAIN_STATUS.STATUS_USER_DISPUTED && this.renderProgressBar(itemInfo)}
+        <div className="bottomStatus">
+          {this.renderStatus()}
+          {this.renderButton(buttonClassName)}
+        </div>
+      </div>
+
+    );
+  }
 
   render() {
     const {
@@ -558,7 +627,6 @@ class FeedBetting extends React.Component {
     //const eventName = event_name && this.formatEventName(event_name);
     //const predictName = event_predict && this.formatPredictName(event_predict);
 
-    const buttonClassName = this.getButtonClassName(actionTitle);
     console.log(TAG, 'render', isLoading);
     return (
       <div>
@@ -587,16 +655,11 @@ class FeedBetting extends React.Component {
             </div>
             {role === ROLE.INITER ? this.renderMaker() : this.renderShaker()}
           </div>
-          <div className="bottomDiv">
-            {this.renderStatus()}
-            {this.renderButton(buttonClassName)}
-          </div>
+          {this.renderBottom(itemInfo)}
         </Feed>
       </div>
     );
   }
-
-
 }
 
 const mapState = state => ({
@@ -610,7 +673,8 @@ const mapDispatch = ({
   collectFree,
   showAlert,
   uninitItemFree,
-  refundFree,
   refund,
+  refundFree,
+  dispute,
 });
 export default connect(mapState, mapDispatch)(FeedBetting);

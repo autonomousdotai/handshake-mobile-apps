@@ -5,6 +5,7 @@ import handshake from './handshake';
 import betting from './betting';
 import me from './me';
 import comment from './comment';
+import admin from './admin';
 // import firebase from './firebase';
 
 export default {
@@ -15,5 +16,6 @@ export default {
   me,
   betting,
   comment,
+  admin,
   // firebase,
 };
