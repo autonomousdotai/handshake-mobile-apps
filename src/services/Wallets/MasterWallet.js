@@ -5,6 +5,7 @@ import { BitcoinCash } from '@/services/Wallets/BitcoinCash.js';
 import { BitcoinCashTestnet } from '@/services/Wallets/BitcoinCashTestnet.js';
 import { BitcoinTestnet } from '@/services/Wallets/BitcoinTestnet.js';
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
+import { Ripple } from '@/services/Wallets/Ripple.js';
 import { Wallet } from '@/services/Wallets/Wallet.js';
 import { TokenERC20 } from '@/services/Wallets/Tokens/TokenERC20';
 import { Shuriken } from '@/services/Wallets/Tokens/Shuriken.js';
@@ -48,11 +49,11 @@ import qs from 'qs';
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
-      Ethereum, Shuriken, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet
+      Ethereum, Shuriken, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet, Ripple
     };
 
     static ListCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet, Shuriken, TokenERC20, TokenERC721,
+      Ethereum, Bitcoin, Ripple, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet, Shuriken, TokenERC20, TokenERC721,
       CryptoStrikers, CryptoPunks, CryptoKitties, Axie, BlockchainCuties,
       ChibiFighters, CryptoClown, CryptoCrystal, Cryptogs, CryptoHorse,
       CryptoSoccr, CryptoZodiacs, CSCPreSaleFactory, DopeRaider, Etherbots,
@@ -512,6 +513,8 @@ export class MasterWallet {
         if (walletJson.contractAddress) wallet.contractAddress = walletJson.contractAddress;
         if (walletJson.customToken) wallet.customToken = walletJson.customToken;
         if (walletJson.isCollectibles) wallet.isCollectibles = walletJson.isCollectibles;
+        if (walletJson.secret) wallet.secret = walletJson.secret;
+        
 
         return wallet;
       } catch (e) {
