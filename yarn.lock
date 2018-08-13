@@ -2946,7 +2946,7 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-classnames@2.x, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
+classnames@2.x, classnames@^2.2.0, classnames@^2.2.3, classnames@^2.2.5, classnames@^2.2.6:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
@@ -5747,10 +5747,8 @@ handlebars@^4.0.11, handlebars@^4.0.3:
     uglify-js "^2.6"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-
-  version "0.0.1533608639"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/cbb39385df64c67c57560ba27cf27b961f346fb9"
-
+  version "0.0.1533882189"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/2521cdd3a08d2538e9acf266b363dfaeaff74d0e"
   dependencies:
     "@babel/core" "^7.0.0-beta.51"
     "@babel/node" "^7.0.0-beta.51"
@@ -10494,6 +10492,13 @@ react-qr-reader@^2.1.0:
     prop-types "^15.5.8"
     webrtc-adapter "^6.1.1"
 
+react-rangeslider@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-rangeslider/-/react-rangeslider-2.2.0.tgz#4362b01f4f5a455f0815d371d496f69ca4c6b5aa"
+  dependencies:
+    classnames "^2.2.3"
+    resize-observer-polyfill "^1.4.2"
+
 react-redux-firebase@^2.1.4:
   version "2.1.7"
   resolved "https://registry.yarnpkg.com/react-redux-firebase/-/react-redux-firebase-2.1.7.tgz#3080808bbeb82c1c78d4e4db1fabbdd7b42cb9ba"
@@ -11054,7 +11059,7 @@ reselect@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-3.0.1.tgz#efdaa98ea7451324d092b2b2163a6a1d7a9a2147"
 
-resize-observer-polyfill@^1.5.0:
+resize-observer-polyfill@^1.4.2, resize-observer-polyfill@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.0.tgz#660ff1d9712a2382baa2cad450a4716209f9ca69"
 
@@ -11157,6 +11162,36 @@ rlp@^2.0.0:
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.1.0.tgz#e4f9886d5a982174f314543831e36e1a658460f9"
   dependencies:
     safe-buffer "^5.1.1"
+
+rmc-date-picker@^6.0.8:
+  version "6.0.8"
+  resolved "https://registry.yarnpkg.com/rmc-date-picker/-/rmc-date-picker-6.0.8.tgz#9aab87b3aa8dc9c5a57349d8f0b05de4e8f4808a"
+  dependencies:
+    babel-runtime "6.x"
+    rmc-picker "~5.0.0"
+
+rmc-dialog@^1.0.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/rmc-dialog/-/rmc-dialog-1.1.1.tgz#1d7fbc6b2cad5b0b53fbab71fe29636d76f78217"
+  dependencies:
+    babel-runtime "6.x"
+    rc-animate "2.x"
+
+rmc-feedback@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/rmc-feedback/-/rmc-feedback-2.0.0.tgz#cbc6cb3ae63c7a635eef0e25e4fbaf5ac366eeaa"
+  dependencies:
+    babel-runtime "6.x"
+    classnames "^2.2.5"
+
+rmc-picker@~5.0.0:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/rmc-picker/-/rmc-picker-5.0.5.tgz#2a33244ced1f4e6b10611ff6e0384a5dbbfc566e"
+  dependencies:
+    babel-runtime "6.x"
+    classnames "^2.2.0"
+    rmc-dialog "^1.0.1"
+    rmc-feedback "^2.0.0"
 
 rmc-tabs@^1.2.27:
   version "1.2.27"
@@ -12855,6 +12890,10 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+validator@^10.4.0:
+  version "10.5.0"
+  resolved "https://registry.yarnpkg.com/validator/-/validator-10.5.0.tgz#1debbe1e6f5fd0c920ed2af47516f3762033939c"
 
 value-equal@^0.4.0:
   version "0.4.0"
