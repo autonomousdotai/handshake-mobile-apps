@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
-import PropTypes from 'prop-types';
 
 class AutoSuggestion extends Component {
   static propTypes = {
     source: PropTypes.instanceOf(Array),
     onSelectEvent: PropTypes.func,
+    onChange: PropTypes.func,
   };
 
   static defaultProps = {
     source: [],
     onSelectEvent: undefined,
+    onChange: undefined,
   };
 
   constructor(props) {
@@ -25,33 +27,35 @@ class AutoSuggestion extends Component {
 
   onSuggestionSelected = (event, { suggestion }) => {
     this.props.onSelectEvent(suggestion);
-  }
+  };
 
   onSuggestionChange = (event, { newValue }) => {
     this.setState({
       value: newValue,
     });
-  }
+    this.props.onChange(newValue);
+  };
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
       suggestions: this.getSuggestions(value),
     });
-  }
+  };
 
   onSuggestionsClearRequested = () => {
     this.setState({
       suggestions: [],
     });
-  }
+  };
 
   onSuggestionBlur = (e) => {
     const inputValue = e.target.value;
-    const suggestion = this.state.suggestions.find(sg => {
+    const suggestion = this.props.source.find(sg => {
       return sg.name === inputValue.trim();
     });
     this.props.onSelectEvent(suggestion || {});
-  }
+    this.props.onChange(inputValue);
+  };
 
   getSuggestionValue = suggestion => suggestion.name;
 
@@ -61,7 +65,7 @@ class AutoSuggestion extends Component {
 
     return inputLength === 0 ? [] : this.props.source.filter(lang =>
       lang.name.toLowerCase().slice(0, inputLength) === inputValue);
-  }
+  };
 
   renderSuggestion = (suggestion, { query }) => {
     const matches = AutosuggestHighlightMatch(suggestion.name, query);
@@ -81,12 +85,13 @@ class AutoSuggestion extends Component {
   };
 
   render() {
-    const { value, suggestions } = this.state;
+    const { props, state } = this;
+    const { value, suggestions } = state;
     const inputProps = {
-      placeholder: 'Choose an Event or Create a new',
       value,
-      name: 'eventName',
-      className: 'form-control',
+      name: props.name,
+      className: props.className,
+      placeholder: props.placeholder,
       onBlur: this.onSuggestionBlur,
       onChange: this.onSuggestionChange,
     };

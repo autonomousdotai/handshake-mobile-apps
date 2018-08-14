@@ -153,16 +153,29 @@ class CreateEventForm extends Component {
         />
       </React.Fragment>
     );
-  }
+  };
 
   renderAutoSuggestion = (props) => {
+    const { touched, dirty, error, warning } = props.meta;
+    const cls = classNames('form-group', {
+      'form-error': (touched || dirty) && error,
+      'form-warning': (touched || dirty) && warning,
+    });
+    console.log(props.meta);
     return (
-      <AutoSuggestion
-        {...props}
-        onChange={(val) => this.setFieldValueToState(props.input.name, val)}
-      />
+      <div class={cls}>
+        <AutoSuggestion
+          {...props}
+          name="eventName"
+          placeholder="Choose an Event or Create a new"
+          className="form-control"
+          value={props.input.value}
+          onChange={props.input.onChange}
+        />
+        {(touched || dirty) && ((error && <span className="ErrorMsg">{error}</span>) || (warning && <span className="WarningMsg">{warning}</span>))}
+      </div>
     );
-  }
+  };
 
   renderEvent = ({ isNew }) => {
     if (!isNew) return null;
@@ -245,7 +258,6 @@ class CreateEventForm extends Component {
           name="creatorFee"
           type="number"
           unit="%"
-          value={this.state.creatorFee}
           className="input-value"
           disabled={!isNew}
           options={optionSlider}
@@ -256,13 +268,12 @@ class CreateEventForm extends Component {
     );
   }
 
-  renderRangleSlider = ({ input, unit, options, type, className, disabled }) => {
-    const { name, value } = input;
-    const rangeSliderProps = { value, type, unit, input, options, className, disabled };
+  renderRangleSlider = (props) => {
     return (
       <RangeSlider
-        {...rangeSliderProps}
-        onChange={(val) => this.setFieldValueToState(name, val)}
+        {...props}
+        value={props.input.value}
+        onChange={props.input.onChange}
       />
     );
   }
