@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Autosuggest from 'react-autosuggest';
 import AutosuggestHighlightMatch from 'autosuggest-highlight/match';
 import AutosuggestHighlightParse from 'autosuggest-highlight/parse';
@@ -33,7 +34,7 @@ class AutoSuggestion extends Component {
     this.setState({
       value: newValue,
     });
-    this.props.onChange(newValue);
+    this.fetchEvent(newValue);
   };
 
   onSuggestionsFetchRequested = ({ value }) => {
@@ -48,15 +49,6 @@ class AutoSuggestion extends Component {
     });
   };
 
-  onSuggestionBlur = (e) => {
-    const inputValue = e.target.value;
-    const suggestion = this.props.source.find(sg => {
-      return sg.name === inputValue.trim();
-    });
-    this.props.onSelectEvent(suggestion || {});
-    this.props.onChange(inputValue);
-  };
-
   getSuggestionValue = suggestion => suggestion.name;
 
   getSuggestions = value => {
@@ -66,6 +58,14 @@ class AutoSuggestion extends Component {
     return inputLength === 0 ? [] : this.props.source.filter(lang =>
       lang.name.toLowerCase().slice(0, inputLength) === inputValue);
   };
+
+  fetchEvent = (value) => {
+    const suggestion = this.props.source.find(sg => {
+      return sg.name === value.trim();
+    });
+    this.props.onSelectEvent(suggestion || {});
+    this.props.onChange(value);
+  }
 
   renderSuggestion = (suggestion, { query }) => {
     const matches = AutosuggestHighlightMatch(suggestion.name, query);
@@ -87,24 +87,32 @@ class AutoSuggestion extends Component {
   render() {
     const { props, state } = this;
     const { value, suggestions } = state;
+    const { touched, error, warning } = props.meta;
+    const cls = classNames(props.className, {
+      'form-error': touched && error,
+      'form-warning': touched && warning,
+    });
     const inputProps = {
+      ...props.input,
       value,
       name: props.name,
-      className: props.className,
+      className: props.fieldClass,
       placeholder: props.placeholder,
-      onBlur: this.onSuggestionBlur,
       onChange: this.onSuggestionChange,
     };
     return (
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-        getSuggestionValue={this.getSuggestionValue}
-        renderSuggestion={this.renderSuggestion}
-        onSuggestionSelected={this.onSuggestionSelected}
-        inputProps={inputProps}
-      />
+      <div className={cls}>
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+          getSuggestionValue={this.getSuggestionValue}
+          renderSuggestion={this.renderSuggestion}
+          onSuggestionSelected={this.onSuggestionSelected}
+          inputProps={inputProps}
+        />
+        {touched && ((error && <span className="ErrorMsg">{error}</span>) || (warning && <span className="WarningMsg">{warning}</span>))}
+      </div>
     );
   }
 }

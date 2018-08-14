@@ -91,7 +91,7 @@
   }
 }
 
-.RangeSlider {
+.RangeSliderContainer {
   position: relative;
   display: flex;
   flex-direction: row;
@@ -112,19 +112,17 @@
     vertical-align: middle;
     margin-top: 2px;
   }
-  .rangeLimit {
-    position: absolute;
-    bottom: 40px;
-    font-size: rem-calc(14px);
-    &.minValue {
-      left: 0;
-    }
-    &.maxValue {
-      right: 0;
-    }
+  .RangeSlider {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 10px;
+    -webkit-user-select: none;
   }
   .rangeslider-horizontal {
     width: 100%;
+    margin: 6px 10px;
     .rangeslider__fill {
       background-color: #007bff;
     }
@@ -354,7 +352,6 @@
 
 .react-autosuggest__container {
   position: relative;
-  margin-bottom: 1rem;
 }
 
 .react-autosuggest__input {

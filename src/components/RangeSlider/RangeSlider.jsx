@@ -19,10 +19,11 @@ class RangeSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      volume: 1,
+      volume: 0,
     };
   }
 
+  /* eslint consistent-return:0 */
   handleOnChange = (value) => {
     if (this.props.disabled) return null;
     this.setState({ volume: value });
@@ -31,7 +32,7 @@ class RangeSlider extends Component {
 
   renderComponent = (props, state) => {
     const { volume } = state;
-    const htmlClassName = classNames('RangeSlider', {
+    const htmlClassName = classNames('RangeSliderContainer', {
       disabled: props.disabled,
     });
     const optionSlider = {
@@ -43,17 +44,22 @@ class RangeSlider extends Component {
     const unit = (props.unit && <span className="unit">{props.unit}</span>);
     return (
       <div className={htmlClassName}>
-        <input
-          {...inputProps}
-          type={props.type}
-          className={props.className}
-          disabled={props.disabled}
-          readOnly
-          autoComplete="off"
-        />{unit}
-        <span className="rangeLimit minValue">{props.options.min}{props.unit}</span>
-        <span className="rangeLimit maxValue">{props.options.max}{props.unit}</span>
-        <Slider {...optionSlider} />
+        <div className="RangeValue">
+          <input
+            {...inputProps}
+            type={props.type}
+            className={props.className}
+            disabled={props.disabled}
+            readOnly
+            autoComplete="off"
+          />
+          <span>{unit}</span>
+        </div>
+        <div className="RangeSlider">
+          <span className="rangeLimit minValue">{props.options.min}{props.unit}</span>
+          <Slider {...optionSlider} />
+          <span className="rangeLimit maxValue">{props.options.max}{props.unit}</span>
+        </div>
       </div>
     );
   }

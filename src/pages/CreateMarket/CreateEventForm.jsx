@@ -48,12 +48,11 @@ class CreateEventForm extends Component {
   }
 
   onCreateNewEvent = (values, dispatch, props) => {
-    console.log('CreateNew', values);
-    // dispatch(createEvent({
-    //   values,
-    //   isNew: props.isNew,
-    //   selectedSource: this.state.selectedReportSource,
-    // }));
+    dispatch(createEvent({
+      values,
+      isNew: props.isNew,
+      selectedSource: this.state.selectedReportSource,
+    }));
   }
 
   setFieldValueToState = (fieldName, value) => {
@@ -88,18 +87,6 @@ class CreateEventForm extends Component {
     );
   }
 
-  buildEventSelectorData = (props) => {
-    return props.eventList.map((event) => {
-      return {
-        ...event,
-        value: event.name,
-      };
-    }).concat({
-      id: 0,
-      value: 'Create a new event',
-    }).sort((a, b) => a.id - b.id);
-  }
-
   smallerThanReportingTime = (value) => {
     if (!this.state.reportingTime) return null;
     return (value + secStep) <= this.state.reportingTime ? null
@@ -120,25 +107,6 @@ class CreateEventForm extends Component {
     return (<div className="CreateEventFormGroupNote">{text}</div>);
   }
 
-  renderEventDropdownList = (props, state) => {
-    const title = 'EVENT';
-    const { shareEvent } = props;
-    if (shareEvent) return null;
-    return (
-      <React.Fragment>
-        {this.renderGroupTitle(title)}
-        <Dropdown
-          placeholder="Create a new event"
-          className="EventDropdown"
-          defaultId={state.selectedEvent}
-          source={this.buildEventSelectorData(props)}
-          onItemSelected={props.onSelectEvent}
-          hasSearch
-        />
-      </React.Fragment>
-    );
-  }
-
   renderEventSuggest = (props) => {
     const title = 'EVENT';
     return (
@@ -146,9 +114,11 @@ class CreateEventForm extends Component {
         {this.renderGroupTitle(title)}
         <Field
           name="eventName"
-          className="form-control"
+          className="form-group"
+          fieldClass="form-control"
           onSelectEvent={props.onSelectEvent}
           source={props.eventList}
+          validate={required}
           component={this.renderAutoSuggestion}
         />
       </React.Fragment>
@@ -156,47 +126,17 @@ class CreateEventForm extends Component {
   };
 
   renderAutoSuggestion = (props) => {
-    const { touched, dirty, error, warning } = props.meta;
-    const cls = classNames('form-group', {
-      'form-error': (touched || dirty) && error,
-      'form-warning': (touched || dirty) && warning,
-    });
-    console.log(props.meta);
     return (
-      <div class={cls}>
-        <AutoSuggestion
-          {...props}
-          name="eventName"
-          placeholder="Choose an Event or Create a new"
-          className="form-control"
-          value={props.input.value}
-          onChange={props.input.onChange}
-        />
-        {(touched || dirty) && ((error && <span className="ErrorMsg">{error}</span>) || (warning && <span className="WarningMsg">{warning}</span>))}
-      </div>
+      <AutoSuggestion
+        {...props}
+        name="eventName"
+        placeholder="Choose an Event or Create a new"
+        value={props.input.value}
+        onChange={props.input.onChange}
+      />
     );
   };
-
-  renderEvent = ({ isNew }) => {
-    if (!isNew) return null;
-    const title = 'CREATE AN EVENT';
-    return (
-      <React.Fragment>
-        {this.renderGroupTitle(title)}
-        <Field
-          name="eventName"
-          type="text"
-          className="form-group"
-          fieldClass="form-control"
-          component={renderField}
-          placeholder="Event name"
-          validate={[required]}
-        />
-        <Field name="eventId" type="hidden" component={renderField} />
-      </React.Fragment>
-    );
-  }
-
+  
   renderOutComes = (props) => {
     const { fields, meta: { error }, isNew } = props;
     const title = 'OUTCOME';
@@ -243,10 +183,10 @@ class CreateEventForm extends Component {
   }
 
   renderFee = ({ isNew }) => {
-    const title = 'CREATOR FEE';
+    const title = 'MARKET CREATOR FEE';
     const textNote = 'The creator fee is a percentage of the total winnings of the market.';
     const optionSlider = {
-      min: 1,
+      min: 0,
       max: 99,
       tooltip: false,
       orientation: 'horizontal',
@@ -408,9 +348,7 @@ class CreateEventForm extends Component {
     return (
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>
         <div className="CreateEventFormBlock">
-          {/* {this.renderEventDropdownList(props, state)} */}
           {this.renderEventSuggest(props, state)}
-          {/* {this.renderEvent(props)} */}
           <FieldArray
             name="outcomes"
             isNew={props.isNew}
