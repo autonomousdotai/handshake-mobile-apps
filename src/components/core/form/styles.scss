@@ -236,6 +236,35 @@
       padding-left: 2px;
     }
   }
+  &.tab-7 {
+
+
+    text-align: center;
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      &:checked ~ button {
+        color: #ffffff;
+      }
+      & ~ button {
+        font-weight: 500;
+        font-size: 16px;
+        border-radius: 0;
+        height: 48px;
+        color: #7f7f7f;
+        letter-spacing: 0;
+        background: none;
+        box-shadow: none;
+      }
+    }
+    //&:first-of-type {
+    //  padding-right: 2px;
+    //}
+    //&:not(:first-of-type) {
+    //  padding-left: 2px;
+    //}
+  }
 
   &.big {
     input {

@@ -292,7 +292,7 @@ class Component extends React.Component {
           // if (isUpdate) {
           rfChange(nameFormExchangeCreate, 'customizePriceBuy', item.buyPercentage * 100);
           rfChange(nameFormExchangeCreate, 'customizePriceSell', item.sellPercentage * 100);
-          this.setState({ buyBalance: item.buyBalance, sellBalance: item.sellBalance });
+          this.setState({ buyBalance: item.buyAmount, sellBalance: item.sellAmount });
           // }
 
           break;
@@ -457,17 +457,17 @@ class Component extends React.Component {
       return;
     }
 
-    const balance = await wallet.getBalance();
-    const fee = await wallet.getFee(NB_BLOCKS, true);
-
-    if (freeStartInfo?.reward === '' || currency !== CRYPTO_CURRENCY.ETH || !isChooseFreeStart) {
-      const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
-
-      if (condition) {
-        this.hideLoading();
-        return;
-      }
-    }
+    // const balance = await wallet.getBalance();
+    // const fee = await wallet.getFee(NB_BLOCKS, true);
+    //
+    // if (freeStartInfo?.reward === '' || currency !== CRYPTO_CURRENCY.ETH || !isChooseFreeStart) {
+    //   const condition = this.showNotEnoughCoinAlert(balance, amountBuy, amountSell, fee, currency);
+    //
+    //   if (condition) {
+    //     this.hideLoading();
+    //     return;
+    //   }
+    // }
 
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
@@ -562,23 +562,30 @@ class Component extends React.Component {
     const { isUpdate } = this.state;
 
     if (isUpdate) {
-      this.props.offerItemRefill({
-        PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}/refill`,
-        METHOD: 'POST',
-        data: offerItem,
-        successFn: (res) => {
-          this.handleRefillOfferSuccess(res);
-
-          this.props.updateOfferStores({
-            PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
-            data: offerStore,
-            METHOD: 'PUT',
-            // successFn: this.handleCreateOfferSuccess,
-            // errorFn: this.handleCreateOfferFailed,
-          });
-        },
+      this.props.updateOfferStores({
+        PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
+        data: offerStore,
+        METHOD: 'PUT',
+        successFn: this.handleCreateOfferSuccess,
         errorFn: this.handleCreateOfferFailed,
       });
+      // this.props.offerItemRefill({
+      //   PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}/refill`,
+      //   METHOD: 'POST',
+      //   data: offerItem,
+      //   successFn: (res) => {
+      //     this.handleRefillOfferSuccess(res);
+      //
+      //     this.props.updateOfferStores({
+      //       PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
+      //       data: offerStore,
+      //       METHOD: 'PUT',
+      //       // successFn: this.handleCreateOfferSuccess,
+      //       // errorFn: this.handleCreateOfferFailed,
+      //     });
+      //   },
+      //   errorFn: this.handleCreateOfferFailed,
+      // });
     } else {
       this.props.addOfferItem({
         PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
@@ -600,31 +607,34 @@ class Component extends React.Component {
 
     // console.log('handleCreateOfferSuccess', data);
 
-    const wallet = MasterWallet.getWalletDefault(currency);
-
-    if (currency === CRYPTO_CURRENCY.BTC) {
-      console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
-      if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
-          console.log('transfer', success);
-        });
-      }
-    } else if (currency === CRYPTO_CURRENCY.ETH) {
-      if (amountSell > 0 && offer.items.ETH.freeStart === '') {
-        try {
-          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
-
-          let result = null;
-          result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
-          console.log('handleCreateOfferSuccess', result);
-
-          this.trackingOnchain(offer.id, '', result.hash, offer.items.ETH.status, '', currency);
-        } catch (e) {
-          this.trackingOnchain(offer.id, '', '', offer.items.ETH.status, e.toString(), currency);
-          console.log('handleCreateOfferSuccess', e.toString());
-        }
-      }
-    }
+    // const wallet = MasterWallet.getWalletDefault(currency);
+    //
+    // if (currency === CRYPTO_CURRENCY.BTC) {
+    //   console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
+    //   if (amountSell > 0) {
+    //     wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
+    //       console.log('transfer', success);
+    //     });
+    //   }
+    // } else if (currency === CRYPTO_CURRENCY.ETH) {
+    //   if (amountSell > 0 && offer.items.ETH.freeStart === '') {
+    //     wallet.transfer(offer.items.ETH.systemAddress, offer.items.ETH.sellTotalAmount, NB_BLOCKS).then((success) => {
+    //       console.log('transfer', success);
+    //     });
+    //     try {
+    //       const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
+    //
+    //       let result = null;
+    //       result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
+    //       console.log('handleCreateOfferSuccess', result);
+    //
+    //       this.trackingOnchain(offer.id, '', result.hash, offer.items.ETH.status, '', currency);
+    //     } catch (e) {
+    //       this.trackingOnchain(offer.id, '', '', offer.items.ETH.status, e.toString(), currency);
+    //       console.log('handleCreateOfferSuccess', e.toString());
+    //     }
+    //   }
+    // }
 
     this.hideLoading();
     const message = <FormattedMessage id="createOfferSuccessMessage" />;
@@ -665,36 +675,36 @@ class Component extends React.Component {
 
     // console.log('handleCreateOfferSuccess', data);
 
-    const wallet = MasterWallet.getWalletDefault(currency);
-
-    if (currency === CRYPTO_CURRENCY.BTC) {
-      console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
-      if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
-          console.log('transfer', success);
-        });
-      }
-    } else if (currency === CRYPTO_CURRENCY.ETH) {
-      if (amountSell > 0 && offer.items.ETH.freeStart === '') {
-        try {
-          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
-
-          let result = null;
-          if (offer.hid) {
-            result = await cashHandshake.addInventory(offer.items.ETH.sellTotalAmount, offer.hid, offer.id);
-          } else {
-            result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
-          }
-
-          console.log('handleRefillOfferSuccess', result);
-
-          this.trackingOnchainRefill(offer.id, '', result.hash, offer.items.ETH.subStatus, '', currency);
-        } catch (e) {
-          this.trackingOnchainRefill(offer.id, '', '', offer.items.ETH.subStatus, e.toString(), currency);
-          console.log('handleRefillOfferSuccess', e.toString());
-        }
-      }
-    }
+    // const wallet = MasterWallet.getWalletDefault(currency);
+    //
+    // if (currency === CRYPTO_CURRENCY.BTC) {
+    //   console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
+    //   if (amountSell > 0) {
+    //     wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
+    //       console.log('transfer', success);
+    //     });
+    //   }
+    // } else if (currency === CRYPTO_CURRENCY.ETH) {
+    //   if (amountSell > 0 && offer.items.ETH.freeStart === '') {
+    //     try {
+    //       const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
+    //
+    //       let result = null;
+    //       if (offer.hid) {
+    //         result = await cashHandshake.addInventory(offer.items.ETH.sellTotalAmount, offer.hid, offer.id);
+    //       } else {
+    //         result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
+    //       }
+    //
+    //       console.log('handleRefillOfferSuccess', result);
+    //
+    //       this.trackingOnchainRefill(offer.id, '', result.hash, offer.items.ETH.subStatus, '', currency);
+    //     } catch (e) {
+    //       this.trackingOnchainRefill(offer.id, '', '', offer.items.ETH.subStatus, e.toString(), currency);
+    //       console.log('handleRefillOfferSuccess', e.toString());
+    //     }
+    //   }
+    // }
 
     this.hideLoading();
     const message = <FormattedMessage id="updateOfferSuccessMessage" />;

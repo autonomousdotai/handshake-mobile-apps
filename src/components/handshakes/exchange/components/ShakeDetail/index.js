@@ -82,13 +82,13 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
     for (const item of Object.values(offer.items)) {
       if (item.currency === newValue) {
-        const { buyBalance, sellBalance } = item;
+        const { buyAmount, sellAmount } = item;
 
         let newType = type;
 
-        if (type === EXCHANGE_ACTION.BUY && sellBalance <= 0) {
+        if (type === EXCHANGE_ACTION.BUY && sellAmount <= 0) {
           newType = EXCHANGE_ACTION.SELL;
-        } else if (type === EXCHANGE_ACTION.SELL && buyBalance <= 0) {
+        } else if (type === EXCHANGE_ACTION.SELL && buyAmount <= 0) {
           newType = EXCHANGE_ACTION.BUY;
         }
 
@@ -110,7 +110,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     } = this.props;
 
     for (const item of Object.values(offer.items)) {
-      const { buyPercentage, buyBalance, sellPercentage, sellBalance } = item;
+      const { buyPercentage, buyAmount, sellPercentage, sellAmount } = item;
       if (item.currency === currency) {
         // Calculate fiatAmount
         let fiatAmount = 0;
@@ -125,10 +125,10 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
         if (shopType === EXCHANGE_ACTION.BUY) {
           percentage = buyPercentage;
-          balance = buyBalance;
+          balance = buyAmount;
         } else {
           percentage = sellPercentage;
-          balance = sellBalance;
+          balance = sellAmount;
         }
 
         const enableShake = +balance >= +amount;
@@ -152,7 +152,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     } = this.props;
 
     for (const item of Object.values(offer.items)) {
-      const { buyPercentage, buyBalance, sellPercentage, sellBalance } = item;
+      const { buyPercentage, buyAmount, sellPercentage, sellAmount } = item;
       if (item.currency === currency) {
         // Calculate fiatAmount
         let fiatAmount = 0;
@@ -163,10 +163,10 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
         if (shopType === EXCHANGE_ACTION.BUY) {
           percentage = buyPercentage;
-          balance = buyBalance;
+          balance = buyAmount;
         } else {
           percentage = sellPercentage;
-          balance = sellBalance;
+          balance = sellAmount;
         }
 
         fiatAmount = amount / (1 + percentage / 100);
@@ -196,13 +196,13 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
 
     for (const item of Object.values(offer.items)) {
       if (item.currency === currency) {
-        const { buyBalance, sellBalance } = item;
+        const { buyAmount, sellAmount } = item;
         const shopType = type === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY;
 
         if (shopType === EXCHANGE_ACTION.BUY) {
-          balance = buyBalance;
+          balance = buyAmount;
         } else {
-          balance = sellBalance;
+          balance = sellAmount;
         }
 
         break;
@@ -318,9 +318,9 @@ const mapState = (state, prevProps) => {
   const EXCHANGE_ACTION_LIST = Object.values(EXCHANGE_ACTION).map((item) => {
     let balance = 0;
     if (item === EXCHANGE_ACTION.BUY) {
-      balance = offer.items[currency]?.sellBalance || 0;
+      balance = offer.items[currency]?.sellAmount || 0;
     } else {
-      balance = offer.items[currency]?.buyBalance || 0;
+      balance = offer.items[currency]?.buyAmount || 0;
     }
 
     return { value: item, text: EXCHANGE_ACTION_NAME[item], hide: balance <= 0 };

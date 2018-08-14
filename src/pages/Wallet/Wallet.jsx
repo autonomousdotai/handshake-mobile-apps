@@ -66,6 +66,7 @@ import './Wallet.scss';
 import CoinTemp from '@/pages/Wallet/CoinTemp';
 import BackupWallet from '@/components/Wallet/BackupWallet/BackupWallet';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
+import FeedCreditCard from "@/components/handshakes/exchange/Feed/FeedCreditCard";
 
 const QRCode = require('qrcode.react');
 
@@ -359,6 +360,19 @@ class Wallet extends React.Component {
         });
       }
     })
+
+
+    // now hide buy coin:
+    // if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet){
+    obj.push({
+      title: 'Buy coins',
+      handler: () => {
+        this.setState({ walletSelected: wallet });
+        this.toggleBottomSheet();
+        this.modalFillRef.open();
+      },
+    });
+    // }
 
     if (!wallet.protected) {
       obj.push({
@@ -905,14 +919,14 @@ class Wallet extends React.Component {
             <TransferCoin active={this.state.activeTransfer} wallet={this.state.walletSelected} onFinish={() => { this.successTransfer() }} />
           </Modal>
 
-          {/* <Modal title="Buy coins" onRef={modal => this.modalFillRef = modal}>
+          <Modal title="Buy coins" onRef={modal => this.modalFillRef = modal}>
             <FeedCreditCard
               buttonTitle="Buy coins"
               currencyForced={this.state.walletSelected ? this.state.walletSelected.name : ''}
               callbackSuccess={this.afterWalletFill}
               addressForced={this.state.walletSelected ? this.state.walletSelected.address : ''}
             />
-          </Modal> */}
+          </Modal>
 
           <Modal title={messages.wallet.action.protect.header} onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
             <WalletProtect onCopy={this.onCopyProtected} step={this.state.stepProtected} active={this.state.activeProtected} wallet={this.state.walletSelected} callbackSuccess={() => { this.successWalletProtect(this.state.walletSelected); }} />

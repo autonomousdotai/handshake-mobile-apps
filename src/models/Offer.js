@@ -29,6 +29,7 @@ class Offer {
       feedType: data.feed_type || '',
       email: data.email || '',
       feePercentage: data.fee_percentage || '',
+      fee: data.fee || '',
       toEmail: data.to_email || '',
       toContactPhone: data.to_contact_phone || '',
       toContactInfo: data.to_contact_info || '',

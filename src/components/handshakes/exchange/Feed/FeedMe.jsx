@@ -24,7 +24,7 @@ import './FeedMe.scss';
 import FeedMeOfferStoreShakeContainer from './FeedMeOfferStoreShakeContainer';
 import FeedMeSwapContainer from './FeedMeSwapContainer';
 import FeedMeInstantContainer from './FeedMeInstantContainer';
-import { trackingOnchain } from '@/reducers/exchange/action';
+import { trackingOnchain, trackingTransfer } from '@/reducers/exchange/action';
 import FeedMeDashboardContainer from './FeedMeDashboardContainer';
 
 class FeedMe extends React.PureComponent {
@@ -219,6 +219,20 @@ class FeedMe extends React.PureComponent {
     });
   }
 
+  trackingTransfer = (offerStoreId, offerStoreShakeId, txHash) => {
+    const url = `exchange/offer-stores/${offerStoreId}/shakes/${offerStoreShakeId}/transfer?tx=${txHash}`;
+
+    this.props.trackingTransfer({
+      PATH_URL: url,
+      METHOD: 'POST',
+      successFn: () => {
+      },
+      errorFn: () => {
+
+      },
+    });
+  }
+
   render() {
     const {
       initUserId, shakeUserIds, extraData, location, state, status, mode = 'discover', ipInfo: { latitude, longitude, country }, initAt, lastUpdateAt, review, reviewCount, ...props
@@ -249,6 +263,7 @@ class FeedMe extends React.PureComponent {
       showNotEnoughCoinAlert: this.showNotEnoughCoinAlert,
       getDisplayName: this.getDisplayName,
       trackingOnchain: this.trackingOnchain,
+      trackingTransfer: this.trackingTransfer,
       showLoading: this.showLoading,
       hideLoading: this.hideLoading,
     };
@@ -308,6 +323,7 @@ const mapState = state => ({
 const mapDispatch = ({
   showAlert,
   trackingOnchain,
+  trackingTransfer,
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(FeedMe));

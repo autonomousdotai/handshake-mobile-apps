@@ -54,6 +54,7 @@ export default {
   withdrawShakedfferSuccessMessage: 'Your offer has been withdrawn.',
   buyUsingCreditCardSuccessMessge: 'Your order using your credit card has gone through.',
   notEnoughCoinInWallet: 'You don\'t have enough coin right now. Please top up your wallet.',
+  threeDSecureNotSupported: 'Not supported this card',
 
   createOfferStoreConfirm: 'Do you want to set up an offer to {intentMsg}?',
   updateOfferStoreConfirm: 'Update your station?',
@@ -887,9 +888,18 @@ export default {
     noDataMessageSwap: 'No vendors near you yet. Be the first',
     feed: {
       cash: {
-
-      }
-    }
+        menu: {
+          actionDescription: 'I WANT TO',
+        },
+        marker: {
+          label: {
+            price: 'Price',
+            maxVolume: 'Max volume',
+            tradeNow: 'Now',
+          },
+        },
+      },
+    },
   },
 
   wallet: {

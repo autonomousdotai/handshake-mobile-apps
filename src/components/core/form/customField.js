@@ -109,6 +109,11 @@ export const fieldRadioButton = customField(({
       _fullWidth = true;
       hasPrefixIcon = true;
       break;
+    case 'tab-7':
+      containerClass = 'tab-7';
+      _fullWidth = true;
+      hasPrefixIcon = false;
+      break;
     case 'radio-big':
       containerClass = 'big';
       hasPrefixIcon = false;
@@ -125,8 +130,8 @@ export const fieldRadioButton = customField(({
       {
       list.map((item, index) => {
         const {
- value: itemValue, text, icon, hide,
-} = item;
+          value: itemValue, text, icon, hide, bgColorActive,
+        } = item;
         if (hide) return null;
         const isChecked = itemValue === value;
         return (
@@ -141,7 +146,7 @@ export const fieldRadioButton = customField(({
               type="button"
               className="btn"
               onClick={() => onChange(itemValue)}
-              style={{ color, minWidth: '58px', ...styleButton }}
+              style={{ color, minWidth: '58px', background: bgColorActive && isChecked ? bgColorActive : '', ...styleButton }}
             >
               {/* <span style={{ fontSize: '28px' }}>&sdot;</span> */}
               {
