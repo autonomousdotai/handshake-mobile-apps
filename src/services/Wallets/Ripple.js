@@ -150,14 +150,15 @@ export class Ripple extends Wallet {
           api.preparePayment(this.address, payment, instructions).then(prepared => {
             console.log('Payment transaction prepared...', prepared);    
             let secret = this.secret != "" ? this.secret : null;
-            const {signedTransaction} = api.sign(prepared.txJSON, secret , {}, {privateKey: this.privateKey, publicKey: this.publicKey});
+            const {signedTransaction, id} = api.sign(prepared.txJSON, secret , {}, {privateKey: this.privateKey, publicKey: this.publicKey});
             console.log('Payment transaction signed...', signedTransaction);
+            console.log('ID->', id);
             api.submit(signedTransaction).then(
               quick => {
                 console.log("quick", quick);
                 api.disconnect();
-                if (quick.resultCode == "tesSUCCESS" || quick.resultCode == "SUCCESS"){
-                  resolve ({ status: 1, message: quick.resultMessage });                
+                if (quick.resultCode == "tesSUCCESS"){
+                  resolve ({ status: 1, message: quick.resultMessage, data: {hash: id}});                
                 }
                 else{
                   resolve({ status: 0, message: quick.resultMessage });                
