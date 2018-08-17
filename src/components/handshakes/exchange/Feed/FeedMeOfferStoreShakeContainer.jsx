@@ -548,7 +548,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
         }
 
         return pendingBalance + transferAmount;
-      });
+      }, 0);
     }
 
     return 0;
@@ -579,7 +579,10 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
 
         let transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? totalAmount : amount;
 
-        if (this.showNotEnoughCoinAlert(balance, transferAmount, 2 * fee, currency)) {
+        const pendingBalance = await this.getPendingBalance();
+        console.log('pendingBalance',pendingBalance);
+
+        if (this.showNotEnoughCoinAlert(balance, pendingBalance + +transferAmount, 2 * fee, currency)) {
           this.props.hideLoading();
           return;
         }
