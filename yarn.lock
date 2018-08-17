@@ -2161,6 +2161,10 @@ bigi@^1.1.0, bigi@^1.4.0:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/bigi/-/bigi-1.4.2.tgz#9c665a95f88b8b08fc05cfd731f561859d725825"
 
+"bignumber.js-4.1.0@github:0xngoubou/bignumber.js-4.1.0":
+  version "4.1.0"
+  resolved "https://codeload.github.com/0xngoubou/bignumber.js-4.1.0/tar.gz/5380bd0a25617479212bfdbe612f00034c87f30e"
+
 "bignumber.js-4.1.0@https://github.com/0xngoubou/bignumber.js-4.1.0.git":
   version "4.1.0"
   resolved "https://github.com/0xngoubou/bignumber.js-4.1.0.git#5380bd0a25617479212bfdbe612f00034c87f30e"
@@ -8047,8 +8051,7 @@ lodash@=4.17.4:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
-"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.13.1, lodash@^4.15.0, lodash@^4.16.2, lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.3.0, lodash@~4.17.10:
-
+"lodash@>=3.5 <5", lodash@^4.0.0, lodash@^4.12.0, lodash@^4.13.1, lodash@^4.15.0, lodash@^4.16.2, lodash@^4.17.10, lodash@^4.17.3, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.2.0, lodash@^4.3.0, lodash@~4.17.10:
   version "4.17.10"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.10.tgz#1b7793cf7259ea38fb3661d4d38b3260af8ae4e7"
 
@@ -11335,9 +11338,9 @@ ripple-bs58check@^2.0.0:
     create-hash "^1.1.0"
     ripple-bs58 "^4.0.0"
 
-ripple-hashes@^0.3.1, "ripple-hashes@https://github.com/0xngoubou/ripple-hashes.git":
+ripple-hashes@^0.3.1, "ripple-hashes@github:0xngoubou/ripple-hashes":
   version "0.3.1"
-  resolved "https://github.com/0xngoubou/ripple-hashes.git#b3110cfa9688b77909b90025f3aa21e52661b540"
+  resolved "https://codeload.github.com/0xngoubou/ripple-hashes/tar.gz/b3110cfa9688b77909b90025f3aa21e52661b540"
   dependencies:
     bignumber.js-4.1.0 "https://github.com/0xngoubou/bignumber.js-4.1.0.git"
     create-hash "^1.1.2"
@@ -11355,16 +11358,23 @@ ripple-keypairs@^0.10.1:
     hash.js "^1.0.3"
     ripple-address-codec "^2.0.1"
 
-ripple-lib-transactionparser@0.7.1, "ripple-lib-transactionparser@https://github.com/0xngoubou/transactionparser.git":
+ripple-lib-transactionparser@0.7.1:
   version "0.7.1"
   resolved "https://github.com/0xngoubou/transactionparser.git#6427a61cd6926a3d4c417488f5c3d589467065ef"
   dependencies:
     bignumber.js "^7.2.1"
     lodash "^4.17.4"
 
-"ripple-lib@https://github.com/0xngoubou/ripple-lib.git":
+"ripple-lib-transactionparser@github:0xngoubou/transactionparser":
+  version "0.7.1"
+  resolved "https://codeload.github.com/0xngoubou/transactionparser/tar.gz/dc4c7b94a9a103af4ac7bef1d5ccd475384a7da6"
+  dependencies:
+    bignumber.js-4.1.0 "https://github.com/0xngoubou/bignumber.js-4.1.0.git"
+    lodash "^4.17.4"
+
+"ripple-lib@github:0xngoubou/ripple-lib":
   version "1.0.0-beta.5"
-  resolved "https://github.com/0xngoubou/ripple-lib.git#2007eeda2b33273c8981811b48d37f8c18fd3695"
+  resolved "https://codeload.github.com/0xngoubou/ripple-lib/tar.gz/2007eeda2b33273c8981811b48d37f8c18fd3695"
   dependencies:
     "@types/lodash" "^4.14.85"
     "@types/ws" "^3.2.0"
