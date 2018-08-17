@@ -2161,13 +2161,17 @@ bigi@^1.1.0, bigi@^1.4.0:
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/bigi/-/bigi-1.4.2.tgz#9c665a95f88b8b08fc05cfd731f561859d725825"
 
-bignumber.js@4.1.0, bignumber.js@^4.1.0:
+"bignumber.js-4.1.0@https://github.com/0xngoubou/bignumber.js-4.1.0.git":
   version "4.1.0"
-  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-4.1.0.tgz#db6f14067c140bd46624815a7916c92d9b6c24b1"
+  resolved "https://github.com/0xngoubou/bignumber.js-4.1.0.git#5380bd0a25617479212bfdbe612f00034c87f30e"
 
 bignumber.js@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-2.4.0.tgz#838a992da9f9d737e0f4b2db0be62bb09dd0c5e8"
+
+bignumber.js@^7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
 
 bin-build@^2.0.0, bin-build@^2.2.0:
   version "2.2.0"
@@ -5819,8 +5823,8 @@ handlebars@^4.0.11, handlebars@^4.0.3:
     uglify-js "^2.6"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1534145187"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/fcfe4c6f659b5412041bd7026ae3dee2059c1d62"
+  version "0.0.1534497847"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/c4bc07b4ec7cca8db0cbeb5f00993c1c74e4c9dd"
   dependencies:
     "@babel/core" "^7.0.0-beta.51"
     "@babel/node" "^7.0.0-beta.51"
@@ -11285,11 +11289,11 @@ ripple-bs58check@^2.0.0:
     create-hash "^1.1.0"
     ripple-bs58 "^4.0.0"
 
-ripple-hashes@^0.3.1:
+ripple-hashes@^0.3.1, "ripple-hashes@https://github.com/0xngoubou/ripple-hashes.git":
   version "0.3.1"
-  resolved "https://registry.yarnpkg.com/ripple-hashes/-/ripple-hashes-0.3.1.tgz#f2f46f1ff05e6487500a99839019114cd2482411"
+  resolved "https://github.com/0xngoubou/ripple-hashes.git#b3110cfa9688b77909b90025f3aa21e52661b540"
   dependencies:
-    bignumber.js "^4.1.0"
+    bignumber.js-4.1.0 "https://github.com/0xngoubou/bignumber.js-4.1.0.git"
     create-hash "^1.1.2"
     ripple-address-codec "^2.0.1"
     ripple-binary-codec "^0.1.0"
@@ -11305,20 +11309,20 @@ ripple-keypairs@^0.10.1:
     hash.js "^1.0.3"
     ripple-address-codec "^2.0.1"
 
-ripple-lib-transactionparser@0.7.1:
+ripple-lib-transactionparser@0.7.1, "ripple-lib-transactionparser@https://github.com/0xngoubou/transactionparser.git":
   version "0.7.1"
-  resolved "https://registry.yarnpkg.com/ripple-lib-transactionparser/-/ripple-lib-transactionparser-0.7.1.tgz#5ececb1e03d65d05605343f4b9dbb76d1089145b"
+  resolved "https://github.com/0xngoubou/transactionparser.git#6427a61cd6926a3d4c417488f5c3d589467065ef"
   dependencies:
-    bignumber.js "^4.1.0"
+    bignumber.js "^7.2.1"
     lodash "^4.17.4"
 
-ripple-lib@^1.0.0-beta.3:
-  version "1.0.0-beta.3"
-  resolved "https://registry.yarnpkg.com/ripple-lib/-/ripple-lib-1.0.0-beta.3.tgz#507f74aa3ff43b3e10bd636c0424067170c0a750"
+"ripple-lib@https://github.com/0xngoubou/ripple-lib.git":
+  version "1.0.0-beta.5"
+  resolved "https://github.com/0xngoubou/ripple-lib.git#2007eeda2b33273c8981811b48d37f8c18fd3695"
   dependencies:
     "@types/lodash" "^4.14.85"
     "@types/ws" "^3.2.0"
-    bignumber.js "^4.1.0"
+    bignumber.js-4.1.0 "https://github.com/0xngoubou/bignumber.js-4.1.0.git"
     https-proxy-agent "2.2.1"
     jsonschema "1.2.2"
     lodash "^4.17.4"
