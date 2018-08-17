@@ -50,7 +50,6 @@ class FeedMeInstantContainer extends React.PureComponent {
         currency,
         currency_symbol: fiatCurrency,
         total: formatMoneyByLocale(fiatAmount, fiatCurrency),
-        fee: feePercentage,
       }}
     />);
 

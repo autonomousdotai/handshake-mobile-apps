@@ -52,13 +52,13 @@ class Recruiting extends React.Component {
     this.getJobs(id);
   };
 
-  handleClickApplyNow = (id) => {
+  handleClickApplyNow = (name) => {
     this.props.updateModal({
       show: true,
       title: (
         <div><FormattedMessage id="landing_page.recruiting.applyNow.title" /></div>
       ),
-      body: <ContentApplyNow />
+      body: <ContentApplyNow jobName={name} />
     })
   }
 

@@ -7,7 +7,8 @@ import {
   EXCHANGE_ACTION_NAME,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS,
   HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_NAME,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE
+  HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS_VALUE,
+  NB_BLOCKS,
 } from "@/constants";
 import {MasterWallet} from '@/services/Wallets/MasterWallet';
 import OfferShop from "@/models/OfferShop";
@@ -194,7 +195,7 @@ class FeedMeOfferStoreContainer extends React.PureComponent {
       if (sellAmount > 0 && freeStart === '') {
         const wallet = MasterWallet.getWalletDefault(currency);
         const balance = await wallet.getBalance();
-        const fee = await wallet.getFee();
+        const fee = await wallet.getFee(NB_BLOCKS, true);
 
         if (!this.checkMainNetDefaultWallet(wallet)) {
           return;

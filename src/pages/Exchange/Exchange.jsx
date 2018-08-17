@@ -6,7 +6,8 @@ import Loading from "@/components/core/presentation/Loading";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 import { URL } from '@/constants';
-import history from '@/services/history';
+import { withRouter } from 'react-router-dom';
+
 import local from '@/services/localStore';
 
 const Discover = props => (
@@ -31,22 +32,24 @@ const keyLastSelectedExchangeId = 'lastSelectedExchangeId';
 
 const mapComponent = {
   [URL.HANDSHAKE_PREDICTION]: { url: URL.HANDSHAKE_PREDICTION, component: <Prediction /> },
-  [URL.HANDSHAKE_CASH]: { url: URL.HANDSHAKE_CASH, component: <Discover history={history} /> },
+  [URL.HANDSHAKE_CASH]: { url: URL.HANDSHAKE_CASH, component: <Discover history={{}} /> },
 }
 
 const defaultUrl = URL.HANDSHAKE_PREDICTION;
+
 class Exchange extends React.Component {
   state = {
     selectedMenuId: defaultUrl,
   }
 
   handleClickMenuItem = (url) => {
+    const { history } = this.props;
     this.setState({ selectedMenuId: url });
     local.save(keyLastSelectedExchangeId, url);
     history.push(url);
   }
   componentDidMount() {
-    const { match: { path } } = this.props;
+    const { match: { path }, history } = this.props;
     let selectedMenuId = defaultUrl;
     if (path === URL.HANDSHAKE_EXCHANGE) {
       selectedMenuId = local.get(keyLastSelectedExchangeId) || defaultUrl;
@@ -55,20 +58,29 @@ class Exchange extends React.Component {
     }
     this.setState({ selectedMenuId });
     local.save(keyLastSelectedExchangeId, selectedMenuId);
+
+    // if pathname === /cash, redirect to /cash to use a different layout!
+    // if (selectedMenuId === URL.HANDSHAKE_CASH) {
+    //   history.push(selectedMenuId);
+    // }
   }
 
   render() {
     const { messages } = this.props.intl;
-    const { intl } = this.props;
+    const { intl, hideNavigationBar } = this.props;
 
     const { selectedMenuId } = this.state;
 
     return (
       <div className="Exchange">
-        <NavigationBar
-          selectedMenuId={selectedMenuId}
-          onClickMenuItem={this.handleClickMenuItem}
-        />
+        {
+          !hideNavigationBar && (
+            <NavigationBar
+              selectedMenuId={selectedMenuId}
+              onClickMenuItem={this.handleClickMenuItem}
+            />
+          )
+        }
         {mapComponent[selectedMenuId].component}
       </div>
     );
@@ -83,4 +95,4 @@ const mapDispatch = dispatch => ({
   // rfChange: bindActionCreators(change, dispatch),
 });
 
-export default injectIntl(connect(null, null)(Exchange));
+export default injectIntl(connect(null, null)(withRouter(Exchange)));

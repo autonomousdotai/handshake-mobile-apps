@@ -56,80 +56,82 @@ class Index extends React.PureComponent {
 
     return (
       <div className="landing-page">
-        <div className="container">
-          {/* mobile */}
-          <div className="row d-md-none">
-            <div className="col-5">
-              {logo}
-            </div>
-            <div className="col-7">
-              <div className="text-right">
-                {btnJoin}
+        <div className="landing-background">
+          <div className="container">
+            {/* mobile */}
+            <div className="row d-md-none">
+              <div className="col-5">
+                {logo}
               </div>
-            </div>
-          </div>
-          <div className="row d-md-none">
-            <div className="col">{btnToggleLeftMenu}</div>
-            <div className="col text-right">{navLinks}</div>
-          </div>
-
-          {/* desktop */}
-          <div className="row d-none d-md-flex">
-            <div className="col-2">
-              {logo}
-            </div>
-            <div className="col-10">
-              <div className="text-right">
-                <span className="mr-4">{navLinks}</span>
-                {btnJoin}
-              </div>
-             </div>
-          </div>
-
-          {children}
-
-          <hr className="landing-hr" />
-
-          <div className="row landing-footer no-gutters">
-            <div className="col-12 col-md-1">
-              <img src={imgLogo} width="54" />
-            </div>
-            <div className="col-12 col-md-8">
-              <div className="align-middle px-1 pt-1">
-                <div><FormattedHTMLMessage id="landing_page.label.footer" /></div>
-              </div>
-            </div>
-            {
-              name && (
-                <div className="col-12 col-md-3 text-left text-md-right">
-                  <div className="pl-1 pt-1">
-                    {
-                      messages[`landing_page.${name}.joinTelegram`] && (
-                        <div>
-                          <FormattedHTMLMessage id={`landing_page.${name}.joinTelegram`} />
-                        </div>
-                      )
-                    }
-                    {
-                      messages[`landing_page.${name}.whitepaper`] && (
-                        <div>
-                          <FormattedHTMLMessage id={`landing_page.${name}.whitepaper`} />
-                        </div>
-                      )
-                    }
-                  </div>
+              <div className="col-7">
+                <div className="text-right">
+                  {btnJoin}
                 </div>
-              )
-            }
-          </div>
+              </div>
+            </div>
+            <div className="row d-md-none">
+              <div className="col">{btnToggleLeftMenu}</div>
+              <div className="col text-right">{navLinks}</div>
+            </div>
 
+            {/* desktop */}
+            <div className="row d-none d-md-flex">
+              <div className="col-2">
+                {logo}
+              </div>
+              <div className="col-10">
+                <div className="text-right">
+                  <span className="mr-4">{navLinks}</span>
+                  {btnJoin}
+                </div>
+              </div>
+            </div>
+
+            {children}
+
+            <hr className="landing-hr" />
+
+            <div className="row landing-footer no-gutters">
+              <div className="col-12 col-md-1">
+                <img src={imgLogo} width="54" />
+              </div>
+              <div className="col-12 col-md-7">
+                <div className="align-middle px-1 pt-1">
+                  <div><FormattedHTMLMessage id="landing_page.label.footer" /></div>
+                </div>
+              </div>
+              {
+                name && (
+                  <div className="col-12 col-md-4 text-left text-md-right">
+                    <div className="pl-1 pt-1">
+                      {
+                        messages[`landing_page.${name}.joinTelegram`] && (
+                          <div>
+                            <FormattedHTMLMessage id={`landing_page.${name}.joinTelegram`} />
+                          </div>
+                        )
+                      }
+                      {
+                        messages[`landing_page.${name}.whitepaper`] && (
+                          <div>
+                            <FormattedHTMLMessage id={`landing_page.${name}.whitepaper`} />
+                          </div>
+                        )
+                      }
+                    </div>
+                  </div>
+                )
+              }
+            </div>
+
+          </div>
+          <Modal isOpen={show} toggle={this.handleToggleModal} className={className} centered={centered}>
+            {title && <ModalHeader toggle={this.handleToggleModal}>{title}</ModalHeader>}
+            <ModalBody>
+              {body}
+            </ModalBody>
+          </Modal>
         </div>
-        <Modal isOpen={show} toggle={this.handleToggleModal} className={className} centered={centered}>
-          {title && <ModalHeader toggle={this.handleToggleModal}>{title}</ModalHeader>}
-          <ModalBody>
-            {body}
-          </ModalBody>
-        </Modal>
       </div>
     );
   }

@@ -210,8 +210,7 @@ class WalletHistory extends React.Component {
         {messages.wallet.action.history.label.balance}: {wallet.balance} {wallet.name}
           <br/>
           {messages.wallet.action.history.label.transactions}: {wallet.transaction_count}<br/>
-          {wallet && wallet.name == "ETH" && (this.state.internalTransactions && this.state.internalTransactions.length > 0) ?
-
+          {wallet && wallet.name == "ETH" ?
             <a target="_blank" href={""+wallet.getAPIUrlAddress(this.state.tabActive)}>{messages.wallet.action.history.label.view_all_etherscan}</a>
             : ""
           }

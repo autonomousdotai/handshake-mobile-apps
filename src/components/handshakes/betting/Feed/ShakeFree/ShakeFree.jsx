@@ -331,6 +331,7 @@ class BetingShakeFree extends React.Component {
     };
 
     const sideText = getKeyByValue(SIDE, this.state.side);
+    const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
 
     return (
       <form className="wrapperBettingShakeFree" onSubmit={this.onSubmit}>
@@ -346,8 +347,8 @@ class BetingShakeFree extends React.Component {
         {/*<div className="rowWrapper">
           <div className="possibleWinningsValue">{estimateGas}</div>
     </div>*/}
-        <Button type="submit" disabled={disable} block className={buttonClass}>
-          Place {sideText} Order
+        <Button type="submit" isLoading={disable} disabled={disable} block className={buttonClass}>
+          {buttonText}
         </Button>
         <EstimateGas />
       </form>

@@ -1,16 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import BetMode from '@/components/handshakes/betting/Feed/OrderPlace/BetMode';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Loading from '@/components/Loading';
 import LuckyReal from '@/components/handshakes/betting/LuckyPool/LuckyReal/LuckyReal';
 import LuckyLanding from '@/pages/LuckyLanding/LuckyLanding';
-
+import { URL } from '@/constants';
 import GA from '@/services/googleAnalytics';
 import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/LuckyFree';
 
-import { eventSelector, isLoading, showedLuckyPoolSelector } from './selector';
+import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage } from './selector';
 import { loadMatches, updateShowedLuckyPool } from './action';
 import EventItem from './EventItem';
 
@@ -21,6 +22,7 @@ class Prediction extends React.Component {
   static propTypes = {
     eventList: PropTypes.array,
     showedLuckyPool: PropTypes.bool,
+    isSharePage: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -40,7 +42,9 @@ class Prediction extends React.Component {
     this.props.dispatch(loadMatches());
   }
 
-  componentWillUnmount() {
+  onCountdownComplete = () => {
+    this.props.dispatch(loadMatches());
+    this.closeOrderPlace();
   }
 
   openOrderPlace(selectedOutcome) {
@@ -63,10 +67,6 @@ class Prediction extends React.Component {
 
       }, 2 * 1000);
     }
-  }
-
-  handleScroll = () => {
-    //this.showLuckyPool();
   }
 
   handleClickEventItem = (id, e, props, itemData) => {
@@ -98,11 +98,6 @@ class Prediction extends React.Component {
       console.error(err);
     }
   };
-
-  onCountdownComplete = () => {
-    this.props.dispatch(loadMatches());
-    this.closeOrderPlace();
-  }
 
   renderEventList = (props) => {
     if (!props.eventList || !props.eventList.length) return null;
@@ -155,13 +150,9 @@ class Prediction extends React.Component {
     );
   }
 
-  renderComponent = (props, state) => {
+  renderLucky = () => {
     return (
-      <div className={Prediction.displayName}>
-        <Loading isLoading={props.isLoading} />
-        {this.renderShareToWin()}
-        {this.renderEventList(props)}
-        {this.renderBetMode(props, state)}
+      <React.Fragment>
         <ModalDialog onRef={(modal) => { this.modalLuckyReal = modal; }}>
           <LuckyReal onButtonClick={() => this.modalLuckyReal.close() } />
         </ModalDialog>
@@ -174,7 +165,28 @@ class Prediction extends React.Component {
           }}
           />
         </ModalDialog>
+      </React.Fragment>
+    );
+  }
 
+  renderViewAllEvent = (props) => {
+    if (!props.isSharePage) return null;
+    return (
+      <a href={URL.HANDSHAKE_PREDICTION} onClick="location.reload()" className="ViewAllEvent">
+        View All Events
+      </a>
+    );
+  }
+
+  renderComponent = (props, state) => {
+    return (
+      <div className={Prediction.displayName}>
+        <Loading isLoading={props.isLoading} />
+        {/* {this.renderShareToWin()} */}
+        {this.renderEventList(props)}
+        {this.renderBetMode(props, state)}
+        {this.renderViewAllEvent(props, state)}
+        {this.renderLucky}
       </div>
     );
   };
@@ -188,6 +200,7 @@ export default connect(
   (state) => {
     return {
       eventList: eventSelector(state),
+      isSharePage: isSharePage(state),
       isLoading: isLoading(state),
       showedLuckyPool: showedLuckyPoolSelector(state),
     };

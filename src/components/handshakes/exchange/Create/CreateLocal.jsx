@@ -60,7 +60,7 @@ import {
 import { BigNumber } from 'bignumber.js/bignumber'
 import { authUpdate } from '@/reducers/auth/action'
 import axios from 'axios/index'
-import { getErrorMessageFromCode } from '../utils'
+import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import iconBitcoin from '@/assets/images/icon/coin/icon-btc.svg'
 import iconEthereum from '@/assets/images/icon/coin/icon-eth.svg'
 

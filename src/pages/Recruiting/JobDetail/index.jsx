@@ -21,7 +21,7 @@ import '../styles.scss'
 const BackToListing = (
   <div className="row mt-3">
     <div className="col">
-      <Link to={URL.RECRUITING}>
+      <Link to={URL.RECRUITING} className="back-to-listing">
         <img src="https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/back.svg" />
         &nbsp;<FormattedMessage id="landing_page.recruiting.label.backToListing" />
       </Link>
@@ -44,12 +44,13 @@ class JobDetail extends React.Component {
   }
 
   handleClickApplyNow = () => {
+    const jobName = this.state?.job?.name;
     this.props.updateModal({
       show: true,
       title: (
         <div><FormattedMessage id="landing_page.recruiting.applyNow.title" /></div>
       ),
-      body: <ContentApplyNow />
+      body: <ContentApplyNow jobName={jobName} />
     })
   }
 
@@ -78,7 +79,7 @@ class JobDetail extends React.Component {
                 {/*<SocialButtons />*/}
                 <ShareSocial
                   title={name}
-                  className="center-block"
+                  className="center-block mt-2"
                   shareUrl={`${window.location.origin}${URL.RECRUITING}/${seo_url}`}
                 />
               </div>

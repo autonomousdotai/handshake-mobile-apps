@@ -57,6 +57,11 @@
     }
   }
 
+  .ViewAllEvent {
+    display: flex;
+    justify-content: center;
+  }
+
   .ShareToWin {
     background-image: url('../../assets/images/share/share-to-win.png');
     display: flex;
@@ -93,6 +98,10 @@
       margin-right: rem-calc(5px);
       line-height: rem-calc(27px);
       font-weight: $medium;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
 
       span {
         display: block;
@@ -103,6 +112,13 @@
       height: 80px;
       overflow-x: auto;
       overflow-y: hidden;
+      > div {
+        display: flex;
+        flex-direction: row;
+      }
+      .ScrollableItem {
+        height: rem-calc(74px);
+      }
       .ScrollableItem:first-child {
         margin-left: rem-calc(10px);
       }
@@ -188,6 +204,13 @@
 
     .EventTotalBetValue {
       color: #D0021B;
+    }
+  }
+  .share-social  {
+    margin-top: 10px;
+    img {
+      width: 30px;
+      margin-right: 20px;
     }
   }
 }

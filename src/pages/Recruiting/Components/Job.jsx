@@ -26,12 +26,12 @@ const CategoryItem = (props) => {
           </div>
         </div>
         <div className="col-12 col-lg-4 text-center">
-          <ButtonApplyNow className="btn-block" onClick={(e) => { e.preventDefault(); onClickApplyNow(id); }} />
+          <ButtonApplyNow className="btn-block" onClick={(e) => { e.preventDefault(); onClickApplyNow(name); }} />
           <div className="job-text-pr mt-2"><FormattedMessage id="landing_page.recruiting.label.getTheWordOut" /></div>
           {/*<SocialButtons />*/}
           <ShareSocial
             title={name}
-            className="center-block"
+            className="center-block mt-2"
             shareUrl={`${window.location.origin}${URL.RECRUITING}/${seo_url}`}
           />
         </div>

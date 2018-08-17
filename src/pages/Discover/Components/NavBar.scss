@@ -1,0 +1,23 @@
+.cash-nav-bar {
+  box-shadow: 0 12px 13px 0 rgba(197,197,197,0.50);
+  background: #FFFFFF;
+  border-radius: 2px;
+  height: 48px;
+  line-height: 48px;
+  padding: 0 2px;
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  z-index: 1;
+
+  font-weight: 600;
+  font-size: 14px;
+  color: #484848;
+  letter-spacing: 0;
+  button {
+    font-weight: 600;
+    font-size: 16px;
+    color: #484848;
+    letter-spacing: 0;
+  }
+}

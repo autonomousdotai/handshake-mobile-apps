@@ -1,111 +1,47 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FormattedHTMLMessage, FormattedMessage, injectIntl } from 'react-intl';
 // service, constant
-import { loadDiscoverList } from '@/reducers/discover/action';
+// import { loadDiscoverList } from '@/reducers/discover/action';
 import {
   API_URL,
-  CASH_SORTING_CRITERIA,
-  CASH_SORTING_LIST,
+  CRYPTO_CURRENCY,
   DISCOVER_GET_HANDSHAKE_RADIUS,
-  EXCHANGE_COOKIE_READ_INSTRUCTION,
+  EXCHANGE_ACTION,
   HANDSHAKE_ID,
-  HANDSHAKE_ID_DEFAULT,
   SORT_ORDER,
   URL,
 } from '@/constants';
-import { Link } from 'react-router-dom';
 // import Cookies from 'js-cookie';
 import Helper from '@/services/helper';
-
 // components
-import { Col, Grid, Row } from 'react-bootstrap';
 // import SearchBar from '@/components/core/controls/SearchBar';
-import ModalDialog from '@/components/core/controls/ModalDialog';
-
 // import FeedPromise from '@/components/handshakes/promise/Feed';
 // import FeedBetting from '@/components/handshakes/betting/Feed';
-import FeedExchange from '@/components/handshakes/exchange/Feed/FeedExchange';
 // import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchangeLocal';
 // import FeedSeed from '@/components/handshakes/seed/Feed';
-import BlockCountry from '@/components/core/presentation/BlockCountry';
-import Maintain from '@/components/core/presentation/Maintain';
-// import NavigationBar from '@/modules/NavigationBar/NavigationBar';
-// import Tabs from '@/components/handshakes/exchange/components/Tabs';
-import NoData from '@/components/core/presentation/NoData';
+import { fieldDropdown, fieldRadioButton } from '@/components/core/form/customField';
+import { change } from 'redux-form';
+import Map from './Components/Map';
+import NavBar from './Components/NavBar';
 import { getFreeStartInfo, getListOfferPrice, setFreeStart } from '@/reducers/exchange/action';
-import { updateShowedLuckyPool } from '@/reducers/betting/action';
+import { loadDiscoverList } from '@/reducers/discover/action';
 import Image from '@/components/core/presentation/Image';
 import loadingSVG from '@/assets/images/icon/loading.gif';
-import OfferShop from '@/models/OfferShop';
-// import ninjaLogoSVG from '@/assets/images/logo.png';
-//
-// import DiscoverBetting from '@/components/handshakes/betting/Discover/Discover';
-import LuckyLanding from '@/pages/LuckyLanding/LuckyLanding';
+import ModalDialog from '@/components/core/controls/ModalDialog/ModalDialog';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
-import createForm from '@/components/core/form/createForm';
-import { fieldDropdown, fieldRadioButton } from '@/components/core/form/customField';
-import { change, Field } from 'redux-form';
-// style
-import '@/components/handshakes/exchange/Feed/FeedExchange.scss';
+import { Grid, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import BlockCountry from '@/components/core/presentation/BlockCountry/BlockCountry';
+import Maintain from '@/components/Router/Maintain';
 import './Discover.scss';
-// import { Helmet } from "react-helmet";
-// import icon2KuNinja from '@/assets/images/icon/2_ku_ninja.svg';
-const maps = {
-  // [HANDSHAKE_ID.PROMISE]: FeedPromise,
-  // [HANDSHAKE_ID.BETTING]: FeedBetting,
-  [HANDSHAKE_ID.EXCHANGE]: FeedExchange,
-  // [HANDSHAKE_ID.EXCHANGE_LOCAL]: FeedExchangeLocal,
-  // [HANDSHAKE_ID.SEED]: FeedSeed,
-};
 
-const nameFormFilterFeeds = 'formFilterFeeds';
-const FormFilterFeeds = createForm({
-  propsReduxForm: {
-    form: nameFormFilterFeeds,
-  },
-});
 
-const PRICE_SORTS = [
-  {
-    id: 'buy_btc_d',
-    text: <FormattedMessage id="ex.sort.price.buy.btc" />,
-  },
-  {
-    id: 'sell_btc_d',
-    text: <FormattedMessage id="ex.sort.price.sell.btc" />,
-  },
-  {
-    id: 'buy_eth_d',
-    text: <FormattedMessage id="ex.sort.price.buy.eth" />,
-  },
-  {
-    id: 'sell_eth_d',
-    text: <FormattedMessage id="ex.sort.price.sell.eth" />,
-  },
-];
+const defaultZoomLevel = 13;
 
-const TAG = 'DISCOVER_PAGE';
 class DiscoverPage extends React.Component {
-  static propTypes = {
-    discover: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired,
-    loadDiscoverList: PropTypes.func.isRequired,
-    getListOfferPrice: PropTypes.func.isRequired,
-    app: PropTypes.object.isRequired,
-    exchange: PropTypes.object.isRequired,
-    ipInfo: PropTypes.any.isRequired,
-    isBannedCash: PropTypes.bool.isRequired,
-    isBannedPrediction: PropTypes.bool.isRequired,
-    setFreeStart: PropTypes.func.isRequired,
-    firebaseApp: PropTypes.object.isRequired,
-    intl: PropTypes.object.isRequired,
-    getFreeStartInfo: PropTypes.func.isRequired,
-  }
-
   constructor(props) {
     super(props);
     const handshakeDefault = HANDSHAKE_ID.EXCHANGE;
@@ -114,8 +50,6 @@ class DiscoverPage extends React.Component {
 
     this.state = {
       handshakeIdActive: handshakeDefault,
-      // tabIndexActive: '',
-      query: '',
       isLoading: true,
       exchange: this.props.exchange,
       modalContent: <div />, // type is node
@@ -123,41 +57,25 @@ class DiscoverPage extends React.Component {
         // className: "discover-popup",
         // isDismiss: false
       },
+      curLocation: { lat: 0, lng: 0 },
       lat: 0,
       lng: 0,
       isBannedCash: this.props.isBannedCash,
       isBannedPrediction: this.props.isBannedPrediction,
       utm,
       program,
-      isLuckyPool: true,
-      sortIndexActive: CASH_SORTING_CRITERIA.DISTANCE,
-      sortPriceIndexActive: '',
-      sortOrder: '',
+      isMarkerShown: false,
+      actionActive: EXCHANGE_ACTION.BUY,
+      currencyActive: CRYPTO_CURRENCY.ETH,
+
+      zoomLevel: defaultZoomLevel,
     };
-
-    if (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
-      this.state.isLoading = false;
-    } else if (this.state.isBannedPrediction) {
-      this.state.isLoading = false;
-      this.state.handshakeIdActive = HANDSHAKE_ID.EXCHANGE;
-    }
-
-    this.clickCategoryItem = this.clickCategoryItem.bind(this);
-    // this.searchChange = this.searchChange.bind(this);
-    this.getUtm = this.getUtm.bind(this);
-    this.getProgram = this.getProgram.bind(this);
-    this.onFreeStartClick = this.onFreeStartClick.bind(this);
-    this.handleScroll = this.handleScroll.bind(this);
   }
 
   componentDidMount() {
     const { ipInfo, rfChange } = this.props;
 
-    // Listen event scroll down
-    window.addEventListener('scroll', this.handleScroll);
-
     this.setAddressFromLatLng(ipInfo?.latitude, ipInfo?.longitude); // fallback
-
     let url = '';
     if (this.state.utm === 'earlybird') {
       url = `exchange/info/offer-store-free-start/${this.state.program}`;
@@ -195,55 +113,21 @@ class DiscoverPage extends React.Component {
       });
     }
 
-    rfChange(nameFormFilterFeeds, 'sortType', CASH_SORTING_CRITERIA.DISTANCE);
-    this.setState({ sortIndexActive: CASH_SORTING_CRITERIA.DISTANCE });
+    // rfChange(nameFormFilterFeeds, 'sortType', CASH_SORTING_CRITERIA.DISTANCE);
+    // this.setState({ sortIndexActive: CASH_SORTING_CRITERIA.DISTANCE });
+
+    this.delayedShowMarker();
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
-  }
-
-
-  onFreeStartClick() {
-    this.modalRef.close();
-    this.props.setFreeStart({ data: true });
-    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
-  }
-
-  getUtm() {
-    const { utm_campaign: utm } = Helper.getQueryStrings(window.location.search);
-
-    return utm;
-  }
-
-  getProgram() {
-    const { free: program } = Helper.getQueryStrings(window.location.search);
-
-    return program;
-  }
-
-  // getDefaultHandShakeId() {
-  //   return HANDSHAKE_ID.EXCHANGE;
-  //
-  //   // if (window.location.pathname.indexOf(URL.HANDSHAKE_CASH) >= 0) {
-  //   //   return HANDSHAKE_ID.EXCHANGE;
-  //   // }
-  //   // let seletedId = HANDSHAKE_ID_DEFAULT;
-  //   // let { id } = Helper.getQueryStrings(window.location.search);
-  //   // id = parseInt(id, 10);
-  //   // if (id && Object.values(HANDSHAKE_ID).indexOf(id) !== -1) {
-  //   //   seletedId = id;
-  //   // }
-  //   // return seletedId;
-  // }
-
-  setAddressFromLatLng = (lat, lng) => {
-    this.setState({ lat, lng }, () => {
-      if (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
-        this.loadDiscoverList();
-      }
+  handleGoToCurrentLocation = () => {
+    const { ipInfo } = this.props;
+    this.setState({
+      curLocation: { lat: ipInfo?.latitude, lng: ipInfo?.longitude },
+      lat: ipInfo?.latitude,
+      lng: ipInfo?.longitude,
+      zoomLevel: defaultZoomLevel,
     });
-  }
+  };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.exchange.listOfferPrice.updatedAt !== prevState.exchange.listOfferPrice.updatedAt) {
@@ -251,10 +135,8 @@ class DiscoverPage extends React.Component {
         //
         const {
           handshakeIdActive,
-          query,
-          sortIndexActive,
-          sortPriceIndexActive,
-          sortOrder,
+          actionActive,
+          currencyActive,
         } = prevState;
         const { ipInfo } = nextProps;
         const qs = { };
@@ -272,124 +154,42 @@ class DiscoverPage extends React.Component {
           if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
             qs.custom_query = ` -offline_i:1 `;
 
-            if (sortIndexActive === CASH_SORTING_CRITERIA.PRICE) {
-              qs.c_sort = sortPriceIndexActive;
-              qs.t_sort = sortOrder;
-            }
+            const sortPrice = `${actionActive.toLowerCase()}_${currencyActive.toLowerCase()}_d`;
+            const sortOrder = actionActive.includes('buy') ? SORT_ORDER.ASC : SORT_ORDER.DESC;
+
+            qs.c_sort = sortPrice;
+            qs.t_sort = sortOrder;
           }
         }
-
-        if (query) {
-          qs.query = query;
-        }
-
-        // nextProps.loadDiscoverList({
-        //   PATH_URL: API_URL.DISCOVER.INDEX,
-        //   qs,
-        // });
       }
       return { exchange: nextProps.exchange };
     }
 
-    if (nextProps.firebaseApp.config?.maintainChild?.betting && prevState.handshakeIdActive === HANDSHAKE_ID.BETTING) {
-      return {
-        isLoading: false,
-      };
-    }
     return null;
   }
 
+  getUtm = () => {
+    const { utm_campaign: utm } = Helper.getQueryStrings(window.location.search);
 
-  getHandshakeList() {
-    const { authProfile } = this.props;
-    const { messages } = this.props.intl;
-    const { list } = this.props.discover;
-    const {
-      handshakeIdActive, lat, lng, sortIndexActive, sortPriceIndexActive,
-    } = this.state;
-    const sortPriceIndexArr = sortPriceIndexActive.split('_');
+    return utm;
+  }
 
-    if (list && list.length > 0) {
-      let myHandShake;
-      const resultList = list.map((handshake) => {
-        if (handshake.id.includes(authProfile?.id)) {
-          myHandShake = handshake;
+  getProgram = () => {
+    const { free: program } = Helper.getQueryStrings(window.location.search);
 
-          return null;
-        }
-        const FeedComponent = maps[handshake.type];
-        const offer = OfferShop.offerShop(JSON.parse(handshake.extraData));
-        const allowRender = sortIndexActive === CASH_SORTING_CRITERIA.PRICE ? offer.itemFlags[sortPriceIndexArr[1].toUpperCase()] && !this.isEmptyBalance(offer.items[sortPriceIndexArr[1].toUpperCase()]) : true;
-        if (FeedComponent && allowRender) {
-          return (
-            <Col key={handshake.id} className="col-12 feed-wrapper px-0">
-              <FeedComponent
-                {...handshake}
-                history={this.props.history}
-                onFeedClick={extraData => this.clickFeedDetail(handshake, extraData)}
-                refreshPage={this.loadDiscoverList}
-                latitude={lat}
-                longitude={lng}
-                modalRef={this.modalRef}
-                offer={offer}
-                setLoading={this.setLoading}
-                sortPriceIndexActive={sortPriceIndexActive}
-              />
+    return program;
+  }
 
-            </Col>
-          );
-        }
-        return null;
-      });
-
-      // Handle my handshake
-      if (myHandShake) {
-        const FeedComponent = maps[myHandShake.type];
-
-        const offer = OfferShop.offerShop(JSON.parse(myHandShake.extraData));
-        if (FeedComponent) {
-          resultList.unshift(
-            <Col key={myHandShake.id} className="col-12 feed-wrapper px-0">
-              <FeedComponent
-                {...myHandShake}
-                history={this.props.history}
-                onFeedClick={extraData => this.clickFeedDetail(myHandShake, extraData)}
-                refreshPage={this.loadDiscoverList}
-                latitude={lat}
-                longitude={lng}
-                modalRef={this.modalRef}
-                offer={offer}
-                ownerStation
-              />
-
-            </Col>,
-          );
-        }
-      }
-
-      return resultList;
-    }
-
-    let message = '';
-    switch (handshakeIdActive) {
-      case HANDSHAKE_ID.EXCHANGE:
-        message = messages.discover.noDataMessageCash;
-        break;
-      case HANDSHAKE_ID.EXCHANGE_LOCAL:
-        message = messages.discover.noDataMessageSwap;
-        break;
-
-      default:
-      // is promise
-    }
-
-    return <NoData style={{ height: '50vh' }} message={message} />;
+  onFreeStartClick = () => {
+    this.modalRef.close();
+    this.props.setFreeStart({ data: true });
+    this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
   }
 
   isEmptyBalance = (item) => {
-    const { sortPriceIndexActive } = this.state;
+    const { actionActive } = this.state;
     const { buyBalance, sellBalance } = item;
-    if (sortPriceIndexActive.includes('buy')) {
+    if (actionActive.includes('buy')) {
       return buyBalance <= 0;
     }
     return sellBalance <= 0;
@@ -399,33 +199,97 @@ class DiscoverPage extends React.Component {
     this.setState({ isLoading: loadingState });
   }
 
-  showLuckyPool() {
-    const { handshakeIdActive } = this.state;
-    const { showedLuckyPool } = this.props;
-    if (handshakeIdActive === HANDSHAKE_ID.BETTING) {
-      if (showedLuckyPool === false) {
-        console.log('Action Lucky Pool:', showedLuckyPool);
-        this.props.updateShowedLuckyPool(true);
-        setTimeout(() => {
-          this.modalLuckyPoolRef.open();
-        }, 2 * 1000);
+  setAddressFromLatLng = (lat, lng) => {
+    this.setState({ lat, lng, curLocation: { lat, lng } }, () => {
+      if (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
+        this.loadDiscoverList();
       }
+    });
+  }
+
+  loadDiscoverList = () => {
+    const {
+      handshakeIdActive,
+      actionActive,
+      currencyActive,
+    } = this.state;
+    const qs = { };
+
+    // const pt = `${this.state.lat},${this.state.lng}`;
+    //
+    // qs.location_p = { pt, d: DISCOVER_GET_HANDSHAKE_RADIUS };
+    qs.pt = `${this.state.lat},${this.state.lng}`;
+    qs.d = DISCOVER_GET_HANDSHAKE_RADIUS;
+
+    if (handshakeIdActive) {
+      qs.type = handshakeIdActive;
+
+      if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
+        qs.custom_query = ` -offline_i:1 `;
+
+        const sortPrice = `${actionActive === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY}_${currencyActive.toLowerCase()}_d`;
+        const sortOrder = actionActive.includes('buy') ? SORT_ORDER.ASC : SORT_ORDER.DESC;
+
+        qs.c_sort = sortPrice;
+        qs.t_sort = sortOrder;
+      }
+    }
+
+    this.props.loadDiscoverList({
+      PATH_URL: API_URL.DISCOVER.INDEX,
+      qs,
+      successFn: () => {
+        this.setLoading(false);
+      },
+      errorFn: () => {
+        this.setLoading(false);
+      },
+    });
+  }
+
+  delayedShowMarker = () => {
+    setTimeout(() => {
+      this.setState({ isMarkerShown: true });
+    }, 3000);
+  }
+
+  handleMarkerClick = () => {
+    this.setState({ isMarkerShown: false });
+    this.delayedShowMarker();
+  }
+
+  onActionChange = (e, newValue) => {
+    console.log('onActionChange', newValue);
+    const { actionActive } = this.state;
+
+    if (actionActive !== newValue) {
+      this.setLoading(true);
+      this.setState({ actionActive: newValue }, () => {
+        this.loadDiscoverList();
+      });
     }
   }
 
-  handleScroll() {
-    this.showLuckyPool();
+  onCurrencyChange = (e, item) => {
+    console.log('onCurrencyChange', item);
+    const { currencyActive } = this.state;
+
+    if (currencyActive !== item.id) {
+      this.setLoading(true);
+      this.setState({ currencyActive: item.id }, () => {
+        this.loadDiscoverList();
+      });
+    }
   }
 
+  getStationsList = () => {
+    const { list } = this.props.discover;
 
-  // searchChange(query) {
-  //   clearTimeout(this.searchTimeOut);
-  //   this.searchTimeOut = setTimeout(() => {
-  //     this.setState({ query }, () => {
-  //       this.loadDiscoverList();
-  //     });
-  //   }, 500);
-  // }
+    if (list && list.length > 0) {
+      return list;
+    }
+    return null;
+  }
 
   clickFeedDetail(handshake, extraData) {
     const { type } = handshake;
@@ -446,260 +310,75 @@ class DiscoverPage extends React.Component {
       }
       default:
     }
-    // this.props.history.push(`${URL.HANDSHAKE_DISCOVER}/${id || ''}`);
   }
 
-  // handleCloseExchangePopupIntro = () => {
-  //   Cookies.set(EXCHANGE_COOKIE_READ_INSTRUCTION.name, true, EXCHANGE_COOKIE_READ_INSTRUCTION.option);
-  //   this.modalRef.close();
-  // }
-
-  // showWelcomePopup = () => {
-  //   if (Cookies.get(EXCHANGE_COOKIE_READ_INSTRUCTION.name) !== 'true') {
-  //     setTimeout(() => {
-  //       this.setState({
-  //         modalContent: (
-  //           <div>
-  //             <div className="text-right pr-2 pt-1">
-  //               <a className="d-inline-block" onClick={this.handleCloseExchangePopupIntro}>&times;</a>
-  //             </div>
-  //             <div className="exchange-popup-intro">
-  //               <div className="logo"><img className="w-100" src={ninjaLogoSVG} alt="" /></div>
-  //               <p className="headline">Ninja, welcomes you to the Dojo!</p>
-  //               <p>We are the first to offer a completely decentralized platform to buy and sell Bitcoin and Ethereum.</p>
-  //               <p>We support credit, debit card and cash.</p>
-  //               <div className="my-3">
-  //                 <div className="highlight-text">How to use:</div>
-  //                 <div className="usage">
-  //                   - (
-  //                   <Link className="link" to={{ pathname: URL.HANDSHAKE_CREATE_INDEX, search: '?id=2' }}>
-  //                     Become a shop
-  //                   </Link>
-  //                   ) to buy and sell BTC/ETH
-  //                 </div>
-  //                 <div className="highlight-text">Or</div>
-  //                 <div className="usage">- Swipe through all the shops to find <a className="link" onClick={this.handleCloseExchangePopupIntro}>the most suitable price.</a></div>
-  //               </div>
-  //               <p>Chat and meet up at the store to fulfill your exchange.</p>
-  //               <p><strong>Have fun trading!</strong></p>
-  //               <button className="btn btn-primary btn-block" onClick={this.handleCloseExchangePopupIntro}>Got it!</button>
-  //             </div>
-  //           </div>
-  //         ),
-  //       }, () => {
-  //         this.modalRef.open();
-  //       });
-  //     }, 1500);
-  //   }
-  // }
-
-  clickCategoryItem(category) {
-    console.log('clickCategoryItem');
-    const { rfChange } = this.props;
-    const { id } = category;
-    gtag.event({
-      category: taggingConfig.common.category,
-      action: taggingConfig.common.action.chooseCategory,
-      label: id,
-    });
-    if (this.state.handshakeIdActive !== id) {
-      this.setLoading(true);
-    }
-    // let tabIndexActive = '';
-    switch (id) {
-      case HANDSHAKE_ID.BETTING:
-        // do something
-        break;
-      case HANDSHAKE_ID.SEED:
-        // do something
-        break;
-      case HANDSHAKE_ID.EXCHANGE:
-        rfChange(nameFormFilterFeeds, 'sortType', CASH_SORTING_CRITERIA.DISTANCE);
-        this.setState({ sortIndexActive: CASH_SORTING_CRITERIA.DISTANCE });
-        // do something
-        // tabIndexActive = 1;
-        // this.showWelcomePopup();
-        break;
-      default:
-        // is promise
-    }
-    // set feed type activate
-    this.setState({
-      handshakeIdActive: id,
-      // tabIndexActive,
-    }, () => {
-      if (category.id !== 3) {
-        this.loadDiscoverList();
-      }
-    });
-    if (category.id === 2 && this.state.isBannedCash) {
-      this.setLoading(false);
-    }
-    if (category.id === 3 && this.state.isBannedPrediction) {
-      this.setLoading(false);
-    }
-  }
-
-  loadDiscoverList = () => {
-    const { ipInfo } = this.props;
+  getMap = () => {
     const {
-      handshakeIdActive,
-      query,
-      sortIndexActive,
-      sortPriceIndexActive,
-      sortOrder,
+      lat,
+      lng,
+      zoomLevel,
+      actionActive,
+      currencyActive,
+      curLocation
     } = this.state;
-    const qs = { };
+    const stations = this.getStationsList();
+    const map = (
+      <div>
+        <NavBar onActionChange={this.onActionChange} onCurrencyChange={this.onCurrencyChange} />
+        <Map
+          isMarkerShown={this.state.isMarkerShown}
+          onMarkerClick={this.handleMarkerClick}
+          // googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
+          loadingElement={<div style={{ height: `100%` }} />}
+          containerElement={<div className="map-container" style={{ height: `calc(100vh - 48px - 120px)`, marginTop: '48px' }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+          // center={{ lat: 35.929673, lng: -78.948237 }}
+          stations={stations}
+          zoomLevel={zoomLevel}
+          curLocation={curLocation}
+          lat={lat}
+          lng={lng}
+          actionActive={actionActive}
+          currencyActive={currencyActive}
+          onFeedClick={(station, extraData) => this.clickFeedDetail(station, extraData)}
+          modalRef={this.modalRef}
+          setLoading={this.setLoading}
+          onGoToCurrentLocation={this.handleGoToCurrentLocation}
+          onMapMounted={e => (this.mapRef = e)}
+          onZoomChanged={() => { this.setState({ zoomLevel: this.mapRef.getZoom() }) }}
+          onCenterChanged={() => { const center = this.mapRef.getCenter(); this.setState({ lat: center.lat() || 0, lng: center.lng() || 0 }) }}
+        />
+      </div>
+    );
 
-    // const pt = `${this.state.lat},${this.state.lng}`;
-    //
-    // qs.location_p = { pt, d: DISCOVER_GET_HANDSHAKE_RADIUS };
-    qs.pt = `${this.state.lat},${this.state.lng}`;
-    qs.d = DISCOVER_GET_HANDSHAKE_RADIUS;
-
-    if (handshakeIdActive) {
-      qs.type = handshakeIdActive;
-
-      if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
-        qs.custom_query = ` -offline_i:1 `;
-
-        if (sortIndexActive === CASH_SORTING_CRITERIA.PRICE) {
-          qs.c_sort = sortPriceIndexActive;
-          qs.t_sort = sortOrder;
-        } else if (sortIndexActive === CASH_SORTING_CRITERIA.RATING) {
-          qs.c_sort = 'review_d';
-          qs.t_sort = SORT_ORDER.DESC;
-        }
-      }
-    }
-
-    if (query) {
-      qs.query = query;
-    }
-
-    this.props.loadDiscoverList({
-      PATH_URL: API_URL.DISCOVER.INDEX,
-      qs,
-      successFn: () => {
-        this.setLoading(false);
-      },
-      errorFn: () => {
-        this.setLoading(false);
-      },
-    });
-  }
-
-  onSortChange = (e, newValue) => {
-    const { rfChange } = this.props;
-    const { sortIndexActive } = this.state;
-    console.log('onSortChange', newValue);
-    if (sortIndexActive !== newValue) {
-      this.setLoading(true);
-      this.setState({ sortIndexActive: newValue, sortPriceIndexActive: '' }, () => {
-        this.loadDiscoverList();
-      });
-    }
-  }
-
-  onSortPriceChange = (e, item) => {
-    const { sortPriceIndexActive } = this.state;
-    console.log('onSortPriceChange', sortPriceIndexActive, item);
-
-    if (sortPriceIndexActive !== item.id) {
-      this.setLoading(true);
-      const sortOrder = item.id.includes('buy') ? SORT_ORDER.ASC : SORT_ORDER.DESC;
-      this.setState({ sortIndexActive: CASH_SORTING_CRITERIA.PRICE, sortPriceIndexActive: item.id, sortOrder }, () => {
-        this.loadDiscoverList();
-      });
-    }
+    return map;
   }
 
   render() {
     const {
-      // handshakeIdActive,
-      // tabIndexActive,
       propsModal,
       modalContent,
-      sortIndexActive,
     } = this.state;
     const { messages } = this.props.intl;
-    const { intl } = this.props;
 
     return (
       <React.Fragment>
         <div className={`discover-overlay ${this.state.isLoading ? 'show' : ''}`}>
           <Image src={loadingSVG} alt="loading" width="100" />
         </div>
-        <Grid className="discover">
-          <React.Fragment>
-            {/*
-                <Helmet>
-                  <title>{intl.formatMessage({ id: 'ex.seo.title' })}</title>
-                  <meta name="description" content={intl.formatMessage({ id: 'ex.seo.meta.description' })} />
-                </Helmet>
-                */}
-            <div className="mt-2 mb-1">
-              <FormFilterFeeds>
-                <div className="d-table w-100">
-                  <div className="d-table-cell"><label className="label-filter-by"><FormattedMessage id="ex.discover.label.sortby" /></label></div>
-                  <div className="d-table-cell">
-                    <Field
-                      name="sortType"
-                      component={fieldRadioButton}
-                      type="tab-5"
-                      fullWidth={false}
-                      list={CASH_SORTING_LIST}
-                      // validate={[required]}
-                      onChange={this.onSortChange}
-                    />
-                    <Field
-                      name="sortType"
-                      component={fieldDropdown}
-                      classNameWrapper=""
-                      defaultText={<FormattedMessage id="ex.sort.price" />}
-                      classNameDropdownToggle={`dropdown-sort bg-white ${sortIndexActive === CASH_SORTING_CRITERIA.PRICE ? 'dropdown-sort-selected' : ''}  `}
-                      list={PRICE_SORTS}
-                      onChange={this.onSortPriceChange}
-                    />
-                  </div>
-                </div>
-
-              </FormFilterFeeds>
-            </div>
-            <div>
-              <div className="ex-sticky-note">
-                <div className="mb-2"><FormattedMessage id="ex.discover.banner.text" /></div>
-                <div>
-                  <Link to={{ pathname: URL.HANDSHAKE_CREATE, search: `?id=${HANDSHAKE_ID.EXCHANGE}` }}>
-                    <button className="btn btn-become"><FormattedMessage id="ex.discover.banner.btnText" /></button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </React.Fragment>
-          <Row>
-            {!this.state.isBannedCash && !this.props.firebaseApp.config?.maintainChild?.exchange && this.getHandshakeList()}
-            {
-              this.state.isBannedCash
-              ? (
-                <BlockCountry />
-              )
-              : this.props.firebaseApp.config?.maintainChild?.exchange ? <Maintain /> : null
-            }
-          </Row>
-          <Row className="info">
-            {messages.product_info}
-          </Row>
-        </Grid>
+        {!this.state.isBannedCash && !this.props.firebaseApp.config?.maintainChild?.exchange && this.getMap()}
+        {
+          this.state.isBannedCash
+            ? (
+              <BlockCountry />
+            )
+            : this.props.firebaseApp.config?.maintainChild?.exchange ? <Maintain /> : null
+        }
         <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} {...propsModal}>
           {modalContent}
         </ModalDialog>
-        <ModalDialog className="modal" onRef={(modal) => { this.modalLuckyPoolRef = modal; return null; }}>
-          <LuckyLanding onButtonClick={() => {
-            this.modalLuckyPoolRef.close();
-          }}
-          />
-        </ModalDialog>
+        {/* <Footer /> */}
       </React.Fragment>
     );
   }
@@ -707,14 +386,12 @@ class DiscoverPage extends React.Component {
 
 const mapState = state => ({
   discover: state.discover,
-  app: state.app,
   ipInfo: state.app.ipInfo,
   exchange: state.exchange,
   isBannedCash: state.app.isBannedCash,
   isBannedPrediction: state.app.isBannedPrediction,
   firebaseApp: state.firebase.data,
   freeStartInfo: state.exchange.freeStartInfo,
-  showedLuckyPool: state.betting.showedLuckyPool,
   authProfile: state.auth.profile,
 });
 
@@ -724,7 +401,6 @@ const mapDispatch = dispatch => ({
   getListOfferPrice: bindActionCreators(getListOfferPrice, dispatch),
   setFreeStart: bindActionCreators(setFreeStart, dispatch),
   getFreeStartInfo: bindActionCreators(getFreeStartInfo, dispatch),
-  updateShowedLuckyPool: bindActionCreators(updateShowedLuckyPool, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(DiscoverPage));

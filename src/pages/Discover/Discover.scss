@@ -2,12 +2,12 @@
 
 .discover {
   background: $gray;
-  .feed-wrapper {
-    margin-bottom:  rem-calc(11px);
-    &:empty {
-      display: none;
-    }
-  }
+  //.feed-wrapper {
+  //  margin-bottom:  rem-calc(11px);
+  //  &:empty {
+  //    display: none;
+  //  }
+  //}
   //.category-wrapper {
   //  margin-bottom: rem-calc(11px);
   //  background: $white;
@@ -18,27 +18,27 @@
   //  }
   //
   //}
-  .dropdown-sort {
-    box-shadow: 0 2px 4px 0 rgba(201, 201, 201, 0.5);
-    height: 35px;
-    font-weight: 500;
-    font-size: 14px;
-    color: #6F6F6F;
-    margin-left: 4px !important;
-  }
+  //.dropdown-sort {
+  //  box-shadow: 0 2px 4px 0 rgba(201, 201, 201, 0.5);
+  //  height: 35px;
+  //  font-weight: 500;
+  //  font-size: 14px;
+  //  color: #6F6F6F;
+  //  margin-left: 4px !important;
+  //}
 
-  .dropdown-sort-selected {
-    background: #000000 !important;
-    color: #FFFFFF !important;
-    border-color: #000000;
-  }
+  //.dropdown-sort-selected {
+  //  background: #000000 !important;
+  //  color: #FFFFFF !important;
+  //  border-color: #000000;
+  //}
 
-  .buy-sell-wrapper {
-    margin-bottom: rem-calc(15px);
-  }
-  .search-bar-wrapper {
-    margin-bottom: rem-calc(15px);
-  }
+  //.buy-sell-wrapper {
+  //  margin-bottom: rem-calc(15px);
+  //}
+  //.search-bar-wrapper {
+  //  margin-bottom: rem-calc(15px);
+  //}
   //.exchange-intro {
   //  //background: #8BB7F0;
   //  background-image: url("../../assets/images/icon/bg-exchange-intro.svg");
@@ -82,11 +82,33 @@
   .faq-block {
     margin-top: rem-calc(15px);
   }
-  .info {
-    padding: rem-calc(15px);
-    font-size: 13px;
-    font-size: $light;
+
+  .ex-sticky-note {
+    font-size: 14px;
+    text-align: center;
+    color: white;
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 414px;
+    background-color: black;
+    z-index: 2;
+    padding: 10px 0;
+    .btn-become {
+      min-width: 200px;
+      border: 1px solid white;
+      background: black;
+      color: white;
+    }
   }
+}
+
+.info {
+  padding: rem-calc(15px);
+  font-size: 13px;
+  font-size: $light;
 }
 
 //.discover-overlay {
@@ -181,4 +203,13 @@
       letter-spacing: 0.42px;
     }
   }
+}
+
+.map-container {
+  img {
+    box-sizing: content-box;
+  }
+  //*, *::before, *::after {
+  //  box-sizing: content-box;
+  //}
 }

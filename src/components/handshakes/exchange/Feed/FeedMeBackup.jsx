@@ -157,6 +157,10 @@ class FeedMe extends React.PureComponent {
       result = false;
     }
 
+    if (process.env.isDojo) {
+      result = true;
+    }
+
     if (!result) {
       const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
       this.showAlert(message);

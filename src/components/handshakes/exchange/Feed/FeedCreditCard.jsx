@@ -1,41 +1,47 @@
-import React from "react";
-import { FormattedMessage, injectIntl } from "react-intl";
-import { Field, formValueSelector } from "redux-form";
-import { connect } from "react-redux";
-import CreditCard from "@/components/handshakes/exchange/components/CreditCard";
-import LevelItem from "@/components/handshakes/exchange/components/LevelItem";
-import Feed from "@/components/core/presentation/Feed";
-import Button from "@/components/core/controls/Button";
-import ModalDialog from "@/components/core/controls/ModalDialog";
-import localStore from "@/services/localStore";
-import { URL } from "@/constants";
-import "../styles.scss";
-import { validate } from "@/components/handshakes/exchange/validation";
-import throttle from "lodash/throttle";
-import createForm from "@/components/core/form/createForm";
-import { change } from "redux-form";
-import { fieldCleave, fieldDropdown, fieldInput, fieldRadioButton } from "@/components/core/form/customField";
-import { required } from "@/components/core/form/validation";
-import { createCCOrder, getCcLimits, getCryptoPrice, getUserCcLimit } from "@/reducers/exchange/action";
-import { API_URL, CRYPTO_CURRENCY_LIST, CRYPTO_CURRENCY_DEFAULT, FIAT_CURRENCY_SYMBOL } from "@/constants";
-import { FIAT_CURRENCY } from "@/constants";
-import CryptoPrice from "@/models/CryptoPrice";
-import { MasterWallet } from "@/services/Wallets/MasterWallet";
-import { bindActionCreators } from "redux";
-import { showAlert } from "@/reducers/app/action";
-import _sample from "lodash/sample";
-import { feedBackgroundColors } from "@/components/handshakes/exchange/config";
-import { formatMoney } from "@/services/offer-util";
-import { BigNumber } from "bignumber.js";
-import { showLoading, hideLoading } from "@/reducers/app/action";
-import axios from "axios";
+import React from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { change, Field, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux';
+import CreditCard from '@/components/handshakes/exchange/components/CreditCard';
+import LevelItem from '@/components/handshakes/exchange/components/LevelItem';
+import Feed from '@/components/core/presentation/Feed';
+import Button from '@/components/core/controls/Button';
+import ModalDialog from '@/components/core/controls/ModalDialog';
+import local from '@/services/localStore';
+import {
+  API_URL,
+  APP,
+  CRYPTO_CURRENCY_DEFAULT,
+  CRYPTO_CURRENCY_LIST,
+  FIAT_CURRENCY,
+  FIAT_CURRENCY_SYMBOL,
+  URL,
+} from '@/constants';
+import '../styles.scss';
+import { validate } from '@/components/handshakes/exchange/validation';
+import throttle from 'lodash/throttle';
+import createForm from '@/components/core/form/createForm';
+import { fieldCleave, fieldDropdown, fieldInput, fieldRadioButton } from '@/components/core/form/customField';
+import { required } from '@/components/core/form/validation';
+import { createCCOrder, getCcLimits, getCryptoPrice, getUserCcLimit } from '@/reducers/exchange/action';
+import CryptoPrice from '@/models/CryptoPrice';
+import { MasterWallet } from '@/services/Wallets/MasterWallet';
+import { bindActionCreators } from 'redux';
+import { hideLoading, showAlert, showLoading } from '@/reducers/app/action';
+import _sample from 'lodash/sample';
+import { feedBackgroundColors } from '@/components/handshakes/exchange/config';
+import { formatMoney } from '@/services/offer-util';
+import { BigNumber } from 'bignumber.js';
+import axios from 'axios';
+import './FeedCreditCard.scss';
+import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 
-const nameFormCreditCard = "creditCard";
+const nameFormCreditCard = 'creditCard';
 const FormCreditCard = createForm({
   propsReduxForm: {
     form: nameFormCreditCard,
-    initialValues: { currency: CRYPTO_CURRENCY_DEFAULT }
-  }
+    initialValues: { currency: CRYPTO_CURRENCY_DEFAULT },
+  },
 });
 const selectorFormCreditCard = formValueSelector(nameFormCreditCard);
 
@@ -49,8 +55,8 @@ class FeedCreditCard extends React.Component {
       amount: 0,
       currency: CRYPTO_CURRENCY_DEFAULT,
       isNewCCOpen: false,
-      modalContent: "",
-      showCCScheme: false
+      modalContent: '',
+      showCCScheme: false,
     };
     this.getCryptoPriceByAmountThrottled = throttle(this.getCryptoPriceByAmount, 500);
     this.mainColor = _sample(feedBackgroundColors);
@@ -59,7 +65,7 @@ class FeedCreditCard extends React.Component {
   async componentDidMount() {
     const { currencyForced, rfChange } = this.props;
     if (currencyForced) {
-      rfChange(nameFormCreditCard, "currency", currencyForced);
+      rfChange(nameFormCreditCard, 'currency', currencyForced);
     }
 
     this.props.getCcLimits({ PATH_URL: API_URL.EXCHANGE.GET_CC_LIMITS });
@@ -79,7 +85,7 @@ class FeedCreditCard extends React.Component {
   }
 
   showLoading = () => {
-    this.props.showLoading({ message: "" });
+    this.props.showLoading({ message: '' });
   };
 
   hideLoading = () => {
@@ -89,13 +95,13 @@ class FeedCreditCard extends React.Component {
   getCryptoPriceByAmount = (amount) => {
     const cryptoCurrency = this.state.currency;
 
-    var data = { amount: amount, currency: cryptoCurrency };
+    const data = { amount, currency: cryptoCurrency };
 
     this.props.getCryptoPrice({
       PATH_URL: API_URL.EXCHANGE.GET_CRYPTO_PRICE,
       qs: data,
       successFn: this.handleGetCryptoPriceSuccess,
-      errorFn: this.handleGetCryptoPriceFailed
+      errorFn: this.handleGetCryptoPriceFailed,
     });
   };
 
@@ -107,14 +113,14 @@ class FeedCreditCard extends React.Component {
     const amoutWillUse = new BigNumber(userCcLimit.amount).plus(new BigNumber(cryptoPrice.fiatAmount)).toNumber();
 
     if (this.state.amount && userCcLimit && userCcLimit.limit < amoutWillUse) {
-      this.setState({ showCCScheme: true });
+      this.setState({ showCCScheme: false });
     } else {
       this.setState({ showCCScheme: false });
     }
   };
 
   handleGetCryptoPriceFailed = (e) => {
-    console.log("handleGetCryptoPriceFailed", e);
+    console.log('handleGetCryptoPriceFailed', e);
   };
 
 
@@ -122,7 +128,7 @@ class FeedCreditCard extends React.Component {
     const { cryptoPrice, addressForced, authProfile } = this.props;
 
 
-    let address = "";
+    let address = '';
     if (addressForced) {
       address = addressForced;
     } else {
@@ -136,17 +142,17 @@ class FeedCreditCard extends React.Component {
         currency: cryptoPrice.currency.trim(),
         fiat_amount: cryptoPrice.fiatAmount.trim(),
         fiat_currency: FIAT_CURRENCY.USD,
-        address: address,
-        email: authProfile ? authProfile.email : "",
-        payment_method_data: params
+        address,
+        email: authProfile ? authProfile.email : '',
+        payment_method_data: params,
       };
       // console.log('handleCreateCCOrder',paramsObj);
       this.props.createCCOrder({
         PATH_URL: API_URL.EXCHANGE.CREATE_CC_ORDER,
         data: paramsObj,
-        METHOD: "POST",
+        METHOD: 'POST',
         successFn: this.handleCreateCCOrderSuccess,
-        errorFn: this.handleCreateCCOrderFailed
+        errorFn: this.handleCreateCCOrderFailed,
       });
     }
   };
@@ -175,10 +181,10 @@ class FeedCreditCard extends React.Component {
     // });
 
     this.props.showAlert({
-      message: <div className="text-center"><FormattedMessage id="buyUsingCreditCardSuccessMessge"/></div>,
+      message: <div className="text-center"><FormattedMessage id="buyUsingCreditCardSuccessMessge" /></div>,
       timeOut: 2000,
-      type: "success",
-      callBack: this.handleBuySuccess
+      type: 'success',
+      callBack: this.handleBuySuccess,
     });
   };
 
@@ -202,10 +208,10 @@ class FeedCreditCard extends React.Component {
 
     // console.log('handleCreateCCOrderFailed', JSON.stringify(e.response));
     this.props.showAlert({
-      message: <div className="text-center">{e.response?.data?.message}</div>,
+      message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
       timeOut: 3000,
-      type: "danger",
-      callBack: this.handleBuyFailed
+      type: 'danger',
+      callBack: this.handleBuyFailed,
     });
 
     // this.setState({modalContent:
@@ -234,21 +240,25 @@ class FeedCreditCard extends React.Component {
     }
   };
 
-  handleSubmit = (values) => {
+  handleSubmit = async (values) => {
     const { handleSubmit } = this.props;
-    const { userCcLimit, cryptoPrice } = this.props;
+    const { userCcLimit, cryptoPrice, addressForced } = this.props;
 
     const amoutWillUse = new BigNumber(userCcLimit.amount).plus(new BigNumber(cryptoPrice.fiatAmount)).toNumber();
 
     if (this.state.amount && userCcLimit && userCcLimit.limit < amoutWillUse) {
       this.props.showAlert({
-        message: <div className="text-center"><FormattedMessage id="overCCLimit" values={{
+        message: <div className="text-center"><FormattedMessage
+          id="overCCLimit"
+          values={{
           currency: FIAT_CURRENCY_SYMBOL,
           limit: formatMoney(userCcLimit.limit),
-          amount: formatMoney(userCcLimit.amount)
-        }}/></div>,
-        timeOut: 3000,
-        type: "danger"
+          amount: formatMoney(userCcLimit.amount),
+        }}
+        />
+        </div>,
+        timeOut: 5000,
+        type: 'danger',
         // callBack: this.handleBuySuccess
       });
 
@@ -265,42 +275,87 @@ class FeedCreditCard extends React.Component {
 
       let cc = {};
 
-      //Use existing credit card
+      // Use existing credit card
       if (creditCard.ccNumber.length > 0 && !this.state.isNewCCOpen) {
-        cc = { token: "true" };
+        cc = { token: 'true' };
         this.handleCreateCCOrder(cc);
       } else {
         const { cc_number, cc_expired, cc_cvc } = values;
-        const mmYY = cc_expired.split("/");
+        const mmYY = cc_expired.split('/');
+        const params = new URLSearchParams();
+        params.append('card[number]', cc_number && cc_number.trim().replace(/ /g, ''));
+        params.append('card[exp_month]', mmYY[0]);
+        params.append('card[exp_year]', mmYY[1]);
+        params.append('card[cvc]', cc_cvc);
+        params.append('key', process.env.stripeKey);
+        params.append('type', 'card');
+
         axios.post(
-          "https://sandbox.checkout.com/api2/v2/tokens/card",
-          {
-            number: cc_number && cc_number.trim().replace(/ /g, ""),
-            expiryMonth: mmYY[0],
-            expiryYear: mmYY[1],
-            cvv: cc_cvc,
-            requestSource: "JS"
-          },
-          { headers: { authorization: "pk_test_2e31fdfd-f2aa-41f1-99e8-d918472a55e7" } })
-          .then((response) => {
-            const newCCNum = response.data.id;
-            cc = {
-              cc_num: newCCNum,
-              cvv: cc_cvc && cc_cvc.trim().replace(/ /g, ""),
-              expiration_date: cc_expired && cc_expired.trim().replace(/ /g, ""),
-              token: "",
-              save: "true"
-            };
-            this.handleCreateCCOrder(cc);
+          'https://api.stripe.com/v1/sources',
+          params,
+          { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+          .then((payload) => {
+            console.log('payload', payload);
+            const stripe = Stripe(process.env.stripeKey);
+            stripe.createSource({
+              type: 'three_d_secure',
+              amount: new BigNumber(cryptoPrice.fiatAmount).multipliedBy(100).toString(),
+              currency: FIAT_CURRENCY.USD,
+              three_d_secure: {
+                card: payload.data.id,
+              },
+              redirect: {
+                return_url: `${process.env.PUBLIC_URL}/payment`,
+              },
+            }).then((result) => {
+              console.log('submit result', result);
+              if (result.source.three_d_secure.three_d_secure === 'not_supported') {
+                this.hideLoading();
+
+                const message = <FormattedMessage id="threeDSecureNotSupported" />;
+                this.props.showAlert({
+                  message: <div className="text-center">{message}</div>,
+                  timeOut: 3000,
+                  type: 'danger',
+                  // callBack: this.handleBuySuccess
+                });
+              } else {
+                local.save(APP.CC_SOURCE, result.source);
+                local.save(APP.CC_PRICE, cryptoPrice);
+                local.save(APP.CC_TOKEN, payload.data.id);
+
+                let address = '';
+                if (addressForced) {
+                  address = addressForced;
+                } else {
+                  const wallet = MasterWallet.getWalletDefault(cryptoPrice.currency);
+                  address = wallet.address;
+                }
+                local.save(APP.CC_ADDRESS, address);
+
+                window.location = result.source.redirect.url;
+              }
+            });
+
+            // const newCCNum = payload.data.id;
+            // cc = {
+            //   cc_num: newCCNum,
+            //   cvv: cc_cvc && cc_cvc.trim().replace(/ /g, ""),
+            //   expiration_date: cc_expired && cc_expired.trim().replace(/ /g, ""),
+            //   token: "",
+            //   save: "true"
+            // };
+            // this.handleCreateCCOrder(cc);
           }).catch((error) => {
+            // console.log('error', error);
             this.hideLoading();
 
-            const message = error?.response?.data?.errors[0] || "Something wrong!";
+            const message = error?.response?.data?.errors[0] || 'Something wrong!';
             this.props.showAlert({
               message: <div className="text-center">{message}</div>,
               timeOut: 3000,
-              type: "danger"
-              // callBack: this.handleBuySuccess
+              type: 'danger',
+            // callBack: this.handleBuySuccess
             });
           });
       }
@@ -347,12 +402,14 @@ class FeedCreditCard extends React.Component {
   // }
 
   render() {
-    const { intl, userProfile, cryptoPrice, amount, userCcLimit, ccLimits, buttonTitle, currencyForced } = this.props;
+    const {
+      intl, userProfile, cryptoPrice, amount, userCcLimit, ccLimits, buttonTitle, currencyForced,
+    } = this.props;
     const { showCCScheme } = this.state;
     const fiatCurrency = FIAT_CURRENCY_SYMBOL;
     const total = cryptoPrice && cryptoPrice.fiatAmount;
 
-    let modalContent = this.state.modalContent;
+    const modalContent = this.state.modalContent;
 
     const curLevel = userCcLimit ? userCcLimit.level : 1;
 
@@ -363,19 +420,19 @@ class FeedCreditCard extends React.Component {
         <div>
           <FormCreditCard onSubmit={this.handleSubmit} validate={this.handleValidate}>
             <Feed className="feed p-2 mb-2" background={this.mainColor}>
-              <div style={{ color: "white" }}>
+              <div style={{ color: 'white' }}>
                 {
                   showCCScheme && (
-                    <div style={{ background: "rgb(255,255,255,0.2)" }} className="pt-2 px-2 rounded mb-2">
+                    <div style={{ background: 'rgb(255,255,255,0.2)' }} className="pt-2 px-2 rounded mb-2">
                       {
                         ccLimits.map((ccLimit, index) => {
                           const { level, limit, duration } = ccLimit;
                           const isActive = curLevel === level;
 
-                          let text = "";
-                          let from = newTo + 1;
+                          let text = '';
+                          const from = newTo + 1;
                           newTo += duration;
-                          let to = newTo;
+                          const to = newTo;
                           if (index === ccLimits.length - 1) {
                             text = `Every ${duration} days`;
                           } else {
@@ -383,11 +440,14 @@ class FeedCreditCard extends React.Component {
                           }
 
                           return (
-                            <LevelItem key={index} style={{ margin: "0 8px 8px 0", opacity: isActive ? "" : 0.6 }}>
-                              <div className="rounded p-1" style={{
+                            <LevelItem key={index} style={{ margin: '0 8px 8px 0', opacity: isActive ? '' : 0.6 }}>
+                              <div
+                                className="rounded p-1"
+                                style={{
                                 lineHeight: 1.2,
-                                background: isActive ? "#FF3B30" : "rgb(255,255,255,0.2)"
-                              }}>
+                                background: isActive ? '#FF3B30' : 'rgb(255,255,255,0.2)',
+                              }}
+                              >
                                 {text}
                               </div>
                               <div className="p-1">
@@ -401,7 +461,7 @@ class FeedCreditCard extends React.Component {
                   )
                 }
                 <div className="form-group pt-2 d-flex">
-                  <label className="col-form-label headline"><h4><FormattedMessage id="buy"/></h4></label>
+                  <label className="col-form-label headline"><h4><FormattedMessage id="buy" /></h4></label>
                   <div className="mx-2">
                     <Field
                       name="amount"
@@ -410,35 +470,39 @@ class FeedCreditCard extends React.Component {
                       validate={[required]}
                       component={fieldCleave}
                       propsCleave={{
-                        placeholder: intl.formatMessage({ id: "amount" }),
-                        options: { numeral: true, delimiter: "", numeralDecimalScale: 8 },
+                        placeholder: intl.formatMessage({ id: 'amount' }),
+                        options: { numeral: true, delimiter: '', numeralDecimalScale: 8 },
                         style: {
-                          fontSize: "26px",
-                          fontWeight: "600",
-                          height: "44px"
-                        }
+                          fontSize: '26px',
+                          fontWeight: '600',
+                          height: '44px',
+                        },
                       }}
                       className="form-control-custom form-control-custom-ex d-inline-block w-100"
                       onChange={this.onAmountChange}
                     />
                   </div>
-                  <span className="d-inline-block ml-auto" style={{ maxWidth: "368px", minWidth: "128px" }}>
+                  <span className="d-inline-block ml-auto" style={{ maxWidth: '368px', minWidth: '128px' }}>
                     <Field
                       name="currency"
                       type="radio-big"
                       // containerClass="radio-container-old"
                       component={fieldRadioButton}
                       list={currencyForced ? CRYPTO_CURRENCY_LIST.filter(c => c.value === currencyForced) : CRYPTO_CURRENCY_LIST}
-                      color={"#fff"}
+                      color="#fff"
                       onChange={this.onCurrencyChange}
                     />
                   </span>
                 </div>
                 <div className="pb-2">
-                  <h4 className="headline"><FormattedMessage id="askUsingCreditCard" values={{
+                  <h4 className="headline"><FormattedMessage
+                    id="askUsingCreditCard"
+                    values={{
                     fiatCurrency: FIAT_CURRENCY.USD,
-                    total: formatMoney(total)
-                  }}/></h4>
+                    total: formatMoney(total),
+                  }}
+                  />
+                  </h4>
                 </div>
                 {
                   amount && (
@@ -452,7 +516,7 @@ class FeedCreditCard extends React.Component {
                 }
               </div>
             </Feed>
-            <Button block type="submit">{buttonTitle && buttonTitle || <FormattedMessage id="shakeNow"/>} </Button>
+            <Button block type="submit" className="buy-button">{buttonTitle && buttonTitle || <FormattedMessage id="shakeNow" />} </Button>
           </FormCreditCard>
         </div>
         <ModalDialog onRef={modal => this.modalRef = modal}>
@@ -477,9 +541,9 @@ const mapStateToProps = (state) => ({
   cryptoPrice: state.exchange.cryptoPrice,
   userCcLimit: state.exchange.userCcLimit,
   ccLimits: state.exchange.ccLimits || [],
-  amount: selectorFormCreditCard(state, "amount"),
-  currency: selectorFormCreditCard(state, "currency"),
-  authProfile: state.auth.profile
+  amount: selectorFormCreditCard(state, 'amount'),
+  currency: selectorFormCreditCard(state, 'currency'),
+  authProfile: state.auth.profile,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -490,7 +554,7 @@ const mapDispatchToProps = (dispatch) => ({
   rfChange: bindActionCreators(change, dispatch),
   showAlert: bindActionCreators(showAlert, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
-  hideLoading: bindActionCreators(hideLoading, dispatch)
+  hideLoading: bindActionCreators(hideLoading, dispatch),
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(FeedCreditCard));

@@ -74,7 +74,10 @@
       font-weight: 500;
       line-height: rem-calc(35px);
       .index {
-        flex-basis: 4%;
+        width: 6%;
+      }
+      .collapse-content {
+        width: 94%;
       }
     }
     .extend {

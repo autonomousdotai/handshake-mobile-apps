@@ -27,6 +27,15 @@
     position: relative;
     border-radius: 6px;
     background-size: cover;
+
+    .warning {
+      color: Red;
+      bottom: 13px;
+      right: 12px;
+      position: absolute;
+      cursor: pointer;
+      font-size: 14px;
+    }
   }
   .feed-selected{
     border-color: #0BE200;
@@ -70,10 +79,15 @@
     }
   }
   .more{
-    top: 12px;
-    right: 12px;
+    text-align: right;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    width: 30px;
+    top: 6px;
+    right: 2px;
     position: absolute;
     cursor: pointer;
+    display: table;
   }
   .safe{
     bottom: 13px;

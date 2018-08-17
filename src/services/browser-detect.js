@@ -22,6 +22,14 @@ class BrowserDetect {
     return this.browserDetect.phone() !== null;
   }
 
+  get isIphone(){    
+    return this.browserDetect.is('iphone');
+  }
+
+  get isChrome(){
+    return this.browserDetect.is('Chrome');
+  }
+
   /**
    * check is tablet
    *

@@ -5,7 +5,6 @@ import { injectIntl } from 'react-intl';
 
 // services
 import createForm from '@/components/core/form/createForm';
-import Refers from '@/components/Wallet/Refers';
 import { setHeaderTitle, showAlert } from '@/reducers/app/action';
 import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate, submitEmail } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
@@ -156,7 +155,6 @@ class Profile extends React.Component {
         },
       });
     } else {
-      console.log(sms);
       if (!sms) {
         this.props.showAlert({
           message: <div className="text-center">{messages.me.profile.verify.alert.require.phone}</div>,
@@ -399,7 +397,7 @@ class Profile extends React.Component {
                 </div>
               </div>
               <div className={`content ${this.state.usernameCollapse ? '' : 'd-none'}`}>
-                <p className="text">{messages.me.profile.text.username.desc1}?</p>
+                <p className="text">{messages.me.profile.text.username.desc1}</p>
                 <UsernameForm onSubmit={this.addUsername}>
                   <Field
                     name="username"
@@ -559,11 +557,6 @@ class Profile extends React.Component {
                 </EmailForm>
               </div>
             </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <Refers />
           </Col>
         </Row>
         <ModalDialog onRef={(modal) => { this.modalVerifyRef = modal; return null; }}>

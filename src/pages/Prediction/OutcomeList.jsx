@@ -2,7 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 import ScrollableList from '@/components/ScrollableList/ScrollableList';
 import { generatedBackgroundCss } from '@/utils/css.js';
-import { smartTrim } from '@/utils/string';
+import { smartTrim, countWords } from '@/utils/string';
 
 const BACKGROUND_COLORS = [
   '#000000',
@@ -18,14 +18,20 @@ const BACKGROUND_COLORS = [
 ];
 
 function buildOutcomeItem(outcome) {
+  const { name } = outcome;
   const styleCss = {
     background: generatedBackgroundCss(null, BACKGROUND_COLORS),
   };
-  const handledStr = smartTrim(outcome.name, outcome.name.length / 2);
+  let handledStr = [];
+  if (countWords(name) === 2) {
+    handledStr = name.trim().split(' ');
+  } else {
+    handledStr = smartTrim(name, name.length / 2);
+  }
   return (
     <div className="OutcomeItem" style={styleCss}>
-      <span>{handledStr[0]}</span>
-      <span>{handledStr[1]}</span>
+      {handledStr[0] && <span>{handledStr[0]}</span>}
+      {handledStr[1] && <span>{handledStr[1]}</span>}
     </div>
   );
 }

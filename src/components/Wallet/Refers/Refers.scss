@@ -8,3 +8,17 @@
     margin-bottom: 10px;
   }
 }
+
+.refer-table {
+  margin-top: 10px;
+  .refer-value-header {
+    text-align: right;
+  }
+  .refer-value {
+    text-align: right;
+    font-weight: 600;
+  }
+}
+
+table { table-layout: fixed; }
+table th, table td { overflow: hidden; }

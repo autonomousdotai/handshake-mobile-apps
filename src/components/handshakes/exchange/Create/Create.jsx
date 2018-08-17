@@ -54,11 +54,13 @@ import {
   trackingOnchain,
   updateOfferStores,
 } from '@/reducers/exchange/action';
-import { BigNumber } from 'bignumber.js/bignumber';
-import { authUpdate } from '@/reducers/auth/action';
+import { BigNumber } from 'bignumber.js';
+import { authUpdate, checkUsernameExist } from '@/reducers/auth/action';
 import OfferShop from '@/models/OfferShop';
-import { getErrorMessageFromCode } from '../utils';
+import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import PropTypes from 'prop-types';
+import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+import Modal from '@/components/core/controls/Modal';
 
 const nameFormExchangeCreate = 'exchangeCreate';
 const FormExchangeCreate = createForm({
@@ -105,6 +107,7 @@ class Component extends React.Component {
       enableAction: true,
       buyBalance: 0,
       sellBalance: 0,
+      modalFillContent: '',
     };
     // this.mainColor = _sample(feedBackgroundColors)
     this.mainColor = '#1F2B34';
@@ -143,7 +146,7 @@ class Component extends React.Component {
       detectedCountryCode = foundCountryPhone.dialCode;
     }
     rfChange(nameFormExchangeCreate, 'phone', authProfile.phone || `${detectedCountryCode}-`);
-    // rfChange(nameFormExchangeCreate, 'nameShop', authProfile.name || '');
+    rfChange(nameFormExchangeCreate, 'username', authProfile.username || '');
     rfChange(nameFormExchangeCreate, 'address', authProfile.address || '');
 
     let fiatCurrency = { id: FIAT_CURRENCY.USD, text: FIAT_CURRENCY.USD };
@@ -292,7 +295,7 @@ class Component extends React.Component {
           // if (isUpdate) {
           rfChange(nameFormExchangeCreate, 'customizePriceBuy', item.buyPercentage * 100);
           rfChange(nameFormExchangeCreate, 'customizePriceSell', item.sellPercentage * 100);
-          this.setState({ buyBalance: item.buyBalance, sellBalance: item.sellBalance });
+          this.setState({ buyBalance: item.buyAmount, sellBalance: item.sellAmount });
           // }
 
           break;
@@ -356,7 +359,35 @@ class Component extends React.Component {
     // });
   }
 
+  buyCoinsUsingCreditCard = () => {
+    this.modalRef.close();
+    const { messages } = this.props.intl;
+    const { currency } = this.props;
+    const wallet = MasterWallet.getWalletDefault(currency);
+
+    this.setState({
+      modalFillContent:
+        (
+          <FeedCreditCard
+            buttonTitle={messages.create.cash.credit.title}
+            currencyForced={wallet ? wallet.name : ''}
+            callbackSuccess={this.afterWalletFill}
+            addressForced={wallet ? wallet.address : ''}
+          />
+        ),
+    }, () => {
+      this.modalFillRef.open();
+    });
+  }
+
+  cancelTopupNow = () => {
+    this.modalRef.close();
+
+    this.continueSaveOffer();
+  }
+
   showNotEnoughCoinAlert = (balance, amountBuy, amountSell, fee, currency) => {
+    const { isUpdate } = this.state;
     console.log('showNotEnoughCoinAlert', balance, amountBuy, amountSell, fee, currency);
     const bnBalance = new BigNumber(balance);
     const bnAmountBuy = new BigNumber(0);
@@ -368,15 +399,32 @@ class Component extends React.Component {
     const conditionSell = bnBalance.isLessThan(bnAmountSell.plus(bnFeeSell));
 
     if (conditionBuy || conditionSell) {
-      this.props.showAlert({
-        message: <div className="text-center">
-          <FormattedMessage id="notEnoughCoinInWalletStores" />
-        </div>,
-        timeOut: 5000,
-        type: 'danger',
-        callBack: () => {
-        },
+      this.setState({
+        modalContent:
+          (
+            <div className="py-2">
+              <Feed className="feed p-2" background="#259B24">
+                <div className="text-white d-flex align-items-center" style={{ minHeight: '50px' }}>
+                  <div><FormattedMessage id="notEnoughCoinInWalletStores" /></div>
+                </div>
+              </Feed>
+              <Button className="mt-2" block onClick={this.buyCoinsUsingCreditCard}><FormattedMessage id="ex.btn.topup.now" /></Button>
+              <Button block className="btn btn-secondary" onClick={this.cancelTopupNow}>{isUpdate ? <FormattedMessage id="ex.btn.update.atm" /> : <FormattedMessage id="ex.btn.create.atm" />}</Button>
+            </div>
+          ),
+      }, () => {
+        this.modalRef.open();
       });
+
+      // this.props.showAlert({
+      //   message: <div className="text-center">
+      //     <FormattedMessage id="notEnoughCoinInWalletStores" />
+      //   </div>,
+      //   timeOut: 5000,
+      //   type: 'danger',
+      //   callBack: () => {
+      //   },
+      // });
     }
 
     return conditionBuy || conditionSell;
@@ -397,6 +445,10 @@ class Component extends React.Component {
       result = false;
     }
 
+    if (process.env.isDojo) {
+      result = true;
+    }
+
     if (!result) {
       const message = <FormattedMessage id="requireDefaultWalletOnMainNet" />;
       this.showAlert(message);
@@ -413,15 +465,33 @@ class Component extends React.Component {
     clearFields(nameFormExchangeCreate, false, false, 'amountBuy', 'amountSell');
   }
 
+  onSubmit = (values) => {
+    const { messages } = this.props.intl;
+
+    if (values.username) {
+      this.props.checkUsernameExist({
+        PATH_URL: 'user/username-exist',
+        qs: { username: values.username },
+        successFn: (res) => {
+          if (!res.data) {
+            this.handleSubmit(values);
+          } else {
+            this.showAlert(messages.me.profile.username.exist);
+          }
+        },
+      });
+    } else {
+      this.showAlert(messages.me.profile.username.required);
+    }
+  }
+
   handleSubmit = async (values) => {
-    const {
-      authProfile, ipInfo, freeStartInfo, isChooseFreeStart,
-    } = this.props;
-    const { lat, lng, isUpdate } = this.state;
     console.log('handleSubmit', values);
     const {
-      currency, amountBuy, amountSell, customizePriceBuy,
-      customizePriceSell, nameShop, phone, address, stationCurrency,
+      freeStartInfo, isChooseFreeStart,
+    } = this.props;
+    const {
+      currency, amountBuy, amountSell,
     } = values;
 
     this.showLoading();
@@ -445,14 +515,32 @@ class Component extends React.Component {
       }
     }
 
+    this.continueSaveOffer();
+  }
+
+  continueSaveOffer = () => {
+    const {
+      authProfile, ipInfo, freeStartInfo, isChooseFreeStart,
+    } = this.props;
+    const { lat, lng, isUpdate } = this.state;
+    const {
+      currency, amountBuy, amountSell, customizePriceBuy,
+      customizePriceSell, phone, address, stationCurrency,
+    } = this.props;
+
+    const wallet = MasterWallet.getWalletDefault(currency);
+
     const phones = phone.trim().split('-');
     const phoneNew = phones.length > 1 && phones[1].length > 0 ? phone : '';
 
+    const sellAmount = amountSell ? amountSell.toString() : isUpdate ? '' : '0';
+    const buyAmount = amountBuy ? amountBuy.toString() : isUpdate ? '' : '0';
+
     const data = {
       currency,
-      sell_amount: amountSell && amountSell.toString() || '0',
+      sell_amount: sellAmount,
       sell_percentage: customizePriceSell.toString(),
-      buy_amount: amountBuy && amountBuy.toString() || '0',
+      buy_amount: buyAmount,
       buy_percentage: customizePriceBuy.toString(),
       user_address: wallet.address,
     };
@@ -538,23 +626,30 @@ class Component extends React.Component {
     const { isUpdate } = this.state;
 
     if (isUpdate) {
-      this.props.offerItemRefill({
-        PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}/refill`,
-        METHOD: 'POST',
-        data: offerItem,
-        successFn: (res) => {
-          this.handleRefillOfferSuccess(res);
-
-          this.props.updateOfferStores({
-            PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
-            data: offerStore,
-            METHOD: 'PUT',
-            // successFn: this.handleCreateOfferSuccess,
-            // errorFn: this.handleCreateOfferFailed,
-          });
-        },
+      this.props.updateOfferStores({
+        PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
+        data: offerStore,
+        METHOD: 'PUT',
+        successFn: this.handleCreateOfferSuccess,
         errorFn: this.handleCreateOfferFailed,
       });
+      // this.props.offerItemRefill({
+      //   PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}/refill`,
+      //   METHOD: 'POST',
+      //   data: offerItem,
+      //   successFn: (res) => {
+      //     this.handleRefillOfferSuccess(res);
+      //
+      //     this.props.updateOfferStores({
+      //       PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
+      //       data: offerStore,
+      //       METHOD: 'PUT',
+      //       // successFn: this.handleCreateOfferSuccess,
+      //       // errorFn: this.handleCreateOfferFailed,
+      //     });
+      //   },
+      //   errorFn: this.handleCreateOfferFailed,
+      // });
     } else {
       this.props.addOfferItem({
         PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${offer.id}`,
@@ -576,31 +671,34 @@ class Component extends React.Component {
 
     // console.log('handleCreateOfferSuccess', data);
 
-    const wallet = MasterWallet.getWalletDefault(currency);
-
-    if (currency === CRYPTO_CURRENCY.BTC) {
-      console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
-      if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
-          console.log('transfer', success);
-        });
-      }
-    } else if (currency === CRYPTO_CURRENCY.ETH) {
-      if (amountSell > 0 && offer.items.ETH.freeStart === '') {
-        try {
-          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
-
-          let result = null;
-          result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
-          console.log('handleCreateOfferSuccess', result);
-
-          this.trackingOnchain(offer.id, '', result.hash, offer.items.ETH.status, '', currency);
-        } catch (e) {
-          this.trackingOnchain(offer.id, '', '', offer.items.ETH.status, e.toString(), currency);
-          console.log('handleCreateOfferSuccess', e.toString());
-        }
-      }
-    }
+    // const wallet = MasterWallet.getWalletDefault(currency);
+    //
+    // if (currency === CRYPTO_CURRENCY.BTC) {
+    //   console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
+    //   if (amountSell > 0) {
+    //     wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
+    //       console.log('transfer', success);
+    //     });
+    //   }
+    // } else if (currency === CRYPTO_CURRENCY.ETH) {
+    //   if (amountSell > 0 && offer.items.ETH.freeStart === '') {
+    //     wallet.transfer(offer.items.ETH.systemAddress, offer.items.ETH.sellTotalAmount, NB_BLOCKS).then((success) => {
+    //       console.log('transfer', success);
+    //     });
+    //     try {
+    //       const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
+    //
+    //       let result = null;
+    //       result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
+    //       console.log('handleCreateOfferSuccess', result);
+    //
+    //       this.trackingOnchain(offer.id, '', result.hash, offer.items.ETH.status, '', currency);
+    //     } catch (e) {
+    //       this.trackingOnchain(offer.id, '', '', offer.items.ETH.status, e.toString(), currency);
+    //       console.log('handleCreateOfferSuccess', e.toString());
+    //     }
+    //   }
+    // }
 
     this.hideLoading();
     const message = <FormattedMessage id="createOfferSuccessMessage" />;
@@ -641,36 +739,36 @@ class Component extends React.Component {
 
     // console.log('handleCreateOfferSuccess', data);
 
-    const wallet = MasterWallet.getWalletDefault(currency);
-
-    if (currency === CRYPTO_CURRENCY.BTC) {
-      console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
-      if (amountSell > 0) {
-        wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
-          console.log('transfer', success);
-        });
-      }
-    } else if (currency === CRYPTO_CURRENCY.ETH) {
-      if (amountSell > 0 && offer.items.ETH.freeStart === '') {
-        try {
-          const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
-
-          let result = null;
-          if (offer.hid) {
-            result = await cashHandshake.addInventory(offer.items.ETH.sellTotalAmount, offer.hid, offer.id);
-          } else {
-            result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
-          }
-
-          console.log('handleRefillOfferSuccess', result);
-
-          this.trackingOnchainRefill(offer.id, '', result.hash, offer.items.ETH.subStatus, '', currency);
-        } catch (e) {
-          this.trackingOnchainRefill(offer.id, '', '', offer.items.ETH.subStatus, e.toString(), currency);
-          console.log('handleRefillOfferSuccess', e.toString());
-        }
-      }
-    }
+    // const wallet = MasterWallet.getWalletDefault(currency);
+    //
+    // if (currency === CRYPTO_CURRENCY.BTC) {
+    //   console.log('transfer BTC', offer.items.BTC.systemAddress, amountSell);
+    //   if (amountSell > 0) {
+    //     wallet.transfer(offer.items.BTC.systemAddress, offer.items.BTC.sellTotalAmount, NB_BLOCKS).then((success) => {
+    //       console.log('transfer', success);
+    //     });
+    //   }
+    // } else if (currency === CRYPTO_CURRENCY.ETH) {
+    //   if (amountSell > 0 && offer.items.ETH.freeStart === '') {
+    //     try {
+    //       const cashHandshake = new ExchangeCashHandshake(wallet.chainId);
+    //
+    //       let result = null;
+    //       if (offer.hid) {
+    //         result = await cashHandshake.addInventory(offer.items.ETH.sellTotalAmount, offer.hid, offer.id);
+    //       } else {
+    //         result = await cashHandshake.initByStationOwner(offer.items.ETH.sellTotalAmount, offer.id);
+    //       }
+    //
+    //       console.log('handleRefillOfferSuccess', result);
+    //
+    //       this.trackingOnchainRefill(offer.id, '', result.hash, offer.items.ETH.subStatus, '', currency);
+    //     } catch (e) {
+    //       this.trackingOnchainRefill(offer.id, '', '', offer.items.ETH.subStatus, e.toString(), currency);
+    //       console.log('handleRefillOfferSuccess', e.toString());
+    //     }
+    //   }
+    // }
 
     this.hideLoading();
     const message = <FormattedMessage id="updateOfferSuccessMessage" />;
@@ -685,6 +783,8 @@ class Component extends React.Component {
     });
 
     this.resetFormValue();
+
+    this.updateUserProfile(offer);
   }
 
   handleCreateOfferFailed = (e) => {
@@ -741,17 +841,21 @@ class Component extends React.Component {
   // //////////////////////
 
   updateUserProfile = (offerShop) => {
+    const { username } = this.props;
     console.log('updateUserProfile offerShop', offerShop);
     const params = new URLSearchParams();
     params.append('name', offerShop.username);
     params.append('address', offerShop.contactInfo);
+    params.append('username', username);
     this.props.authUpdate({
       PATH_URL: 'user/profile',
       data: params,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       METHOD: 'POST',
       successFn: () => {
-        // this.setState({ haveProfile: true });
+        if (this.props.app.firechat) {
+          this.props.app.firechat.updateUserName(username);
+        }
       },
       errorFn: () => {
         // this.setState({ haveProfile: false });
@@ -770,15 +874,19 @@ class Component extends React.Component {
     this.props.history.push(`${URL.HANDSHAKE_ME}?id=${HANDSHAKE_ID.EXCHANGE}&tab=dashboard`);
   }
 
+  afterWalletFill = () => {
+    this.modalFillRef.close();
+  }
+
   render() {
+    const { messages } = this.props.intl;
     const {
       currency, listOfferPrice, stationCurrency, customizePriceBuy, customizePriceSell, amountBuy, amountSell, freeStartInfo, isChooseFreeStart,
     } = this.props;
     const {
-      isUpdate, enableAction, buyBalance, sellBalance,
+      isUpdate, enableAction, buyBalance, sellBalance, modalContent, modalFillContent,
     } = this.state;
     const fiatCurrency = stationCurrency?.id;
-    const modalContent = this.state.modalContent;
     // const allowInitiate = this.offer ? (!this.offer.itemFlags.ETH || !this.offer.itemFlags.BTC) : true;
 
     // let enableChooseFiatCurrency = true;
@@ -806,7 +914,7 @@ class Component extends React.Component {
     const listCurrency = FIAT_CURRENCY_LIST;
     return (
       <div className="create-exchange">
-        <FormExchangeCreate onSubmit={this.handleSubmit} validate={this.handleValidate}>
+        <FormExchangeCreate onSubmit={this.onSubmit} validate={this.handleValidate}>
           <div className="d-flex mt-3">
             <div className="input-group">
               <Field
@@ -974,6 +1082,22 @@ class Component extends React.Component {
             </div>
             <hr className="hrLine"/> */}
 
+              <div className="d-flex py-1">
+                <label className="col-form-label mr-auto label-create">
+                  <span className="align-middle">{messages.me.profile.text.username.label}</span>
+                  <div className="explanation">{messages.me.profile.text.username.desc1}</div>
+                </label>
+                <div className="input-group">
+                  <Field
+                    name="username"
+                    className="form-control-custom form-control-custom-ex w-100 input-no-border"
+                    component={fieldInput}
+                    placeholder={messages.me.profile.text.username.label}
+                    validate={[required]}
+                  />
+                </div>
+              </div>
+
               <div>
                 <div className="d-flex mt-2">
                   <label className="col-form-label mr-auto label-create"><span
@@ -1044,6 +1168,9 @@ class Component extends React.Component {
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
         </ModalDialog>
+        <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal}>
+          {modalFillContent}
+        </Modal>
       </div>
     );
   }
@@ -1062,6 +1189,7 @@ const mapStateToProps = (state) => {
   const phone = selectorFormExchangeCreate(state, 'phone');
   const address = selectorFormExchangeCreate(state, 'address');
   const stationCurrency = selectorFormExchangeCreate(state, 'stationCurrency');
+  const username = selectorFormExchangeCreate(state, 'username');
 
   return {
     currency,
@@ -1073,12 +1201,14 @@ const mapStateToProps = (state) => {
     phone,
     address,
     stationCurrency,
+    username,
     ipInfo: state.app.ipInfo,
     authProfile: state.auth.profile,
     offerStores: state.exchange.offerStores,
     listOfferPrice: state.exchange.listOfferPrice,
     freeStartInfo: state.exchange.freeStartInfo,
     isChooseFreeStart: state.exchange.isChooseFreeStart,
+    app: state.app,
   };
 };
 
@@ -1095,5 +1225,6 @@ const mapDispatchToProps = dispatch => ({
   updateOfferStores: bindActionCreators(updateOfferStores, dispatch),
   offerItemRefill: bindActionCreators(offerItemRefill, dispatch),
   getUserLocation: bindActionCreators(getUserLocation, dispatch),
+  checkUsernameExist: bindActionCreators(checkUsernameExist, dispatch),
 });
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Component));
