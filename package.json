@@ -136,7 +136,7 @@
     "ripple-hashes": "github:0xngoubou/ripple-hashes",
     "ripple-keypairs": "^0.10.1",
     "ripple-lib": "github:0xngoubou/ripple-lib",
-    "ripple-lib-transactionparser": "github:0xngoubou/transactionparser",
+    "ripple-lib-transactionparser": "github:0xbatutut/transactionparser",
     "rmc-tabs": "^1.2.27",
     "sass-loader": "^7.0.3",
     "satoshi-bitcoin": "^1.0.4",
