@@ -534,20 +534,20 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
           id, currency: itemCurrency, type, freeStart, amount, totalAmount, status, subStatus,
         } = itemOffer;
 
-        let transferAmount = 0;
+        let transferAmount = new BigNumber(0);
 
         if (currency === itemCurrency && (status === 'completing' || (status === 'completed' && subStatus === 'transferring'))) {
           const userType = getHandshakeUserType(initUserId, shakeUserIds);
 
           if ((type === EXCHANGE_ACTION.SELL && userType === HANDSHAKE_USER.OWNER && freeStart === '') ||
             (type === EXCHANGE_ACTION.BUY && userType === HANDSHAKE_USER.SHAKED)) {
-            transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? totalAmount : amount;
+            transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? new BigNumber(totalAmount) : new BigNumber(amount);
 
-            transferAmount += 2 * fee;
+            transferAmount = transferAmount.plus(new BigNumber(2 * fee));
           }
         }
 
-        return pendingBalance + transferAmount;
+        return pendingBalance + transferAmount.toNumber();
       }, 0);
     }
 
@@ -577,12 +577,12 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
           return;
         }
 
-        let transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? totalAmount : amount;
+        let transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? new BigNumber(totalAmount) : new BigNumber(amount);
 
         const pendingBalance = await this.getPendingBalance();
         console.log('pendingBalance',pendingBalance);
 
-        if (this.showNotEnoughCoinAlert(balance, pendingBalance + +transferAmount, 2 * fee, currency)) {
+        if (this.showNotEnoughCoinAlert(balance, transferAmount.plus(new BigNumber(pendingBalance)).toNumber(), 2 * fee, currency)) {
           this.props.hideLoading();
           return;
         }
