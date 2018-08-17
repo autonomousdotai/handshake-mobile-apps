@@ -15,6 +15,7 @@ import Layout from '@/components/Layout/Main';
 import imgCash from '@/assets/images/landing/home/cash.jpg';
 import imgCashContent from '@/assets/images/landing/cash/fake-content.svg';
 import imgDadContent from '@/assets/images/landing/dad/fake-content.jpg';
+import imgPredictionContent from '@/assets/images/landing/prediction/fake-content.svg';
 // import imgBlockchainPrivacy from '@/assets/images/landing/home/blockchain-privacy.jpg';
 import imgDad from '@/assets/images/landing/home/dad.jpg';
 // import imgDao from '@/assets/images/landing/home/dao.jpg';
@@ -44,6 +45,9 @@ const LandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Ma
 const ProjectDetail = createDynamicImport(() => import('@/components/ProjectDetail'), Loading);
 const Recruiting = createDynamicImport(() => import('@/pages/Recruiting'), Loading);
 const JobDetail = createDynamicImport(() => import('@/pages/Recruiting/JobDetail'), Loading);
+const ContentForCashBusiness = createDynamicImport(() => import('@/pages/LandingPage/ContentForCashBusiness'), Loading);
+const Discover = createDynamicImport(() => import('@/pages/Discover/Discover'), Loading);
+const RouterCCConfirm = createDynamicImport(() => import('@/components/Router/CCConfirm'), Loading);
 
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
@@ -58,7 +62,8 @@ const configRoutesUsingMobileLayout = [
   { path: URL.COMMENTS_BY_SHAKE, component: RouterComment },
   { path: URL.ADMIN, component: RouterAdmin },
   { path: URL.REPORT, component: RouterAdmin },
-  { path: URL.REPORT, component: RouterAdmin },
+  { path: URL.HANDSHAKE_PEX, component: RouterExchange },
+  { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
   {
     path: URL.PRODUCT_DAD_URL,
     render: () => {
@@ -82,7 +87,8 @@ if (BrowserDetect.isDesktop) {
   const configRoutesUsingDesktopLayout = [
     { path: URL.LUCKY_POOL, component: RouterLuckyPool },
     { path: URL.PRODUCT_CASH_URL, render: () => <ProjectDetail type="product" name="cash" img={imgCash} imgContent={imgCashContent} /> },
-    { path: URL.PRODUCT_PREDICTION_URL, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} /> },
+    { path: URL.PRODUCT_PREDICTION_URL, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} imgContent={imgPredictionContent} /> },
+    { path: URL.HANDSHAKE_PEX, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} /> },
     { path: URL.PRODUCT_WALLET_URL, render: () => <ProjectDetail type="product" name="wallet" img={imgWallet} /> },
     { path: URL.PRODUCT_HIVEPAY_OFFLINE_URL, render: () => <ProjectDetail type="product" name="pay-for-stores" img={imgHivepayOffline} /> },
     { path: URL.PRODUCT_HIVEPAY_ONLINE_URL, render: () => <ProjectDetail type="product" name="pay-for-devs" img={imgHivepayOnline} /> },
@@ -141,37 +147,42 @@ class Router extends React.Component {
           <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
           <Route exact path={URL.RECRUITING} component={Recruiting} />
           <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
+          <Route path={URL.CASH_FOR_BUSINESS} render={() => <ProjectDetail type="landing" name="cash-for-business" img={imgDad} imgContent1={imgDadContent} contentComponent={<ContentForCashBusiness />} />} />
           {routesUsingDesktopLayout}
+
+          {/* Cash on mobile uses a completely different layout! */}
+          {/* <Route path={URL.HANDSHAKE_CASH} component={Discover} /> */}
+
           <Route
             path={URL.INDEX}
-            render={props =>
-              (
+            render={props => {
+              return (
                 <Layout {...props}>
                   {
                     this.state.firebaseApp.config.isMaintain
-                    ? <Maintain />
-                    : (
-                      <ScrollToTop>
-                        <Switch>
-                          {/*<Route*/}
+                      ? <Maintain />
+                      : (
+                        <ScrollToTop>
+                          <Switch>
+                            {/*<Route*/}
                             {/*exact*/}
                             {/*path={URL.INDEX}*/}
                             {/*render={() => {*/}
-                              {/*if (process.env.isDojo) {*/}
-                                {/*return <Redirect to={{ pathname: URL.HANDSHAKE_CASH }} />*/}
-                              {/*}*/}
-                              {/*return <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} />*/}
+                            {/*if (process.env.isDojo) {*/}
+                            {/*return <Redirect to={{ pathname: URL.HANDSHAKE_CASH }} />*/}
+                            {/*}*/}
+                            {/*return <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} />*/}
                             {/*}}*/}
-                          {/*/>*/}
-                          {routesUsingMobileLayout}
-                          <Route component={Page404} />
-                        </Switch>
-                      </ScrollToTop>
-                    )
+                            {/*/>*/}
+                            {routesUsingMobileLayout}
+                            <Route component={Page404} />
+                          </Switch>
+                        </ScrollToTop>
+                      )
                   }
                 </Layout>
               )
-            }
+            }}
           />
         </Switch>
       </BrowserRouter>

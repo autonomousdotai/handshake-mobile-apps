@@ -42,22 +42,22 @@ class AddToken extends React.Component {
     super(props);
 
     this.state = {
-      wallets: [],      
+      wallets: [],
       walletSelected: false,
       inputContractAddressValue: '',
       inputTokenDecimalsValue: 0,
       inputTokenNameValue: '',
-      inputTokenSymbolValue: '',      
+      inputTokenSymbolValue: '',
       formAddTokenIsActive: false,
       // Qrcode
       qrCodeOpen: false,
       delay: 300,
       walletsData: false,
-      tokenType: false,    
-      
+      tokenType: false,
+
       // Autosuggest
-      listToken: [],          
-    }    
+      listToken: [],
+    }
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -84,11 +84,11 @@ class AddToken extends React.Component {
     this.props.hideLoading();
   }
 
-  componentDidMount() {    
-    // clear form:    
-    this.resetForm();  
+  componentDidMount() {
+    // clear form:
+    this.resetForm();
     this.getWalletDefault();
-    this.listTokenType();        
+    this.listTokenType();
   }
 
   resetForm(){
@@ -96,17 +96,17 @@ class AddToken extends React.Component {
   }
 
   componentWillUnmount() {
-    
+
   }
   componentDidUpdate (){
-  
+
   }
-  componentWillReceiveProps() {       
-    if (!this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){    
+  componentWillReceiveProps() {
+    if (!this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){
       this.props.clearFields(nameFormAddToken, false, false, "contractAddress", "tokenName", "tokenSymbol", "tokenDecimals");
       this.setState({formAddTokenIsActive: this.props.formAddTokenIsActive});
     }
-    if (this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){      
+    if (this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){
       this.getWalletDefault();
       this.setState({formAddTokenIsActive: this.props.formAddTokenIsActive});
     }
@@ -122,13 +122,13 @@ class AddToken extends React.Component {
 
 
   onFinish = () => {
-   
+
     const { onFinish } = this.props;
-    
-    if (onFinish) {      
+
+    if (onFinish) {
       onFinish({"data": this.state.tokenType});
     } else {
-      
+
     }
   }
 
@@ -137,10 +137,10 @@ class AddToken extends React.Component {
     let coinDefault = 'ETH';
 
     let wallets = MasterWallet.getMasterWallet();
-    
+
     let listWalletETH = [];
     let walletDefault = false;
-    
+
     // set name + text for list:
     if (wallets.length > 0){
       wallets.forEach((wallet) => {
@@ -149,19 +149,19 @@ class AddToken extends React.Component {
           if (process.env.isLive){
             wallet.text = wallet.getShortAddress() + " (" + wallet.className + " " + wallet.name + ")";
           }
-          wallet.id = wallet.address + "-" + wallet.getNetworkName()+ wallet.name;  
+          wallet.id = wallet.address + "-" + wallet.getNetworkName()+ wallet.name;
 
           if (walletDefault === false &&  wallet.default){
-              walletDefault = wallet;                          
+              walletDefault = wallet;
           }
           listWalletETH.push(wallet);
-        }              
+        }
       });
     }
-    
+
     if (walletDefault === false && listWalletETH.length > 0)
       walletDefault = listWalletETH[0];
-    
+
     this.setState({wallets: listWalletETH, walletSelected: walletDefault});
     this.props.rfChange(nameFormAddToken, 'walletSelected', walletDefault);
 
@@ -174,37 +174,37 @@ class AddToken extends React.Component {
     }
 
     this.setState({isRestoreLoading: true});
-        
-    this.props.clearFields(nameFormAddToken, false, false, "tokenName", "tokenSymbol", "tokenDecimals");   
+
+    this.props.clearFields(nameFormAddToken, false, false, "tokenName", "tokenSymbol", "tokenDecimals");
 
     let tokenType = new TokenERC20();
-    tokenType.createFromWallet(this.state.walletSelected);    
+    tokenType.createFromWallet(this.state.walletSelected);
     tokenType.getContractInfo(contractAddress).then(result =>{
-      if (result){           
+      if (result){
         this.setState({
           inputTokenNameValue: tokenType.title,
           inputTokenSymbolValue: tokenType.name,
           inputTokenDecimalsValue: tokenType.decimals,
         });
-        const { rfChange } = this.props        
+        const { rfChange } = this.props
         rfChange(nameFormAddToken, 'tokenName', tokenType.title);
         rfChange(nameFormAddToken, 'tokenSymbol', tokenType.name);
-        rfChange(nameFormAddToken, 'tokenDecimals', tokenType.decimals);        
-        this.setState({isRestoreLoading: false, tokenType: tokenType});        
+        rfChange(nameFormAddToken, 'tokenDecimals', tokenType.decimals);
+        this.setState({isRestoreLoading: false, tokenType: tokenType});
       }
-      else this.setState({isRestoreLoading: false, tokenType: false});        
-    });    
+      else this.setState({isRestoreLoading: false, tokenType: false});
+    });
   }
 
-  invalidateAddNewToken = (value) => {    
+  invalidateAddNewToken = (value) => {
     if (!this.state.walletSelected) return {};
     let errors = {};
     if (this.state.walletSelected){
       // check address:
       let result = this.state.walletSelected.checkAddressValid(value['contractAddress']);
       if (result !== true){
-          errors.contractAddress = 'Please enter a valid contract address';      
-          this.props.clearFields(nameFormAddToken, false, false, "tokenName", "tokenSymbol", "tokenDecimals");   
+          errors.contractAddress = 'Please enter a valid contract address';
+          this.props.clearFields(nameFormAddToken, false, false, "tokenName", "tokenSymbol", "tokenDecimals");
       }
     }
     return errors
@@ -237,24 +237,24 @@ class AddToken extends React.Component {
 
 submitAddToken=()=>{
   // todo handle submit form ....
-  
+
   if (this.state.tokenType != false){
-    this.setState({isRestoreLoading: true});  
+    this.setState({isRestoreLoading: true});
     let tokenType  = this.state.tokenType;
-    
+
     tokenType.decimals = this.state.inputTokenDecimalsValue;
     tokenType.name = this.state.inputTokenSymbolValue;
     tokenType.title = this.state.inputTokenNameValue;
 
     this.setState({tokenType: tokenType});
-    
+
     let result = MasterWallet.AddToken(tokenType);
-    
+
     this.showSuccess("Successfully added custom token");
-    
+
     this.onFinish();
-    
-    this.setState({isRestoreLoading: false, tokenType: false});  
+
+    this.setState({isRestoreLoading: false, tokenType: false});
   }
   else{
     this.showError("Unable to add custom token");
@@ -262,19 +262,19 @@ submitAddToken=()=>{
 }
 
 onItemSelectedWallet = (item) =>{
-  
+
   // I don't know why the item is not object ?????
-  let wallet = MasterWallet.convertObject(item);  
+  let wallet = MasterWallet.convertObject(item);
   this.setState({walletSelected: wallet}, () => {
       this.loadTokenInfo(this.state.inputContractAddressValue);
-  });  
+  });
 }
 
-onItemSelectedTokenType = (item) =>{    
+onItemSelectedTokenType = (item) =>{
 
   // to check token type first:
   let tokenType = new TokenERC20();
-  tokenType.createFromWallet(this.state.walletSelected);    
+  tokenType.createFromWallet(this.state.walletSelected);
   tokenType.contractAddress = item.address;
   tokenType.name = item.symbol;
   tokenType.title = item.name;
@@ -287,21 +287,21 @@ onItemSelectedTokenType = (item) =>{
     inputContractAddressValue: item.address,
     tokenType: tokenType,
   });
-  const { rfChange } = this.props        
+  const { rfChange } = this.props
   rfChange(nameFormAddToken, 'tokenName', item.name);
   rfChange(nameFormAddToken, 'tokenSymbol', item.symbol);
   rfChange(nameFormAddToken, 'tokenDecimals', item.decimal);
-  rfChange(nameFormAddToken, 'contractAddress', item.address);            
-  
+  rfChange(nameFormAddToken, 'contractAddress', item.address);
+
 }
 
 // For Qrcode:
 handleScan=(data) =>{
   const { rfChange } = this.props
   if(data){
-    rfChange(nameFormAddToken, 'contractAddress', data);   
-    this.loadTokenInfo(data); 
-    this.modalScanQrCodeRef.close();    
+    rfChange(nameFormAddToken, 'contractAddress', data);
+    this.loadTokenInfo(data);
+    this.modalScanQrCodeRef.close();
   }
 }
 handleError(err) {
@@ -339,17 +339,17 @@ renderScanQRCode = () => (
     listToken.forEach(token => {
       let tokenTmp = token;
       tokenTmp.id = token.address;
-      tokenTmp.value = token.name + ` (${token.symbol})`;    
-      objectTokenList.push(tokenTmp);   
+      tokenTmp.value = token.name + ` (${token.symbol})`;
+      objectTokenList.push(tokenTmp);
       this.setState({listToken: objectTokenList});
     });
-   }   
+   }
  }
-  
+
   render() {
-        
-    return ( 
-      <div>                                 
+
+    return (
+      <div>
           {/* QR code dialog */}
           {this.renderScanQRCode()}
           <AddNewTokenForm className="addtoken-wrapper" onSubmit={this.submitAddToken} validate={this.invalidateAddNewToken}>
@@ -376,45 +376,45 @@ renderScanQRCode = () => (
                     value={this.state.inputContractAddressValue}
                     onChange={evt => this.updateAddressValue(evt)}
                     validate={[required]}
-                  />          
+                  />
               {!isIOs ? <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeWhite} /> : ""}
             </div>
 
-            <p className="labelText">Name</p>           
+            <p className="labelText">Name</p>
             <Field
                   name="tokenName"
                   type="text" className="form-control"
                   component={fieldInput}
                   value={this.state.inputTokenNameValue}
-                  onChange={evt => this.updateTokenNameValue(evt)}                  
-                  validate={[required]}                    
+                  onChange={evt => this.updateTokenNameValue(evt)}
+                  validate={[required]}
               />
 
-              <p className="labelText">Symbol</p>                      
+              <p className="labelText">Symbol</p>
               <Field
                   name="tokenSymbol"
                   type="text"className="form-control"
                   component={fieldInput}
                   value={this.state.inputTokenSymbolValue}
-                  onChange={evt => this.updateTokenSymbolValue(evt)}                  
+                  onChange={evt => this.updateTokenSymbolValue(evt)}
                   validate={[required]}
               />
 
-              <p className="labelText">Decimals</p>                      
+              <p className="labelText">Decimals</p>
               <Field
                   name="tokenDecimals"
                   type="text"className="form-control"
                   component={fieldInput}
                   value={this.state.inputTokenDecimalsValue}
-                  onChange={evt => this.updateTokenDecimalsValue(evt)}                  
+                  onChange={evt => this.updateTokenDecimalsValue(evt)}
                   // validate={[required]}
               />
 
-                <div className ="dropdown-wallet-tranfer">                
-                  <p className="labelText">For wallet</p>            
+                <div className ="dropdown-wallet-tranfer">
+                  <p className="labelText">For wallet</p>
                   <Field
-                      name="walletSelected"                      
-                      component={fieldDropdown}                  
+                      name="walletSelected"
+                      component={fieldDropdown}
                       placeholder="Select a wallet"
                       defaultText={this.state.walletSelected ? this.state.walletSelected.text : ''}
                       list={this.state.wallets}
@@ -422,11 +422,11 @@ renderScanQRCode = () => (
                           this.onItemSelectedWallet(item);
                         }
                       }
-                    />                                    
+                    />
                 </div>
-                                
+
                 <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>Add Token</Button>
-              </div>            
+              </div>
           </AddNewTokenForm>
         </div>
     )
@@ -434,20 +434,20 @@ renderScanQRCode = () => (
 }
 
 AddToken.propTypes = {
-  formAddTokenIsActive: PropTypes.bool,  
+  formAddTokenIsActive: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => ({
-  
+
 });
 
-const mapDispatchToProps = (dispatch) => ({  
+const mapDispatchToProps = (dispatch) => ({
   rfChange: bindActionCreators(change, dispatch),
   showAlert: bindActionCreators(showAlert, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
   clearFields: bindActionCreators(clearFields, dispatch),
-  
+
 });
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(AddToken));

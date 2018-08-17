@@ -340,6 +340,7 @@ class BettingCreate extends React.Component {
     const { side } = this.props.bettingShake;
     const buttonClass = theme;
     const sideText = getKeyByValue(SIDE, side);
+    const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
     return (
       <form className="wrapperBetting" onSubmit={this.onSubmit}>
         <div className="formInput">
@@ -349,7 +350,7 @@ class BettingCreate extends React.Component {
             <span className="amountValue">{this.state.winValue}</span>
           </div>
         </div>
-        <Button type="submit" disabled={disable} block className={buttonClass}>Place {sideText} order</Button>
+        <Button type="submit" isLoading={disable} disabled={disable} block className={buttonClass}>{buttonText}</Button>
         <EstimateGas />
       </form>
     );

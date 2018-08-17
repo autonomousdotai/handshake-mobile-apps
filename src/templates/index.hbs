@@ -14,7 +14,8 @@
   <meta property="og:description" content="{{ htmlWebpackPlugin.options.env.description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="" />
-  <meta property="og:image" content="" />
+  <meta property="og:image" content="/images/og_image.png" />
+  <meta property="og:image:type" content="image/png" />
   <meta property="og:site_name" content="{{ htmlWebpackPlugin.options.env.title }}" />
   <meta property="fb:app_id" content="{{ htmlWebpackPlugin.options.env.social.facebookAppId }}" />
   <!-- twitter  -->
@@ -91,6 +92,7 @@
       initSocial();
     }, 2000);
   </script>
+  <script src="https://js.stripe.com/v3/"></script>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ htmlWebpackPlugin.options.env.social.googleTagmanagerId }}"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

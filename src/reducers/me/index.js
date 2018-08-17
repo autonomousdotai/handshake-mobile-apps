@@ -163,6 +163,7 @@ const meReducter = (
           let status = '';
           let { id } = offer;
           const handledHandshake = handshake;
+          const extraData = JSON.parse(handshake.extraData);
 
           if (offer.type === EXCHANGE_FEED_TYPE.INSTANT) {
             status = HANDSHAKE_EXCHANGE_CC_STATUS_VALUE[offer.status];
@@ -179,9 +180,11 @@ const meReducter = (
 
           if (
             handledHandshake.id.includes(id) &&
-            handledHandshake.status !== status
+            (handledHandshake.status !== status || (extraData.sub_status !== offer.sub_status))
           ) {
             handledHandshake.status = status;
+            extraData.sub_status = offer.sub_status;
+            handledHandshake.extraData = JSON.stringify(extraData);
             handledHandshake.lastUpdateAt = Date.now() / 1000;
           }
           return handledHandshake;
@@ -243,6 +246,7 @@ const meReducter = (
           let status = '';
           const { id } = offer;
           const handledHandshake = handshake;
+          const extraData = JSON.parse(handshake.extraData);
 
           if (offer.type === EXCHANGE_FEED_TYPE.INSTANT) {
             status = HANDSHAKE_EXCHANGE_CC_STATUS_VALUE[offer.status];
@@ -255,9 +259,11 @@ const meReducter = (
 
           if (
             handledHandshake.id.includes(id) &&
-            handledHandshake.status !== status
+            (handledHandshake.status !== status || (extraData.sub_status !== offer.sub_status))
           ) {
             handledHandshake.status = status;
+            extraData.sub_status = offer.sub_status;
+            handledHandshake.extraData = JSON.stringify(extraData);
             handledHandshake.lastUpdateAt = Date.now() / 1000;
           }
           return handledHandshake;

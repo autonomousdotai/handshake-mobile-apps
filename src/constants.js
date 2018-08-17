@@ -20,9 +20,14 @@ export const APP = {
   COUNTRY_PHONE_NEED_VERIFY: 'country_phone_need_verify',
   CHAT_ENCRYPTION_KEYPAIR:'chat_encryption_keypair',
   REFERS: 'refers',
+  SETTING: 'setting',
   OFFLINE_STATUS: 'offline_status',
   ALLOW_LOCATION_ACCESS: 'allow_location_access',
   isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'],
+  CC_SOURCE: 'cc_source',
+  CC_PRICE: 'cc_price',
+  CC_ADDRESS: 'cc_address',
+  CC_TOKEN: 'cc_token',
 };
 
 export const UNSELECTED = 'UNSELECTED';
@@ -47,7 +52,7 @@ export const HANDSHAKE_NAME = {
   // [HANDSHAKE_ID.SEED]: 'Seed',
   [HANDSHAKE_ID.WALLET_TRANSFER]: { name: 'Transfer coins', priority: 4 },
   [HANDSHAKE_ID.WALLET_RECEIVE]: { name: 'Receive coins', priority: 5 },
-  [HANDSHAKE_ID.EXCHANGE]: { name: 'Manage your station', priority: 6 },
+  [HANDSHAKE_ID.EXCHANGE]: { name: 'Manage your ATM', priority: 6 },
   // [HANDSHAKE_ID.EXCHANGE_LOCAL]: { name: 'Make swaps', priority: 7 },
   // UNSELECTED: { name: 'Create a prediction market', priority: 100 },
 };
@@ -170,6 +175,11 @@ export const EXCHANGE_ACTION_LIST = [
 ];
 
 export const EXCHANGE_ACTION_DEFAULT = EXCHANGE_ACTION.BUY;
+
+export const EXCHANGE_ACTION_COLORS = {
+  [EXCHANGE_ACTION.BUY]: { color: '#4CD964' },
+  [EXCHANGE_ACTION.SELL]: { color: '#F86C4F' },
+};
 
 export const FIAT_CURRENCY_SYMBOL = '$';
 
@@ -455,7 +465,6 @@ export const LOCATION_METHODS = {
 };
 
 // API
-
 export const BASE_API = {
   BASE_URL: process.env.BASE_API_URL,
   TIMEOUT: 10000,
@@ -477,6 +486,7 @@ export const URL = {
   HANDSHAKE_DISCOVER_DETAIL: '/discover/:slug',
 
   HANDSHAKE_PREDICTION: '/prediction',
+  HANDSHAKE_PEX: '/pex',
 
   HANDSHAKE_CASH: '/cash',
   HANDSHAKE_CASH_INDEX: '/cash',
@@ -508,13 +518,13 @@ export const URL = {
   WHITE_PAPER: '/whitepaper',
   WHITE_PAPER_INDEX: '/whitepaper',
 
-  // INTRODUCING_NINJA_CASH: '/introducing-ninja-cash',
   // ABOUT_NINJA_CASH: '/about-ninja-cash',
 
   // PRODUCT_URL: '/product',
   // RESEARCH_URL: '/research',
 
   PRODUCT_CASH_URL: '/cash',
+  CASH_FOR_BUSINESS: '/cash-for-business',
   PRODUCT_PREDICTION_URL: '/prediction',
   PRODUCT_WALLET_URL: '/wallet',
   PRODUCT_HIVEPAY_OFFLINE_URL: '/pay-for-stores',
@@ -527,6 +537,8 @@ export const URL = {
 
   RECRUITING: '/recruiting',
   RECRUITING_JOB_DETAIL: '/recruiting/:slug',
+
+  CC_PAYMENT_URL: '/payment',
 };
 
 export const LANDING_PAGE_TYPE = {
@@ -538,11 +550,15 @@ export const LANDING_PAGE_TYPE = {
     text: 'Research',
     url: '/research',
   },
+  landing: {
+    text: '',
+    url: '',
+  },
 }
 
+export const RECRUITING_SLACK_CHANNEL = 'https://hooks.slack.com/services/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';
 
 export const NB_BLOCKS = 20;
-
 
 export const blockchainNetworks = {
   rinkeby: {

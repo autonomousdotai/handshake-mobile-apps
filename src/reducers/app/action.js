@@ -133,7 +133,7 @@ const tokenHandle = ({
             }));
           }
         },
-        successFn: () => {          
+        successFn: () => {
           // success
           console.log('coins - getListOfferPrice - ipInfo', ipInfo);
           dispatch(getUserProfile({ PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE }));
@@ -150,19 +150,27 @@ const tokenHandle = ({
             MasterWallet.createMasterWallets();
             console.log('create wallet success');
           } else {
-            const shuriWallet = MasterWallet.getShuriWallet();
-            if (shuriWallet === false) {
-              MasterWallet.createShuriWallet();
-            }
+            // const shuriWallet = MasterWallet.getShuriWallet();
+            // if (shuriWallet === false) {
+            //   MasterWallet.createShuriWallet();
+            // }
           }
-          const shuriWallet = MasterWallet.getShuriWallet();
+
+          let ethAddress = "";
+          if(listWallet && listWallet.length > 0){
+            ethAddress = listWallet[0].address;
+          }
+          //const shuriWallet = MasterWallet.getShuriWallet();
           const data = new FormData();
-          data.append('reward_wallet_addresses', MasterWallet.convertToJsonETH(shuriWallet));
+          //data.append('reward_wallet_addresses', MasterWallet.convertToJsonETH(shuriWallet));
           data.append("wallet_addresses", MasterWallet.getListWalletAddressJson());
           if (isSignup) {
-            // update address to username: 
-            data.append('username', shuriWallet.address);            
-          }          
+            // update address to username:
+            ///data.append('username', shuriWallet.address);
+            if(ethAddress)
+              data.append('username', ethAddress);
+          }
+
           dispatch(authUpdate({
             PATH_URL: 'user/profile',
             data,
@@ -172,7 +180,7 @@ const tokenHandle = ({
               if (isSignup && process.env.isDojo && !process.env.isLive) {
                 // console.log('call request free eth ...');
                 dispatch(getFreeETH({
-                  PATH_URL: `/user/free-rinkeby-eth?address=${shuriWallet.address}`,
+                  PATH_URL: `/user/free-rinkeby-eth?address=${ethAddress}`,
                   METHOD: 'POST',
                   successFn(e) {
                     console.log('request free eth success', e);

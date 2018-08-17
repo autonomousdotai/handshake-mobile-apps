@@ -1,9 +1,13 @@
 .job-detail {
-  a {
+  a.back-to-listing {
     color: #484848;
+    font-weight: 500;
     &:hover {
       text-decoration: none;
     }
+  }
+  a {
+    color: #2456FB;
   }
   .jd-name {
     font-weight: 300;
@@ -11,4 +15,8 @@
     line-height: 40px;
     color: #333;
   }
+  b, strong {
+    font-weight: bold !important;
+  }
+
 }

@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Countdown from '@/components/Countdown/Countdown';
 import Image from '@/components/core/presentation/Image';
+import CopyLink from '@/assets/images/share/link.svg';
 import commentIcon from '@/assets/images/icon/comment.svg';
+import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { URL } from '@/constants';
 import { formatAmount } from '@/utils/number';
 import OutcomeList from './OutcomeList';
@@ -68,6 +70,21 @@ function renderOutcomeList(event, onClickOutcome) {
 }
 
 function EventItem({ event, onClickOutcome, onCountdownComplete }) {
+  const { id } = event;
+  const socialList = [
+    {
+      img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/facebook.svg',
+      title: 'FACEBOOK',
+    }, {
+      img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/twitter.svg',
+      title: 'TWITTER',
+    },
+    {
+      img: CopyLink,
+      title: 'COPY',
+    },
+  ];
+  const shareURL = `${window.location.origin}${URL.HANDSHAKE_PEX}?match=${id}`;
   return (
     <div className="EventItem">
       {renderEventName(event)}
@@ -78,7 +95,8 @@ function EventItem({ event, onClickOutcome, onCountdownComplete }) {
           {renderEvenTimeLeft(event, onCountdownComplete)}
           {renderEventTotalBets(event)}
         </div>
-        {renderEventMessages(event)}
+        {/* {renderEventMessages(event)} */}
+        <ShareSocial title="Ninja" shareUrl={shareURL} socialList={socialList} />
       </div>
     </div>
   );

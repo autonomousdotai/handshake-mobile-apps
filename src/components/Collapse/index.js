@@ -26,7 +26,7 @@ class Collapse extends React.PureComponent {
               {index}
               {index > 9 ? "." : ". "}
             </div>
-            <div>{label}</div>
+            <div className="collapse-content">{label}</div>
           </div>
           <div className="extend">
             <img

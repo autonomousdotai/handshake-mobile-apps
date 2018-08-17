@@ -47,6 +47,8 @@ import BackupWallet from '@/components/Wallet/BackupWallet/BackupWallet';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
 import { FormattedMessage } from 'react-intl';
 import loadingSVG from '@/assets/images/icon/loading.gif';
+import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
+import { MasterWallet } from '@/services/Wallets/MasterWallet';
 
 const TAG = 'Me';
 const maps = {
@@ -127,6 +129,7 @@ class Me extends React.Component {
       firstTime: true,
       me: this.props.me,
       isLoading: false,
+      modalFillContent: '',
     };
   }
 
@@ -369,6 +372,26 @@ class Me extends React.Component {
     this.modalBackupRef.open();
   }
 
+  buyCoinsUsingCreditCard = () => {
+    const { messages } = this.props.intl;
+
+    this.setState({
+      modalFillContent:
+        (
+          <FeedCreditCard
+            buttonTitle={messages.create.cash.credit.title}
+            callbackSuccess={this.afterWalletFill}
+          />
+        ),
+    }, () => {
+      this.modalFillRef.open();
+    });
+  }
+
+  afterWalletFill = () => {
+    this.modalFillRef.close();
+  }
+
   render() {
     const { list, listDashboard } = this.props.me;
     let listFeed = [];
@@ -378,7 +401,7 @@ class Me extends React.Component {
       listFeed = list;
     }
     const { messages } = this.props.intl;
-    const { offerStores, propsModal, modalContent } = this.state;
+    const { offerStores, propsModal, modalContent, modalFillContent } = this.state;
     const online = !this.props.auth.offline;
     let haveOffer = false;
 
@@ -478,12 +501,12 @@ class Me extends React.Component {
                 listFeed.map((handshake) => {
                     const FeedComponent = maps[handshake.type];
                     if (FeedComponent) {
-                      if (handshake.offerFeedType === EXCHANGE_FEED_TYPE.OFFER_STORE_SHAKE &&
-                        handshake.status === HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING &&
-                        handshake.initUserId === authProfile?.id
-                      ) {
-                        return null;
-                      }
+                      // if (handshake.offerFeedType === EXCHANGE_FEED_TYPE.OFFER_STORE_SHAKE &&
+                      //   handshake.status === HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING &&
+                      //   handshake.initUserId === authProfile?.id
+                      // ) {
+                      //   return null;
+                      // }
                       return (
                         <Col key={handshake.id} className="feed-wrapper" id={handshake.id}>
                           <FeedComponent
@@ -494,6 +517,7 @@ class Me extends React.Component {
                             mode="me"
                             refreshPage={this.loadMyHandshakeList}
                             setLoading={this.setLoading}
+                            buyCoinsUsingCreditCard={this.buyCoinsUsingCreditCard}
                           />
                         </Col>
                       );
@@ -505,6 +529,7 @@ class Me extends React.Component {
                     <p>{messages.me.feed.cash.stationExplain}</p>
                     <p>{messages.me.feed.cash.stationCreateSuggest}</p>
                     <button className="btn btn-primary btn-block" onClick={this.showRestoreWallet}>{messages.me.feed.cash.restoreStation}</button>
+                    <button className="btn btn-primary btn-block" onClick={this.buyCoinsUsingCreditCard}>{messages.me.feed.cash.buyMoreCoin}</button>
                   </div>
                 ) :
                 (
@@ -515,6 +540,7 @@ class Me extends React.Component {
                 listFeed && listFeed.length > 0 && this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD && (
                   <div className="text-center">
                     <button className="btn btn-primary btn-block" onClick={this.showBackupWallet}>{messages.me.feed.cash.backupStation}</button>
+                    <button className="btn btn-primary btn-block" onClick={this.buyCoinsUsingCreditCard}>{messages.me.feed.cash.buyMoreCoin}</button>
                     {haveOffer && (<button className="btn btn-link text-underline" onClick={this.handleUpdateExchange}><FormattedMessage id="ex.shop.dashboard.button.updateInventory" /></button>)}
                   </div>
                 )
@@ -533,6 +559,9 @@ class Me extends React.Component {
         {/* Modal for Backup wallets : */}
         <Modal title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
           <RestoreWallet />
+        </Modal>
+        <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal}>
+          {modalFillContent}
         </Modal>
       </React.Fragment>
     );

@@ -2,10 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { setLanguage } from '@/reducers/app/action';
-
 import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl';
 import { Field, formValueSelector } from 'redux-form';
-
 import LandingWrapper from '@/components/LandingWrapper';
 import Collapse from '@/components/Collapse';
 import createForm from '@/components/core/form/createForm';
@@ -53,7 +51,7 @@ class Index extends React.PureComponent {
   render() {
     const { messages, locale } = this.props.intl;
     const {
-      name, img, imgContent, getEmail, intl, type,
+      name, img, imgContent, getEmail, intl, type, contentComponent
     } = this.props;
     const { hasSubscribed } = this.state;
     const cta1 = messages[`landing_page.${name}.cta1`];
@@ -74,10 +72,16 @@ class Index extends React.PureComponent {
           <div className="row mt-5">
             <div className="col">
               <div className="pd-breadcrumb">
-                <Link to={categoryUrl}>
-                  {categoryText}
-                </Link>
-                <span className="mx-2">/</span>
+                {
+                  type !== 'landing' && (
+                    <React.Fragment>
+                      <Link to={categoryUrl}>
+                        {categoryText}
+                      </Link>
+                      <span className="mx-2">/</span>
+                    </React.Fragment>
+                  )
+                }
                 <span>
                   <FormattedMessage id={`landing_page.${name}.breadcrumb`} />
                 </span>
@@ -90,7 +94,7 @@ class Index extends React.PureComponent {
                 <FormattedMessage id={`landing_page.${name}.heading`} />
               </div>
               <div className="pd-subHeading">
-                <FormattedMessage id={`landing_page.${name}.subHeading`} />
+                <FormattedHTMLMessage id={`landing_page.${name}.subHeading`} />
               </div>
               <div className="mt-4">
                 {textEmail && (
@@ -169,12 +173,14 @@ class Index extends React.PureComponent {
             </div>
           </div>
           {imgContent && (
-            <div className="row">
+            <div className="row mt-5">
               <div className="col">
                 <img src={imgContent} className="w-100" />
               </div>
             </div>
           )}
+
+          {contentComponent}
 
           {
             faq && (

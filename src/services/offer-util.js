@@ -95,4 +95,11 @@ export function getLatLongHash(method, lat, lng) {
   return result;
 }
 
+export function shortenUser(userName) {
+  if (userName.length > 12) {
+    return `${userName.substr(0, 4)}...${userName.substr(userName.length - 4)}`;
+  }
+  return userName;
+}
+
 export default { getOfferPrice };

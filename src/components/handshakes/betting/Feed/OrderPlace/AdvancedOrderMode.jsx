@@ -56,6 +56,8 @@ class AdvancedOrderMode extends React.Component {
     const { disable } = this.state;
     const buttonClass = theme;
     const sideText = getKeyByValue(SIDE, side);
+    const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
+
     return (
       <React.Fragment>
         <BettingShake
@@ -63,7 +65,7 @@ class AdvancedOrderMode extends React.Component {
           onClickSubmit={(click) =>{ this.onButtonSubmit = click; }}
         />
         <OrderBook {...orderBook} />
-        <Button block disabled={disable} className={buttonClass} onClick={this.handleClick}>Place {sideText} Order</Button>
+        <Button block isLoading={disable} disabled={disable} className={buttonClass} onClick={this.handleClick}>{buttonText}</Button>
         <EstimateGas />
       </React.Fragment>
     );

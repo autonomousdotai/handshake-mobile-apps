@@ -6,7 +6,8 @@ import OfferPrice from '@/models/OfferPrice';
 import OfferShop from '@/models/OfferShop';
 import { EXCHANGE_ACTIONS } from './action';
 import { EXCHANGE_ACTION } from '@/constants';
-import Dashboard from "@/models/Dashboard";
+import Dashboard from '@/models/Dashboard';
+import Referal from '@/models/Referal';
 
 const initListOfferPrice = [];
 initListOfferPrice.updatedAt = Date.now();
@@ -63,6 +64,9 @@ function exchangeReducter(state = {
     }
     case `${EXCHANGE_ACTIONS.GET_DASHBOARD_INFO}_SUCCESS`: {
       return { ...state, dashboardInfo: Dashboard.dashboard(action.payload.data) };
+    }
+    case `${EXCHANGE_ACTIONS.GET_REFERAL_INFO}_SUCCESS`: {
+      return { ...state, referalInfo: Referal.referal(action.payload.data) };
     }
     default:
       return state;
