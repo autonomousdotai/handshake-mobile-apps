@@ -85,6 +85,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
   }
 
   showNotEnoughCoinAlert = (balance, amount, fee, currency) => {
+    console.log('showNotEnoughCoinAlert',balance, amount, fee, currency);
     const { showNotEnoughCoinAlert } = this.props;
 
     if (showNotEnoughCoinAlert) {

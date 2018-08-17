@@ -182,6 +182,8 @@ class FeedMe extends React.PureComponent {
       // });
     }
 
+    console.log('showNotEnoughCoinAlert',condition);
+
     return condition;
   }
 
