@@ -247,12 +247,13 @@ class Transfer extends React.Component {
     if (!this.state.walletSelected) return {};
     let errors = {};
     if (this.state.walletSelected){
+      
       // check address:
       let result = this.state.walletSelected.checkAddressValid(value['to_address']);
       if (result !== true)
           errors.to_address = this.getMessage(result);
+      
       // check amount:
-
       if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amountCoin']))
         errors.amountCoin = `${messages.wallet.action.transfer.error}`
     }
@@ -276,7 +277,6 @@ class Transfer extends React.Component {
           inputSendAmountValue: amount,
           inputSendMoneyValue: money.toFixed(0)
         });
-
       }
       this.props.rfChange(nameFormSendWallet, 'amountCoin', amount);
       this.props.rfChange(nameFormSendWallet, 'amountMoney', money);
@@ -285,12 +285,12 @@ class Transfer extends React.Component {
 
   getMessage(str){
     const { messages } = this.props.intl;
-    let result = "";
+    let result = str;
     try{
       result = eval(str);
     }
     catch(e){
-      console.error(e);
+      console.log(e);
     }
 
     return result;
