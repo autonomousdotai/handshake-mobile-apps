@@ -95,6 +95,7 @@ export const CRYPTO_CURRENCY = {
 export const CRYPTO_CURRENCY_NAME = {
   [CRYPTO_CURRENCY.ETH]: 'ETH',
   [CRYPTO_CURRENCY.BTC]: 'BTC',
+  BCH: 'BCH',
 };
 
 export const CRYPTO_CURRENCY_LIST = Object.values(CRYPTO_CURRENCY).map((item) => {
@@ -541,6 +542,7 @@ export const URL = {
   RECRUITING_JOB_DETAIL: '/recruiting/:slug',
 
   CC_PAYMENT_URL: '/payment',
+  BUY_BY_CC_URL: '/buy-by-credit-card',
 };
 
 export const LANDING_PAGE_TYPE = {

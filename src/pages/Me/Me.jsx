@@ -403,6 +403,10 @@ class Me extends React.Component {
     this.modalFillRef.close();
   }
 
+  closeFillCoin = () => {
+    this.setState({ modalFillContent: '' });
+  }
+
   render() {
     const { list, listDashboard } = this.props.me;
     let listFeed = [];
@@ -571,7 +575,7 @@ class Me extends React.Component {
         <Modal title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
           <RestoreWallet />
         </Modal>
-        <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal}>
+        <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal} onClose={this.closeFillCoin}>
           {modalFillContent}
         </Modal>
       </React.Fragment>

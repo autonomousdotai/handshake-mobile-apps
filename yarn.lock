@@ -2165,10 +2165,6 @@ bigi@^1.1.0, bigi@^1.4.0:
   version "4.1.0"
   resolved "https://codeload.github.com/0xngoubou/bignumber.js-4.1.0/tar.gz/5380bd0a25617479212bfdbe612f00034c87f30e"
 
-"bignumber.js-4.1.0@https://github.com/0xngoubou/bignumber.js-4.1.0.git":
-  version "4.1.0"
-  resolved "https://github.com/0xngoubou/bignumber.js-4.1.0.git#5380bd0a25617479212bfdbe612f00034c87f30e"
-
 bignumber.js@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-2.4.0.tgz#838a992da9f9d737e0f4b2db0be62bb09dd0c5e8"
@@ -5843,8 +5839,8 @@ handlebars@^4.0.11, handlebars@^4.0.3:
     uglify-js "^2.6"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1534839889"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/20f685e21e7746082a582f5fba12264eb498de6b"
+  version "0.0.1534832727"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/c34ddf35437c935fb2df06b60ff2eb77dbdf4c12"
   dependencies:
     "@babel/core" "^7.0.0-beta.51"
     "@babel/node" "^7.0.0-beta.51"
@@ -10151,7 +10147,7 @@ prop-types-extra@^1.0.1:
     react-is "^16.3.2"
     warning "^3.0.0"
 
-prop-types@15, prop-types@15.x, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.3, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@15, prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.3, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -10514,13 +10510,6 @@ react-dropzone@^4.2.11:
   dependencies:
     attr-accept "^1.0.3"
     prop-types "^15.5.7"
-
-react-file-reader@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/react-file-reader/-/react-file-reader-1.1.4.tgz#1838f1f3fa70dcfdef4ef525d74dda3c6312089a"
-  dependencies:
-    prop-types "^15.5.0"
-    uuid4 "^1.0.0"
 
 react-google-maps@^9.4.5:
   version "9.4.5"
@@ -11353,7 +11342,7 @@ ripple-hashes@^0.3.1, "ripple-hashes@github:0xngoubou/ripple-hashes":
   version "0.3.1"
   resolved "https://codeload.github.com/0xngoubou/ripple-hashes/tar.gz/d9157617b39e78890dd58bba6111443350bbc318"
   dependencies:
-    bignumber.js-4.1.0 "https://github.com/0xngoubou/bignumber.js-4.1.0.git"
+    bignumber.js-4.1.0 "github:0xngoubou/bignumber.js-4.1.0"
     create-hash "^1.1.2"
     ripple-address-codec "^2.0.1"
     ripple-binary-codec "^0.1.0"
@@ -11389,7 +11378,7 @@ ripple-lib-transactionparser@0.7.1:
   dependencies:
     "@types/lodash" "^4.14.85"
     "@types/ws" "^3.2.0"
-    bignumber.js-4.1.0 "https://github.com/0xngoubou/bignumber.js-4.1.0.git"
+    bignumber.js-4.1.0 "github:0xngoubou/bignumber.js-4.1.0"
     https-proxy-agent "2.2.1"
     jsonschema "1.2.2"
     lodash "^4.17.4"
@@ -13076,10 +13065,6 @@ utila@~0.4:
 utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
-
-uuid4@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/uuid4/-/uuid4-1.0.0.tgz#813aaeaf11ea2f68909c5ad57d894f83202d6720"
 
 uuid@2.0.1:
   version "2.0.1"
