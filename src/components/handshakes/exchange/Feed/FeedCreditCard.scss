@@ -1,8 +1,125 @@
-.buy-button {
-  background: #111111;
-  border-radius: 6px;
-  font-size: 20px;
-  color: #FFFFFF;
-  letter-spacing: 0;
-  text-align: center;
+.choose-coin {
+  .specific-amount {
+    padding: 10px;
+    background: linear-gradient(0deg, #85A1F8 0%, #617BFF 100%);
+  }
+  .label-1 {
+    font-weight: 500;
+    font-size: 22px;
+    color: #FFFFFF;
+  }
+  .label-2 {
+    opacity: 0.6;
+    font-size: 16px;
+    color: #FFFFFF;
+    line-height: 19px;
+  }
+  .form-control-cc {
+    margin-right: 120px;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .dropdown-button {
+    background: #EDF2F8;
+    position: absolute;
+    right: 0px;
+    width: 126px;
+    border: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 48px;
+    z-index: 10;
+
+    font-size: 18px;
+    color: #211D2C;
+  }
+  .btn-submit-specific {
+    background: #001890;
+    font-size: 18px;
+    line-height: 30px;
+  }
+  .by-package {
+    padding: 10px;
+    .p-label-choose {
+      font-size: 16px;
+      color: #211D2C;
+    }
+    .package {
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 16px;
+      color: #FFFFFF;
+      text-align: center;
+      width: 100%;
+    }
+    .p-basic {
+      background: #68AEFF;
+    }
+    .p-pro {
+      background: #FFBA48;
+    }
+    .p-plus {
+      background: #FF2C46;
+    }
+    .p-price {
+      font-weight: 500;
+      font-size: 18px;
+      color: #211D2C;
+    }
+    .p-saving {
+      font-weight: 500;
+      font-size: 14px;
+      color: #FF2C46;
+      margin-left: 8px;
+    }
+    .p-amount {
+      font-size: 16px;
+      color: #5766A4;
+      line-height: 19px;
+    }
+    .btn-p-buy-now {
+      background: #f6f8fe;
+      font-weight: 500;
+      font-size: 16px;
+      color: #546FF7;
+      padding: 10px 15px;
+    }
+  }
+}
+
+.credit-card {
+  background: #F7F8FE;
+  .btn-close {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .wrapper {
+    background: white;
+    margin: 0 10px;
+    padding: 20px 15px;
+    border-radius: 5px;
+    height: 700px;
+    .cc-label {
+      font-size: 16px;
+      color: #828AA8;
+      line-height: 19px;
+      margin-bottom: 5px;
+    }
+    .input-custom {
+      border: 2px solid #EBF0F6;
+      border-radius: 6px;
+      height: 54px;
+      padding: 0 10px;
+      color: #252130;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+    .btn-submit-cc {
+      background: #546FF7;
+    }
+  }
 }

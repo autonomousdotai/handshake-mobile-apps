@@ -135,7 +135,7 @@ class CCConfirm extends React.Component {
     gtag.event({
       category: taggingConfig.creditCard.category,
       action: taggingConfig.creditCard.action.buySuccess,
-      label: `${amount} ${currency} - ${fiat_amount} ${fiat_currency}`,
+      value: fiat_amount,
     });
 
     this.props.showAlert({

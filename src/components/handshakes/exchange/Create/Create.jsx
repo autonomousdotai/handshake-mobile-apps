@@ -890,6 +890,10 @@ class Component extends React.Component {
     this.modalFillRef.close();
   }
 
+  closeFillCoin = () => {
+    this.setState({ modalFillContent: '' });
+  }
+
   render() {
     const { messages } = this.props.intl;
     const {
@@ -1180,7 +1184,7 @@ class Component extends React.Component {
         <ModalDialog onRef={modal => this.modalRef = modal}>
           {modalContent}
         </ModalDialog>
-        <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal}>
+        <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal} onClose={this.closeFillCoin}>
           {modalFillContent}
         </Modal>
       </div>

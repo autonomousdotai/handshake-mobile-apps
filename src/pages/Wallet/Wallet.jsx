@@ -392,21 +392,22 @@ class Wallet extends React.Component {
       }
     })
 
+    const allowedWallets = ['BTC', 'ETH', 'BCH'];
     // now hide buy coin:
-    if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet && (wallet.name == "BTC" || wallet.name == "ETH")){
+    if (true && allowedWallets.includes(wallet.name)){
+    // if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet && allowedWallets.includes(wallet.name)){
       obj.push({
         title: messages.create.cash.credit.title,
         handler: () => {
-
           this.setState({
             walletSelected: wallet,
             modalFillContent:
               (
                 <FeedCreditCard
                   buttonTitle={messages.create.cash.credit.title}
-                  currencyForced={this.state.walletSelected ? this.state.walletSelected.name : ''}
+                  currencyForced={wallet ? wallet.name : ''}
                   callbackSuccess={this.afterWalletFill}
-                  addressForced={this.state.walletSelected ? this.state.walletSelected.address : ''}
+                  addressForced={wallet ? wallet.address : ''}
                 />
               ),
           }, () => {
@@ -833,6 +834,10 @@ class Wallet extends React.Component {
     this.setState({ activeTransfer: false });
   }
 
+  closeFillCoin = () => {
+    this.setState({ modalFillContent: '' });
+  }
+
   closeCreate = () => {
     this.setState({input12PhraseValue: "", walletKeyDefaultToCreate: 1});
   }
@@ -973,7 +978,7 @@ class Wallet extends React.Component {
             />
           </Modal>
 
-          <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal}>
+          <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal} onClose={this.closeFillCoin}>
             {modalFillContent}
           </Modal>
 

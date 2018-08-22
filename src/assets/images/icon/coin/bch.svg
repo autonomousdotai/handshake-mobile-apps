@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.2 (57519) - http://www.bohemiancoding.com/sketch -->
+    <title>btc</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="84.7265625%" y1="77.8710938%" x2="15.6510417%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#FF8006" offset="0%"></stop>
+            <stop stop-color="#FFC349" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="btc" transform="translate(1.000000, 1.000000)" fill-rule="nonzero">
+            <g id="Group-14" fill="#57C656" stroke="#FFFFFF" stroke-width="3">
+                <rect id="Rectangle-3" x="0.5" y="0.5" width="37" height="37" rx="10"></rect>
+            </g>
+            <g id="Group-15" transform="translate(20.000000, 19.500000) rotate(-14.000000) translate(-20.000000, -19.500000) translate(13.000000, 8.000000)" fill="#FFFFFF">
+                <path d="M0,20.125 L0,2.625 L7.174125,2.625 C9.282875,2.625 10.878875,3.031875 11.969125,3.845625 C13.059375,4.659375 13.60275,5.852 13.60275,7.420875 C13.60275,8.278375 13.384,9.034375 12.95,9.687125 C12.5125,10.339875 11.904375,10.8185 11.12475,11.123 C12.01375,11.34875 12.71375,11.799375 13.2265,12.483625 C13.740125,13.162625 14,13.993 14,14.980875 C14,16.662625 13.467125,17.9375 12.4005,18.802 C11.333875,19.6665 9.816625,20.1075 7.844375,20.125 L0,20.125 Z M3.5,9.625 L7.317625,9.625 C9.12275,9.594375 10.028375,8.904 10.028375,7.485625 C10.028375,6.692875 9.799125,6.1215 9.3415,5.77325 C8.883875,5.425 8.162,5.25 7.174125,5.25 L3.5,5.25 L3.5,9.625 Z M3.5,12.25 L3.5,17.5 L7.7385,17.5 C8.579375,17.5 10.5,17.089625 10.5,15.217125 C10.5,13.344625 9.522625,12.273625 7.875,12.25 L3.5,12.25 Z" id="Shape"></path>
+                <polygon id="Shape" points="2.625 0 5.425 0 5.425 4.375 2.625 4.375"></polygon>
+                <polygon id="Shape" points="7 0 9.8 0 9.8 4.375 7 4.375"></polygon>
+                <polygon id="Shape" points="2.625 18.375 5.425 18.375 5.425 22.75 2.625 22.75"></polygon>
+                <polygon id="Shape" points="7 18.375 9.8 18.375 9.8 22.75 7 22.75"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>
