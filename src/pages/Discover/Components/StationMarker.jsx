@@ -20,7 +20,6 @@ import { shakeOfferItem, trackingLocation } from '@/reducers/exchange/action';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import PropTypes from 'prop-types';
 import Offer from '@/models/Offer';
-import history from '@/services/history';
 import AllStationDetails from './AllStationDetails';
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
 import { Bitcoin } from '@/services/Wallets/Bitcoin';
@@ -196,7 +195,7 @@ class StationMarker extends React.Component {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
-        history.push(`${URL.HANDSHAKE_ME}?id=${HANDSHAKE_ID.EXCHANGE}`);
+        this.props.history.push(`${URL.HANDSHAKE_ME}?id=${HANDSHAKE_ID.EXCHANGE}`);
       },
     });
   }

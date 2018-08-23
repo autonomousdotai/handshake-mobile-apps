@@ -360,6 +360,7 @@ class DiscoverPage extends React.Component {
       mapCenterLng,
     } = this.state;
     const { list: stations, offers } = this.props.discover;
+    const { history } = this.props;
 
     return (
       <React.Fragment>
@@ -376,6 +377,7 @@ class DiscoverPage extends React.Component {
           containerElement={<div className="map-container" style={{ height: `calc(100vh - 48px - 120px)`, marginTop: '48px' }} />}
           mapElement={<div style={{ height: `100%` }} />}
           // center={{ lat: 35.929673, lng: -78.948237 }}
+          history={history}
           stations={stations}
           offers={offers}
           zoomLevel={zoomLevel}

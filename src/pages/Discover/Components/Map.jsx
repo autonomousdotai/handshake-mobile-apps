@@ -66,6 +66,7 @@ class Map extends React.Component {
             actionActive={actionActive}
             currencyActive={currencyActive}
             onFeedClick={extraData => onFeedClick(station, extraData)}
+            history={history}
             offer={offer}
             modalRef={modalRef}
             setLoading={setLoading}

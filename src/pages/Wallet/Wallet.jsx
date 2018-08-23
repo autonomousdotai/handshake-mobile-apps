@@ -394,8 +394,8 @@ class Wallet extends React.Component {
 
     const allowedWallets = ['BTC', 'ETH', 'BCH'];
     // now hide buy coin:
-    // if (true && allowedWallets.includes(wallet.name)){
-    if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet && allowedWallets.includes(wallet.name)){
+    if (true && allowedWallets.includes(wallet.name)){
+    // if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet && allowedWallets.includes(wallet.name)){
       obj.push({
         title: messages.create.cash.credit.title,
         handler: () => {

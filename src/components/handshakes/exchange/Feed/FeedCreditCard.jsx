@@ -344,7 +344,7 @@ class FeedCreditCard extends React.Component {
             const message = error?.response?.data?.error?.message || 'Something wrong!';
             this.props.showAlert({
               message: <div className="text-center">{message}</div>,
-              timeOut: 3000,
+              timeOut: 5000,
               type: 'danger',
             // callBack: this.handleBuySuccess
             });

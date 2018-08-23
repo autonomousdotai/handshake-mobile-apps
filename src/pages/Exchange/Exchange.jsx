@@ -1,10 +1,10 @@
-import React from "react";
-import NavigationBar from "@/modules/NavigationBar/NavigationBar";
-import DynamicImport from "@/components/App/DynamicImport";
+import React from 'react';
+import NavigationBar from '@/modules/NavigationBar/NavigationBar';
+import DynamicImport from '@/components/App/DynamicImport';
 import Prediction from '@/pages/Prediction/Prediction';
-import Loading from "@/components/core/presentation/Loading";
-import { injectIntl } from "react-intl";
-import { connect } from "react-redux";
+import Loading from '@/components/core/presentation/Loading';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import { URL } from '@/constants';
 import { withRouter } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ import local from '@/services/localStore';
 const Discover = props => (
   <DynamicImport
     loading={Loading}
-    load={() => import("@/pages/Discover/Discover")}
+    load={() => import('@/pages/Discover/Discover')}
   >
     {Component => <Component {...props} />}
   </DynamicImport>
@@ -31,9 +31,9 @@ const Discover = props => (
 const keyLastSelectedExchangeId = 'lastSelectedExchangeId';
 
 const mapComponent = {
-  [URL.HANDSHAKE_PREDICTION]: { url: URL.HANDSHAKE_PREDICTION, component: <Prediction /> },
-  [URL.HANDSHAKE_CASH]: { url: URL.HANDSHAKE_CASH, component: <Discover history={{}} /> },
-}
+  [URL.HANDSHAKE_PREDICTION]: { url: URL.HANDSHAKE_PREDICTION, component: Prediction },
+  [URL.HANDSHAKE_CASH]: { url: URL.HANDSHAKE_CASH, component: Discover },
+};
 
 const defaultUrl = URL.HANDSHAKE_PREDICTION;
 
@@ -65,6 +65,13 @@ class Exchange extends React.Component {
     // }
   }
 
+  getPageComponent = () => {
+    const { selectedMenuId } = this.state;
+    const Component = mapComponent[selectedMenuId].component;
+
+    return <Component history={this.props.history} />;
+  }
+
   render() {
     const { messages } = this.props.intl;
     const { intl, hideNavigationBar } = this.props;
@@ -81,7 +88,7 @@ class Exchange extends React.Component {
             />
           )
         }
-        {mapComponent[selectedMenuId].component}
+        {this.getPageComponent()}
       </div>
     );
   }
