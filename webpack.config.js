@@ -19,7 +19,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 // configs
 const envConfig = require('./.env.js');
 
-module.exports = function webpackConfig(env, argv) {
+module.exports = function webpackConfig(env, argv = {}) {
   const isProduction = argv.mode === 'production';
 
   const stats = {

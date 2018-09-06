@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
 import IconIdea from '@/assets/images/icon/idea.svg';
 
+import { hsGetTxCount } from '@/services/eth/transaction';
+
 class PexCreateBtn extends Component {
   static displayName = 'PexCreateBtn';
   static propTypes = {
@@ -20,8 +22,10 @@ class PexCreateBtn extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     window.addEventListener('scroll', this.onScroll);
+    const tx = await hsGetTxCount();
+    console.log('tx', tx);
   }
 
   componentWillUnmount() {
