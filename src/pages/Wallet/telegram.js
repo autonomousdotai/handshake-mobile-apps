@@ -2,6 +2,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const jsonfile = require('jsonfile');
 const path = require('path');
 const _ = require('lodash');
+//test test
 
 const token = ''; // ninja_orgbot
 const bot = new TelegramBot(token, { polling: true });
