@@ -1,6 +1,5 @@
 
-
-export function erCallBack(errObj, result) {
+export function resultCallback(errObj, result) {
   if (!errObj) {
     console.log('result', result);
   } else {

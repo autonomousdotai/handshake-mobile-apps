@@ -1,7 +1,7 @@
 import EthereumTx from 'ethereumjs-tx';
 
 import initWeb3 from './initWeb3';
-import { erCallBack } from './callback';
+import { resultCallback, eventCallBack } from './callback';
 
 /**
  * Account nonce: a transaction counter of an account
@@ -10,7 +10,7 @@ import { erCallBack } from './callback';
  * @param callback
  * @returns {Promise<number>}
  */
-export function getTxCount({ address, defaultBlock, callback = erCallBack }) {
+export function getTxCount({ address, defaultBlock, callback = resultCallback }) {
   const web3 = initWeb3();
   return web3.eth.getTransactionCount(address, defaultBlock, callback);
 }
@@ -48,6 +48,6 @@ export function sendRawTx({
     const tx = new EthereumTx(txParams);
     tx.sign(pKeyHex);
     const serializedTx = web3.utils.toHex(tx.serialize());
-    web3.eth.sendSignedTransaction(serializedTx, erCallBack);
+    eventCallBack(web3.eth.sendSignedTransaction(serializedTx));
   });
 }

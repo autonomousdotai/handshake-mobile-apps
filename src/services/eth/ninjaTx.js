@@ -11,19 +11,9 @@ export function sendRawNinjaTx({
 }) {
   const from = getUserAddress(coinName);
   const privateKey = getPrivateKey(coinName);
-  const gasLimit = '';
+  const gasLimit = constant.GAS_LIMIT;
   const gasPrice = '';
   const value = '';
 
-  sendRawTx({
-    from,
-    defaultBlock,
-    privateKey,
-    chainId,
-    gasLimit,
-    gasPrice,
-    to,
-    value,
-    data,
-  });
+  sendRawTx({ from, defaultBlock, privateKey, chainId, gasLimit, gasPrice, to, value, data });
 }

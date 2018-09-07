@@ -1,3 +1,3 @@
 export default {
-  LIMIT_GAS: 350000,
+  GAS_LIMIT: 350000,
 };
