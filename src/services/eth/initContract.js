@@ -1,12 +1,11 @@
-/* eslint-disable import/no-dynamic-require,global-require */
 import initWeb3 from './initWeb3';
 
-function loadABI(contractName) {
+// @TODO: generic, move to utils
+function loadABI(contractFile) {
   try {
-    const filePath = `../contracts/${contractName}.json`;
-    const abiContent = require(filePath);
+    const abiContent = require(contractFile); // eslint-disable-line
     if (!abiContent) {
-      throw ('Cannot find contract file ', filePath);
+      throw new Error('ABI is empty');
     }
     return abiContent;
   } catch (e) {
@@ -15,20 +14,14 @@ function loadABI(contractName) {
   }
 }
 
-export function initContract(contractName, contractAddress, options) {
+const contractInstance = {};
+
+export function initContract({ contractFile, contractAddress, options }) {
+  if (contractInstance[contractAddress]) {
+    return contractInstance[contractAddress];
+  }
   const web3 = initWeb3();
-  const abi = loadABI(contractName);
-  return new web3.eth.Contract(abi, contractAddress, options);
-}
-
-export const contractMethod = (contractName, contractAddress, options, contractMethodName, params) => {
-  const contract = initContract(contractName, contractAddress, options);
-  return contract.methods[contractMethodName](...params).encodeABI();
-}
-
-export const handShakeContract = (options, contractMethodName, params) => {
-  const contractName = 'handshakecontract';
-  const contractAddress = 'handshakeAddress';
-
-  return contractMethod(contractName, contractAddress, options, contractMethodName, params);
+  const abi = loadABI(contractFile);
+  contractInstance[contractAddress] = new web3.eth.Contract(abi, contractAddress, options);
+  return contractInstance[contractAddress];
 }
