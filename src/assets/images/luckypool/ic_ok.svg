@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="51px" height="51px" viewBox="0 0 51 51" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-ok</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="3" transform="translate(-182.000000, -163.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="icons8-ok" transform="translate(182.000000, 163.000000)">
+                <path d="M25.5,0 C11.4397531,0 0,11.4397531 0,25.5 C0,39.5602469 11.4397531,51 25.5,51 C39.5602469,51 51,39.5602469 51,25.5 C51,11.4397531 39.5602469,0 25.5,0 Z M25.5,3.92307692 C37.4378015,3.92307692 47.0769231,13.5622005 47.0769231,25.5 C47.0769231,37.4378015 37.4378015,47.0769231 25.5,47.0769231 C13.5622005,47.0769231 3.92307692,37.4378015 3.92307692,25.5 C3.92307692,13.5622005 13.5622005,3.92307692 25.5,3.92307692 Z M37.8209135,16.2439904 L23.5384615,30.5264423 L15.140625,22.1286058 L12.3209135,24.9483173 L22.1286058,34.7560096 L23.5384615,36.1045673 L24.9483173,34.7560096 L40.640625,19.0637019 L37.8209135,16.2439904 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

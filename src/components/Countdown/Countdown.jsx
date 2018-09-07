@@ -82,7 +82,7 @@ export default class Countdown extends Component {
   renderDays = (days) => {
     if (days <= 0) return null;
     const pl = (days > 1) ? 'days' : 'day';
-    return (<span className="CountdownItem Days">{`${days} ${pl} left`}</span>);
+    return (<span className="CountdownItem Days">{`${days} ${pl}`}</span>);
   }
 
   renderHours = (hours) => {

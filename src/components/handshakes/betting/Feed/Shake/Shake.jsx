@@ -83,7 +83,7 @@ class BetingShake extends React.Component {
 
     const { oddValue, amountValue } = this.state;
 
-    const { matchName, matchOutcome, side, closingDate, onSubmitClick, handleBetFail} = this.props;
+    const { matchName, matchOutcome, side, closingDate, onSubmitClick,onCancelClick, handleBetFail} = this.props;
 
     const amount = parseBigNumber(amountValue);
     const odds = parseBigNumber(oddValue);

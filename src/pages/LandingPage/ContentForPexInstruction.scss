@@ -1,0 +1,78 @@
+@import './src/styles/style';
+
+.wrapperContentPexInstruction {
+  font-family: $font-family-base;
+  font-size: 16px;
+  color: #484848;
+
+  .wrapperPexIntroducer {
+    border-radius: 43px;
+    border: 15px solid #FAFAFA;
+    padding: 20px 30px;
+  }
+  .wrapperPexTopContent {
+    margin-top: 40px;
+  }
+  .wrapperGuideStep {
+    margin: 40px 0px;
+    .stepNumber {
+      color: #F5D516;
+      font-size: 64px;
+
+    }
+  }
+  .features {
+    background: #FFFFFF;
+    box-shadow: 0 4px 15px 0 rgba(7,42,68,0.10);
+    border-radius: 10px;
+    padding: 0 20px 20px;
+    .feature-title {
+      margin-top: 12px;
+      font-weight: 500;
+      font-size: 18px;
+      color: #484848;
+      letter-spacing: 1px;
+    }
+    .feature-caption {
+      opacity: 0.8;
+      font-size: 20px;
+      color: #484848;
+      letter-spacing: 0;
+      line-height: 35px;
+    }
+  }
+
+  .how-to-index {
+    background: #F5D516;
+    font-size: 16px;
+    font-weight: 500;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 16px;
+    margin-right: 10px;
+    padding: 2px 8px;
+  }
+  .how-to-text {
+    opacity: 0.8;
+    font-size: 20px;
+    color: #484848;
+    line-height: 20px;
+  }
+  .pexHeadline {
+    //font-weight: 600;
+    font-size: 30px;
+    letter-spacing: 0;
+    line-height: 48px;
+  }
+  .subHeadline {
+    opacity: 0.8;
+    font-size: 20px;
+    color: #484848;
+    letter-spacing: 0;
+    line-height: 40px;
+  }
+  .table-head {
+    background: #fefbea;
+    color: #f6da14;
+  }
+}

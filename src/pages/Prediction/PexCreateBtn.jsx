@@ -1,31 +1,16 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
 import IconIdea from '@/assets/images/icon/idea.svg';
 
-import { hsGetTxCount } from '@/services/eth/transaction';
+import constant from '@/services/eth/constants';
 
 class PexCreateBtn extends Component {
   static displayName = 'PexCreateBtn';
-  static propTypes = {
-    className: PropTypes.string,
-  };
-
-  static defaultProps = {
-    className: '',
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
 
   async componentDidMount() {
     window.addEventListener('scroll', this.onScroll);
-    const tx = await hsGetTxCount();
-    console.log('tx', tx);
+    console.log('constant', constant);
   }
 
   componentWillUnmount() {

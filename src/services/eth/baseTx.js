@@ -31,7 +31,7 @@ export function sendRawTx({
   from, defaultBlock, privateKey,
   chainId, gasLimit, gasPrice, to, value, data,
 }) {
-  const web3 = initWeb3;
+  const web3 = initWeb3();
 
   getTxCount({ from, defaultBlock }).then(nonce => {
     const txParams = {

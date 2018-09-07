@@ -79,6 +79,9 @@ import iconAddPlus from '@/assets/images/wallet/icons/icon-add-plus.svg';
 import iconAlignJust from '@/assets/images/wallet/icons/icon-align-just.svg';
 import { hideHeader } from '@/reducers/app/action';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
+import customRightIcon from '@/assets/images/wallet/icons/icon-options.svg';
+
+import WalletPreferences from './Components/WalletPreferences'
 
 const QRCode = require('qrcode.react');
 
@@ -773,7 +776,7 @@ class Wallet extends React.Component {
           onReceiveClick={() => this.onAddressClick(wallet)}
           onWarningClick={() => this.onWarningClick(wallet)}
           wallet={wallet}
-          iconBackImage={BackChevronSVGWhite}
+          customBackIcon={BackChevronSVGWhite}
           modalHeaderStyle={this.modalHeaderStyle}
         />
       )
@@ -944,15 +947,20 @@ class Wallet extends React.Component {
     return (
       <div className="wallet-page">
 
-        <Modal iconBackImage={BackChevronSVGWhite} modalBodyStyle={this.modalBodyStyle} modalHeaderStyle={this.modalHeaderStyle} title={this.state.walletSelected ? this.state.walletSelected.title : messages.wallet.action.history.header} onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
+      
+        <Modal customBackIcon={BackChevronSVGWhite} modalBodyStyle={this.modalBodyStyle} modalHeaderStyle={this.modalHeaderStyle} title={this.state.walletSelected ? this.state.walletSelected.title : messages.wallet.action.history.header} onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
           {modalHistory}
         </Modal>
 
-        <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
+        <Modal title="Preferences" onRef={modal => this.modalWalletReferencesRef = modal} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle}>
+          <WalletPreferences />
+        </Modal>
+
+        <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
             <AddToken formAddTokenIsActive={formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
         </Modal>
 
-        <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddCollectibleIsActive: false})} title="Add Collectible" onRef={modal => this.modalAddNewCollectibleRef = modal}>
+        <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddCollectibleIsActive: false})} title="Add Collectible" onRef={modal => this.modalAddNewCollectibleRef = modal}>
             <AddCollectible formAddCollectibleIsActive={formAddCollectibleIsActive} onFinish={() => {this.addedCollectible()}}/>
         </Modal>
 
@@ -976,40 +984,40 @@ class Wallet extends React.Component {
           {/* ModalDialog for transfer coin */}
 
 
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.transfer.header} onRef={modal => this.modalSendRef = modal}  onClose={this.closeTransfer}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.transfer.header} onRef={modal => this.modalSendRef = modal}  onClose={this.closeTransfer}>
             {modalTransferCoin}
           </Modal>
 
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} title={messages.create.cash.credit.title} onRef={modal => this.modalBuyCoin = modal} onClose={this.closeBuyCoin}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} title={messages.create.cash.credit.title} onRef={modal => this.modalBuyCoin = modal} onClose={this.closeBuyCoin}>
             {modalBuyCoin}
           </Modal>
 
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.protect.header} onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.protect.header} onClose={this.closeProtected} onRef={modal => this.modalProtectRef = modal}>
             <WalletProtect onCopy={this.onCopyProtected} step={this.state.stepProtected} active={this.state.activeProtected} wallet={this.state.walletSelected} callbackSuccess={() => { this.successWalletProtect(this.state.walletSelected); }} />
           </Modal>
 
           {/* Modal for Backup wallets : */}
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.backup.header} onRef={modal => this.modalBackupRef = modal}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.backup.header} onRef={modal => this.modalBackupRef = modal}>
             <BackupWallet walletData={walletsData} />
           </Modal>
 
           {/* Modal for Restore wallets : */}
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
             <RestoreWallet />
           </Modal>
 
           {/* Modal for Setting wallets : */}
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} title={messages.wallet.action.setting.header} onRef={modal => this.modalSettingRef = modal} onClose={this.closeSetting}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} title={messages.wallet.action.setting.header} onRef={modal => this.modalSettingRef = modal} onClose={this.closeSetting}>
             {modalSetting}
           </Modal>
 
           {/* Modal for Copy address : */}
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}   title={messages.wallet.action.receive.title} onRef={modal => this.modalReceiveCoinRef = modal} onClose={()=> {this.setState({modalReceiveCoin: false})}}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}   title={messages.wallet.action.receive.title} onRef={modal => this.modalReceiveCoinRef = modal} onClose={()=> {this.setState({modalReceiveCoin: false})}}>
             {modalReceiveCoin}
           </Modal>
 
           {/* Modal for Create/Import wallet : */}
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.create.header} onRef={modal => this.modalCreateWalletRef = modal} onClose={this.closeCreate}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.create.header} onRef={modal => this.modalCreateWalletRef = modal} onClose={this.closeCreate}>
             <Row className="list">
               <Header title={messages.wallet.action.create.label.select_coins} hasLink={false} />
             </Row>
@@ -1057,7 +1065,7 @@ class Wallet extends React.Component {
 
           {/* QR code dialog */}
           {/* {this.renderScanQRCode()} */}
-          <Modal iconBackImage={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} onClose={() => this.closeQrCode()} title={messages.wallet.action.scan_qrcode.header} onRef={modal => this.modalScanQrCodeRef = modal}>
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} onClose={() => this.closeQrCode()} title={messages.wallet.action.scan_qrcode.header} onRef={modal => this.modalScanQrCodeRef = modal}>
             {this.state.qrCodeOpen &&
               <QrReader
                 delay={this.state.delay}

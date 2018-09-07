@@ -40,7 +40,7 @@
 }
 .item-center{
   display: inline-block;
-  width: 60%;
+  // width: 60%;
 }
 .name {
   font-size: rem-calc(15px);
@@ -607,12 +607,15 @@
       }
     }
   }
-  .header-history-tx{
-    color:Black;
+  .header-history-tx{    
     font-size: 14px;
     text-align: center;
     padding: 10px;
-    overflow: hidden;
+    overflow: hidden;        
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: #315E9E;
+    opacity: 0.54;
 
     a{
       text-decoration: underline;

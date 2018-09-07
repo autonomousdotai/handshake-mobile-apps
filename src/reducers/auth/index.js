@@ -9,6 +9,7 @@ const authReducter = (state = {
   isLogged: false,
   offline: local.get(APP.OFFLINE_STATUS),
   updatedAt: Date.now(),
+  fetching: false,
 }, action) => {
   switch (action.type) {
     case `${ACTIONS.AUTH_SIGNUP}_SUCCESS`:
@@ -28,6 +29,15 @@ const authReducter = (state = {
       };
     case `${ACTIONS.SET_OFFLINE_STATUS}_SUCCESS`: {
       return { ...state, offline: state.offline ? 0 : 1 };
+    }
+    case `${ACTIONS.SUBMIT_EMAIL_SUBCRIBE}`: {
+      return { ...state, fetching: true };
+    }
+    case `${ACTIONS.SUBMIT_EMAIL_SUBCRIBE}_SUCCESS`: {
+      return { ...state, fetching: false };
+    }
+    case `${ACTIONS.SUBMIT_EMAIL_SUBCRIBE}_FAILED`: {
+      return { ...state, fetching: false };
     }
 
     default:

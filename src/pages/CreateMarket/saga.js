@@ -7,7 +7,16 @@ import { isBalanceinInvalid } from '@/stores/common-saga';
 import { showAlert } from '@/stores/common-action';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { reportSelector } from './selector';
-import { loadCreateEventData, createEvent, shareEvent, sendEmailCode, verifyEmail, updateEmailPut, updateCreateEventLoading } from './action';
+import {
+  loadCreateEventData,
+  createEvent,
+  shareEvent,
+  sendEmailCode,
+  verifyEmail,
+  updateEmailPut,
+  verifyEmailCodePut,
+  updateCreateEventLoading,
+} from './action';
 
 function* handleLoadReportsSaga({ cache = true }) {
   try {
@@ -145,8 +154,8 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
         const reportSource = {
           source_id: selectedSource,
           source: selectedSource ? undefined : {
-            name: values.ownReportName,
-            url: values.ownReportUrl,
+            name: '',
+            url: values.reports,
           },
         };
         Object.keys(reportSource).forEach((k) => !reportSource[k] && delete reportSource[k]);
@@ -217,11 +226,13 @@ function* handleUpdateEmail({ email }) {
 
 function* handleSendEmailCode({ email }) {
   try {
-    return yield call(apiPost, {
+    const sendCode = yield call(apiPost, {
       PATH_URL: `user/verification/email/start?email=${email}`,
       type: 'SEND_EMAIL_CODE',
       headers: { 'Content-Type': 'multipart/form-data' },
     });
+    if (sendCode.error) return null;
+    return yield put(verifyEmailCodePut(true));
   } catch (e) {
     console.error('handleSendEmailCode', e);
     return null;
@@ -230,14 +241,19 @@ function* handleSendEmailCode({ email }) {
 
 function* handleVerifyEmail({ email, code }) {
   try {
-    yield call(apiPost, {
+    const verify = yield call(apiPost, {
       PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
       type: 'VERIFY_EMAIL',
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    yield handleUpdateEmail({ email });
+    if (verify.error) {
+      return yield put(verifyEmailCodePut(false));
+    }
+    yield put(verifyEmailCodePut(true));
+    return yield handleUpdateEmail({ email });
   } catch (e) {
     console.error('handleVerifyEmail', e);
+    return null;
   }
 }
 

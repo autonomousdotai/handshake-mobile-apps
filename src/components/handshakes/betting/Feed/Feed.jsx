@@ -148,6 +148,7 @@ class FeedBetting extends React.Component {
       ' fromAddress: ', fromAddress,
     );
 
+    console.log(TAG, 'ESTIMATE:', estimatedGas);
     if (!isRightNetwork()) {
       message = MESSAGE.RIGHT_NETWORK;
     } else if (!isSameAddress(fromAddress)) {
@@ -155,11 +156,14 @@ class FeedBetting extends React.Component {
     } else if (freeBet && title !== BETTING_STATUS_LABEL.DISPUTE) {
       this.handleActionFree(title, id, hid);
     } else if (estimatedGas > balance) {
-      message = MESSAGE.NOT_ENOUGH_GAS;
+      message = MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', estimatedGas);
     } else {
       this.handleActionReal(title, id, hid);
     }
     if (message) {
+      this.setState({
+        isLoading: false,
+      });
       this.props.showAlert({
         message: <div className="text-center">{message}</div>,
         timeOut: 3000,

@@ -18,8 +18,13 @@ export const eventSelector = (state) => {
 };
 
 export const countReportSelector = (state) => {
-  const { matches = [] } = state.ui;
-  return matches.length || 0;
+  const { countReport } = state.ui;
+  return countReport || 0;
+};
+export const checkFreeBetSelector = (state) => {
+
+  const { freeBet = {} } = state.ui;
+  return freeBet;
 };
 
 export const isSharePage = (state) => {
@@ -35,5 +40,15 @@ export const isLoading = (state) => {
 
 export const showedLuckyPoolSelector = (state) => {
   return state.ui.showedLuckyPool;
+};
+
+export const checkExistSubcribeEmailSelector = (state) => {
+  /*
+  const { matches = [] } = state.ui;
+  return matches.length || 0;
+  */
+  const { isExistEmail = false } = state.ui;
+  console.log('isExistEmail');
+  return isExistEmail;
 };
 

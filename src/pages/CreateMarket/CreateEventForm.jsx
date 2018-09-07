@@ -4,12 +4,10 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import IconPlus from '@/assets/images/icon/icon-plus.svg';
 import IconTrash from '@/assets/images/icon/icon-trash.svg';
-import RangeSlider from '@/components/RangeSlider/RangeSlider';
-import AutoSuggestion from '@/components/AutoSuggestion/AutoSuggestion';
 import moment from 'moment';
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker';
 import { renderField } from './form';
-import { required, urlValidator, isExists } from './validate';
+import { required, urlValidator } from './validate';
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
 import { createEventFormName } from './constants';
@@ -57,7 +55,7 @@ class CreateEventForm extends Component {
     dispatch(createEvent({
       values,
       isNew: props.isNew,
-      selectedSource: this.state.selectedReportSource.value,
+      selectedSource: this.state.selectedReportSource.value || null,
     }));
   }
 
@@ -119,6 +117,10 @@ class CreateEventForm extends Component {
     return oldData.every((i) => i.name !== newItem.name) ? undefined : 'Outcome already exists';
   }
 
+  reportSelected = (value) => {
+    this.setFieldValueToState('selectedReportSource', value);
+  }
+
   renderGroupTitle = (title) => {
     return (<div className="CreateEventFormGroupTitle">{title}</div>);
   }
@@ -133,13 +135,15 @@ class CreateEventForm extends Component {
       <React.Fragment>
         {this.renderGroupTitle(title)}
         <Field
+          type="autoSuggestion"
           name="eventName"
           className="form-group"
           fieldClass="form-control"
-          onSelectEvent={props.onSelectEvent}
+          placeholder="Choose an Event or Create a new one"
+          onSelect={props.onSelect}
           source={props.eventList}
           validate={required}
-          component={this.renderAutoSuggestion}
+          component={renderField}
         />
       </React.Fragment>
     );
@@ -160,18 +164,6 @@ class CreateEventForm extends Component {
       />
     );
   }
-
-  renderAutoSuggestion = (props) => {
-    return (
-      <AutoSuggestion
-        {...props}
-        name="eventName"
-        placeholder="Choose an Event or Create a new one"
-        value={props.input.value}
-        onChange={props.input.onChange}
-      />
-    );
-  };
 
   renderOutComes = (props) => {
     const { fields, meta: { error }, isNew } = props;
@@ -227,7 +219,7 @@ class CreateEventForm extends Component {
     const textNote = 'The market fee is a percentage of the total winnings of the market.';
     const optionSlider = {
       min: 0,
-      max: 99,
+      max: 5,
       tooltip: false,
       orientation: 'horizontal',
     };
@@ -236,73 +228,36 @@ class CreateEventForm extends Component {
         {this.renderGroupTitle(title)}
         <Field
           name="creatorFee"
-          type="number"
+          type="rangeSlider"
           unit="%"
           className="input-value"
           disabled={!isNew}
           options={optionSlider}
-          component={this.renderRangleSlider}
+          component={renderField}
         />
         {this.renderGroupNote(textNote)}
       </div>
     );
   }
 
-  renderRangleSlider = (props) => {
-    return (
-      <RangeSlider
-        {...props}
-        value={props.input.value}
-        onChange={props.input.onChange}
-      />
-    );
-  }
-
-  renderReport = (props, state) => {
-    const reports = [{
-      value: '',
-      label: 'Select a verified source...',
-    }].concat(props.reportList);
+  renderReport = (props) => {
+    const reportList = props.reportList.map(item => ({ ...item, name: item.url }));
+    const validate = props.isNew ? [required, urlValidator] : [];
     return (
       <React.Fragment>
         {this.renderGroupTitle('REPORT')}
-        <div className="form-group">
-          <Field
-            name="reports"
-            type="select"
-            placeholder="Select a verified source..."
-            disabled={!props.isNew}
-            validate={required}
-            onChange={(e, newValue) => this.setFieldValueToState('selectedReportSource', newValue)}
-            component={renderField}
-            options={reports}
-          />
-        </div>
-        {
-          props.isNew && !state.selectedReportSource.value &&
-          <React.Fragment>
-            <div className="CreateEventOption"><span>Or</span></div>
-            <Field
-              name="ownReportName"
-              type="text"
-              className="form-group"
-              fieldClass="form-control"
-              component={renderField}
-              placeholder="Enter your prefer source name"
-              validate={[required, (value) => isExists(value, 'name', props.reportList)]}
-            />
-            <Field
-              name="ownReportUrl"
-              type="text"
-              className="form-group"
-              fieldClass="form-control"
-              component={renderField}
-              placeholder="Enter your prefer source URL"
-              validate={[required, urlValidator, (value) => isExists(value, 'url', props.reportList)]}
-            />
-            {this.renderGroupNote('We will review your source and get back to you within 24 hours.')}
-          </React.Fragment>
-        }
+        <Field
+          type="autoSuggestion"
+          name="reports"
+          className="form-group"
+          fieldClass="form-control"
+          placeholder="Enter result source URL"
+          onSelect={this.reportSelected}
+          source={reportList}
+          disabled={!props.isNew}
+          validate={validate}
+          component={renderField}
+        />
       </React.Fragment>
     );
   }
@@ -345,8 +300,8 @@ class CreateEventForm extends Component {
           name="closingTime"
           type="text"
           component={this.renderDateTime}
-          title="Closing Time"
-          placeholder="Event close"
+          title="Event closing time"
+          placeholder="Event closing time"
           validate={[required, this.smallerThanReportingTime]}
           disabled={!props.isNew}
           value={state.closingTime}
@@ -357,8 +312,8 @@ class CreateEventForm extends Component {
           name="reportingTime"
           type="text"
           component={this.renderDateTime}
-          title="Reporting Time"
-          placeholder="Report by"
+          title="Report deadline"
+          placeholder="Report deadline"
           validate={[required, this.smallerThanDisputeTime]}
           disabled={!props.isNew || !state.closingTime}
           value={state.reportingTime}
@@ -369,8 +324,8 @@ class CreateEventForm extends Component {
           name="disputeTime"
           type="text"
           component={this.renderDateTime}
-          title="Dispute Time"
-          placeholder="Dispute by"
+          title="Dispute deadline"
+          placeholder="Dispute deadline"
           validate={[required]}
           disabled={!props.isNew || !state.reportingTime}
           value={state.disputeTime}
@@ -402,7 +357,7 @@ class CreateEventForm extends Component {
         </div>
         {this.renderFee(props)}
         <div className="CreateEventFormBlock">
-          {this.renderReport(props, state)}
+          {this.renderReport(props)}
           {this.renderTimeGroup(props, state)}
           <button type="submit" className="btn btn-primary btn-block" disabled={props.pristine || props.submitting}>
             {props.isNew ? 'Create a new event' : 'Add new outcomes'}

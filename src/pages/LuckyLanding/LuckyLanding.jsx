@@ -27,25 +27,31 @@ class LuckyLanding extends React.Component {
           >
             <Image src={CloseIcon} alt="CloseIcon" />
           </div>
-          <Image className="luckyLandingLogo" src={LuckyLogoSVG} alt="luckyfree" />
-          <div className="luckyTopContent">
-            <div className="luckyLandingTitle">WANNA WIN</div>
-            <div className="luckyTitleEth">10 ETH?</div>
-            <div className="luckyTopText">Place any bet to enter the draw.</div>
-          </div>
+          <Image className="luckyLandingLogo" src={LuckyLogoSVG} alt="luckyLogo" />
+
+        </div>
+        <div className="luckyTopContent">
+          <div className="luckyLandingTitle">Hey Ninja!</div>
+          <div className="luckyTitleDesc">Take a look around.</div>
         </div>
 
         <Button
-          className="luckyLandingButton"
+          className="btnLuckyLanding guideButton"
           onClick={() => {
               this.props.onButtonClick();
           }}
-          //to={URL.HANDSHAKE_DISCOVER}
         >
-          Bet now
+          Quick start guide
         </Button>
 
-        <div className="luckyLandingSmallDes">*Draw closes after 1000 bets.<br />Free bets do not count.</div>
+        <Button
+          className="btnLuckyLanding gotItButton"
+          onClick={() => {
+              this.props.onButtonClick();
+          }}
+        >
+          Got it
+        </Button>
 
       </div>
     );

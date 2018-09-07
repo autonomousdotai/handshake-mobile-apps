@@ -10,62 +10,64 @@
 
   //height: 100vh;
   .luckyLandingTop {
-    background: url('../../assets/images/luckypool/lucky-landing-bg.svg') no-repeat;
-    background-size: cover;
+    background: url('../../assets/images/luckypool/lucky-landing-bg.svg');
     display: flex;
     padding-top: 9.5rem;
   }
   .luckyTopContent {
-    margin-right: rem-calc(20px);
-    margin-left: rem-calc(10px);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
   }
   .luckyLandingTitle {
-    font-size: rem-calc(26px);
+    font-size: rem-calc(18px);
+    font-weight: 400;
+    margin-top: 10%;
 
   }
-  .luckyTitleEth {
-    font-size: rem-calc(40px);
-    font-weight: 500;
-    color: #2456FB;
-
+  .luckyTitleDesc {
+    font-size: rem-calc(15px);
+    opacity: .6;
   }
-  .luckyTopText {
+  .btnLuckyLanding {
+    border-radius: rem-calc(5px);
     font-size: rem-calc(16px);
-    margin-top: 2.25rem;
-  }
-  .luckyLandingButton {
-    background: #2456FB;
-    border-radius: rem-calc(2px);
-    font-size: rem-calc(16px);
-    color: #FFFFFF;
     height: rem-calc(50px);
 
-
-    //display: inline-block;
     font-weight: 400;
     text-align: center;
     white-space: nowrap;
     vertical-align: middle;
 
-    //user-select: none;
     padding: 0.75rem 0.75rem;
-    margin: 2.5rem 2.5rem 0 2.5rem;
-    //transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-left: rem-calc(50px);
+    margin-right: rem-calc(50px);
+  }
+  .btnLuckyLanding.guideButton {
+    background: #2456FB;
+    color: #FFFFFF;
+    margin-top: 5%;
 
   }
-  .luckyLandingSmallDes {
-    font-size: rem-calc(12px);
-    text-align: center;
-    margin-top: rem-calc(20px);
-    margin-bottom: rem-calc(20px);
+  .btnLuckyLanding.gotItButton {
+    background: white;
+    color: #828AA8;
+    border: 1px solid #828AA8;
+    margin-top: rem-calc(5px);
+    margin-bottom: rem-calc(30px);
+
   }
+
   .luckyLandingLogo {
     margin-right: rem-calc(20px);
+    position: relative;
+    left: 69px;
+    top: 19px;
   }
   .luckyLandingClose {
     position: absolute;
     top: .5rem;
-    right: .5rem;
+    right: 1.5rem;
     width: 25px;
     height: 25px;
   }

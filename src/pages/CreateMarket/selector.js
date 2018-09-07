@@ -25,3 +25,5 @@ export const categorySelector = (state) => {
 export const shareEventSelector = (state) => state.ui.shareEvent;
 
 export const isLoading = (state) => state.ui.isCreateEventLoading;
+
+export const isValidEmailCode = (state) => state.ui.isValidEmailCode;

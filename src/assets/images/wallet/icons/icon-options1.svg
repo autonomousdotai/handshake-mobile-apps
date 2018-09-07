@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="448px" height="448px" viewBox="0 0 448 448" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
+    <title>options</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="options" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="Group-2" transform="translate(0.000000, 288.000000)">
+                <g id="Group">
+                    <rect id="Rectangle-path" x="0" y="64" width="272" height="32"></rect>
+                    <rect id="Rectangle-path" x="368" y="64" width="80" height="32"></rect>
+                    <path d="M352,127.5 C352,145.449 337.673,160 320,160 C302.327,160 288,145.449 288,127.5 L288,32.5 C288,14.551 302.327,0 320,0 C337.673,0 352,14.551 352,32.5 L352,127.5 Z" id="Shape"></path>
+                </g>
+            </g>
+            <g id="Group" transform="translate(0.000000, 144.000000)">
+                <rect id="Rectangle-path" x="0" y="64" width="80" height="32"></rect>
+                <rect id="Rectangle-path" x="176" y="64" width="272" height="32"></rect>
+                <path d="M160,127.5 C160,145.449 145.673,160 128,160 C110.327,160 96,145.449 96,127.5 L96,32.5 C96,14.551 110.327,0 128,0 C145.673,0 160,14.551 160,32.5 L160,127.5 Z" id="Shape"></path>
+            </g>
+            <g id="Group">
+                <rect id="Rectangle-path" x="0" y="64" width="272" height="32"></rect>
+                <rect id="Rectangle-path" x="368" y="64" width="80" height="32"></rect>
+                <path d="M352,127.5 C352,145.449 337.673,160 320,160 C302.327,160 288,145.449 288,127.5 L288,32.5 C288,14.551 302.327,0 320,0 C337.673,0 352,14.551 352,32.5 L352,127.5 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

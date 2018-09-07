@@ -29,6 +29,14 @@ export const verifyEmail = (payload = {}) => {
   };
 };
 
+export const verifyEmailCodePut = (value) => {
+  return SET_DATA({
+    type: 'CREATE_MARKET:VERIFY_EMAIL_CODE_PUT',
+    _path: 'ui.isValidEmailCode',
+    _value: value,
+  });
+};
+
 export const updateCreateEventLoading = (value) => {
   return SET_DATA({
     type: 'CREATE_MARKET:LOADING',

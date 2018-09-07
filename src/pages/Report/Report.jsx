@@ -4,6 +4,12 @@ import { loadMatches } from '@/reducers/betting/action';
 import BettingReport from '@/components/handshakes/betting-event/BettingReport';
 import { API_URL } from '@/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
+import {
+  getBalance, getEstimateGas,
+} from '@/components/handshakes/betting/utils';
+import { MESSAGE } from '@/components/handshakes/betting/message.js';
+import { showAlert } from '@/reducers/app/action';
+
 
 const TAG = 'REPORT';
 const betHandshakeHandler = BetHandshakeHandler.getShareManager();
@@ -31,13 +37,12 @@ class Report extends React.Component {
   }
 
   fetchMatches() {
-    console.log('fetchMatches');
     this.props.loadMatches({
       PATH_URL: `${API_URL.CRYPTOSIGN.MATCHES_REPORT}`,
     });
   }
 
-  callContractReport(outcomes) {
+  async callContractReport(outcomes) {
     if (outcomes.length > 0) {
       betHandshakeHandler.reportOutcomes(outcomes);
     }
@@ -65,6 +70,8 @@ const mapState = state => ({
 
 const mapDispatch = ({
   loadMatches,
+  showAlert,
+
 });
 
 export default connect(mapState, mapDispatch)(Report);

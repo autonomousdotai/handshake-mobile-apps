@@ -3,7 +3,7 @@ import { isExpiredDate } from '@/components/handshakes/betting/validation';
 import { BETTING_STATUS_LABEL } from '@/components/handshakes/betting/message';
 import { PERCENT_DISPUTE } from '@/components/handshakes/betting/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
-
+import { leftTime} from '@/components/handshakes/betting/utils';
 const TAG = 'STATUS_ACTION';
 
 const betHandshakeHandler = BetHandshakeHandler.getShareManager();
@@ -82,7 +82,7 @@ export const getStatusLabel = (item) => {
     && (result > BETTING_RESULT.INITED || result < BETTING_RESULT.DISPUTED)
     && status !== BET_BLOCKCHAIN_STATUS.STATUS_RESOLVED
     && !isExpiredDate(disputeTime)) {
-    return disputeAction(result, side);
+    return disputeAction(result, side, disputeTime);
   }
 
   if (result === BETTING_RESULT.INITED && // hasn't has result
@@ -265,7 +265,9 @@ const winOrLose = (resultStatus, side = SIDE.SUPPORT, disputeTime) => {
       strStatus = BETTING_STATUS_LABEL.WIN;
       isAction = true;
     } else {
-      strStatus = BETTING_STATUS_LABEL.WIN + BETTING_STATUS_LABEL.WIN_WAIT;
+      const time = leftTime(disputeTime);
+      console.log(TAG, 'TIME:', time);
+      strStatus = BETTING_STATUS_LABEL.WIN + BETTING_STATUS_LABEL.WIN_WAIT.replace('{{value}}', time);
       isAction = false;
     }
   } else { // LOSE
@@ -296,7 +298,7 @@ const rollbackAction = () => {
   return { title: null, isAction, status: strStatus };
 };
 
-const disputeAction = (result, side) => {
+const disputeAction = (result, side, disputeTime) => {
   console.log(TAG, 'disputeAction');
   let strStatus = null;
   let isAction = true;
@@ -308,7 +310,9 @@ const disputeAction = (result, side) => {
       break;
     default:
       if (result === side) {
-        strStatus = BETTING_STATUS_LABEL.WIN + BETTING_STATUS_LABEL.WIN_WAIT;
+        const time = leftTime(disputeTime);
+        console.log(TAG, 'TIME:', time);
+        strStatus = BETTING_STATUS_LABEL.WIN + BETTING_STATUS_LABEL.WIN_WAIT.replace('{{value}}', time);
         isAction = false;
         label = null;
       } else {

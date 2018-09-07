@@ -47,7 +47,7 @@ class RangeSlider extends Component {
         <div className="RangeValue">
           <input
             {...inputProps}
-            type={props.type}
+            type="number"
             className={props.className}
             disabled={props.disabled}
             readOnly

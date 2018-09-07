@@ -7,9 +7,9 @@ import CopyLink from '@/assets/images/share/link.svg';
 import commentIcon from '@/assets/images/icon/comment.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { URL } from '@/constants';
+import GA from '@/services/googleAnalytics';
 import { formatAmount } from '@/utils/number';
 import OutcomeList from './OutcomeList';
-import GA from '@/services/googleAnalytics';
 
 function renderEventName({ event }) {
   return (

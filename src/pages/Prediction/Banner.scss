@@ -1,0 +1,42 @@
+@import './src/styles/style';
+
+.ShareToWinContainer {
+  position: relative;
+}
+.ShareToWin {
+  //background-image: url('../../assets/images/share/share-to-win.png');
+  //display: flex;
+  //height: rem-calc(110px);
+  //position: relative;
+}
+
+.ShareToWinTitle {
+  font-family: $font-family-base;
+  font-size: rem-calc(22px);
+  color: white;
+  letter-spacing: 0;
+  font-weight: bold;
+  width: 57%;
+  position: absolute;
+  top: 9%;
+  right: 37%;
+  bottom: 3%;
+  span {
+    color: #2456FB;
+  }
+  .RollingText {
+    color: #FFEC00;
+  }
+  .btnBanner {
+    border: none;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    line-height: rem-calc(22px);
+    font-weight: normal;
+  }
+  .btnBanner.FollowButton {
+    background-color: #F5A623;
+    margin-top: 6%;
+    height: rem-calc(40px);
+  }
+}

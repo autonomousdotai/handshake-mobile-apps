@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="448px" height="448px" viewBox="0 0 448 448" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 49.3 (51167) - http://www.bohemiancoding.com/sketch -->
-    <title>options</title>
+    <title>icon-options</title>
     <desc>Created with Sketch.</desc>
     <defs></defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="options" fill="#FFFFFF" fill-rule="nonzero">
-            <g id="Group-2" transform="translate(0.000000, 288.000000)">
+        <g id="icon-options" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="Group-2" transform="translate(0.000000, 20.571429)">
                 <g id="Group">
-                    <rect id="Rectangle-path" x="0" y="64" width="272" height="32"></rect>
-                    <rect id="Rectangle-path" x="368" y="64" width="80" height="32"></rect>
-                    <path d="M352,127.5 C352,145.449 337.673,160 320,160 C302.327,160 288,145.449 288,127.5 L288,32.5 C288,14.551 302.327,0 320,0 C337.673,0 352,14.551 352,32.5 L352,127.5 Z" id="Shape"></path>
+                    <rect id="Rectangle-path" x="0" y="4.57142857" width="19.4285714" height="2.28571429"></rect>
+                    <rect id="Rectangle-path" x="26.2857143" y="4.57142857" width="5.71428571" height="2.28571429"></rect>
+                    <path d="M25.1428571,9.10714286 C25.1428571,10.3892143 24.1195,11.4285714 22.8571429,11.4285714 C21.5947857,11.4285714 20.5714286,10.3892143 20.5714286,9.10714286 L20.5714286,2.32142857 C20.5714286,1.03935714 21.5947857,0 22.8571429,0 C24.1195,0 25.1428571,1.03935714 25.1428571,2.32142857 L25.1428571,9.10714286 Z" id="Shape"></path>
                 </g>
             </g>
-            <g id="Group" transform="translate(0.000000, 144.000000)">
-                <rect id="Rectangle-path" x="0" y="64" width="80" height="32"></rect>
-                <rect id="Rectangle-path" x="176" y="64" width="272" height="32"></rect>
-                <path d="M160,127.5 C160,145.449 145.673,160 128,160 C110.327,160 96,145.449 96,127.5 L96,32.5 C96,14.551 110.327,0 128,0 C145.673,0 160,14.551 160,32.5 L160,127.5 Z" id="Shape"></path>
+            <g id="Group" transform="translate(0.000000, 10.285714)">
+                <rect id="Rectangle-path" x="0" y="4.57142857" width="5.71428571" height="2.28571429"></rect>
+                <rect id="Rectangle-path" x="12.5714286" y="4.57142857" width="19.4285714" height="2.28571429"></rect>
+                <path d="M11.4285714,9.10714286 C11.4285714,10.3892143 10.4052143,11.4285714 9.14285714,11.4285714 C7.8805,11.4285714 6.85714286,10.3892143 6.85714286,9.10714286 L6.85714286,2.32142857 C6.85714286,1.03935714 7.8805,0 9.14285714,0 C10.4052143,0 11.4285714,1.03935714 11.4285714,2.32142857 L11.4285714,9.10714286 Z" id="Shape"></path>
             </g>
             <g id="Group">
-                <rect id="Rectangle-path" x="0" y="64" width="272" height="32"></rect>
-                <rect id="Rectangle-path" x="368" y="64" width="80" height="32"></rect>
-                <path d="M352,127.5 C352,145.449 337.673,160 320,160 C302.327,160 288,145.449 288,127.5 L288,32.5 C288,14.551 302.327,0 320,0 C337.673,0 352,14.551 352,32.5 L352,127.5 Z" id="Shape"></path>
+                <rect id="Rectangle-path" x="0" y="4.57142857" width="19.4285714" height="2.28571429"></rect>
+                <rect id="Rectangle-path" x="26.2857143" y="4.57142857" width="5.71428571" height="2.28571429"></rect>
+                <path d="M25.1428571,9.10714286 C25.1428571,10.3892143 24.1195,11.4285714 22.8571429,11.4285714 C21.5947857,11.4285714 20.5714286,10.3892143 20.5714286,9.10714286 L20.5714286,2.32142857 C20.5714286,1.03935714 21.5947857,0 22.8571429,0 C24.1195,0 25.1428571,1.03935714 25.1428571,2.32142857 L25.1428571,9.10714286 Z" id="Shape"></path>
             </g>
         </g>
     </g>

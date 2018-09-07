@@ -1,8 +1,8 @@
 import { takeLatest, call, select, put } from 'redux-saga/effects';
 import { apiGet } from '@/stores/api-saga';
-import { REMOVE_DATA } from '@/stores/data-action';
+import { REMOVE_DATA, SET_DATA } from '@/stores/data-action';
 import { API_URL } from '@/constants';
-import { loadMatches, getReportCount, removeExpiredEvent } from './action';
+import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, updateFreeBet, checkExistSubcribeEmail, updateCountReport, updateExistEmail } from './action';
 import { eventSelector } from './selector';
 
 export function* handleLoadMatches({ cache = true }) {
@@ -44,14 +44,46 @@ export function* handleRemoveEvent({ eventId }) {
 
 export function* handleCountReport() {
   try {
-    return yield call(apiGet, {
+    const response = yield call(apiGet, {
       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
       type: 'COUNT_REPORT',
-      _key: 'matches',
-      _path: 'ui',
     });
+    //console.log('handleCountReport', response.data);
+    yield put(updateCountReport(response.data.length));
   } catch (e) {
-    return console.error('handleCountReport', e);
+    console.log(e);
+    //return console.error('handleCountReport', e);
+  }
+}
+
+export function* handleFreeBet() {
+  try {
+    const response = yield call(apiGet, {
+      PATH_URL: API_URL.CRYPTOSIGN.CHECK_FREE_AVAILABLE,
+      type: 'CHECK_FREE_AVAILABLE',
+    });
+    yield put(updateFreeBet(response.data));
+  } catch (e) {
+    console.error('handleFreeBet', e);
+  }
+}
+
+export function* handleCheckExistEmail() {
+  try {
+    const response = yield call(apiGet, {
+      PATH_URL: API_URL.USER.CHECK_EXIST_EMAIL,
+      type: 'CHECK_EXIST_EMAIL',
+    });
+    console.log('Response Data:', response.data);
+    if (response.data) {
+      const { email_existed: emailExist } = response.data;
+
+      yield put(updateExistEmail(emailExist));
+    }
+
+
+  } catch (e) {
+    console.error('handleFreeBet', e);
   }
 }
 
@@ -60,5 +92,8 @@ export default function* predictionSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
   yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
+  yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
+  yield takeLatest(checkFreeBet().type, handleFreeBet);
+  yield takeLatest(checkExistSubcribeEmail().type, handleCheckExistEmail);
 
 }

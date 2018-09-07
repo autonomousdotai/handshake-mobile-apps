@@ -8,21 +8,32 @@ import LuckyReal from '@/components/handshakes/betting/LuckyPool/LuckyReal/Lucky
 import LuckyLanding from '@/pages/LuckyLanding/LuckyLanding';
 import GA from '@/services/googleAnalytics';
 import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/LuckyFree';
+import FreeBetLose from '@/components/handshakes/betting/LuckyPool/FreeBetLose';
+import FreeBetWin from '@/components/handshakes/betting/LuckyPool/FreeBetWin';
+import EmailPopup from '@/components/handshakes/betting/Feed/EmailPopup';
 import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import Modal from '@/components/core/controls/Modal';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
 import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import ReportPopup from '@/components/handshakes/betting/Feed/ReportPopup';
-import { URL } from '@/constants';
+import { FREE_BET_STATUS } from '@/components/handshakes/betting/constants';
+
+import Banner from '@/pages/Prediction/Banner';
 import { injectIntl } from 'react-intl';
-import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector } from './selector';
-import { loadMatches, getReportCount, removeExpiredEvent } from './action';
+import { URL } from '@/constants';
+import { Link } from 'react-router-dom';
+import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkFreeBetSelector, checkExistSubcribeEmailSelector } from './selector';
+import { loadMatches, updateShowedLuckyPool, getReportCount, removeExpiredEvent, checkFreeBet, checkExistSubcribeEmail } from './action';
 
 import EventItem from './EventItem';
 import PexCreateBtn from './PexCreateBtn';
+import local from '@/services/localStore';
+import { APP } from '@/constants';
+import _ from 'lodash';
 
 import './Prediction.scss';
+import { BETTING_RESULT } from '@/components/handshakes/betting/constants';
 
 class Prediction extends React.Component {
   static displayName = 'Prediction';
@@ -32,10 +43,13 @@ class Prediction extends React.Component {
     isSharePage: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
     countReport: PropTypes.number,
+    freeBet: PropTypes.object,
+    emailExist: PropTypes.number
   };
 
   static defaultProps = {
     eventList: [],
+    emailExist: 0
   };
 
   constructor(props) {
@@ -44,18 +58,53 @@ class Prediction extends React.Component {
       selectedOutcome: null,
       isLuckyPool: true,
       modalFillContent: '',
+      isOrderOpening: false,
+      shouldShowFreePopup: true,
     };
   }
 
   componentDidMount() {
+    window.addEventListener('scroll', this.handleScroll);
     this.props.dispatch(loadMatches());
     this.props.dispatch(getReportCount());
+    this.props.dispatch(checkFreeBet());
+    this.props.dispatch(checkExistSubcribeEmail());
   }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
 
   onCountdownComplete = (eventId) => {
     this.props.dispatch(removeExpiredEvent({ eventId }));
     this.closeOrderPlace();
     this.props.dispatch(getReportCount());
+  }
+
+  handleScroll = () => {
+    this.showLuckyPool();
+  };
+  didPlaceOrder = (isFree)=> {
+    this.closeOrderPlace();
+    if (!this.props.isExistEmail) {
+      this.modalEmailPopupRef.open();
+    }else {
+      isFree ? this.modalLuckyFree.open() : this.modalLuckyReal.open();
+
+    }
+  }
+
+  checkFreeAvailabe(props) {
+    const { freeBet={} } = props;
+    const { free_bet_available: freeAvailable = 0, last_item: lastItem = {} } = freeBet;
+    const { status } = lastItem;
+    let isFreeAvailable = false;
+
+    if ((status !== FREE_BET_STATUS.WAITING || !status) && freeAvailable > 0) {
+      isFreeAvailable = true;
+    }
+    return isFreeAvailable;
   }
 
   openOrderPlace = (selectedOutcome) => {
@@ -65,6 +114,54 @@ class Prediction extends React.Component {
 
   closeOrderPlace = () => {
     this.modalOrderPlace.close();
+    this.setState({
+      isOrderOpening: false,
+    });
+  }
+
+  checkLuckyPool() {
+    if (localStorage.getItem('showedLuckyPool') !== null) {
+      return localStorage.getItem('showedLuckyPool');
+    }
+    return null;
+  }
+
+  showLuckyPool() {
+    const showedLuckyPool = this.checkLuckyPool();
+    if (showedLuckyPool) return;
+    setTimeout(() => {
+      this.modalLuckyPoolRef.open();
+      localStorage.setItem('showedLuckyPool', true);
+    }, 2 * 1000);
+  }
+
+  checkShowFreeBetPopup(props) {
+    const isFreeAvailable = this.checkFreeAvailabe(props);
+    const { freeBet } = props;
+    const { free_bet_available: freeAvailable = 0} = freeBet;
+
+    const key = `showedFreebet${freeAvailable}`;
+    const isShowed = localStorage.getItem(key);
+
+    if (isFreeAvailable && !isShowed) {
+
+      const { isOrderOpening, shouldShowFreePopup } = this.state;
+      const { last_item: lastItem = {} } = freeBet;
+      const { is_win: isWin, status } = lastItem;
+      if (status === FREE_BET_STATUS.REPORTED && !isOrderOpening && shouldShowFreePopup) {
+        if (!isWin && this.modalFreeBetLoseRef) {
+          this.modalFreeBetLoseRef.open();
+        } else if (isWin && this.modalFreeBetWinRef) {
+          this.modalFreeBetWinRef.open();
+        }
+        localStorage.setItem(key, true);
+
+        this.setState({
+          shouldShowFreePopup: false,
+        });
+      }
+    }
+
   }
 
   handleClickEventItem = (props, itemData) => {
@@ -82,11 +179,13 @@ class Prediction extends React.Component {
       reportTime: event.reportTime,
       value: event.name,
     };
+    this.props.dispatch(checkFreeBet());
     this.openOrderPlace(selectedOutcome);
     this.modalOrderPlace.open();
     this.setState({
       selectedOutcome,
       selectedMatch,
+      isOrderOpening: true,
     });
 
     // send event tracking
@@ -119,7 +218,14 @@ class Prediction extends React.Component {
     );
   };
 
+  renderShareToWin = () => {
+    return (
+      <Banner />
+    );
+  }
+
   renderBetMode = (props, state) => {
+    const isFreeAvailable = this.checkFreeAvailabe(props);
     return (
       <ModalDialog className="BetSlipContainer" close onRef={(modal) => { this.modalOrderPlace = modal; }}>
         <BetMode
@@ -128,9 +234,9 @@ class Prediction extends React.Component {
           openPopup={(click) => { this.openOrderPlace = click; }}
           onCancelClick={this.closeOrderPlace}
           handleBetFail={this.handleBetFail}
+          freeAvailable={isFreeAvailable}
           onSubmitClick={(isFree) => {
-            this.closeOrderPlace();
-            isFree ? this.modalLuckyFree.open() : this.modalLuckyReal.open();
+            this.didPlaceOrder(isFree);
           }}
         />
       </ModalDialog>
@@ -148,13 +254,19 @@ class Prediction extends React.Component {
 
   renderLuckyReal = () => (
     <ModalDialog onRef={(modal) => { this.modalLuckyReal = modal; }}>
-      <LuckyReal onButtonClick={() => this.modalLuckyReal.close()} />
+      <LuckyReal onButtonClick={() => {
+        this.modalLuckyReal.close();
+      }}
+      />
     </ModalDialog>
   )
 
   renderLuckyFree = () => (
     <ModalDialog onRef={(modal) => { this.modalLuckyFree = modal; }}>
-      <LuckyFree onButtonClick={() => this.modalLuckyFree.close()} />
+      <LuckyFree onButtonClick={() => {
+        this.modalLuckyFree.close();
+      }}
+      />
     </ModalDialog>
   )
 
@@ -162,6 +274,33 @@ class Prediction extends React.Component {
     <ModalDialog className="modal" onRef={(modal) => { this.modalLuckyPoolRef = modal; return null; }}>
       <LuckyLanding onButtonClick={() => {
           this.modalLuckyPoolRef.close();
+        }}
+      />
+    </ModalDialog>
+  )
+
+  renderFreeBetLose = () => (
+    <ModalDialog className="modal" onRef={(modal) => { this.modalFreeBetLoseRef = modal; return null; }}>
+      <FreeBetLose onButtonClick={() => {
+          this.modalFreeBetLoseRef.close();
+      }}
+      />
+    </ModalDialog>
+  )
+
+  renderFreeBetWin = () => (
+    <ModalDialog className="modal" onRef={(modal) => { this.modalFreeBetWinRef = modal; return null; }}>
+      <FreeBetWin onButtonClick={() => {
+          this.modalFreeBetWinRef.close();
+      }}
+      />
+    </ModalDialog>
+  )
+  renderEmailPopup = () => (
+    <ModalDialog className="modal" onRef={(modal) => { this.modalEmailPopupRef = modal; return null; }}>
+      <EmailPopup onButtonClick={() => {
+          this.modalEmailPopupRef.close();
+          this.props.dispatch(checkExistSubcribeEmail());
         }}
       />
     </ModalDialog>
@@ -222,9 +361,20 @@ class Prediction extends React.Component {
   }
 
   renderComponent = (props, state) => {
+    if (1) {
+      /*
+      return (
+        <div className="Maintenance">
+          <p>The site is down a bit of maintenance right now.</p>
+          <p>But soon we will be up and the sun will shine again.</p>
+        </div>
+      );*/
+    }
+    this.checkShowFreeBetPopup(props);
     return (
       <div className={Prediction.displayName}>
         <Loading isLoading={props.isLoading} />
+        {this.renderShareToWin()}
         <PexCreateBtn />
         {this.renderEventList(props)}
         {this.renderBetMode(props, state)}
@@ -232,6 +382,9 @@ class Prediction extends React.Component {
         {this.renderLuckyReal()}
         {this.renderLuckyFree()}
         {this.renderLuckyLanding()}
+        {this.renderFreeBetLose()}
+        {this.renderFreeBetWin()}
+        {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
         {this.renderCreditCard()}
         {props.countReport > 0 && <ReportPopup />}
@@ -252,6 +405,8 @@ export default injectIntl(connect(
       isSharePage: isSharePage(state),
       isLoading: isLoading(state),
       showedLuckyPool: showedLuckyPoolSelector(state),
+      freeBet: checkFreeBetSelector(state),
+      isExistEmail: checkExistSubcribeEmailSelector(state),
     };
   },
 )(Prediction));

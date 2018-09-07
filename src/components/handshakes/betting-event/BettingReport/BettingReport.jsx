@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { BETTING_RESULT } from '@/components/handshakes/betting/constants.js';
+import {
+  getBalance, getEstimateGas,
+} from '@/components/handshakes/betting/utils';
+import { MESSAGE } from '@/components/handshakes/betting/message.js';
+
 import { BASE_API } from '@/constants';
 import { Alert } from 'reactstrap';
 import $http from '@/services/api';
@@ -163,13 +168,35 @@ class BettingReport extends React.Component {
     }, 1000);
   }
 
+  async validate(outcomes) {
+    const { isAdmin } = this.props;
+    let message = " ";
+    let status = true;
+
+    if (!isAdmin) {
+      const balance = await getBalance();
+      const estimatedGas = await getEstimateGas();
+      console.log(TAG, 'estimate Gas:', estimatedGas);
+      const totalGas = estimatedGas * outcomes.length;
+      console.log(TAG, 'Outcomes Length:', outcomes.length);
+      console.log(TAG, 'totalGas', totalGas);
+
+      if (totalGas > balance) {
+        message = MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', totalGas);
+        status = false;
+      }
+    }
+
+    return { status, message };
+
+  }
   checkToken() {
     if (localStorage.getItem('Token') !== null) {
       return localStorage.getItem('Token');
     }
     return null;
   }
-  onSubmit= (event) => {
+  onSubmit= async (event) => {
     const radios = [];
     if (localStorage.getItem('disable') === false) {
       return null;
@@ -202,37 +229,49 @@ class BettingReport extends React.Component {
       });
     } else {
       const { isAdmin } = this.props;
+      const isValid = await this.validate(this.state.final);
+      console.log(TAG, 'isValide:', isValid);
+      const { status, message } = isValid;
+      if (status) {
 
-      const tokenValue = token || this.checkToken();
-      const authenticate = { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' };
-      const headers = isAdmin ? authenticate : null;
-      console.log('Final State:', this.state.final);
+        const tokenValue = token || this.checkToken();
+        const authenticate = { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' };
+        const headers = isAdmin ? authenticate : null;
+        console.log('Final State:', this.state.final);
 
-      const url = isAdmin ? `${BASE_API.BASE_URL}/cryptosign/admin/match/report/${this.state.activeMatchData.id}` :
-                  `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
+        const url = isAdmin ? `${BASE_API.BASE_URL}/cryptosign/admin/match/report/${this.state.activeMatchData.id}` :
+                    `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
 
-      const submit = $http({
-        url,
-        data: {
-          result: this.state.final,
-        },
-        //qs: { dispute: resolved ? 1 : 0 },
-        headers: headers,
-        method: 'post',
-      });
-      console.log(TAG, this.state.final);
-
-      submit.then((response) => {
-        response.data.status === 1 && this.setState({
-          disable: true,
+        const submit = $http({
+          url,
+          data: {
+            result: this.state.final,
+          },
+          //qs: { dispute: resolved ? 1 : 0 },
+          headers: headers,
+          method: 'post',
         });
 
-        response.data.status === 1 && this.onReportSuccess(response);
 
-        response.data.status === 0 && this.onReportFailed(response);
-      });
+        submit.then((response) => {
+          response.data.status === 1 && this.setState({
+            disable: true,
+          });
 
+          response.data.status === 1 && this.onReportSuccess(response);
 
+          response.data.status === 0 && this.onReportFailed(response);
+        });
+
+      } else {
+        this.props.showAlert({
+          message: <div className="text-center">{message}</div>,
+          timeOut: 3000,
+          type: 'danger',
+          callBack: () => {
+          },
+        });
+      }
     }
   }
   onReportSuccess = (response) => {

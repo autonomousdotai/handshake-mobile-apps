@@ -1,0 +1,41 @@
+@import './src/styles/style';
+.wrapperFreeBetLose {
+  //margin: rem-calc(-20px);
+  //padding: rem-calc(40px 30px 40px 30px);
+  background:white;
+  font-family: $font-family-base;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .freeBetLoseButton {
+    background: #2456FB;
+    border-radius: rem-calc(5px);
+    font-size: rem-calc(16px);
+    color: #FFFFFF;
+    letter-spacing: 0;
+    border: none;
+    height: rem-calc(50px);
+    font-weight: 400;
+
+    margin: rem-calc(30px 50px 30px 50px);
+  }
+  .freeBetLoseSmallDes {
+    font-size: rem-calc(15px);
+    text-align: center;
+    opacity: .6;
+    margin-top: rem-calc(5px);
+
+  }
+  .freeBetLoseDes {
+    font-size: rem-calc(18px);
+    text-align: center;
+    margin-top: rem-calc(20px);
+    font-weight: 400;
+  }
+  .freeBetLoseBanner {
+    //margin-right: rem-calc(20px);
+    background-color: #F5A623;
+    padding: rem-calc(30px 30px);
+
+  }
+}

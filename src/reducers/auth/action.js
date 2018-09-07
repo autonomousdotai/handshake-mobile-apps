@@ -16,6 +16,7 @@ export const ACTIONS = {
   CHECK_FOLLOW_TWITTER: 'CHECK_FOLLOW_TWITTER',
   REFERRED_INFO: 'REFERRED_INFO',
   COMPLETE_PROFILE: 'COMPLETE_PROFILE',
+  SUBMIT_EMAIL_SUBCRIBE: 'SUBMIT_EMAIL_SUBCRIBE',
 };
 
 export const fetchProfile = createAPI(ACTIONS.AUTH_FETCH);
@@ -29,6 +30,8 @@ export const submitPhone = createAPI(ACTIONS.SUBMIT_PHONE);
 export const verifyEmail = createAPI(ACTIONS.VERIFY_EMAIL);
 export const submitEmail = createAPI(ACTIONS.SUBMIT_EMAIL);
 export const checkUsernameExist = createAPI(ACTIONS.CHECK_USERNAME);
+export const submitEmailSubcribe = createAPI(ACTIONS.SUBMIT_EMAIL_SUBCRIBE);
+
 // wallet:
 export const getFreeETH = createAPI(ACTIONS.GET_FREE_ETH);
 export const checkJoinTelegram = createAPI(ACTIONS.CHECK_JOIN_TELEGRAM);

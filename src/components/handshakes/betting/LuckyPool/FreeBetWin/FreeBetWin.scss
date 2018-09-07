@@ -1,0 +1,39 @@
+@import './src/styles/style';
+.wrapperFreeBetWin {
+  //margin: rem-calc(-20px);
+  //padding: rem-calc(40px 30px 40px 30px);
+  background:white;
+  font-family: $font-family-base;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .freeBetWinButton {
+    background: #2456FB;
+    border-radius: rem-calc(5px);
+    font-size: rem-calc(16px);
+    color: #FFFFFF;
+    letter-spacing: 0;
+    border: none;
+    height: rem-calc(50px);
+    font-weight: 400;
+
+    margin: rem-calc(30px 50px 30px 50px);
+  }
+  .freeBetWinSmallDes {
+    font-size: rem-calc(15px);
+    text-align: center;
+    opacity: .6;
+    margin-top: rem-calc(5px);
+  }
+  .freeBetWinDes {
+    font-size: rem-calc(18px);
+    text-align: center;
+    margin-top: rem-calc(20px);
+    font-weight: 400;
+  }
+  .freeBetWinBanner {
+    background-color: #FF3483;
+    padding: rem-calc(20px 40px 0px 40px);
+
+  }
+}

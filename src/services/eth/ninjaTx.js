@@ -1,8 +1,7 @@
 import { sendRawTx } from './baseTx';
-import * as constant from './constants';
+import constant from './constants';
 import { getPrivateKey, getUserAddress, getChainId } from './ninjaAccount';
 
-const data = contractMethod('handshake', 'contractAddr', )
 export function sendRawNinjaTx({
   coinName,
   defaultBlock = 'pending',

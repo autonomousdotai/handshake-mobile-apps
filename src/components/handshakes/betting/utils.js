@@ -5,6 +5,7 @@ import local from '@/services/localStore';
 import { APP } from '@/constants';
 import { MESSAGE_SERVER } from '@/components/handshakes/betting/message.js';
 import { BET_TYPE, ROLE } from '@/components/handshakes/betting/constants.js';
+import moment from 'moment';
 
 import { BigNumber } from 'bignumber.js';
 import _ from 'lodash';
@@ -76,6 +77,49 @@ export const getEstimateGas = async () => {
   // const bettinghandshake = new BettingHandshake(chainId);
   // const result = await bettinghandshake.getEstimateGas();
   // return result;
+};
+
+export const leftTime = (endTime) => {
+  const newClosingDate = moment.unix(endTime);
+  const dayUnit = newClosingDate.utc();
+  const today = moment();
+  const todayUnit = today.utc();
+  let d = Math.abs(dayUnit - todayUnit) / 1000;                           // delta
+  const r = {};                                                                // result
+  const s = {                                                                  // structure
+    year: 31536000,
+    month: 2592000,
+    week: 604800, // uncomment row to ignore
+    day: 86400,   // feel free to add your own row
+    hour: 3600,
+    minute: 60,
+    second: 1
+  };
+
+  Object.keys(s).forEach(function(key){
+      r[key] = Math.floor(d / s[key]);
+      d -= r[key] * s[key];
+  });
+
+  // for example: {year:0,month:0,week:1,day:2,hour:34,minute:56,second:7}
+  console.log(r);
+  let text = "";
+  if (r.day > 0) {
+    text += `${r.day}d `;
+  }
+  if (r.hour > 0) {
+    text += `${r.hour}hr `;
+  }
+
+  if (r.minute > 0) {
+    text += `${r.minute}m `;
+  }
+
+  if (r.second > 0) {
+    text += `${r.second}s`;
+  }
+
+  return text;
 };
 
 export const foundShakeList = (item) => {

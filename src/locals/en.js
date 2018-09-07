@@ -465,7 +465,7 @@ export default {
   'landing_page.cash.btnSubmitEmail': 'Go',
   'landing_page.cash.joinTelegram': `Join the dojo on <a href="https://t.me/ninjacash" class="landing-link">Telegram</a>`,
   'landing_page.cash.whitepaper': `Read more about <a href="https://medium.com/@ninja_org/introducing-ninja-cash-b0d51a9f4e1b" class="landing-link">Cash</a>`,
-  'landing_page.cash.youtubeVideoId': 'xCU5puuwros',
+  'landing_page.cash.youtubeVideoId': '9L1IltkvU9g',
 
   'landing_page.cash-for-business.breadcrumb': 'CRYPTO ATM',
   'landing_page.cash-for-business.heading': 'A user friendly ATM for Bitcoin, Ethereum, and Litecoin',
@@ -484,7 +484,7 @@ export default {
   // 'landing_page.cash.cta2_url': 'https://t.me/ninjacash',
   'landing_page.cash-for-business.joinTelegram': `Join the dojo on <a href="https://t.me/ninjacash" class="landing-link">Telegram</a>`,
   'landing_page.cash-for-business.whitepaper': `Read more about <a href="https://medium.com/@ninja_org/introducing-ninja-cash-b0d51a9f4e1b" class="landing-link">Cash</a>`,
-  'landing_page.cash-for-business.youtubeVideoId': 'xCU5puuwros',
+  'landing_page.cash-for-business.youtubeVideoId': '9L1IltkvU9g',
 
   'landing_page.prediction.breadcrumb': 'Prediction',
   'landing_page.prediction.heading': 'Bet on anything against anyone, anywhere. Guaranteed payout. Your odds. 100% anonymous.',

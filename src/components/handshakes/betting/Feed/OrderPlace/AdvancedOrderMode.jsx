@@ -60,8 +60,9 @@ class AdvancedOrderMode extends React.Component {
   }
 
   render() {
-    const { bettingShake, orderBook, theme, handleBetFail } = this.props;
-    const { side } = bettingShake;
+    const { bettingShake, orderBook, theme } = this.props;
+    console.log("Avanced:", this.props);
+    const { side, onCancelClick, handleBetFail } = bettingShake;
     const { disable } = this.state;
     const buttonClass = theme;
     const sideText = getKeyByValue(SIDE, side);
@@ -73,6 +74,7 @@ class AdvancedOrderMode extends React.Component {
           {...bettingShake}
           onClickSubmit={(click) => { this.onButtonSubmit = click }}
           handleBetFail={ () => { handleBetFail(); }}
+          onCancelClick={() => { onCancelClick();}}
         />
         <Button block isLoading={disable} disabled={disable} className={buttonClass} onClick={this.handleClick}>{buttonText}</Button>
         <EstimateGas />

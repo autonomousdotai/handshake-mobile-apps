@@ -1,0 +1,27 @@
+.box-setting{
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    .item
+    {
+        border-bottom: 1px #f4f4f4 solid;
+        margin-bottom: 13px;        
+        position: relative;
+        width: 100%;
+        padding: 20px;
+        padding-bottom: 10px;
+        .name{
+            float: left;
+            font-size: 16px;
+        }
+        .value{
+            float: right;            
+            .text{
+                font-weight: 400;
+                opacity: 0.7;
+            }
+        }
+    }
+}
