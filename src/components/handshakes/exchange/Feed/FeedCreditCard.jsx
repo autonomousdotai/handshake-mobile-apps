@@ -43,7 +43,7 @@ import iconBitcoinCash from '@/assets/images/icon/coin/bch.svg';
 import iconUsd from '@/assets/images/icon/coin/icons8-us_dollar.svg';
 import iconLock from '@/assets/images/icon/icons8-lock_filled.svg';
 import { Link } from 'react-router-dom';
-import cx from "classnames";
+import cx from 'classnames';
 
 export const CRYPTO_ICONS = {
   [CRYPTO_CURRENCY.ETH]: iconEthereum,
@@ -472,11 +472,11 @@ class FeedCreditCard extends React.Component {
   };
 
   onCurrencyChange = (e, newValue) => {
-    const { currency } = this.state;
+    const { currency, amount } = this.state;
 
     if (currency !== newValue.id) {
       this.setState({ currency: newValue.id }, () => {
-        this.getCryptoPriceByAmount(1);
+        this.getCryptoPriceByAmount(amount);
       });
     }
   }
@@ -485,12 +485,35 @@ class FeedCreditCard extends React.Component {
     console.log('onAmountChange', amount);
     const { rfChange, cryptoPrice } = this.props;
 
-    let fiatAmount = amount * cryptoPrice.fiatAmount / cryptoPrice.amount;
+    // let fiatAmount = amount * cryptoPrice.fiatAmount / cryptoPrice.amount;
+    //
+    // fiatAmount = roundNumberByLocale(fiatAmount, cryptoPrice.fiatCurrency, DECIMAL_NUMBER);
+    // console.log('onAmountChange', fiatAmount);
+    // rfChange(nameFormSpecificAmount, 'fiatAmount', fiatAmount);
 
-    fiatAmount = roundNumberByLocale(fiatAmount, cryptoPrice.fiatCurrency, DECIMAL_NUMBER);
-    console.log('onAmountChange', fiatAmount);
-    rfChange(nameFormSpecificAmount, 'fiatAmount', fiatAmount);
+    this.setState({ amount }, () => {
+      if (this.intervalCountdown) {
+        clearTimeout(this.intervalCountdown);
+      }
+
+      this.intervalCountdown = setTimeout(() => {
+        this.getCryptoPriceByAmount(amount);
+      }, 1000);
+    });
   }
+
+  componentWillUnmount() {
+    if (this.intervalCountdown) {
+      clearTimeout(this.intervalCountdown);
+    }
+  }
+
+
+  //   this.setState({
+  //                   hasSelectedCoin: true, amount: values.amount, fiatAmount: values.fiatAmount, currency: values.currency.id, fiatCurrency: values.fiatCurrency.id,
+  // }, () => {
+  //   this.getCryptoPriceByAmount(values.amount);
+  // });
 
   onFiatAmountChange = (e, fiatAmount) => {
     console.log('onFiatAmountChange', fiatAmount);
@@ -578,7 +601,7 @@ class FeedCreditCard extends React.Component {
                 className="form-control form-control-lg border-0 rounded-right form-control-cc"
                 type="text"
                 component={fieldInput}
-                onChange={this.onFiatAmountChange}
+                // onChange={this.onFiatAmountChange}
                 validate={[required]}
                 elementAppend={
                   <Field
@@ -589,9 +612,9 @@ class FeedCreditCard extends React.Component {
                     list={listFiatCurrency}
                     component={fieldDropdown}
                     caret={false}
-                    // disabled={!enableChooseFiatCurrency}
                   />
                 }
+                disabled
               />
             </div>
             <div className="mt-3 mb-3">
@@ -639,7 +662,7 @@ class FeedCreditCard extends React.Component {
           </div>
         </div>
         <div>
-          <div className={cx('ex-sticky-note', isPopup ? 'ex-sticky-note-popup' : '') }>
+          <div className={cx('ex-sticky-note', isPopup ? 'ex-sticky-note-popup' : '')}>
             <div className="mb-2"><FormattedMessage id="ex.credit.banner.text" /></div>
             <div>
               <Link to={{ pathname: URL.ESCROW_DEPOSIT, search: `` }}>
