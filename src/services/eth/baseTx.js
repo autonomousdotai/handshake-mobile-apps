@@ -23,11 +23,11 @@ export function getTxCount({ address, defaultBlock, callback = resultCallback })
  * @param chainId - The chain id to use when signing this transaction (web3.eth.net.getId())
  * @param gasLimit - transaction gas limit
  * @param gasPrice - transaction gas price
- * @param to - to the to address
- * @param value - the amount of ether sent
+ * @param to - the account to send Ether to
+ * @param value - the amount of Ether sent
  * @param data - the data of the message or the init of a contract
  */
-export function sendRawTx({
+export function sendRawTxBase({
   from, defaultBlock, privateKey,
   chainId, gasLimit, gasPrice, to, value, data,
 }) {

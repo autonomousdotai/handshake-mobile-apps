@@ -1,19 +1,19 @@
-import { sendRawTx } from './baseTx';
+import { sendRawTxBase } from './baseTx';
 import constant from './constants';
 import { getPrivateKey, getUserAddress, getChainId } from './ninjaAccount';
 
-export function sendRawNinjaTx({
+export function sendRawTx({
   coinName,
   defaultBlock = 'pending',
   chainId = getChainId(),
   to,
+  value,
   data,
 }) {
   const from = getUserAddress(coinName);
   const privateKey = getPrivateKey(coinName);
   const gasLimit = constant.GAS_LIMIT;
   const gasPrice = '';
-  const value = '';
 
-  sendRawTx({ from, defaultBlock, privateKey, chainId, gasLimit, gasPrice, to, value, data });
+  sendRawTxBase({ from, defaultBlock, privateKey, chainId, gasLimit, gasPrice, to, value, data });
 }

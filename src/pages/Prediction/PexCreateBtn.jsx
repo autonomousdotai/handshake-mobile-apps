@@ -3,14 +3,11 @@ import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
 import IconIdea from '@/assets/images/icon/idea.svg';
 
-import constant from '@/services/eth/constants';
-
 class PexCreateBtn extends Component {
   static displayName = 'PexCreateBtn';
 
   async componentDidMount() {
     window.addEventListener('scroll', this.onScroll);
-    console.log('constant', constant);
   }
 
   componentWillUnmount() {
