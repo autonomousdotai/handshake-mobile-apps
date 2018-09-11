@@ -1,0 +1,34 @@
+.Shop {
+  .product {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    // border-bottom: 1px solid #3a3e4a;
+    &:last-child {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+    .product-name {
+      margin: 0;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 400;
+      color: #666;
+    }
+    .price-review {
+      padding: 0 15px;
+      display: flex;
+      flex-wrap: wrap;
+      div {
+        width: 50%;
+      }
+      .price {
+        font-weight: 700;
+        font-size: 19px;
+      }
+      .review {
+        font-weight: 400;
+        font-size: 14px;
+      }
+    }
+  }
+}

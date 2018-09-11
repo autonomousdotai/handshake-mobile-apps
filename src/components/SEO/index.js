@@ -112,3 +112,18 @@ export const SEOPayForStores = (
     />
   </Helmet>
 );
+
+
+export const SEOShop = (
+  <Helmet>
+    <title>Ninja Shop: Buy products with cash. Secure, anonymous, easy</title>
+    <meta
+      name="description"
+      content="Ninja Shop: Buy products with cash. Secure, anonymous, easy"
+    />
+    <meta
+      name="keywords"
+      content="Ninja Shop: Buy products with cash. Secure, anonymous, easy"
+    />
+  </Helmet>
+);

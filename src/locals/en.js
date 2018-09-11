@@ -17,7 +17,8 @@ export default {
       setting: 'Setting',
       atm: 'ATM',
       bet: 'Bet',
-      credit: 'CC'
+      credit: 'CC',
+      shop: 'Shop',
     },
   },
   buy: 'Buy',
