@@ -62,6 +62,7 @@ const RouterBuyCC = createDynamicImport(() => import('@/components/Router/Credit
 const RouterEscrowDeposit = createDynamicImport(() => import('@/pages/Escrow/Deposit'), Loading);
 const RouterEscrowWithdraw = createDynamicImport(() => import('@/pages/Escrow/Withdraw'), Loading);
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
+const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
 
 
 /* ======================== FOR MOBILE ======================== */
@@ -95,6 +96,7 @@ const configRoutesUsingMobileLayout = [
     }
   },
   { path: URL.RESOLVE, component: RouterResolve },
+  { path: URL.SHOP_URL, component: RouterShop },
 ];
 const routesUsingMobileLayout = configRoutesUsingMobileLayout.map(route => (
   <Route
