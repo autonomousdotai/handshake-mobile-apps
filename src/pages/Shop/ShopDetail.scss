@@ -1,0 +1,141 @@
+@import './src/styles/style';
+
+.ShopDetail {
+  padding-top: 10px;
+  .header-info {
+    padding: 0 15px;
+    margin-bottom: 16px;
+  }
+  .vendor {
+    margin-bottom: 8px;
+    img {
+      width: 30px;
+      margin-right: 10px;
+    }
+    span {
+      font-weight: 500;
+    }
+  }
+  .product-name {
+    margin: 0;
+    font-weight: 400;
+  }
+  .price {
+    padding: 0 15px;
+    font-weight: 400;
+    font-size: 24px;
+    color: #ff3b30;
+    img {
+      vertical-align: sub;
+    }
+    .shipping-date {
+      margin-left: 35px;
+      font-size: 15px;
+      vertical-align: middle;
+      color: #333;
+      img {
+        margin-right: 10px;
+        vertical-align: sub;
+      }
+    }
+  }
+  .buy-now-btn {
+    padding: 0 15px 15px 15px;
+  }
+
+  .warranty-block {
+    padding: 0 15px 20px 15px;
+  }
+  .carousel {
+    .slick-dots {
+      margin-top: 10px;
+      padding: 0;
+      list-style-type: none;
+      text-align: center;
+      li {
+        display: inline-block;
+        margin-right: 20px;
+        &:last-child {
+          margin-right: 0;
+        }
+        .dot {
+          display: block;
+          width: 10px;
+          height: 10px;
+          background: #919296;
+        }
+      }
+      .slick-active {
+        .dot {
+          opacity: .7;
+        }
+      }
+    }
+  }
+  .information-tab {
+    padding: 0 15px;
+    .TabItem {
+      margin-right: 20px;
+      font-size: 15px;
+      font-weight: 400;
+      color: #333;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    .Active {
+      border-bottom: 1px solid;
+    }
+    .TabPanel {
+      padding-top: 20px;
+      video {
+        width: 100%;
+      }
+    }
+  }
+  .order-information {
+    margin-top: 20px;
+    .field-info {
+      display: flex;
+      justify-content: space-between;
+      -webkit-box-pack: justify;
+      margin-bottom: 5px;
+    }
+  }
+  .your-information-form {
+    padding-top: 10px;
+    .input-group {
+      display: flex;
+      align-items: center;
+      margin: 10px 0;
+      label {
+        width: 20%;
+        margin: 0;
+        margin-right: 10px;
+        font-weight: $medium;
+      }
+    }
+    input {
+      border-radius: 0;
+      &::placeholder {
+        font-size: 14px;
+        opacity: .5;
+      }
+    }
+    .area {
+      display: flex;
+      input {
+        border-right: 0;
+        &:last-child {
+          border-right: 1px solid #ced4da;
+        }
+      }
+    }
+    .country {
+      margin-top: 10px;
+    }
+  }
+  .red {
+    color: #8e3d1d;
+  }
+}

@@ -1,0 +1,51 @@
+@import './src/styles/style';
+
+.Shop {
+  .header-block {
+    padding: 15px 0;
+    background: url('https://2.pik.vn/2018a870e71d-e8ff-4bb3-a433-59538799c1aa.png') no-repeat;
+    background-size: cover;
+    text-align: center;
+    h1 {
+      margin: 0;
+      font-size: rem-calc(22px);
+      color: $white;
+    }
+  }
+  .product {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+    &:last-child {
+      margin-bottom: 0;
+      border-bottom: 0;
+    }
+    .product-name {
+      margin: 0;
+      padding: 15px;
+      font-size: 15px;
+      font-weight: 400;
+      color: #666;
+    }
+    .price-review {
+      padding: 0 15px;
+      display: flex;
+      flex-wrap: wrap;
+      div {
+        width: 50%;
+      }
+      .price {
+        font-weight: 700;
+        font-size: 19px;
+      }
+      .review {
+        font-weight: 400;
+        font-size: 14px;
+        span {
+          position: relative;
+          top: 4px;
+        }
+      }
+    }
+  }
+}

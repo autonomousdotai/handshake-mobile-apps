@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-shopping_cart_loaded</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-4" transform="translate(-339.000000, -6.000000)" fill-rule="nonzero">
+            <g id="icons8-shopping_cart_loaded" transform="translate(339.000000, 6.000000)">
+                <rect id="Rectangle-path" fill="#F57C00" transform="translate(15.190424, 6.772328) rotate(45.000000) translate(-15.190424, -6.772328) " x="11.8642652" y="3.44616952" width="6.65231716" height="6.65231716"></rect>
+                <rect id="Rectangle-path" fill="#FF9800" transform="translate(10.476138, 5.724761) rotate(45.000000) translate(-10.476138, -5.724761) " x="6.78331637" y="2.0319397" width="7.38564346" height="7.38564346"></rect>
+                <g id="Group" transform="translate(1.047619, 2.619048)" fill="#009688">
+                    <path d="M6.80952381,13.6190476 C6.23333333,13.6190476 5.76190476,13.147619 5.76190476,12.5714286 L5.76190476,7.33333333 L3.66666667,7.33333333 L3.66666667,12.5714286 C3.66666667,14.3 5.08095238,15.7142857 6.80952381,15.7142857 L16.7619048,15.7142857 L16.7619048,13.6190476 L6.80952381,13.6190476 Z" id="Shape"></path>
+                    <path d="M4.08571429,2.0952381 L3.87619048,1.41428571 C3.56190476,0.576190476 2.77619048,0 1.88571429,0 L0,0 L0,2.0952381 L1.88571429,2.0952381 L4.76666667,10.7904762 C4.92380952,11.2095238 5.29047619,11.5238095 5.76190476,11.5238095 L15.7142857,11.5238095 C16.1333333,11.5238095 16.5,11.2619048 16.6571429,10.8952381 L20.6380952,2.0952381 L4.08571429,2.0952381 Z" id="Shape"></path>
+                </g>
+                <circle id="Oval" fill="#00695C" cx="1.04761905" cy="3.66666667" r="1.04761905"></circle>
+                <g id="Group" transform="translate(6.809524, 18.333333)" fill="#37474F">
+                    <circle id="Oval" cx="9.42857143" cy="1.57142857" r="1.57142857"></circle>
+                    <circle id="Oval" cx="1.57142857" cy="1.57142857" r="1.57142857"></circle>
+                </g>
+                <g id="Group" transform="translate(7.857143, 19.380952)" fill="#607D8B">
+                    <circle id="Oval" cx="8.38095238" cy="0.523809524" r="1"></circle>
+                    <circle id="Oval" cx="0.523809524" cy="0.523809524" r="1"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
