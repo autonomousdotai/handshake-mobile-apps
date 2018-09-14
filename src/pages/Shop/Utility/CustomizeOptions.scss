@@ -1,0 +1,49 @@
+.CustomizeOptions {
+  .option {
+    position: relative;
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #e7e9ec;
+    border-radius: 3px;
+    border: 1px solid #c1c1c1;
+    box-shadow: 0 .1rem 0 rgba(255,255,255,.6) inset;
+    .expand-arrow {
+      position: absolute;
+      top: 20%;
+      right: 0;
+      padding: 10px;
+      transform: rotate(-90deg);
+    }
+    .title {
+      margin-right: 5px;
+    }
+    .optionName {
+      font-weight: 700;
+    }
+  }
+  .option-list {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    background: #ffffff;
+    color: #000000;
+    .package {
+      font-size: 20px;
+    }
+    .option-value {
+      
+    }
+    .active {
+      background: #e7e9ec;
+      color: #000000;
+      font-weight: 700;
+    }
+  }
+  .expand {
+    display: block;
+  }
+}

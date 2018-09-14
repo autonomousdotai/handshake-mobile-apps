@@ -3,14 +3,10 @@ import React from 'react';
 import Button from '@/components/core/controls/Button/Button';
 import Modal from '@/components/core/controls/Modal';
 import Dropdown from '@/components/core/controls/Dropdown';
-// import CustomizeOptions from './Utility/CustomizeOptions';
+import CustomizeOptions from './Utility/CustomizeOptions';
 //
 import { set, getJSON } from 'js-cookie';
 import { showAlert } from '@/reducers/app/action';
-// import createForm from '@/components/core/form/createForm';
-// import { fieldDropdown, fieldInput } from '@/components/core/form/customField';
-// import { required } from '@/components/core/form/validation';
-// import { Field, clearFields, change, formValues } from 'redux-form';
 import { connect } from 'react-redux';
 import Input from '@/components/core/forms/Input/Input';
 import PropTypes from 'prop-types';
@@ -63,6 +59,7 @@ class ShopDetail extends React.Component {
     this.placeOrder = ::this.placeOrder;
     this.updateQuantity = ::this.updateQuantity;
     this.updateShippingAndTax = ::this.updateShippingAndTax;
+    this.afterSelectNewOption = ::this.afterSelectNewOption;
   }
 
   addOptionTextToObject(object) {
@@ -160,25 +157,17 @@ class ShopDetail extends React.Component {
       this.zipRef.value = addressInfo.zip;
       this.cityRef.value = addressInfo.city;
       this.stateRef.value = addressInfo.state;
-      // this.countryRef.value = addressInfo.country;
       countryCode = addressInfo.country;
     } else if (ipInfo) {
       this.cityRef.value = ipInfo.city;
       this.stateRef.value = ipInfo.regionCode;
-      // this.countryRef.value = ipInfo.country;
       countryCode = ipInfo.country;
     }
     this.setState({ countryCode });
   }
 
-  videoOrImage(firstGallery, productName) {
-    if (firstGallery.is_video) {
-      // video
-      return <iframe src={firstGallery.youtube_url} />
-    } else {
-      // image
-      return <img src={firstGallery.image} alt={productName} />
-    }
+  afterSelectNewOption(optionSelecting) {
+    this.setState({ optionSelecting }, () => { this.updateShippingAndTax(); this.imagesSliderRef.slider.slickGoTo(0); });
   }
 
   updateQuantity(e) {
@@ -191,7 +180,7 @@ class ShopDetail extends React.Component {
   get yourInformationForm() {
     return {
       city: this.cityRef.value.trim(),
-      country: this.countryRef.itemSelecting.id.trim(),
+      country: this.countryRef.itemSelecting.id ? this.countryRef.itemSelecting.id.trim() : '',
       email: this.emailRef.value.trim(),
       fullname: this.nameRef.value.trim(),
       phone: this.phoneRef.value.trim(),
@@ -299,11 +288,12 @@ class ShopDetail extends React.Component {
             {productInfo.shipping_date}
           </span>
         </p>
-        {/* <CustomizeOptions 
+        <CustomizeOptions
+          className="customize-options"
           product={product}
           optionSelecting={optionSelecting}
-          afterSelectNewOption={() => {}}
-        /> */}
+          afterSelectNewOption={this.afterSelectNewOption}
+        />
         <div className="buy-now-btn">
           <Button block onClick={() => this.modalBuyNowRef.open()}>
             Buy now
