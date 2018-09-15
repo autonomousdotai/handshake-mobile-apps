@@ -30,18 +30,21 @@ export function reduceReducers(...reducersList) {
   };
 }
 
-const newReducers = Object.keys(defaultStore).reduce((result, key) => {
-  return Object.assign({}, result, { [key]: (s = {}) => s });
-}, {});
-
-const AppReducers = combineReducers({
+const reducerList = {
   app: appReducer,
   auth: authReducer,
   firebase: firebaseReducer,
   router: routerReducer,
   ...reducers,
-  ...newReducers,
-});
+};
+const defaultReducer = (s = {}) => s;
+const AppReducers = combineReducers(
+  Object.keys(defaultStore).reduce((result, key) => {
+    return Object.assign({}, result, {
+      [key]: reducers[key] ? reducers[key] : defaultReducer,
+    });
+  }, reducerList),
+);
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -51,7 +54,7 @@ const createStoreWithFirebase = compose(
 )(createStore);
 
 const rootReducer = reduceReducers(AppReducers, dataReducer);
-const store = createStoreWithFirebase(rootReducer);
+const store = createStoreWithFirebase(rootReducer, defaultStore);
 
 sagaMiddleware.run(rootSaga);
 

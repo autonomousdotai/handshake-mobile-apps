@@ -135,7 +135,6 @@ const tokenHandle = ({
         },
         successFn: () => {
           // success
-          console.log('coins - getListOfferPrice - ipInfo', ipInfo);
           dispatch(getUserProfile({ PATH_URL: API_URL.EXCHANGE.GET_USER_PROFILE }));
           dispatch(getListOfferPrice({
             PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE,

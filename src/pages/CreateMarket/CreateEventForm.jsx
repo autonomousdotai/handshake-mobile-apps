@@ -11,6 +11,7 @@ import { required, urlValidator } from './validate';
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
 import { createEventFormName } from './constants';
+import EmailVerification from './EmailVerification';
 
 const minStep = 15;
 const secStep = minStep * 60;
@@ -22,6 +23,7 @@ class CreateEventForm extends Component {
     reportList: PropTypes.array,
     categoryList: PropTypes.array,
     isNew: PropTypes.bool,
+    hasEmail: PropTypes.any,
     initialValues: PropTypes.object,
     shareEvent: PropTypes.object,
     eventList: PropTypes.array,
@@ -36,6 +38,7 @@ class CreateEventForm extends Component {
     formAction: undefined,
     dispatch: undefined,
     isNew: true,
+    hasEmail: false,
     initialValues: {},
     shareEvent: null,
     eventList: [],
@@ -352,7 +355,7 @@ class CreateEventForm extends Component {
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>
         <div className="CreateEventFormBlock">
           {this.renderEventSuggest(props, state)}
-          {/*{this.renderCategories(props, state)}*/}
+          {/* {this.renderCategories(props, state)} */}
           <FieldArray
             name="outcomes"
             isNew={props.isNew}
@@ -364,6 +367,7 @@ class CreateEventForm extends Component {
         <div className="CreateEventFormBlock">
           {this.renderReport(props)}
           {this.renderTimeGroup(props, state)}
+          <EmailVerification hasEmail={props.hasEmail} />
           <button type="submit" className="btn btn-primary btn-block" disabled={props.pristine || props.submitting}>
             {props.isNew ? 'Create a new event' : 'Add new outcomes'}
           </button>

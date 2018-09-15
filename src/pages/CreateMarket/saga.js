@@ -3,7 +3,7 @@ import { apiGet, apiPost } from '@/stores/api-saga';
 import { API_URL, URL } from '@/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { handleLoadMatches } from '@/pages/Prediction/saga';
-import { isBalanceinInvalid } from '@/stores/common-saga';
+import { isBalanceInvalid } from '@/stores/common-saga';
 import { showAlert } from '@/stores/common-action';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { reportSelector } from './selector';
@@ -56,6 +56,7 @@ function* handleLoadCreateEventData() {
       call(handleLoadReportsSaga, {}),
       call(handleLoadMatches, {}),
       call(handleLoadCategories, {}),
+      call(isBalanceInvalid, {}),
     ]);
     yield put(updateCreateEventLoading(false));
   } catch (e) {
@@ -116,7 +117,7 @@ function* saveGenerateShareLinkToStore(data) {
 function* handleCreateEventSaga({ values, isNew, selectedSource }) {
   try {
     yield put(updateCreateEventLoading(true));
-    const balanceInvalid = yield call(isBalanceinInvalid);
+    const balanceInvalid = yield call(isBalanceInvalid);
     if (balanceInvalid) {
       yield put(showAlert({
         message: MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', balanceInvalid),
@@ -231,11 +232,11 @@ function* handleSendEmailCode({ email }) {
       type: 'SEND_EMAIL_CODE',
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    if (sendCode.error) return null;
-    return yield put(verifyEmailCodePut(true));
+    if (sendCode.error) {
+      console.error('Failed to submit email: ', sendCode.error);
+    }
   } catch (e) {
     console.error('handleSendEmailCode', e);
-    return null;
   }
 }
 
@@ -246,7 +247,7 @@ function* handleVerifyEmail({ email, code }) {
       type: 'VERIFY_EMAIL',
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    if (verify.error) {
+    if (!verify.status) {
       return yield put(verifyEmailCodePut(false));
     }
     yield put(verifyEmailCodePut(true));
