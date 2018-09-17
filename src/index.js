@@ -17,34 +17,6 @@ if (process.env.isStaging) {
 }
 
 window.gasPrice = 64;
-
-/*
-function getGasPrice() {
-  // axios
-  //   .get(`https://api.etherscan.io/api?module=proxy&action=eth_gasPrice&apikey=${
-  //     process.env.apikeyEtherscan
-  //   }`)
-  //   .then((res) => {
-  //     const gasPrice = Number(res.data.result).toString();
-  //     console.log('gasPrice', gasPrice);
-  //     window.gasPrice = Web3.utils.fromWei(gasPrice, 'gwei');
-  //     console.log('gasPrice gwei', window.gasPrice);
-  //   });
-
-  axios
-    .get(`https://ethgasstation.info/json/ethgasAPI.json`)
-    .then((res) => {
-      // const gasPrice = Number(res.data.average).toString();
-      // console.log('gasPrice', gasPrice);
-      //window.gasPrice = (Number(res.data.average) / 10).toString();
-      // console.log('gasPrice gwei', window.gasPrice);
-
-      const gasBN = new BigNumber(res.data.average);
-      const gasPriceBN = gasBN.div(10);
-      window.gasPrice = gasPriceBN.toNumber().toString();
-    });
-}*/
-
 getGasPrice();
 setInterval(getGasPrice, 1000 * 60);
 

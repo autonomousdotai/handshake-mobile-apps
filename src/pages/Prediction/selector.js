@@ -50,4 +50,3 @@ export const checkExistSubcribeEmailSelector = (state) => {
   const { isExistEmail = false } = state.ui;
   return isExistEmail;
 };
-

@@ -12,4 +12,7 @@ export default {
     freeBet: {},
     isExistEmail: false,
   },
+  blockChain: {
+    insufficientGas: null,
+  },
 };

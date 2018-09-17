@@ -23,9 +23,8 @@ function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_UR
   let respondedData = {}; // { status, result, error }
   try {
     const response = yield call($http, { url, data, method });
-    const { status } = response.data;
-    if (status === 1 || status === 200) {
-      respondedData = { status, data: response.data.data };
+    if (response.status === 200) {
+      respondedData = { status: response.data.status, data: response.data.data };
     } else {
       console.error('callAPI (status): ', response);
       respondedData = { status: response.status, error: response.statusText };

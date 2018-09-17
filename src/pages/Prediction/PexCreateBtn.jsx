@@ -1,31 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
 import IconIdea from '@/assets/images/icon/idea.svg';
+import StickyHeader from '@/components/StickyHeader/StickyHeader';
 
-class PexCreateBtn extends Component {
+class PexCreateBtn extends React.PureComponent {
   static displayName = 'PexCreateBtn';
-
-  componentDidMount() {
-    window.addEventListener('scroll', this.onScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll);
-  }
-
-  onScroll = () => {
-    const createBtn = document.getElementById('PexCreateBtn');
-    if (window.pageYOffset > createBtn.offsetTop) {
-      createBtn.classList.add('Sticky');
-    } else {
-      createBtn.classList.remove('Sticky');
-    }
-  };
-
   render() {
     return (
-      <div id="PexCreateBtn">
+      <StickyHeader elementId="PexCreateBtn">
         <div className="Idea">
           <img src={IconIdea} alt="" className="IconIdea" />
           <span>Wanna start a new bet?</span>
@@ -33,7 +16,7 @@ class PexCreateBtn extends Component {
         <Link to={{ pathname: URL.HANDSHAKE_PEX_CREATOR }}>
           <button className="btn btn-report">Create now</button>
         </Link>
-      </div>
+      </StickyHeader>
     );
   }
 }

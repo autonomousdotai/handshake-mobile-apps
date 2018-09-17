@@ -13,10 +13,56 @@
     color: #d9534f;
   }
 }
+
+.EmailVerification {
+  margin-bottom: 0.7rem;
+
+  .FlexRow {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+  }
+
+  .EmailCodeField {
+    flex: 1;
+    padding-right: 15px;
+  }
+
+  .EmailBtn {
+    min-width: 70px;
+    max-height: 47px;
+  }
+}
+
+#InsufficientGas {
+  background-color: #F75454;
+  color: #ffffff;
+  padding: 10px;
+  z-index: 5;
+  font-size: 13px;
+
+  a {
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+
+.Sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  opacity: 0.9;
+}
+
 .ErrorMsg {
   display: inline-block;
   margin-top: 5px;
 }
+
 .EmailRequiredContainer {
   display: flex;
   padding: 10px 20px;

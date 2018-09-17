@@ -88,12 +88,13 @@ function renderByType(props) {
 export const renderField = (props) => {
   const {
     label, className,
-    meta: { touched, error, warning },
+    meta: { touched, error, warning, asyncValidating },
   } = props;
 
   const cls = classNames(className, {
     'form-error': touched && error,
     'form-warning': touched && warning,
+    'async-validating': asyncValidating,
   });
 
   return (
