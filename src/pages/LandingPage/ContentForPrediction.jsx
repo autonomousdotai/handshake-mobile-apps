@@ -239,7 +239,51 @@ const roadmaps = [
   }
 ]
 
+
+// renderRoadMap() {
+//   return (
+
+//   );
+//}
+
 class ContentForPrediction extends React.Component {
+
+  renderRoadMapLine = (title, content) => {
+    return (
+      <div>
+        <div className='title'>{title}</div>
+        <div className='content'>{content}</div>
+      </div>
+    );
+  }
+
+  renderRoadMapItem =(index, time, items) => {
+    return (
+      <div>
+        <div
+          className={`${
+            index % 2 === 0 ? 'text-left' : 'text-right'
+          }`}
+        >
+          <div className={`${index % 2 === 0 ? 'left' : 'right'}`}>
+            <div className='time'>
+              {time}
+              <img src={imgBarline} className='barline' />
+            </div>
+
+            <div>
+              {items.map(item => {
+                const { title, content } = item
+                return this.renderRoadMapLine(title, content);
+              })}
+            </div>
+            <img src={imgCircle} className='circle' />
+          </div>
+        </div>
+      </div>
+    );
+}
+
   render () {
     const { messages, locale } = this.props.intl
     return (
@@ -252,33 +296,7 @@ class ContentForPrediction extends React.Component {
               {roadmaps.map((roadmap, index) => {
                 const { time, items } = roadmap
                 return (
-                  <div>
-                    <div
-                      className={`${
-                        index % 2 === 0 ? 'text-left' : 'text-right'
-                      }`}
-                    >
-                      <div className={`${index % 2 === 0 ? 'left' : 'right'}`}>
-                        <div className='time'>
-                          {time}
-                          <img src={imgBarline} className='barline' />
-                        </div>
-
-                        <div>
-                          {items.map(item => {
-                            const { title, content } = item
-                            return (
-                              <div>
-                                <div className='title'>{title}</div>
-                                <div className='content'>{content}</div>
-                              </div>
-                            )
-                          })}
-                        </div>
-                        <img src={imgCircle} className='circle' />
-                      </div>
-                    </div>
-                  </div>
+                  this
                 )
               })}
             </div>

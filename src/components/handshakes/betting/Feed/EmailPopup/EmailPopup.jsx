@@ -8,6 +8,10 @@ import isEmail from 'validator/lib/isEmail';
 import { submitEmailSubcribe } from '@/reducers/auth/action';
 import { API_URL } from '@/constants';
 import { connect } from 'react-redux';
+import {
+  getMessageWithCode,
+} from '@/components/handshakes/betting/utils.js';
+
 import GA from '@/services/googleAnalytics';
 
 import './EmailPopup.scss';
@@ -23,6 +27,7 @@ class EmailPopup extends React.Component {
     this.state = {
       email: '',
       isValidEmail: true,
+      errorMessage: '',
     };
   }
 
@@ -37,6 +42,7 @@ class EmailPopup extends React.Component {
     if (!isEmail(email)) {
       this.setState({
         isValidEmail: false,
+        errorMessage: 'Please enter right email format',
       });
     } else {
       this.submitEmail(email);
@@ -56,14 +62,23 @@ class EmailPopup extends React.Component {
         this.props.onButtonClick();
       }),
       errorFn: ((error)=> {
-        console.log(error);
+        const { status, code } = error;
+        if (status === 0) {
+          const message = getMessageWithCode(code);
+          console.log(error);
+          this.setState({
+            isValidEmail: false,
+            errorMessage: message,
+          });
+        }
       }),
     });
   }
 
   renderErrorField() {
+    const { errorMessage } = this.state;
     return (
-      <div className="errorField">*Please enter right email format</div>
+      <div className="errorField">*{errorMessage}</div>
     );
   }
 
