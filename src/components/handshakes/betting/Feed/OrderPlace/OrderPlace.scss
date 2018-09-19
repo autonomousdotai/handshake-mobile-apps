@@ -18,6 +18,10 @@
   padding: 20px 0 0;
   .TabList {
     justify-content: space-between;
+    min-height: 38px;
+  }
+  > .TabPanel {
+    flex: 1;
   }
   > .TabPanel > .OrderMode {
     display: flex;
