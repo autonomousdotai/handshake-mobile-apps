@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
-import StickyHeader from '@/components/StickyHeader/StickyHeader';
 import IconIdea from '@/assets/images/icon/idea.svg';
 import GA from '@/services/googleAnalytics';
 
 class PexCreateBtn extends React.PureComponent {
   render() {
     return (
-      <StickyHeader elementId="PexCreateBtn" >
+      <div id="PexCreateBtn" >
         <div className="Idea">
           <img src={IconIdea} alt="" className="IconIdea" />
           <span>Wanna start a new bet?</span>
@@ -21,7 +20,7 @@ class PexCreateBtn extends React.PureComponent {
         >
           <button className="btn btn-report">Create now</button>
         </Link>
-      </StickyHeader>
+      </div>
     );
   }
 }

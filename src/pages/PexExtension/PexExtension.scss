@@ -8,71 +8,79 @@
   right: 0;
   bottom: 0;
 
-  .ExtLeftContainer {
-    flex-basis: 50%;
-    display: flex;
-    position: relative;
+  .LeftSideBar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 20%;
+    background-color: #000000;
+    border-right: 10px solid #F6DA25;
+    text-align: center;
 
-    .LeftSideBar {
-      flex-basis: 40%;
-      display: flex;
-      flex-direction: column;
-      background-color: #000000;
-      border-right: 10px solid #F6DA25;
-
-
-      .ExtLogo {
-        margin-top: 12%;
-      }
-    }
-
-    .MacBook {
-      position: absolute;
-      top: 15%;
-      left: 0;
-      width: 100%;
-
-      img {
-        width: 95%;
-      }
+    img {
+      margin-top: 10%;
     }
   }
 
-  .ExtRightContainer {
-    flex-basis: 50%;
-    padding-right: 10%;
+  .MainWrapper {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
 
-    .ExtHeader {
-      margin-top: 15%;
-      font-size: 42px;
+    .Main {
+      align-items: start;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .MacBook {
+      flex-basis: 50%;
+      display: flex;
       position: relative;
+    }
 
-      span {
+    .Description {
+      flex-basis: 50%;
+      padding-right: 10%;
+
+      .ExtHeader {
+        font-size: 42px;
         position: relative;
-        z-index: 2;
+
+        span {
+          position: relative;
+          z-index: 2;
+        }
+
+        &::after {
+          position: absolute;
+          content: '';
+          height: 20px;
+          width: 300px;
+          background-color: #FFF988;
+          bottom: 35px;
+          left: 180px;
+        }
       }
 
-      &::after {
-        position: absolute;
-        content: '';
-        height: 20px;
-        width: 300px;
-        background-color: #FFF988;
-        bottom: 35px;
-        left: 180px;
+      .ExtQuestion {
+        font-size: 30px;
       }
-    }
 
-    .ExtQuestion {
-      font-size: 30px;
-    }
+      .ExtDescription {
+        font-size: 24px;
+      }
 
-    .ExtDescription {
-      font-size: 24px;
-    }
-
-    p {
-      padding-bottom: 30px;
+      p {
+        padding-bottom: 30px;
+      }
     }
   }
 

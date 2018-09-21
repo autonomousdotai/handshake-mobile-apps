@@ -28,6 +28,7 @@ import { shareEventSelector } from '../CreateMarket/selector';
 
 import EventItem from './EventItem';
 import PexCreateBtn from './PexCreateBtn';
+import Disclaimer from './Disclaimer';
 
 import './Prediction.scss';
 
@@ -265,6 +266,7 @@ class Prediction extends React.Component {
             />
           );
         })}
+        <Disclaimer />
       </div>
     );
   };
@@ -401,7 +403,6 @@ class Prediction extends React.Component {
         {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
         {this.renderCreditCard()}
-
       </div>
     );
   };
