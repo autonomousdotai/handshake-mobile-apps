@@ -1,4 +1,7 @@
 import React from "react";
+import { Fade, Flip, Zoom, Slide, LightSpeed } from 'react-reveal';
+
+
 import imgBTC from '@/assets/images/landing/wallet/btc.svg';
 import imgLTC from '@/assets/images/landing/wallet/ltc.svg';
 import imgETH from '@/assets/images/landing/wallet/eth.svg';
@@ -27,17 +30,19 @@ const Wallet = () => (
           <div className="col px-0">
             <div className="row">
               <div className="col-lg-6">
-                <h1 className="display-3  text-white">Ninja Wallet</h1>
+              <Fade left>
+                <h1 className="display-3 text-white">Ninja Wallet</h1>
                 <p className="text-white">No downloads. No signups. No fees.<br/>A decentralized cryptocurrency wallet that lets you stay 100% anonymous.</p>
+                <p className="text-white">Access Ninja Wallet on your mobile browser</p>
                 <div className="btn-wrapper">
-                  <p className="text-white">Access Ninja Wallet on your mobile browser</p>
                   <a href="https://ninja.org/wallet" className="btn btn-white btn-icon mb-3 mb-sm-0">
                     <span className="btn-inner--text">Try now!</span>
                   </a>
                 </div>
+              </Fade>
               </div>
               <div className="col-lg-6 main-screen text-center">
-                <img width="300" src={imgIPHONE} />
+                <Flip right><img width="300" src={imgIPHONE} /></Flip>
               </div>
             </div>
           </div>
@@ -54,6 +59,7 @@ const Wallet = () => (
       <div className="container">
         <div className="row row-grid align-items-center">
           <div className="col-md-6 order-md-2">
+          <Zoom right>
             <div className="icons-container mt-5 on-screen" data-toggle="on-screen">
               <i className="icon floating"><img src={imgBTC} /></i>
               <i className="icon floating"><img src={imgXRP} /></i>
@@ -61,13 +67,16 @@ const Wallet = () => (
               <i className="icon floating"><img src={imgZEC} /></i>
               <i className="icon floating"><img src={imgLTC} /></i>
             </div>
+          </Zoom>
           </div>
           <div className="col-md-6 order-md-1">
+            <Slide bottom>
             <div className="pr-md-5">
               <h3>Hold multiple cryptocurrencies with a decentralized wallet </h3>
               <p>Ninja Wallet - free, no downloads, no sign ups, and no KYC. Allowing users to remain 100% anonymous, with all transactions secured on the blockchain.</p>
               <p>It currently supports BTC, ETH, BCH, ERC20 tokens, and ERC721 collectibles such as CryptoKitties, CryptoStrikers, CryptoPunks. The currencies XRP, ZEC, LTC… and more will be added soon.</p>
             </div>
+            </Slide>
           </div>
         </div>
       </div>
@@ -76,14 +85,16 @@ const Wallet = () => (
       <div className="container">
         <div className="row row-grid align-items-center">
           <div className="col-md-7 transform-perspective-left">
-              <img src={imgPromo1} className="img-fluid" />
+          < Flip left><img src={imgPromo1} className="img-fluid" /></ Flip>
           </div>
           <div className="col-md-5">
+          <Slide bottom>
             <div className="pl-md-5">
               <h3>Multiple wallets </h3>
               <p>Quickly create, import and manage personal, business and testnet wallets in one secure location.</p>
               <p>We use hierarchical deterministic (HD) address generation for secure in-app wallet generation and back up.</p>
             </div>
+            </Slide>
           </div>
         </div>
       </div>
@@ -93,19 +104,20 @@ const Wallet = () => (
         <div className="row row-grid align-items-center">
           <div className="col-md-6 order-lg-2 ml-lg-auto">
             <div className="position-relative pl-md-5">
-              <img src={img1} className="img-fluid" />
+              <Zoom bottom><img src={img1} className="img-fluid" /></Zoom>
             </div>
           </div>
           <div className="col-lg-6 order-lg-1  pb-100">
             <div className="d-flex">
-
+            <Slide top>
               <div className="">
                 <h4 className="display-3 text-white">All storage is on your device</h4>
                 <p className="text-white">We want to ensure that our customers have a secure and private experience when using our wallet. That is why we don’t store any of your personal information, private keys, or data on our servers.</p>
-
               </div>
+              </Slide>
             </div>
 
+            <Slide top>
             <div className="card shadow shadow-lg--hover mt-5">
               <div className="card-body">
                 <div className="d-flex px-3">
@@ -120,6 +132,7 @@ const Wallet = () => (
                 </div>
               </div>
             </div>
+            </Slide>
           </div>
         </div>
       </div>
@@ -131,6 +144,7 @@ const Wallet = () => (
     </section>
     <section className="section section-lg pt-150 pb-150">
       <div className="container">
+      <LightSpeed bottom cascade>
         <div className="row justify-content-center text-center">
           <div className="col-lg-8">
             <h2 className="display-3">Don’t forget to backup your wallet</h2>
@@ -140,11 +154,13 @@ const Wallet = () => (
             </div>
           </div>
         </div>
+        </LightSpeed>
       </div>
     </section>
     <section className="section section-lg bg-gradient-warning pt-150 pb-150">
       <div className="container pb-50">
         <div className="row text-center justify-content-center">
+          <Slide bottom cascade>
           <div className="col-lg-10">
             <h2 className="display-3 text-white">More features of Ninja Wallet</h2>
 
@@ -224,6 +240,7 @@ const Wallet = () => (
                 </li>
               </ul>
           </div>
+          </Slide>
         </div>
       </div>
       <div className="separator separator-bottom separator-skew zindex-100">

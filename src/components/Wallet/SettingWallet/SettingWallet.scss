@@ -1,35 +1,5 @@
 
-.settingwallet-wrapper{
-  margin-bottom: 60px;
-
-  .dropdown-custom{
-    margin-bottom: 20px;
-  }
-  .bgBox{
-    padding: 12px;
-    border-radius: 6px;
-    background-color: #ffffff;
-  }
-  input[type=text], input[type=tel], input[type=number]{
-    font-size: 16px;
-    line-height: 22px;
-    height: 45px;
-    border-radius: 6px;
-    font-weight: 300;
-  }
-  .row{
-    border-bottom: 1px solid #ededed;
-    padding: 10px 0px ;
-    display: list-item;
-
-    .label{
-      width: 50%;
-      float: left;
-    }
-
-    .value{
-      text-align: right;
-    }
-  }
-
+.list-currency{
+    margin-top: 20px;        
+    padding-bottom: 60px;
 }

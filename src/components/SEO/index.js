@@ -127,3 +127,17 @@ export const SEOShop = (
     />
   </Helmet>
 );
+
+export const SEOBecomeAtm = (
+  <Helmet>
+    <title>Earn Passive Income with Ninja ATM</title>
+    <meta
+      name="description"
+      content="Ninja ATM is a tool to sell coin for cash. Become our ATM for FREE to generate new source of income with no initial investment"
+    />
+    <meta
+      name="keywords"
+      content="Earn Passive Income"
+    />
+  </Helmet>
+);

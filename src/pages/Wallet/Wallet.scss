@@ -15,8 +15,7 @@
   // padding: 20px;
   background: #FFFFFF;
   // box-shadow: 0 15px 11px -8px #F1F1F1;
-  border-radius: 4px;
-  width: 97%;
+  border-radius: 4px;  
   margin: auto;
   margin-bottom: 25px;
 }
@@ -104,6 +103,13 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-color: #f4f4fb;
+  padding-bottom: 60px;
+
+  .float-button-scan-qrcode{
+    position: fixed;
+    bottom: 45px;
+    right: 1px;
+  }
 
   .modal-custom-header{
     img:first-child {

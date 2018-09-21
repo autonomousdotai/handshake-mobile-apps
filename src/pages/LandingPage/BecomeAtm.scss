@@ -1,0 +1,299 @@
+@import './src/styles/style';
+
+.become-atm-container {
+  font-family: azo-sans-web, sans-serif;
+  padding: 15px 0;
+  overflow: hidden;
+  @media screen and (max-width: 600px) {
+    padding: 20px;
+  }
+  .become-atm-modal {
+    max-width: none;
+    .modal-backdrop {
+      max-width: none;
+    }
+    .modal-dialog-content {
+      max-width: 400px;
+      text-align: center;
+      padding: 40px 20px;
+      .modal-desc {
+        margin-bottom: 20px;
+      }
+    }
+  }
+  .project-detail {
+    font-family: azo-sans-web, sans-serif;
+    font-weight: 400;
+    .logoContainer {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .emailDesc {
+      font-weight: bold;
+    }
+    .email-control-group {
+      display: flex;
+    }
+    .video-frame {
+      @media screen and (max-width: 700px) {
+        margin: 20px 0px;
+      }
+    }
+    .landing-footer {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .categories.row {
+      background-color: white;
+      border-radius: 5px;
+      margin: 30px 0px;
+      padding: 10px;
+      .category-item {
+        display: flex;
+        flex-direction: column;
+        @media screen and (max-width: 600px) {
+          margin: 10px 0px;
+        }
+        .icon {
+          width: 50px;
+          height: 50px;
+          margin: 10px 0px;
+        }
+        .label {
+          font-weight: bold;
+          &::after {
+            content: "";
+            width: 50px;
+            background-color: #FFF988;
+            height: 4px;
+            display: block;
+            margin: 10px 0px;
+          }
+        }
+        .desc {
+
+        }
+      }
+    }
+    .emailField {
+      position: relative;
+      width: rem-calc(300px);
+      @media screen and (max-width: 600px) {
+        width: auto;
+      }
+    }
+    .wrapperEmail{
+      display: flex;
+      justify-content: space-between;
+      @media screen and (max-width: 600px) {
+        margin: 10px 0px;
+        justify-content: center;
+      }
+      .label {
+        @media screen and (max-width: 1280px) {
+          display: none !important;
+        }
+      }
+    }
+    .btnEmail {
+      padding: 0px;
+      border: none;
+    }
+    .emailSubmit {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+    }
+    .btnTelegram {
+      background: #FFF988;
+      border-radius: rem-calc(5px);
+      font-size: rem-calc(16px);
+      letter-spacing: 0;
+      border: 1px solid #F5D516;
+      height: rem-calc(48px);
+      width: rem-calc(70px);
+      margin-left: rem-calc(10px);
+    }
+
+    .pd-breadcrumb {
+      font-size: 16px;
+      color: #484848;
+      letter-spacing: 0;
+      span {
+        opacity: 1;
+      }
+      a {
+        color: #484848;
+        opacity: 0.6;
+      }
+    }
+    .pd-heading {
+      font-family: azo-sans-web, sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      color: #484848;
+      letter-spacing: 0;
+      line-height: 44px;
+    }
+    .pd-subHeading {
+      .font-normal {
+        font-weight: 300px ! important;
+      }
+
+      opacity: 1;
+      font-family: azo-sans-web, sans-serif;
+      font-weight: 400;
+      font-size: 19px;
+      color: #484848;
+      letter-spacing: 0;
+      line-height: 29px;
+      margin-top: 18px;
+
+
+    }
+
+    .pd-content {
+      opacity: 0.85;
+      font-size: 18px;
+      color: #484848;
+      letter-spacing: 0;
+      line-height: 33px;
+    }
+    .pd-faq {
+      font-weight: 600;
+      font-size: 30px;
+      text-align: center;
+      margin-top: 120px;
+    }
+    .control-subscribe-email {
+      height: 48px;
+      min-width: 210px;
+    }
+    .text-email {
+      color: #484848;
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .text-send-link {
+      color: #484848;
+      font-size: 17px;
+      padding-top: 12px;
+    }
+  }
+
+  .pay-for-devs{
+
+    .pd-heading{
+      font-weight: normal ! important;
+      color: Black;
+      padding-bottom: 1rem;
+    }
+
+    .getstart {
+      padding-bottom: 4rem;
+
+      .pd-content{
+        font-weight: 300;
+      }
+    }
+
+    .desc {
+      padding-bottom: 4rem;
+
+      .pd-content{
+        font-weight: 300;
+      }
+    }
+
+    .why-use{
+      background: url('../../assets/images/landing/pay-for-devs/bg-why.png') no-repeat 0px 0px;
+
+      padding-bottom: 8rem;
+      padding-top: 4rem;
+
+      .pd-heading{
+        text-align: center;
+        width: 100%;
+      }
+
+      .card-deck{
+        margin: 50px 1rem 0px 1rem;
+
+        .card{
+          border:none;
+          -webkit-box-shadow: -1px 2px 16px -4px rgba(0,0,0,0.15);
+          -moz-box-shadow: -1px 2px 16px -4px rgba(0,0,0,0.15);
+          box-shadow: -1px 2px 16px -4px rgba(0,0,0,0.15);
+          margin: 0px 1.5rem;
+
+          img.card-img-top {
+            margin-left: 1.25rem;
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+            height: 60px;
+          }
+
+          .card-body{
+            font-weight: 300;
+            color: #484848;
+            line-height: 33px;
+            padding: 2rem;
+
+            p {
+              padding-bottom: 1rem;
+            }
+
+            h5 {
+              font-weight: 400;
+            }
+          }
+        }
+      }
+
+    }
+
+
+    .anywhere{
+      background: url('../../assets/images/landing/pay-for-devs/bg-anywhere.png') no-repeat top left;
+      padding-bottom: 4rem;
+      padding-top: 2rem;
+      padding-left: 40px;
+
+      .pd-content{
+        background: white;
+        margin: auto;
+        width: 50%;
+        height: 50%;
+        overflow: auto;
+        font-weight: 300;
+        font-size: 16px;
+
+        p:last-child{padding-bottom: 0px; margin-bottom: 0px;}
+      }
+    }
+
+    .chargeback{
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+
+      .pd-content{
+        background: url('../../assets/images/landing/pay-for-devs/bg-chargeback.png') no-repeat top left;
+        padding-top: 2rem;
+        font-weight: 300;
+        font-size: 16px;
+      }
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .why-use{
+      .card-deck{
+        .card { flex:auto }
+      }
+    }
+
+  }
+}

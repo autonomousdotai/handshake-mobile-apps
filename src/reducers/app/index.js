@@ -34,6 +34,11 @@ function appReducter(state = {
     message: '',
   },
 
+  configConfirmPasscode: {
+    isShow: false,
+    valueConfirm: 0,
+  },
+
   isError: false,
   isWarning: false,
 
@@ -66,6 +71,17 @@ function appReducter(state = {
   }
 }, action) {
   switch (action.type) {
+    case APP_ACTION.SHOW_CONFIRM:
+      return {
+        ...state,
+        passcodeData: action.payload,
+      };
+    case APP_ACTION.HIDE_CONFIRM:
+      return {
+        ...state,
+        passcodeData: action.payload,
+      };
+    
     case APP_ACTION.SET_ROOT_LOADING:
       return {
         ...state,

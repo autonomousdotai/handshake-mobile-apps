@@ -11,7 +11,7 @@ import { createDynamicImport } from '@/services/app';
 import Loading from '@/components/core/presentation/Loading';
 import ScrollToTop from '@/components/App/ScrollToTop';
 import Layout from '@/components/Layout/Main';
-import { SEOHome, SEOCash, SEOPrediction, SEODad, SEOWallet, SEOWhisper, SEOPayForDevs, SEOPayForStores } from '@/components/SEO';
+import { SEOHome, SEOCash, SEOPrediction, SEODad, SEOWallet, SEOWhisper, SEOPayForDevs, SEOPayForStores, SEOBecomeAtm } from '@/components/SEO';
 
 import imgCash from '@/assets/images/landing/home/cash.jpg';
 import imgCashContent from '@/assets/images/landing/cash/fake-content.svg';
@@ -65,6 +65,7 @@ const RouterEscrowWithdraw = createDynamicImport(() => import('@/pages/Escrow/Wi
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
 const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
 const RouterInternalWithdraw = createDynamicImport(() => import('@/components/Router/InternalWithdraw'), Loading);
+const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
 
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
@@ -98,7 +99,7 @@ const configRoutesUsingMobileLayout = [
   },
   { path: URL.RESOLVE, component: RouterResolve },
   { path: URL.SHOP_URL, component: RouterShop },
-
+  { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
 ];
 const routesUsingMobileLayout = configRoutesUsingMobileLayout.map(route => (
   <Route
@@ -129,6 +130,7 @@ if (BrowserDetect.isDesktop) {
     { path: URL.PRODUCT_DAD_URL, render: () => <ProjectDetail type="product" name="dad" img={imgDad} imgContent={imgDadContent} reactHelmetElement={SEODad} /> },
     { path: URL.RESEARCH_UNCOMMONS_URL, render: () => <ProjectDetail type="research" name="uncommons" img={imgUncommons} /> },
     { path: URL.PRODUCT_WHISPER_URL, render: () => <ProjectDetail type="product" name="whisper" img={imgWhisper} reactHelmetElement={SEOWhisper} /> },
+    { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
     { path: URL.INTERNAL_WITHDRAW_URL, component: RouterInternalWithdraw },
   ];
   routesUsingDesktopLayout = configRoutesUsingDesktopLayout.map(route => (
