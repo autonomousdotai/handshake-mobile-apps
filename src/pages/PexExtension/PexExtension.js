@@ -70,7 +70,7 @@ class PexExtension extends React.Component {
             </div>
             <div className="Description">
               <p className="ExtHeader">
-                <span>Ninja Predicts Chrome Extension</span>
+                Ninja Predicts <span>Chrome Extension</span>
               </p>
               <p className="ExtQuestion">
                 Bet on anything you read online without even leaving the page.
