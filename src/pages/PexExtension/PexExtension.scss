@@ -65,8 +65,8 @@
           height: 20px;
           width: 300px;
           background-color: #FFF988;
-          bottom: 35px;
-          left: 180px;
+          bottom: 25px;
+          left: 0;
         }
       }
 
@@ -79,7 +79,7 @@
       }
 
       p {
-        padding-bottom: 30px;
+        padding-bottom: 20px;
       }
     }
   }
@@ -97,7 +97,7 @@
         input {
           border: 1px solid #ECECEC;
           height: 54px;
-          padding-left: 25px;
+          padding-left: 15px;
 
           &::-webkit-input-placeholder {
             color: #858585;
@@ -106,12 +106,13 @@
       }
 
       button {
-        flex-basis: 30%;
+        flex-basis: 25%;
         max-height: 54px;
 
         background-color: #FFF988;
         border: 3px solid #F5D516;
         color: #000000;
+        min-width: 190px;
       }
 
       .ErrorMsg {

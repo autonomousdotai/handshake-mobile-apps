@@ -37,7 +37,7 @@ class PexExtension extends React.Component {
     }
     return (
       <div className="ExtSubscribe">
-        <span>The internet is waiting to play with you.</span>
+        <span>Get Chrome Extension</span>
         <form className="EmailRequiredForm" onSubmit={props.handleSubmit(this.onSubmit)}>
           <Field
             name="email"
@@ -49,7 +49,7 @@ class PexExtension extends React.Component {
             validate={[required, emailValidator]}
           />
           <button type="submit" className="btn btn-primary btn-block">
-            Ready to rock
+            Be the first to know
           </button>
         </form>
         <span className="SubscribeError">{errMsg}</span>
@@ -70,7 +70,7 @@ class PexExtension extends React.Component {
             </div>
             <div className="Description">
               <p className="ExtHeader">
-                Ninja Predicts <span>Chrome Extension</span>
+                <span>Ninja Predicts</span>
               </p>
               <p className="ExtQuestion">
                 Bet on anything you read online without even leaving the page.
