@@ -37,7 +37,7 @@ class PexExtension extends React.Component {
     }
     return (
       <div className="ExtSubscribe">
-        <span>Get Chrome Extension</span>
+        <span className="EmailLabel">Get Chrome Extension</span>
         <form className="EmailRequiredForm" onSubmit={props.handleSubmit(this.onSubmit)}>
           <Field
             name="email"
@@ -70,14 +70,15 @@ class PexExtension extends React.Component {
             </div>
             <div className="Description">
               <p className="ExtHeader">
-                <span>Ninja Predicts</span>
+                <span>Ninja Prediction</span>
               </p>
               <p className="ExtQuestion">
                 Bet on anything you read online without even leaving the page.
               </p>
               <p className="ExtDescription">
-                You use the internet. You have opinions. Ninja9148 thinks you're wrong.
-                Create a bet in just one click and win ETH for being right.
+                You use the internet, and you have opinions. <br />
+                Ninja9148 thinks you're wrong.<br />
+                Create a bet in just one click and win ETH for being right. <br />
                 Stay 100% anonymous the entire time.
               </p>
               {this.renderSubscribeForm(props)}

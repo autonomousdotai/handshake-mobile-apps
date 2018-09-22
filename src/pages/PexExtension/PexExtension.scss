@@ -87,6 +87,12 @@
   .ExtSubscribe {
     font-size: 18px;
 
+    .EmailLabel {
+      padding-left: 15px;
+      padding-bottom: 10px;
+      display: inline-block;
+    }
+
     .EmailRequiredForm {
       display: flex;
 
