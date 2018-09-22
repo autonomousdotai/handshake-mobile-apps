@@ -88,9 +88,9 @@
     font-size: 18px;
 
     .EmailLabel {
-      padding-left: 15px;
       padding-bottom: 10px;
       display: inline-block;
+      font-weight: 300;
     }
 
     .EmailRequiredForm {
@@ -103,7 +103,6 @@
         input {
           border: 1px solid #ECECEC;
           height: 54px;
-          padding-left: 15px;
 
           &::-webkit-input-placeholder {
             color: #858585;
