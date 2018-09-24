@@ -57,7 +57,7 @@ class PexExtension extends React.Component {
     );
   }
 
-  renderRightContainer = (props) => {
+  renderComponent = (props) => {
     return (
       <React.Fragment>
         <div className="LeftSideBar">
