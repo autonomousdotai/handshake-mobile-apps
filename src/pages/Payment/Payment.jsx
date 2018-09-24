@@ -399,7 +399,7 @@ class Payment extends React.Component {
           <div className="msg-error">{this.state.msgError}</div>
         </Modal>
 
-        <ModalDialog className="complete-wrapper" title="Complete crypto payment" onRef={modal => this.modalCompleteRef = modal}>
+        <ModalDialog className="complete-wrapper" title="Payment complete" onRef={modal => this.modalCompleteRef = modal}>
           {modalComplete}
         </ModalDialog>
       </div>);

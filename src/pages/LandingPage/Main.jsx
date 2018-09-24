@@ -70,14 +70,14 @@ const products = [
     title: <FormattedMessage id="landing_page.products.hivepay-online.title" />,
     subTitle: <FormattedMessage id="landing_page.products.hivepay-online.subTitle" />,
     img: imgHivepayOnline,
-    to: URL.PRODUCT_HIVEPAY_ONLINE_URL,
+    to: URL.PRODUCT_PAYFORDEVS_URL,
   },
   {
     name: 'hivepay-offline',
     title: <FormattedMessage id="landing_page.products.hivepay-offline.title" />,
     subTitle: <FormattedMessage id="landing_page.products.hivepay-offline.subTitle" />,
     img: imgHivepayOffline,
-    to: URL.PRODUCT_HIVEPAY_OFFLINE_URL,
+    to: URL.PRODUCT_PAYFORSTORES_URL,
   },
   {
     name: 'fund',

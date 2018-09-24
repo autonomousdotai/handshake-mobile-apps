@@ -5,7 +5,7 @@ import { URL } from '@/constants';
 // import MultiLanguage from '@/components/core/controls/MultiLanguage';
 import meIcon from '@/assets/images/navigation/ic_account.svg.raw';
 import walletIcon from '@/assets/images/navigation/ic_wallet_white.svg.raw';
-import predictionIcon from '@/assets/images/categories/chip.svg';
+// import predictionIcon from '@/assets/images/categories/chip.svg';
 
 function Me() {
   return (
@@ -32,14 +32,25 @@ function Caption(title) {
   );
 }
 
+function BuyCrypto() {
+  return (
+    <Link to={URL.BUY_BY_CC_URL} className="BuyCrypto">
+      <span>Buy crypto with credit card</span>
+    </Link>
+  );
+}
+
 function HeaderBar(props) {
   const { className, titleBar } = props;
+  const { pathname } = window.location;
+
   return (
     <div className={className}>
       {Me()}
       {Caption(titleBar)}
       {/* <MultiLanguage /> */}
       {Wallet()}
+      { (pathname === URL.HANDSHAKE_WALLET) && BuyCrypto()}
     </div>
   );
 }

@@ -50,7 +50,7 @@
   }
 
   .wallet-info{
-    margin-top: 2rem;
+    margin-top: 1rem;
 
     .help{
       margin-top: 1rem;
@@ -64,6 +64,31 @@
     .disabled{
       background: silver;
       border-color: gray;
+    }
+
+    .wallet{
+      border: 1px solid #ececec;
+      padding: 0.6rem 2rem 0.6rem 0.6rem;
+      border-radius: 5px;
+      overflow: hidden;
+      -webkit-box-shadow: 0px 0px 30px rgba(0, 0, 0, .1);
+      -moz-box-shadow: 0px 0px 30px rgba(0, 0, 0, .1);
+      box-shadow: 0px 0px 30px rgba(0, 0, 0, .1);
+      background: url('../../assets/images/icon/pay/arrow-select.svg') no-repeat 99% center;
+      .name{
+        float:left;
+        width: 50%;
+      }
+
+      .value{
+        float:right;
+        font-weight: 400;
+      }
+
+      .clearfix{
+        padding: 0.3rem 0;
+        clear: both;
+      }
     }
   }
 
@@ -88,14 +113,14 @@
     color: #2d2d2d;
     letter-spacing: 0;
     text-align: center;
-    padding: 24px 0;
+    padding: 20px 0;
     position: relative;
     -ms-flex-negative: 0;
     flex-shrink: 0;
 
     .icon{
       img {
-        height: 70px;
+        height: 60px;
       }
       margin-bottom: 2rem;
     }
@@ -120,13 +145,13 @@
     line-height: 1.23;
     letter-spacing: 0;
     text-align: center;
-    padding: 24px 0;
+    padding: 20px 0;
     position: relative;
     -ms-flex-negative: 0;
     flex-shrink: 0;
 
     .icon{
-      height: 70px;
+      height: 60px;
       line-height: 45px;
       text-align: center;
       display: -ms-flexbox;
@@ -137,7 +162,7 @@
       justify-content: center;
 
       img{
-        height: 70px;
+        height: 60px;
       }
     }
 

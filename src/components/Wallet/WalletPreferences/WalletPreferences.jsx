@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import './WalletPreferences.scss';
-import Switch from '../../../../components/core/controls/Switch';
+import Switch from '@/components/core/controls/Switch';
 import Input from '../Input';
 import Modal from '@/components/core/controls/Modal';
 import {injectIntl} from 'react-intl';
 import { ENGINE_METHOD_DIGESTS } from 'constants';
-
 
 class WalletPreferences extends React.Component {
   constructor(props) {
@@ -15,7 +14,7 @@ class WalletPreferences extends React.Component {
     this.state = {
       walletNameContent: "",
       walletName: this.props.wallet.title,
-      isHideBalance: this.props.wallet.hideBalance,
+      isHideBalance: this.props.wallet.hideBalance,            
     };
     this.messages = this.props.intl.messages;
   }
@@ -38,6 +37,7 @@ class WalletPreferences extends React.Component {
       this.props.onUpdateWalletName(this.props.wallet);
       this.modalWalletNameRef.close();
     }
+        
   }
 
   renderModalName=()=>{
@@ -58,10 +58,11 @@ class WalletPreferences extends React.Component {
     this.setState({walletName : this.props.wallet.title}, ()=>{
       this.renderModalName();
     });
-  }
+  }  
 
   render() {
     const { onItemClick, wallet } = this.props;
+    
 
     return (
       <div>
@@ -104,9 +105,7 @@ class WalletPreferences extends React.Component {
 
                   </div>
               </div>
-
-
-          </div>
+          </div>                
         </div>
     );
   }
@@ -117,4 +116,9 @@ WalletPreferences.propTypes = {
   onDeleteWalletClick: PropTypes.func,
 };
 
-export default injectIntl(WalletPreferences);
+const mapDispatch = ({  
+  
+});
+
+
+export default injectIntl(connect(null, mapDispatch)(WalletPreferences));

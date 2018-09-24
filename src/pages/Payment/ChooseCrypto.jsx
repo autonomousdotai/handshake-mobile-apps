@@ -176,28 +176,6 @@ class ChooseCrypto extends React.Component {
     return result;
   }
 
-  // get listMainCoin(){
-  //   const main = this.state.mainCoin;
-  //   if(main){
-  //     let arr = [], icon = '';
-  //     for(var i in main) {
-  //       arr.push(main[i]);
-  //     }
-
-  //     return arr.map(wallet => {
-  //       let icon = '';
-  //       try{ icon = require("@/assets/images/icon/wallet/coins/" + wallet.name.toLowerCase() + '.svg')} catch (ex){console.log(ex)};
-
-  //       return <div className="coin" key={wallet.name}  onClick={() =>{this.selectCoin(wallet)}}>
-  //           <div className="icon"><img src={icon} /></div>
-  //           <div className="name">{wallet.className}</div>
-  //           <div className="balance">{wallet.balance} {wallet.name}</div>
-  //         </div>
-  //       }
-  //     );
-  //   }
-  // }
-
   get listCoin(){
     const coins = this.state.listCoin;
     const {toCrypto} = this.props;

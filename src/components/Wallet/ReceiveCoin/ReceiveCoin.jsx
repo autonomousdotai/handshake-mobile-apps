@@ -304,6 +304,16 @@ class ReceiveCoin extends React.Component {
     });
   }
 
+
+  genDataReceive(){
+    if (this.state.walletSelected){
+      let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
+      if (this.state.isCurrency){
+        value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : ''); 
+      }
+    }
+  }
+
   render() {
     const { messages } = this.props.intl;
     let { currency } = this.props;
@@ -323,9 +333,9 @@ class ReceiveCoin extends React.Component {
           {/* <div className="bodyTitle"><span>{messages.wallet.action.receive.message} { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div> */}
           <div className={['bodyBackup bodyShareAddress']}>
 
-          <div className="bodyTitle">
+          {/* <div className="bodyTitle">
             <span>{messages.wallet.action.receive.title2}</span>
-          </div>
+          </div> */}
 
           <div className="box-addresses">
 

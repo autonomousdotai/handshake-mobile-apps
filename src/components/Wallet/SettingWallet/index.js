@@ -1,3 +1,3 @@
-import AddToken from './AddToken';
+import SettingWallet from './SettingWallet';
 
-export default AddToken;
+export default SettingWallet;

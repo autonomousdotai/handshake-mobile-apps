@@ -9,6 +9,7 @@ import {clearHeaderLeft, clearHeaderRight, hideHeader, setHeaderTitle} from '@/r
 
 const BuyCC = props => (<DynamicImport loading={Loading} load={() => import('@/components/handshakes/exchange/Feed/FeedCreditCard')}>{Component => <Component {...props} />}</DynamicImport>);
 const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() => import('@/pages/Error/Page404')}>{Component => <Component {...props} />}</DynamicImport>);
+const PageNotSupport = props => (<DynamicImport isNotFound loading={Loading} load={() => import('@/pages/Error/PageNotSupport')}>{Component => <Component {...props} />}</DynamicImport>);
 
 const routerMap = [
   { path: URL.BUY_BY_CC_URL, component: BuyCC },
@@ -32,6 +33,7 @@ class BuyCCRouter extends React.Component {
   }
 
   render() {
+    if (this.props.isBannedIp) return <PageNotSupport/>;
     return (
       <Switch>
         {routerMap.map(route => <Route key={route.path} exact path={route.path} component={route.component} />)}
@@ -41,6 +43,6 @@ class BuyCCRouter extends React.Component {
   }
 }
 
-export default connect(null, ({
+export default connect(state => ({ isBannedIp: state.app.isBannedIp }), ({
   setHeaderTitle, clearHeaderRight, clearHeaderLeft, hideHeader,
 }))(BuyCCRouter);

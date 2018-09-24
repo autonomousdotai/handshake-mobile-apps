@@ -298,7 +298,7 @@ class Transfer extends React.Component {
 
   invalidateTransferCoins = (value) => {
     const { messages } = this.props.intl;
-
+    console.log('invalidateTransferCoins');
     if (!this.state.walletSelected) return {};
     let errors = {};
     if (this.state.walletSelected){

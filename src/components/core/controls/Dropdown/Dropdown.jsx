@@ -13,7 +13,7 @@ class Dropdown extends React.PureComponent {
     super(props);
     this.state = {
       text: props.placeholder,
-      isShow: false,
+      isShow: this.props.isShow || false,
       idActive: -1,
       itemList: props.source,
     };
@@ -22,7 +22,7 @@ class Dropdown extends React.PureComponent {
     this.onItemSelected = ::this.onItemSelected;
     this.setDefaultItem = ::this.setDefaultItem;
     this.filterSource = ::this.filterSource;
-    this.handleShow = ::this.handleShow;
+    this.handleShow = ::this.handleShow;    
   }
   // will store item selecting
   itemSelecting = {};
@@ -118,7 +118,7 @@ class Dropdown extends React.PureComponent {
               </li>
             )
           }
-          <div className="result">
+          <div className="result" style={this.props.customResultCss || {}}>
             {
               itemList.length > 0 ? (
                 itemList.map(item => (
@@ -156,6 +156,8 @@ Dropdown.propTypes = {
   })).isRequired,
   afterSetDefault: PropTypes.func,
   hasSearch: PropTypes.bool,
+  isShow: PropTypes.bool,
+  
 };
 
 Dropdown.defaultProps = {

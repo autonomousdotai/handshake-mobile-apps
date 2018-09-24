@@ -7,13 +7,12 @@ import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import createForm from '@/components/core/form/createForm';
-import { fieldDropdown, fieldInput } from '@/components/core/form/customField';
+import ListCoin from '@/components/Wallet/ListCoin';
 import { getCryptoPrice } from '@/reducers/exchange/action';
 import { bindActionCreators } from 'redux';
 import { MasterWallet } from "@/services/Wallets/MasterWallet";
 import { showAlert } from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
-import { StringHelper } from '@/services/helper';
 import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import iconClock from '@/assets/images/icon/pay/clock.svg';
 import Countdown from '@/components/Countdown/Countdown';
@@ -50,7 +49,8 @@ class Checkout extends React.Component {
       isRestoreLoading: false,
       event: false,
       isExpired: false,
-      isWarning: false
+      isWarning: false,
+      modalListCoin: ''
     }
   }
 
@@ -236,19 +236,28 @@ class Checkout extends React.Component {
     this.showToast(messages.wallet.action.copy.message);
   }
 
-  onItemSelectedWallet = (item) =>{
+  // onItemSelectedWallet = (item) =>{
 
-    let wallet = MasterWallet.convertObject(item);
-    this.setState({walletSelected: wallet});
+  //   let wallet = MasterWallet.convertObject(item);
+  //   this.setState({walletSelected: wallet});
 
-    wallet.getBalance().then(result => {
-      wallet.balance = wallet.formatNumber(result);
-      this.setState({walletSelected: wallet}, ()=>{
-        MasterWallet.UpdateBalanceItem(wallet);
-        this.checkValid();
-      });
+  //   wallet.getBalance().then(result => {
+  //     wallet.balance = wallet.formatNumber(result);
+  //     this.setState({walletSelected: wallet}, ()=>{
+  //       MasterWallet.UpdateBalanceItem(wallet);
+  //       this.checkValid();
+  //     });
+  //   });
+  // }
+
+  selectWallet = (walletSelected) => {
+
+    this.setState({walletSelected, modalListCoin: ''}, ()=> {
+      this.modalListCoinRef.close()
+      this.checkValid();
     });
   }
+
 
   submitSendCoin=(wallet, toAddress, amountCrypto)=>{
     const {toCrypto} = this.props;
@@ -265,6 +274,19 @@ class Checkout extends React.Component {
           this.showError(this.getMessage(success.message));
         }
       }
+    });
+  }
+
+  openListCoin=()=>{
+    this.setState({modalListCoin:
+      <ListCoin
+        wallets={this.state.wallets}
+        crypto={this.state.walletSelected.name}
+        walletSelected={this.state.walletSelected}
+        onSelect={wallet => { this.selectWallet(wallet); }}
+      />
+    }, ()=> {
+      this.modalListCoinRef.open();
     });
   }
 
@@ -328,12 +350,21 @@ class Checkout extends React.Component {
 
   get showWallet(){
     const { messages } = this.props.intl;
-
+    const { modalListCoin } = this.state;
     return !this.state.isExpired && (
       <div className="wallet-info">
-      <SendWalletForm onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
+        <div className="wallet" onClick={() => {this.openListCoin() }}>
+          <div className="name">{this.state.walletSelected && this.state.walletSelected.title}</div>
+          <div className="value">{this.state.walletSelected && this.state.walletSelected.getShortAddress()}</div>
+          <div className="clearfix"></div>
+          <div className="name">Balance</div>
+          <div className="value">{this.state.walletSelected && this.state.walletSelected.balance + " " + this.state.walletSelected.name}</div>
+        </div>
 
-        <div className ="dropdown-wallet-tranfer">
+        <ModalDialog className="wallets-wrapper" title="Select wallets" onRef={modal => this.modalListCoinRef = modal}>
+          {modalListCoin}
+        </ModalDialog>
+        {/* <div className ="dropdown-wallet-tranfer">
           <Field
             name="walletSelected"
             component={fieldDropdown}
@@ -348,11 +379,11 @@ class Checkout extends React.Component {
         </div>
 
         <label className='label-balance'>{messages.wallet.action.payment.label.wallet_balance} { this.state.walletSelected ? StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name) : ""}</label>
+        */}
 
-        <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading} disabled={this.state.isDisableCheckout} type="submit" block={true}>{messages.wallet.action.payment.button.checkout}</Button>
+        <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading} disabled={this.state.isDisableCheckout} onClick={()=> this.sendCoin()} block={true}>{messages.wallet.action.payment.button.checkout}</Button>
 
         <div className="help"><div className="badge badge-light" onClick={()=> window.location.href = '/wallet'}>Go to Ninja Wallet</div></div>
-      </SendWalletForm>
       </div>
     )
   }
@@ -363,7 +394,7 @@ class Checkout extends React.Component {
         {this.renderEvenTimeLeft(this.state.event)}
         {this.showExpiredPayment}
         {this.showPayment}
-        {this.showTabs}
+        {/* {this.showTabs} */}
         {this.showWallet}
       </div>)
 

@@ -1,11 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import {injectIntl} from 'react-intl';
-import {Field, formValueSelector, clearFields} from "redux-form";
 import {connect} from "react-redux";
-import createForm from '@/components/core/form/createForm'
-import { change } from 'redux-form'
-import { bindActionCreators } from "redux";
 import {showAlert} from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
 import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
@@ -19,20 +15,39 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import './SettingWallet.scss';
 import Dropdown from '@/components/core/controls/Dropdown';
 
-const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefined);
+import '../WalletPreferences/WalletPreferences.scss';
 
-const nameFormSetting = 'FormSetting';
-const SettingForm = createForm({ propsReduxForm: { form: nameFormSetting, enableReinitialize: true, clearSubmitErrors: true}});
+import Switch from '@/components/core/controls/Switch';
+import Input from '../Input';
+import { ENGINE_METHOD_DIGESTS } from 'constants';
+import { newPasscode, requestWalletPasscode, updatePasscode } from '@/reducers/app/action';
+
+import iconLock from '@/assets/images/wallet/icons/icon-lock.svg';
+import iconCurrentcy from '@/assets/images/wallet/icons/icon-currency.svg';
+import iconNotifications from '@/assets/images/wallet/icons/icon-notifications.svg';
+import iconTwitter from '@/assets/images/wallet/icons/icon-twitter.svg';
+import iconFacebook from '@/assets/images/wallet/icons/icon-facebook.svg';
+import iconTelegram from '@/assets/images/wallet/icons/icon-telegram.svg';
+import iconBackupWallet from '@/assets/images/wallet/icons/icon-backup.svg';
+import iconRestoreWallet from '@/assets/images/wallet/icons/icon-restore.svg';
+
+import Modal from '@/components/core/controls/Modal';
+
+
 
 class SettingWallet extends React.Component {
   constructor(props) {
     super(props);
 
+    this.defaultSettings = {"wallet":{"alternateCurrency": "USD", "passcode": {"enable": false, "value": ""}, "notification": true}};//todo: need move this to config.
+    
     this.state = {
       currencies: [],
       alternateCurrency: '',
-      cryptoAddress: -1
-    }
+      settings: this.defaultSettings,
+      switchContent: '',
+      listCurrenciesContent: '',
+    }    
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -61,26 +76,30 @@ class SettingWallet extends React.Component {
   }
 
   componentDidMount(){
-    let setting = local.get(APP.SETTING);
 
-    //alternateCurrency
+    let settings = local.get(APP.SETTING);
+
     let currencies = this.state.currencies;
     if(!currencies || currencies.length < 1){
-      currencies = this.listCurrencies();
-      this.setState({currencies: currencies});
-
-      let alternateCurrency = 'USD';
-      if(setting && setting.wallet && setting.wallet.alternateCurrency)
-        alternateCurrency = setting.wallet.alternateCurrency
-
-      this.setState({alternateCurrency: alternateCurrency});
+      currencies = this.listCurrencies();      
     }
 
-    //cryptoAddress
-    // if(this.state.cryptoAddress < 0){
-    //   let cryptoAddress = !setting || !setting.wallet || !setting.wallet.cryptoAddress ? 1 : setting.wallet.cryptoAddress;
-    //   this.setState({cryptoAddress: cryptoAddress});
-    // }
+    if(!(settings && settings.wallet)){
+      settings = this.state.settings;
+    }
+    else{
+      if (!settings.wallet.passcode){
+        settings.wallet.passcode = this.state.settings.wallet.passcode;
+      }
+    }
+    
+    this.setState({settings: settings, currencies: currencies, switchContent: this.genSwitchContent(settings)});       
+  }
+
+  genSwitchContent(settings){
+    if (!settings)
+      settings = this.state.settings;              
+    return <Switch isChecked={settings.wallet.passcode.enable} onChange={(isChecked)=> {this.onEnablePasscode(isChecked)}} />
   }
 
   showLoading = () => {
@@ -101,45 +120,22 @@ class SettingWallet extends React.Component {
     return currencies;
   }
 
-  // listCryptoAddress = () => {
-  //   const { messages } = this.props.intl;
-
-  //   return [
-  //     { id: 1, value: messages.wallet.action.setting.label.short_address },
-  //     { id: 2, value: messages.wallet.action.setting.label.shortest_address },
-  //     { id: 3, value: messages.wallet.action.setting.label.hide_address }
-  //   ];
-  // }
-
   onCurrenciesSelected = (item) =>{
     const { messages } = this.props.intl;
 
-    let setting = local.get(APP.SETTING);
-    if(!setting)
-      setting = {};
+    let settings = this.state.settings;
 
-    if(!setting.wallet)
-      setting.wallet = {};
+    settings.wallet.alternateCurrency = item.id;
 
-    setting.wallet.alternateCurrency = item.id;
-    local.save(APP.SETTING, setting);
-    this.showSuccess(messages.wallet.action.setting.success.save_alternative_currency);
+    this.setState({settings: settings}, () => {
+      this.updateSettings(settings);            
+    });    
+
+    this.setState({listCurrenciesContent: ''}, ()=> {
+      this.modalSelectCurrencyRef.close();
+    });
+    // this.showSuccess(messages.wallet.action.setting.success.save_alternative_currency);
   }
-
-  // onAddressSelected = (item) =>{
-  //   const { messages } = this.props.intl;
-
-  //   let setting = local.get(APP.SETTING);
-  //   if(!setting)
-  //     setting = {};
-
-  //   if(!setting.wallet)
-  //     setting.wallet = {};
-
-  //   setting.wallet.cryptoAddress = item.id;
-  //   local.save(APP.SETTING, setting);
-  //   this.showSuccess(messages.wallet.action.setting.success.save_crypto_address);
-  // }
 
   getCountryName(locale) {
     const hasSupportLanguage = LANGUAGES.find(language => language.code === locale);
@@ -151,64 +147,228 @@ class SettingWallet extends React.Component {
     this.modalLanguageRef.close();
   }
 
+  onClickPasscode=()=>{
+    // case update or set new:
+    // if passcode is on enable, show update, else nothing.
+    if (this.state.settings.wallet.passcode.enable){
+      // ask old passcode first + set new passcode:      
+      this.props.updatePasscode({
+        onSuccess: (md5Passcode) => {
+          settings.wallet.passcode = {"enable": true, "value": md5Passcode};
+          this.setState({settings: settings}, () => {
+            this.updateSettings(settings);            
+          });
+        },
+        onCancel: () => {
+          this.setState({switchContent: ""}, () => {
+            this.setState({switchContent: this.genSwitchContent()});
+          });
+        }
+      });
+    }
+  }
+
+  updateSettings(settings){    
+    if(settings){        
+        local.save(APP.SETTING, settings);        
+        return true;
+    }    
+    return false;
+  }
+
+  onEnablePasscode=(isChecked)=>{
+    
+    let settings = this.state.settings;
+    
+    // from off => on:
+    if (isChecked){
+      // if dont set pascode value yet, show new set passcode:
+      // if(!this.state.settings.wallet.passcode.value) 
+      {        
+        this.props.newPasscode({      
+          onSuccess: (md5Passcode) => {
+            settings.wallet.passcode = {"enable": true, "value": md5Passcode};
+            this.setState({settings: settings}, () => {
+              this.updateSettings(settings);            
+            });
+          },
+          onCancel: () => {          
+            this.setState({switchContent: ""}, () => {
+              this.setState({switchContent: this.genSwitchContent()});
+            });
+          }
+          
+        });
+      }
+      // else{
+      //   // update enable only        
+      //   settings.wallet.passcode.enable = true;
+      //   this.setState({settings: settings}, () => {
+      //     this.updateSettings(settings);            
+      //   });
+      // }
+    }
+    else{
+      // from on -> off:
+      this.props.requestWalletPasscode({      
+        onSuccess: () => {
+          settings.wallet.passcode.enable = false;
+          this.setState({settings: settings}, () => {
+            this.updateSettings(settings);            
+          });
+        },
+        onCancel: () => {          
+          this.setState({switchContent: ""}, () => {
+            this.setState({switchContent: this.genSwitchContent()});
+          });
+        }
+      });
+    }
+    
+  }
+
+  onClickCurrency=()=>{
+    const { messages } = this.props.intl;
+    let settings = this.state.settings;
+    this.setState({
+      listCurrenciesContent: (<Dropdown customResultCss={{"maxHeight": "none"}}
+              placeholder={messages.wallet.action.setting.label.select_alternative_currency}
+              defaultId={settings.wallet.alternateCurrency}
+              source={this.state.currencies}
+              onItemSelected={this.onCurrenciesSelected}
+              hasSearch
+              isShow={true}
+            />)}, ()=>{
+              this.modalSelectCurrencyRef.open();
+            }) 
+  }
+
+  
+
+  onClickNotification=(isChecked)=>{
+    let settings = this.state.settings;
+    settings.wallet.notification = isChecked;
+    this.setState({settings: settings}, () => {
+      this.updateSettings(settings);            
+    });
+  }
+
+  openTelegram=()=>{
+    window.open('https://t.me/ninja_org?ref=ninja-wallet', '_blank');
+  }
+  openFacebook=()=>{
+    window.open('https://www.facebook.com/ninjadotorg/?ref=ninja-wallet', '_blank');
+  }
+  openTwitter=()=>{
+    window.open('https://twitter.com/ninja_org?ref=ninja-wallet', '_blank');
+  }
+
   render() {
     const { messages } = this.props.intl;
 
-    return (
-      <div>
-        <SettingForm className="settingwallet-wrapper" onSubmit={this.saveSetting}>
+    let settings = this.state.settings;      
 
-          <div className="bgBox">
+    return (             
 
-            <div className ="dropdown-wallet-tranfer">
-              <p className="labelText">{messages.wallet.action.setting.label.alternative_currency}</p>
-              <Dropdown
-                placeholder={messages.wallet.action.setting.label.select_alternative_currency}
-                defaultId={this.state.alternateCurrency}
-                source={this.state.currencies}
-                onItemSelected={this.onCurrenciesSelected}
-                hasSearch
-              />
+        <div className="box-setting">
+
+            <Modal title={messages.wallet.action.setting.label.select_alternative_currency} onRef={modal => this.modalSelectCurrencyRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle}>
+              <div className="list-currency">
+                  {this.state.listCurrenciesContent}              
+              </div>
+            </Modal>
+            
+
+            <div className="item">
+                <img className="icon" src={iconLock} />
+                <div className="name" onClick={()=> {this.onClickPasscode();}}>                    
+                    <label>{messages.wallet.action.setting.label.passcode}</label>
+                </div>
+                <div className="value">
+                  {this.state.switchContent}
+                </div>
             </div>
 
-            {/* <div className ="dropdown-setting">
-              <p className="labelText">{messages.wallet.action.setting.label.crypto_address}</p>
-              <Dropdown
-                placeholder={messages.wallet.action.setting.label.select_crypto_address}
-                defaultId={this.state.cryptoAddress}
-                source={this.listCryptoAddress()}
-                onItemSelected={this.onAddressSelected}
-              />
-            </div> */}
-            {/* <div className="row multi-language">
-              <div className="label">Language</div>
-              <div className="value" onClick={() => this.modalLanguageRef.open()}>{countrySelecting.name}</div>
-
-              <ModalDialog onRef={(modal) => { this.modalLanguageRef = modal; return null; }}>
-                <div className="country-block">
-                  <p className="text">Select your language</p>
-                  {
-                    LANGUAGES.map(language => (
-                      <div
-                        key={language.code}
-                        className={`country ${locale === language.code && 'active'}`}
-                        onClick={() => this.changeCountry(language.code)}
-                      >
-                        <span className="name">{language.name}</span>
-                        {
-                          locale === language.code && (
-                            <img className="tick" src={TickSVG} alt="active" />
-                          )
-                        }
-                      </div>
-                    ))
-                  }
+            <div className="item">
+                <img className="icon" src={iconNotifications} />
+                <div className="name">                    
+                    <label>{messages.wallet.action.setting.label.push_notifications}</label>
                 </div>
-              </ModalDialog>
-            </div> */}
-          </div>
-        </SettingForm>
-      </div>
+                <div className="value">
+                  <Switch isChecked={settings.wallet.push_notification} onChange={(isChecked)=> {this.onClickNotification(isChecked)}} />
+                </div>
+            </div>
+
+            <div className="item" onClick={()=> {this.onClickCurrency();}}>
+                <img className="icon" src={iconCurrentcy} />
+                <div className="name">                    
+                    <label>{messages.wallet.action.setting.label.alternative_currency}</label>
+                </div>
+                <div className="value">
+                  <span className="text">{settings.wallet.alternateCurrency}</span>
+                </div>
+            </div>
+            
+            <div className="item header">
+              <label>{messages.wallet.action.setting.label.wallet_account}</label>
+            </div>
+
+            <div className="item" onClick={this.props.onBackupWalletAccountClick}>
+                <img className="icon" src={iconBackupWallet} />
+                <div className="name">                    
+                    <label>{messages.wallet.action.backup.title}</label>
+                </div>
+                <div className="value">
+                  
+                </div>
+            </div>
+            <div className="item" onClick={this.props.onRestoreWalletAccountClick}>
+                <img className="icon" src={iconRestoreWallet} />
+                <div className="name">                    
+                    <label>{messages.wallet.action.restore.title}</label>
+                </div>
+                <div className="value">
+                  
+                </div>
+            </div>
+
+            
+
+            <div className="item header">
+              <label>{messages.wallet.action.setting.label.community}</label>
+            </div>
+
+            <div className="item" onClick={()=> {this.openTwitter();}}>
+                <img className="icon" src={iconTwitter} />
+                <div className="name">                    
+                    <label>Twitter</label>
+                </div>
+                <div className="value">
+                  
+                </div>
+            </div>  
+            <div className="item" onClick={()=> {this.openFacebook();}}>
+                <img className="icon" src={iconFacebook} />
+                <div className="name">                    
+                    <label>Facebook</label>
+                </div>
+                <div className="value">
+                  
+                </div>
+            </div>     
+            <div className="item" onClick={()=> {this.openTelegram();}}>
+                <img className="icon" src={iconTelegram} />
+                <div className="name">                    
+                    <label>Telegram Group</label>
+                </div>
+                <div className="value">
+                  
+                </div>
+            </div>                                              
+            
+
+        </div>
+      
     )
   }
 }
@@ -223,14 +383,13 @@ const mapStateToProps = (state) => ({
   app: state.app,
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatch = ({
+  newPasscode, requestWalletPasscode, updatePasscode,  
   setLanguage,
-  rfChange: bindActionCreators(change, dispatch),
-  showAlert: bindActionCreators(showAlert, dispatch),
-  showLoading: bindActionCreators(showLoading, dispatch),
-  hideLoading: bindActionCreators(hideLoading, dispatch),
-  clearFields: bindActionCreators(clearFields, dispatch),
-
+  showAlert,
+  showLoading,
+  hideLoading,
 });
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(SettingWallet));
+
+export default injectIntl(connect(mapStateToProps, mapDispatch)(SettingWallet));

@@ -593,6 +593,36 @@ export default {
   'landing_page.whisper.label.sendLinkToEmail': `Send link to your email:`,
   'landing_page.whisper.btnSubmitEmail': 'Go',
 
+  'landing_page.become_atm.heading': 'Earn Passive Income with Ninja ATM',
+  'landing_page.become_atm.subHeading': [
+    'Ninja ATM is a tool to sell coin for cash',
+    'Become our ATM for FREE to generate new source of income with no initial investment',
+  ],
+  'landing_page.become_atm.email.desc': 'Sounds good? Leave your email here for a quick guide to install an ATM for FREE!',
+  'landing_page.become_atm.email.label': 'I want to earn more:',
+  'landing_page.become_atm.email.placeholder': 'Enter your email address',
+  'landing_page.become_atm.email.submitBtnLabel': 'Earn!',
+  'landing_page.become_atm.youtubeId': '9L1IltkvU9g',
+  'landing_page.become_atm.footer': `You know It All! Let's start making some Money`,
+  'landing_page.become_atm.modal.title': 'Im making passive income with Ninja ATM. Try now!',
+  'landing_page.become_atm.modal.content': 'SHARE with your friends NOW to win 25 USD!',
+  'landing_page.become_atm.modal.subContent': 'Share more, earn more',
+  'landing_page.become_atm.modal.metadata': 'Ninja ATM is a new way for you to earn at least 500 USD/month with zero investment',
+  'landing_page.become_atm.categories': [
+    {
+      label: 'Easy Profit',
+      desc: 'Make passive income of at least 500USD/month',
+    },
+    {
+      label: 'No Investment',
+      desc: 'Everything will be done through your smartphone. No registration fee. No hidden cost',
+    },
+    {
+      label: 'Flexible working hours',
+      desc: 'Decide your own working hours. Have the freedom and flexbility to work anytime, anywhere',
+    },
+  ],
+
   // MobileOrTablet components
   MOT_TITLE: 'The anonymous exchange of anything',
   MOT_CONTENT_1: 'Open',
@@ -1213,17 +1243,21 @@ export default {
         header: 'Setting wallets',
         success: {
           restore: 'Your Wallet restore success',
-          save_alternative_currency: 'Save alternative currency selected!',
+          save_alternative_currency: 'Save currency selected!',
           save_crypto_address: 'Save format crypto address seleted!'
         },
         label: {
-          alternative_currency: 'Alternative currency',
-          select_alternative_currency: 'Select alternative currency',
+          alternative_currency: 'Currency',
+          select_alternative_currency: 'Select currency',
           crypto_address: 'Cryptocurrency address',
           select_crypto_address: 'Select cryptocurrency address',
           short_address: 'Show short address',
           shortest_address: 'Show shortest address',
-          hide_address: 'Hide address'
+          hide_address: 'Hide address',
+          passcode: "Passcode",
+          push_notifications: "Push Notifications",
+          community: "Community",
+          wallet_account: "Wallet Account",
         },
         button: {
           restore: 'Restore now',

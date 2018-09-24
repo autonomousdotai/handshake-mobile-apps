@@ -81,8 +81,10 @@ import iconAlignJust from '@/assets/images/wallet/icons/icon-align-just.svg';
 import { hideHeader } from '@/reducers/app/action';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
 import customRightIcon from '@/assets/images/wallet/icons/icon-options.svg';
+import floatButtonScanQRCode from '@/assets/images/wallet/icons/float-button-scan.svg';
 
-import WalletPreferences from './Components/WalletPreferences'
+import WalletPreferences from '@/components/Wallet/WalletPreferences';
+import { requestWalletPasscode  } from '@/reducers/app/action';
 
 const QRCode = require('qrcode.react');
 
@@ -179,7 +181,7 @@ class Wallet extends React.Component {
     };
 
     this.props.setHeaderRight(this.headerRight());
-    this.listener = _.throttle(this.scrollListener, 200).bind(this);
+    this.listener = _.throttle(this.scrollListener, 200).bind(this);   
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -306,10 +308,6 @@ class Wallet extends React.Component {
       this.splitWalletData(listWallet);
       await this.getListBalace(listWallet);
     }
-
-    /* var btc = new Bitcoin();
-     var tx = await btc.transfer("tprv8ccSMiuz5MfvmYHzdMbz3pjn5uW3G8zxM975sv4MxSGkvAutv54raKHiinLsxW5E4UjyfVhCz6adExCmkt7GjC41cYxbNxt5ZqyJBdJmqPA","mrPJ6rBHpJGnsLK3JGfJQjdm5vkjeAb63M", 0.0001);
-     console.log(tx) */
   }
 
   async getSetting(){
@@ -345,16 +343,7 @@ class Wallet extends React.Component {
 
     await this.splitWalletData(listWallet);
 
-    await MasterWallet.UpdateLocalStore(listWallet);
-
-
-    // var btcTestnet = new Bitcoin(Bitcoin.Network.Testnet);
-    // var balance = await btcTestnet.getBalance("n1MZwXhWs1unyuG6qNbEZRZV4qjzd3ZMyz");
-    // console.log("btcTestnet", balance);
-
-    // var ethRinkeby = new Ethereum (Ethereum.Network.Rinkeby);
-    // balance = await ethRinkeby.getBalance("0xe70adf9aE4d5F68E80A8E2C5EA3B916Dd49C6D87");
-    // console.log("ethRinkeby", balance);
+    await MasterWallet.UpdateLocalStore(listWallet);   
   }
 
   toggleBottomSheet() {
@@ -468,26 +457,7 @@ class Wallet extends React.Component {
           MasterWallet.UpdateLocalStore(lstWalletTemp);
         }
       })
-    }
-
-    // let canRemove = (wallet.isToken &&  wallet.customToken) || !wallet.isReward;
-    // if (canRemove) {
-    //   obj.push({
-    //     title: messages.wallet.action.remove.title,
-    //     handler: () => {
-    //       this.setState({walletSelected: wallet});
-    //       this.modalRemoveRef.open();
-    //       this.toggleBottomSheet();
-    //     }
-    //   })
-    // }
-
-    // obj.push({
-    //   title: messages.wallet.action.cancel.title,
-    //   handler: () => {
-    //     this.toggleBottomSheet();
-    //   },
-    // });
+    }    
 
     return obj;
   }
@@ -600,18 +570,23 @@ class Wallet extends React.Component {
   }
 
   showTransfer(wallet){
-    this.setState({ walletSelected: wallet,
-      modalTransferCoin:
-        (
-          <TransferCoin
-            wallet={wallet}
-            onFinish={(result) => { this.successTransfer(result) }}
-            currency={this.state.alternateCurrency}
-          />
-        ),
-      }, ()=>{
-      this.modalSendRef.open();
+    this.props.requestWalletPasscode({      
+      onSuccess: () => {
+          this.setState({ walletSelected: wallet,
+            modalTransferCoin:
+              (
+                <TransferCoin
+                  wallet={wallet}
+                  onFinish={(result) => { this.successTransfer(result) }}
+                  currency={this.state.alternateCurrency}
+                />
+              ),
+            }, ()=>{
+            this.modalSendRef.open();
+          });
+      }
     });
+    
   }
 
   showReceive(wallet){
@@ -626,6 +601,36 @@ class Wallet extends React.Component {
       )
     }, ()=>{
       this.modalReceiveCoinRef.open();
+    });
+  }
+
+  showBackupWalletAccount=()=>{
+
+    this.props.requestWalletPasscode({      
+      onSuccess: () => {
+          this.setState({activeBackup: true, walletsData: {
+            "auth_token": local.get(APP.AUTH_TOKEN),
+            "chat_encryption_keypair": local.get(APP.CHAT_ENCRYPTION_KEYPAIR),
+            "wallets": this.getAllWallet()}},()=>{
+              this.modalBackupRef.open();
+          });
+      }
+    });  
+  }
+  
+  showRestoreWalletAccount=()=>{
+    this.props.requestWalletPasscode({      
+      onSuccess: () => {
+        this.modalRestoreRef.open();
+      }
+    })    
+  }
+
+  showWalletSettings(){    
+    this.setState({
+      modalSetting: (<SettingWallet onBackupWalletAccountClick={this.showBackupWalletAccount} onRestoreWalletAccountClick={this.showRestoreWalletAccount} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
+    }, ()=> {      
+      this.modalSettingRef.open();
     });
   }
 
@@ -652,7 +657,7 @@ class Wallet extends React.Component {
     //     this.showModalAddCollectible();
     //   },
     // });
-
+    
 
     obj.push({
       title: messages.wallet.action.backup.title,
@@ -676,19 +681,13 @@ class Wallet extends React.Component {
       title: messages.wallet.action.setting.title,
       handler: () => {
         this.setState({
-          modalSetting: (<SettingWallet />)
+          modalSetting: (<SettingWallet customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
         }, ()=> {
           this.toggleBottomSheet();
           this.modalSettingRef.open();
         });
       },
-    });
-    // obj.push({
-    //   title: messages.wallet.action.cancel.title,
-    //   handler: () => {
-    //     this.toggleBottomSheet();
-    //   },
-    // });
+    });    
     return obj;
   }
 
@@ -761,8 +760,11 @@ class Wallet extends React.Component {
   }
 
   onIconRightHeaderClick = () => {
-    this.setState({ listMenu: this.creatSheetMenuHeaderMore() });
-    this.toggleBottomSheet();
+    //this.setState({ listMenu: this.creatSheetMenuHeaderMore() });
+    //this.toggleBottomSheet();
+    
+    // now show settings
+    this.showWalletSettings();
   }
 
   onMoreClick = (wallet) => {
@@ -772,8 +774,13 @@ class Wallet extends React.Component {
 
   onWarningClick = (wallet) => {
     // if (!wallet.protected) {
-      this.setState({ walletSelected: wallet, stepProtected: 1, activeProtected: true });
-      this.modalProtectRef.open();
+      this.props.requestWalletPasscode({      
+        onSuccess: () => {
+          this.setState({ walletSelected: wallet, stepProtected: 1, activeProtected: true });
+          this.modalProtectRef.open();
+        }
+      }) 
+      
     // } else {
 
     // }
@@ -802,10 +809,10 @@ class Wallet extends React.Component {
     MasterWallet.UpdateLocalStore(this.getAllWallet());
     this.onWalletItemClick(wallet);
   }
-
+  
   onOpenWalletPreferences = (wallet) =>{
     this.setState({
-      modalWalletPreferences: (<WalletPreferences onDeleteWalletClick={()=>{this.modalRemoveRef.open();}} onWarningClick={()=>{this.onWarningClick(wallet);}} onUpdateWalletName={(wallet)=> {this.onUpdateWalletName(wallet);}} wallet={wallet} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
+      modalWalletPreferences: (<WalletPreferences onDeleteWalletClick={()=>{this.props.requestWalletPasscode({onSuccess: () => { this.modalRemoveRef.open();}});}} onWarningClick={()=>{this.onWarningClick(wallet);}} onUpdateWalletName={(wallet)=> {this.onUpdateWalletName(wallet);}} wallet={wallet} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
     }, ()=>{
       this.modalWalletReferencesRef.open();
     });
@@ -984,6 +991,8 @@ class Wallet extends React.Component {
     return (
       <div className="wallet-page">
 
+        {/* <img onClick={()=> {alert('ga');}} className="float-button-scan-qrcode" src={floatButtonScanQRCode} /> */}
+
         <Modal customRightIconClick={()=>{this.onOpenWalletPreferences(this.state.walletSelected);}}  customRightIcon={customRightIcon} customBackIcon={BackChevronSVGWhite} modalBodyStyle={this.modalBodyStyle} modalHeaderStyle={this.modalHeaderStyle} title={this.state.walletSelected ? this.state.walletSelected.title : messages.wallet.action.history.header} onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
           {modalHistory}
         </Modal>
@@ -1030,6 +1039,11 @@ class Wallet extends React.Component {
             <WalletProtect onCopy={this.onCopyProtected} step={this.state.stepProtected} active={this.state.activeProtected} wallet={this.state.walletSelected} callbackSuccess={() => { this.successWalletProtect(this.state.walletSelected); }} />
           </Modal>
 
+          {/* Modal for Setting wallets : */}
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={{"padding": 0}} title={messages.wallet.action.setting.header} onRef={modal => this.modalSettingRef = modal} onClose={this.closeSetting}>
+            {modalSetting}
+          </Modal>
+
           {/* Modal for Backup wallets : */}
           <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.backup.header} onRef={modal => this.modalBackupRef = modal}>
             <BackupWallet walletData={walletsData} />
@@ -1038,11 +1052,6 @@ class Wallet extends React.Component {
           {/* Modal for Restore wallets : */}
           <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
             <RestoreWallet />
-          </Modal>
-
-          {/* Modal for Setting wallets : */}
-          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} title={messages.wallet.action.setting.header} onRef={modal => this.modalSettingRef = modal} onClose={this.closeSetting}>
-            {modalSetting}
           </Modal>
 
           {/* Modal for Copy address : */}
@@ -1226,7 +1235,8 @@ const mapDispatch = ({
   hideLoading,
   change,
   clearFields,
-  hideHeader
+  hideHeader,
+  requestWalletPasscode
 });
 
 
