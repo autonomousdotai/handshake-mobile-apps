@@ -7,8 +7,6 @@ import {
 } from '@/constants';
 import createForm from '@/components/core/form/createForm';
 import { change, Field, formValueSelector } from 'redux-form';
-import './CommonStyle.scss';
-import './Deposit.scss';
 import { fieldInput } from '@/components/core/form/customField';
 
 import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
@@ -29,6 +27,8 @@ import Helper from '@/services/helper';
 import _ from 'lodash';
 import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
+import './CommonStyle.scss';
+import './Deposit.scss';
 
 const nameFormEscrowDeposit = 'escrowDeposit';
 const FormEscrowDeposit = createForm({
