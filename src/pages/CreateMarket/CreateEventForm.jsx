@@ -157,6 +157,16 @@ class CreateEventForm extends Component {
           validate={required}
           component={renderField}
         />
+        <label className="switch">
+          <Field
+            name="private"
+            component="input"
+            type="checkbox"
+            disabled={!props.isNew}
+          />
+          <span className="slider round" />
+          <span className="text">Private</span>
+        </label>
       </React.Fragment>
     );
   };

@@ -19,15 +19,17 @@ function* callApi({ _path, _key, type, method, data, headers, BASE_URL = BASE_AP
   if (!PATH_URL) throw new Error('URL is required');
   if (!type) throw new Error('Action type is required');
   if (_path) yield put(apiAction.preFetch({ _path, type }));
+
   const url = `${BASE_URL}/${PATH_URL}`;
-  let respondedData = {}; // { status, result, error }
+
+  let respondedData = {};
   try {
     const response = yield call($http, { url, data, method, headers });
     if (response.status === 200) {
-      if (response.data.status === 0) {
-        respondedData = response.data;
-      } else {
+      if (response.data.status === 1) {
         respondedData = { status: response.data.status, data: response.data.data };
+      } else {
+        respondedData = response.data; // status, data, message, code
       }
     } else {
       console.error('callAPI (status): ', response);
@@ -48,7 +50,7 @@ function* callApi({ _path, _key, type, method, data, headers, BASE_URL = BASE_AP
       yield put(apiAction.postFetch({
         _path,
         type,
-        _key: _key || 'list',
+        _key,
         _value: respondedData.data,
       }));
     }

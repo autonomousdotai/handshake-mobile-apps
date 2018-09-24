@@ -11,6 +11,7 @@ export const eventSelector = (state) => {
   const urlParams = qs.parse(queryString.slice(1));
   const { match } = urlParams;
   const { events } = state.prediction;
+  if (!events) return [];
   if (_.isEmpty(urlParams) || _.isEmpty(events)) {
     return state.prediction.events;
   }
@@ -30,7 +31,7 @@ export const checkFreeBetSelector = (state) => {
 export const isSharePage = (state) => {
   const queryString = queryStringSelector(state);
   const urlParams = qs.parse(queryString.slice(1));
-  return !!urlParams.match;
+  return urlParams.match || false;
 };
 
 export const isLoading = (state) => {

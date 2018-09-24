@@ -2,26 +2,33 @@ import { takeLatest, call, select, put } from 'redux-saga/effects';
 import { apiGet } from '@/stores/api-saga';
 import { REMOVE_DATA } from '@/stores/data-action';
 import { API_URL } from '@/constants';
-import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, updateFreeBet, checkExistSubcribeEmail, updateCountReport, updateExistEmail } from './action';
+import {
+  loadMatches, getReportCount, removeExpiredEvent,
+  checkFreeBet, updateFreeBet, checkExistSubcribeEmail,
+  updateCountReport, updateExistEmail, updateEventList,
+} from './action';
 import { eventSelector } from './selector';
 
-export function* handleLoadMatches({ cache = true }) {
+export function* handleLoadMatches({ isSharePage }) {
   try {
-    if (cache) {
-      const events = yield select(eventSelector);
-      if (events && events.length) {
-        return events;
-      }
+    if (isSharePage) {
+      const { data } = yield call(apiGet, {
+        PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${isSharePage}`,
+        type: 'LOAD_MATCH_DETAIL',
+        // _key: 'events',
+        _path: 'prediction',
+      });
+      yield put(updateEventList([data]));
+    } else {
+      yield call(apiGet, {
+        PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
+        type: 'LOAD_MATCHES',
+        _key: 'events',
+        _path: 'prediction',
+      });
     }
-
-    return yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
-      type: 'LOAD_MATCHES',
-      _key: 'events',
-      _path: 'prediction',
-    });
   } catch (e) {
-    return console.error('handleLoadMachesSaga', e);
+    console.error('handleLoadMachesSaga', e);
   }
 }
 
@@ -30,7 +37,6 @@ export function* handleRemoveEvent({ eventId }) {
     const events = yield select(eventSelector);
     if (events && events.length) {
       const index = events.findIndex((item) => item.id === eventId);
-      console.log('blahblah', index);
       if (index >= 0) {
         yield put(REMOVE_DATA({
           _path: 'prediction.events',
@@ -49,11 +55,9 @@ export function* handleCountReport() {
       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
       type: 'COUNT_REPORT',
     });
-    //console.log('handleCountReport', response.data);
     yield put(updateCountReport(response.data.length));
   } catch (e) {
     console.log(e);
-    //return console.error('handleCountReport', e);
   }
 }
 
@@ -80,8 +84,6 @@ export function* handleCheckExistEmail() {
 
       yield put(updateExistEmail(emailExist));
     }
-
-
   } catch (e) {
     console.error('handleFreeBet', e);
   }

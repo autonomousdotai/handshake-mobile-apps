@@ -40,13 +40,10 @@ class Prediction extends React.Component {
     eventList: PropTypes.array,
     shareEvent: PropTypes.object,
     showedLuckyPool: PropTypes.bool,
-    isSharePage: PropTypes.bool,
+    isSharePage: PropTypes.any,
     countReport: PropTypes.number,
     freeBet: PropTypes.object,
-    isExistEmail: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.number,
-    ]),
+    isExistEmail: PropTypes.any,
   };
 
   static defaultProps = {
@@ -68,11 +65,11 @@ class Prediction extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
-    this.props.dispatch(loadMatches());
+    this.props.dispatch(loadMatches({ isSharePage: this.props.isSharePage }));
     this.props.dispatch(getReportCount());
     this.props.dispatch(checkFreeBet());
     this.props.dispatch(checkExistSubcribeEmail());
+    window.addEventListener('scroll', this.handleScroll);
   }
 
   componentWillUnmount() {
@@ -253,7 +250,11 @@ class Prediction extends React.Component {
   }
 
   renderEventList = (props) => {
-    if (!props.eventList || !props.eventList.length) return null;
+    if (props.isLoading) return null;
+    if (!props.eventList || !props.eventList.length) {
+      return (<p className="NoMsg">No event found</p>);
+    }
+
     return (
       <div className="EventList">
         {props.eventList.map((event) => {
@@ -293,7 +294,7 @@ class Prediction extends React.Component {
   renderViewAllEvent = (props) => {
     if (!props.isSharePage) return null;
     return (
-      <a href={URL.HANDSHAKE_PREDICTION} onClick="location.reload()" className="ViewAllEvent">
+      <a href={URL.HANDSHAKE_PREDICTION} className="ViewAllEvent">
         View All Events
       </a>
     );

@@ -74,3 +74,12 @@ export const checkExistSubcribeEmail = (value) => {
     _value: value,
   });
 };
+
+export const updateEventList = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:UPDATE_EVENTS',
+    _path: 'prediction.events',
+    _value: value,
+  });
+};
+

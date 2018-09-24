@@ -11,6 +11,7 @@ import { reportSelector, categorySelector, shareEventSelector, isLoading, hasEma
 import { createEventFormName } from './constants';
 
 import './CreateMarket.scss';
+import './ToggleSwitch.scss';
 
 class CreateMarket extends React.Component {
   static displayName = 'CreateMarket';
@@ -58,9 +59,11 @@ class CreateMarket extends React.Component {
     const initialValues = !selectedEvent ? {
       outcomes: [{}],
       creatorFee: 0,
+      private: false,
     } : {
       eventId: selectedEvent.id,
       eventName: selectedEvent.name,
+      private: !selectedEvent.public,
       outcomes: selectedEvent.outcomes.concat({}),
       creatorFee: selectedEvent.market_fee,
       reports: selectedEvent.source_id,

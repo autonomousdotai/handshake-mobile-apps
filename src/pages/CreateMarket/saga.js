@@ -30,6 +30,7 @@ function* handleLoadReportsSaga({ cache = true }) {
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_REPORTS,
       type: 'LOAD_REPORTS',
       _path: 'reports',
+      _key: 'list',
     });
   } catch (e) {
     return console.error('handleLoadReportsSaga', e);
@@ -55,7 +56,7 @@ function* handleLoadCreateEventData() {
     yield all([
       call(handleLoadReportsSaga, {}),
       call(handleLoadMatches, {}),
-      call(handleLoadCategories, {}),
+      // call(handleLoadCategories, {}),
       call(isBalanceInvalid, {}),
     ]);
     yield put(updateCreateEventLoading(false));
@@ -168,7 +169,7 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           homeTeamFlag: values.homeTeamFlag || '',
           awayTeamFlag: values.awayTeamFlag || '',
           name: values.eventName,
-          public: 1,
+          public: values.private ? 0 : 1,
           date: values.closingTime,
           reportTime: values.reportingTime,
           disputeTime: values.disputeTime,
@@ -177,6 +178,7 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           category_id: 7, // values.category.id, hard-code for now
           ...reportSource,
         };
+        console.log('newEventData', newEventData);
         const { data } = yield call(handleCreateNewEventSaga, { newEventData });
         if (data && data.length) {
           const eventData = data[0];

@@ -200,6 +200,7 @@ export const API_URL = {
     INIT_HANDSHAKE_FREE: 'cryptosign/handshake/create_free_bet',
     SHAKE: 'cryptosign/handshake/shake',
     LOAD_MATCHES: 'cryptosign/match',
+    LOAD_MATCHES_DETAIL: 'cryptosign/match',
     MATCHES_REPORT: 'cryptosign/match/report',
     COUNT_REPORT: 'cryptosign/match/report',
     ADMIN_MATCHES: 'cryptosign/admin/match/report',
