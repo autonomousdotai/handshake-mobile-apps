@@ -329,9 +329,6 @@ class Profile extends React.Component {
                   type: 'success',
                 });
                 // chatInstance.updateUserName(values.username);
-                if (this.props.app.firechat) {
-                  this.props.app.firechat.updateUserName(values.username);
-                }
 
               },
             });

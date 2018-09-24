@@ -28,8 +28,48 @@ class BecomeAtm extends React.PureComponent {
   constructor() {
     super();
 
+    this.state = {
+      played: false,
+      numberRegistered: 0,
+    };
+
     this.modal = null;
+    this.youtubeVideoPlayer = React.createRef();
     this.openModal = ::this.openModal;
+    this.onMouseEnterVideo = :: this.onMouseEnterVideo;
+  }
+
+  componentDidMount() {
+    this.getSubscribed();
+  }
+
+  onMouseEnterVideo() {
+    const { played } = this.state;
+    if (played) return;
+    this.setState({ played: true }, () => {
+      if (this.youtubeVideoPlayer) {
+        this.youtubeVideoPlayer.current.src += '&autoplay=1';
+      }
+    });
+  }
+
+  getSubscribed() {
+    const formData = new FormData();
+    formData.set('product', 'become-atm');
+
+    $http({
+      method: 'POST',
+      url: `${BASE_API.BASE_URL}/user/count_subscribed_user`,
+      data: formData,
+    })
+      .then((res) => {
+        const { data: { data } } = res;
+        const number = ((Number.parseInt(data, 10) || 1) * 6) + 2;
+        this.setState({ numberRegistered: number });
+      })
+      .catch(err => {
+        console.log('err count subscribed', err);
+      });
   }
 
   openModal() {
@@ -182,6 +222,7 @@ class BecomeAtm extends React.PureComponent {
   render() {
     const { messages } = this.props.intl;
     const { reactHelmetElement } = this.props;
+    const { numberRegistered } = this.state;
     const youtubeVideoId = messages['landing_page.become_atm.youtubeId'];
     return (
       <main className="become-atm-container container">
@@ -202,11 +243,15 @@ class BecomeAtm extends React.PureComponent {
                 </div>
                 <div className="mt-4 d-md-none d-lg-block">
                   { this.renderEmailForm() }
+                  <div style={{ textAlign: 'center' }}><span>({numberRegistered} <FormattedMessage id="landing_page.become_atm.email.peopleRegistered" />)</span></div>
                 </div>
               </div>
               <div className="col-12 col-md-6 video-frame">
                 {youtubeVideoId && (
                   <iframe
+                    onMouseEnter={this.onMouseEnterVideo}
+                    ref={this.youtubeVideoPlayer}
+                    id="video-player"
                     title="youtube-video"
                     width="100%"
                     height="315"
@@ -223,9 +268,9 @@ class BecomeAtm extends React.PureComponent {
             </div>
             {this.renderCategory()}
             <div className="landing-footer">
-              <h3>
+              <h2>
                 <FormattedMessage id="landing_page.become_atm.footer" />
-              </h3>
+              </h2>
               <div className="mt-4" style={{ maxWidth: '600px' }}>
                 { this.renderEmailForm({ withDesc: false }) }
               </div>

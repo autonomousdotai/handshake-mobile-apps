@@ -11,6 +11,7 @@ import Alert from '@/components/core/presentation/Alert';
 import Loading from '@/components/core/controls/Loading';
 import WalletPasscode from '@/components/Wallet/WalletPasscode'
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import QRCodeScan from '@/components/Wallet/QRCodeScan/QRCodeScan';
 
 class MainLayout extends React.Component {
   static propTypes = {
@@ -73,6 +74,7 @@ class MainLayout extends React.Component {
         <Alert />
         <Loading />
         <WalletPasscode />
+        <QRCodeScan />
         <Modal isOpen={show} toggle={this.handleToggleModal} className={className} centered={centered}>
           {title && <ModalHeader toggle={this.handleToggleModal}>{title}</ModalHeader>}
           <ModalBody>

@@ -513,25 +513,29 @@ export default {
 
   // 'landing_page.breadcrumb.home': 'Home',
 
-  'landing_page.cash.breadcrumb': 'Cash',
+  'landing_page.cash.breadcrumb': 'Atm',
   'landing_page.cash.heading': 'Buy crypto with cash. Secure, anonymous, easy.',
-  'landing_page.cash.subHeading': 'Ninja Cash is a decentralized peer to peer (P2P) cryptocurrency exchange that allows users to trade ETH and BTC for cash. Anonymous and immediate: no signup, no ID verification. Blockchain secured and fraud proof.',
-  'landing_page.cash.textEmail': `To start trading, please open <a href="https://ninja.org/cash">ninja.org/cash</a> on your mobile browser.`,
+  'landing_page.cash.subHeading':
+    `<ul>
+      <li>No signup, no need for ID verification</li>
+      <li>Blockchain secured and fraud proof</li>
+      <li>Make person to person transactions with our ATM ninjas</li>
+    </ul>`,
+  'landing_page.cash.textEmail': `Open <a href="https://ninja.org/atm">ninja.org/atm</a> on your mobile browser to find an ATM near you!`,
   'landing_page.cash.label.sendLinkToEmail': `Send link to your email:`,
   'landing_page.cash.btnSubmitEmail': 'Go',
   'landing_page.cash.joinTelegram': `Join the dojo on <a href="https://t.me/ninjacash" class="landing-link">Telegram</a>`,
   'landing_page.cash.whitepaper': `Read more about <a href="https://medium.com/@ninja_org/introducing-ninja-cash-b0d51a9f4e1b" class="landing-link">Cash</a>`,
   'landing_page.cash.youtubeVideoId': '9L1IltkvU9g',
+  'landing_page.cash.alternativeAction': `Become a Ninja ATM`,
 
   'landing_page.cash-for-business.breadcrumb': 'CRYPTO ATM',
-  'landing_page.cash-for-business.heading': 'A user friendly ATM for Bitcoin, Ethereum, and Litecoin',
+  'landing_page.cash-for-business.heading': 'Earn money effortlessly',
   'landing_page.cash-for-business.subHeading':
     `<ul>
-      <li>Flexible investment: no fixed term contracts</li>
-      <li>Beat the banks: super low transaction fees</li>
-      <li>Take charge: You set your profit margins</li>
+      <li>Set up a virtual crypto ATM to make passive income with zero investment</li>
     </ul>`,
-  'landing_page.cash-for-business.textEmail': `To start trading, please open <a href="https://ninja.org/cash">ninja.org/cash</a> on your mobile browser.`,
+  'landing_page.cash-for-business.textEmail': `To start trading, please open <a href="https://ninja.org/atm">ninja.org/atm</a> on your mobile browser.`,
   'landing_page.cash-for-business.label.sendLinkToEmail': `Send link to your email:`,
   'landing_page.cash-for-business.btnSubmitEmail': 'Go',
   // 'landing_page.cash-for-business.cta1': 'GET STARTED for FREE',
@@ -541,6 +545,7 @@ export default {
   'landing_page.cash-for-business.joinTelegram': `Join the dojo on <a href="https://t.me/ninjacash" class="landing-link">Telegram</a>`,
   'landing_page.cash-for-business.whitepaper': `Read more about <a href="https://medium.com/@ninja_org/introducing-ninja-cash-b0d51a9f4e1b" class="landing-link">Cash</a>`,
   'landing_page.cash-for-business.youtubeVideoId': '9L1IltkvU9g',
+  'landing_page.cash-for-business.alternativeAction': `Become a Ninja ATM`,
 
   'landing_page.prediction.breadcrumb': 'Prediction',
   'landing_page.prediction.heading': 'Bet on anything against anyone, anywhere. Guaranteed payout. Your odds. 100% anonymous.',
@@ -602,6 +607,7 @@ export default {
   'landing_page.become_atm.email.label': 'I want to earn more:',
   'landing_page.become_atm.email.placeholder': 'Enter your email address',
   'landing_page.become_atm.email.submitBtnLabel': 'Earn!',
+  'landing_page.become_atm.email.peopleRegistered': 'people have registered',
   'landing_page.become_atm.youtubeId': '9L1IltkvU9g',
   'landing_page.become_atm.footer': `You know It All! Let's start making some Money`,
   'landing_page.become_atm.modal.title': 'Im making passive income with Ninja ATM. Try now!',
@@ -652,70 +658,73 @@ export default {
   COIN_EXCHANGE_LP_FAQ_TITLE: 'Frequently asked questions',
   'landing_page.cash.faq': [
     {
-      question: 'What is Ninja Cash?',
-      answer: 'Ninja Cash is a peer-to-peer decentralized exchange where people can easily exchange cryptocurrency for cash. We want to make sure that traders are able to set up their own ATMs and set their own prices - not have to rely on market prices to buy and sell cryptocurrency.',
+      question: 'What’s the difference between Ninja ATM and other crypto ATMs?',
+      answer: 'Ninja ATM is a tool to help people who want to buy crypto purchase it easily and anonymously. You don’t need a debit or credit card, and you don’t need to pay any transaction fees.',
     },
     {
-      question: 'Is it easy to set up an ATM?',
-      answer: <span>It is really simple to set up a ATM on Ninja Cash. We have written some step by step instructions for you <a target="__blank" href="https://medium.com/@ninja_org/a-step-by-step-guide-on-how-to-sell-btc-eth-for-cash-on-ninja-5b30a87e42c2">here</a>.</span>,
+      question: 'Do I need an account to use a Ninja ATM?',
+      answer: 'Nope, there’s no prior registration needed! We don’t have a compulsory KYC process.',
     },
     {
-      question: 'Where is Ninja Cash available?',
-      answer: 'Ninjas are constantly joining us from all over the world. Anyone anywhere can set up an ATM. Just check out ninja.org and see if there is an ATM near you.',
+      question: 'Where is Ninja ATM available?',
+      answer: 'All over the world! Check out ninja.org/atm on your mobile or tablet to find your nearest ATM.',
     },
     {
-      question: 'What documents do I need to provide to make an account on Ninja Cash?',
-      answer: 'Nothing. We don’t need any of your personal information. An account is automatically created on your phone the first time you visit ninja.org.',
+      question: 'Will I be truly anonymous on Ninja ATM?',
+      answer: 'Yes, your entire transaction history is anonymous. We don’t ask for any personal information when you buy crypto with Ninja ATMs.',
     },
     {
-      question: 'Will I be truly anonymous on Ninja Cash?',
-      answer: 'Yes. We don\'t ask for your real name, the only way people will know it\'s you is if you tell them!',
+      question: 'Is Ninja ATM safe?',
+      answer: '100%. All of the transactions made through Ninja ATM are secured by smart contracts written on the Ethereum blockchain.',
     },
     {
-      question: 'Is Ninja Cash secure?',
-      answer: 'Yes, keeping your money safe and your identity private is our top priority. All of the transactions conducted on Ninja Cash are secured through the use of smart contracts written on the Ethereum blockchain.',
-    },
-    {
-      question: 'How do I buy cryptocurrency from Ninja Cash?',
-      answer: 'Ninja Cash will connect you to other users in your area who are selling cryptocurrency. All you need to do is find someone who is selling for a price you like and you can then arrange the trade.',
-    },
-    {
-      question: 'What currencies can I use on Ninja Cash?',
-      answer: 'Ninja Cash is global, so it depends on where your ATM is set up. Usually, your trade will be made in the local currency.',
-    },
-    {
-      question: 'How do I keep my wallet safe?',
-      answer: <span>Secure your wallet with the provided series of words. No one can withdraw your coins without these words in the right order. We suggest that you don’t keep this password in your phone, but that you make a hard copy of it and keep it in a safe place.<br /><a target="__blank" href="https://medium.com/@ninja_org/how-to-back-up-your-ninja-wallet-its-really-quite-easy-d98a5ec1a671">Make sure you backup your wallet.</a></span>,
-    },
-    {
-      question: 'How do I pay for coins?',
-      answer: 'After you have connected with a fellow ninja, you will arrange a place to make the trade. Once you hand over your cash, the seller will confirm the deal on NinjaCash. At that moment, your newly-purchased cryptocurrency will be automatically transferred to your wallet out of escrow.',
+      question: 'Which currencies can I use with Ninja ATMs?',
+      answer: 'Ninja Cash is global, so you buy crypto in the local currency, or in USD if you and the ATM owner prefer.',
     },
     {
       question: 'Are there any fees?',
-      answer: 'ATM owners pay a 1% transaction fee.',
+      answer: 'None at all!',
     },
     {
-      question: 'How long does it take to complete a transaction?',
-      answer: 'It really depends on what is happening on the Ethereum blockchain at that moment. We expect that transactions will take roughly 10-20 mins to go through. It may be longer if the blockchain is experiencing unusually high traffic - most likely due to the latest dApp sensation.',
+      question: 'How long does it takes to complete a transaction?',
+      answer: 'Transactions usually take a few minutes to go through. It may take slightly longer if the blockchain is experiencing unusually high traffic.',
     },
     {
-      question: 'What happens if the transaction fails?',
-      answer: 'You can always track your transaction history and if something goes wrong, don’t hesitate to contact us. We will figure out the problem as soon as we can and get back to you.',
+      question: 'How do I keep my Ninja wallet safe?',
+      answer: 'Make sure to secure and backup your wallet. We suggest that instead of keeping the passwords in your phone, you make a hard copy and keep this hidden in a safe place.',
     },
     {
-      question: 'Can I buy coins on Ninja Cash using a credit card?',
-      answer: 'Unfortunately, we don’t accept any credit card payments. We are looking to introduce that feature in the future.',
+      question: 'Who do I contact if I have a problem or a question?',
+      answer: <span>You can chat to us on Telegram <a href="https://t.me/ninja_org" class="landing-link">t.me/ninja_org</a> or email <a href="mailto:support@ninja.org" class="landing-link" target="_top">support@ninja.org</a></span>,
     },
-    {
-      question: 'Where is the coin held?',
-      answer: 'The coin is kept in the Ninja wallet which is completely under your control.',
-    },
-    {
-      question: 'How can I make sure my coin is transferred to me after I give the other ninja cash?',
-      answer: 'As a buyer, you’ll be able to observe the seller approving the transaction. Once that happens, the cryptocurrency will be released from escrow and into your wallet.',
-    }
   ],
+  'landing_page.cash-for-business.faq': [
+    {
+      question: 'What is Ninja ATM?',
+      answer: 'Ninja ATM is a tool for people to buy crypto with cash easily and anonymously.',
+    },
+    {
+      question: 'How does it work?',
+      answer: 'By becoming an Ninja ATM,  you will set up a virtual ATM to sell crypto and earn profits from the sale commission.',
+    },
+    {
+      question: 'How do I set up my Ninja ATM?',
+      answer: 'You can find detailed step-by-step instruction here.',
+    },
+    {
+      question: 'Is it safe?',
+      answer: 'Yes! Because you only buy crypto from us when there’s a customer, you’re always in control of your money.',
+    },
+    {
+      question: 'Are there any fees?',
+      answer: 'None at all!',
+    },
+    {
+      question: 'Who can I contact if I need help?',
+      answer: <span>You can contact us on through Telegram <a href="https://t.me/ninja_org" class="landing-link">t.me/ninja_org</a> or email <a href="mailto:support@ninja.org" class="landing-link" target="_top">support@ninja.org</a></span>,
+    },
+  ],
+
   'landing_page.prediction.faq': [
     {
       question: 'What is Ninja PEX?',

@@ -13,52 +13,42 @@ import iconSteadyIncome from '@/assets/images/landing/cash-for-business/steady-i
 
 const features = [
   {
-    name: 'easy-setup',
-    title: 'Easy set up',
+    name: 'easy-anonymous',
+    title: 'Easy and anonymous',
     icon: iconSteadyIncome,
-    caption: <span>No financial investment or extra manpower needed. All you need to set up is your smartphone</span>,
+    caption: <span>No need to install an app. No signup or ID verification required.</span>,
   },
   {
-    name: 'own-schedule',
-    title: 'Set your own schedule',
+    name: 'highly-protect',
+    title: 'Highly protected',
     icon: iconMinimumEffort,
-    caption: <span>You decide when and where you want to work. You’re the boss</span>,
+    caption: <span>Buy crypto directly from local human ATMs,  with escrow secured transactions</span>,
   },
   {
-    name: 'great-income',
-    title: 'Make great income',
+    name: 'best-rate',
+    title: 'The best rates around',
     icon: iconEarnMore,
-    caption: <span>Earn up to <strong>1000 USD/month</strong> easily </span>,
+    caption: <span>No transaction fees. Consistently low prices for crypto across all ATMs</span>,
   },
-  {
-    name: 'grow-customer-base',
-    title: 'Grow your customer base',
-    icon: iconEarnMore,
-    caption: <span>Convert crypto enthusiasts into regular customers</span>,
-  }
 ]
 
 const howToSetUpATM = [
   {
     id: 1,
-    text: 'Register for free to become a Ninja ATM. We just need your phone number and email address',
+    text: 'Open ninja.org/atm on your mobile browser',
   },
   {
     id: 2,
-    text: 'Customers find you on the map showing nearby Ninja ATMs and come to your store to buy crypto with cash.',
+    text: 'Choose from the Ninja ATMs in your area',
   },
   {
     id: 3,
-    text: 'You conduct the transaction. Here’s how',
-  },
-  {
-    id: 4,
-    text: 'You keep the commission from the transaction',
+    text: 'Go to that Ninja ATM and buy crypto with cash, face to face',
   },
 ]
 
 
-class ContentForCashBusiness extends React.Component {
+class ContentForAtm extends React.Component {
   render() {
     const { messages, locale } = this.props.intl;
     return (
@@ -83,7 +73,7 @@ class ContentForCashBusiness extends React.Component {
             <img src={iconIphone} />
           </div>
           <div className="col-12 col-md-6">
-            <div className="mt-5 headline">How does Ninja ATM work?</div>
+            <div className="mt-5 headline">How do I use Ninja ATM?</div>
             {
               howToSetUpATM.map(how => {
                 const { id, text } = how;
@@ -102,6 +92,6 @@ class ContentForCashBusiness extends React.Component {
   }
 }
 
-ContentForCashBusiness.propTypes = {};
+ContentForAtm.propTypes = {};
 
-export default injectIntl(ContentForCashBusiness);
+export default injectIntl(ContentForAtm);

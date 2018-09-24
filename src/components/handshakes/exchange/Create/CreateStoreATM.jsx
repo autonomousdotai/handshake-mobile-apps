@@ -550,9 +550,6 @@ class Component extends React.Component {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       METHOD: 'POST',
       successFn: () => {
-        if (this.props.app.firechat) {
-          this.props.app.firechat.updateUserName(username);
-        }
       },
       errorFn: () => {
         // this.setState({ haveProfile: false });

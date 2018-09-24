@@ -17,6 +17,9 @@ export const APP_ACTION = {
   SHOW_CONFIRM: 'SHOW_CONFIRM',
   HIDE_CONFIRM: 'SHOW_CONFIRM',
 
+  SHOW_SCAN_QRCODE: 'SHOW_SCAN_QRCODE',
+  HIDE_SCAN_QRCODE: 'HIDE_SCAN_QRCODE',
+
   NETWORK_ERROR: 'NETWORK_ERROR',
 
   SET_LANGUAGE: 'SET_LANGUAGE',
@@ -56,7 +59,6 @@ export const APP_ACTION = {
   BAN_PREDICTION: 'BAN_PREDICTION',
   BAN_CHECKED: 'BAN_CHECKED',
 
-  SET_FIRECHAT: 'SET_FIRECHAT',
   SET_FIREBASE_USER: 'SET_FIREBASE_USER',
 };
 
@@ -65,6 +67,10 @@ export const newPasscode = config => ({ type: APP_ACTION.SHOW_CONFIRM, payload: 
 export const requestWalletPasscode = config => ({ type: APP_ACTION.SHOW_CONFIRM, payload: { isShow: true, type: 2, ...config } });
 export const updatePasscode = config => ({ type: APP_ACTION.HIDE_CONFIRM, payload: { isShow: true, type: 3, ...config } });
 export const hidePasscode = config => ({ type: APP_ACTION.HIDE_CONFIRM, payload: { isShow: false, type: 4, ...config } });
+
+// scan qrcode:
+export const showScanQRCode = config => ({ type: APP_ACTION.SHOW_SCAN_QRCODE, payload: { isShow: true, ...config } });
+export const hideScanQRCode = config => ({ type: APP_ACTION.HIDE_SCAN_QRCODE, payload: { isShow: false, ...config } });
 
 // Loading
 export const showLoading = config => ({ type: APP_ACTION.LOADING, payload: { ...config } });
@@ -107,7 +113,6 @@ export const setBannedPrediction = () => ({ type: APP_ACTION.BAN_PREDICTION });
 export const setCheckBanned = () => ({ type: APP_ACTION.BAN_CHECKED });
 
 // Chat
-export const setFirechat = payload => ({ type: APP_ACTION.SET_FIRECHAT, payload });
 export const setFirebaseUser = payload => ({ type: APP_ACTION.SET_FIREBASE_USER, payload });
 
 // App

@@ -34,11 +34,6 @@ function appReducter(state = {
     message: '',
   },
 
-  configConfirmPasscode: {
-    isShow: false,
-    valueConfirm: 0,
-  },
-
   isError: false,
   isWarning: false,
 
@@ -61,8 +56,6 @@ function appReducter(state = {
 
   isNerworkError: false,
 
-  firechat: {},
-
   modal: {
     className: '',
     show: false,
@@ -81,6 +74,16 @@ function appReducter(state = {
       return {
         ...state,
         passcodeData: action.payload,
+      };
+    case APP_ACTION.SHOW_SCAN_QRCODE:
+      return {
+        ...state,
+        scanQRCodeData: action.payload,
+      };
+    case APP_ACTION.HIDE_SCAN_QRCODE:
+      return {
+        ...state,
+        scanQRCodeData: action.payload,
       };
 
     case APP_ACTION.SET_ROOT_LOADING:
@@ -278,13 +281,6 @@ function appReducter(state = {
       return {
         ...state,
         isBannedChecked: true,
-      };
-    }
-
-    case APP_ACTION.SET_FIRECHAT: {
-      return {
-        ...state,
-        firechat: action.payload,
       };
     }
 
