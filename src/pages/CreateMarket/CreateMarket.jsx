@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { eventSelector } from '@/pages/Prediction/selector';
 import Loading from '@/components/Loading';
 import GasAlert from '@/pages/CreateMarket/GasAlert';
-import { isValidEmailCode } from '@/pages/CreateMarket/selector';
+import { isValidEmailCode, eventDetailSelector } from '@/pages/CreateMarket/selector';
 import CreateEventForm from './CreateEventForm';
 import { loadCreateEventData } from './action';
 import { reportSelector, categorySelector, shareEventSelector, isLoading, hasEmail, insufficientGas, uId } from './selector';
@@ -45,7 +44,8 @@ class CreateMarket extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(loadCreateEventData());
+    const { eventId } = this.props.match.params;
+    this.props.dispatch(loadCreateEventData({ eventId }));
   }
 
   onSelectEvent = (item) => {
@@ -109,9 +109,9 @@ class CreateMarket extends React.Component {
 }
 
 export default connect(
-  (state) => {
+  (state, props) => {
     return {
-      eventList: eventSelector(state),
+      eventList: eventDetailSelector(state, props),
       isLoading: isLoading(state),
       isValidEmailCode: isValidEmailCode(state),
       reportList: reportSelector(state),

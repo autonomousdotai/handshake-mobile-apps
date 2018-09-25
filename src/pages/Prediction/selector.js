@@ -11,19 +11,19 @@ export const eventSelector = (state) => {
   const urlParams = qs.parse(queryString.slice(1));
   const { match } = urlParams;
   const { events } = state.prediction;
-  if (!events) return [];
+  if (!events || !events.length) return [];
   if (_.isEmpty(urlParams) || _.isEmpty(events)) {
     return state.prediction.events;
   }
-  return events.filter(event => (event.id === _.toInteger(match)));
+  return events.filter(e => (e.id === _.toInteger(match)));
 };
 
 export const countReportSelector = (state) => {
   const { countReport } = state.ui;
   return countReport || 0;
 };
-export const checkFreeBetSelector = (state) => {
 
+export const checkFreeBetSelector = (state) => {
   const { freeBet = {} } = state.ui;
   return freeBet;
 };

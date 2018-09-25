@@ -60,22 +60,6 @@ function renderEventTotalBets({ event }) {
   );
 }
 
-function renderEventMessages({ event }) {
-  const commentLink = `${URL.COMMENTS_BY_SHAKE_INDEX}?objectId=event_${event.id}`;
-  return (
-    <Link
-      className="EventMessage"
-      to={commentLink}
-      onClick={() => {
-        GA.clickComment(event.name);
-      }}
-    >
-      <span className="EventMessageIcon"><Image src={commentIcon} /></span>
-      <div className="EventMessageText">Comments</div>
-    </Link>
-  );
-}
-
 function renderOutcomeList({ event, onClickOutcome }) {
   return (
     <OutcomeList event={event} onClick={onClickOutcome} />
@@ -113,7 +97,6 @@ function EventItem(props) {
           {renderEvenTimeLeft(props)}
           {renderEventTotalBets(props)}
         </div>
-        {/* {renderEventMessages(event)} */}
         {renderShareSocial(props)}
       </div>
     </div>

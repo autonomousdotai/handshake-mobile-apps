@@ -1,5 +1,6 @@
 export default {
   prediction: {},
+  predictionDetail: {},
   reports: {},
   categories: {},
   orderPlace: {},

@@ -9,12 +9,25 @@ import {
 } from './action';
 import { eventSelector } from './selector';
 
-export function* handleLoadMatches({ isSharePage }) {
+export function* handleLoadMatchDetail({ eventId }) {
   try {
-    if (isSharePage) {
+    yield call(apiGet, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${eventId}`,
+      type: 'LOAD_MATCH_DETAIL',
+      _key: eventId,
+      _path: 'predictionDetail',
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function* handleLoadMatches({ isDetail }) {
+  try {
+    if (isDetail) {
       const { data } = yield call(apiGet, {
-        PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${isSharePage}`,
-        type: 'LOAD_MATCH_DETAIL',
+        PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${isDetail}`,
+        type: 'LOAD_MATCH_DETAIL_SHARE',
         // _key: 'events',
         _path: 'prediction',
       });

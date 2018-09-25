@@ -250,19 +250,6 @@
       &:hover {
         text-decoration: none;
       }
-
-      .EventMessageText {
-        font-size: rem-calc(15px);
-        color: #030303;
-        letter-spacing: 0;
-      }
-
-      .EventMessageIcon {
-        padding-right: rem-calc(5px);
-        img {
-          min-width: rem-calc(15px);
-        }
-      }
     }
 
     .EventTotalBetValue {

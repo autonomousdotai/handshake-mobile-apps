@@ -65,7 +65,7 @@ class Prediction extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(loadMatches({ isSharePage: this.props.isSharePage }));
+    this.props.dispatch(loadMatches({ isDetail: this.props.isSharePage }));
     this.props.dispatch(getReportCount());
     this.props.dispatch(checkFreeBet());
     this.props.dispatch(checkExistSubcribeEmail());
