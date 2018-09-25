@@ -139,12 +139,12 @@ class ListCoin extends React.Component {
 
   get showListCoin(){
     const { wallets, walletSelected } = this.state;
-    if(wallets){console.log(wallets);
+    if(wallets){
       return wallets.map(e => {
         let icon = '';
         try{ icon = require("@/assets/images/icon/wallet/coins/" + e.name.toLowerCase() + '.svg')} catch (ex){console.log(ex)};
         let isLive = e.network === MasterWallet.ListCoin[e.className].Network.Mainnet;
-        let isSelected = walletSelected && e.network == walletSelected.network && e.address == walletSelected.address;
+        let isSelected = walletSelected && e.network == walletSelected.network && e.address == walletSelected.address && e.name == walletSelected.name;
 
         return <div className={"coinName " + (!isLive && " test") + (isSelected ? " selected" : "")} key={e.network+e.address}>
             <div className="row">

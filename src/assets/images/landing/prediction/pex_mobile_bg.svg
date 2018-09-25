@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="817px" viewBox="0 0 1440 817" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 8</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="50%" y1="-2.48949813e-15%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FF8308" offset="0%"></stop>
+            <stop stop-color="#FD4F00" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="4" transform="translate(0.000000, -2790.000000)">
+            <g id="Group-8" transform="translate(0.000000, 2790.000000)">
+                <polygon id="Rectangle-4" fill="url(#linearGradient-1)" points="-7.27595761e-12 12 1440 153.670801 1440 661.56698 -3.23117427e-27 817"></polygon>
+                <circle id="Oval-4-Copy" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="293" cy="435" r="30"></circle>
+                <circle id="Oval-6" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="71.5" cy="651.5" r="13.5"></circle>
+                <circle id="Oval-6" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="213.5" cy="598.5" r="13.5"></circle>
+                <circle id="Oval-6" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="293.5" cy="762.5" r="13.5"></circle>
+                <circle id="Oval-6" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="404.5" cy="634.5" r="13.5"></circle>
+                <circle id="Oval-6" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="596.5" cy="747.5" r="13.5"></circle>
+                <circle id="Oval-6" fill="#FFFFFF" fill-rule="nonzero" opacity="0.1" cx="667.5" cy="571.5" r="13.5"></circle>
+                <path d="M1550.31217,102.722289 C1554.76649,89.6401886 1555.46479,69.4320423 1551.78718,56.0221548 C1539.97575,12.9399898 1485.34649,-12.7287423 1432.67131,6.44962319 C1384.37581,24.0345283 1372.5521,96.5814988 1335.46895,88.6947229 C1248.2496,70.1463521 1216.83498,132.47604 1221.43577,183.21572 C1224.40752,215.990603 1251.82421,256.528157 1310.38904,252.270719 C1327.63088,251.017362 1344.56563,255.268168 1359.157,263.728097 C1384.07722,278.178186 1423.68801,281.565 1464.8343,270.226043 C1526.72711,253.168817 1568.6539,209.25487 1558.47812,172.14297 C1557.63998,169.087733 1556.4749,166.173652 1555.00745,163.408307 C1545.15105,144.825831 1543.43697,122.914331 1550.31217,102.722289 Z" id="Fill-5" fill="#FAFAFA" opacity="0.100000001" transform="translate(1390.500000, 138.500000) scale(-1, 1) translate(-1390.500000, -138.500000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

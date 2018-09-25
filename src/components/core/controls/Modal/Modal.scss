@@ -32,6 +32,6 @@
 }
 
 .modal-custom-show {
-  display: block;
-  overflow-y: auto;
+  display: block !important;
+  overflow-y: auto !important;
 }

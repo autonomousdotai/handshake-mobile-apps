@@ -126,7 +126,7 @@ const roadmaps = [
     ]
   },
   {
-    time: 'EARLY AUGUST 2018',
+    time: 'AUGUST 2018',
     items: [
       {
         title: 'MARKET CREATION FEATURE',
@@ -140,53 +140,21 @@ const roadmaps = [
     ]
   },
   {
-    time: 'MID AUGUST 2018',
-    items: [
-      {
-        title: 'ERC20 TOKEN SUPPORT',
-        content: (
-          <span>
-            Implement support for payment with an ERC20-compatible token.
-          </span>
-        )
-      }
-    ]
-  },
-  {
-    time: 'LATE AUGUST 2018',
-    items: [
-      {
-        title: 'BUG DISCOVERY',
-        content: (
-          <span>
-            A public bounty program to help us identify bugs and vulnerabilities
-            within the product.
-          </span>
-        )
-      }
-    ]
-  },
-  {
     time: 'SEPTEMBER 2018',
     items: [
-      {
-        title: 'REFERRAL & AMBASSADOR SYSTEM',
-        content: (
-          <span>
-            Implement a referral system to reward ambassadors for bringing new
-            business to the{' '}
-            <i>
-              <strong>Prediction Exchange</strong>
-            </i>.
-          </span>
-        )
-      },
       {
         title: 'REPUTATION',
         content: (
           <span>
-            A protocol that tracks the history of users and unlocks in-app
-            benefits for those with a good reputation.
+          A protocol that tracks the history of users and unlocks in-app benefits for those with a good reputation.
+          </span>
+        )
+      },
+      {
+        title: 'CHROME EXTENSION',
+        content: (
+          <span>
+          Launch Google Chrome extension to allow desktop users to access the <i><strong>Prediction Exchange</strong></i>.
           </span>
         )
       }
@@ -196,13 +164,52 @@ const roadmaps = [
     time: 'OCTOBER 2018',
     items: [
       {
+        title: 'ERC20 TOKEN SUPPORT',
+        content: (
+          <span>
+          Implement support for a payment with an ERC20-compatible token.
+          </span>
+        )
+      },
+      {
+        title: 'BUG DISCOVERY',
+        content: (
+          <span>
+          A public bounty program to help us identify bugs and vulnerabilities within the product.
+          </span>
+        )
+      }
+    ]
+  },
+  {
+    time: 'NOVEMBER 2018',
+    items: [
+      {
+        title: 'PERSONAL LOAN',
+        content: (
+          <span>
+          We launch our own decentralized credit option for small and personal loans.
+          </span>
+        )
+      },
+      {
         title: 'ADD BITCOIN',
         content: (
           <span>
-            Introduce Bitcoin as a playable coin within the{' '}
-            <i>
-              <strong>Prediction Exchange</strong>
-            </i>.
+          Introduce Bitcoin as a playable coin within the <i><strong>Prediction Exchange</strong></i>
+          </span>
+        )
+      }
+    ]
+  },
+  {
+    time: 'DECEMBER 2018',
+    items: [
+      {
+        title: 'BUSINESS LOAN',
+        content: (
+          <span>
+          Expand our credit option for businesses.
           </span>
         )
       }

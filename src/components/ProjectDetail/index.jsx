@@ -51,6 +51,7 @@ class Index extends React.PureComponent {
   openTelegram = () => {
     window.open('https://t.me/ninja_org', '_blank');
   }
+
   becomeAtm = () => {
     const { name } = this.props;
     if (name === 'cash') {
@@ -58,6 +59,19 @@ class Index extends React.PureComponent {
     } else if (name === 'cash-for-business') {
       window.location = URL.LANDING_BECOME_ATM;
     }
+  }
+  renderDisclaim(name) {
+    return (
+      <div className="row">
+        <div className="col">
+          <div className="pd-faq">Disclaimer</div>
+          <div className="pd-content">
+            <FormattedMessage id={`landing_page.${name}.disclaim`} />
+          </div>
+          <p className="pd-content">Need more information? Check out our FAQ and instructions on how to play.</p>
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -76,6 +90,7 @@ class Index extends React.PureComponent {
       messages[`landing_page.${name}.btnSubmitEmail`] || 'Submit';
     const youtubeVideoId = messages[`landing_page.${name}.youtubeVideoId`];
     const faq = messages[`landing_page.${name}.faq`];
+    const disclaim = messages[`landing_page.${name}.disclaim`];
     const alternativeAction = messages[`landing_page.${name}.alternativeAction`];
 
     const { url: categoryUrl, text: categoryText } = LANDING_PAGE_TYPE[type];
@@ -226,7 +241,7 @@ class Index extends React.PureComponent {
           }
           {
             faq && (
-              <div className="row">
+              <div className="row mt-5">
                 <div className="col">
                   <div className="pd-faq">
                     {messages.COIN_EXCHANGE_LP_FAQ_TITLE}
@@ -247,6 +262,7 @@ class Index extends React.PureComponent {
               </div>
             )
           }
+          {disclaim && this.renderDisclaim(name)}
         </div>
       </LandingWrapper>
     );

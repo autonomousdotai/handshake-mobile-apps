@@ -129,7 +129,7 @@ class BecomeAtm extends React.PureComponent {
     return (
       <div key={cat.label} className="category-item col-sm-4">
         <img className="icon" src={icon} alt={cat.label} />
-        <span className="label">{cat.label}</span>
+        <h2 className="label">{cat.label}</h2>
         <span className="desc">{cat.desc}</span>
       </div>
     );
@@ -224,6 +224,8 @@ class BecomeAtm extends React.PureComponent {
     const { reactHelmetElement } = this.props;
     const { numberRegistered } = this.state;
     const youtubeVideoId = messages['landing_page.become_atm.youtubeId'];
+    const heading = messages['landing_page.become_atm.heading'];
+    const footer = messages['landing_page.become_atm.footer'];
     return (
       <main className="become-atm-container container">
         {reactHelmetElement}
@@ -236,7 +238,7 @@ class BecomeAtm extends React.PureComponent {
             <div className="row mt-4">
               <div className="col-12 col-md-6">
                 <div className="pd-heading">
-                  <FormattedMessage id="landing_page.become_atm.heading" />
+                  <h1>{heading}</h1>
                 </div>
                 <div className="pd-subHeading">
                   {this.renderSubheading()}
@@ -268,9 +270,7 @@ class BecomeAtm extends React.PureComponent {
             </div>
             {this.renderCategory()}
             <div className="landing-footer">
-              <h2>
-                <FormattedMessage id="landing_page.become_atm.footer" />
-              </h2>
+              <h2>{footer}</h2>
               <div className="mt-4" style={{ maxWidth: '600px' }}>
                 { this.renderEmailForm({ withDesc: false }) }
               </div>

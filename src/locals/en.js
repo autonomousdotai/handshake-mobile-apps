@@ -556,6 +556,7 @@ export default {
   'landing_page.prediction.joinTelegram': `Join the dojo on <a href="https://t.me/ninja_org" class="landing-link">Telegram</a>`,
   'landing_page.prediction.whitepaper': `Read our <a href="https://medium.com/@ninja_org/shakeninja-bex-1c938f18b3e8" class="landing-link">whitepaper</a> | Find us on <a href="https://github.com/ninjadotorg" class="landing-link">Github</a>`,
   //'landing_page.prediction.youtubeVideoId': '-YYp9yW4RDQ',
+  'landing_page.prediction.disclaim':`Ninja is open-source, decentralized software that never holds user data, or user funds. As such, Ninja does not have the power to alter or restrict any actions made on the platform and so cannot be responsible for policing it. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never stake more than you are willing to lose. Play safe!.`,
 
   'landing_page.wallet.breadcrumb': 'Wallet',
   'landing_page.wallet.heading': 'A decentralized cryptocurrency wallet. No downloads. No sign ups.',
@@ -608,7 +609,7 @@ export default {
   'landing_page.become_atm.email.placeholder': 'Enter your email address',
   'landing_page.become_atm.email.submitBtnLabel': 'Earn!',
   'landing_page.become_atm.email.peopleRegistered': 'people have registered',
-  'landing_page.become_atm.youtubeId': '9L1IltkvU9g',
+  'landing_page.become_atm.youtubeId': 'bNRK6HMTmzA',
   'landing_page.become_atm.footer': `You know It All! Let's start making some Money`,
   'landing_page.become_atm.modal.title': 'Im making passive income with Ninja ATM. Try now!',
   'landing_page.become_atm.modal.content': 'SHARE with your friends NOW to win 25 USD!',

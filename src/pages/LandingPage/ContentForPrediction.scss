@@ -42,6 +42,7 @@
   color: white;
   .contentBlock {
     padding-top: 8.5rem;
+    padding-left: 5vw;
   }
   .imageContent {
     padding-top: 2.25rem;
@@ -54,12 +55,20 @@
   }
   .rightImageSecond {
     position: absolute;
-    top: 133px;
-    right: -74px;
+    top: 203px;
+    right: 20px;
+  }
+}
+.wrapperExtentsion {
+  margin-left: -1.875rem;
+  .wrappeContent {
+    padding-top: 3.875rem;
   }
 }
 .wrapperMobile::before {
-  content: '';
+  //content: '';
+
+  /*
   border-left: 1175px solid #FF8308;
   border-top: 5vw solid transparent;
   border-bottom: 5vw solid transparent;
@@ -67,7 +76,16 @@
   height: 564px;
   z-index: 0;
   position: absolute;
+*/
+  /*
+  position: absolute;
 
+  background: url('../../assets/images/landing/prediction/pex_mobile_bg.svg') no-repeat;
+  height: 50vw;
+  width: 100vw;
+  margin-left: -10vw;
+  margin-right: -10vw;
+  */
 
 }
 .wrapperAnonymous {
@@ -81,17 +99,52 @@
     padding-top: 7vw;
   }
 }
-.wrapperAnonymous:before {
-  content: '';
-  border-right: 66vw solid #3023AE;
-  border-top: 7vw solid transparent;
-  border-bottom: 5vw solid transparent;
-  width: 0;
-  height: 35vw;
-  z-index: 0;
-  position: absolute;
+// .wrapperAnonymous:before {
+//   content: '';
+//   border-right: 66vw solid #3023AE;
+//   border-top: 7vw solid transparent;
+//   border-bottom: 5vw solid transparent;
+//   width: 0;
+//   height: 35vw;
+//   z-index: 0;
+//   position: absolute;
+// }
+.wrapperTransparent {
+  .wrapperContent {
+    padding-top: 3.25rem;
+    padding-right: 5.25rem;
+  }
 }
-
+.wrapperIntroduce {
+  display: flex;
+  .emailField {
+    position: relative;
+    width: rem-calc(300px);
+  }
+  .wrapperEmail{
+    display: flex;
+    justify-content: space-between;
+  }
+  .btnEmail {
+    padding: 0px;
+    border: none;
+  }
+  .emailSubmit {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+  }
+  .btnTelegram {
+    background: #FFF988;
+    border-radius: rem-calc(5px);
+    font-size: rem-calc(16px);
+    letter-spacing: 0;
+    border: 1px solid #F5D516;
+    height: rem-calc(48px);
+    width: rem-calc(250px);
+    margin-left: rem-calc(10px);
+  }
+}
 .column {
   width: 50%;
   z-index: 1;
@@ -142,3 +195,76 @@
   justify-content: center;
   margin-bottom: 2rem;
 }
+.section {
+  position: relative;
+  margin-left: -100px;
+  margin-right: -100px;
+  //height: 30vw;
+}
+.bg-gradient-mobile {
+  background: linear-gradient(-179deg, #FF8308 0%, #FD4F00 100%);
+}
+.bg-gradient-anonymous {
+  background: linear-gradient(0deg, #3023AE 0%, #7042BF 97%);
+}
+
+
+.mobile_recDown {
+
+  border-left: 1311px solid transparent;
+  border-right: 0vw solid transparent;
+  border-top: 122px solid white;
+  position: absolute;
+}
+.mobile_recUp {
+  border-left: 1311px solid transparent;
+  border-bottom: 96px solid white;
+  position: absolute;
+  bottom: 0;
+}
+.mobile_shape1 {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.mobile_shape2 {
+  position: absolute;
+  left: 5vw;
+  bottom: 18px;
+}
+.anonymous_recDown {
+
+  border-left: 231vw solid white;
+  border-right: 0vw solid transparent;
+  border-top: 186px solid transparent;
+  position: absolute;
+  bottom: 0;
+}
+.anonymous_recUp {
+  border-left: 1311px solid white;
+  border-bottom: 108px solid transparent;
+  position: absolute;
+  top: 0;
+}
+.anonymous_shape1 {
+  position: absolute;
+  left: 0;
+  top: 109px;
+}
+.anonymous_shape2 {
+  position: absolute;
+  right: 32px;
+  top: 50px;
+}
+.anonymous_shape3 {
+  position: absolute;
+  left: 0px;
+  bottom: 136px;
+}
+.anonymous_shape4 {
+  position: absolute;
+  right: 32px;
+  bottom: 160px;
+}
+
+

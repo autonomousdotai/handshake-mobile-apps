@@ -19,12 +19,13 @@
       position: absolute;
       left: 0;
       top: 28px;
+      width: 200px;
     }
     position: relative;
     display: inline-block;
     width: calc(50% + 3px);
     //text-align: left;
-    padding-right: 10px;
+    padding-right: 10vw;
     border-right: 6px solid black;
 
     .circle {
@@ -39,12 +40,14 @@
       position: absolute;
       right: 0;
       top: 28px;
+      width: 200px;
+
     }
     position: relative;
     display: inline-block;
     width: calc(50% + 3px);
     //text-align: right;
-    padding-left: 10px;
+    padding-left: 10vw;
     border-left: 6px solid black;
     .circle {
       position: absolute;
