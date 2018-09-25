@@ -22,7 +22,7 @@ export function* handleLoadMatchDetail({ eventId }) {
   }
 }
 
-export function* handleLoadMatches({ isDetail }) {
+export function* handleLoadMatches({ isDetail, source }) {
   try {
     if (isDetail) {
       const { data } = yield call(apiGet, {
@@ -33,8 +33,9 @@ export function* handleLoadMatches({ isDetail }) {
       });
       yield put(updateEventList([data]));
     } else {
+      const PATH_URL = source ? `${API_URL.CRYPTOSIGN.LOAD_MATCHES}?source=${source}` : API_URL.CRYPTOSIGN.LOAD_MATCHES;
       yield call(apiGet, {
-        PATH_URL: API_URL.CRYPTOSIGN.LOAD_MATCHES,
+        PATH_URL,
         type: 'LOAD_MATCHES',
         _key: 'events',
         _path: 'prediction',
