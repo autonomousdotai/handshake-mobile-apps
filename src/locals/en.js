@@ -527,16 +527,13 @@ export default {
   'landing_page.cash.joinTelegram': `Join the dojo on <a href="https://t.me/ninjacash" class="landing-link">Telegram</a>`,
   'landing_page.cash.whitepaper': `Read more about <a href="https://medium.com/@ninja_org/introducing-ninja-cash-b0d51a9f4e1b" class="landing-link">Cash</a>`,
   'landing_page.cash.youtubeVideoId': '9L1IltkvU9g',
-  'landing_page.cash.alternativeAction': `Become a Ninja ATM`,
+  'landing_page.cash.btnBecomeAtm': `Become a Ninja ATM`,
 
   'landing_page.cash-for-business.breadcrumb': 'CRYPTO ATM',
   'landing_page.cash-for-business.heading': 'Earn money effortlessly',
-  'landing_page.cash-for-business.subHeading':
-    `<ul>
-      <li>Set up a virtual crypto ATM to make passive income with zero investment</li>
-    </ul>`,
+  'landing_page.cash-for-business.subHeading': 'Set up a virtual crypto ATM to make passive income with zero investment',
   'landing_page.cash-for-business.textEmail': `To start trading, please open <a href="https://ninja.org/atm">ninja.org/atm</a> on your mobile browser.`,
-  'landing_page.cash-for-business.label.sendLinkToEmail': `Send link to your email:`,
+  'landing_page.cash-for-business.label.sendLinkToEmail': `Leave your email here for a quick guide to install an ATM for FREE!`,
   'landing_page.cash-for-business.btnSubmitEmail': 'Go',
   // 'landing_page.cash-for-business.cta1': 'GET STARTED for FREE',
   // 'landing_page.cash-for-business.cta1_url': 'https://ninja.org/cash',
@@ -544,8 +541,7 @@ export default {
   // 'landing_page.cash.cta2_url': 'https://t.me/ninjacash',
   'landing_page.cash-for-business.joinTelegram': `Join the dojo on <a href="https://t.me/ninjacash" class="landing-link">Telegram</a>`,
   'landing_page.cash-for-business.whitepaper': `Read more about <a href="https://medium.com/@ninja_org/introducing-ninja-cash-b0d51a9f4e1b" class="landing-link">Cash</a>`,
-  'landing_page.cash-for-business.youtubeVideoId': '9L1IltkvU9g',
-  'landing_page.cash-for-business.alternativeAction': `Become a Ninja ATM`,
+  'landing_page.cash-for-business.youtubeVideoId': 'bNRK6HMTmzA',
 
   'landing_page.prediction.breadcrumb': 'Prediction',
   'landing_page.prediction.heading': 'Bet on anything against anyone, anywhere. Guaranteed payout. Your odds. 100% anonymous.',
@@ -557,6 +553,7 @@ export default {
   'landing_page.prediction.whitepaper': `Read our <a href="https://medium.com/@ninja_org/shakeninja-bex-1c938f18b3e8" class="landing-link">whitepaper</a> | Find us on <a href="https://github.com/ninjadotorg" class="landing-link">Github</a>`,
   //'landing_page.prediction.youtubeVideoId': '-YYp9yW4RDQ',
   'landing_page.prediction.disclaim':`Ninja is open-source, decentralized software that never holds user data, or user funds. As such, Ninja does not have the power to alter or restrict any actions made on the platform and so cannot be responsible for policing it. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never stake more than you are willing to lose. Play safe!.`,
+  'landing_page.prediction.btnJoinTelegram': 'Join the dojo on Telegram',
 
   'landing_page.wallet.breadcrumb': 'Wallet',
   'landing_page.wallet.heading': 'A decentralized cryptocurrency wallet. No downloads. No sign ups.',
@@ -565,11 +562,13 @@ export default {
   'landing_page.wallet.label.sendLinkToEmail': `Send link to your email:`,
   'landing_page.wallet.btnSubmitEmail': 'Go',
   'landing_page.wallet.youtubeVideoId': '',
+  'landing_page.wallet.btnJoinTelegram': 'Join the dojo on Telegram',
 
   'landing_page.pay-for-stores.breadcrumb': 'Pay For Stores',
   'landing_page.pay-for-stores.heading': 'Seamlessly integrate cryptocurrency payments into your offline business.',
   'landing_page.pay-for-stores.subHeading': 'Allow your offline customers to pay for goods and services in cryptocurrency, just by scanning a QR code. Give the millions of people who own crypto somewhere to spend it.',
   'landing_page.pay-for-stores.textEmail': 'Be the first to hear when we launch',
+  'landing_page.pay-for-stores.btnJoinTelegram': 'Join the dojo on Telegram',
 
   'landing_page.pay-for-devs.breadcrumb': 'Pay For Devs',
   'landing_page.pay-for-devs.heading': 'Connect your e-commerce business with a truly borderless payment network.',
@@ -585,6 +584,7 @@ export default {
   'landing_page.dad.heading': 'Building decentralized datasets to advance AI.',
   'landing_page.dad.subHeading': 'Today, data is controlled by a handful of corporations. The people who need data to develop AI can\'t access it. The people who created the data see no rewards. DAD will solve both problems.',
   'landing_page.dad.textEmail': 'Be the first to hear when we launch',
+  'landing_page.dad.btnJoinTelegram': 'Join the dojo on Telegram',
 
   'landing_page.uncommons.breadcrumb': 'Uncommons',
   'landing_page.uncommons.heading': 'The people\'s blockchain.',
@@ -598,6 +598,7 @@ export default {
   'landing_page.whisper.textEmail': `To start chatting, please open <a href="https://ninja.org/whisper">ninja.org/whisper</a> on your mobile browser.`,
   'landing_page.whisper.label.sendLinkToEmail': `Send link to your email:`,
   'landing_page.whisper.btnSubmitEmail': 'Go',
+  'landing_page.whisper.btnJoinTelegram': 'Join the dojo on Telegram',
 
   'landing_page.become_atm.heading': 'Earn Passive Income with Ninja ATM',
   'landing_page.become_atm.subHeading': [

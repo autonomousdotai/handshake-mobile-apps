@@ -9,25 +9,26 @@ import iconIphone from '@/assets/images/landing/cash-for-business/iphone.svg';
 import iconLine from '@/assets/images/landing/cash-for-business/line.svg';
 import iconMinimumEffort from '@/assets/images/landing/cash-for-business/minimum-effort.svg';
 import iconSteadyIncome from '@/assets/images/landing/cash-for-business/steady-income.svg';
+import iconSchedule from '@/assets/images/landing/cash-for-business/steady-income.svg';
 
 
 const features = [
   {
     name: 'easy-setup',
     title: 'Easy set up',
-    icon: iconSteadyIncome,
+    icon: iconMinimumEffort,
     caption: <span>No financial investment or extra manpower needed. All you need to set up is your smartphone</span>,
   },
   {
     name: 'own-schedule',
     title: 'Set your own schedule',
-    icon: iconMinimumEffort,
+    icon: iconSchedule,
     caption: <span>You decide when and where you want to work. You’re the boss</span>,
   },
   {
     name: 'great-income',
     title: 'Make great income',
-    icon: iconEarnMore,
+    icon: iconSteadyIncome,
     caption: <span>Earn up to <strong>1000 USD/month</strong> easily </span>,
   },
   {

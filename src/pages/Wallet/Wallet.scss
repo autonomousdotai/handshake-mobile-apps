@@ -727,6 +727,21 @@
     font-weight: 400;
   }
 
+  .name{
+    float:left;
+    width: 50%;
+  }
+
+  .name2{
+    float:left;
+    width: 30%;
+  }
+
+  .value{
+    float:right;
+    font-weight: 400;
+  }
+
   .clearfix{
     padding: 0.3rem 0;
     clear: both;

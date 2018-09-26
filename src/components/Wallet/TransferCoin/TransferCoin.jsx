@@ -281,7 +281,7 @@ class Transfer extends React.Component {
 
       // get balance for first item + update to local store:
       walletDefault.getBalance().then(result => {
-        walletDefault.balance = result;
+        walletDefault.balance = walletDefault.formatNumber(result);
         this.setState({walletSelected: walletDefault});
         MasterWallet.UpdateBalanceItem(walletDefault);
       });
@@ -555,7 +555,7 @@ render() {
                 <div className="name">{this.state.walletSelected && this.state.walletSelected.title}</div>
                 <div className="value">{this.state.walletSelected && this.state.walletSelected.getShortAddress()}</div>
                 <div className="clearfix"></div>
-                <div className="name">Balance</div>
+                <div className="name2">Balance</div>
                 <div className="value">{this.state.walletSelected && this.state.walletSelected.balance + " " + this.state.walletSelected.name}</div>
               </div>
 

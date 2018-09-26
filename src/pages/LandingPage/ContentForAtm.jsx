@@ -15,19 +15,19 @@ const features = [
   {
     name: 'easy-anonymous',
     title: 'Easy and anonymous',
-    icon: iconSteadyIncome,
+    icon: iconMinimumEffort,
     caption: <span>No need to install an app. No signup or ID verification required.</span>,
   },
   {
     name: 'highly-protect',
     title: 'Highly protected',
-    icon: iconMinimumEffort,
+    icon: iconEarnMore,
     caption: <span>Buy crypto directly from local human ATMs,  with escrow secured transactions</span>,
   },
   {
     name: 'best-rate',
     title: 'The best rates around',
-    icon: iconEarnMore,
+    icon: iconSteadyIncome,
     caption: <span>No transaction fees. Consistently low prices for crypto across all ATMs</span>,
   },
 ]
@@ -58,7 +58,7 @@ class ContentForAtm extends React.Component {
             features.map((feature, index) => {
               const { name, title, icon, caption } = feature;
               return (
-                <div key={name} className="col-12 col-md-3 mt-4">
+                <div key={name} className="col-12 col-md-4 mt-4">
                   <div><img src={icon} /></div>
                   <div className="feature-title">{title}</div>
                   <div><img src={iconLine} /></div>

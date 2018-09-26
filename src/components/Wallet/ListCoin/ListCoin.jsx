@@ -146,7 +146,7 @@ class ListCoin extends React.Component {
         let isLive = e.network === MasterWallet.ListCoin[e.className].Network.Mainnet;
         let isSelected = walletSelected && e.network == walletSelected.network && e.address == walletSelected.address && e.name == walletSelected.name;
 
-        return <div className={"coinName " + (!isLive && " test") + (isSelected ? " selected" : "")} key={e.network+e.address}>
+        return <div className={"coinName " + (!isLive && " test") + (isSelected ? " selected" : "")} key={e.name+e.network+e.address}>
             <div className="row">
               <div className="col-2 icon" onClick={()=> this.selectCoin(e)}><img src={isSelected ? iconSelected : icon} /></div>
               <div className="col-5" onClick={()=> this.selectCoin(e)}>

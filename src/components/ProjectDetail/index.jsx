@@ -91,7 +91,8 @@ class Index extends React.PureComponent {
     const youtubeVideoId = messages[`landing_page.${name}.youtubeVideoId`];
     const faq = messages[`landing_page.${name}.faq`];
     const disclaim = messages[`landing_page.${name}.disclaim`];
-    const alternativeAction = messages[`landing_page.${name}.alternativeAction`];
+    const btnBecomeAtm = messages[`landing_page.${name}.btnBecomeAtm`];
+    const btnJoinTelegram = messages[`landing_page.${name}.btnJoinTelegram`];
 
     const { url: categoryUrl, text: categoryText } = LANDING_PAGE_TYPE[type];
     return (
@@ -166,19 +167,19 @@ class Index extends React.PureComponent {
                           </div>
 
                           {
-                            alternativeAction ? (
+                            btnBecomeAtm ? (
                               <button className="btnTelegram" type="button"
                                       onClick={()=> {
                                         this.becomeAtm();
                                       }}
-                              ><FormattedHTMLMessage id={`landing_page.${name}.alternativeAction`} /></button>
-                            ) : (
+                              ><FormattedHTMLMessage id={`landing_page.${name}.btnBecomeAtm`} /></button>
+                            ) : btnJoinTelegram ?  (
                               <button className="btnTelegram"
                                       onClick={()=> {
                                         this.openTelegram();
                                       }}
                               >Join the dojo on Telegram</button>
-                            )
+                            ) : null
                           }
 
                         </div>
