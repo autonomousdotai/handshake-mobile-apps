@@ -23,6 +23,7 @@ import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import './TransferCoin.scss';
 import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code.svg';
 import BrowserDetect from '@/services/browser-detect';
+import ListCoin from '@/components/Wallet/ListCoin';
 
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -57,7 +58,8 @@ class Transfer extends React.Component {
       rate: 0,
       inputSendAmountValue: 0,
       inputSendMoneyValue: 0,
-      legacyMode: false
+      legacyMode: false,
+      modalListCoin: ''
     }
   }
 
@@ -247,29 +249,29 @@ class Transfer extends React.Component {
     // set name + text for list:
     let listWalletCoin = [];
     if (wallets.length > 0){
-      wallets.forEach((wal) => {
+      wallets.forEach(async (wal) => {
         if(!wal.isCollectibles){
           wal.text = wal.getShortAddress() + " (" + wal.name + "-" + wal.getNetworkName() + ")";
           if (process.env.isLive){
             wal.text = wal.getShortAddress() + " (" + wal.className + " " + wal.name + ")";
           }
+
           wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
+          wal.balance = wal.formatNumber(await wal.getBalance());
           listWalletCoin.push(wal);
         }
-
       });
     }
 
-    if (!walletDefault){
-      if (listWalletCoin.length > 0){
-        walletDefault = listWalletCoin[0];
-      }
+    if (!walletDefault && listWalletCoin.length > 0){
+      walletDefault = listWalletCoin[0];
     }
 
     // set name for walletDefault:
     if (wallet){
       walletDefault = wallet;
     }
+
     if (walletDefault){
       walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.name + "-" + walletDefault.getNetworkName() + ")";
       if (process.env.isLive){
@@ -283,13 +285,11 @@ class Transfer extends React.Component {
         this.setState({walletSelected: walletDefault});
         MasterWallet.UpdateBalanceItem(walletDefault);
       });
-
     }
 
     this.setState({wallets: listWalletCoin, walletDefault: walletDefault, walletSelected: walletDefault}, ()=>{
       this.props.rfChange(nameFormSendWallet, 'walletSelected', walletDefault);
     });
-
   }
 
   sendCoin = () => {
@@ -298,7 +298,6 @@ class Transfer extends React.Component {
 
   invalidateTransferCoins = (value) => {
     const { messages } = this.props.intl;
-    console.log('invalidateTransferCoins');
     if (!this.state.walletSelected) return {};
     let errors = {};
     if (this.state.walletSelected){
@@ -399,29 +398,6 @@ submitSendCoin=()=>{
     });
 }
 
-onItemSelectedWallet = async (item) =>{
-
-  let wallet = MasterWallet.convertObject(item);
-  // if(wallet.name != this.state.walletSelected.name){
-  //   this.props.clearFields(nameFormSendWallet, false, false, "amountCoin", "amountMoney");
-  //   this.setState({rate: 0});
-  // }
-
-  this.setState({walletSelected: wallet});
-
-  wallet.getBalance().then(result => {
-    wallet.balance = result;
-    this.setState({walletSelected: wallet});
-    MasterWallet.UpdateBalanceItem(wallet);
-  });
-
-  if(wallet.name != this.state.currency){
-    await this.setRate(wallet.name);
-    this.updateAddressAmountValue(null, this.state.inputSendAmountValue);
-  }
-
-}
-
 // For Qrcode:
 handleScan=(data) =>{
   const { rfChange } = this.props
@@ -464,11 +440,37 @@ openImageDialog = () => {
   this.refs.qrReader1.openImageDialog();
 }
 
+openListCoin=()=>{
+  this.setState({modalListCoin:
+    <ListCoin
+      wallets={this.state.wallets}
+      walletSelected={this.state.walletSelected}
+      onSelect={wallet => { this.selectWallet(wallet); }}
+    />
+  }, ()=> {
+    this.modalListCoinRef.open();
+  });
+}
+
+selectWallet = async (walletSelected) => {
+
+  this.setState({walletSelected, modalListCoin: ''}, ()=> {
+    MasterWallet.UpdateBalanceItem(walletSelected);
+    this.modalListCoinRef.close();
+  });
+
+  if(walletSelected.name != this.state.currency){
+    await this.setRate(walletSelected.name);
+    this.updateAddressAmountValue(null, this.state.inputSendAmountValue);
+  }
+}
+
 render() {
   let { currency } = this.props;
   if(!currency) currency = "USD";
   const { messages } = this.props.intl;
   let showDivAmount = this.state.walletSelected && this.state.rate;
+  const { modalListCoin } = this.state;
 
   return (
     <div>
@@ -547,35 +549,29 @@ render() {
               </div>
             }
 
-            <div className ="dropdown-wallet-tranfer">
+            <div className ="dropdown-wallet-tranfer ">
               <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>
-              <Field
-                name="walletSelected"
-                component={fieldDropdown}
-                placeholder={messages.wallet.action.transfer.placeholder.select_wallet}
-                defaultText={this.state.walletSelected ? this.state.walletSelected.text : ""}
-                list={this.state.wallets}
-                onChange={(item) => {
-                    this.onItemSelectedWallet(item);
-                  }
-                }
-              />
+              <div className="wallet-listcoin" onClick={() => {this.openListCoin() }}>
+                <div className="name">{this.state.walletSelected && this.state.walletSelected.title}</div>
+                <div className="value">{this.state.walletSelected && this.state.walletSelected.getShortAddress()}</div>
+                <div className="clearfix"></div>
+                <div className="name">Balance</div>
+                <div className="value">{this.state.walletSelected && this.state.walletSelected.balance + " " + this.state.walletSelected.name}</div>
+              </div>
+
+              <div className="wallets-wrapper">
+                <Modal title="Select wallets" onRef={modal => this.modalListCoinRef = modal}>
+                  {modalListCoin}
+                </Modal>
+              </div>
+
+
             </div>
 
-            <label className='label-balance'>{messages.wallet.action.transfer.label.wallet_balance} &nbsp;
-            {
-              this.state.walletSelected ?
-              (
-                ( this.state.walletSelected && this.state.walletSelected.hideBalance ? StringHelper.format("[{0}]", messages.wallet.action.history.label.balance_hidden)
-                  :
-                  StringHelper.format("{0} {1}", this.state.walletSelected.balance, this.state.walletSelected.name)
-                )
-              ) : ""
-            }
-            </label>
-            </div>
+            <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button.transfer}</Button>
+          </div>
 
-          <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button.transfer}</Button>
+
         </SendWalletForm>
       </div>
     )

@@ -46,6 +46,9 @@ const bip39 = require('bip39');
 import qs from 'qs';
 import { Ripple } from '@/services/Wallets/Ripple.js';
 
+const CryptoJS = require('crypto-js');
+const SHA256 = require('crypto-js/sha256');
+
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
@@ -181,7 +184,7 @@ export class MasterWallet {
     }
 
     static AddToken(newToken) {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
       if (wallets === false) return false;
       wallets.push(JSON.parse(JSON.stringify(newToken)));
       MasterWallet.UpdateLocalStore(wallets, true);
@@ -189,8 +192,11 @@ export class MasterWallet {
     }
 
     static UpdateLocalStore(masterWallet, sync = false) {
+      
+      // encrypt wallet:
+      let encryptWalletData = MasterWallet.encrypt(JSON.stringify(masterWallet));
 
-      localStore.save(MasterWallet.KEY, masterWallet);
+      localStore.save(MasterWallet.KEY, encryptWalletData);
 
       // call api update list address:
       if (sync){
@@ -200,7 +206,8 @@ export class MasterWallet {
     }
 
     static getListWalletAddressJson(){
-      const masterWallet = localStore.get(MasterWallet.KEY);
+
+      const masterWallet = MasterWallet.getWalletDataLocalString();
 
         let listAddresses = [];
 
@@ -393,12 +400,37 @@ export class MasterWallet {
       return wallets;
     }
 
-    // Get list wallet from store local:
-    static getMasterWallet() {
+    // get wallet data string local store:
+    static getWalletDataLocalString(){      
+      
       const wallets = localStore.get(MasterWallet.KEY);
 
       if (wallets == false) return false;
 
+      // check is json or encrypt data:
+      if (typeof(wallets) !== 'object'){                
+        let walletDecrypt = MasterWallet.decrypt(wallets);
+        let walletsObject = MasterWallet.IsJsonString(walletDecrypt);
+        if (walletsObject != false){
+          return walletsObject;
+        }
+      }
+      else{
+        // backup:
+        try {localStore.save('backup', CryptoJS.AES.encrypt(JSON.stringify(wallets), 'backup').toString());} catch (e){console.log(e);};
+        MasterWallet.UpdateLocalStore(wallets);
+      }      
+        
+      return wallets;
+    }
+
+    // Get list wallet from store local:
+    static getMasterWallet() {
+            
+      let wallets = MasterWallet.getWalletDataLocalString();
+      
+      if (wallets == false) return false;
+      
       const listWallet = [];
       let hasTestnet = false;
 
@@ -457,7 +489,7 @@ export class MasterWallet {
     }
 
     static getWallets(coinName = '') {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
 
       if (wallets === false) return false;
 
@@ -490,7 +522,7 @@ export class MasterWallet {
 
     // Get list wallet from store local:
     static getWalletDefault(coinName = '') {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
 
       if (wallets === false) return false;
 
@@ -531,7 +563,7 @@ export class MasterWallet {
 
   // Get list reward wallet from store local:
     static getRewardWalletDefault(coinName = '') {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
 
       if (wallets === false) return false;
 
@@ -601,7 +633,16 @@ export class MasterWallet {
     }
     static restoreWallets(dataString) {
       try {
-        const jsonData = MasterWallet.IsJsonString(dataString);
+        let jsonData = MasterWallet.IsJsonString(dataString);
+
+        // check encrypt if not json ?
+        if (jsonData === false){          
+          jsonData = MasterWallet.decrypt(dataString);          
+          if (jsonData !== false){          
+            jsonData = MasterWallet.IsJsonString(jsonData);
+          }          
+        }
+
         let auth_token = false;
         let wallets = false;
         let chat_encryption_keypair = false;
@@ -700,6 +741,29 @@ export class MasterWallet {
 
     static log(data, key = MasterWallet.KEY) {
       //console.log(`%c ${StringHelper.format('{0}: ', key)}`, 'background: #222; color: #bada55', data);
+    }
+    static encrypt(message) {
+      try{
+        let WALLET_SECRET_KEY = process.env.WALLET_SECRET_KEY;        
+        let ciphertext = CryptoJS.AES.encrypt(message, WALLET_SECRET_KEY);
+        return ciphertext.toString();
+      }
+      catch (e){
+        console.log("encrypt", e);
+        return false;
+      }
+    }
+    static decrypt(ciphertext) {
+      try{
+        let WALLET_SECRET_KEY = process.env.WALLET_SECRET_KEY;
+        let bytes = CryptoJS.AES.decrypt(ciphertext, WALLET_SECRET_KEY);
+        let plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        return plaintext;
+      }
+      catch (e){
+        console.log("decrypt", e);
+        return false;
+      }
     }
 }
 

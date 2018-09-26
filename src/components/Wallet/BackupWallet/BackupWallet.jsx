@@ -101,15 +101,16 @@ class BackupWallet extends React.Component {
 
   render() {
     const { messages } = this.props.intl;
+    let walletData = this.state.walletData ? MasterWallet.encrypt(JSON.stringify(this.state.walletData)) : '';
     return (
         <div className="backupwallet">
           <div className="bodyTitle">{messages.wallet.action.backup.description}</div>
             <div className="bodyBackup">
               <textarea
                 readOnly
-                value={this.state.walletData ? JSON.stringify(this.state.walletData) : ''}
+                value={walletData}
               />
-              <Button className="button" cssType="danger" onClick={() => { Clipboard.copy(JSON.stringify(this.state.walletData)); this.showToast(messages.wallet.action.backup.success.copied);this.onFinish(); }} >{messages.wallet.action.backup.button.copy}</Button>
+              <Button className="button" cssType="danger" onClick={() => { Clipboard.copy(walletData); this.showToast(messages.wallet.action.backup.success.copied);this.onFinish(); }} >{messages.wallet.action.backup.button.copy}</Button>
             </div>
         </div>
     )

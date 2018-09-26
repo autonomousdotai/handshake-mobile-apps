@@ -114,7 +114,7 @@ class ContentForWallet extends React.Component {
                   <Fade left>
                     <h1 className="display-3 text-white">Ninja Wallet</h1>
                     <p className="text-white">No downloads. No signups. No fees.<br/>A decentralized cryptocurrency wallet that lets you stay 100% anonymous.</p>
-                    <p className="text-white">Open <a className="text-info" href="https://www.ninja.org/wallet">ninja.org/wallet</a> on your mobile browser <br />to access Ninja Wallet</p>
+                    <p className="text-white">Open <a className="text-info" href="https://ninja.org/wallet">ninja.org/wallet</a> on your mobile browser <br />to access Ninja Wallet</p>
                     <div className="btn-wrapper">
                       { this.state.isSubscribed ? <div className="bg card bg-success p-4 text-center">Thank you for subscribing!</div> : this.renderEmailForm() }
                     </div>

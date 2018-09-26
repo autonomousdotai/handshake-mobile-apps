@@ -175,6 +175,8 @@ class Wallet extends React.Component {
       modalSetting: '',
       modalHistory: '',
       modalWalletPreferences: "",
+      backupWalletContent: "",
+      restoreWalletContent: "",
 
       // sortable:
       listSortable: {coin: false, token: false, collectitble: false},
@@ -603,27 +605,32 @@ class Wallet extends React.Component {
       this.modalReceiveCoinRef.open();
     });
   }
-
+  
   showBackupWalletAccount=()=>{
 
     this.props.requestWalletPasscode({      
       onSuccess: () => {
-          this.setState({activeBackup: true, walletsData: {
-            "auth_token": local.get(APP.AUTH_TOKEN),
-            "chat_encryption_keypair": local.get(APP.CHAT_ENCRYPTION_KEYPAIR),
-            "wallets": this.getAllWallet()}},()=>{
-              this.modalBackupRef.open();
-          });
+        this.setState({backupWalletContent: <BackupWallet />}, ()=>{
+          this.modalBackupRef.open();
+        })
       }
     });  
+  }
+  closeBackupWalletAccount=()=>{
+    this.setState({backupWalletContent: ""});
   }
   
   showRestoreWalletAccount=()=>{
     this.props.requestWalletPasscode({      
       onSuccess: () => {
-        this.modalRestoreRef.open();
+        this.setState({restoreWalletContent: <RestoreWallet />}, ()=>{
+          this.modalRestoreRef.open();
+        })        
       }
     })    
+  }
+  closeRestoreWalletAccount=()=>{
+    this.setState({restoreWalletContent: ""});
   }
 
   showWalletSettings(){    
@@ -632,63 +639,6 @@ class Wallet extends React.Component {
     }, ()=> {      
       this.modalSettingRef.open();
     });
-  }
-
-  creatSheetMenuHeaderMore() {
-    const { messages } = this.props.intl;
-    const obj = [];
-
-    // obj.push({
-    //   title: messages.wallet.action.import.title,
-    //   handler: () => {
-    //     this.showModalAddCoin();
-    //   },
-    // });
-
-    // obj.push({
-    //   title: messages.wallet.action.add_token.title,
-    //   handler: () => {
-    //     this.showModalAddToken();
-    //   },
-    // });
-    // obj.push({
-    //   title: messages.wallet.action.add_collectible.title,
-    //   handler: () => {
-    //     this.showModalAddCollectible();
-    //   },
-    // });
-    
-
-    obj.push({
-      title: messages.wallet.action.backup.title,
-      handler: () => {
-        this.setState({activeBackup: true, walletsData: {
-          "auth_token": local.get(APP.AUTH_TOKEN),
-          "chat_encryption_keypair": local.get(APP.CHAT_ENCRYPTION_KEYPAIR),
-          "wallets": this.getAllWallet()}});
-        this.toggleBottomSheet();
-        this.modalBackupRef.open();
-      },
-    });
-    obj.push({
-      title: messages.wallet.action.restore.title,
-      handler: () => {
-        this.toggleBottomSheet();
-        this.modalRestoreRef.open();
-      },
-    });
-    obj.push({
-      title: messages.wallet.action.setting.title,
-      handler: () => {
-        this.setState({
-          modalSetting: (<SettingWallet customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
-        }, ()=> {
-          this.toggleBottomSheet();
-          this.modalSettingRef.open();
-        });
-      },
-    });    
-    return obj;
   }
 
   // add custom token:
@@ -759,10 +709,7 @@ class Wallet extends React.Component {
     this.setState({ isNewCCOpen: !this.state.isNewCCOpen });
   }
 
-  onIconRightHeaderClick = () => {
-    //this.setState({ listMenu: this.creatSheetMenuHeaderMore() });
-    //this.toggleBottomSheet();
-    
+  onIconRightHeaderClick = () => {    
     // now show settings
     this.showWalletSettings();
   }
@@ -986,7 +933,7 @@ class Wallet extends React.Component {
   render = () => {
     const { messages } = this.props.intl;
     const { formAddTokenIsActive, formAddCollectibleIsActive, modalBuyCoin, modalTransferCoin, modalSetting,
-      modalHistory, modalWalletPreferences, modalReceiveCoin, walletSelected, walletsData} = this.state;
+      modalHistory, modalWalletPreferences, modalReceiveCoin, walletSelected, walletsData, backupWalletContent, restoreWalletContent} = this.state;
 
     return (
       <div className="wallet-page">
@@ -1045,13 +992,13 @@ class Wallet extends React.Component {
           </Modal>
 
           {/* Modal for Backup wallets : */}
-          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.backup.header} onRef={modal => this.modalBackupRef = modal}>
-            <BackupWallet walletData={walletsData} />
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.backup.header} onRef={modal => this.modalBackupRef = modal} onClose={this.closeBackupWalletAccount}>
+            {backupWalletContent}
           </Modal>
 
           {/* Modal for Restore wallets : */}
-          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal}>
-            <RestoreWallet />
+          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  title={messages.wallet.action.restore.header} onRef={modal => this.modalRestoreRef = modal} onClose={this.closeRestoreWalletAccount}>
+            {restoreWalletContent}
           </Modal>
 
           {/* Modal for Copy address : */}

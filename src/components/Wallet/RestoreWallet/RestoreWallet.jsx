@@ -94,7 +94,7 @@ class RestoreWallet extends React.Component {
       }
     }
     this.showError(messages.wallet.action.restore.error);
-    this.setState({ erroValueBackup: true, isRestoreLoading: false });
+    this.setState({ erroValueBackup: true, isRestoreLoading: false, inputRestoreWalletValue: '' });
   }
 
   updateRestoreWalletValue = (evt) => {

@@ -154,8 +154,8 @@ class ListCoin extends React.Component {
                 <div className="address">{e.getShortAddress()}</div>
               </div>
               <div className="col-5 text-right pr-3">
-                <div className="balance">{e.balance} {e.name}</div>
-                <div className="qrcode" onClick={()=> this.openQRCode(e)}><img src={isSelected ? iconQRCodeWhite : iconQRCodeBlack} /></div>
+                <div className="balance" onClick={()=> this.selectCoin(e)}>{e.balance} {e.name}</div>
+                <div className="qrcode"><img src={isSelected ? iconQRCodeWhite : iconQRCodeBlack}  onClick={()=> this.openQRCode(e)} /></div>
               </div>
             </div>
           </div>

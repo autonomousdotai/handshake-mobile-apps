@@ -17,7 +17,6 @@ const PayForDevsGetStarted = () => (
         <div className="col-12 col-md-6 pd-subHeading">
           <p className="pd-heading">Pay for Devs Quickstart</p>
           <p>A crypto payment gateway for developers that is easy to integrate into their mobile app or website.</p>
-          <div className="pt-4"><a href="/payment"><button className="btn btn-primary-landing ml-1">GET STARTED for FREE</button></a></div>
         </div>
         </Fade>
         <div className="col-12 col-md-6 text-right pt-4"><Flip right><img src={img1} /></Flip></div>
@@ -106,6 +105,7 @@ const PayForDevsGetStarted = () => (
         <div className="col-12 col-md-6 pd-content">
           <p className="pd-heading">Register to make regular payments</p>
           <p>Register your username on Ninja Wallet. Then, set your default crypto wallet which you want to use for outgoing and incoming payments. With each order, your server will automatically redirect to Ninja Payment to process the charge. This redirect link will contain the recipient’s wallet address, payment amount, and any additional information you wish you include.</p>
+          <div className="pt-4"><a href="/payment"><button className="btn btn-primary-landing ml-1" disabled>Comming soon</button></a></div>
         </div>
         </Slide>
         <div className="col-12 col-md-6"><Zoom right><img src={img3} /></Zoom></div>

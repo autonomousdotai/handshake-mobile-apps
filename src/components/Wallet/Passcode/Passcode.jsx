@@ -51,7 +51,7 @@ class Passcode extends React.PureComponent {
       // check pass:
       if (check){
         let valueEnter = parseInt(passcodeResult.join(''));
-        console.log(this.props.confirmValue , md5(valueEnter ));
+        // console.log(this.props.confirmValue , md5(valueEnter ));
         if (this.props.confirmValue){
           if (this.props.confirmValue === md5(valueEnter )){
             // console.log("pass confirm", valueEnter);

@@ -58,11 +58,12 @@ class ContentForPayForDevs extends React.Component {
     } = this.props;
     const { withDesc } = opt;
     return (
-      <FormSubscribeEmail onSubmit={this.handleSubmit}>
+      <div>
         <div className="d-table-cell align-top text-send-link">
           For updates, subscribe your email
         </div>
         <div className="wrapperEmail">
+          <FormSubscribeEmail onSubmit={this.handleSubmit}>
           <div className="emailField">
             <Field
               name="email"
@@ -78,9 +79,10 @@ class ContentForPayForDevs extends React.Component {
               </button>
             </div>
           </div>
-          <button className="btnTelegram">Get Started</button>
+          </FormSubscribeEmail>
+          <button className="btnTelegram" onClick={() => {window.location.href = '/pay-for-devs-get-started' }}>Get Started</button>
         </div>
-      </FormSubscribeEmail>
+      </div>
     );
   }
 
@@ -95,7 +97,11 @@ class ContentForPayForDevs extends React.Component {
             <p>We wanted to create a platform that would allow businesses to seamlessly integrate cryptocurrency payments into their current business model.</p>
             <p className="pd-content font-normal">Give your customers more choices when paying.</p>
             <div className="subscribe">
-              { this.state.isSubscribed ? <div className="text-success">Thank you for subscribing!</div> : this.renderEmailForm() }
+              { this.state.isSubscribed ?
+              <div>
+                <div className="text-success p-2">Thank you for subscribing!</div>
+                <button className="btnTelegram" onClick={() => {window.location.href = '/pay-for-devs-get-started' }}>Get Started</button>
+              </div> : this.renderEmailForm() }
             </div>
           </div>
         </Slide>
