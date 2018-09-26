@@ -6,6 +6,7 @@ import Select from 'react-select';
 import classNames from 'classnames';
 import AutoSuggestion from '@/components/AutoSuggestion/AutoSuggestion';
 import RangeSlider from '@/components/RangeSlider/RangeSlider';
+import CreatableSelect from 'react-select/lib/Creatable';
 
 function selectControl(props) {
   const { name, value, onChange } = props.input;
@@ -20,6 +21,18 @@ function selectControl(props) {
       placeholder={props.placeholder}
       isDisabled={props.disabled}
       options={props.options}
+    />
+  );
+}
+
+function creatableSelect(props) {
+  const { name, value, onChange } = props.input;
+  return (
+    <CreatableSelect
+      isClearable
+      onChange={onChange}
+      // onInputChange={onChange}
+      options={props.dataSource}
     />
   );
 }
@@ -39,10 +52,11 @@ function inputControl(props) {
 function autoSuggestion(props) {
   const { placeholder, source } = props;
   const { name, value, onChange } = props.input;
-  let nextValue = (typeof value === 'string' || typeof value === 'number')
-    ? source.find(o => (o.name === value || o.id === value)) : value.toString();
-  if (typeof nextValue === 'object') {
-    nextValue = nextValue.name;
+  let nextValue;
+  if (typeof value === 'number') {
+    nextValue = source.find(o => (o.name === value || o.id === value) || {}).name;
+  } else {
+    nextValue = value.toString();
   }
   const asProps = {
     ...props,
@@ -76,6 +90,8 @@ function renderByType(props) {
   switch (props.type) {
     case 'select':
       return selectControl(props);
+    case 'creatableSelect':
+      return creatableSelect(props);
     case 'autoSuggestion':
       return autoSuggestion(props);
     case 'rangeSlider':

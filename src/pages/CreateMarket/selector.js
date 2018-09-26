@@ -11,8 +11,7 @@ export const uId = (state) => {
 
 export const eventDetailSelector = (state, props) => {
   const { eventId } = props.match.params;
-  if (!state.predictionDetail[eventId]) return [];
-  return [state.predictionDetail[eventId]];
+  return state.predictionDetail[eventId] || {};
 };
 
 export const reportSelector = (state) => {

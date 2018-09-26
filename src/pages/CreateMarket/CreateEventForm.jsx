@@ -6,13 +6,14 @@ import IconPlus from '@/assets/images/icon/icon-plus.svg';
 import IconTrash from '@/assets/images/icon/icon-trash.svg';
 import moment from 'moment';
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker';
+import GA from '@/services/googleAnalytics';
 import { renderField } from './form';
 import { required, urlValidator } from './validate';
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
 import { createEventFormName } from './constants';
 import EmailVerification from './EmailVerification';
-import GA from '@/services/googleAnalytics';
+import EventName from './EventName';
 
 const minStep = 15;
 const secStep = minStep * 60;
@@ -376,7 +377,7 @@ class CreateEventForm extends Component {
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>
         <div className="CreateEventFormBlock">
           {this.renderEventSuggest(props, state)}
-          {/* {this.renderCategories(props, state)} */}
+          {/*<EventName eventList={props.eventList} />*/}
           <FieldArray
             name="outcomes"
             isNew={props.isNew}
@@ -388,6 +389,8 @@ class CreateEventForm extends Component {
         <div className="CreateEventFormBlock">
           {this.renderReport(props)}
           {this.renderTimeGroup(props, state)}
+        </div>
+        <div className="CreateEventFormBlock">
           <EmailVerification
             hasEmail={props.hasEmail}
             isValidEmailCode={props.isValidEmailCode}

@@ -56,7 +56,7 @@ function* handleLoadCreateEventData({ eventId }) {
     yield all([
       call(handleLoadReportsSaga, {}),
       eventId && call(handleLoadMatchDetail, { eventId }),
-      call(handleLoadMatches, { isDetail: eventId }),
+      call(handleLoadMatches, {}),
       // call(handleLoadCategories, {}),
       call(isBalanceInvalid, {}),
     ]);

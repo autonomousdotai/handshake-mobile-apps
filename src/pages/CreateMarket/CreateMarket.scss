@@ -307,9 +307,11 @@
   margin: 0 -15px 5px -15px;
   padding: 15px;
   background-color: #ffffff;
-  > .CreateEventFormGroupTitle:first-child {
+
+  .CreateEventFormGroupTitle {
     font-size: rem-calc(16px);
   }
+
   button.AddMoreOutCome {
     color: #2456FB;
     font-size: rem-calc(16px);
