@@ -169,7 +169,7 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           awayTeamCode: values.awayTeamCode || '',
           homeTeamFlag: values.homeTeamFlag || '',
           awayTeamFlag: values.awayTeamFlag || '',
-          name: values.eventName,
+          name: values.eventName.label,
           public: values.private ? 0 : 1,
           date: values.closingTime,
           reportTime: values.reportingTime,

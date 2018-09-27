@@ -29,10 +29,18 @@ function creatableSelect(props) {
   const { name, value, onChange } = props.input;
   return (
     <CreatableSelect
-      isClearable
+      // className={props.className}
+      classNamePrefix="react-select"
+      name={name}
+      value={value}
       onChange={onChange}
-      // onInputChange={onChange}
+      isClearable
+      // backspaceRemovesValue
+      placeholder={props.placeholder}
       options={props.dataSource}
+      isDisabled={props.disabled}
+      getOptionLabel={props.getOptionLabel}
+      getOptionValue={props.getOptionValue}
     />
   );
 }

@@ -14,6 +14,7 @@ import ShareMarket from './ShareMarket';
 import { createEventFormName } from './constants';
 import EmailVerification from './EmailVerification';
 import EventName from './EventName';
+import ReportSource from './ReportSource';
 
 const minStep = 15;
 const secStep = minStep * 60;
@@ -32,6 +33,7 @@ class CreateEventForm extends Component {
     eventList: PropTypes.array,
     formAction: PropTypes.func,
     dispatch: PropTypes.func,
+    onSelect: PropTypes.func,
     isValidEmailCode: PropTypes.bool,
   };
 
@@ -41,6 +43,7 @@ class CreateEventForm extends Component {
     categoryList: undefined,
     formAction: undefined,
     dispatch: undefined,
+    onSelect: undefined,
     isNew: true,
     hasEmail: false,
     initialValues: {},
@@ -143,48 +146,18 @@ class CreateEventForm extends Component {
     return (<div className="CreateEventFormGroupNote">{text}</div>);
   }
 
-  renderEventSuggest = (props) => {
+  renderPrivateOption = (props) => {
     return (
-      <React.Fragment>
-        {this.renderGroupTitle('EVENT')}
+      <label className="switch">
         <Field
-          type="autoSuggestion"
-          name="eventName"
-          className="form-group"
-          fieldClass="form-control"
-          placeholder="e.g. UEFA - Spain vs Portugal"
-          onSelect={props.onSelect}
-          source={props.eventList}
-          validate={required}
-          component={renderField}
+          name="private"
+          component="input"
+          type="checkbox"
+          disabled={!props.isNew}
         />
-        <label className="switch">
-          <Field
-            name="private"
-            component="input"
-            type="checkbox"
-            disabled={!props.isNew}
-          />
-          <span className="slider round" />
-          <span className="text">Private</span>
-        </label>
-      </React.Fragment>
-    );
-  };
-
-  renderCategories = (props) => {
-    return (
-      <Field
-        name="category"
-        type="select"
-        label="Category"
-        placeholder="Select a category..."
-        className="form-group"
-        disabled={!props.isNew}
-        validate={required}
-        component={renderField}
-        options={props.categoryList}
-      />
+        <span className="slider round" />
+        <span className="text">Private</span>
+      </label>
     );
   }
 
@@ -376,8 +349,8 @@ class CreateEventForm extends Component {
     return (
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>
         <div className="CreateEventFormBlock">
-          {this.renderEventSuggest(props, state)}
-          {/*<EventName eventList={props.eventList} />*/}
+          <EventName eventList={props.eventList} onSelect={props.onSelect} />
+          {this.renderPrivateOption(props)}
           <FieldArray
             name="outcomes"
             isNew={props.isNew}
@@ -387,7 +360,11 @@ class CreateEventForm extends Component {
         </div>
         {this.renderFee(props)}
         <div className="CreateEventFormBlock">
-          {this.renderReport(props)}
+          {/*{this.renderReport(props)}*/}
+          <ReportSource
+            reportList={props.reportList}
+            disabled={!props.isNew}
+          />
           {this.renderTimeGroup(props, state)}
         </div>
         <div className="CreateEventFormBlock">

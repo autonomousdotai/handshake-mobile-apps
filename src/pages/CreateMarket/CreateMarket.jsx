@@ -61,17 +61,16 @@ class CreateMarket extends React.Component {
   }
 
   onSelectEvent = (item) => {
+    console.log('item', item);
     this.setState({
       eventId: item.id || 0,
       selectedEvent: item,
     });
-    if (item.id) {
-      // this.props.history.push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id}`); // eslint-disable-line
-    }
   }
 
   renderCreateEventForm = (props, state) => {
     const { selectedEvent } = state;
+    const selectedReport = props.reportList.find(i => i.id === selectedEvent.source_id);
     // const selectedEvent = state.eventId ? props.eventList.find(item => item.id.toString() === state.eventId.toString()) : props.eventDetail;
     const initialValues = (!selectedEvent || !selectedEvent.id) ? {
       outcomes: [{}],
@@ -79,11 +78,15 @@ class CreateMarket extends React.Component {
       private: false,
     } : {
       eventId: selectedEvent.id,
-      eventName: selectedEvent.name,
+      eventName: {
+        value: selectedEvent.id.toString(),
+        label: selectedEvent.name,
+      },
       private: !selectedEvent.public,
       outcomes: selectedEvent.outcomes.concat({}),
       creatorFee: selectedEvent.market_fee,
-      reports: selectedEvent.source_id,
+      reports: selectedReport,
+      // reports: selectedEvent.source_id,
       category: selectedEvent.category_id,
       closingTime: selectedEvent.date,
       reportingTime: selectedEvent.reportTime,
