@@ -5,7 +5,7 @@ import { renderField } from '@/pages/CreateMarket/form';
 import { emailValidator, required } from '@/pages/CreateMarket/validate';
 import { Field, reduxForm } from 'redux-form';
 import ExtLogo from '@/assets/images/pex/ext-landing-page/logo.svg';
-import MacBook from '@/assets/images/pex/ext-landing-page/mac.png';
+import MacBook from '@/assets/images/pex/ext-landing-page/mac.gif';
 import { ExtensionSubscribe } from './action';
 import { subscribeResultSelector } from './selector';
 
