@@ -21,6 +21,7 @@ class ListCoin extends React.Component {
     walletSelected: PropTypes.any,
     wallets: PropTypes.any,
     crypto: PropTypes.string,
+    addressSelected: PropTypes.string,
     onSelect: PropTypes.func
   }
 
@@ -65,15 +66,18 @@ class ListCoin extends React.Component {
   async componentDidMount() {
     let { walletSelected, wallets, crypto } = this.props;
     this.showLoading();
-    if(!wallets){
+    if(!wallets){console.log('componentDidMount');
       wallets = await this.getWallets();
     }
-
-    this.setState({wallets, walletSelected}, ()=> {this.hideLoading() });
+    console.log('componentDidMount getWallets');
+    this.setState({wallets}, ()=> {this.hideLoading() });
+    walletSelected &&  this.setState({walletSelected});
   }
 
   getWallets = () => {
-    const { crypto } = this.props;
+    const { crypto, walletSelected, addressSelected } = this.props;
+
+    let isAddressSelected = walletSelected && !addressSelected ? true : false;
     return new Promise(async (resolve, reject) => {
       let wallets = crypto ? await MasterWallet.getWallets(crypto) : await MasterWallet.getMasterWallet();
 
@@ -81,19 +85,27 @@ class ListCoin extends React.Component {
       let listWalletCoin = [];
       if (wallets.length > 0){
         for(let wal of wallets){
-          if(!wal.isCollectibles){
+          if(!wal.isCollectibles){console.log('isAddressSelected', isAddressSelected, wal.address, addressSelected)
+            if(!isAddressSelected && wal.address == addressSelected) {
+              isAddressSelected = true;
+              this.setState({walletSelected: wal})
+            }
+
             wal.text = wal.getShortAddress() + " (" + wal.name + "-" + wal.getNetworkName() + ")";
             if (process.env.isLive){
               wal.text = wal.getShortAddress() + " (" + wal.className + " " + wal.name + ")";
             }
             wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
-
-            wal.balance = wal.formatNumber(await wal.getBalance());
+            wal.balance = await wal.getBalance();
+            wal.balance = wal.balance && wal.formatNumber(wal.balance);
             listWalletCoin.push(wal);
           }
         }
 
         resolve(listWalletCoin);
+      }
+      else{
+        resolve(false);
       }
     });
   }
@@ -161,6 +173,9 @@ class ListCoin extends React.Component {
           </div>
         }
       );
+    }
+    else{
+      return <div className="notfound">Not found wallets</div>
     }
   }
 

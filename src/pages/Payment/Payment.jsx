@@ -9,6 +9,7 @@ import {getFiatCurrency} from '@/reducers/exchange/action';
 import { bindActionCreators } from "redux";
 import Modal from '@/components/core/controls/Modal';
 import ModalDialog from '@/components/core/controls/ModalDialog';
+import Register from '@/components/Wallet/PFDRegister';
 import Checkout from './Checkout';
 import ChooseCrypto from './ChooseCrypto';
 import Complete from './Complete';
@@ -43,6 +44,8 @@ class Payment extends React.Component {
       modalChooseCrypto: '',
       modalCheckout: '',
       modalComplete: '',
+      modalRegister: '',
+
       msgError: '',
       toAddresses: false,
       isCryptoCurrency: false,
@@ -84,8 +87,22 @@ class Payment extends React.Component {
   async checkPayNinja() {
     const querystring = window.location.search.replace('?', '');
     this.querystringParsed = qs.parse(querystring);
-    let { order_id, to, amount, currency:currency, confirm_url } = this.querystringParsed;
+    let { order_id, to, amount, currency:currency, confirm_url, act } = this.querystringParsed;
 
+    //open registration form
+    if(act && act == 'register'){
+      this.setState({
+        fullBackUrl: fullBackUrl,
+        isCryptoCurrency: isCryptoCurrency,
+        modalRegister: <Register
+        />
+        }, () => {
+          this.modalRegisterRef.open();
+        }
+      );
+
+      return;
+    }
 
     if (!order_id && !amount && !confirm_url) {
       this.setState({isShowInfo: true});
@@ -323,6 +340,10 @@ class Payment extends React.Component {
     }
   }
 
+  closeRegister = () => {
+    this.setState({modalRegister: ''});
+  }
+
   successPayNinja = (data) => {
 
     this.setState({
@@ -383,7 +404,7 @@ class Payment extends React.Component {
 
   showPayNinja = () => {
     const { messages } = this.props.intl;
-    const { modalChooseCrypto, modalCheckout, modalComplete } = this.state;
+    const { modalChooseCrypto, modalRegister, modalCheckout, modalComplete } = this.state;
 
     return (
       <div className="checkout-wrapper">
@@ -393,6 +414,10 @@ class Payment extends React.Component {
 
         <Modal title="Payment" onRef={modal => this.modalCheckoutRef = modal} onClose={() => this.closeCheckout()}>
           {modalCheckout}
+        </Modal>
+
+        <Modal title="Register" onRef={modal => this.modalRegisterRef = modal} onClose={() => this.closeRegister()}>
+          {modalRegister}
         </Modal>
 
         <Modal title="Error" onRef={modal => this.modalErrorRef = modal}>
