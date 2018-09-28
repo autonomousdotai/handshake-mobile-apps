@@ -240,7 +240,12 @@ class Transfer extends React.Component {
     let wallets = listWallet;
     let walletDefault = null;
     if (!wallets){
-      wallets = MasterWallet.getMasterWallet();
+      if (coinName){
+        wallets = MasterWallet.getWallets(coinName);
+      }
+      else{
+        wallets = MasterWallet.getMasterWallet();
+      }
     }
 
     if (coinName){
@@ -469,7 +474,10 @@ selectWallet = async (walletSelected) => {
 get showWallet(){
   const walletSelected = this.state.walletSelected;
   let icon = '';
-  try{ icon = require("@/assets/images/icon/wallet/coins/" + walletSelected.name.toLowerCase() + '.svg')} catch (ex){console.log(ex)};
+  try{
+    if(walletSelected)
+      icon = require("@/assets/images/icon/wallet/coins/" + walletSelected.name.toLowerCase() + '.svg');
+  } catch (ex){console.log(ex)};
 
   return (
     <div className="walletSelected" onClick={() => {this.openListCoin() }}>

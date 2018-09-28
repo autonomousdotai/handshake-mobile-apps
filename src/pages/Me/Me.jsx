@@ -633,7 +633,11 @@ class Me extends React.Component {
                     <div className="NoDataContainer">
                       <div className="NoDataTitle">Nothing here</div>
                       <img src={NoDataImage} alt="Nothing herer" />
-                      <div className="ShortDescription">Don’t leave it blank.<br /> Place some bet, try your luck.</div>
+                      <div className="ShortDescription">
+                        Oops! <br />
+                        Looks like you’re a bit lost… <br />
+                        Go back and win big ninja!
+                      </div>
                       <div className="PlayNow">
                         <Link to="/prediction" className="btn btn-primary">Play now</Link>
                       </div>

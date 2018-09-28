@@ -87,14 +87,15 @@ class Prediction extends React.Component {
   // @TODO: Extensions
   /* eslint no-useless-escape: 0 */
   receiverMessage = (props) => {
+    console.log(window.localStorage.getItem('test'));
     const windowInfo = isJSON(window.name) ? JSON.parse(window.name) : null;
     if (windowInfo) {
       const { message } = windowInfo;
       if (window.self !== window.top && message) {
-        const urlPattern = /^https?\:\/\/(?:www\.)([^\/?#]+)(?:[\/?#]|$)/i;
+        const urlPattern = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/i;
         const { url } = message;
         const matches = url.match(urlPattern);
-        const source = matches && matches[1];
+        const source = matches && matches[0];
         props.dispatch(loadMatches({ source }));
       }
     }
