@@ -59,12 +59,10 @@ class CreateEventForm extends Component {
       closingTime: props.initialValues.closingTime,
       reportingTime: props.initialValues.reportingTime,
       disputeTime: props.initialValues.disputeTime,
-      selectedReportSource: {},
     };
   }
 
   onCreateNewEvent = async (values, dispatch, props) => {
-    console.log('CreateEventForm values: ', values);
     const { eventName, creatorFee } = values;
     await getGasPrice();
     if (props.isNew) {
@@ -75,7 +73,6 @@ class CreateEventForm extends Component {
     dispatch(createEvent({
       values,
       isNew: props.isNew,
-      selectedSource: this.state.selectedReportSource.value || null,
     }));
   }
 
@@ -137,7 +134,7 @@ class CreateEventForm extends Component {
   }
 
   reportSelected = (value) => {
-    this.setFieldValueToState('selectedReportSource', value);
+    // this.setFieldValueToState('selectedReportSource', value);
   }
 
   renderGroupTitle = (title) => {

@@ -17,8 +17,8 @@ export const eventDetailSelector = (state, props) => {
 export const reportSelector = (state) => {
   return (state.reports.list || []).map(r => {
     return Object.assign({}, r, {
-      value: r.id,
-      label: `${r.name} - ${r.url}`,
+      value: r.id.toString(),
+      label: r.url,
     });
   });
 };

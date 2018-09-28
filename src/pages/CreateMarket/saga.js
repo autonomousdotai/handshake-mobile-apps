@@ -116,7 +116,7 @@ function* saveGenerateShareLinkToStore(data) {
   }));
 }
 
-function* handleCreateEventSaga({ values, isNew, selectedSource }) {
+function* handleCreateEventSaga({ values, isNew }) {
   try {
     yield put(updateCreateEventLoading(true));
     const balanceInvalid = yield call(isBalanceInvalid);
@@ -154,14 +154,13 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
         }
       } else {
         // Create new event
-        const reportSource = {
-          source_id: selectedSource,
-          source: selectedSource ? undefined : {
-            name: '',
-            url: values.reports,
+        const { reports } = values;
+        const reportSource = reports.id ? { source_id: reports.id } : {
+          source: {
+            name: reports.value,
+            url: reports.value,
           },
         };
-        Object.keys(reportSource).forEach((k) => !reportSource[k] && delete reportSource[k]);
         const newEventData = {
           homeTeamName: values.homeTeamName || '',
           awayTeamName: values.awayTeamName || '',

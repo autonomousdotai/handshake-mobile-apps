@@ -5,7 +5,7 @@ import Loading from '@/components/Loading';
 import GasAlert from '@/pages/CreateMarket/GasAlert';
 import { isValidEmailCode, eventDetailSelector } from '@/pages/CreateMarket/selector';
 import { eventSelector } from '@/pages/Prediction/selector';
-// import { URL } from '@/constants';
+import { URL } from '@/constants';
 import CreateEventForm from './CreateEventForm';
 import { loadCreateEventData } from './action';
 import { reportSelector, categorySelector, shareEventSelector, isLoading, hasEmail, insufficientGas, uId } from './selector';
@@ -26,6 +26,7 @@ class CreateMarket extends React.Component {
     uId: PropTypes.any,
     insufficientGas: PropTypes.any,
     isValidEmailCode: PropTypes.bool,
+    eventDetail: PropTypes.object,
   };
 
   static defaultProps = {
@@ -33,6 +34,7 @@ class CreateMarket extends React.Component {
     reportList: [],
     categoryList: [],
     match: {},
+    eventDetail: {},
     insufficientGas: undefined,
     isValidEmailCode: undefined,
   };
@@ -61,11 +63,11 @@ class CreateMarket extends React.Component {
   }
 
   onSelectEvent = (item) => {
-    console.log('item', item);
     this.setState({
       eventId: item.id || 0,
       selectedEvent: item,
     });
+    this.props.history.push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id || ''}`); // eslint-disable-line
   }
 
   renderCreateEventForm = (props, state) => {

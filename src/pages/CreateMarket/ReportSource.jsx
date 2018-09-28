@@ -19,12 +19,15 @@ class ReportSource extends React.PureComponent {
     disabled: false,
   };
 
+  requireSelect = (i) => required((i || {}).value);
+
+  urlValidator = (i) => urlValidator((i || {}).url);
+
   renderComponent = (props) => {
     const cls = cx(ReportSource.displayName, {
       [props.className]: !!props.className,
     });
-    const reportList = props.reportList.map(i => ({ ...i, value: i.id.toString(), label: i.url }));
-    const validate = props.isNew ? [required, urlValidator] : [];
+    // const reportList = props.reportList.map(i => ({ ...i, value: i.id.toString(), label: `${i.url}zzzzz` }));
     const textNote = 'You must report the result to close the bet and get your fee.';
     return (
       <div className={cls}>
@@ -36,10 +39,9 @@ class ReportSource extends React.PureComponent {
           className="form-group"
           fieldClass="form-control"
           placeholder="Result URL e.g. livescore.com"
-          // onSelect={this.reportSelected}
-          dataSource={reportList}
+          dataSource={props.reportList}
           disabled={props.disabled}
-          validate={validate}
+          validate={[this.requireSelect, this.urlValidator]}
           component={renderField}
         />
       </div>
