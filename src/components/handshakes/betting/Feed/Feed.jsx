@@ -19,6 +19,7 @@ import {
   getBalance, getEstimateGas, foundShakeList, parseBigNumber,
   formatAmount,formatOdds, findUserBet, parseJsonString,
 } from '@/components/handshakes/betting/utils.js';
+import { getGasPrice } from '@/utils/gasPrice';
 
 // components
 import Button from '@/components/core/controls/Button';
@@ -133,7 +134,7 @@ class FeedBetting extends React.Component {
       isLoading: true,
     });
     const balance = await getBalance();
-
+    await getGasPrice();
     let message = null;
     const {
       hid,
