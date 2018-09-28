@@ -407,27 +407,30 @@ class Payment extends React.Component {
     const { modalChooseCrypto, modalRegister, modalCheckout, modalComplete } = this.state;
 
     return (
-      <div className="checkout-wrapper">
-        <Modal title="Select crypto payment" onRef={modal => this.modalChooseCryptoRef = modal}  onClose={() => this.closeChooseCrypto()}>
-          {modalChooseCrypto}
-        </Modal>
-
-        <Modal title="Payment" onRef={modal => this.modalCheckoutRef = modal} onClose={() => this.closeCheckout()}>
-          {modalCheckout}
-        </Modal>
-
+      <div>
         <Modal title="Register" onRef={modal => this.modalRegisterRef = modal} onClose={() => this.closeRegister()}>
           {modalRegister}
         </Modal>
 
-        <Modal title="Error" onRef={modal => this.modalErrorRef = modal}>
-          <div className="msg-error">{this.state.msgError}</div>
-        </Modal>
+        <div className="checkout-wrapper">
+          <Modal title="Select crypto payment" onRef={modal => this.modalChooseCryptoRef = modal}  onClose={() => this.closeChooseCrypto()}>
+            {modalChooseCrypto}
+          </Modal>
 
-        <ModalDialog className="complete-wrapper" title="Payment complete" onRef={modal => this.modalCompleteRef = modal}>
-          {modalComplete}
-        </ModalDialog>
-      </div>);
+          <Modal title="Payment" onRef={modal => this.modalCheckoutRef = modal} onClose={() => this.closeCheckout()}>
+            {modalCheckout}
+          </Modal>
+
+          <Modal title="Error" onRef={modal => this.modalErrorRef = modal}>
+            <div className="msg-error">{this.state.msgError}</div>
+          </Modal>
+
+          <ModalDialog className="complete-wrapper" title="Payment complete" onRef={modal => this.modalCompleteRef = modal}>
+            {modalComplete}
+          </ModalDialog>
+        </div>
+      </div>
+    );
   }
 
   showOverview = () => {

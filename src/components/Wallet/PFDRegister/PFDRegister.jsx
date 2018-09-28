@@ -10,12 +10,9 @@ import local from '@/services/localStore';
 import { APP } from '@/constants';
 
 import { setLanguage } from '@/reducers/app/action';
+import Button from '@/components/core/controls/Button';
 import Modal from '@/components/core/controls/Modal';
 import ModalDialog from '@/components/core/controls/ModalDialog';
-
-import './PFDRegister.scss';
-import '../WalletPreferences/WalletPreferences.scss';
-import Dropdown from '@/components/core/controls/Dropdown';
 
 import Switch from '@/components/core/controls/Switch';
 import Input from '../Input';
@@ -23,8 +20,14 @@ import { newPasscode, requestWalletPasscode, updatePasscode } from '@/reducers/a
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
 import { Bitcoin } from '@/services/Wallets/Bitcoin';
 import ListCoin from '@/components/Wallet/ListCoin';
-import iconRemove from '@/assets/images/icon/comment/delete-icon.svg';
+import valid from '@/services/validate';
+
 import ConfirmPopup from '@/components/ConfirmPopup';
+import './PFDRegister.scss';
+import '../WalletPreferences/WalletPreferences.scss';
+import iconRemove from '@/assets/images/icon/comment/delete-icon.svg';
+
+const supportWallets = ['BTC', 'ETH', 'BCH', 'XRP', 'EOS'];
 
 class PFDRegister extends React.Component {
   constructor(props) {
@@ -36,6 +39,7 @@ class PFDRegister extends React.Component {
       switchContent: '',
       listCurrenciesContent: '',
 
+      inputEmail: '',
       modalEmail: '',
       modalShopID: '',
       modalConfirmURL: '',
@@ -56,9 +60,6 @@ class PFDRegister extends React.Component {
   showToast(mst) {
     this.showAlert(mst, 'primary', 2000);
   }
-  showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
-  }
   showSuccess(mst) {
     this.showAlert(mst, 'success', 2000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
@@ -78,8 +79,23 @@ class PFDRegister extends React.Component {
       wallets: [
         {name: 'ETH', address: ''},
         {name: 'BTC', address: ''},
-        {name: 'BCH', address: ''},
         {name: 'XRP', address:''}]};
+
+    let wallets = [];
+    supportWallets.map(e => {
+      let arr = shop.wallets.filter(w => {
+        return w.name == e;
+      });
+
+      if(arr && arr.length){
+        wallets.push(arr[0]);
+      }
+      else{
+        wallets.push({name: e, address: ''});
+      }
+    });
+
+    shop.wallets = wallets;
     this.setState({shop});
   }
 
@@ -153,17 +169,30 @@ class PFDRegister extends React.Component {
   }
 
   openFormEmail=()=>{
-    console.log('openFormEmail');
 
     this.setState({modalEmail: (
         <div className="update-name">
-          <label>Email</label>
-          <Input required placeholder="" maxLength="40" value={this.state.shop.email} onChange={(value) => {this.changeEmail(value)}} />
-          <button type="button" onClick={()=> {this.updateEmail();}} block={true} className="button-wallet-cpn">Save</button>
+          <label>Shop email to receive customer payment, new updates...</label>
+          <Input required placeholder="Shop email" maxLength="40" value={this.state.shop.email} onChange={(value) => {this.changeEmail(value)}} />
+          <Button type="button" onClick={()=> {this.updateEmail();}} block={true} className="button-wallet-cpn">Save</Button>
         </div>
       )
     }, ()=>{
       this.modalEmailRef.open();
+    });
+  }
+
+  openFormShopID=()=>{
+
+    this.setState({modalShopID: (
+        <div className="update-name">
+          <label>Shop ID</label>
+          <Input required placeholder="Shop ID" maxLength="40" value={this.state.shop.shop_id} onChange={(value) => {this.changeShopID(value)}} />
+          <Button type="button" onClick={()=> {this.updateShopID();}} block={true} className="button-wallet-cpn">Save</Button>
+        </div>
+      )
+    }, ()=>{
+      this.modalShopIDRef.open();
     });
   }
 
@@ -174,7 +203,7 @@ class PFDRegister extends React.Component {
         <div className="update-name">
           <label>Confirm URL</label>
           <Input required placeholder="" maxLength="40" value={this.state.shop.confirm_url} onChange={(value) => {this.changeEmail(value)}} />
-          <button type="button" onClick={()=> {this.updateEmail();}} block={true} className="button-wallet-cpn">Save</button>
+          <button type="button" onClick={(value)=> {this.updateEmail(value);}} block={true} className="button-wallet-cpn">Save</button>
         </div>
       )
     }, ()=>{
@@ -183,22 +212,25 @@ class PFDRegister extends React.Component {
   }
 
   changeEmail=(value) => {
-    let shop = this.state.shop;
-    if(shop){
-      shop.email = value;
-    }
-    this.setState({shop}, ()=>{
-      //this.renderModalName();
-    });
+    this.setState({inputEmail: value});
   }
 
-  updateEmail = () => {
-    let shop = this.state.shop;
+  changeShopID=(value) => {
+    this.setState({inputShopID: value});
+  }
 
-    if (shop){
-      //update API
-      this.modalEmailRef.close();
+  updateShopID = (value) => {
+    const { messages } = this.props.intl;
+    let {inputShopID, shop} = this.state;
+
+    if (!shop){
+      return;
     }
+
+    shop.shop_id = inputShopID;
+    this.setState({shop}, ()=>{
+      this.modalShopIDRef.close();
+    });
   }
 
   showLoading = () => {
@@ -280,15 +312,19 @@ class PFDRegister extends React.Component {
 
         <div className="box-setting">
 
-          <Modal title={messages.wallet.action.setting.label.select_alternative_currency} onRef={modal => this.modalSelectCurrencyRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle}>
+          <Modal title={messages.wallet.action.setting.label.select_alternative_currency} onRef={modal => this.modalSelectCurrencyRef = modal}>
             <div className="list-currency">
               {this.state.listCurrenciesContent}
             </div>
           </Modal>
 
 
-          <Modal onClose={()=>{this.setState({modalEmail: ""})}} title="Email" onRef={modal => this.modalEmailRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle}>
+          <Modal onClose={()=>{this.setState({modalEmail: ""})}} title="Email" onRef={modal => this.modalEmailRef = modal}>
             {modalEmail}
+          </Modal>
+
+          <Modal onClose={()=>{this.setState({modalShopID: ""})}} title="Shop ID" onRef={modal => this.modalmodalShopIDRef = modal}>
+            {modalShopID}
           </Modal>
 
           <div className="wallets-wrapper">
@@ -297,14 +333,14 @@ class PFDRegister extends React.Component {
             </Modal>
           </div>
 
-          <div className="item1">
-            <div className="name" onClick={()=> {this.openFormEmail();}}>{messages.wallet.action.payment.label.email}</div>
+          <div className="item1" onClick={()=> {this.openFormEmail();}}>
+            <div className="name">{messages.wallet.action.payment.label.email}</div>
             <div className="value">
             <span className="text">{shop && shop.email}</span>
             </div>
           </div>
 
-          <div className="item1">
+          <div className="item1" onClick={()=> {this.openFormShopID();}}>
             <div className="name">{messages.wallet.action.payment.label.shop_id}</div>
             <div className="value">
               <span className="text">{shop && shop.shop_id}</span>
