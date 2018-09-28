@@ -23,7 +23,8 @@ import { newPasscode, requestWalletPasscode, updatePasscode } from '@/reducers/a
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
 import { Bitcoin } from '@/services/Wallets/Bitcoin';
 import ListCoin from '@/components/Wallet/ListCoin';
-
+import iconRemove from '@/assets/images/icon/comment/delete-icon.svg';
+import ConfirmPopup from '@/components/ConfirmPopup';
 
 class PFDRegister extends React.Component {
   constructor(props) {
@@ -69,32 +70,136 @@ class PFDRegister extends React.Component {
   }
 
   componentDidMount(){
-
     this.loadShopData();
   }
 
   loadShopData = () => {
     let shop = {email: 'khoa.trinh@autonomous.nyc', shop_id: 'khoatrinh', confirm_url: 'http://www.autonomous.ai/confirm',
       wallets: [
-        {name: 'ETH', address: '0x56627819b7622ac4b2f248d6c45c9c71f4865730'},
-        {name: 'BTC', address: '1NKEu3PWTgAaNdLXgF2CY31NQYaRuF1htH'},
-        {name: 'BCH', address: '112Eu3PWTgAaNdLXgF2CY31NQYaRu45st'},
-        {name: 'XRP', address:'r4fcXbSrpfAidRT6SNQbCWNu5Ct5E1rAFi'}]};
+        {name: 'ETH', address: ''},
+        {name: 'BTC', address: ''},
+        {name: 'BCH', address: ''},
+        {name: 'XRP', address:''}]};
     this.setState({shop});
   }
 
   selectWallet=(w)=>{
+    // this.setState({modalListCoin: <ConfirmPopup
+    //   title={"hehe"}
+    //   content={"haha"}
+    //   cancelButtonTitle="Cancel"
+    //   okButtonTitle="Dispute"
+    //   cancelButtonClick={() => {
+
+    //   }}
+    //   okButtonClick= {() => {
+
+    //   }}
+    //   />});
+
     this.setState({modalListCoin:
       <ListCoin
         addressSelected={w.address}
         crypto={w.name}
-        onSelect={wallet => { this.selectWallet(wallet); }}
+        onSelect={wallet => { this.selectedWallet(wallet); }}
       />
     }, ()=> {
       this.modalListCoinRef.open();
     });
   }
 
+  selectedWallet=(w)=>{console.log('selectedWallet');
+    let { wallets } = this.state.shop;
+    if(wallets){
+      console.log('deleteWallet', wallets);
+      wallets.some((wallet) => {
+        if (wallet.name == w.name){
+          wallet.address = w.address;
+          return true;
+        }
+      });
+
+      //post API
+      //...
+
+      this.setState({ wallets, modalListCoin: ''}, ()=> {
+        this.modalListCoinRef.close();
+      });
+    }
+  }
+
+  deleteWallet=(w)=>{
+    let { wallets } = this.state.shop;
+
+    if(wallets){
+      console.log('deleteWallet', wallets);
+      wallets.some((wallet) => {
+        if (wallet.name == w.name && wallet.address == w.address){
+          wallet.address = "";
+          return true;
+        }
+      });
+
+      // for(let i in wallets){
+      //   console.log(wallets[i]);
+      //   if(w.address == wallets[i].address && w.name == wallets[i].name){
+      //     wallets[i] = {name: w.name, address: ''};
+      //     break;
+      //   }
+      // }
+      console.log('deleteWallet2', wallets);
+      this.setState({wallets});
+    }
+  }
+
+  openFormEmail=()=>{
+    console.log('openFormEmail');
+
+    this.setState({modalEmail: (
+        <div className="update-name">
+          <label>Email</label>
+          <Input required placeholder="" maxLength="40" value={this.state.shop.email} onChange={(value) => {this.changeEmail(value)}} />
+          <button type="button" onClick={()=> {this.updateEmail();}} block={true} className="button-wallet-cpn">Save</button>
+        </div>
+      )
+    }, ()=>{
+      this.modalEmailRef.open();
+    });
+  }
+
+  openFormConfirmURL=()=>{
+    console.log('openFormConfirmURL');
+
+    this.setState({modalConfirmURL: (
+        <div className="update-name">
+          <label>Confirm URL</label>
+          <Input required placeholder="" maxLength="40" value={this.state.shop.confirm_url} onChange={(value) => {this.changeEmail(value)}} />
+          <button type="button" onClick={()=> {this.updateEmail();}} block={true} className="button-wallet-cpn">Save</button>
+        </div>
+      )
+    }, ()=>{
+      this.modalConfirmURLRef.open();
+    });
+  }
+
+  changeEmail=(value) => {
+    let shop = this.state.shop;
+    if(shop){
+      shop.email = value;
+    }
+    this.setState({shop}, ()=>{
+      //this.renderModalName();
+    });
+  }
+
+  updateEmail = () => {
+    let shop = this.state.shop;
+
+    if (shop){
+      //update API
+      this.modalEmailRef.close();
+    }
+  }
 
   showLoading = () => {
     this.props.showLoading({message: '',});
@@ -126,12 +231,12 @@ class PFDRegister extends React.Component {
 
         w.address = wallet.address;
 
-          return <div key={wallet.name + wallet.address} className="item" onClick={() => this.selectWallet(wallet)}>
-            <img className="icon" src={icon} />
-            <div className="name">
-                <label>{w.getShortAddress()}</label>
+          return <div key={wallet.name + wallet.address} className="item">
+            <img className="icon" src={icon} onClick={() => this.selectWallet(wallet)} />
+            <div className="name" onClick={() => this.selectWallet(wallet)}>
+                <label>{w.address ? w.getShortAddress() : "<unset>"}</label>
             </div>
-            <div className="value"></div>
+            {w.address && <div className="value" onClick={() => this.deleteWallet(wallet)}><img src={iconRemove} /></div>}
           </div>
         })}
 
@@ -193,7 +298,7 @@ class PFDRegister extends React.Component {
           </div>
 
           <div className="item1">
-            <div className="name" onClick={()=> {this.changeEmail();}}>{messages.wallet.action.payment.label.email}</div>
+            <div className="name" onClick={()=> {this.openFormEmail();}}>{messages.wallet.action.payment.label.email}</div>
             <div className="value">
             <span className="text">{shop && shop.email}</span>
             </div>
@@ -206,7 +311,7 @@ class PFDRegister extends React.Component {
             </div>
           </div>
 
-          <div className="item1" onClick={()=> {this.onClickCurrency();}}>
+          <div className="item1" onClick={()=> {this.openFormConfirmURL();}}>
             <div className="name">{messages.wallet.action.payment.label.confirm_url}</div>
             <div className="value">
               <span className="text">{shop && this.formatUrl(shop.confirm_url)}</span>
