@@ -197,13 +197,12 @@ class PFDRegister extends React.Component {
   }
 
   openFormConfirmURL=()=>{
-    console.log('openFormConfirmURL');
 
     this.setState({modalConfirmURL: (
         <div className="update-name">
           <label>Confirm URL</label>
-          <Input required placeholder="" maxLength="40" value={this.state.shop.confirm_url} onChange={(value) => {this.changeEmail(value)}} />
-          <button type="button" onClick={(value)=> {this.updateEmail(value);}} block={true} className="button-wallet-cpn">Save</button>
+          <Input required placeholder="" maxLength="40" value={this.state.shop.confirm_url} onChange={(value) => {this.changeConfirmURL(value)}} />
+          <button type="button" onClick={()=> {this.updateConfirmURL();}} block={true} className="button-wallet-cpn">Save</button>
         </div>
       )
     }, ()=>{
@@ -211,16 +210,52 @@ class PFDRegister extends React.Component {
     });
   }
 
+  updateConfirmURL = () => {
+    const { messages } = this.props.intl;
+    let {inputShopID, shop} = this.state;
+
+    if (!shop){
+      return;
+    }
+
+    shop.shop_id = inputShopID;
+    this.setState({shop}, ()=>{
+      this.modalShopIDRef.close();
+    });
+  }
+
   changeEmail=(value) => {
     this.setState({inputEmail: value});
+  }
+
+  updateEmail = () => {
+    const { messages } = this.props.intl;
+    let {inputEmail, shop} = this.state;
+
+    if (!shop){
+      return;
+    }
+
+    if (valid.email(inputEmail)) {
+      this.props.showAlert({
+        message: <div className="text-center">{messages.me.profile.verify.alert.notValid.client.email}</div>,
+        timeOut: 3000,
+        type: 'danger',
+      });
+      return;
+    }
+
+    shop.shop_id = inputEmail;
+    this.setState({shop}, ()=>{
+      this.modalEmailRef.close();
+    });
   }
 
   changeShopID=(value) => {
     this.setState({inputShopID: value});
   }
 
-  updateShopID = (value) => {
-    const { messages } = this.props.intl;
+  updateShopID = () => {
     let {inputShopID, shop} = this.state;
 
     if (!shop){
@@ -323,8 +358,12 @@ class PFDRegister extends React.Component {
             {modalEmail}
           </Modal>
 
-          <Modal onClose={()=>{this.setState({modalShopID: ""})}} title="Shop ID" onRef={modal => this.modalmodalShopIDRef = modal}>
+          <Modal onClose={()=>{this.setState({modalShopID: ""})}} title="Shop ID" onRef={modal => this.modalShopIDRef = modal}>
             {modalShopID}
+          </Modal>
+
+          <Modal onClose={()=>{this.setState({modalConfirmURL: ""})}} title="Shop ID" onRef={modal => this.modalConfirmURLRef = modal}>
+            {modalConfirmURL}
           </Modal>
 
           <div className="wallets-wrapper">
