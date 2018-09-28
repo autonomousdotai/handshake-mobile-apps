@@ -947,6 +947,8 @@ export const AUTONOMOUS_END_POINT = {
   CHECKOUT: '/order-api/order/cart/checkout',
   PRODUCTS: '/product-api/v2/products',
   PRODUCT: '/product-api/product',
+  CURRENT_COUNTRY: '/common-api/current-country',
+  CHANGE_COUNTRY: '/common-api/change-country',
 };
 export const COUNTRY_LIST = {
   "AD": "AD - Andorra",

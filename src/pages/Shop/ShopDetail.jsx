@@ -60,6 +60,7 @@ class ShopDetail extends React.Component {
     this.updateQuantity = ::this.updateQuantity;
     this.updateShippingAndTax = ::this.updateShippingAndTax;
     this.afterSelectNewOption = ::this.afterSelectNewOption;
+    this.onChangeCountry = ::this.onChangeCountry;
   }
 
   addOptionTextToObject(object) {
@@ -111,6 +112,17 @@ class ShopDetail extends React.Component {
             totalAmountPretty: totalAmount.toFixed(2),
           };
   }
+
+  async onChangeCountry(country) {
+    if (country.id) {
+      const url = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.CHANGE_COUNTRY}?country=${country.id}`;
+      await $http({ url, method: 'PUT', withCredentials: true });
+      // // get current country
+      // const urlCurrentCountry = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.CURRENT_COUNTRY}`;
+      // await $http({ url: urlCurrentCountry, method: 'GET', withCredentials: true });
+      this.updateShippingAndTax();
+    }
+  }
   
   async componentDidMount() {
     // get product buy slug
@@ -157,7 +169,7 @@ class ShopDetail extends React.Component {
       this.zipRef.value = addressInfo.zip;
       this.cityRef.value = addressInfo.city;
       this.stateRef.value = addressInfo.state;
-      countryCode = addressInfo.country;
+      // countryCode = addressInfo.country;
     } else if (ipInfo) {
       this.cityRef.value = ipInfo.city;
       this.stateRef.value = ipInfo.regionCode;
@@ -212,7 +224,7 @@ class ShopDetail extends React.Component {
         quantity: parseInt(this.quantityRef.value.trim()),
       },
     };
-    const { data: placeOrder } = await $http({ url, data, method: 'POST' });
+    const { data: placeOrder } = await $http({ url, data, method: 'POST', withCredentials: true });
     if (placeOrder.status > 0) {
       // success
       const { order_id, order_num } = placeOrder.order;
@@ -368,7 +380,7 @@ class ShopDetail extends React.Component {
               defaultId={countryCode}
               source={this.converCountrySource}
               onRef={country => this.countryRef = country}
-              onItemSelected={this.updateShippingAndTax}
+              onItemSelected={this.onChangeCountry}
             />
             <div className="input-group">
               <label htmlFor="">Phone</label>

@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import DynamicImport from '@/components/App/DynamicImport';
 import Loading from '@/components/core/presentation/Loading';
-import { URL } from '@/constants';
+import { URL, AUTONOMOUS_END_POINT } from '@/constants';
 import { setHeaderTitle, clearHeaderLeft, clearHeaderRight, hideHeader } from '@/reducers/app/action';
+import $http from '@/services/api';
 
 const Shop = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Shop/Shop')}>{Component => <Component {...props} />}</DynamicImport>);
 const OrderConfirm = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Shop/Confirm')}>{Component => <Component {...props} />}</DynamicImport>);
@@ -33,6 +34,18 @@ class ShopRouter extends React.Component {
     this.props.clearHeaderRight();
     this.props.clearHeaderLeft();
     this.props.hideHeader();
+    // bind
+    this.setupCountry.call(this);
+  }
+
+  async setupCountry() {
+    // set change country
+    const { country } = this.props.ipInfo;
+    const url = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.CHANGE_COUNTRY}?country=${country}`;
+    await $http({ url, method: 'PUT', withCredentials: true });
+    // get current country
+    // const urlCurrentCountry = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.CURRENT_COUNTRY}`;
+    // await $http({ url: urlCurrentCountry, method: 'GET', withCredentials: true });
   }
 
   render() {
@@ -45,6 +58,6 @@ class ShopRouter extends React.Component {
   }
 }
 
-export default connect(null, ({
+export default connect(state => ({ ipInfo: state.app.ipInfo }), ({
   setHeaderTitle, clearHeaderRight, clearHeaderLeft, hideHeader,
 }))(ShopRouter);

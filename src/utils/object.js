@@ -17,3 +17,16 @@ export function removeItems(obj, keys) {
 export function getKeyByValue(obj, val) {
   return Object.keys(obj)[Object.values(obj).indexOf(val)];
 }
+
+/**
+ * Detect JSON string
+ * @param {*} string
+ */
+export function isJSON(string) {
+  try {
+    const json = JSON.parse(string);
+    return (typeof json === 'object');
+  } catch (e) {
+    return false;
+  }
+}

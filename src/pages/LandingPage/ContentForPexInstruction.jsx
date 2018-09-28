@@ -58,16 +58,25 @@ class ContentForPexInstruction extends React.Component {
         <p className="content">The entire <strong>Prediction</strong> platform is decentralized (which is awesome) but, that also means that you’re the one responsible for your wallet. Unfortunately, we can’t do anything for you, if something happens. It’s always better to be safe than sorry, so please backup your wallet.</p>
         <p className="content">On your mobile device, open <a href="https://ninja.org/wallet">ninja.org/wallet</a></p>
         <div className="wrapperGuideCenter">
-          <img src={StepOne1} width="450" alt="StepOne1" />
+          <div className="imageBlock">
+            <div className="content">Figure 1.1</div>
+            <img src={StepOne1} width="450" alt="StepOne1" />
+          </div>
           <p className="content">Tap the settings cog {' '}
             <span className="icCheckOut">
               <Image src={imgSetting} alt="imgSetting" width="50px" />
-            </span>icon in the top right corner.
+            </span>icon in the top right corner. <i>(Figure 1.1)</i>
           </p>
-          <img src={StepOne2} width="450" alt="StepOne2" />
-          <p className="content">Tap <strong>Backup wallets.</strong></p>
-          <img src={StepOne3} width="450" alt="StepOne3" />
-          <p className="content">You’ll see your private key code. Tap <strong>Copy it somewhere safe.</strong></p>
+          <div className="imageBlock">
+            <div className="content">Figure 1.2</div>
+            <img src={StepOne2} width="450" alt="StepOne2" />
+          </div>
+          <p className="content">Tap <strong>Backup wallets.</strong> <i>(Figure 1.2)</i></p>
+          <div className="imageBlock">
+            <div className="content">Figure 1.3</div>
+            <img src={StepOne3} width="450" alt="StepOne3" />
+          </div>
+          <p className="content">You’ll see your private key code. Tap <strong>Copy it somewhere safe.</strong>{' '}<i>(Figure 1.3)</i></p>
         </div>
         <br />
         <p className="content">Congrats, your wallet is now backed up! (You should store your code somewhere super, super safe...like a vault or something).</p>
@@ -84,10 +93,16 @@ class ContentForPexInstruction extends React.Component {
         <div className="pexHeadline">Play with Ether or Bitcoin</div>
         <p className="content">If you have already have Ether or Bitcoin, you can just transfer it straight from your wallet into our in-app one.</p>
         <div className="wrapperGuideCenter">
-          <img src={StepTwo1} width="450" alt="StepTwo1" />
-          <img src={StepTwo2} width="450" alt="StepTwo2" />
+          <div className="imageBlock">
+            <div className="content">Figure 2.1</div>
+            <img src={StepTwo1} width="450" alt="StepTwo1" />
+          </div>
+          <div className="imageBlock">
+            <div className="content">Figure 2.2</div>
+            <img src={StepTwo2} width="450" alt="StepTwo2" />
+          </div>
         </div>
-        <p className="content">Or you can copy over the address to buy from popular coin exchanges like <strong>Coinbase</strong> or <strong>Binance</strong>.</p>
+        <p className="content">Or you can copy over the address to buy from popular coin exchanges like <strong>Coinbase</strong> or <strong>Binance</strong>. <i>(Figure 2.1, Figure 2.2)</i></p>
       </div>
     );
   }
@@ -100,10 +115,16 @@ class ContentForPexInstruction extends React.Component {
         <div className="pexHeadline">Top Up By Credit Card</div>
         <p className="content">On your mobile device, open <a href="https://ninja.org/buy-by-credit-card">ninja.org/buy-by-credit-card</a></p>
         <div className="wrapperGuideCenter">
-          <img src={StepThree1} width="450" alt="StepThree1" />
-          <p className="content">Choose a coin and enter the amount you’re buying. Tap the <strong>Buy</strong> button.</p>
-          <img src={StepThree2} width="450" alt="StepThree2" />
-          <p className="content">Enter your credit card details and tap <strong>Pay Now.</strong></p>
+          <div className="imageBlock">
+            <div className="content">Figure 3.1</div>
+            <img src={StepThree1} width="450" alt="StepThree1" />
+          </div>
+          <p className="content">Choose a coin and enter the amount you’re buying. Tap the <strong>Buy</strong> button. <i>(Figure 3.1)</i></p>
+          <div className="imageBlock">
+            <div className="content">Figure 3.2</div>
+            <img src={StepThree2} width="450" alt="StepThree2" />
+          </div>
+          <p className="content">Enter your credit card details and tap <strong>Pay Now.</strong> <i>(Figure 3.2)</i></p>
         </div>
       </div>
     );
@@ -117,12 +138,18 @@ class ContentForPexInstruction extends React.Component {
         <p className="content">Open <a href="https://ninja.org/pex">ninja.org/pex</a></p>
         <p className="content">First, pick an <strong>event</strong> (i.e. Man. City— Newcastle), the <strong>outcome</strong> (Man. City wins) and the side (support or bet against the outcome).</p>
         <div className="wrapperGuideCenter wrapperImages">
-          <img src={StepFourth1} width="450" alt="StepThree1" />
-          <img src={StepFourth2} width="450" alt="StepThree2" />
+          <div className="imageBlock">
+            <div className="content">Figure 4.1</div>
+            <img src={StepFourth1} width="450" alt="StepThree1" />
+          </div>
+          <div className="imageBlock">
+            <div className="content">Figure 4.2</div>
+            <img src={StepFourth2} width="450" alt="StepThree2" />
+          </div>
         </div>
         <br />
         <div className="content">
-          <p>Then enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 4.0).</p>
+          <p>Then enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 4.0). <i>(Figure 4.1, Figure 4.2)</i></p>
           <p><strong>Example</strong>: The odds 4.0 means you could win 3 ETH for every 1 ETH you put down.Total winnings: 1 ETH + 3TH = 4ETH</p>
           <p>Tap <strong>Bet Now.</strong></p>
           <p>The stake will be put into an escrow smart contract. The <strong>Prediction Matching Engine</strong> will then find another user to bet against the odds you’ve set.</p>
@@ -140,13 +167,14 @@ class ContentForPexInstruction extends React.Component {
         <div className="stepNumber">5</div>
         <div className="pexHeadline">Wait for the result.</div>
         <p className="content">Once the event ends, the reporter of the market will report the result within the reporting window (set by the market creator).</p>
-        <div className="wrapperGuideCenter wrapperImages">
+        <div className="wrapperGuideCenter wrapperImages imageBlock" >
+          <div className="content">Figure 5.1</div>
           <img src={StepFifth1} width="450" alt="StepFifth1" />
         </div>
         <br />
         <div className="content">
           <p>There will be a short window to dispute the result (again set by the market creator).</p>
-          <p>After which the result will be final and verified. If you win, your winnings will be automatically transferred from the escrow smart contract to your account.</p>
+          <p>After which the result will be final and verified. If you win, your winnings will be automatically transferred from the escrow smart contract to your account. <i>(Figure 5.1)</i></p>
           <p>Or if the result was successfully disputed, you’ll be completely refunded.</p>
           <p>And that’s it!</p>
           <p><strong>Happy forecasting Ninjas!</strong></p>

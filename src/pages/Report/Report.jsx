@@ -9,6 +9,7 @@ import {
 } from '@/components/handshakes/betting/utils';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { showAlert } from '@/reducers/app/action';
+import { getGasPrice } from '@/utils/gasPrice';
 
 
 const TAG = 'REPORT';
@@ -43,6 +44,7 @@ class Report extends React.Component {
   }
 
   async callContractReport(outcomes) {
+    await getGasPrice();
     if (outcomes.length > 0) {
       betHandshakeHandler.reportOutcomes(outcomes);
     }
