@@ -229,7 +229,7 @@ class ContentForWallet extends React.Component {
                 <h2 className="display-3">Don’t forget to backup your wallet</h2>
                 <p className="lead text-muted">Keep your cryptocurrencies and crypto assets safe and make sure you backup your Ninja Wallet as soon as you create one.</p>
                 <div className="btn-wrapper">
-                  <a target="_blank" href="https://medium.com/@ninja_org/how-to-back-up-your-ninja-wallet-its-really-quite-easy-d98a5ec1a671" className="btn btn-primary mb-3 mb-sm-0">Learn how to backup your wallet</a>
+                  <a target="_blank" href="https://medium.com/@ninja_org/ninja-wallet-101-d7e3c27c52e6" className="btn btn-primary mb-3 mb-sm-0">Learn how to backup your wallet</a>
                 </div>
               </div>
             </div>

@@ -215,29 +215,6 @@ const roadmaps = [
       }
     ]
   },
-  {
-    time: 'NOVEMBER 2018',
-    items: [
-      {
-        title: 'PERSONAL LOAN',
-        content: (
-          <span>
-            We launch our own decentralized credit option for small and personal
-            loans.
-          </span>
-        )
-      }
-    ]
-  },
-  {
-    time: 'DECEMBER 2018',
-    items: [
-      {
-        title: 'BUSINESS LOAN',
-        content: <span>Expand our credit option for business.</span>
-      }
-    ]
-  }
 ];
 
 
