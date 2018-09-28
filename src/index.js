@@ -18,7 +18,7 @@ if (process.env.isStaging) {
 
 window.gasPrice = 64;
 getGasPrice();
-setInterval(getGasPrice, 1000 * 60);
+//setInterval(getGasPrice, 1000 * 60);
 
 if (process.env.caches) {
   OfflinePlugin.install({

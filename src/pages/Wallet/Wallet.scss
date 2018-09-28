@@ -708,6 +708,73 @@
   margin: 10px;
 }
 
+.walletSelected {
+  border: solid 1px #EAEAEC;
+  border-radius: 5px;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  margin-top: 1rem;
+  -webkit-box-shadow: -1px 2px 10px 1px rgba(0,0,0,0.1);
+  -moz-box-shadow: -1px 2px 10px 1px rgba(0,0,0,0.1);
+  box-shadow: -1px 2px 10px 1px rgba(0,0,0,0.1);
+
+  .icon{
+    padding-right: 0 !important;
+    padding-top: 0.5rem !important;
+
+    img {
+      height: 42px;
+      border:solid 1px white;
+      border-radius: 50%;
+      background: white;
+    }
+  }
+
+  .lastCol{
+    text-align:right;
+    padding-right: 1rem !important;
+    overflow-y: hidden;
+
+    .balance{
+      font-size: 1rem;
+      font-weight:400;
+    }
+    .arrow{
+      position: absolute;
+      right: 1rem;
+      padding-right: 1rem;
+    }
+  }
+
+  .name{
+    color:Gray;
+    font-size: 1rem;
+  }
+
+  .address{
+    font-size: 1rem;
+  }
+  .col-2, .col-5, .col-6, .col-4{
+    padding: 0 0.5rem;
+    line-height: 1.9;
+  }
+
+
+
+  @media (max-width: 330px){
+    .col-5{
+      flex: 0 0 60%;
+    }
+
+    .balance{
+      display: contents !important;
+    }
+
+    .arrow{
+      float: right;
+    }
+  }
+}
+
 .wallet-listcoin{
   border: 1px solid #ececec;
   padding: 0.6rem 2rem 0.6rem 0.6rem;
@@ -933,6 +1000,18 @@
     {
       padding-right: 10px;
       padding-left: 10px;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .sendwallet-wrapper{
+    padding: 0 !important;
+    margin: 0 !important;
+    border:none !important;
+
+    .bgBox{
+      padding: 0 !important;
     }
   }
 }

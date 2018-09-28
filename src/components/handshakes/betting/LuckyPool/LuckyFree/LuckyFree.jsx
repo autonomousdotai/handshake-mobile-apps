@@ -15,8 +15,8 @@ class LuckyFree extends React.Component {
     return (
       <div className="wrapperLuckyFree">
         <Image className="luckyFreeImage" src={LuckyFreeSVG} alt="luckyfree" />
-        <div className="luckyFreeDes">Good Luck!<br />Wanna win 10 ETH?</div>
-        <div className="luckyFreeSmallDes">Just bet again to enter the draw.</div>
+        <div className="luckyFreeDes">Good Luck!<br />Wanna win one (or more!) of 10x 1ETH prizes?</div>
+        <div className="luckyFreeSmallDes">Simply bet again to enter the prize draw.</div>
         <Button
           className="luckyFreeButton"
           onClick={() => this.props.onButtonClick()}

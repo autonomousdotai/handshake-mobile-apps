@@ -22,6 +22,7 @@ import { StringHelper } from '@/services/helper';
 import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import './TransferCoin.scss';
 import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code.svg';
+import iconArrowDown from '@/assets/images/icon/expand-arrow.svg';
 import BrowserDetect from '@/services/browser-detect';
 import ListCoin from '@/components/Wallet/ListCoin';
 
@@ -465,6 +466,27 @@ selectWallet = async (walletSelected) => {
   }
 }
 
+get showWallet(){
+  const walletSelected = this.state.walletSelected;
+  let icon = '';
+  try{ icon = require("@/assets/images/icon/wallet/coins/" + walletSelected.name.toLowerCase() + '.svg')} catch (ex){console.log(ex)};
+
+  return (
+    <div className="walletSelected" onClick={() => {this.openListCoin() }}>
+      <div className="row">
+        <div className="col-2 icon"><img src={icon} /></div>
+        <div className="col-5">
+          <div className="name">{walletSelected && walletSelected.title}</div>
+          <div className="address">{walletSelected && walletSelected.getShortAddress()}</div>
+        </div>
+        <div className="col-5 lastCol">
+          <div className="balance">{walletSelected && walletSelected.balance + " " + walletSelected.name}</div>
+          <div className="arrow"><img src={iconArrowDown} /></div>
+        </div>
+      </div>
+    </div>);
+}
+
 render() {
   let { currency } = this.props;
   if(!currency) currency = "USD";
@@ -551,13 +573,7 @@ render() {
 
             <div className ="dropdown-wallet-tranfer ">
               <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>
-              <div className="wallet-listcoin" onClick={() => {this.openListCoin() }}>
-                <div className="name">{this.state.walletSelected && this.state.walletSelected.title}</div>
-                <div className="value">{this.state.walletSelected && this.state.walletSelected.getShortAddress()}</div>
-                <div className="clearfix"></div>
-                <div className="name2">Balance</div>
-                <div className="value">{this.state.walletSelected && this.state.walletSelected.balance + " " + this.state.walletSelected.name}</div>
-              </div>
+              {this.showWallet}
 
               <div className="wallets-wrapper">
                 <Modal title="Select wallets" onRef={modal => this.modalListCoinRef = modal}>
