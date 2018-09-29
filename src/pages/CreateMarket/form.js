@@ -26,7 +26,7 @@ function selectControl(props) {
 }
 
 function creatableSelect(props) {
-  const { name, value, onChange, onBlur } = props.input;
+  const { name, value, onChange } = props.input;
   return (
     <CreatableSelect
       // className={props.className}
@@ -34,9 +34,7 @@ function creatableSelect(props) {
       name={name}
       value={value}
       onChange={onChange}
-      onBlur={() => onBlur(value.value)}
       isClearable
-      // backspaceRemovesValue
       placeholder={props.placeholder}
       options={props.dataSource}
       isDisabled={props.disabled}

@@ -82,6 +82,10 @@ class CreateEventForm extends Component {
     });
   }
 
+  dispatchTouchAction = (fieldName) => {
+    return this.props.dispatch(this.props.formAction(touch, fieldName));
+  };
+
   addMoreOutcomes = (fields) => {
     const allData = fields.getAll();
     const lastIndex = allData.length - 1;
@@ -90,8 +94,9 @@ class CreateEventForm extends Component {
     if (isValid) {
       fields.push({});
     } else {
-      const { dispatch, formAction } = this.props;
-      dispatch(formAction(touch, `outcomes[${lastIndex}].name`));
+      // const { dispatch, formAction } = this.props;
+      // dispatch(formAction(touch, `outcomes[${lastIndex}].name`));
+      this.dispatchTouchAction(`outcomes[${lastIndex}].name`);
     }
   }
 
@@ -131,10 +136,6 @@ class CreateEventForm extends Component {
     const newItem = value[lastIndex];
     const oldData = value.slice(0, lastIndex);
     return oldData.every((i) => i.name !== newItem.name) ? undefined : 'Outcome already exists';
-  }
-
-  reportSelected = (value) => {
-    // this.setFieldValueToState('selectedReportSource', value);
   }
 
   renderGroupTitle = (title) => {
@@ -237,6 +238,7 @@ class CreateEventForm extends Component {
     );
   }
 
+  /*
   renderReport = (props) => {
     const reportList = props.reportList.map(item => ({ ...item, name: item.url }));
     const validate = props.isNew ? [required, urlValidator] : [];
@@ -260,6 +262,7 @@ class CreateEventForm extends Component {
       </React.Fragment>
     );
   }
+  */
 
   renderDateTime = ({ input, disabled, type, title, placeholder, startDate, endDate, meta }) => {
     const { value, name, ...onEvents } = input;
@@ -359,10 +362,10 @@ class CreateEventForm extends Component {
         </div>
         {this.renderFee(props)}
         <div className="CreateEventFormBlock">
-          {/*{this.renderReport(props)}*/}
           <ReportSource
             reportList={props.reportList}
             disabled={!props.isNew}
+            dispatchFormAction={(fieldName) => this.dispatchTouchAction(fieldName)}
           />
           {this.renderTimeGroup(props, state)}
         </div>

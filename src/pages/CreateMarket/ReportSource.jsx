@@ -11,23 +11,29 @@ class ReportSource extends React.PureComponent {
     className: PropTypes.string,
     reportList: PropTypes.array,
     disabled: PropTypes.bool,
+    dispatchFormAction: PropTypes.func.isRequired,
+    fieldName: PropTypes.string,
   };
 
   static defaultProps = {
     className: '',
     reportList: [],
     disabled: false,
+    fieldName: 'reports',
   };
 
-  requireSelect = (i) => required((i || {}).value);
+  onChange = () => {
+    this.props.dispatchFormAction(this.props.fieldName);
+  }
 
-  urlValidator = (i) => urlValidator((i || {}).url);
+  requireSelect = (i) => required((i || {}).label);
+
+  urlValidator = (i) => urlValidator((i || {}).label);
 
   renderComponent = (props) => {
     const cls = cx(ReportSource.displayName, {
       [props.className]: !!props.className,
     });
-    // const reportList = props.reportList.map(i => ({ ...i, value: i.id.toString(), label: `${i.url}zzzzz` }));
     const textNote = 'You must report the result to close the bet and get your fee.';
     return (
       <div className={cls}>
@@ -35,12 +41,13 @@ class ReportSource extends React.PureComponent {
         <div className="CreateEventFormGroupNote">{textNote}</div>
         <Field
           type="creatableSelect"
-          name="reports"
+          name={props.fieldName}
           className="form-group"
           fieldClass="form-control"
           placeholder="Result URL e.g. livescore.com"
           dataSource={props.reportList}
           disabled={props.disabled}
+          onChange={this.onChange}
           validate={[this.requireSelect, this.urlValidator]}
           component={renderField}
         />
