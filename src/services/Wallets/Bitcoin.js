@@ -48,14 +48,17 @@ export class Bitcoin extends Wallet {
     this.privateKey = derived.privateKey.toString();
   }
 
-  async getBalance() {
+  async getBalance(isFormatNumber) {
     this.setDefaultNetwork();
 
     const url = `${this.network}/addr/${this.address}/balance`;
     const response = await axios.get(url);
 
     if (response.status == 200) {
-      return await satoshi.toBitcoin(response.data);
+      if(isFormatNumber)
+        return this.formatNumber(await satoshi.toBitcoin(response.data));
+      else
+        return await satoshi.toBitcoin(response.data);
     }
     return false;
   }

@@ -9,7 +9,7 @@ import iconIphone from '@/assets/images/landing/cash-for-business/iphone.svg';
 import iconLine from '@/assets/images/landing/cash-for-business/line.svg';
 import iconMinimumEffort from '@/assets/images/landing/cash-for-business/minimum-effort.svg';
 import iconSteadyIncome from '@/assets/images/landing/cash-for-business/steady-income.svg';
-import iconSchedule from '@/assets/images/landing/cash-for-business/steady-income.svg';
+import iconSchedule from '@/assets/images/landing/cash-for-business/schedule.svg';
 
 
 const features = [

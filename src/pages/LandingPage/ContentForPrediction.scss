@@ -267,4 +267,28 @@
   bottom: 160px;
 }
 
+.btnMobileOpen {
+  background: #536DFE;
+  //border-radius: rem-calc(5px);
+  font-size: rem-calc(16px);
+  letter-spacing: 0;
+  border: none;
+  height: rem-calc(44px);
+  //width: rem-calc(250px);
+  padding: rem-calc(10px 10px);
+  text-align: center;
+  color: white;
+  position: relative;
+}
+.btnMobileOpen:before {
+  content: '';
+  width: 100%;
+	height: 100%;
+  z-index: -1;
+  position: absolute;
+  border: 1px solid #536DFE;
+  top: 3px;
+  left: 3px;
+}
+
 

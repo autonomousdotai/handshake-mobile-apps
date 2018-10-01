@@ -42,14 +42,17 @@ export class BitcoinCash extends Bitcoin {
     var address = new bitcore.PrivateKey(this.privateKey).toAddress();
     this.address = address.toString().split(':')[1];
   }
-  async getBalance() {
+  async getBalance(isFormatNumber) {
     this.setDefaultNetwork();
 
     const url = `${this.network}/addr/${this.address}/balance`;
     const response = await axios.get(url);
 
     if (response.status == 200) {
-      return response.data;
+      if(isFormatNumber)
+        return this.formatNumber(response.data);
+      else
+        return response.data;
     }
     return false;
   }

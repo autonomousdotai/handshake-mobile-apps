@@ -49,8 +49,9 @@ class WalletPasscode extends React.PureComponent {
       if (passcode && passcode['enable'] && passcode['value']){
         this.requestWalletPasscode(props, passcode);
       }
-      else{
+      else{        
         props.onSuccess();
+        this.hidePasscode();
       }
     }
     else if (type == 3){

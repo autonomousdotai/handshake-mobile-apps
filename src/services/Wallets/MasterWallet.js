@@ -410,8 +410,8 @@ export class MasterWallet {
       // check is json or encrypt data:
       if (typeof(wallets) !== 'object'){                
         let walletDecrypt = MasterWallet.decrypt(wallets);
-        let walletsObject = MasterWallet.IsJsonString(walletDecrypt);
-        if (walletsObject != false){
+        let walletsObject = MasterWallet.IsJsonString(walletDecrypt);        
+        if (walletsObject !== false){          
           return walletsObject;
         }
       }
@@ -429,7 +429,7 @@ export class MasterWallet {
             
       let wallets = MasterWallet.getWalletDataLocalString();
       
-      if (wallets == false) return false;
+      if (wallets == false) return false;      
       
       const listWallet = [];
       let hasTestnet = false;

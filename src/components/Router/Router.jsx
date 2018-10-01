@@ -109,6 +109,7 @@ const routesUsingMobileLayout = configRoutesUsingMobileLayout.map(route => (
 
 
 /* ======================== FOR DESKTOP ======================== */
+const PageMobileOnly = createDynamicImport(() => import('@/pages/Error/MobileOnly'), Loading, true);
 
 let routesUsingDesktopLayout = null;
 if (BrowserDetect.isDesktop) {
@@ -121,7 +122,7 @@ if (BrowserDetect.isDesktop) {
     { path: URL.HANDSHAKE_PEX, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
     { path: URL.PRODUCT_WALLET_URL, render: () => <ProjectDetail type="product" name="wallet" img={imgWallet} reactHelmetElement={SEOWallet} entireContentComponent={<ContentForWallet />} /> },
     { path: URL.PEX_EXTENSION, render: () => <PexExtension reactHelmetElement={SEOPrediction} /> },
-    { path: URL.HANDSHAKE_PEX_CREATOR, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
+    { path: URL.HANDSHAKE_PEX_CREATOR, render: () => <ProjectDetail type="product" name="wallet" img={imgWallet} reactHelmetElement={SEOWallet} entireContentComponent={<PageMobileOnly />} /> },
     { path: URL.HANDSHAKE_EXCHANGE, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
     { path: URL.PRODUCT_PAYFORSTORES_URL, render: () => <ProjectDetail type="product" name="pay-for-stores" img={imgHivepayOffline} reactHelmetElement={SEOPayForStores} /> },
     { path: URL.PRODUCT_PAYFORDEVS_URL, render: () => <ProjectDetail type="product" name="pay-for-devs" reactHelmetElement={SEOPayForDevs} entireContentComponent={<ContentForPayForDevs />} /> },
