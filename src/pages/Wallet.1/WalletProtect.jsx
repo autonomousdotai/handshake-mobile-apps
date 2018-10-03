@@ -8,7 +8,6 @@ import Button from '@/components/core/controls/Button';
 import Checkbox from '@/components/core/forms/Checkbox/Checkbox';
 import Modal from '@/components/core/controls/Modal';
 import ModalDialog from '@/components/core/controls/ModalDialog';
-import { differenceWith } from 'lodash';
 
 class WalletProtect extends React.Component {
   static propTypes = {

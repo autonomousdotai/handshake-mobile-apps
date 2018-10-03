@@ -1,4 +1,3 @@
-import Immutable from 'immutable';
 import { sprintf } from 'sprintf-js';
 
 function validateEmail(email) {
@@ -8,7 +7,7 @@ function validateEmail(email) {
 }
 
 // Enum
-const error = Immutable.Map({ // eslint-disable-line
+const error = { // eslint-disable-line
   REQUIRED: 1,
   EMAIL: 2,
   CHAR_COMPARE_GT: 3,
@@ -17,7 +16,7 @@ const error = Immutable.Map({ // eslint-disable-line
   NUMBER_COMPARE_LT: 6,
   CONFIRM_PASSWORD: 7,
   IN_LIST: 8,
-});
+};
 
 const errorText = {};
 errorText[error.get('REQUIRED')] = '%1$s is required';

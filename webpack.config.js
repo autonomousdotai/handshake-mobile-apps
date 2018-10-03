@@ -14,6 +14,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PwaManifestPlugin = require('webpack-pwa-manifest');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 // const OfflinePlugin = require('offline-plugin');
 
 // configs
@@ -220,6 +221,8 @@ module.exports = function webpackConfig(env, argv = {}) {
           favicon: xPath('src/assets/favicon.png'),
           env: appEnvConfig,
         }),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        // new BundleAnalyzerPlugin(),
       ],
       module: {
         rules: [

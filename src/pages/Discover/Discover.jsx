@@ -38,7 +38,6 @@ import Maintain from '@/components/Router/Maintain';
 import './Discover.scss';
 import { showPopupGetGPSPermission } from '@/reducers/app/action';
 import local from '@/services/localStore';
-// import _debounce from 'lodash/debounce';
 
 const defaultZoomLevel = 13;
 
