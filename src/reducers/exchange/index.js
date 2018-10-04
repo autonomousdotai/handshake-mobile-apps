@@ -11,6 +11,7 @@ import Referal from '@/models/Referal';
 import Deposit from '@/models/Deposit';
 import Handshake from '@/models/Handshake';
 import CashStore from "@/models/CashStore";
+import CashAtmPrice from "@/models/CashAtmPrice";
 
 const initListOfferPrice = [];
 initListOfferPrice.updatedAt = Date.now();
@@ -30,6 +31,7 @@ function exchangeReducter(state = {
   listOfferPrice: initListOfferPrice,
   isChooseFreeStart: false,
   depositInfo: initDepositInfo,
+  listOfferPriceCashAtm: initListOfferPrice,
 }, action) {
   // console.log('exchangeReducter', JSON.stringify(action));
   switch (action.type) {
@@ -63,6 +65,18 @@ function exchangeReducter(state = {
       return {
         ...state,
         listOfferPrice,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.GET_LIST_OFFER_PRICE_CASH_ATM}_SUCCESS`: {
+      const listOfferPriceCashAtm = action.payload.data.map((offerPrice) => {
+        const price = CashAtmPrice.cashAtmPrice(offerPrice);
+
+        return price;
+      });
+      listOfferPriceCashAtm.updatedAt = Date.now();
+      return {
+        ...state,
+        listOfferPriceCashAtm,
       };
     }
     case `${EXCHANGE_ACTIONS.GET_IP_INFORM}_SUCCESS`: {

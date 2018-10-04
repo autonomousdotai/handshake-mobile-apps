@@ -7,7 +7,7 @@ import local from '@/services/localStore';
 import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
 import COUNTRIES_BLACKLIST_CASH from '@/data/country-blacklist-exchange';
 import { authUpdate, fetchProfile, getFreeETH, signUp } from '@/reducers/auth/action';
-import { getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
+import { getListOfferPrice, getUserProfile, getListOfferPriceCashAtm } from '@/reducers/exchange/action';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import BrowserDetect from '@/services/browser-detect';
@@ -158,8 +158,15 @@ const tokenHandle = ({
               console.log('coins - getListOfferPrice - redux - error', e);
             },
           }));
-          // wallet          
-          const listWallet = MasterWallet.getMasterWallet();          
+          dispatch(getListOfferPriceCashAtm({
+            PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE_CASH_ATM,
+            // qs: { fiat_currency: ipInfo?.currency },
+            errorFn(e) {
+              console.log('coins - getListOfferPriceCashAtm - redux - error', e);
+            },
+          }));
+          // wallet
+          const listWallet = MasterWallet.getMasterWallet();
           if (listWallet === false) {
             MasterWallet.createMasterWallets();
             console.log('create wallet success');

@@ -238,6 +238,7 @@ export const API_URL = {
     GET_USER_PROFILE: 'exchange/user/profile', // {path: '/user/profile', method: 'get'},
     GET_OFFER_PRICE: 'exchange/info/crypto-quote', // {path: '/info/instant-buy/price', method: 'get'},
     GET_LIST_OFFER_PRICE: 'exchange/info/crypto-quotes', // {path: '/info/instant-buy/price', method: 'get'},
+    GET_LIST_OFFER_PRICE_CASH_ATM: 'exchange/cash/quotes', // {path: '/info/instant-buy/price', method: 'get'},
     GET_USER_TRANSACTION: 'exchange/user/transactions', // {path: '/user/transactions', method: 'get'},
     OFFERS: 'exchange/offers',
     SHAKE: 'shake',

@@ -75,7 +75,7 @@ class DiscoverPage extends React.Component {
       currencyActive: CRYPTO_CURRENCY.ETH,
 
       zoomLevel: defaultZoomLevel,
-      browserHeight: window.innerHeight - 108,
+      browserHeight: window.innerHeight - 60,
       curStationIdShowAllDetails: null,
       curStation: null,
     };
@@ -446,9 +446,11 @@ class DiscoverPage extends React.Component {
       curStationIdShowAllDetails,
     } = this.state;
     const { list: stations, offers } = this.props.discover;
-    const { history } = this.props;
+    const { history, listOfferPriceCashAtm } = this.props;
 
     console.log('curStation',curStation);
+
+    const marginTop = listOfferPriceCashAtm && listOfferPriceCashAtm.length > 0 ? 48 : 0;
 
     return (
       <React.Fragment>
@@ -462,7 +464,7 @@ class DiscoverPage extends React.Component {
           // googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
           googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
           loadingElement={<div style={{ height: `100%` }} />}
-          containerElement={<div className="map-container" style={{ height: `${browserHeight}px`, marginTop: '48px', position: 'relative' }} />}
+          containerElement={<div className="map-container" style={{ height: `${browserHeight - marginTop}px`, marginTop: `${marginTop}px`, position: 'relative' }} />}
           mapElement={<div style={{ height: `100%` }} />}
           // center={{ lat: 35.929673, lng: -78.948237 }}
           history={history}
@@ -577,6 +579,7 @@ const mapState = state => {
     freeStartInfo: state.exchange.freeStartInfo,
     authProfile: state.auth.profile,
     cashStore: state.exchange.cashStore,
+    listOfferPriceCashAtm: state.exchange.listOfferPriceCashAtm,
   };
 };
 
