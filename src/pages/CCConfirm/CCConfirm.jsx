@@ -34,8 +34,8 @@ class CCConfirm extends React.Component {
     console.log('location.search', window.location.search);
   }
 
-  static source = {
-  };
+  // static source = {
+  // };
 
   componentDidMount() {
   }
