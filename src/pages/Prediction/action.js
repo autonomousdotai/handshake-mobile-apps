@@ -74,6 +74,13 @@ export const checkExistSubcribeEmail = (value) => {
     _value: value,
   });
 };
+export const updateTotalBets = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:TOTAL_BETS',
+    _path: 'ui.totalBets',
+    _value: value,
+  });
+};
 
 export const updateEventList = (value) => {
   return SET_DATA({

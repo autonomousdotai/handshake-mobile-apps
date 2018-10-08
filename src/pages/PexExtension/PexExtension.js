@@ -1,13 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { renderField } from '@/pages/CreateMarket/form';
-import { emailValidator, required } from '@/pages/CreateMarket/validate';
-import { Field, reduxForm } from 'redux-form';
 import ExtLogo from '@/assets/images/pex/ext-landing-page/logo.svg';
-import MacBook from '@/assets/images/pex/ext-landing-page/mac.png';
-import { ExtensionSubscribe } from './action';
-import { subscribeResultSelector } from './selector';
+import GuideClip from '@/assets/images/pex/ext-landing-page/guide-clip.gif';
+import MacBook from '@/assets/images/pex/ext-landing-page/macbook.svg';
 
 import './PexExtension.scss';
 
@@ -15,74 +10,31 @@ class PexExtension extends React.Component {
   static displayName = 'PexExtension';
   static propTypes = {
     reactHelmetElement: PropTypes.element,
-    dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     reactHelmetElement: null,
   };
 
-  onSubmit = (value) => {
-    this.props.dispatch(ExtensionSubscribe(value));
-  }
-
-  renderSubscribeForm = (props) => {
-    let errMsg;
-    if (props.subscribeResult && props.subscribeResult.status) {
-      return (
-        <span className="SubscribeSuccess">Thank you for subscribing!</span>
-      );
-    } else if (props.subscribeResult && !props.subscribeResult.status) {
-      errMsg = props.subscribeResult.message;
-    }
-    return (
-      <div className="ExtSubscribe">
-        <span className="EmailLabel">Get Chrome Extension</span>
-        <form className="EmailRequiredForm" onSubmit={props.handleSubmit(this.onSubmit)}>
-          <Field
-            name="email"
-            type="email"
-            className="form-group"
-            fieldClass="form-control"
-            component={renderField}
-            placeholder="Enter your email address"
-            validate={[required, emailValidator]}
-          />
-          <button type="submit" className="btn btn-primary btn-block">
-            Be the first to know
-          </button>
-        </form>
-        <span className="SubscribeError">{errMsg}</span>
-      </div>
-    );
-  }
-
-  renderComponent = (props) => {
+  renderComponent = () => {
+    const URL_EXT = 'https://chrome.google.com/webstore/detail/ninja-prediction/lmbfnjfjefcjgbddmaijlmkkpfipbjhb';
     return (
       <React.Fragment>
-        <div className="LeftSideBar">
-          <a href="/"><img src={ExtLogo} alt="Extension logo" className="ExtLogo" /></a>
-        </div>
-        <div className="MainWrapper">
-          <div className="Main">
-            <div className="MacBook">
-              <img src={MacBook} alt="MacBook" />
+        <div className="PexExtensionContent">
+          <h1>
+            <a href="/" title="Ninja Prediction">
+              <img src={ExtLogo} alt="Ninja Prediction" className="ExtLogo" />
+            </a>
+          </h1>
+          <div className="GuideClipArea">
+            <img src={MacBook} alt="Extension Instruction" className="MacBook" />
+            <div className="FrameClip">
+              <img src={GuideClip} alt="Extension Instruction" className="GuideClip" />
             </div>
-            <div className="Description">
-              <p className="ExtHeader">
-                <span>Ninja Prediction</span>
-              </p>
-              <p className="ExtQuestion">
-                Bet on anything you read online without even leaving the page.
-              </p>
-              <p className="ExtDescription">
-                You use the internet, and you have opinions. <br />
-                Ninja9148 thinks you're wrong.<br />
-                Create a bet in just one click and win ETH for being right. <br />
-                Stay 100% anonymous the entire time.
-              </p>
-              {this.renderSubscribeForm(props)}
-            </div>
+          </div>
+          <div className="Description">
+            <span>Bet on anything, against anyone on the Internet.</span>
+            <a href={URL_EXT} target="blank" title="Add to chrome" className="btn btn-warning">Add to chrome</a>
           </div>
         </div>
       </React.Fragment>
@@ -100,14 +52,4 @@ class PexExtension extends React.Component {
 }
 
 
-export default connect(
-  (state) => {
-    return {
-      subscribeResult: subscribeResultSelector(state),
-    };
-  },
-)(
-  reduxForm({
-    form: 'ExtLandingForm',
-  })(PexExtension),
-);
+export default PexExtension;

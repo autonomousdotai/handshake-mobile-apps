@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.3 (57544) - http://www.bohemiancoding.com/sketch -->
+    <title>Shapeicon-copy-white</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="MOBILE-WEB-ATM" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Transfer-info" transform="translate(-375.000000, -445.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="Group" transform="translate(20.000000, 227.000000)">
+                <g id="icons8-copy-copy-2" transform="translate(355.000000, 218.000000)">
+                    <path d="M1.2,0 C0.537,0 0,0.537 0,1.2 L0,9.6 L1.2,9.6 L1.2,1.2 L9.6,1.2 L9.6,0 L1.2,0 Z M3.6,2.4 C2.937,2.4 2.4,2.937 2.4,3.6 L2.4,10.8 C2.4,11.463 2.937,12 3.6,12 L10.8,12 C11.463,12 12,11.463 12,10.8 L12,3.6 C12,2.937 11.463,2.4 10.8,2.4 L3.6,2.4 Z M3.6,3.6 L10.8,3.6 L10.8,10.8 L3.6,10.8 L3.6,3.6 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

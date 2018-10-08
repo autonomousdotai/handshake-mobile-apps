@@ -2,6 +2,13 @@
   margin-bottom: 1px;
   margin-right: 5px;
 }
+
+.walletNotFound{
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2rem 0;
+}
+
 .sendwallet-wrapper{
 
   margin: auto;
@@ -118,11 +125,12 @@
 
 .div-amount {
   padding-bottom: 10px;
+  position: relative;
 
   .prepend{
-    padding-top: 11px;
+    padding-top: 10px;
     position: absolute;
-    right: 50px;
+    right: 10px;
     color: #7b7b7b;
   }
 

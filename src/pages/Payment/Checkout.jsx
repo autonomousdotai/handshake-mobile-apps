@@ -71,17 +71,32 @@ class Checkout extends React.Component {
   showSuccess(mst) {
     this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
-  showLoading() {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
+
+  async componentDidMount() {
+    this.props.showLoading();
+    await this.getWalletDefault();
     this.props.hideLoading();
+
+    this.getBalanceWallets();
   }
 
-  componentDidMount() {
-    this.showLoading();
-    this.getWalletDefault();
+  getBalanceWallets = async () => {
+    let { wallets, walletSelected, walletDefault } = this.state;
+
+    if(wallets){
+      for(let i in wallets){
+        wallets[i].balance = await wallets[i].getBalance(true);
+        if(walletSelected.name == wallets[i].name && walletSelected.address == wallets[i].address && walletSelected.network == wallets[i].network){
+          walletSelected.balance = wallets[i].balance;
+          MasterWallet.UpdateBalanceItem(walletSelected);
+          this.checkValid();
+        }
+      }
+
+      this.setState({wallets, walletSelected, walletDefault});
+    }
   }
+
 
   copyToClipboard =(text) => {
     const textField = document.createElement('textarea');
@@ -128,9 +143,8 @@ class Checkout extends React.Component {
           if (process.env.isLive){
             wal.text = wal.getShortAddress() + " (" + wal.className + " " + wal.name + ")";
           }
-          wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
 
-          wal.balance = wal.formatNumber(await wal.getBalance());
+          wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
           listWalletCoin.push(wal);
         }
       }
@@ -148,23 +162,15 @@ class Checkout extends React.Component {
         walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
       walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName() + walletDefault.name;
-
-      // get balance for first item + update to local store:
-      this.setState({walletSelected: walletDefault});
-      MasterWallet.UpdateBalanceItem(walletDefault);
     }
 
     let endDate = new Date(), warningDate = new Date();
     // endDate.setSeconds(endDate.getSeconds() + 15);
     // warningDate.setSeconds(warningDate.getSeconds() + 5);
-
     endDate.setMinutes(endDate.getMinutes() + 5);
     warningDate.setMinutes(warningDate.getMinutes() + 1);
 
-    this.setState({wallets: listWalletCoin, walletSelected: walletDefault, event:{end: endDate.getTime(), warning: warningDate.getTime()}, isExpired: false, isWarning: false}, ()=>{
-      this.checkValid();
-      this.hideLoading();
-    });
+    this.setState({wallets: listWalletCoin, walletSelected: walletDefault, event:{end: endDate.getTime(), warning: warningDate.getTime()}, isExpired: false, isWarning: false});
   }
 
   checkValid = () =>{
@@ -235,20 +241,6 @@ class Checkout extends React.Component {
     Clipboard.copy(this.state.toAddress);
     this.showToast(messages.wallet.action.copy.message);
   }
-
-  // onItemSelectedWallet = (item) =>{
-
-  //   let wallet = MasterWallet.convertObject(item);
-  //   this.setState({walletSelected: wallet});
-
-  //   wallet.getBalance().then(result => {
-  //     wallet.balance = wallet.formatNumber(result);
-  //     this.setState({walletSelected: wallet}, ()=>{
-  //       MasterWallet.UpdateBalanceItem(wallet);
-  //       this.checkValid();
-  //     });
-  //   });
-  // }
 
   selectWallet = (walletSelected) => {
 

@@ -45,59 +45,8 @@ export class Ripple extends Wallet {
         console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
     }
 
-    // Not work on server live
-    createAddressPrivatekey2() {
-      const t0 = performance.now();
-
-      if (this.mnemonic == '') {
-        this.mnemonic = bip39.generateMnemonic(); // generates string
-      }
-      const seed = bip39.mnemonicToSeed(this.mnemonic); // creates seed buffer
-
-      console.log('mnemonic: ' + this.mnemonic);
-
-      let bip32 = require("ripple-bip32");
-      const m = bip32.fromSeedBuffer(seed);
-
-      console.log("m", m);
-
-      let masterXprv = m.toBase58();
-      console.log("masterXprv", masterXprv)
-
-      let derived = m.derivePath(StringHelper.format('m/44\'/{0}\'/0\'/0/0', this.coinType));//derivePath("m/0'/2147483647'", hexSeed);
-
-
-      let xprv = derived.toBase58();
-      console.log("xprv", xprv)
-
-      // xpub
-      let xpub = derived.neutered().toBase58();
-      console.log("xpub", xpub);
-
-      // ripple address
-      let address = derived.getAddress();
-      console.log("ripple address", address);
-
-      // publickey / privatekey
-      const srcpair = derived.keyPair.getKeyPairs();
-
-      console.log("srcpair---->", derived.keyPair);
-
-      let privateKey = srcpair.privateKey;
-
-      console.log('privateKey: ' + privateKey);
-      console.log('publicKey: ' + srcpair.publicKey);
-
-      this.address = address;
-      this.privateKey = privateKey;
-      this.publicKey = srcpair.publicKey;
-
-      const t1 = performance.now();
-      console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
-    }
-
     async getBalance() {
-      try{        
+      try{
         let data = await this.accountInfo();
         console.log('getAccountInfo.....', data);
         if(data)
@@ -110,7 +59,7 @@ export class Ripple extends Wallet {
         //console.log(e);
       }
       return 0;
-      
+
     }
 
     accountInfo(){

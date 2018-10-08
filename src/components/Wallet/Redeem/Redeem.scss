@@ -1,0 +1,167 @@
+
+.redeem-page{
+
+    padding: 20px;
+
+    @media (max-width: 330px){
+        margin-top: 10px;     
+        padding: 5px;
+        .confirm-button label{
+            font-size: 16px;
+        }        
+    }
+    .re-term-header{
+        text-transform: uppercase;
+        font-size: 0.875rem;
+        font-weight: 700;
+        margin-top: 20px;
+        text-align: center;
+    }
+    .re-term-body{
+        line-height: 25px;
+        margin-top: 10px;
+        padding-right: 10px;
+        text-align: justify;
+        font-size: 14px;
+        margin-left: -20px;
+        padding-bottom: 40px;
+        max-height: 500px;
+        overflow-y: scroll;
+        @media (max-width: 330px){
+            max-height: 300px;     
+        }
+        
+    }
+    .titleBox{
+        text-align: center;
+        img{
+            margin: auto;
+            width: 70px;
+        }
+        .title{
+            margin-top: 10px;
+            font-size: 30px;
+        }
+        .code{
+            color: #009688
+        }
+    }    
+    .buttonRedeem{        
+        margin-top: 30px;        
+        button{
+            width: 100%;
+            height: 50px;
+        }
+    }
+    .buttonConfirmRedeem{
+        margin-top: 10px;
+    }
+    .term{
+        margin-top: 40px;
+        font-size: 14px;
+        text-align: center;
+    }
+    .term-link{
+        color: #007bff;
+        text-decoration: none;
+        background-color: transparent;
+    }
+    .findcode{
+        text-align: center;
+        margin-top: 30px;
+    }
+    .redeem-code{
+        .placeholder, input{
+            text-align: center;
+        }        
+    }
+    .box-value{
+        overflow: hidden;
+        text-align: center;
+        margin-top: 15px;
+        border-top: solid 1px #EAEAEC;        
+        border-bottom: solid 1px #EAEAEC;
+        .giftcard-value{
+            float: left;
+            width: 50%;            
+            padding: 10px 0;
+        }
+        .coin-value{
+            float: right;
+            width: 50%;
+            padding: 10px 0;
+            border-left: solid 1px #EAEAEC;
+        }
+        .v-title{
+            font-weight: 400;
+            opacity: 0.7;
+        }
+        .v-value{
+            font-weight: 400;
+            font-size: 18px;
+        }
+    }
+    .error{
+        text-align: center;
+        color: #f83c37;
+        margin-top: -10px;
+    }
+    .box-header-success{
+        text-align: center;
+        margin-top: 30px;
+        img{
+            width: 60px;
+        }
+    }
+    .button-done{
+        width: 100%;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        height: 50px;
+    }
+    .wallet-select-title{
+        margin-top: 20px;
+        text-align: center;
+        opacity: .7;
+    }
+    .wallet-from{
+        border: solid 1px #EAEAEC;
+        border-radius: 5px;
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        margin-top: 5px;
+        .re-name{            
+            font-size: 1rem;
+            opacity: 0.72;            
+            font-size: 16px;
+            color: #211D2C;
+            letter-spacing: 0;
+        }
+        .re-address{            
+            opacity: 0.78;            
+            font-size: 16px;
+            color: #8593A2;
+            letter-spacing: 0;
+        }        
+        
+        position: relative;
+        .arrow-down{
+            position: absolute;
+            right: 10px;
+            top: 16px;
+        }
+        .logo{
+            width: 20px;
+            margin-right: 10px;
+            margin-left: -5px;
+            margin-top: -2px;
+        }
+        @media (max-width: 330px){            
+            .re-address{
+                display: none;
+            }
+            .logo{
+                margin-right: 5px;
+            }
+        }
+    }
+}

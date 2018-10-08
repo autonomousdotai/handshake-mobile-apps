@@ -19,7 +19,7 @@ import './EmailPopup.scss';
 class EmailPopup extends React.Component {
   static propTypes = {
     onButtonClick: PropTypes.func,
-
+    submitEmailSubcribe: PropTypes.func,
   }
   constructor(props) {
     super(props);
@@ -119,7 +119,7 @@ class EmailPopup extends React.Component {
           }}
         >
         Notify me
-          </Button>
+        </Button>
       </div>
     );
   }

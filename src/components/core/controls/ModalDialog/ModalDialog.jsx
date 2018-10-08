@@ -41,6 +41,7 @@ class ModalDialog extends React.Component {
     document.body.classList.remove('hide-scroll');
     document.body.removeAttribute('style');
     window.scrollTo(0, this.currentOffset);
+    if (this.props.hasOwnProperty('onClose')) this.props.onClose();
   }
 
   render() {

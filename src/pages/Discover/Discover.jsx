@@ -6,12 +6,12 @@ import { FormattedHTMLMessage, FormattedMessage, injectIntl } from 'react-intl';
 // import { loadDiscoverList } from '@/reducers/discover/action';
 import {
   API_URL,
-  APP,
+  APP, ATM_TYPE,
   CRYPTO_CURRENCY,
   DISCOVER_GET_HANDSHAKE_RADIUS,
   EXCHANGE_ACTION,
   HANDSHAKE_ID,
-  SORT_ORDER,
+  SORT_ORDER, TIME_FORMAT, TIME_FORMAT_AM_PM,
   URL,
 } from '@/constants';
 // import Cookies from 'js-cookie';
@@ -22,23 +22,22 @@ import Helper from '@/services/helper';
 // import FeedBetting from '@/components/handshakes/betting/Feed';
 // import FeedExchangeLocal from '@/components/handshakes/exchange/Feed/FeedExchangeLocal';
 // import FeedSeed from '@/components/handshakes/seed/Feed';
-import { fieldDropdown, fieldRadioButton } from '@/components/core/form/customField';
 import { change } from 'redux-form';
 import Map from './Components/Map';
 import NavBar from './Components/NavBar';
-import {getFreeStartInfo, getListOfferPrice, getOfferStores, setFreeStart} from '@/reducers/exchange/action';
+import { getFreeStartInfo, getListOfferPrice, getStoreATM, setFreeStart } from '@/reducers/exchange/action';
 import { loadDiscoverList } from '@/reducers/discover/action';
 import Image from '@/components/core/presentation/Image';
 import loadingSVG from '@/assets/images/icon/loading.gif';
-import ModalDialog from '@/components/core/controls/ModalDialog/ModalDialog';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
-import BlockCountry from '@/components/core/presentation/BlockCountry/BlockCountry';
-import Maintain from '@/components/Router/Maintain';
 import './Discover.scss';
 import { showPopupGetGPSPermission } from '@/reducers/app/action';
 import local from '@/services/localStore';
-// import _debounce from 'lodash/debounce';
+import Modal from '@/components/core/controls/Modal/Modal';
+import AtmCashTransfer from '@/components/handshakes/exchange/AtmCashTransfer';
+import CreateStoreATM, { CASH_ATM_TAB } from '@/components/handshakes/exchange/Create/CreateStoreATM';
+import moment from "moment/moment";
 
 const defaultZoomLevel = 13;
 
@@ -56,6 +55,7 @@ class DiscoverPage extends React.Component {
       isLoading: true,
       exchange: this.props.exchange,
       discover: this.props.discover,
+      modalTitle: '',
       modalContent: <div />, // type is node
       propsModal: {
         // className: "discover-popup",
@@ -75,7 +75,9 @@ class DiscoverPage extends React.Component {
       currencyActive: CRYPTO_CURRENCY.ETH,
 
       zoomLevel: defaultZoomLevel,
-      browserHeight: window.innerHeight - 108,
+      browserHeight: window.innerHeight - 60,
+      curStationIdShowAllDetails: null,
+      curStation: null,
     };
 
     local.save(APP.EXCHANGE_ACTION, EXCHANGE_ACTION.BUY);
@@ -131,18 +133,26 @@ class DiscoverPage extends React.Component {
     // this.setState({ sortIndexActive: CASH_SORTING_CRITERIA.DISTANCE });
 
     this.delayedShowMarker();
-    this.getOfferStore();
+    this.getStoreATM();
   }
 
   handleGoToCurrentLocation = () => {
-    const { ipInfo } = this.props;
+    const { ipInfo, cashStore } = this.props;
+    let latitude = ipInfo?.latitude;
+    let longitude = ipInfo?.longitude;
+
+    if (cashStore) {
+      latitude = cashStore.latitude;
+      longitude = cashStore.longitude;
+    }
+
     this.setState({
-      curLocation: { lat: ipInfo?.latitude, lng: ipInfo?.longitude },
+      curLocation: { lat: latitude, lng: longitude },
       // mapCenter: { lat: ipInfo?.latitude, lng: ipInfo?.longitude },
-      lat: ipInfo?.latitude,
-      lng: ipInfo?.longitude,
-      mapCenterLat: ipInfo?.latitude,
-      mapCenterLng: ipInfo?.longitude,
+      lat: latitude,
+      lng: longitude,
+      mapCenterLat: latitude,
+      mapCenterLng: longitude,
       zoomLevel: defaultZoomLevel,
     });
   };
@@ -209,10 +219,9 @@ class DiscoverPage extends React.Component {
     this.props.history.push(`${URL.HANDSHAKE_CREATE}?id=${HANDSHAKE_ID.EXCHANGE}`);
   }
 
-  getOfferStore = () => {
-    const { authProfile } = this.props;
-    this.props.getOfferStores({
-      PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${authProfile.id}`,
+  getStoreATM = () => {
+    this.props.getStoreATM({
+      PATH_URL: `${API_URL.EXCHANGE.CASH_STORE_ATM}`,
     });
   }
 
@@ -255,7 +264,7 @@ class DiscoverPage extends React.Component {
       qs.type = handshakeIdActive;
 
       if (handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
-        qs.custom_query = ` -offline_i:1 `;
+        qs.custom_query = ` -offline_i:1 offer_feed_type_s:cash_store`;
 
         const sortPrice = `${actionActive === EXCHANGE_ACTION.BUY ? EXCHANGE_ACTION.SELL : EXCHANGE_ACTION.BUY}_${currencyActive.toLowerCase()}_d`;
         const sortOrder = actionActive.includes('buy') ? SORT_ORDER.ASC : SORT_ORDER.DESC;
@@ -352,11 +361,76 @@ class DiscoverPage extends React.Component {
     this.setState({ zoomLevel: this.mapRef.getZoom() });
   }
 
+  handleOnChangeShowAllDetails = (id, newValue) => {
+    console.log('handleOnChangeShowAllDetails', id, newValue);
+    let offer = null;
+    if (newValue) {
+      const { list: stations, offers } = this.props.discover;
+      const index = stations.findIndex(station => station.id === id);
+      offer = offers[index];
+    }
+    this.setState({ curStationIdShowAllDetails: newValue ? id : null, curStation: offer });
+  }
+
+  onReceiptSaved = () => {
+    this.openAtmManagement({ defaultTab: CASH_ATM_TAB.TRANSACTION });
+  }
+
+  setModalTitle = (title) => {
+    this.setState({
+      modalTitle: title,
+    });
+  }
+
+  openNewTransaction = () => {
+    const { messages } = this.props.intl;
+
+    this.setState({
+      modalTitle: messages.atm_cash_transfer.title,
+      modalContent:
+        (
+          <AtmCashTransfer
+            setLoading={this.setLoading}
+            history={this.props.history}
+            onReceiptSaved={this.onReceiptSaved}
+            setModalTitle={this.setModalTitle}
+          />
+        ),
+    }, () => {
+      this.modalRef.open();
+    });
+  }
+
+  openAtmManagement = (opt = {}) => {
+    const { messages } = this.props.intl;
+
+    this.setState({
+      modalTitle: messages.create.atm.title,
+      modalContent:
+        (
+          <CreateStoreATM onAtmCreated={this.getStoreATM} onAtmUpdated={this.loadDiscoverList} closeModal={this.modalRef.close} options={opt} />
+        ),
+    }, () => {
+      this.modalRef.open();
+    });
+  }
+
+  getWorkingHour(station) {
+    const startTime = moment(station.information.open_hour, TIME_FORMAT).format(TIME_FORMAT_AM_PM);
+    const endTime = moment(station.information.close_hour, TIME_FORMAT).format(TIME_FORMAT_AM_PM);
+    return `${startTime.toUpperCase()} - ${endTime.toUpperCase()}`;
+  }
+
+  closeModal = () => {
+    this.setState({ modalContent: '' });
+  }
+
   render() {
     const {
       propsModal,
       modalContent,
-      browserHeight
+      browserHeight,
+      curStation,
     } = this.state;
     const { messages } = this.props.intl;
     const {
@@ -368,9 +442,15 @@ class DiscoverPage extends React.Component {
       curLocation,
       mapCenterLat,
       mapCenterLng,
+      modalTitle,
+      curStationIdShowAllDetails,
     } = this.state;
     const { list: stations, offers } = this.props.discover;
-    const { history } = this.props;
+    const { history, listOfferPriceCashAtm } = this.props;
+
+    console.log('curStation',curStation);
+
+    const marginTop = listOfferPriceCashAtm && listOfferPriceCashAtm.length > 0 ? 48 : 0;
 
     return (
       <React.Fragment>
@@ -384,7 +464,7 @@ class DiscoverPage extends React.Component {
           // googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
           googleMapURL={`https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`}
           loadingElement={<div style={{ height: `100%` }} />}
-          containerElement={<div className="map-container" style={{ height: `${browserHeight}px`, marginTop: '48px', position: 'relative' }} />}
+          containerElement={<div className="map-container" style={{ height: `${browserHeight - marginTop}px`, marginTop: `${marginTop}px`, position: 'relative' }} />}
           mapElement={<div style={{ height: `100%` }} />}
           // center={{ lat: 35.929673, lng: -78.948237 }}
           history={history}
@@ -405,19 +485,83 @@ class DiscoverPage extends React.Component {
           onMapMounted={(e) => (this.mapRef = e)}
           onZoomChanged={this.handleOnZoomChanged}
           onCenterChanged={this.handleOnCenterChanged}
+          openNewTransaction={this.openNewTransaction}
+          openAtmManagement={this.openAtmManagement}
+          curStationIdShowAllDetails={curStationIdShowAllDetails}
+          onChangeShowAllDetails={this.handleOnChangeShowAllDetails}
         />
 
-        {/*{!this.state.isBannedCash && !this.props.firebaseApp.config?.maintainChild?.exchange && this.getMap()}*/}
-        {/*{*/}
-          {/*this.state.isBannedCash*/}
-            {/*? (*/}
-              {/*<BlockCountry />*/}
-            {/*)*/}
-            {/*: this.props.firebaseApp.config?.maintainChild?.exchange ? <Maintain /> : null*/}
-        {/*}*/}
-        <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} {...propsModal}>
+        {/* {!this.state.isBannedCash && !this.props.firebaseApp.config?.maintainChild?.exchange && this.getMap()} */}
+        {/* { */}
+        {/* this.state.isBannedCash */}
+        {/* ? ( */}
+        {/* <BlockCountry /> */}
+        {/* ) */}
+        {/* : this.props.firebaseApp.config?.maintainChild?.exchange ? <Maintain /> : null */}
+        {/* } */}
+        {/* <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }} {...propsModal}> */}
+        {/* {modalContent} */}
+        {/* </ModalDialog> */}
+        <div className={`popup-all-station-details ${curStationIdShowAllDetails ? 'open' : 'close'}`}>
+          { curStationIdShowAllDetails && (
+            <div>
+              <div className="text-center">
+                <div className="line" onClick={() => this.handleOnChangeShowAllDetails(null, null)} />
+              </div>
+              <div className="mt-2">
+                <div className="media">
+                  {/*<img className="mr-3" src="https://www.gadgetguy.com.au/cms/wp-content/uploads/panasonic-lumix-lx7-sample-04-square.jpg" width={50} />*/}
+                  <div className="media-body">
+                    <div className="primary-text">{curStation?.name}</div>
+                    {/*<div className="secondary-text">About 1.4 km away</div>*/}
+                  </div>
+                </div>
+                <div className="mt-3">
+                  {
+                    curStation?.phone && (
+                      <div>
+                        <div className="d-inline-block w-25 pr-2 align-middle">
+                          <div className="secondary-text">{messages.discover.feed.cash.marker.label.tel}</div>
+                        </div>
+                        <div className="d-inline-block w-75 pl-2 align-middle">
+                          <div className="information-text">{curStation?.phone}</div>
+                        </div>
+                      </div>
+                    )
+                  }
+                  {
+                    curStation.businessType === ATM_TYPE.STORE && (
+                      <div>
+                        <div className="d-inline-block w-25 pr-2 align-middle">
+                          <div className="secondary-text">{messages.discover.feed.cash.marker.label.workingHours}</div>
+                        </div>
+                        <div className="d-inline-block w-75 pl-2 align-middle">
+                          <div className="information-text">{this.getWorkingHour(curStation)}</div>
+                        </div>
+                      </div>
+                    )
+                  }
+                  {
+                    curStation?.address && (
+                      <div>
+                        <div className="d-inline-block w-25 pr-2 align-middle">
+                          <div className="secondary-text">{messages.discover.feed.cash.marker.label.address}</div>
+                        </div>
+                        <div className="d-inline-block w-75 pl-2 align-middle">
+                          <div className="information-text">{curStation?.address}</div>
+                        </div>
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </div>)
+          }
+        </div>
+
+        <Modal title={modalTitle} onRef={modal => this.modalRef = modal} onClose={this.closeModal}>
           {modalContent}
-        </ModalDialog>
+        </Modal>
         {/* <Footer /> */}
       </React.Fragment>
     );
@@ -434,6 +578,8 @@ const mapState = state => {
     firebaseApp: state.firebase.data,
     freeStartInfo: state.exchange.freeStartInfo,
     authProfile: state.auth.profile,
+    cashStore: state.exchange.cashStore,
+    listOfferPriceCashAtm: state.exchange.listOfferPriceCashAtm,
   };
 };
 
@@ -444,7 +590,7 @@ const mapDispatch = dispatch => ({
   setFreeStart: bindActionCreators(setFreeStart, dispatch),
   getFreeStartInfo: bindActionCreators(getFreeStartInfo, dispatch),
   showPopupGetGPSPermission: bindActionCreators(showPopupGetGPSPermission, dispatch),
-  getOfferStores: bindActionCreators(getOfferStores, dispatch),
+  getStoreATM: bindActionCreators(getStoreATM, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(DiscoverPage));

@@ -1,11 +1,11 @@
-import _ from 'lodash';
+import { isEmpty } from '@/utils/is';
 
 export const hasEmail = (state) => {
-  if (_.isEmpty(state.auth.profile)) return null;
+  if (isEmpty(state.auth.profile)) return null;
   return state.auth.profile.email;
 };
 export const uId = (state) => {
-  if (_.isEmpty(state.auth.profile)) return null;
+  if (isEmpty(state.auth.profile)) return null;
   return state.auth.profile.id;
 };
 

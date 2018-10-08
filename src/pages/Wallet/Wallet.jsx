@@ -53,9 +53,6 @@ import { showLoading, hideLoading } from '@/reducers/app/action';
 import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
 import local from '@/services/localStore';
 import {APP} from '@/constants';
-import _ from 'lodash';
-import qs from 'querystring';
-import axios from 'axios';
 
 import AddToken from '@/components/Wallet/AddToken/AddToken';
 import AddCollectible from '@/components/Wallet/AddCollectible/AddCollectible';
@@ -84,7 +81,10 @@ import customRightIcon from '@/assets/images/wallet/icons/icon-options.svg';
 import floatButtonScanQRCode from '@/assets/images/wallet/icons/float-button-scan.svg';
 
 import WalletPreferences from '@/components/Wallet/WalletPreferences';
-import { requestWalletPasscode  } from '@/reducers/app/action';
+import { requestWalletPasscode, showScanQRCode, showQRCodeContent  } from '@/reducers/app/action';
+import QRCodeContent from '@/components/Wallet/QRCodeContent';
+import Redeem from '@/components/Wallet/Redeem';
+
 
 const QRCode = require('qrcode.react');
 
@@ -178,12 +178,14 @@ class Wallet extends React.Component {
       backupWalletContent: "",
       restoreWalletContent: "",
 
+      redeemContent: "",
+
       // sortable:
       listSortable: {coin: false, token: false, collectitble: false},
     };
 
     this.props.setHeaderRight(this.headerRight());
-    this.listener = _.throttle(this.scrollListener, 200).bind(this);   
+    // this.listener = _.throttle(this.scrollListener, 200).bind(this);
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -284,21 +286,22 @@ class Wallet extends React.Component {
   }
 
   attachScrollListener() {
-    window.addEventListener('scroll', this.listener);
-    window.addEventListener('resize', this.listener);
-    this.listener();
+    // window.addEventListener('scroll', this.listener);
+    // window.addEventListener('resize', this.listener);
+    // this.listener();
   }
 
   detachScrollListener() {
-    window.removeEventListener('scroll', this.listener);
-    window.removeEventListener('resize', this.listener);
+    // window.removeEventListener('scroll', this.listener);
+    // window.removeEventListener('resize', this.listener);
   }
 
   componentWillUnmount() {
     this.detachScrollListener();
   }
 
-  async componentDidMount() {
+  async componentDidMount() {    
+    
     this.getSetting();
     this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
@@ -345,7 +348,7 @@ class Wallet extends React.Component {
 
     await this.splitWalletData(listWallet);
 
-    await MasterWallet.UpdateLocalStore(listWallet);   
+    await MasterWallet.UpdateLocalStore(listWallet);
   }
 
   toggleBottomSheet() {
@@ -459,7 +462,7 @@ class Wallet extends React.Component {
           MasterWallet.UpdateLocalStore(lstWalletTemp);
         }
       })
-    }    
+    }
 
     return obj;
   }
@@ -572,7 +575,7 @@ class Wallet extends React.Component {
   }
 
   showTransfer(wallet){
-    this.props.requestWalletPasscode({      
+    this.props.requestWalletPasscode({
       onSuccess: () => {
           this.setState({ walletSelected: wallet,
             modalTransferCoin:
@@ -587,8 +590,31 @@ class Wallet extends React.Component {
             this.modalSendRef.open();
           });
       }
-    });
-    
+
+    });    
+  }
+  showTransferFromQRCode=(dataAddress)=>{        
+    this.props.requestWalletPasscode({      
+      onSuccess: () => {        
+          this.setState({
+            modalTransferCoin:
+              (
+                <TransferCoin                  
+                  onFinish={(result) => { 
+                    this.modalSendRef.close();
+                    // this.autoCheckBalance(dataAddress.address, amount);
+                   }}
+                  currency={this.state.alternateCurrency}
+                  coinName={dataAddress.symbol}
+                  toAddress={dataAddress.address}
+                  amount={dataAddress.amount}
+                />
+              ),
+            }, ()=>{
+            this.modalSendRef.open();
+          });
+      }
+    });    
   }
 
   showReceive(wallet){
@@ -605,38 +631,38 @@ class Wallet extends React.Component {
       this.modalReceiveCoinRef.open();
     });
   }
-  
+
   showBackupWalletAccount=()=>{
 
-    this.props.requestWalletPasscode({      
+    this.props.requestWalletPasscode({
       onSuccess: () => {
         this.setState({backupWalletContent: <BackupWallet />}, ()=>{
           this.modalBackupRef.open();
         })
       }
-    });  
+    });
   }
   closeBackupWalletAccount=()=>{
     this.setState({backupWalletContent: ""});
   }
-  
+
   showRestoreWalletAccount=()=>{
-    this.props.requestWalletPasscode({      
+    this.props.requestWalletPasscode({
       onSuccess: () => {
         this.setState({restoreWalletContent: <RestoreWallet />}, ()=>{
           this.modalRestoreRef.open();
-        })        
+        })
       }
-    })    
+    })
   }
   closeRestoreWalletAccount=()=>{
     this.setState({restoreWalletContent: ""});
   }
 
-  showWalletSettings(){    
+  showWalletSettings(){
     this.setState({
       modalSetting: (<SettingWallet onBackupWalletAccountClick={this.showBackupWalletAccount} onRestoreWalletAccountClick={this.showRestoreWalletAccount} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
-    }, ()=> {      
+    }, ()=> {
       this.modalSettingRef.open();
     });
   }
@@ -709,7 +735,7 @@ class Wallet extends React.Component {
     this.setState({ isNewCCOpen: !this.state.isNewCCOpen });
   }
 
-  onIconRightHeaderClick = () => {    
+  onIconRightHeaderClick = () => {
     // now show settings
     this.showWalletSettings();
   }
@@ -721,13 +747,13 @@ class Wallet extends React.Component {
 
   onWarningClick = (wallet) => {
     // if (!wallet.protected) {
-      this.props.requestWalletPasscode({      
+      this.props.requestWalletPasscode({
         onSuccess: () => {
           this.setState({ walletSelected: wallet, stepProtected: 1, activeProtected: true });
           this.modalProtectRef.open();
         }
-      }) 
-      
+      })
+
     // } else {
 
     // }
@@ -756,7 +782,7 @@ class Wallet extends React.Component {
     MasterWallet.UpdateLocalStore(this.getAllWallet());
     this.onWalletItemClick(wallet);
   }
-  
+
   onOpenWalletPreferences = (wallet) =>{
     this.setState({
       modalWalletPreferences: (<WalletPreferences onDeleteWalletClick={()=>{this.props.requestWalletPasscode({onSuccess: () => { this.modalRemoveRef.open();}});}} onWarningClick={()=>{this.onWarningClick(wallet);}} onUpdateWalletName={(wallet)=> {this.onUpdateWalletName(wallet);}} wallet={wallet} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
@@ -828,6 +854,7 @@ class Wallet extends React.Component {
 
   closeTransfer = () => {
     this.setState({ modalTransferCoin: '' });
+    console.log("closeTransfer");
   }
 
   closeBuyCoin = () => {
@@ -889,47 +916,43 @@ class Wallet extends React.Component {
     }
   }
 
-  getETHFree() {
+  getETHFree=()=> {
     window.open('https://www.rinkeby.io/#faucet', '_blank');
+    // let data="ninja-redeem:NINJA101F8DC?value=234";
+    // let result = MasterWallet.getQRCodeDetail(data);
+    // this.props.showQRCodeContent({   
+    //   data: result      
+    // });    
   }
 
-  // For Qrcode:
-  handleScan=(data) =>{
-
-    if(data){
-      let value = data.split(',');
-      this.setState({
-        inputAddressAmountValue: value[0],
-      });
-      this.props.change(nameFormSendWallet, 'to_address', value[0]);
-
-      if (value.length == 2){
-        this.setState({
-          inputSendAmountValue: value[1],
-        });
-        this.props.change(nameFormSendWallet, 'amount', value[1]);
-      }
-      this.modalScanQrCodeRef.close();
-    }
-  }
-  handleError(err) {
-    console.log('error wc', err);
+  onQRCodeScaned=(data)=>{    
+    let result = MasterWallet.getQRCodeDetail(data);        
+    this.props.showQRCodeContent({   
+      data: result      
+    });    
   }
 
-  renderScanQRCode = () => {
-    const { messages } = this.props.intl;
-    <Modal onClose={() => this.closeQrCode()} title={messages.wallet.action.scan_qrcode.header} onRef={modal => this.modalScanQrCodeRef = modal}>
-      {this.state.qrCodeOpen ?
-        <QrReader
-          delay={this.state.delay}
-          onScan={(data) => { this.handleScan(data); }}
-          onError={this.handleError}
-          style={{ width: '100%', height: '100%' }}
-        />
-        : ''}
-    </Modal>
+  // redeem:
+  showRedeemModal=(data)=>{
+    this.setState({
+      redeemContent:
+        (
+          <Redeem                  
+            data={data}
+            onFinish={(result) => { 
+              this.modalRedeemRef.close();
+             }}            
+          />
+        ),
+      }, ()=>{
+      this.modalRedeemRef.open();
+    });
   }
 
+  closeModalRedeem=(data)=>{
+    this.setState({redeemContent: ''});
+  }
+  
   render = () => {
     const { messages } = this.props.intl;
     const { formAddTokenIsActive, formAddCollectibleIsActive, modalBuyCoin, modalTransferCoin, modalSetting,
@@ -938,20 +961,32 @@ class Wallet extends React.Component {
     return (
       <div className="wallet-page">
 
-        {/* <img onClick={()=> {alert('ga');}} className="float-button-scan-qrcode" src={floatButtonScanQRCode} /> */}
+        {/* float button qrcode */}
+        <img onClick={()=> {this.props.showScanQRCode({onFinish: (data) => {this.onQRCodeScaned(data);}});}} className="float-button-scan-qrcode" src={floatButtonScanQRCode} />
 
+        {/* history modal */}
         <Modal customRightIconClick={()=>{this.onOpenWalletPreferences(this.state.walletSelected);}}  customRightIcon={customRightIcon} customBackIcon={BackChevronSVGWhite} modalBodyStyle={this.modalBodyStyle} modalHeaderStyle={this.modalHeaderStyle} title={this.state.walletSelected ? this.state.walletSelected.title : messages.wallet.action.history.header} onRef={modal => this.modalHistoryRef = modal} onClose={this.closeHistory}>
           {modalHistory}
         </Modal>
 
+        {/* wallet preferences  */}
         <Modal title="Preferences" onRef={modal => this.modalWalletReferencesRef = modal} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} onClose={this.closePreferences}>
           {modalWalletPreferences}
         </Modal>
 
+        {/* qrcode result detected modal popup*/}
+        <QRCodeContent onRedeemClick={(data)=> {this.showRedeemModal(data);}}  onTransferClick={(data)=> {this.showTransferFromQRCode(data);}} />
+
+        <Modal title={messages.wallet.action.redeem.title} onRef={modal => this.modalRedeemRef = modal} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} onClose={this.closeModalRedeem}>
+          {this.state.redeemContent}
+        </Modal>
+
+        {/* add new token modal */}
         <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
             <AddToken formAddTokenIsActive={formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
         </Modal>
 
+        {/* add collectible modal */}
         <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddCollectibleIsActive: false})} title="Add Collectible" onRef={modal => this.modalAddNewCollectibleRef = modal}>
             <AddCollectible formAddCollectibleIsActive={formAddCollectibleIsActive} onFinish={() => {this.addedCollectible()}}/>
         </Modal>
@@ -1051,20 +1086,7 @@ class Wallet extends React.Component {
               {messages.wallet.action.create.button.create}
             </Button>
             <Header />
-          </Modal>
-
-          {/* QR code dialog */}
-          {/* {this.renderScanQRCode()} */}
-          <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} onClose={() => this.closeQrCode()} title={messages.wallet.action.scan_qrcode.header} onRef={modal => this.modalScanQrCodeRef = modal}>
-            {this.state.qrCodeOpen &&
-              <QrReader
-                delay={this.state.delay}
-                onScan={(data) => { this.handleScan(data); }}
-                onError={this.handleError}
-                style={{ width: '100%', height: '100%' }}
-              />
-            }
-          </Modal>
+          </Modal>          
 
           <Grid>
 
@@ -1183,7 +1205,9 @@ const mapDispatch = ({
   change,
   clearFields,
   hideHeader,
-  requestWalletPasscode
+  requestWalletPasscode,
+  showScanQRCode,
+  showQRCodeContent
 });
 
 

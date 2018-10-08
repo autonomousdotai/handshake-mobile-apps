@@ -1,0 +1,59 @@
+.basicWallet {
+  border-radius: 6px;
+  background-color: #fafafa;
+  padding: 0.5rem 1rem;
+  border: 1px solid #f6f4f4;
+  line-height: 2;
+  overflow-y: hidden;
+
+  .line{
+    clear: both;;
+
+    .label{
+      float: left;
+      width: 30%;
+      opacity: 0.8;
+    }
+
+    .value{
+      float: right;
+      width: 70%;
+      text-align: right;
+      font-weight: 300;
+    }
+
+    .data {
+      display: table;
+      width: 100%;
+
+      textarea{
+        width: 100%;
+        line-height: 1.5;
+        border-radius: 6px;
+        border:none;
+        background: #e8e8e8;
+        padding: 0.5rem;
+      }
+    }
+
+    .toAddress {
+      display: table;
+      width: 100%;
+      word-break: break-all;
+      line-height: 1.5;
+      padding: 0.5rem;
+      border-radius: 6px;
+      background: #e8e8e8;
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+  }
+}
+
+.advanced {
+  text-align: center;
+  margin-bottom: 0px;
+  span {
+    display: block;
+  }
+}

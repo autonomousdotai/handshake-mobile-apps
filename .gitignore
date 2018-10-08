@@ -1,6 +1,5 @@
 node_modules
 yarn-error.log
-yarn.lock
 package-lock.json
 dist
 .DS_Store
@@ -11,3 +10,4 @@ testing
 .idea/
 deployment
 deployment.tar
+tree.json

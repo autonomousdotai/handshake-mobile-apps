@@ -13,11 +13,16 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background: $white;
+    background-color: rgba($color: $black, $alpha: 0.3);
     z-index: $z-index-loading-full-screen;
     img {
-        width: 50px;
-        height: 50px;
+        width:  rem-calc(50px);
+        height: rem-calc(50px);
+        background: $white;
+        border-radius: 50%;
+        top: 50%;
+        left: 50%;
+        //transform: translate(-50%, -50%);
         margin-bottom: rem-calc(19px);
     }
     .text {

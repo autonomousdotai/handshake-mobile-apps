@@ -168,7 +168,7 @@ class ListCoin extends React.Component {
 
     const { messages } = this.props.intl;
     const { modalQRCode } = this.state;
-    return (
+    return (      
       <div className="listCoin">
         {this.showListCoin}
         <ModalDialog className="qr-wrapper" onRef={modal => this.modalQRCodeRef = modal}>

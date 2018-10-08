@@ -59,13 +59,6 @@ const products = [
     to: URL.PRODUCT_WALLET_URL
   },
   {
-    name: 'whisper',
-    title: <FormattedMessage id="landing_page.products.whisper.title" />,
-    subTitle: <FormattedMessage id="landing_page.products.whisper.subTitle" />,
-    img: imgWhisper,
-    to: URL.PRODUCT_WHISPER_URL,
-  },
-  {
     name: 'hivepay-online',
     title: <FormattedMessage id="landing_page.products.hivepay-online.title" />,
     subTitle: <FormattedMessage id="landing_page.products.hivepay-online.subTitle" />,

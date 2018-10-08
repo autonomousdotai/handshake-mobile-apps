@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/EtherLambos.json');
+const abi = require('@/contracts/Wallet/EtherLambos.json');
 
 export class EtherLambos extends TokenERC721 {
 

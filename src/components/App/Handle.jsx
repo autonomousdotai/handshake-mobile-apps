@@ -12,7 +12,7 @@ import Loading from '@/components/core/presentation/Loading';
 import Router from '@/components/Router/Router';
 // chat
 import md5 from 'md5';
-import _ from 'lodash';
+import { isEmpty } from '@/utils/is';
 
 class Handle extends React.Component {
   static propTypes = {
@@ -55,7 +55,7 @@ class Handle extends React.Component {
 
   signInFirebase(cb) {
     const { profile, token } = this.props.auth;
-    if (_.isEmpty(profile) || _.isEmpty(token)) {
+    if (isEmpty(profile) || isEmpty(token)) {
       setTimeout(() => {
         this.signInFirebase(cb);
       }, 100);

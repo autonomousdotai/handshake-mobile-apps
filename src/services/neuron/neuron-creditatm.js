@@ -11,6 +11,10 @@ export default class CreditATM extends BaseHandshake {
     return 'CreditATM';
   }
 
+  get contractFolder() {
+    return 'ATM';
+  }
+
   get address() {
     const wallet = MasterWallet.getWalletDefault('ETH');
     return wallet.address;

@@ -111,6 +111,63 @@
   font-size: $light;
 }
 
+.popup-all-station-details {
+  background: #FFFFFF;
+  padding: 0px 10px 20px 10px;
+  position: fixed;
+  bottom: 60px;
+  height: auto;
+  width: 100%;
+  transition: transform 0.5s;
+  &.open {
+    transform: translateY(0px);
+  }
+  &.close {
+    transform: translateY(700px);
+  }
+  .line {
+    display: inline-block;
+    width: 100px;
+    height: 8px;
+    border-radius: 8px;
+    background: #E5EAF8;
+    cursor: pointer;
+  }
+  .primary-text {
+    color: #060E2E;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: left;
+    letter-spacing: 0;
+  }
+  .secondary-text {
+    color: #868DAD;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    letter-spacing: 0;
+  }
+  .information-text {
+    color: #060E2E;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    letter-spacing: 0;
+  }
+  .success-text {
+    font-weight: 500;
+    color: #34CF81;
+  }
+
+  .button-buy-coin-now {
+    background: #546FF7;
+    box-shadow: 0 2px 5px 0 rgba(84,111,247,0.41);
+    border-radius: 4px;
+    color: white;
+  }
+
+}
+
 //.discover-overlay {
 //  width: 100vw;
 //  height: 100vh;

@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/CryptoZodiacs.json');
+const abi = require('@/contracts/Wallet/CryptoZodiacs.json');
 
 export class CryptoZodiacs extends TokenERC721 {
 

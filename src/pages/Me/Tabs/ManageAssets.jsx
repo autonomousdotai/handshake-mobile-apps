@@ -1,36 +1,18 @@
-import React from 'react'
-import { bindActionCreators, compose } from 'redux'
-import { connect } from 'react-redux'
+import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 // action, mock
-import { fireBaseBettingChange, fireBaseExchangeDataChange, loadMyHandshakeList } from '@/reducers/me/action'
-import {
-  API_URL,
-  APP,
-  EXCHANGE_FEED_TYPE,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS,
-  HANDSHAKE_ID,
-  HANDSHAKE_ID_DEFAULT,
-  URL
-} from '@/constants'
-import { fieldDropdown, fieldRadioButton } from '@/components/core/form/customField';
-import { FormattedMessage, injectIntl } from 'react-intl'
+import { API_URL } from '@/constants';
+import { FormattedMessage, injectIntl } from 'react-intl';
 // components
-import { getDashboardInfo, getListOfferPrice, getOfferStores, reviewOffer } from '@/reducers/exchange/action'
+import { getCreditATM } from '@/reducers/exchange/action';
 // style
-import { setOfflineStatus } from '@/reducers/auth/action'
-import createForm from "@/components/core/form/createForm";
-import { change, Field } from 'redux-form';
-
-import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
-import iconEthereum from '@/assets/images/icon/coin/eth.svg';
-import iconBitcoinCash from '@/assets/images/icon/coin/bch.svg';
-import iconLock from '@/assets/images/icon/icons8-lock_filled.svg';
+import { change } from 'redux-form';
 import iconSafeGuard from '@/assets/images/icon/safe-guard.svg';
 
 import Asset from './Asset';
-import { formatMoneyByLocale } from '@/services/offer-util';
-import { getCreditATM } from '@/reducers/exchange/action';
 import Withdraw from '@/pages/Escrow/Withdraw';
+import Deposit from '@/pages/Escrow/Deposit';
 import Modal from '@/components/core/controls/Modal/Modal';
 
 class ManageAssets extends React.Component {
@@ -38,7 +20,8 @@ class ManageAssets extends React.Component {
     super(props);
 
     this.state = {
-      modalWithdrawContent: '',
+      modalContent: '',
+      modalTitle: '',
     };
   }
 
@@ -50,31 +33,43 @@ class ManageAssets extends React.Component {
     this.props.getCreditATM({ PATH_URL: API_URL.EXCHANGE.CREDIT_ATM });
   }
 
-  depositCoinATM = () => {
-    this.props.history.push(URL.ESCROW_DEPOSIT);
+  depositCoinATM = (currency) => {
+    console.log('depositCoinATM', currency);
+    const { messages } = this.props.intl;
+
+    this.setState({
+      modalTitle: messages.me.credit.deposit.title,
+      modalContent:
+        (
+          <Deposit setLoading={this.props.setLoading} history={this.props.history} currency={currency} />
+        ),
+    }, () => {
+      this.modalRef.open();
+    });
   }
 
   withdrawCash = () => {
     const { messages } = this.props.intl;
 
     this.setState({
-      modalWithdrawContent:
+      modalTitle: messages.me.credit.withdraw.title,
+      modalContent:
         (
-          <Withdraw setLoading={this.props.setLoading} history={this.props.history}/>
+          <Withdraw setLoading={this.props.setLoading} history={this.props.history} />
         ),
     }, () => {
-      this.modalWithdrawRef.open();
+      this.modalRef.open();
     });
   }
 
-  closeWithdraw = () => {
-    this.setState({ modalWithdrawContent: '' });
+  closeModal = () => {
+    this.setState({ modalContent: '' });
   }
 
-  render () {
+  render() {
     const { messages } = this.props.intl;
     const { depositInfo, creditRevenue } = this.props;
-    const { modalWithdrawContent } = this.state;
+    const { modalContent, modalTitle } = this.state;
     let assets = [];
 
     if (depositInfo) {
@@ -89,8 +84,8 @@ class ManageAssets extends React.Component {
             assets.map(asset => {
               const { currency: id } = asset;
               return (
-                <Asset key={id} {...asset} history={this.props.history} setLoading={this.props.setLoading}/>
-              )
+                <Asset key={id} {...asset} history={this.props.history} setLoading={this.props.setLoading} depositCoinATM={this.depositCoinATM} />
+              );
             })
           }
           <div className="asset position-relative">
@@ -120,7 +115,7 @@ class ManageAssets extends React.Component {
           </div>
           <div className="mt-3">
             <div className="d-inline-block w-50 pr-1">
-              <button className="btn primary-button btn-block" onClick={this.depositCoinATM}>
+              <button className="btn primary-button btn-block" onClick={() => this.depositCoinATM()}>
                 <FormattedMessage id="dashboard.btn.depositEscrow" />
               </button>
             </div>
@@ -131,11 +126,11 @@ class ManageAssets extends React.Component {
             </div>
           </div>
         </div>
-        <Modal title={messages.me.credit.withdraw.title} onRef={modal => this.modalWithdrawRef = modal} onClose={this.closeWithdraw}>
-          {modalWithdrawContent}
+        <Modal title={modalTitle} onRef={modal => this.modalRef = modal} onClose={this.closeModal}>
+          {modalContent}
         </Modal>
       </div>
-    )
+    );
   }
 }
 
@@ -143,11 +138,11 @@ const mapState = state => ({
   me: state.me,
   depositInfo: state.exchange.depositInfo,
   creditRevenue: state.exchange.creditRevenue || 0,
-})
+});
 
 const mapDispatch = dispatch => ({
   rfChange: bindActionCreators(change, dispatch),
   getCreditATM: bindActionCreators(getCreditATM, dispatch),
-})
+});
 
-export default injectIntl(connect(mapState, mapDispatch)(ManageAssets))
+export default injectIntl(connect(mapState, mapDispatch)(ManageAssets));

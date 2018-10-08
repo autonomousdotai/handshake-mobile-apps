@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/PandaEarth.json');
+const abi = require('@/contracts/Wallet/PandaEarth.json');
 
 export class PandaEarth extends TokenERC721 {
 

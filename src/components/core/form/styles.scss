@@ -356,3 +356,11 @@
   //padding-top: 4px;
 }
 
+ul.date-selector {
+  columns: 2;
+  list-style-type: none;
+  width: 100%;
+  input[type=checkbox] {
+    margin: 0px 5px;
+  }
+}

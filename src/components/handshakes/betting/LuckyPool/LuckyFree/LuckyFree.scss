@@ -7,28 +7,34 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  font-size: rem-calc(14px);
+
   .luckyFreeButton {
     background: #2456FB;
     border-radius: rem-calc(2px);
-    font-size: rem-calc(16px);
     color: #FFFFFF;
     letter-spacing: 0;
-    margin-top: rem-calc(40px);
+    margin-top: rem-calc(10px);
     border: none;
     height: rem-calc(50px);
     //font-weight: $medium;
   }
   .luckyFreeDes {
-    font-size: rem-calc(20px);
     text-align: center;
     margin-top: rem-calc(20px);
   }
   .luckyFreeSmallDes {
-    font-size: rem-calc(14px);
     text-align: center;
     margin-top: rem-calc(20px);
   }
   .luckyFreeImage {
     margin-right: rem-calc(20px);
+  }
+  .countdown {
+    text-align: center;
+    margin-top: 15px;
+    background: #F5F5F5;
+    border-radius: rem-calc(5px);
+    padding: rem-calc(5px 3px);
   }
 }

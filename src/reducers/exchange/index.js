@@ -10,6 +10,8 @@ import Dashboard from '@/models/Dashboard';
 import Referal from '@/models/Referal';
 import Deposit from '@/models/Deposit';
 import Handshake from '@/models/Handshake';
+import CashStore from "@/models/CashStore";
+import CashAtmPrice from "@/models/CashAtmPrice";
 
 const initListOfferPrice = [];
 initListOfferPrice.updatedAt = Date.now();
@@ -29,6 +31,7 @@ function exchangeReducter(state = {
   listOfferPrice: initListOfferPrice,
   isChooseFreeStart: false,
   depositInfo: initDepositInfo,
+  listOfferPriceCashAtm: initListOfferPrice,
 }, action) {
   // console.log('exchangeReducter', JSON.stringify(action));
   switch (action.type) {
@@ -62,6 +65,18 @@ function exchangeReducter(state = {
       return {
         ...state,
         listOfferPrice,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.GET_LIST_OFFER_PRICE_CASH_ATM}_SUCCESS`: {
+      const listOfferPriceCashAtm = action.payload.data.map((offerPrice) => {
+        const price = CashAtmPrice.cashAtmPrice(offerPrice);
+
+        return price;
+      });
+      listOfferPriceCashAtm.updatedAt = Date.now();
+      return {
+        ...state,
+        listOfferPriceCashAtm,
       };
     }
     case `${EXCHANGE_ACTIONS.GET_IP_INFORM}_SUCCESS`: {
@@ -120,6 +135,22 @@ function exchangeReducter(state = {
 
       return {
         ...state, depositInfo,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.GET_STORE_ATM}_SUCCESS`: {
+      const cashStore = CashStore.cashStore(action.payload.data);
+      return {
+        ...state, cashStore,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.GET_TRANSACTION_CASH_STORE}_SUCCESS`: {
+      const list = handleListPayload(action.payload.data.handshakes);
+      list.filter(handshake => handshake.offerFeedType === 'cash_order');
+
+      console.log('GET_TRANSACTION_CASH_STORE', list.filter(handshake => handshake.offerFeedType === 'cash_order'));
+      return {
+        ...state,
+        cashStoreTransaction: list.filter(handshake => handshake.offerFeedType === 'cash_order'),
       };
     }
     default:

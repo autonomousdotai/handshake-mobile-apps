@@ -180,7 +180,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
   render() {
     const { files } = this.state;
     // eslint-disable-next-line
-    const { imgSample, onSuccess, ...rest } = this.props
+    const { imgSample, onSuccess, authProfile, ...rest } = this.props
     return (
       <div>
         {/* <button className='btn btn-primary mb-1' type='button' onClick={this.onOpenClick}> */}
@@ -247,4 +247,4 @@ const mapState = state => ({
 const mapDispatch = ({
 });
 
-export default injectIntl(connect(mapState, mapDispatch)(Component));
+export default injectIntl(connect(mapState, mapDispatch, null, { withRef: true })(Component), { withRef: true });

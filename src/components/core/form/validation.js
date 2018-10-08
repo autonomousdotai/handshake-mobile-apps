@@ -76,3 +76,10 @@ export const isNormalInteger = (str) => {
     return <FormattedMessage id="error.mustBeAPositiveInteger" />;
   }
 }
+
+export const requiredDaySelector = value => {
+  if (value) {
+    return Object.keys(value)?.length !== 0 ? undefined : <FormattedMessage id="error.required" />;
+  }
+  return <FormattedMessage id="error.required" />;
+};

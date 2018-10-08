@@ -53,7 +53,7 @@ export const validateBet = async (amount = 0, odds = 0, closingDate, matchName =
   const estimateGas = await getEstimateGas();
   const estimatedGasBN = parseBigNumber(estimateGas.toString()||0);
   const total = amount.plus(estimatedGasBN).toNumber()||0;
-  let result = { status: true, message: '', code: -1, value: null };
+  let result = { status: true, message: '', code: -1, value: null, balance };
   if (!isRightNetwork()) {
     result.message = MESSAGE.RIGHT_NETWORK;
     result.status = false;

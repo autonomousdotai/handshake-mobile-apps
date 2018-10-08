@@ -79,7 +79,7 @@ export const MESSAGE = {
 export const BETTING_STATUS_LABEL =
     {
       //LABEL
-      INITING: 'Placing a bet...',
+      INITING: 'Your bet is being placed on the blockchain. Please wait...',
       ROLLBACK: 'There is something wrong with blockchain. The bet is cancelled',
       COLLECT_FAILED: 'There is something wrong with withdraw.',
       SHOULD_CANCEL: 'Your bet was not matched. Please cancel to get a refund.',

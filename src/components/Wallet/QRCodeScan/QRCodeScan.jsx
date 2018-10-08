@@ -18,9 +18,9 @@ import BrowserDetect from '@/services/browser-detect';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
 
 class QRCodeScan extends React.Component {
-  
+
   static propTypes = {
-    app: PropTypes.object,  
+    app: PropTypes.object,
     onFinish: PropTypes.func,
     intl: PropTypes.object.isRequired,
   }
@@ -28,31 +28,38 @@ class QRCodeScan extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {   
-      isShow: false,                
-      delay: 300,            
-      data: '',      
+    this.state = {
+      isShow: false,
+      delay: 300,
+      data: '',
       legacyMode: false,
       onFinish: null,
     }
   }
 
-  componentWillReceiveProps(nextProps) {     
+  componentWillReceiveProps(nextProps) {
     let props = nextProps.app.scanQRCodeData || {};
-    if (props.isShow){      
+    if (props.isShow){
        this.openQrcode(props);
     }
   }
 
   componentDidMount() {
     let legacyMode = (BrowserDetect.isChrome && BrowserDetect.isIphone); // show choose file or take photo
-    this.setState({legacyMode: legacyMode});                
-  }  
+    this.setState({legacyMode: legacyMode});
+  }
 
 
   onFinish = (data) => {
+    try {
+      // reset input select file
+      this.refs.qrReaderScan.els.input.value = '';
+    } catch(e) {
+      console.warn(e);
+    }
+
     const { onFinish } = this.state;
-    
+
     if (onFinish) {
       onFinish(data);
       this.modalScanQrCodeMainRef.close();
@@ -60,12 +67,12 @@ class QRCodeScan extends React.Component {
     else{
 
     }
-    
-    
-  }   
+
+
+  }
 
 // For Qrcode:
-handleScan=(data) =>{  
+handleScan=(data) =>{
   if(data){
     this.onFinish(data);
   }
@@ -75,11 +82,11 @@ handleError(err) {
   console.log('error scan qrcode: ', err);
 }
 
-oncloseQrCode=() => {  
+oncloseQrCode=() => {
   this.setState({ isShow: false, onFinish: null }, () => {
     this.props.hideScanQRCode();
-  });  
-  
+  });
+
 }
 
 openQrcode = (props) => {
@@ -96,12 +103,12 @@ openImageDialog = () => {
   this.refs.qrReaderScan.openImageDialog();
 }
 
-render() {  
-  
-  const { messages } = this.props.intl;    
-  
+render() {
+
+  const { messages } = this.props.intl;
+
   {/* QR code dialog */}
-  return (        
+  return (
         <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeMainRef = modal} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={{color: "#fff", background: "#546FF7"}} modalBodyStyle={{"padding": 0}} >
           {this.state.isShow || this.state.legacyMode ?
             <QrReader
@@ -114,7 +121,7 @@ render() {
               showViewFinder={false}
             />
             : ''}
-        </Modal>    
+        </Modal>
     )
   }
 }

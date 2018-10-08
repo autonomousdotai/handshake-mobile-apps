@@ -9,62 +9,6 @@
     }
   }
 
-  .complete-wrapper{
-    .modal-dialog-content{
-      width: 96%;
-      height: 65%;
-      min-height:420px;
-    }
-
-    .position{
-      top: 50px;
-      align-items: unset;
-    }
-
-    .complete-info{
-      text-align: center;
-      position: relative;
-      -ms-flex-negative: 0;
-      flex-shrink: 0;
-      margin: 2rem auto;
-
-      .icon{
-        margin: 1.5rem auto;
-
-        img {
-          color: #28a745;
-          width: 110px;
-        }
-      }
-
-      .redirect{
-        color: #cdcdcd;
-        font-size: 14px;
-        margin-bottom: 1rem;
-        white-space: nowrap;
-      }
-
-      .msg{
-        font-size: 18px;
-        font-weight: 400;
-        margin: 0.5rem 0;
-      }
-
-      .title{
-        font-size: 24px;
-        font-weight: 500;
-        color: #28a745;
-        margin: 1rem 0;
-      }
-    }
-
-    .failed{
-      .title{
-        color: #dc3545;
-      }
-    }
-  }
-
   .msg-error{
     color: red;
     width: 100%;

@@ -1,3 +1,5 @@
+/* eslint camelcase:0 */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 // component
@@ -5,25 +7,29 @@ import './Switch.scss';
 
 class Switch extends React.PureComponent {
   constructor(props) {
-    super(props);     
+    super(props);
     this.state = {
       isChecked: this.props.isChecked || false
     }
   }
 
-  onChange = () =>{
-    const {onChange} = this.props || null;     
-    this.setState({ isChecked: !this.state.isChecked}, () => {      
-      if (onChange) onChange(this.state.isChecked);
-    });    
+  UNSAFE_componentWillReceiveProps({ isChecked }) {
+    typeof isChecked === 'boolean' && this.setState({ isChecked });
   }
 
-  render() {        
+  onChange = () =>{
+    const {onChange} = this.props || null;
+    this.setState({ isChecked: !this.state.isChecked}, () => {
+      if (onChange) onChange(this.state.isChecked);
+    });
+  }
+
+  render() {
     return (
-      
+
       <div className="switch-component">
           <label className="switch">
-            <input type="checkbox" defaultChecked={this.state.isChecked} onChange={this.onChange} />
+            <input type="checkbox" checked={this.state.isChecked} onChange={this.onChange} />
             <span className="slider round"></span>
           </label>
       </div>
@@ -32,7 +38,7 @@ class Switch extends React.PureComponent {
 }
 
 Switch.propType = {
-  onChange: PropTypes.func,  
+  onChange: PropTypes.func,
   isChecked: PropTypes.bool,
 }
 

@@ -11,7 +11,7 @@ const ethUtil = require('ethereumjs-util');
 const bip39 = require('bip39');
 
 const BN = Web3.utils.BN;
-const compiled = require('@/contracts/Shuriken.json');
+const compiled = require('@/contracts/Wallet/Shuriken.json');
 
 const erc20Abi = compiled.abi;
 

@@ -48,13 +48,14 @@ class OrderPlace extends React.Component {
   }
 
   render() {
-    const { bettingShake, orderBook } = this.props;
+    const { bettingShake, orderBook, dispatch } = this.props;
     const orderMode = {
       bettingShake: {
         ...bettingShake,
         side: this.state.side,
       },
       orderBook,
+      dispatch,
     };
     return (
       <React.Fragment>

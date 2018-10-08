@@ -1,5 +1,9 @@
 /* Switch */
-  .switch {  
+  .switch-component {
+    display: flex;
+    align-items: center;
+  }
+  .switch {
     display: inline-block;
     // width: 60px;
     // height: 34px;
@@ -10,7 +14,7 @@
     input {
       display:none;
     }
-  }  
+  }
     .slider {
       position: absolute;
       cursor: pointer;
@@ -20,7 +24,7 @@
       bottom: 0;
       background-color: #ccc;
       -webkit-transition: .4s;
-      transition: .4s;      
+      transition: .4s;
     }
      
     .slider:before {

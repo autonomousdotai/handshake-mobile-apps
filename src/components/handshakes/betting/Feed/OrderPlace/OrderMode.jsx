@@ -19,6 +19,7 @@ class OrderMode extends React.PureComponent {
   }
 
   render() {
+
     return (
       <React.Fragment>
         <Tabs htmlClassName="OrderMode" afterClick={this.afterTabChanges}>
@@ -26,7 +27,7 @@ class OrderMode extends React.PureComponent {
             <SimpleOrderMode {...this.props} />
           </div>
           <div label="Advanced" className="OrderModeType">
-            <AdvancedOrderMode {...this.props} />
+            <AdvancedOrderMode {...this.props} dispatch={this.props.dispatch}/>
           </div>
         </Tabs>
       </React.Fragment>

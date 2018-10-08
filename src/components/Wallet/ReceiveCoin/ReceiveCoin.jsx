@@ -304,14 +304,21 @@ class ReceiveCoin extends React.Component {
     });
   }
 
-
-  genDataReceive(){
-    if (this.state.walletSelected){
-      let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
-      if (this.state.isCurrency){
-        value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : ''); 
+  // get qrcode value
+  genQRCodeValue(){
+    if (this.state.walletSelected){  
+      let amountValue = this.state.inputSendAmountValue.trim() != "" ? this.state.inputSendAmountValue.trim() : "";
+      if(this.state.isCurrency){
+        amountValue = this.state.switchValue != '' ? this.state.switchValue.toString() : "";
+      } 
+      if (amountValue != ""){
+        //<coin-title>:<address>?amount=<amount>
+        return ((this.state.walletSelected.className.replace(/\s/g,'')).toLowerCase() + ":" + this.state.walletSelected.address + "?amount=" + amountValue.toString()).trim();;
       }
+      // address only if amount is none
+      return this.state.walletSelected.address;
     }
+    return "";        
   }
 
   render() {
@@ -319,15 +326,20 @@ class ReceiveCoin extends React.Component {
     let { currency } = this.props;
     if(!currency) currency = "USD";
 
+    const qrCodeValue = this.genQRCodeValue();
+
     let showDivAmount = this.state.walletSelected && this.state.rate;
 
-    let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
-    if (this.state.isCurrency){
-      value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : '');
-    }
-    let qrCodeValue = (this.state.walletSelected ? this.state.walletSelected.address : '') + value;
+    // let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
+    // if (this.state.isCurrency){
+    //   value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : '');
+    // }
+    // let qrCodeValue = (this.state.walletSelected ? this.state.walletSelected.address : '') + value;
+    
     let symbol = this.state.isCurrency ? currency : (this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : '');
+    
     let placeholder = ((this.state.inputSendAmountValue == 0 || this.state.inputSendAmountValue.toString() == '') ? "0.0" : this.state.inputSendAmountValue.toString() ) + " " + symbol
+    
     return (
       <div className="receive-coins">
           {/* <div className="bodyTitle"><span>{messages.wallet.action.receive.message} { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div> */}

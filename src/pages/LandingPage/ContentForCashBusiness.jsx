@@ -89,7 +89,7 @@ class ContentForCashBusiness extends React.Component {
               howToSetUpATM.map(how => {
                 const { id, text } = how;
                 return (
-                  <div key={id} className="mt-5">
+                  <div key={id} className="my-5 py-4">
                     <span className="how-to-index rounded-circle">{id}</span>
                     <span className="how-to-text">{text}</span>
                   </div>

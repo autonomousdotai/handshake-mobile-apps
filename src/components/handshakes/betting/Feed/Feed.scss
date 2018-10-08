@@ -65,34 +65,36 @@
 
   .bettingInfoValues{
     padding: rem-calc(0 15px 10px);
-    float: right;
-    text-align: right;
-    font-size: 14px;
+    //text-align: right;
     font-weight: 400;
+    display: flex;
+    justify-content: space-between;
   }
   .bettingInfo {
     padding: rem-calc(0 15px 10px);
-    float:left;
+    display: flex;
+    justify-content: space-between;
+
+  }
+  .description {
+    font-size: rem-calc(14px);
+    color: #8a8a8f;
+    letter-spacing: rem-calc(0.25px);
+    font-weight: $normal;
+    margin-bottom: rem-calc(2px);
+  }
+  .value {
+    font-size: rem-calc(14px);
+    color: #000000;
+    letter-spacing: rem-calc(0.29px);
+    font-weight: $normal;
+  }
+  @media (max-width: 320px) {
     .description {
-      font-size: rem-calc(14px);
-      color: #8a8a8f;
-      letter-spacing: rem-calc(0.25px);
-      font-weight: $normal;
-      margin-bottom: rem-calc(2px);
+      font-size: rem-calc(10px);
     }
     .value {
-      font-size: rem-calc(14px);
-      color: #000000;
-      letter-spacing: rem-calc(0.29px);
-      font-weight: $normal;
-    }
-    @media (max-width: 320px) {
-      .description {
-        font-size: rem-calc(10px);
-      }
-      .value {
-        font-size: rem-calc(12px);
-      }
+      font-size: rem-calc(12px);
     }
   }
   .bottomDiv {

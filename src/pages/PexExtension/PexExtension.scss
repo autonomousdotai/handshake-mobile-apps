@@ -1,139 +1,71 @@
 .PexExtension {
-  display: flex;
-  height: 100%;
-  background-color: #ffffff;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-width: 980px;
+  min-height: 600px;
+  overflow: hidden;
+  background: #ffffff url('../../assets/images/pex/ext-landing-page/background.svg');
+  background-size: cover;
 
-  .LeftSideBar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 20%;
-    background-color: #000000;
-    border-right: 10px solid #F6DA25;
-    text-align: center;
-
-    img {
-      margin-top: 10%;
-    }
-  }
-
-  .MainWrapper {
-    position: absolute;
-    top: 10%;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
+  &Content {
     display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
-
-    .Main {
-      align-items: start;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
+    h1 {
+      padding: 50px 0 30px;
     }
+  }
 
+  .GuideClipArea {
+    position: relative;
+    display: flex;
+    height: 0;
+    width: 100%;
+    flex: 1;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    align-content: stretch;
     .MacBook {
-      flex-basis: 50%;
-      display: flex;
-      position: relative;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
     }
-
-    .Description {
-      flex-basis: 50%;
-      padding-right: 10%;
-
-      .ExtHeader {
-        font-size: 42px;
-        position: relative;
-
-        span {
-          position: relative;
-          z-index: 2;
-        }
-
-        &::after {
-          position: absolute;
-          content: '';
-          height: 20px;
-          width: 300px;
-          background-color: #FFF988;
-          bottom: 25px;
-          left: 0;
-        }
-      }
-
-      .ExtQuestion {
-        font-size: 30px;
-      }
-
-      .ExtDescription {
-        font-size: 24px;
-      }
-
-      p {
-        padding-bottom: 20px;
+    .FrameClip {
+      position: absolute;
+      top: 6.9%;
+      bottom: 12.37%;
+      width: 100%;
+      z-index: 2;
+      text-align: center;
+      > img.GuideClip {
+        height: 100%;
+        margin-right: 3px;
       }
     }
   }
-
-  .ExtSubscribe {
-    font-size: 18px;
-
-    .EmailLabel {
-      padding-bottom: 10px;
-      display: inline-block;
-      font-weight: 300;
+  .Description {
+    font-size: 30px;
+    padding: 30px 0 50px 0;
+    text-align: center;
+    > span {
+      display: block;
+      margin-bottom: 15px;
     }
-
-    .EmailRequiredForm {
-      display: flex;
-
-      .form-group {
-        flex-basis: 60%;
-        padding-right: 30px;
-
-        input {
-          border: 1px solid #ECECEC;
-          height: 54px;
-
-          &::-webkit-input-placeholder {
-            color: #858585;
-          }
-        }
-      }
-
-      button {
-        flex-basis: 25%;
-        max-height: 54px;
-
-        background-color: #FFF988;
-        border: 3px solid #F5D516;
-        color: #000000;
-        min-width: 190px;
-      }
-
-      .ErrorMsg {
-        color: red;
-      }
+    a.btn {
+      min-width: 180px;
     }
   }
-
-  .SubscribeSuccess {
-    font-weight: bold;
-    font-size: 24px;
-    color: #25bd25;
-  }
-
-  .SubscribeError {
-    color: red;
-  }
-
 }

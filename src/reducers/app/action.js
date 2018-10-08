@@ -7,7 +7,7 @@ import local from '@/services/localStore';
 import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
 import COUNTRIES_BLACKLIST_CASH from '@/data/country-blacklist-exchange';
 import { authUpdate, fetchProfile, getFreeETH, signUp } from '@/reducers/auth/action';
-import { getListOfferPrice, getUserProfile } from '@/reducers/exchange/action';
+import { getListOfferPrice, getUserProfile, getListOfferPriceCashAtm } from '@/reducers/exchange/action';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { FormattedMessage, FormattedHTMLMessage } from 'react-intl';
 import BrowserDetect from '@/services/browser-detect';
@@ -19,6 +19,9 @@ export const APP_ACTION = {
 
   SHOW_SCAN_QRCODE: 'SHOW_SCAN_QRCODE',
   HIDE_SCAN_QRCODE: 'HIDE_SCAN_QRCODE',
+
+  SHOW_QRCODE_CONTENT: 'SHOW_QRCODE_CONTENT',
+  HIDE_QRCODE_CONTENT: 'HIDE_QRCODE_CONTENT',  
 
   NETWORK_ERROR: 'NETWORK_ERROR',
 
@@ -71,6 +74,10 @@ export const hidePasscode = config => ({ type: APP_ACTION.HIDE_CONFIRM, payload:
 // scan qrcode:
 export const showScanQRCode = config => ({ type: APP_ACTION.SHOW_SCAN_QRCODE, payload: { isShow: true, ...config } });
 export const hideScanQRCode = config => ({ type: APP_ACTION.HIDE_SCAN_QRCODE, payload: { isShow: false, ...config } });
+
+// qrcode content
+export const showQRCodeContent = config => ({ type: APP_ACTION.SHOW_QRCODE_CONTENT, payload: { isShow: true, ...config } });
+export const hideQRCodeContent = config => ({ type: APP_ACTION.HIDE_QRCODE_CONTENT, payload: { isShow: false, ...config } });
 
 // Loading
 export const showLoading = config => ({ type: APP_ACTION.LOADING, payload: { ...config } });
@@ -158,8 +165,15 @@ const tokenHandle = ({
               console.log('coins - getListOfferPrice - redux - error', e);
             },
           }));
-          // wallet          
-          const listWallet = MasterWallet.getMasterWallet();          
+          dispatch(getListOfferPriceCashAtm({
+            PATH_URL: API_URL.EXCHANGE.GET_LIST_OFFER_PRICE_CASH_ATM,
+            // qs: { fiat_currency: ipInfo?.currency },
+            errorFn(e) {
+              console.log('coins - getListOfferPriceCashAtm - redux - error', e);
+            },
+          }));
+          // wallet
+          const listWallet = MasterWallet.getMasterWallet();
           if (listWallet === false) {
             MasterWallet.createMasterWallets();
             console.log('create wallet success');

@@ -64,11 +64,11 @@ class Index extends React.PureComponent {
     return (
       <div className="row">
         <div className="col">
-          <div className="pd-faq">Disclaimer</div>
-          <div className="pd-content">
+          <div className="pd-disclaim">Disclaimer</div>
+          <div className="pd-small-content">
             <FormattedMessage id={`landing_page.${name}.disclaim`} />
           </div>
-          <p className="pd-content">Need more information? Check out our FAQ and <a href="http://ninja.org/pex/instruction">instructions</a> on how to play.</p>
+          <p className="pd-small-content">Need more information? Check out our FAQ and <a href="http://ninja.org/pex/instructions">instructions</a> on how to play.</p>
         </div>
       </div>
     );
@@ -242,7 +242,7 @@ class Index extends React.PureComponent {
           }
           {
             faq && (
-              <div className="row mt-5">
+              <div className="row mt-5" onRef={(ref) => { this.faqRef = ref; return null; }}>
                 <div className="col">
                   <div className="pd-faq">
                     {messages.COIN_EXCHANGE_LP_FAQ_TITLE}

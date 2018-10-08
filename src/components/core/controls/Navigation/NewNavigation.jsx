@@ -58,7 +58,7 @@ class Navigation extends React.Component {
               <span>{this.props.intl.messages.app.navigation.credit.toUpperCase()}</span>
             </Link>
           </li>
-          <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM]))}>
+          <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.CASH_STORE_URL]))}>
             <Link to={URL.HANDSHAKE_ATM} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: discoverIcon }} />
               <span>{this.props.intl.messages.app.navigation.atm.toUpperCase()}</span>
@@ -82,7 +82,7 @@ class Navigation extends React.Component {
               <span>{this.props.intl.messages.app.navigation.shop.toUpperCase()}</span>
             </Link>
           </li>
-          <li className={cn(this.checkSelected([URL.HANDSHAKE_ME_INDEX, URL.ESCROW_DEPOSIT]))}>
+          <li className={cn(this.checkSelected([URL.HANDSHAKE_ME_INDEX]))}>
             <Link to={URL.HANDSHAKE_ME_INDEX} onClick={this.props.clearHeaderBack}>
               <div className="me-icon" dangerouslySetInnerHTML={{ __html: meIcon }} />
               <span>{this.props.intl.messages.app.navigation.setting.toUpperCase()}</span>

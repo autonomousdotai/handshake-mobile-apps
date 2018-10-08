@@ -207,7 +207,7 @@ class ContentForPrediction extends React.Component {
 
         <div className="wrapperMobile wrapperBlock">
           <div className="contentBlock column ">
-            <div className="pexHeadLine">Mobile web appcontent</div>
+            <div className="pexHeadLine">Mobile Web App</div>
             <div className="pexContent">No download or signup required. <br/> Simply open up your browser and you’re ready to go.</div>
             <img className="imageContent" src={imgMobileIcon} alt="imgMobileIcon" width="400" />
           </div>
@@ -284,15 +284,6 @@ class ContentForPrediction extends React.Component {
     return (
       <div className="wrapperVerticalBlock">
         <img src={imgFeature} alt="imgFeature" width="100%" />
-      </div>
-    );
-  }
-  renderDisclaim() {
-    return (
-      <div className="wrapperVerticalBlock">
-        <div className="pexHeadLine" >Disclaimer</div>
-        <div className="pexContent">Ninja is open-source, decentralized software that never holds user data, or user funds. As such, Ninja does not have the power to alter or restrict any actions made on the platform and so cannot be responsible for policing it. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never stake more than you are willing to lose. Play safe!.</div>
-        <div className="pexContent">Need more information? Check out our FAQ and instructions on how to play.</div>
       </div>
     );
   }

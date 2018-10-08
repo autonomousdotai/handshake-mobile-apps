@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { merge, trimEnd } from 'lodash';
 import local from '@/services/localStore';
 import { APP, BASE_API } from '@/constants';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
@@ -12,10 +11,7 @@ const $http = ({
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
-  const completedHeaders = merge(
-    defaultHeaders,
-    headers,
-  );
+  const completedHeaders = Object.assign({} , defaultHeaders, headers);
 
   if (url.startsWith(BASE_API.BASE_URL)) {
     const token = local.get(APP.AUTH_TOKEN);
@@ -33,7 +29,7 @@ const $http = ({
     method: parsedMethod,
     timeout: BASE_API.TIMEOUT,
     headers: completedHeaders,
-    url: trimEnd(`${url}/${id}`, '/'),
+    url: id ? `${url}/${id}` : url, // trimEnd(`${url}/${id}`, '/'),
     params: qs,
     data,
     ...rest,

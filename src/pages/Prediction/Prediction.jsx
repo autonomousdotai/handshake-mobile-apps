@@ -22,7 +22,7 @@ import { isJSON } from '@/utils/object';
 
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
-import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkFreeBetSelector, checkExistSubcribeEmailSelector } from './selector';
+import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkFreeBetSelector, checkExistSubcribeEmailSelector, totalBetsSelector } from './selector';
 import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, checkExistSubcribeEmail } from './action';
 import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
@@ -45,6 +45,7 @@ class Prediction extends React.Component {
     countReport: PropTypes.number,
     freeBet: PropTypes.object,
     isExistEmail: PropTypes.any,
+    totalBets: PropTypes.number,
   };
 
   static defaultProps = {
@@ -87,7 +88,6 @@ class Prediction extends React.Component {
   // @TODO: Extensions
   /* eslint no-useless-escape: 0 */
   receiverMessage = (props) => {
-    console.log(window.localStorage.getItem('test'));
     const windowInfo = isJSON(window.name) ? JSON.parse(window.name) : null;
     if (windowInfo) {
       const { message } = windowInfo;
@@ -107,7 +107,7 @@ class Prediction extends React.Component {
 
   didPlaceOrder = (isFree) => {
     this.closeOrderPlace();
-    if (!this.props.isExistEmail) {
+    if (!this.props.isExistEmail && isFree) {
       this.modalEmailPopupRef.open();
     } else {
       isFree ? this.modalLuckyFree.open() : this.modalLuckyReal.open();
@@ -320,10 +320,14 @@ class Prediction extends React.Component {
 
   renderLuckyReal = () => (
     <ModalDialog onRef={(modal) => { this.modalLuckyReal = modal; }}>
-      <LuckyReal onButtonClick={() => {
-        this.modalLuckyReal.close();
-      }}
+      <LuckyReal
+        totalBets={this.props.totalBets}
+        isExistEmail={this.props.isExistEmail}
+        onButtonClick={() => {
+          this.modalLuckyReal.close();
+        }}
       />
+
     </ModalDialog>
   )
 
@@ -332,6 +336,8 @@ class Prediction extends React.Component {
       <LuckyFree onButtonClick={() => {
         this.modalLuckyFree.close();
       }}
+        totalBets={this.props.totalBets}
+
       />
     </ModalDialog>
   )
@@ -442,6 +448,7 @@ export default injectIntl(connect(
       freeBet: checkFreeBetSelector(state),
       isExistEmail: checkExistSubcribeEmailSelector(state),
       shareEvent: shareEventSelector(state),
+      totalBets: totalBetsSelector(state),
     };
   },
 )(Prediction));

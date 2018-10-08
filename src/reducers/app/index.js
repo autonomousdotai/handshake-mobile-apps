@@ -85,6 +85,16 @@ function appReducter(state = {
         ...state,
         scanQRCodeData: action.payload,
       };
+    case APP_ACTION.SHOW_QRCODE_CONTENT:
+      return {
+        ...state,
+        qRCodeContentData: action.payload,
+      };
+    case APP_ACTION.HIDE_QRCODE_CONTENT:
+      return {
+        ...state,
+        qRCodeContentData: action.payload,
+      };
 
     case APP_ACTION.SET_ROOT_LOADING:
       return {

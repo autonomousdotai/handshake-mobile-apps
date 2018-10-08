@@ -21,6 +21,7 @@ import { validateBet } from '@/components/handshakes/betting/validation.js';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { calculateBetDefault, calculateWinValues } from '@/components/handshakes/betting/calculation';
+import { updateTotalBets } from '@/pages/Prediction/action';
 
 
 import './Shake.scss';
@@ -44,6 +45,7 @@ class BetingShake extends React.Component {
     reportTime: PropTypes.any.isRequired,
     onSubmitClick: PropTypes.func,
     onCancelClick: PropTypes.func,
+    dispatch: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -62,6 +64,7 @@ class BetingShake extends React.Component {
       oddValue: 0,
       amountValue: 0,
       winValue: 0,
+      balance: 0,
     };
     this.onSubmit = this.onSubmit.bind(this);
   }
@@ -106,7 +109,11 @@ class BetingShake extends React.Component {
     }
 
     const validate = await validateBet(amount, odds, closingDate, matchName, matchOutcome);
-    const { status, message, code, value } = validate;
+    const { status, message, code, value, balance } = validate;
+    this.setState({
+      balance,
+    });
+
     if (status) {
       this.initHandshake(amount, odds);
       onSubmitClick();
@@ -132,6 +139,7 @@ class BetingShake extends React.Component {
 
       }
     }
+
   }
 
 
@@ -183,10 +191,14 @@ class BetingShake extends React.Component {
   initHandshakeSuccess = async (successData) => {
     console.log(TAG, 'initHandshakeSuccess', successData);
     const { status, data } = successData;
+    const { balance } = this.state;
+
+    const { handshakes, total_bets: totalBets } = data;
 
     if (status && data) {
-      betHandshakeHandler.controlShake(data);
-      const isExist = isExistMatchBet(data);
+      this.props.dispatch(updateTotalBets(totalBets));
+      betHandshakeHandler.controlShake(handshakes, balance);
+      const isExist = isExistMatchBet(handshakes);
       let message = MESSAGE.CREATE_BET_NOT_MATCH;
       if (isExist) {
         message = MESSAGE.CREATE_BET_MATCHED;
@@ -316,10 +328,11 @@ class BetingShake extends React.Component {
     return this.renderForm();
   }
 }
-
+const mapState = state => ({
+});
 const mapDispatch = ({
   initHandshake,
   shakeItem,
   showAlert,
 });
-export default connect(null, mapDispatch)(BetingShake);
+export default connect(mapState, mapDispatch)(BetingShake);

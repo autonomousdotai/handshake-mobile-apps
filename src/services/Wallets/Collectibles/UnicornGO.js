@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/UnicornGO.json');
+const abi = require('@/contracts/Wallet/UnicornGO.json');
 
 export class UnicornGO extends TokenERC721 {
 

@@ -515,26 +515,7 @@ class FeedBetting extends React.Component {
       },
     });
   }
-
-  renderStatus = () => {
-    const { statusTitle } = this.state;
-    return <div className="statusBetting" dangerouslySetInnerHTML={{ __html: statusTitle }} />;
-  }
-
-
-  renderItem(matchedAmount, amount, winMatch, winValue) {
-    return (
-      <div className="bettingInfoValues">
-        <div>
-          {<div className="value">{matchedAmount}/{amount} ETH</div>}
-        </div>
-        <div>
-          <div className="value">{winMatch}/{winValue} ETH</div>
-        </div>
-      </div>
-    );
-  }
-  renderItemShake(shakerList) {
+  calculateDisplayValueShaker(shakerList) {
     let displayWinMatch = 0;
     let displayAmount = 0;
     let displayMatchedAmount = 0;
@@ -563,31 +544,10 @@ class FeedBetting extends React.Component {
       displayWinMatch = formatAmount(displayWinMatch);
       displayAmount = formatAmount(displayAmount);
       displayWinValue = formatAmount(displayWinValue);
-
-      // console.log(TAG, ' renderShaker',
-      //                   ' displayMatchedAmount:', displayMatchedAmount,
-      //                   ' displayWinMatch:', displayWinMatch,
-      //                   ' displayAmount:', displayAmount,
-      //                   ' displayWinValue:', displayWinValue,
-      //                 );
-
-      return (this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue));
     }
-    return null;
+    return { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue };
   }
-
-  renderShaker() {
-
-    const { shakedItemList } = this.state;
-
-    return (
-      <div>
-        {this.renderItemShake(shakedItemList)}
-      </div>
-    );
-  }
-
-  renderMaker() {
+  calculateDisplayValueMaker() {
     const { itemInfo } = this.state;
     const { amount, odds, remainingAmount, matched } = itemInfo;
     const amountBN = parseBigNumber(amount);
@@ -613,11 +573,30 @@ class FeedBetting extends React.Component {
     const displayMatchedAmount = formatAmount(amountMatch);
     const displayWinMatch = formatAmount(winMatch);
     const displayWinValue = formatAmount(winValue);
+    return { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue };
+  }
 
+  renderStatus = () => {
+    const { statusTitle } = this.state;
+    return <div className="statusBetting" dangerouslySetInnerHTML={{ __html: statusTitle }} />;
+  }
+
+
+  renderItem(matchedAmount, amount, winMatch, winValue) {
     return (
-      this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue)
+      <div className="clearfix">
+        <div className="bettingInfo">
+          <div className="description">Matched</div>
+          <div className="value">{matchedAmount}/{amount} ETH</div>
+        </div>
+        <div className="bettingInfoValues">
+          <div className="description">You could win</div>
+          <div className="value">{winMatch}/{winValue} ETH</div>
+        </div>
+      </div>
     );
   }
+
   renderButton(buttonClassName) {
     const {
       actionTitle, isLoading,
@@ -666,7 +645,7 @@ class FeedBetting extends React.Component {
 
   render() {
     const {
-      actionTitle, isAction, itemInfo, isLoading, eventName, predictName
+      actionTitle, isAction, itemInfo, isLoading, eventName, predictName, shakedItemList,
     } = this.state;
 
     //const {extraData} = this.props;
@@ -674,8 +653,8 @@ class FeedBetting extends React.Component {
     const { side, odds, role } = itemInfo;
 
     const colorBySide = side === 1 ? `support` : 'oppose';
-
-
+    const displayValues = role === ROLE.INITER ? this.calculateDisplayValueMaker() : this.calculateDisplayValueShaker(shakedItemList);
+    const { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue } = displayValues;
     console.log(TAG, 'render', isLoading);
     return (
       <div>
@@ -697,13 +676,7 @@ class FeedBetting extends React.Component {
             </div>
             <div className="oddName"><span className="odds-text-feed">Odds</span> <span className={`odds-value-feed-${colorBySide}`}>{odds}</span></div>
           </div>
-          <div className="clearfix">
-            <div className="bettingInfo">
-              <div className="description">Matched</div>
-              <div className="description">You could win</div>
-            </div>
-            {role === ROLE.INITER ? this.renderMaker() : this.renderShaker()}
-          </div>
+          {this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue)}
           {this.renderBottom(itemInfo)}
         </Feed>
       </div>

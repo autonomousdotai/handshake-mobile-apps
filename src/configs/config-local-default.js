@@ -12,7 +12,7 @@ const config = {
       predictionHandshakeDevAddress: '0xe7bbe7ddffd2b39fd46e4594de9914d1e057e8c8',
       exchangeHandshakeAddress: '0x5fa2e0d96dbe664beb502407bf46ea85b131fb86',
       exchangeCashAddress: '0x72b0ba8b3e039153b557e4e15fa11fd6a79b7498',
-      creditAtmAddress: '0xf24b786cc7d72ef70162e99137e660dbe4a48233',
+      creditAtmAddress: '0xf2ef1a4f0da895efab6f4f882ab3448871f7d741',
       blockchainNetwork: 'https://mainnet.infura.io/',
       apikeyEtherscan: 'AVBIHJUF3G4ZY2CHZI6F4RVBFWC3A3EIVB',
       shurikenTokenAddress: '0xca0fed76b5807557ce38e65cab83be3373cc2e7d',

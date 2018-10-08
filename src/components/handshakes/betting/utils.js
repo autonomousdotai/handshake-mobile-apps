@@ -8,7 +8,7 @@ import { BET_TYPE, ROLE } from '@/components/handshakes/betting/constants.js';
 import moment from 'moment';
 
 import { BigNumber } from 'bignumber.js';
-import _ from 'lodash';
+import { isEmpty } from '@/utils/is';
 
 
 const ROUND = 1000000;
@@ -129,7 +129,7 @@ export const foundShakeList = (item) => {
 
   //const idOffchain = getId(offchain);
   //console.log('Id Offchain:', idOffchain);
-  if (!_.isEmpty(shakers)) {
+  if (!isEmpty(shakers)) {
     const shakersArr = JSON.parse(shakers);
     const shakedList = shakersArr.filter(element => element.shaker_id === profile.id);
     console.log('foundShakedList:', shakedList);

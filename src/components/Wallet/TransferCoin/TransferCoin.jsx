@@ -52,15 +52,18 @@ class Transfer extends React.Component {
       walletDefault: false,
       walletSelected: false,
       currency: this.props.currency,
+
       // Qrcode
       qrCodeOpen: false,
       delay: 300,
-      walletsData: false,
+      legacyMode: false,
+
       rate: 0,
       inputSendAmountValue: 0,
       inputSendMoneyValue: 0,
       legacyMode: false,
-      modalListCoin: ''
+      modalListCoin: '',
+      walletNotFound: ''
     }
   }
 
@@ -91,45 +94,28 @@ class Transfer extends React.Component {
   componentWillReceiveProps() {
     const {currency} = this.props;
     this.setState({inputSendAmountValue: 0, inputSendMoneyValue: 0, currency: currency ? currency : 'USD'});
-    this.resetForm();
 
   }
 
-  async componentDidMount() {
+   async componentDidMount() {
     this.showLoading();
     let legacyMode = (BrowserDetect.isChrome && BrowserDetect.isIphone); // show choose file or take photo
     this.setState({legacyMode: legacyMode});
 
-    //this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amountCoin", "amountMoney");
-
-    if (this.props.amount){
-      this.props.rfChange(nameFormSendWallet, 'amountCoin', this.props.amount);
-    }
-
-    if (this.props.toAddress){
-      this.setState({inputAddressAmountValue: this.props.toAddress});
-      this.props.rfChange(nameFormSendWallet, 'to_address', this.props.toAddress);
-    }
-
     await this.getWalletDefault();
     this.hideLoading();
 
-    this.setRate();
+    await this.setRate();
+
+    let amount = this.props.amount || "";
+    if(amount){console.log(amount);
+      this.updateAddressAmountValue(null, amount);
+    }
+
+    let toAddress = this.props.toAddress || "";
+    this.props.rfChange(nameFormSendWallet, 'to_address', toAddress);
     this.getBalanceWallets();
   }
-
-  resetForm(){
-    this.props.clearFields(nameFormSendWallet, false, false, "to_address", "amountCoin", "amountMoney");
-  }
-
-  showLoading = () => {
-    this.props.showLoading({message: '',});
-  }
-
-  hideLoading = () => {
-    this.props.hideLoading();
-  }
-
 
   onFinish = async (data) => {
     const { onFinish } = this.props;
@@ -289,15 +275,14 @@ class Transfer extends React.Component {
       walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName() + walletDefault.name;
     }
 
-    this.setState({wallets: listWalletCoin, walletDefault: walletDefault, walletSelected: walletDefault}, ()=>{
+    this.setState({wallets: listWalletCoin, walletDefault, walletSelected: walletDefault}, ()=>{
       this.props.rfChange(nameFormSendWallet, 'walletSelected', walletDefault);
     });
   }
 
   getBalanceWallets = async () => {
     let { wallets, walletSelected, walletDefault } = this.state;
-
-    if(wallets){
+    if(wallets && wallets.length){
       for(let i in wallets){
         wallets[i].balance = await wallets[i].getBalance(true);
         if(walletSelected.name == wallets[i].name && walletSelected.address == wallets[i].address && walletSelected.network == wallets[i].network){
@@ -311,8 +296,20 @@ class Transfer extends React.Component {
 
       this.setState({wallets, walletSelected, walletDefault});
     }
-  }
+    else{
+      const { coinName } = this.props;
 
+      if(coinName){
+        this.setState({walletNotFound:
+          <div className="walletNotFound">
+            {coinName} wallet is not found to transfer
+          </div>
+        }, ()=> {
+
+        });
+      }
+    }
+  }
 
   sendCoin = () => {
       this.modalConfirmTranferRef.open();
@@ -392,7 +389,6 @@ class Transfer extends React.Component {
     }
   }
 
-
   updateSendAddressValue = (evt) => {
     this.setState({
       inputAddressAmountValue: evt.target.value,
@@ -424,19 +420,24 @@ submitSendCoin=()=>{
 handleScan=(data) =>{
   const { rfChange } = this.props
   if(data){
-    let value = data.split(',');
-    this.setState({
-      inputAddressAmountValue: value[0],
-    });
-    rfChange(nameFormSendWallet, 'to_address', value[0]);
-    if (value.length == 2){
-      this.setState({
-        inputSendAmountValue: value[1],
-      });
-
-      //rfChange(nameFormSendWallet, 'amountCoin', value[1]);
-      this.updateAddressAmountValue(null, value[1]);
+    let qrCodeResult = MasterWallet.getQRCodeDetail(data);
+    if (qrCodeResult){
+      let dataType = qrCodeResult['type'];
+      if (dataType == MasterWallet.QRCODE_TYPE.TRANSFER){
+          this.setState({
+            inputAddressAmountValue: qrCodeResult.data.address, inputSendAmountValue: qrCodeResult.data.amount
+          });
+          this.updateAddressAmountValue(null, qrCodeResult.data.amount);
+          rfChange(nameFormSendWallet, 'to_address', qrCodeResult.data.address);
+      }
+      else if (dataType == MasterWallet.QRCODE_TYPE.CRYPTO_ADDRESS){
+        rfChange(nameFormSendWallet, 'to_address', qrCodeResult.data.address);
+      }
+      else{
+        this.showAlert("Address not found");
+      }
     }
+
     this.modalScanQrCodeRef.close();
   }
 }
@@ -477,7 +478,6 @@ openListCoin=()=>{
 selectWallet = async (walletSelected) => {
 
   this.setState({walletSelected, modalListCoin: ''}, ()=> {
-    MasterWallet.UpdateBalanceItem(walletSelected);
     this.modalListCoinRef.close();
   });
 
@@ -515,7 +515,7 @@ render() {
   if(!currency) currency = "USD";
   const { messages } = this.props.intl;
   let showDivAmount = this.state.walletSelected && this.state.rate;
-  const { modalListCoin } = this.state;
+  const { modalListCoin, walletNotFound } = this.state;
 
   return (
     <div>
@@ -543,7 +543,7 @@ render() {
             : ''}
         </Modal>
 
-        <SendWalletForm className="sendwallet-wrapper" onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
+        <SendWalletForm className={walletNotFound ? "d-none" : "sendwallet-wrapper"} onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
 
         {/* Box: */}
         <div className="bgBox">
@@ -599,7 +599,7 @@ render() {
               {this.showWallet}
 
               <div className="wallets-wrapper">
-                <Modal title="Select wallets" onRef={modal => this.modalListCoinRef = modal}>
+                <Modal title={messages.wallet.action.transfer.placeholder.select_wallet} onRef={modal => this.modalListCoinRef = modal}>
                   {modalListCoin}
                 </Modal>
               </div>
@@ -612,6 +612,8 @@ render() {
 
 
         </SendWalletForm>
+
+        {walletNotFound}
       </div>
     )
   }
@@ -620,6 +622,11 @@ render() {
 Transfer.propTypes = {
   wallet: PropTypes.any,
   currency: PropTypes.string,
+  toAddress: PropTypes.string,
+  fromAddress: PropTypes.string,
+  coinName: PropTypes.string,
+  amount: PropTypes.any,
+  onFinish: PropTypes.func,
 };
 
 

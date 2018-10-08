@@ -7,8 +7,8 @@ import iconReceived from '@/assets/images/icon/icon-received.svg';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import './Wallet.scss';
+import { HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS } from '@/constants';
 
-const _ = require('lodash');
 const moment = require('moment');
 
 class WalletTransaction extends React.Component {
@@ -206,7 +206,7 @@ class WalletTransaction extends React.Component {
               char == "internal_transactions" ?
                 (val.length > 0 ?
                   <div className="body" key={char}>
-                    <div className="key">{_.startCase(_.camelCase(char))}</div>
+                    <div className="key">{char}</div>
                     <div className="value">
                     {
                       val.map(e => {
@@ -222,7 +222,7 @@ class WalletTransaction extends React.Component {
                 : "")
               :
                 <div className="body" key={char}>
-                  <div className="key">{_.startCase(_.camelCase(char))}</div>
+                  <div className="key">{char}</div>
                   <div className="value">{val}</div>
                 </div>
             )

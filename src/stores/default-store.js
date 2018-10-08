@@ -12,6 +12,7 @@ export default {
     countReport: 0,
     freeBet: {},
     isExistEmail: false,
+    totalBets: 0,
   },
   blockChain: {
     insufficientGas: null,

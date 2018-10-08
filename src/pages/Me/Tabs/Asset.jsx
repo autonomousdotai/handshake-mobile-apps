@@ -70,11 +70,6 @@ class Asset extends React.Component {
     this.props.setLoading(false);
   }
 
-  depositCoinATM = () => {
-    const { currency } = this.props;
-    this.props.history.push(`${URL.ESCROW_DEPOSIT}?currency=${currency}`);
-  }
-
   deactiveDeposit = () => {
     console.log('deactiveDeposit');
     const { messages } = this.props.intl;
@@ -207,7 +202,7 @@ class Asset extends React.Component {
           status === 'inactive' ? (
             <button
               className={cx('btn btn-sm btn-activate', 'primary-button')}
-              onClick={this.depositCoinATM}
+              onClick={() => this.props.depositCoinATM(currency)}
             >
               <FormattedMessage id="dashboard.btn.reactivate" />
             </button>

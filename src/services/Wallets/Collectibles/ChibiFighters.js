@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/ChibiFighters.json');
+const abi = require('@/contracts/Wallet/ChibiFighters.json');
 
 export class ChibiFighters extends TokenERC721 {
 

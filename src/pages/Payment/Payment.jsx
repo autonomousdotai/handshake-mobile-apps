@@ -69,12 +69,6 @@ class Payment extends React.Component {
   showSuccess(mst) {
     this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
-  }
 
   componentDidMount() {
     this.checkPayNinja();

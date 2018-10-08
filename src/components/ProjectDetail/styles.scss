@@ -75,9 +75,22 @@
     letter-spacing: 0;
     line-height: 33px;
   }
+  .pd-small-content {
+    opacity: 0.85;
+    font-size: 12px;
+    color: #484848;
+    letter-spacing: 0;
+    line-height: 33px;
+  }
   .pd-faq {
     font-weight: 600;
     font-size: 30px;
+    text-align: center;
+    margin-top: 120px;
+  }
+  .pd-disclaim {
+    font-weight: 600;
+    font-size: 18px;
     text-align: center;
     margin-top: 120px;
   }

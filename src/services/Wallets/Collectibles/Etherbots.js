@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/Etherbots.json');
+const abi = require('@/contracts/Wallet/Etherbots.json');
 
 export class Etherbots extends TokenERC721 {
 

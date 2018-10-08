@@ -30,3 +30,10 @@ export const validate = (values, isUpdate) => {
 
   return errors;
 };
+
+export const addressValidation = (address = '') => {
+  if (address.length < 3) {
+    return 'Wrong address';
+  }
+  return null;
+};

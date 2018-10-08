@@ -1,10 +1,10 @@
 .btn-current-location {
   position: absolute;
   right: 10px;
-  bottom: 195px;
+  bottom: 100px;
 
   box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
-  border-radius: 2px;
+  border-radius: 20px;
   cursor: pointer;
   background-color: #ffffff;
   width: 40px;
@@ -25,8 +25,9 @@
 .container-button {
   position: absolute;
   bottom: 23px;
-  left: 8px;
-  width: 308px;
+  left: 0.5rem;
+  width: 100%;
+  padding-right: 1rem;
   button {
     font-size: 16px;
     font-family: 'AppleSystemUIFont', sans-serif;

@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import Button from '@/components/core/controls/Button';
 import { bindActionCreators } from 'redux';
 import { showAlert } from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
-import { StringHelper } from '@/services/helper';
 import iconSuccess from '@/assets/images/pages/payment/check-circle-solid.svg';
 import iconFailed from '@/assets/images/pages/payment/times-circle-solid.svg';
 import qs from 'querystring';
+import './Complete.scss';
 
 class Complete extends React.Component {
   static propTypes = {
@@ -45,17 +44,11 @@ class Complete extends React.Component {
   showSuccess(mst) {
     this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
-  showLoading() {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
-  }
 
   componentDidMount() {
-    this.showLoading();
+    this.props.showLoading();
     this.getData();
-    this.hideLoading();
+    this.props.hideLoading();
   }
 
   getMessage(str){
@@ -77,14 +70,14 @@ class Complete extends React.Component {
     const querystring = window.location.search.replace('?', '');
     this.querystringParsed = qs.parse(querystring);
     const { order_id, confirm_url } = this.querystringParsed;
-
     if(data) {
       let icon = '', title = '', msg = '', fullBackUrl = '', success = true;
+
       if(data.hash){
         icon = iconSuccess;
         title = 'Payment processed!';
         msg = 'Thank you for your purchase!';
-        fullBackUrl = `${confirm_url}?order_id=${order_id}&hash=${data.hash}&status=1`;
+        fullBackUrl = `${confirm_url}?order_id=${order_id}&transaction=${data.hash}&status=1`;
         setTimeout(() => {window.location.href = fullBackUrl}, 7000);
       }
       else{

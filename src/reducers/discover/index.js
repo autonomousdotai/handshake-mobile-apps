@@ -4,6 +4,7 @@ import { handShakeList } from '@/data/shake';
 import { ACTIONS } from './action';
 import local from '@/services/localStore';
 import OfferShop from '@/models/OfferShop';
+import CashStore from "@/models/CashStore";
 
 // const handleListPayload = payload => payload.map(handshake => Handshake.handshake(handshake));
 const handleDetailPayload = () => Handshake.handshake(handShakeList.data[1]);
@@ -18,21 +19,19 @@ const isEmptyBalance = (item) => {
 };
 
 const handleListPayload = (payload) => {
+  console.log('handleListPayload', payload);
   const result = [];
   const offers = [];
 
   const currencyActive = local.get(APP.EXCHANGE_CURRENCY);
   payload.map((handshake) => {
     const hs = Handshake.handshake(handshake);
-    const offer = OfferShop.offerShop(JSON.parse(hs.extraData));
+    const offer = CashStore.cashStore(JSON.parse(hs.extraData));
     const { id } = hs;
+    const { businessType } = offer;
 
-    const allowRender = offer.itemFlags[currencyActive] && !isEmptyBalance(offer.items[currencyActive]);
-
-    if (allowRender) {
-      result.push(hs);
-      offers.push(offer);
-    }
+    result.push(hs);
+    offers.push(offer);
 
     return null;
   });

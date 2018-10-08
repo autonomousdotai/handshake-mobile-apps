@@ -11,7 +11,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/CryptoStrikers.json');
+const abi = require('@/contracts/Wallet/CryptoStrikers.json');
 
 export class CryptoStrikers extends TokenERC721 {
   constructor() {
