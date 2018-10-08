@@ -7,6 +7,7 @@ import me from './me';
 import comment from './comment';
 import admin from './admin';
 import internalWithdraw from './internalWithdraw';
+import internalAdmin from './internalAdmin';
 // import firebase from './firebase';
 
 export default {
@@ -19,5 +20,6 @@ export default {
   comment,
   admin,
   internalWithdraw,
+  internalAdmin,
   // firebase,
 };

@@ -56,3 +56,32 @@ export function isEqual(value, other) {
   // If nothing failed, return true
   return true;
 }
+
+/* eslint no-restricted-syntax:0 */
+export function compact(array) {
+  let resIndex = 0;
+  const result = [];
+
+  if (array == null) {
+    return result;
+  }
+
+  for (const value of array) {
+    if (value) {
+      result[resIndex += 1] = value;
+    }
+  }
+  return result;
+}
+
+export function uniqBy(array, condition) {
+  const result = {};
+  if (!condition) {
+    return array;
+  }
+
+  array.forEach(item => {
+    result[condition(item)] = item;
+  });
+  return Object.values(result);
+}

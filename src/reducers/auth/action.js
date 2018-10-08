@@ -9,6 +9,7 @@ export const ACTIONS = {
   VERIFY_PHONE: 'VERIFY_PHONE',
   SUBMIT_PHONE: 'SUBMIT_PHONE',
   VERIFY_EMAIL: 'VERIFY_EMAIL',
+  VERIFY_ID: 'VERIFY_ID',
   SUBMIT_EMAIL: 'SUBMIT_EMAIL',
   CHECK_USERNAME: 'CHECK_USERNAME',
   GET_FREE_ETH: 'GET_FREE_ETH',
@@ -29,6 +30,7 @@ export const getVerifyPhoneCode = createAPI(ACTIONS.GET_VERIFY_PHONE_CODE);
 export const verifyPhone = createAPI(ACTIONS.VERIFY_PHONE);
 export const submitPhone = createAPI(ACTIONS.SUBMIT_PHONE);
 export const verifyEmail = createAPI(ACTIONS.VERIFY_EMAIL);
+export const verifyID = createAPI(ACTIONS.VERIFY_ID);
 export const submitEmail = createAPI(ACTIONS.SUBMIT_EMAIL);
 export const checkUsernameExist = createAPI(ACTIONS.CHECK_USERNAME);
 export const submitEmailSubcribe = createAPI(ACTIONS.SUBMIT_EMAIL_SUBCRIBE);

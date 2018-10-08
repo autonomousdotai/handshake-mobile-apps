@@ -25,6 +25,7 @@ class Auth {
       status: rawData.status || '',
       username: rawData.username || '',
       address: rawData.address || '',
+      idVerified: rawData.id_verified || 0,
     };
   }
 }

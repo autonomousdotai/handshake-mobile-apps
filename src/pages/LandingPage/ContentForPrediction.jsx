@@ -176,7 +176,7 @@ class ContentForPrediction extends React.Component {
   }
   renderExtension() {
     return (
-      <section className="section">
+      <section className="section" id="extension">
         <div className="wrapperExtentsion wrapperBlock">
           <div className="column">
             <img src={imgExtension} alt="imgExtension" width="600" />
@@ -221,7 +221,7 @@ class ContentForPrediction extends React.Component {
   }
   renderMarket() {
     return (
-      <section className="section">
+      <section className="section" id="market">
         <div className="wrapperBlock">
           <div className="column">
             <img src={imgMarket} alt="imgMarket" width="500" />

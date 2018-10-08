@@ -6,12 +6,14 @@ import { injectIntl } from 'react-intl';
 // services
 import createForm from '@/components/core/form/createForm';
 import { setHeaderTitle, showAlert } from '@/reducers/app/action';
-import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate, submitEmail } from '@/reducers/auth/action';
+import { verifyPhone, submitPhone, verifyEmail, checkUsernameExist, authUpdate, submitEmail, verifyID } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
 // components
 import { Grid, Row, Col } from 'react-bootstrap';
 import Image from '@/components/core/presentation/Image';
 import Button from '@/components/core/controls/Button';
+import Dropdown from '@/components/core/controls/Dropdown';
+import UploadZone from '@/components/core/controls/UploadZone';
 import { Field } from 'redux-form';
 import { fieldCleave } from '@/components/core/form/customField';
 import ModalDialog from '@/components/core/controls/ModalDialog';
@@ -36,6 +38,7 @@ class Profile extends React.Component {
     submitPhone: PropTypes.func.isRequired,
     verifyPhone: PropTypes.func.isRequired,
     verifyEmail: PropTypes.func.isRequired,
+    verifyID: PropTypes.func.isRequired,
     submitEmail: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     app: PropTypes.object.isRequired,
@@ -59,14 +62,20 @@ class Profile extends React.Component {
       successMessage: '',
       isShowVerificationPhoneCode: false,
       isShowVerificationEmailCode: false,
+      idVerificationDocumentType: -1,
+      idVerificationFrontImage: null,
+      idVerificationBackImage: null,
+      idVerificationSelfieImage: null,
+      idVerified: props.auth.profile.idVerified,
     };
     // bind
-    this.onSubmitVerifyPhone = ::this.onSubmitVerifyPhone;
-    this.onSubmitVerifyEmail = ::this.onSubmitVerifyEmail;
-    this.selectPhoneRegionCode = ::this.selectPhoneRegionCode;
-    this.filterCountries = ::this.filterCountries;
-    this.onTextFieldChange = ::this.onTextFieldChange;
-    this.addUsername = ::this.addUsername;
+    this.onSubmitVerifyPhone = :: this.onSubmitVerifyPhone;
+    this.onSubmitIDVerification = :: this.onSubmitIDVerification;
+    this.addUsername = :: this.addUsername;
+    this.selectPhoneRegionCode = :: this.selectPhoneRegionCode;
+    this.filterCountries = :: this.filterCountries;
+    this.onTextFieldChange = :: this.onTextFieldChange;
+    this.addUsername = :: this.addUsername;
 
     this.UsernameForm = createForm({
       propsReduxForm: {
@@ -115,10 +124,88 @@ class Profile extends React.Component {
         initialValues: { email: props.auth.profile.email || local.get(APP.EMAIL_NEED_VERIFY) || '' },
       },
     });
+    this.IDVerificationForm = createForm({
+      propsReduxForm: {
+        form: 'IDVerificationForm',
+        initialValues: { verifyStatus: props.auth.profile.id_verified, documentType: -1, frontImage: null, backImage: null, selfieImage: null },
+      },
+    });
   }
 
   onTextFieldChange(name, value) {
     this.setState(() => ({ [name]: value }));
+  }
+
+  onSubmitIDVerification() {
+    const {
+      idVerificationDocumentType,
+      idVerificationFrontImage,
+      idVerificationBackImage,
+      idVerificationSelfieImage,
+    } = this.state;
+    const { messages } = this.props.intl;
+
+    if (idVerificationDocumentType < 0) {
+      this.props.showAlert({
+        message: <div className="text-center">{messages.me.profile.verify.alert.notValid.idVerification.invalidDocument}</div>,
+        timeOut: 3000,
+        type: 'danger',
+      });
+      return;
+    }
+
+    if (!idVerificationFrontImage) {
+      this.props.showAlert({
+        message: <div className="text-center">{messages.me.profile.verify.alert.notValid.idVerification.invalidFrontImage}</div>,
+        timeOut: 3000,
+        type: 'danger',
+      });
+      return;
+    }
+
+    if (idVerificationDocumentType > 0 && !idVerificationBackImage) {
+      this.props.showAlert({
+        message: <div className="text-center">{messages.me.profile.verify.alert.notValid.idVerification.invalidBackImage}</div>,
+        timeOut: 3000,
+        type: 'danger',
+      });
+      return;
+    }
+
+    if (!idVerificationSelfieImage) {
+      this.props.showAlert({
+        message: <div className="text-center">{messages.me.profile.verify.alert.notValid.idVerification.invalidSelfieImage}</div>,
+        timeOut: 3000,
+        type: 'danger',
+      });
+      return;
+    }
+
+    const data = new FormData();
+    data.append('document_type', idVerificationDocumentType);
+    data.append('front_image', idVerificationFrontImage);
+    data.append('back_image', idVerificationBackImage);
+    data.append('selfie_image', idVerificationSelfieImage);
+    this.props.verifyID({
+      PATH_URL: 'user/id_verification',
+      data,
+      METHOD: 'POST',
+      successFn: () => {
+        this.setState(() => ({ idVerified: 2, idVerificationCollapse: false }));
+        this.props.showAlert({
+          message: <div className="text-center">{messages.me.profile.verify.alert.success.idVerification}</div>,
+          timeOut: 3000,
+          type: 'success',
+        });
+      },
+      errorFn: () => {
+        this.props.showAlert({
+          message: <div className="text-center">{messages.me.profile.verify.alert.cannot.idVerification}</div>,
+          timeOut: 3000,
+          type: 'danger',
+        });
+      },
+    });
   }
 
   onSubmitVerifyPhone() {
@@ -130,7 +217,7 @@ class Profile extends React.Component {
     if (phoneStart !== phone) {
       this.props.verifyPhone({
         PATH_URL: 'user/verification/phone/start',
-        qs: {
+        data: {
           country: `${countryCode.dialCode.replace('+', '')}`,
           phone,
         },
@@ -371,7 +458,7 @@ class Profile extends React.Component {
     const {
       countryCode, countries, sms, email, code,
     } = this.state;
-    const { UsernameForm, NumberPhoneForm, EmailForm } = this;
+    const { UsernameForm, NumberPhoneForm, EmailForm, IDVerificationForm } = this;
     const { messages } = this.props.intl;
     return (
       <Grid className="profile">
@@ -495,7 +582,7 @@ class Profile extends React.Component {
                   <span>{messages.me.profile.text.email.desc1}</span>
                 </p>
                 <div className="extend">
-                  <span className="badge badge-success">{ this.props.auth.profile.email ? 'Verified' : '' }</span>
+                  <span className="badge badge-success">{this.props.auth.profile.email ? 'Verified' : ''}</span>
                   <Image className={this.state.emailCollapse ? 'rotate' : ''} src={ExpandArrowSVG} alt="arrow" />
                 </div>
               </div>
@@ -556,11 +643,130 @@ class Profile extends React.Component {
             </div>
           </Col>
         </Row>
+        <Row>
+          <Col md={12}>
+            <div className="collapse-custom">
+              <div className="head" onClick={() => this.setState(state => ({ idVerificationCollapse: !state.idVerificationCollapse }))}>
+                <p className="label">
+                  {messages.me.profile.text.id_verification.label}
+                  <span>{messages.me.profile.text.id_verification.desc1}</span>
+                </p>
+                <div className="extend">
+                  <span className={`badge ${this.state.idVerified === 1 ? 'badge-sucess' : (this.state.idVerified === 2 ? 'badge-warning' : '')}`}>{this.state.idVerified === 1 ? 'Verified' : (this.state.idVerified === 2 ? 'Processing' : '')}</span>
+                  <Image className={this.state.idVerificationCollapse ? 'rotate' : ''} src={ExpandArrowSVG} alt="arrow" />
+                </div>
+              </div>
+              <div className={`content ${this.state.idVerificationCollapse ? '' : 'd-none'}`}>
+                <p className="text">{messages.me.profile.text.id_verification.desc2}</p>
+                <p className="text">{messages.me.profile.text.id_verification.desc3}</p>
+                <p className="text">{messages.me.profile.text.id_verification.desc4}</p>
+                <p className="text">{messages.me.profile.text.id_verification.desc5}</p>
+                <IDVerificationForm onSubmit={this.onSubmitIDVerification}>
+                  <div>
+                    <p />
+                    <Row>
+                      <div className="col-12">
+                        <Dropdown
+                          placeholder={messages.me.profile.text.id_verification.desc6}
+                          name="document_type"
+                          className="w-100"
+                          defaultId="-1"
+                          source={[
+                            {
+                              id: -1,
+                              value: messages.me.profile.text.id_verification.desc6,
+                              className: 'disable',
+                              disableClick: true,
+                            },
+                            {
+                              id: 0,
+                              value: 'Passport',
+                            },
+                            {
+                              id: 1,
+                              value: 'Driver License',
+                            },
+                            {
+                              id: 2,
+                              value: 'Goverment ID Card',
+                            },
+                          ]}
+                          onItemSelected={(item) => {
+                            this.setState({ idVerificationDocumentType: item.id });
+                          }
+                          }
+                        />
+                      </div>
+                    </Row>
+                  </div>
+                  <div>
+                    <p />
+                    <Row>
+                      <div className="col-12">
+                        <UploadZone
+                          name="front_image"
+                          className="w-100"
+                          acceptMimeType={['image/jpeg', 'image/jpg', 'image/png']}
+                          multiple={false}
+                          dropLabel={messages.me.profile.text.id_verification.desc7}
+                          onDrop={(files) => {
+                            this.setState({ idVerificationFrontImage: files[0] });
+                          }}
+                        />
+                      </div>
+                    </Row>
+                  </div>
+                  <div>
+                    <p />
+                    <Row>
+                      <div className="col-12">
+                        <UploadZone
+                          name="back_image"
+                          className="w-100"
+                          acceptMimeType={['image/jpeg', 'image/jpg', 'image/png']}
+                          multiple={false}
+                          dropLabel={messages.me.profile.text.id_verification.desc8}
+                          onDrop={(files) => {
+                            this.setState({ idVerificationBackImage: files[0] });
+                          }}
+                        />
+                      </div>
+                    </Row>
+                  </div>
+                  <div>
+                    <p />
+                    <Row>
+                      <div className="col-12">
+                        <UploadZone
+                          name="selfie_image"
+                          className="w-100"
+                          acceptMimeType={['image/jpeg', 'image/jpg', 'image/png']}
+                          multiple={false}
+                          dropLabel={messages.me.profile.text.id_verification.desc9}
+                          onDrop={(files) => {
+                            this.setState({ idVerificationSelfieImage: files[0] });
+                          }}
+                        />
+                      </div>
+                    </Row>
+                  </div>
+                  <div>
+                    <Row>
+                      <div className="col-12">
+                        <Button cssType="anonymous" className="submit-btn">{messages.me.profile.text.id_verification.button.submit}</Button>
+                      </div>
+                    </Row>
+                  </div>
+                </IDVerificationForm>
+              </div>
+            </div>
+          </Col>
+        </Row>
         <ModalDialog onRef={(modal) => { this.modalVerifyRef = modal; return null; }}>
           <div className="modal-verify">
             <Image src={CheckedSVG} alt="checked" />
             <p>Successed!</p>
-            <p>{ this.state.successMessage ? this.state.successMessage : 'Your authentication is verified' }</p>
+            <p>{this.state.successMessage ? this.state.successMessage : 'Your authentication is verified'}</p>
           </div>
         </ModalDialog>
       </Grid>
@@ -578,6 +784,7 @@ const mapDispatch = ({
   verifyPhone,
   submitPhone,
   verifyEmail,
+  verifyID,
   showAlert,
   checkUsernameExist,
   authUpdate,
