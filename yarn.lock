@@ -1668,10 +1668,6 @@ big.js@^3.1.3:
   version "4.1.0"
   resolved "https://codeload.github.com/0xngoubou/bignumber.js-4.1.0/tar.gz/5380bd0a25617479212bfdbe612f00034c87f30e"
 
-"bignumber.js-4.1.0@https://github.com/0xngoubou/bignumber.js-4.1.0.git":
-  version "4.1.0"
-  resolved "https://github.com/0xngoubou/bignumber.js-4.1.0.git#5380bd0a25617479212bfdbe612f00034c87f30e"
-
 bignumber.js@^2.1.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-2.4.0.tgz#838a992da9f9d737e0f4b2db0be62bb09dd0c5e8"
@@ -4888,8 +4884,8 @@ handlebars@^4.0.11:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1538965322"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/ce7cc696a3cbd62f94bfb4d6cd86a6bc7f63eab4"
+  version "0.0.1538987031"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/7d6afaf10e361283d8f1b9323abd24d8054c7eb7"
   dependencies:
     "@babel/core" "^7.0.0-beta.51"
     "@babel/node" "^7.0.0-beta.51"
@@ -8503,12 +8499,12 @@ react-dom@^16.4.0:
     prop-types "^15.6.2"
     schedule "^0.5.0"
 
-react-dropzone@^4.2.11:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-4.3.0.tgz#facdd7db16509772633c9f5200621ac01aa6706f"
+react-dropzone@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-6.0.2.tgz#53a9fdc7b9125c5f2aa9d985a75878b200ee241c"
   dependencies:
     attr-accept "^1.1.3"
-    prop-types "^15.5.7"
+    prop-types "^15.6.2"
 
 react-google-maps@^9.4.5:
   version "9.4.5"

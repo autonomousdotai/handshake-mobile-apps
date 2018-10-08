@@ -1,0 +1,184 @@
+.choose-coin {
+  margin-bottom: 60px;
+  background-color: #ffffff;
+  .specific-amount {
+    padding: 10px;
+    background: linear-gradient(0deg, #85A1F8 0%, #617BFF 100%);
+  }
+  .label-1 {
+    font-weight: 500;
+    font-size: 22px;
+    color: #FFFFFF;
+  }
+  .label-2 {
+    opacity: 0.6;
+    font-size: 16px;
+    color: #FFFFFF;
+    line-height: 19px;
+  }
+  .form-control-cc {
+    margin-right: 120px;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .dropdown-button {
+    background: #EDF2F8;
+    position: absolute;
+    right: 0px;
+    width: 126px;
+    border: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 48px;
+    z-index: 10;
+
+    font-size: 18px;
+    color: #211D2C;
+  }
+  .btn-submit-specific {
+    background: #001890;
+    font-size: 18px;
+    line-height: 30px;
+  }
+  .by-package {
+    padding: 10px;
+    .p-label-choose {
+      font-size: 16px;
+      color: #211D2C;
+    }
+    .package {
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 16px;
+      color: #FFFFFF;
+      text-align: center;
+      width: 100%;
+    }
+    .p-basic {
+      background: #68AEFF;
+    }
+    .p-pro {
+      background: #FFBA48;
+    }
+    .p-plus {
+      background: #FF2C46;
+    }
+    .p-price {
+      font-weight: 500;
+      font-size: 18px;
+      color: #211D2C;
+    }
+    .p-saving {
+      font-weight: 500;
+      font-size: 14px;
+      color: #FF2C46;
+      margin-left: 8px;
+    }
+    .p-amount {
+      font-size: 16px;
+      color: #5766A4;
+      line-height: 19px;
+    }
+    .btn-p-buy-now {
+      background: #f6f8fe;
+      font-weight: 500;
+      font-size: 16px;
+      color: #546FF7;
+      padding: 10px 15px;
+    }
+  }
+
+  .ex-sticky-note-popup {
+    bottom: 0px;
+  }
+
+  .rf-type-atm-container {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0px;
+    span {
+      color: white;
+      font-size: 16px;
+      font-weight: normal;
+      text-align: left;
+      letter-spacing: 0;
+    }
+
+    .rf-type-atm-radio-container {
+      display: block;
+      position: relative;
+      padding-left: 35px;
+      margin-bottom: 12px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+
+      /* Hide the browser's default checkbox */
+      input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        &:checked ~ .checkmark {
+          background-color: #2196F3;
+
+          /* Show the checkmark when checked */
+          &:after {
+            display: block;
+          }
+        }
+      }
+
+      /* Create a custom checkbox */
+      .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 25px;
+        width: 25px;
+        background-color: white;
+        border-radius: 4px;
+        border: 1px solid #E5EAF8;
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        &:after {
+          content: "";
+          position: absolute;
+          left: 9px;
+          top: 5px;
+          width: 5px;
+          height: 10px;
+          border: solid white;
+          border-width: 0 3px 3px 0;
+          -webkit-transform: rotate(45deg);
+          -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
+        }
+      }
+    }
+  }
+}
+
+.ex-sticky-note {
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 414px;
+  background-color: black;
+  z-index: 2;
+  padding: 10px 0;
+  .btn-become {
+    min-width: 200px;
+    border: 1px solid white;
+    background: black;
+    color: white;
+  }
+}

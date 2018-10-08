@@ -1,0 +1,33 @@
+.codForm-container {
+  padding: 20px 0px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  .codForm-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: grey;
+    width: 100vw;
+    position: relative;
+    height: 40px;
+    background-color: #f8f8f8;
+    top: -20px;
+    text-align: center;
+  }
+  .codForm-form {
+    width: 100%;
+    > * {
+      margin: 15px 0px;
+    }
+  }
+  .codForm-buy-btn {
+    padding: 10px 30px;
+    font-size: 15px;
+    color: white;
+  }
+  .codForm-buy-btn-container {
+    text-align: center;
+  }
+}

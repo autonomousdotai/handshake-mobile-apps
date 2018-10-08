@@ -62,6 +62,7 @@ const ContentForPexInstruction = createDynamicImport(() => import('@/pages/Landi
 const Discover = createDynamicImport(() => import('@/pages/Discover/Discover'), Loading);
 const RouterCCConfirm = createDynamicImport(() => import('@/components/Router/CCConfirm'), Loading);
 const RouterBuyCC = createDynamicImport(() => import('@/components/Router/Credit'), Loading);
+const RouterBuyCryptoCoin = createDynamicImport(() => import('@/components/Router/BuyCryptoCoin'), Loading);
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
 const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
 const RouterInternalWithdraw = createDynamicImport(() => import('@/components/Router/InternalWithdraw'), Loading);
@@ -87,7 +88,8 @@ const configRoutesUsingMobileLayout = [
   { path: URL.ADMIN, component: RouterAdmin },
   { path: URL.REPORT, component: RouterReport },
   { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
-  { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
+  // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
+  { path: URL.BUY_COIN_URL, component: RouterBuyCryptoCoin },
 
   { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
   {
@@ -211,7 +213,7 @@ class Router extends React.Component {
                         <ScrollToTop>
                           <Switch>
                             <Route exact path={URL.INDEX} render={() => {
-                              return <Redirect to={{ pathname: URL.BUY_BY_CC_URL }} />
+                              return <Redirect to={{ pathname: URL.BUY_COIN_URL }} />
                             }}
                             />
                             {/*<Route*/}

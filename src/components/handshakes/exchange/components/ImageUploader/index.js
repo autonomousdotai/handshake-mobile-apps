@@ -40,7 +40,7 @@ export class Component extends React.PureComponent { // eslint-disable-line reac
     }).then((res) => {
       const correspondingFile = newFiles.find(item => item.name === file.name);
       if (correspondingFile) {
-        correspondingFile.url = `https://cdn-handshake-staging.autonomous.ai/${res.data.data}`;
+        correspondingFile.url = `${process.env.CDN_URL}/${res.data.data}`;
         delete correspondingFile.percent;
         this.setState({ files: newFiles });
         this.forceUpdate();

@@ -1106,6 +1106,12 @@ export default {
     },
   },
   create: {
+    cod_form: {
+      cod: 'Cash on Delivery',
+      your_address: 'Your address',
+      time_note: 'Time and note',
+      buy_btn: 'Buy',
+    },
     cash: {
       credit: {
         title: 'Buy coins',
@@ -1139,6 +1145,11 @@ export default {
         updatedAtmSuccess: 'Success!',
         no_history: 'You do not have any order yet.',
       },
+      confirm_button: {
+        desc: 'Are you sure?',
+        confirm: 'Sure',
+        cancel: 'Cancel',
+      },
       button: {
         create: 'Create my ATM',
         update: 'Update my ATM',
@@ -1161,9 +1172,13 @@ export default {
           processing: 'Pending',
           success: 'Success',
           transferring: 'Sending coins...',
+          cancelled: 'Canceled',
+          fiat_transfering: 'Sending money...',
+          transfer_failed: 'Failed',
         },
         messageTransfer: 'You haven\'t transferred yet.',
         transferNow: 'View detail',
+        cancel_order: 'Cancel',
       },
     },
   },
@@ -1708,5 +1723,16 @@ export default {
     copied: 'Copied to clipboard!',
     title: 'Payment detail',
     amount_info: 'Profit = Customer Amount - Your Amount',
+  },
+  buy_coin: {
+    label: {
+      header: 'Buy crypto with Ninja',
+      description: 'Ninja has some of the best prices around',
+      common_packages: 'Common packages:',
+      payment_methods: {
+        bank_transfer: 'Bank Transfer',
+        cod: 'COD',
+      },
+    },
   },
 };

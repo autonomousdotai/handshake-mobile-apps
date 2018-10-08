@@ -36,9 +36,14 @@
       font-weight: 400;
     }
 
-    .processing {
+    .processing, .cancelled {
       font-size: 16px;
       color: #FF3D37;
+      letter-spacing: 0;
+    }
+    .cancelled {
+      font-size: 16px;
+      color: #868DAD;
       letter-spacing: 0;
     }
     .success {
