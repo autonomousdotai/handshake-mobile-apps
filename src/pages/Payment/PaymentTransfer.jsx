@@ -20,7 +20,6 @@ import Modal from '@/components/core/controls/Modal';
 import Complete from './Complete';
 import { showAlert } from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
-import _ from 'lodash';
 import qs from 'querystring';
 
 
