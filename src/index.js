@@ -1,13 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
-import Web3 from 'web3';
-import { BigNumber } from 'bignumber.js';
 import { getGasPrice } from '@/utils/gasPrice.js';
 // components
 import Website from '@/components/App/Basic';
 import LogManage from '@/services/logmanage';
-// import registerServiceWorker from '@/services/worker';
 import * as OfflinePlugin from 'offline-plugin/runtime';
 
 if (process.env.isStaging) {
@@ -18,7 +14,6 @@ if (process.env.isStaging) {
 
 window.gasPrice = 64;
 getGasPrice();
-//setInterval(getGasPrice, 1000 * 60);
 
 if (process.env.caches) {
   OfflinePlugin.install({

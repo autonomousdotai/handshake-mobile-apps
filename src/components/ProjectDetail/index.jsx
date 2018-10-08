@@ -10,12 +10,11 @@ import createForm from '@/components/core/form/createForm';
 import { fieldInput } from '@/components/core/form/customField';
 import { email, required } from '@/components/core/form/validation';
 import $http from '@/services/api';
-import { BASE_API, LANDING_PAGE_TYPE } from '@/constants';
 import { Link } from 'react-router-dom';
+import { URL, BASE_API, LANDING_PAGE_TYPE } from '@/constants';
 import iconSubmitEmail from '@/assets/images/icon/landingpage/email_submit.svg';
 
 import './styles.scss';
-import { URL } from '@/constants';
 const nameFormSubscribeEmail = 'subscribeEmail';
 const FormSubscribeEmail = createForm({
   propsReduxForm: {

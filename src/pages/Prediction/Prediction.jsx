@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { push } from 'connected-react-router';
 import BetMode from '@/components/handshakes/betting/Feed/OrderPlace/BetMode';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Loading from '@/components/Loading';
@@ -114,10 +115,9 @@ class Prediction extends React.Component {
     }
   }
 
-  checkFreeAvailabe(props) {
+  checkFreeAvailabe = (props) => {
     const { freeBet = {} } = props;
     const { free_bet_available: freeAvailable = 0, can_freebet: canFreeBet = false } = freeBet;
-    //const { status } = lastItem;
     let isFreeAvailable = false;
 
     if (canFreeBet && freeAvailable > 0) {
@@ -154,7 +154,7 @@ class Prediction extends React.Component {
     }, 2 * 1000);
   }
 
-  checkShowFreeBetPopup(props) {
+  checkShowFreeBetPopup = (props) => {
     const isFreeAvailable = this.checkFreeAvailabe(props);
     const { freeBet } = props;
     const { free_bet_available: freeAvailable = 0 } = freeBet;
@@ -186,10 +186,12 @@ class Prediction extends React.Component {
     const { event } = itemProps;
     const { shareEvent } = this.props;
     if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
-      this.props.history.push(`${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`);
       if (shareEvent) {
         this.props.dispatch(removeShareEvent(['shareEvent']));
       }
+      const redirectURL = `${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`;
+      this.props.dispatch(push(redirectURL));
+      this.props.history.push(redirectURL);
     } else {
       const selectedOutcome = {
         hid: itemData.hid,
