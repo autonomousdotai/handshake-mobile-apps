@@ -3,6 +3,7 @@ export default {
     events: [],
     relevantEvents: [],
   },
+  predictionDetail: {},
   reports: {},
   categories: {},
   orderPlace: {},

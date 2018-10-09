@@ -111,7 +111,7 @@ class CreateEventForm extends Component {
         <input
           className="form-control"
           {...inputProps}
-          value={this.unixToDateFormat(value)}
+          defaultValue={this.unixToDateFormat(value)}
         />
       </div>
     );

@@ -18,7 +18,6 @@ import { isFunction } from '@/utils/is';
 function* callApi({ _path, _key, type, method, data, headers, BASE_URL = BASE_API.BASE_URL, PATH_URL, successFn, errorFn }) {
   if (!PATH_URL) throw new Error('URL is required');
   if (!type) throw new Error('Action type is required');
-  console.log(_path);
   if (_path) yield put(apiAction.preFetch({ _path, type }));
 
   const url = `${BASE_URL}/${PATH_URL}`;

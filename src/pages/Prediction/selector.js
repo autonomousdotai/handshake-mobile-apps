@@ -17,7 +17,6 @@ export const eventSelector = (state) => {
   return events.filter(event => (event.id === parseInt(match, 10)));
 };
 export const relevantEventSelector = (state) => {
-  console.log('Relevant Events:', state.prediction.relevantEvents);
   return state.prediction.relevantEvents;
 }
 
