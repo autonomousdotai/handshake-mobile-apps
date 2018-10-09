@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { showAlert } from '@/reducers/app/action';
+//import { showAlert } from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
 import iconSuccess from '@/assets/images/pages/payment/check-circle-solid.svg';
 import iconFailed from '@/assets/images/pages/payment/times-circle-solid.svg';
+//import { ICON } from '@/styles/images';
 import qs from 'querystring';
 import './Complete.scss';
 
@@ -25,24 +26,6 @@ class Complete extends React.Component {
       success: true,
       fullBackUrl: ''
     }
-  }
-
-  showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
-    this.props.showAlert({
-      message: <div className="textCenter">{icon}{msg}</div>,
-      timeOut,
-      type,
-      callBack: () => {},
-    });
-  }
-  showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
-  }
-  showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
 
   componentDidMount() {

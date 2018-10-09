@@ -1,28 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, clearFields, change } from 'redux-form';
+import { clearFields, change } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
-import Modal from '@/components/core/controls/Modal';
-import createForm from '@/components/core/form/createForm';
 import ListCoin from '@/components/Wallet/ListCoin';
 import { getCryptoPrice } from '@/reducers/exchange/action';
 import { bindActionCreators } from 'redux';
 import { MasterWallet } from "@/services/Wallets/MasterWallet";
-import { showAlert } from '@/reducers/app/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
+import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
 import iconClock from '@/assets/images/icon/pay/clock.svg';
 import Countdown from '@/components/Countdown/Countdown';
 
 // style
 import './Checkout.scss';
-
-
-const nameFormSendWallet = 'sendWallet';
-const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
 
 window.Clipboard = (function (window, document, navigator) {
   let textArea,
@@ -67,9 +59,6 @@ class Checkout extends React.Component {
   }
   showError(mst) {
     this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
 
   async componentDidMount() {
@@ -123,7 +112,7 @@ class Checkout extends React.Component {
   onRefesh = () => {
     const { onRefesh } = this.props;
     if (onRefesh && typeof onRefesh === 'function') {
-      this.showLoading();
+      this.props.showLoading();
       this.setState({isExpired: false, isWarning: false});
       onRefesh();
     }

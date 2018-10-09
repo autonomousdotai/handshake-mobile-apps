@@ -1,23 +1,19 @@
 @import './src/styles/style';
 $text-black: #000000;
-.iconSuccessChecked{
-  margin-bottom: 1px;
-  margin-right: 5px;
-}
 .addtoken-wrapper{
-  
+
   .dropdown-custom{
     button{
       padding-left: 12px;
-    } 
-  } 
+    }
+  }
 
   margin-bottom: 60px;
 
     .bgBox{
       // background-image: url('../../../assets/images/pages/wallet/bg-box-wallet-coin.svg');
       // background-repeat: no-repeat;
-      // background-size: cover;      
+      // background-size: cover;
       padding: 12px;
       // color: #fff;
       border-radius: 6px;
@@ -28,23 +24,23 @@ $text-black: #000000;
       margin-top: 20px;
       background-color: #ffffff;
     }
-    
-  
+
+
     .text-danger{
       font-size: 14px;
-  
+
     }
-  
+
     .label-balance{
       margin-top: 9px;
       // color: #ffffff;
       font-size: 16px;
       display: block;
     }
-  
-    input[type=text], input[type=tel], input[type=number]{      
+
+    input[type=text], input[type=tel], input[type=number]{
       font-size: 16px;
-      line-height: 22px;      
+      line-height: 22px;
       height: 45px;
       // background: #4869D1;
       // border: 1px solid #6485F6;
@@ -64,7 +60,7 @@ $text-black: #000000;
       // width: 100%;
       // left: 0;
       // border-radius: 0;
-      padding: 0.9625rem 0;  
+      padding: 0.9625rem 0;
       margin-top: 30px;
     }
 
@@ -74,7 +70,7 @@ $text-black: #000000;
       margin-right: 15px;
       margin-top: 15px;
     }
-      
+
     .div-address-qr-code{
       position: relative;
       margin-bottom: 15px;
@@ -120,12 +116,12 @@ $text-black: #000000;
       .btn-group{
         // background: #4869D1;
         // border: 1px solid #6485F6;
-        
+
         // border: 1px solid #6c95ea;
         // background: rgba(255, 255, 255, 0.15);
         border: 1px solid #ced4da;
         background: #ffffff;
-        
+
         padding: 5px;
         border-radius: 5px;
         padding-left: 1px;
@@ -156,7 +152,7 @@ $text-black: #000000;
         border: 0;
       }
     }
-    
+
     .bodyConfirm .left{
         float: left;
         width: auto;
@@ -177,7 +173,7 @@ $text-black: #000000;
         margin: auto;
         width: 100%;
         margin-bottom: 5px;
-      
+
       }
 
 

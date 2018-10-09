@@ -129,7 +129,7 @@ const roadmaps = [
     time: 'AUGUST 2018',
     items: [
       {
-        title: (<a href="#market">MARKET CREATION FEATURE</a>),
+        title: 'MARKET CREATION FEATURE',
         content: (
           <span>
             We'll give users full control to create their own markets to host
@@ -151,7 +151,7 @@ const roadmaps = [
         )
       },
       {
-        title: (<a href="#extension">CHROME EXTENSION</a>),
+        title: 'CHROME EXTENSION',
         content: (
           <span>
           Launch Google Chrome extension to allow desktop users to access the <i><strong>Prediction Exchange</strong></i>.

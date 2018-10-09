@@ -22,21 +22,11 @@ import {
   fieldPhoneInput,
   fieldRadioButton
 } from '@/components/core/form/customField';
-import {required} from '@/components/core/form/validation';
 import {change, Field, formValueSelector, clearFields} from 'redux-form';
-import {bindActionCreators} from 'redux';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import Dropdown from '@/components/core/controls/Dropdown';
 import createForm from '@/components/core/form/createForm';
-
-import dontIcon from '@/assets/images/icon/3-dot-icon.svg';
-import iconSafe from '@/assets/images/icon/icon-safe.svg';
-import iconWarning from '@/assets/images/icon/icon-warning.svg';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
-import iconLoading from '@/assets/images/icon/loading.svg.raw';
-import iconQRCodeBlack from '@/assets/images/icon/scan-qr-code.svg';
-import bgAddImg from '@/assets/images/pages/wallet/add-wallet.svg';
 
 import Header from './Header';
 import HeaderMore from './HeaderMore';
@@ -46,11 +36,7 @@ import WalletHistory from './WalletHistory';
 import TransferCoin from '@/components/Wallet/TransferCoin';
 import ReceiveCoin from '@/components/Wallet/ReceiveCoin';
 import ReactBottomsheet from 'react-bottomsheet';
-import { setHeaderRight } from '@/reducers/app/action';
-import QrReader from 'react-qr-reader';
-import { showAlert } from '@/reducers/app/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
-import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
+import { showLoading, hideLoading, showAlert, setHeaderRight } from '@/reducers/app/action';
 import local from '@/services/localStore';
 import {APP} from '@/constants';
 
@@ -64,12 +50,8 @@ import CoinTemp from '@/pages/Wallet/CoinTemp';
 import BackupWallet from '@/components/Wallet/BackupWallet/BackupWallet';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
 import SettingWallet from '@/components/Wallet/SettingWallet/SettingWallet';
-import FeedCreditCard from "@/components/handshakes/exchange/Feed/FeedCreditCard";
-import * as gtag from '@/services/ga-utils';
-import taggingConfig from '@/services/tagging-config';
 
 // new layout:
-
 import logoWallet from '@/assets/images/wallet/images/logo-wallet.svg';
 import iconMoreSettings from '@/assets/images/wallet/icons/icon-more-settings.svg';
 import SortableComponent from "./SortableComponent";
@@ -84,7 +66,7 @@ import WalletPreferences from '@/components/Wallet/WalletPreferences';
 import { requestWalletPasscode, showScanQRCode, showQRCodeContent  } from '@/reducers/app/action';
 import QRCodeContent from '@/components/Wallet/QRCodeContent';
 import Redeem from '@/components/Wallet/Redeem';
-
+import { ICON } from '@/styles/images';
 
 const QRCode = require('qrcode.react');
 
@@ -96,29 +78,15 @@ window.Clipboard = (function (window, document, navigator) {
   } function copyToClipboard() { document.execCommand('copy'); document.body.removeChild(textArea); } copy = function (text) { createTextArea(text); selectText(); copyToClipboard(); }; return { copy };
 }(window, document, navigator));
 
-const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-
 const nameFormSendWallet = 'sendWallet';
-//const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
-
 const nameFormCreditCard = 'creditCard';
-const FormCreditCard = createForm({
-  propsReduxForm: {
-    form: nameFormCreditCard,
-    initialValues: { currency: 'ETH' },
-  },
-});
-const selectorFormCreditCard = formValueSelector(nameFormCreditCard);
-
-const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefined);
-
 const defaultOffset = 500;
 
 var topOfElement = function(element) {
-    if (!element) {
-        return 0;
-    }
-    return element.offsetTop + topOfElement(element.offsetParent);
+  if (!element) {
+      return 0;
+  }
+  return element.offsetTop + topOfElement(element.offsetParent);
 };
 
 class Wallet extends React.Component {
@@ -177,7 +145,6 @@ class Wallet extends React.Component {
       modalWalletPreferences: "",
       backupWalletContent: "",
       restoreWalletContent: "",
-
       redeemContent: "",
 
       // sortable:
@@ -203,13 +170,7 @@ class Wallet extends React.Component {
     this.showAlert(mst, 'danger', 3000);
   }
   showSuccess(mst) {
-    this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
+    this.showAlert(mst, 'success', 4000, ICON.SuccessChecked());
   }
   headerRight() {
     return (<HeaderMore onHeaderMoreClick={this.onIconRightHeaderClick} />);
@@ -300,8 +261,8 @@ class Wallet extends React.Component {
     this.detachScrollListener();
   }
 
-  async componentDidMount() {    
-    
+  async componentDidMount() {
+
     this.getSetting();
     this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
@@ -591,16 +552,16 @@ class Wallet extends React.Component {
           });
       }
 
-    });    
+    });
   }
-  showTransferFromQRCode=(dataAddress)=>{        
-    this.props.requestWalletPasscode({      
-      onSuccess: () => {        
+  showTransferFromQRCode=(dataAddress)=>{
+    this.props.requestWalletPasscode({
+      onSuccess: () => {
           this.setState({
             modalTransferCoin:
               (
-                <TransferCoin                  
-                  onFinish={(result) => { 
+                <TransferCoin
+                  onFinish={(result) => {
                     this.modalSendRef.close();
                     // this.autoCheckBalance(dataAddress.address, amount);
                    }}
@@ -614,7 +575,7 @@ class Wallet extends React.Component {
             this.modalSendRef.open();
           });
       }
-    });    
+    });
   }
 
   showReceive(wallet){
@@ -920,16 +881,16 @@ class Wallet extends React.Component {
     window.open('https://www.rinkeby.io/#faucet', '_blank');
     // let data="ninja-redeem:NINJA101F8DC?value=234";
     // let result = MasterWallet.getQRCodeDetail(data);
-    // this.props.showQRCodeContent({   
-    //   data: result      
-    // });    
+    // this.props.showQRCodeContent({
+    //   data: result
+    // });
   }
 
-  onQRCodeScaned=(data)=>{    
-    let result = MasterWallet.getQRCodeDetail(data);        
-    this.props.showQRCodeContent({   
-      data: result      
-    });    
+  onQRCodeScaned=(data)=>{
+    let result = MasterWallet.getQRCodeDetail(data);
+    this.props.showQRCodeContent({
+      data: result
+    });
   }
 
   // redeem:
@@ -937,11 +898,11 @@ class Wallet extends React.Component {
     this.setState({
       redeemContent:
         (
-          <Redeem                  
+          <Redeem
             data={data}
-            onFinish={(result) => { 
+            onFinish={(result) => {
               this.modalRedeemRef.close();
-             }}            
+             }}
           />
         ),
       }, ()=>{
@@ -952,7 +913,7 @@ class Wallet extends React.Component {
   closeModalRedeem=(data)=>{
     this.setState({redeemContent: ''});
   }
-  
+
   render = () => {
     const { messages } = this.props.intl;
     const { formAddTokenIsActive, formAddCollectibleIsActive, modalBuyCoin, modalTransferCoin, modalSetting,
@@ -1086,7 +1047,7 @@ class Wallet extends React.Component {
               {messages.wallet.action.create.button.create}
             </Button>
             <Header />
-          </Modal>          
+          </Modal>
 
           <Grid>
 

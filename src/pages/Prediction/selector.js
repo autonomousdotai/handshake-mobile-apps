@@ -16,6 +16,10 @@ export const eventSelector = (state) => {
   }
   return events.filter(event => (event.id === parseInt(match, 10)));
 };
+export const relevantEventSelector = (state) => {
+  console.log('Relevant Events:', state.prediction.relevantEvents);
+  return state.prediction.relevantEvents;
+}
 
 export const countReportSelector = (state) => {
   const { countReport } = state.ui;
@@ -33,7 +37,7 @@ export const isSharePage = (state) => {
 };
 
 export const isLoading = (state) => {
-  if (!state.prediction._meta) return true;
+  if (!state.prediction._meta) return false;
   return state.prediction._meta.isFetching;
 };
 

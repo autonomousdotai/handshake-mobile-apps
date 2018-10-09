@@ -87,7 +87,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.ADMIN, component: RouterAdmin },
   { path: URL.REPORT, component: RouterReport },
   { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
-  { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
+  // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
 
   { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
   {
@@ -211,7 +211,7 @@ class Router extends React.Component {
                         <ScrollToTop>
                           <Switch>
                             <Route exact path={URL.INDEX} render={() => {
-                              return <Redirect to={{ pathname: URL.BUY_BY_CC_URL }} />
+                              return <Redirect to={{ pathname: URL.HANDSHAKE_ATM }} />
                             }}
                             />
                             {/*<Route*/}

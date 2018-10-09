@@ -15,11 +15,11 @@ import Complete from './Complete';
 import Overview from './Overview';
 import DevDoc from './DevDoc';
 import { API_URL } from "@/constants";
-import { showAlert } from '@/reducers/app/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import ReactBottomsheet from 'react-bottomsheet';
 import HeaderMore from './HeaderMore';
 import qs from 'querystring';
+import { ICON } from '@/styles/images';
 
 // style
 import './Payment.scss';
@@ -52,27 +52,8 @@ class Payment extends React.Component {
     this.props.setHeaderRight(this.headerRight());
   }
 
-  showAlert(msg, type = 'success', timeOut = 5000, icon = '') {
-    this.props.showAlert({
-      message: <div className="textCenter">{icon}{msg}</div>,
-      timeOut,
-      type,
-      callBack: () => {},
-    });
-  }
-  showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
-  }
-  showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-
   componentDidMount() {
     this.checkPayNinja();
-    //this.successPayNinja();
   }
 
   async checkPayNinja() {

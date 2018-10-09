@@ -7,24 +7,21 @@ import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import createForm from '@/components/core/form/createForm'
-import {fieldDropdown, fieldInput} from '@/components/core/form/customField'
+import { fieldInput } from '@/components/core/form/customField'
 import { API_URL } from "@/constants";
 import local from '@/services/localStore';
 import {APP} from '@/constants';
 import {required} from '@/components/core/form/validation'
 import {MasterWallet} from "@/services/Wallets/MasterWallet";
 import { bindActionCreators } from "redux";
-import {showAlert} from '@/reducers/app/action';
 import {getFiatCurrency} from '@/reducers/exchange/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
 import { StringHelper } from '@/services/helper';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import './TransferCoin.scss';
-import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code.svg';
-import iconArrowDown from '@/assets/images/icon/expand-arrow.svg';
+import { ICON } from '@/styles/images';
 import BrowserDetect from '@/services/browser-detect';
-import ListCoin from '@/components/Wallet/ListCoin';
+import WalletSelected from '@/components/Wallet/WalletSelected';
 
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -62,7 +59,6 @@ class Transfer extends React.Component {
       inputSendAmountValue: 0,
       inputSendMoneyValue: 0,
       legacyMode: false,
-      modalListCoin: '',
       walletNotFound: ''
     }
   }
@@ -82,33 +78,25 @@ class Transfer extends React.Component {
     this.showAlert(mst, 'danger', 3000);
   }
   showSuccess(mst) {
-    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
+    this.showAlert(mst, 'success', 5000, ICON.SuccessChecked());
   }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
-  }
-
   componentWillReceiveProps() {
     const {currency} = this.props;
     this.setState({inputSendAmountValue: 0, inputSendMoneyValue: 0, currency: currency ? currency : 'USD'});
-
   }
 
    async componentDidMount() {
-    this.showLoading();
+    this.props.showLoading();
     let legacyMode = (BrowserDetect.isChrome && BrowserDetect.isIphone); // show choose file or take photo
     this.setState({legacyMode: legacyMode});
 
     await this.getWalletDefault();
-    this.hideLoading();
+    this.props.hideLoading();
 
     await this.setRate();
 
     let amount = this.props.amount || "";
-    if(amount){console.log(amount);
+    if(amount){
       this.updateAddressAmountValue(null, amount);
     }
 
@@ -143,7 +131,6 @@ class Transfer extends React.Component {
       catch(e){
       }
 
-
       onFinish(result);
     } else {
 
@@ -161,9 +148,7 @@ class Transfer extends React.Component {
           result = JSON.parse(data);
         }
       }
-      catch(e){
-
-      }
+      catch(e){ }
     }
 
     return result;
@@ -252,6 +237,7 @@ class Transfer extends React.Component {
             wal.text = wal.getShortAddress() + " (" + wal.className + " " + wal.name + ")";
           }
 
+          wal.balance = wal.formatNumber(wal.balance);
           wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
           listWalletCoin.push(wal);
         }
@@ -273,6 +259,7 @@ class Transfer extends React.Component {
         walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
       walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName() + walletDefault.name;
+      walletDefault.balance = walletDefault.formatNumber(walletDefault.balance);
     }
 
     this.setState({wallets: listWalletCoin, walletDefault, walletSelected: walletDefault}, ()=>{
@@ -463,23 +450,9 @@ openImageDialog = () => {
   this.refs.qrReader1.openImageDialog();
 }
 
-openListCoin=()=>{
-  this.setState({modalListCoin:
-    <ListCoin
-      wallets={this.state.wallets}
-      walletSelected={this.state.walletSelected}
-      onSelect={wallet => { this.selectWallet(wallet); }}
-    />
-  }, ()=> {
-    this.modalListCoinRef.open();
-  });
-}
-
 selectWallet = async (walletSelected) => {
 
-  this.setState({walletSelected, modalListCoin: ''}, ()=> {
-    this.modalListCoinRef.close();
-  });
+  this.setState({walletSelected});
 
   if(walletSelected.name != this.state.currency){
     await this.setRate(walletSelected.name);
@@ -487,35 +460,12 @@ selectWallet = async (walletSelected) => {
   }
 }
 
-get showWallet(){
-  const walletSelected = this.state.walletSelected;
-  let icon = '';
-  try{
-    if(walletSelected)
-      icon = require("@/assets/images/icon/wallet/coins/" + walletSelected.name.toLowerCase() + '.svg');
-  } catch (ex){console.log(ex)};
-  return (
-    <div className="walletSelected" onClick={() => {this.openListCoin() }}>
-      <div className="row">
-        <div className="col-2 icon"><img src={icon} /></div>
-        <div className="col-5">
-          <div className="name">{walletSelected && walletSelected.title}</div>
-          <div className="address">{walletSelected && walletSelected.getShortAddress()}</div>
-        </div>
-        <div className="col-5 lastCol">
-          <div className="balance">{walletSelected && walletSelected.balance + " " + walletSelected.name}</div>
-          <div className="arrow"><img src={iconArrowDown} /></div>
-        </div>
-      </div>
-    </div>);
-}
-
 render() {
   let { currency } = this.props;
   if(!currency) currency = "USD";
   const { messages } = this.props.intl;
   let showDivAmount = this.state.walletSelected && this.state.rate;
-  const { modalListCoin, walletNotFound } = this.state;
+  const { walletNotFound, walletSelected } = this.state;
 
   return (
     <div>
@@ -559,7 +509,7 @@ render() {
               onChange={evt => this.updateSendAddressValue(evt)}
               validate={[required]}
             />
-            <img onClick={() => { this.openQrcode() }} className="icon-qr-code-black" src={iconQRCodeWhite} />
+            <span onClick={() => { this.openQrcode() }} className="icon-qr-code-black">{ICON.QRCode()}</span>
           </div>
           <p className="labelText">{messages.wallet.action.transfer.label.amount}</p>
             <div className="div-amount">
@@ -594,17 +544,9 @@ render() {
               </div>
             }
 
-            <div className ="dropdown-wallet-tranfer ">
+            <div>
               <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>
-              {this.showWallet}
-
-              <div className="wallets-wrapper">
-                <Modal title={messages.wallet.action.transfer.placeholder.select_wallet} onRef={modal => this.modalListCoinRef = modal}>
-                  {modalListCoin}
-                </Modal>
-              </div>
-
-
+              { walletSelected && <WalletSelected walletSelected={walletSelected} onSelect={wallet => { this.selectWallet(wallet); }}></WalletSelected> }
             </div>
 
             <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button.transfer}</Button>

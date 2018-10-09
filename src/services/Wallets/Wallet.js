@@ -19,7 +19,7 @@ export class Wallet {
     this.customToken = false;
     this.isCollectibles = false;
     this.decimals = 18;
-    this.secret = '';  
+    this.secret = '';
     this.publicKey = '',
     this.icon = 'eth.svg'
     //settings:
@@ -52,7 +52,23 @@ export class Wallet {
   getCoinLogo(){
     return StringHelper.format('{0}.svg', this.name.toLowerCase());
   }
+  formatNumber(value, decimal=6){
+    let result = 0, count = 0;
+    try {
+      if(!isNaN(value)) result = Number(value);
 
+      if (Math.floor(value) !== value)
+          count = value.toString().split(".")[1].length || 0;
+
+      if(count > decimal)
+        result = Number(value).toFixed(decimal);
+    }
+    catch(e) {
+      result = 0;
+    }
+
+    return result;
+  }
 }
 
 export default { Wallet };

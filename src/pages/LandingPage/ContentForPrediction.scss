@@ -58,6 +58,9 @@
     top: 203px;
     right: 20px;
   }
+  .contentMobile {
+    margin-left: 27px;
+  }
 }
 .wrapperExtentsion {
   margin-left: -1.875rem;
@@ -65,29 +68,7 @@
     padding-top: 3.875rem;
   }
 }
-.wrapperMobile::before {
-  //content: '';
 
-  /*
-  border-left: 1175px solid #FF8308;
-  border-top: 5vw solid transparent;
-  border-bottom: 5vw solid transparent;
-  width: 0;
-  height: 564px;
-  z-index: 0;
-  position: absolute;
-*/
-  /*
-  position: absolute;
-
-  background: url('../../assets/images/landing/prediction/pex_mobile_bg.svg') no-repeat;
-  height: 50vw;
-  width: 100vw;
-  margin-left: -10vw;
-  margin-right: -10vw;
-  */
-
-}
 .wrapperAnonymous {
   position: relative;
   color: white;
@@ -99,20 +80,14 @@
     padding-top: 7vw;
   }
 }
-// .wrapperAnonymous:before {
-//   content: '';
-//   border-right: 66vw solid #3023AE;
-//   border-top: 7vw solid transparent;
-//   border-bottom: 5vw solid transparent;
-//   width: 0;
-//   height: 35vw;
-//   z-index: 0;
-//   position: absolute;
-// }
+
 .wrapperTransparent {
   .wrapperContent {
     padding-top: 3.25rem;
     padding-right: 5.25rem;
+  }
+  .contentTransparent {
+    margin-left: 60px;
   }
 }
 .wrapperIntroduce {
@@ -143,6 +118,9 @@
     height: rem-calc(48px);
     width: rem-calc(250px);
     margin-left: rem-calc(10px);
+  }
+  .contentIntroduce {
+    margin-left: 60px;
   }
 }
 .column {

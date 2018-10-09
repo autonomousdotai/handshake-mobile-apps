@@ -60,6 +60,21 @@ class Index extends React.PureComponent {
       window.location = URL.LANDING_BECOME_ATM;
     }
   }
+  scrollToFAQ() {
+    const faqNode = ReactDOM.findDOMNode(this.refs.faq)
+
+    if (faqNode && location.href.includes('#faq')) {
+      faqNode.scrollIntoView({
+          behaviour: 'smooth',
+          block: 'start',
+          inline: 'center',
+      });
+    }
+  }
+  componentDidMount() {
+    this.scrollToFAQ();
+  }
+
   renderDisclaim(name) {
     return (
       <div className="row">
@@ -243,7 +258,7 @@ class Index extends React.PureComponent {
           }
           {
             faq && (
-              <div className="row mt-5" id="faq" ref={ re => { this.faqRef = re }} >
+              <div className="row mt-5" id="faq" ref="faq" >
                 <div className="col">
                   <div className="pd-faq">
                     {messages.COIN_EXCHANGE_LP_FAQ_TITLE}

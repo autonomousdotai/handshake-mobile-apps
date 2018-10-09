@@ -52,12 +52,12 @@ class Navigation extends React.Component {
     return (
       <footer className="footer">
         <ul>
-          <li className={cn(this.checkSelected(URL.BUY_BY_CC_URL))}>
+          {/*<li className={cn(this.checkSelected(URL.BUY_BY_CC_URL))}>
             <Link to={URL.BUY_BY_CC_URL} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: creditIcon }} />
               <span>{this.props.intl.messages.app.navigation.credit.toUpperCase()}</span>
             </Link>
-          </li>
+          </li>*/}
           <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.CASH_STORE_URL]))}>
             <Link to={URL.HANDSHAKE_ATM} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: discoverIcon }} />

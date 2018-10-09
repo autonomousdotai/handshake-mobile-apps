@@ -5,9 +5,10 @@ import { API_URL } from '@/constants';
 import {
   loadMatches, getReportCount, removeExpiredEvent,
   checkFreeBet, updateFreeBet, checkExistSubcribeEmail,
-  updateCountReport, updateExistEmail, updateEventList,
+  updateCountReport, updateExistEmail,
+  loadRelevantEvents, updateRelevantEvents, updateEvents,
 } from './action';
-import { eventSelector } from './selector';
+import { eventSelector, relevantEventSelector } from './selector';
 
 export function* handleLoadMatchDetail({ eventId }) {
   try {
@@ -32,7 +33,7 @@ export function* handleLoadMatches({ isDetail, source }) {
         _path: 'prediction',
       });
       if (data) {
-        yield put(updateEventList([data]));
+        yield put(updateEvents([data]));
       }
     } else {
       const PATH_URL = source ? `${API_URL.CRYPTOSIGN.LOAD_MATCHES}?source=${source}` : API_URL.CRYPTOSIGN.LOAD_MATCHES;
@@ -45,6 +46,25 @@ export function* handleLoadMatches({ isDetail, source }) {
     }
   } catch (e) {
     console.error('handleLoadMachesSaga', e);
+  }
+}
+
+export function* handleLoadRelevantEvents({ cache = true, eventId }) {
+  try {
+    if (cache) {
+      const events = yield select(relevantEventSelector);
+      if (events && events.length) {
+        return events;
+      }
+    }
+    const PATH_URL = `${API_URL.CRYPTOSIGN.RELEVANT_EVENTS}?match=${eventId}`;
+    const response = yield call(apiGet, {
+      PATH_URL,
+      type: 'LOAD_RELEVANT_EVENTS',
+    });
+    yield put(updateRelevantEvents(response.data));
+  } catch (e) {
+    console.error('handleLoadRelevantMachesSaga', e);
   }
 }
 
@@ -108,6 +128,7 @@ export function* handleCheckExistEmail() {
 
 export default function* predictionSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
+  yield takeLatest(loadRelevantEvents().type, handleLoadRelevantEvents);
   yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
   yield takeLatest(checkFreeBet().type, handleFreeBet);

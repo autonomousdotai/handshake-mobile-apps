@@ -3,26 +3,12 @@ import PropTypes from 'prop-types';
 import { Field, clearFields, change } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import Button from '@/components/core/controls/Button';
-import ModalDialog from '@/components/core/controls/ModalDialog';
-import Modal from '@/components/core/controls/Modal';
-import createForm from '@/components/core/form/createForm';
-import { fieldDropdown, fieldInput } from '@/components/core/form/customField';
 import { API_URL } from "@/constants";
 import { getFiatCurrency } from '@/reducers/exchange/action';
-import CryptoPrice from '@/models/CryptoPrice';
 import { bindActionCreators } from 'redux';
 import { MasterWallet } from "@/services/Wallets/MasterWallet";
-import { showAlert } from '@/reducers/app/action';
 import { showLoading, hideLoading } from '@/reducers/app/action';
-import { StringHelper } from '@/services/helper';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
-
-// style
-import './ChooseCrypto.scss';
-
-const nameFormSendWallet = 'sendWallet';
-const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
+import './ChooseCrypto.scss'; // style
 
 class ChooseCrypto extends React.Component {
   static propTypes = {
@@ -37,32 +23,9 @@ class ChooseCrypto extends React.Component {
     }
   }
 
-  showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
-    this.props.showAlert({
-      message: <div className="textCenter">{icon}{msg}</div>,
-      timeOut,
-      type,
-      callBack: () => {},
-    });
-  }
-  showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
-  }
-  showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
-  }
 
   async componentDidMount() {
-    this.showLoading();
+    this.props.showLoading();
     let listWallet = await MasterWallet.getMasterWallet();
 
     if (listWallet == false) {
@@ -86,35 +49,7 @@ class ChooseCrypto extends React.Component {
       }
     }
     this.setState({ listCoin: listCoin });
-    this.hideLoading();
-
-
-      // // is Mainnet (coin, token, collectible)
-      // if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
-      //   let coin = mainCoin[wallet.name];
-      //   console.log(listWallet);
-
-      //   if(!coin)
-      //     mainCoin[wallet.name] = wallet;
-      //   else{
-      //     if(!coin.default && wallet.default){
-      //       mainCoin[wallet.name] = wallet;
-      //     }
-      //   }
-      // } else {
-      //   let coin = testCoin[wallet.name];
-      //   if(!coin)
-      //     testCoin[wallet.name] = wallet;
-      //   else{
-      //     if(!coin.default && wallet.default){
-      //       testCoin[wallet.name] = wallet;
-      //     }
-      //   }
-      // }
-
-
-    //console.log(mainCoin, testCoin);
-
+    this.props.hideLoading();
   }
 
   isToCrypto = (walletName, toCrypto) => {

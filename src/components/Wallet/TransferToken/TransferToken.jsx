@@ -7,20 +7,15 @@ import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import createForm from '@/components/core/form/createForm'
-import {fieldDropdown, fieldInput} from '@/components/core/form/customField'
-import { API_URL } from "@/constants";
-import local from '@/services/localStore';
-import {APP} from '@/constants';
+import {fieldDropdown, fieldInput} from '@/components/core/form/customField';
 import { ICON } from '@/styles/images';
 import {required} from '@/components/core/form/validation'
 import {MasterWallet} from "@/services/Wallets/MasterWallet";
 import { bindActionCreators } from "redux";
-import {showAlert} from '@/reducers/app/action';
 import {getFiatCurrency} from '@/reducers/exchange/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
 import { StringHelper } from '@/services/helper';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
 import './TransferToken.scss';
 import '../TransferCoin/TransferCoin.scss';
 import BrowserDetect from '@/services/browser-detect';
@@ -67,14 +62,8 @@ class TransferToken extends React.Component {
       callBack: () => {},
     });
   }
-  showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
-  }
   showError(mst) {
     this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
   }
 
   async componentDidMount() {
@@ -181,7 +170,7 @@ class TransferToken extends React.Component {
     this.modalConfirmTranferRef.open();
   }
 
-  invalidateTransferCoins = (value) => {console.log('invalidateTransferCoins');
+  invalidateTransferCoins = (value) => {
     const { messages } = this.props.intl;
     if (!this.state.walletSelected) return {};
     let errors = {};
@@ -197,8 +186,6 @@ class TransferToken extends React.Component {
     }
     return errors
   }
-
-
 
   updateAddressAmountValue = (evt, val) => {
     let amount = evt ? evt.target.value : null;
@@ -236,13 +223,11 @@ class TransferToken extends React.Component {
     const {inputAddressAmountValue, inputSendAmountValue, walletSelected, data, gasLimit} = this.state;
     this.setState({isRestoreLoading: true});
     this.modalConfirmTranferRef.close();
-    console.log(walletSelected, inputAddressAmountValue, inputSendAmountValue, data || "", gasLimit || defaultGasLimit);
     walletSelected.transfer(inputAddressAmountValue, inputSendAmountValue, data || "", gasLimit || defaultGasLimit).then(success => {
 
       this.setState({isRestoreLoading: false});
       if (success.hasOwnProperty('status')){
         if (success.status == 1){
-          //this.showSuccess(this.getMessage(success.message));
           this.onFinish(success.data);
           MasterWallet.NotifyUserTransfer(walletSelected.address, inputAddressAmountValue);
         }

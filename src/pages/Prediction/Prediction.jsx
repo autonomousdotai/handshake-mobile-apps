@@ -20,11 +20,12 @@ import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard
 import ReportPopup from '@/components/handshakes/betting/Feed/ReportPopup';
 import { predictionStatistics } from '@/components/handshakes/betting/Feed/OrderPlace/action';
 import { isJSON } from '@/utils/object';
+import qs from 'querystring';
 
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
-import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkFreeBetSelector, checkExistSubcribeEmailSelector, totalBetsSelector } from './selector';
-import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, checkExistSubcribeEmail } from './action';
+import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkFreeBetSelector, checkExistSubcribeEmailSelector, totalBetsSelector, relevantEventSelector } from './selector';
+import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, checkExistSubcribeEmail, loadRelevantEvents } from './action';
 import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
 
@@ -40,6 +41,7 @@ class Prediction extends React.Component {
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     eventList: PropTypes.array,
+    relevantEvents:PropTypes.array,
     shareEvent: PropTypes.object,
     showedLuckyPool: PropTypes.bool,
     isSharePage: PropTypes.any,
@@ -51,6 +53,7 @@ class Prediction extends React.Component {
 
   static defaultProps = {
     eventList: [],
+    relevantEvents: [],
     shareEvent: null,
     isExistEmail: 0,
   };
@@ -74,6 +77,10 @@ class Prediction extends React.Component {
     this.props.dispatch(checkFreeBet());
     this.props.dispatch(checkExistSubcribeEmail());
     window.addEventListener('scroll', this.handleScroll);
+    const eventId = this.getEventId(this.props);
+    if (eventId) {
+      this.props.dispatch(loadRelevantEvents({eventId}));
+    }
   }
 
   componentWillUnmount() {
@@ -84,6 +91,13 @@ class Prediction extends React.Component {
     this.props.dispatch(removeExpiredEvent({ eventId }));
     this.closeOrderPlace();
     this.props.dispatch(getReportCount());
+  }
+  getEventId = (props) => {
+    const querystring = window.location.search.replace('?', '');
+    const querystringParsed = qs.parse(querystring);
+    console.log('Query:', querystringParsed);
+    const { match } = querystringParsed;
+    return match || null;
   }
 
   // @TODO: Extensions
@@ -98,6 +112,8 @@ class Prediction extends React.Component {
         const matches = url.match(urlPattern);
         const source = matches && matches[0];
         props.dispatch(loadMatches({ source }));
+        //props.dispatch(loadRelevantEvents({ source }));
+
       }
     }
   }
@@ -287,10 +303,33 @@ class Prediction extends React.Component {
             />
           );
         })}
+        {this.renderRelevantEventList(props)}
         <Disclaimer />
       </div>
     );
   };
+
+  renderRelevantEventList = (props) => {
+    if (!props.isSharePage) return null;
+    if (!props.relevantEvents || !props.relevantEvents.length) return null;
+    console.log('renderRelevantEventList RelevantEvent: ', props.relevantEvents);
+    return (
+      <div className="RelevantEventList">
+        <div className="relevantTitle">Related events</div>
+        {props.relevantEvents.map((event) => {
+          return (
+            <EventItem
+              key={event.id}
+              event={event}
+              onClickOutcome={this.handleClickEventItem}
+              onCountdownComplete={() => this.onCountdownComplete(event.id)}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
 
   renderBetMode = (props, state) => {
     const isFreeAvailable = this.checkFreeAvailabe(props);
@@ -389,7 +428,7 @@ class Prediction extends React.Component {
           <div className="outtaMoneyMsg">
             To keep forecasting, you’ll need to top-up your wallet.
           </div>
-          <button className="btn btn-block btn-primary" onClick={this.showPopupCreditCard}>Top up my wallet</button>
+          {/*<button className="btn btn-block btn-primary" onClick={this.showPopupCreditCard}>Top up my wallet</button>*/}
         </div>
       </ModalDialog>
     );
@@ -444,6 +483,7 @@ export default injectIntl(connect(
     return {
       countReport: countReportSelector(state),
       eventList: eventSelector(state),
+      relevantEvents: relevantEventSelector(state),
       isSharePage: isSharePage(state),
       isLoading: isLoading(state),
       showedLuckyPool: showedLuckyPoolSelector(state),

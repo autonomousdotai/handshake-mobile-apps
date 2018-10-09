@@ -6,6 +6,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { email, required } from '@/components/core/form/validation';
 import { fieldInput } from '@/components/core/form/customField';
 import createForm from '@/components/core/form/createForm';
+import ReactDOM from 'react-dom';
 
 import './ContentForCashBusiness.scss';
 import './ContentForPrediction.scss';
@@ -67,8 +68,23 @@ class ContentForPrediction extends React.Component {
         console.log('err subscribe email', err);
       });
   };
+
   openTelegram = () => {
     window.open('https://t.me/ninja_org', '_blank');
+  }
+  scrollToRoadMap() {
+    const roadMapNode = ReactDOM.findDOMNode(this.refs.roadmap)
+
+    if (roadMapNode && location.href.includes('#roadmap')) {
+      roadMapNode.scrollIntoView({
+          behaviour: 'smooth',
+          block: 'start',
+          inline: 'center',
+      });
+    }
+  }
+  componentDidMount() {
+    this.scrollToRoadMap();
   }
   renderThanksSubcribe() {
     return (
@@ -124,7 +140,7 @@ class ContentForPrediction extends React.Component {
     return (
       <section className="section">
         <div className="wrapperIntroduce">
-          <div className="column">
+          <div className="column contentIntroduce">
             <p className="pexSmallTitle"><strong>Bet on anything against anyone, anywhere. Guaranteed payout. Your odds. 100% anonymous.</strong></p>
             <p className="pexContent">You create the bets, set the odds, and play directly with other parties. Bet with blockchain technology to bypass the bookies and the books - take down the house and make your own luck.</p>
             {/*this.renderEmail()*/}
@@ -144,7 +160,7 @@ class ContentForPrediction extends React.Component {
 
   renderRoadMap() {
     return (
-      <PexRoadMap className="wrapperBlock" />
+      <PexRoadMap ref="roadmap" className="wrapperBlock" />
 
     );
   }
@@ -176,7 +192,7 @@ class ContentForPrediction extends React.Component {
   }
   renderExtension() {
     return (
-      <section className="section" id="extension">
+      <section className="section">
         <div className="wrapperExtentsion wrapperBlock">
           <div className="column">
             <img src={imgExtension} alt="imgExtension" width="600" />
@@ -206,7 +222,7 @@ class ContentForPrediction extends React.Component {
         <img className="mobile_shape2" src={imgMobileShape2} alt="imgMobileShape2" width="400" />
 
         <div className="wrapperMobile wrapperBlock">
-          <div className="contentBlock column ">
+          <div className="contentBlock column contentMobile">
             <div className="pexHeadLine">Mobile Web App</div>
             <div className="pexContent">No download or signup required. <br/> Simply open up your browser and you’re ready to go.</div>
             <img className="imageContent" src={imgMobileIcon} alt="imgMobileIcon" width="400" />
@@ -221,7 +237,7 @@ class ContentForPrediction extends React.Component {
   }
   renderMarket() {
     return (
-      <section className="section" id="market">
+      <section className="section">
         <div className="wrapperBlock">
           <div className="column">
             <img src={imgMarket} alt="imgMarket" width="500" />
@@ -269,7 +285,7 @@ class ContentForPrediction extends React.Component {
     return (
       <section className="section">
         <div className="wrapperTransparent wrapperBlock">
-          <div className="wrapperContent column">
+          <div className="wrapperContent column contentTransparent">
             <div className="pexHeadLine" >Transparency</div>
             <div className="pexContent">Our decentralized, blockchain based approach allows players to benefit from full transparency and total control over their betting experience. We remove the middleman and hand control back to the user.</div>
           </div>
@@ -295,7 +311,7 @@ class ContentForPrediction extends React.Component {
         {/*<img src={imgPredictionContent} className='w-100' />*/}
         { this.renderIntroduce()}
         {this.renderHowToPlay()}
-        {this.renderExtension()}
+        {/*this.renderExtension()*/}
         {this.renderMobileGuide()}
         {/*this.renderExample()*/}
         {this.renderMarket()}
