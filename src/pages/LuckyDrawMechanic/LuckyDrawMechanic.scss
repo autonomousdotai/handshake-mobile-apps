@@ -16,10 +16,6 @@
       width: 100%;
       margin-top: 35px;
     }
-
-    .wrapperluckyDrawTitle {
-      position: relative;
-    }
     .luckyDrawContent {
       margin-top: 20px;
     }
@@ -40,19 +36,20 @@
       left: 0;
     }
     .luckyDrawTitle {
-      font-size: rem-calc(35px);
+      font-size: rem-calc(30px);
       font-weight: 800;
     }
   }
   .wrapperTermCondition {
     font-size: rem-calc(11px);
-
+    margin-top: 40px;
   }
   .wrapperMechanic {
     margin-top: 20px;
 
     .mechanicTitle {
-      font-size: rem-calc(25px);
+      font-size: rem-calc(30px);
+      font-weight: 800;
     }
     .mechanicContent {
       margin-top: 20px;
