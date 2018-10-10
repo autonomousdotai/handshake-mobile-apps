@@ -7,7 +7,7 @@ import { API_URL } from "@/constants";
 import { getFiatCurrency } from '@/reducers/exchange/action';
 import { bindActionCreators } from 'redux';
 import { MasterWallet } from "@/services/Wallets/MasterWallet";
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import './ChooseCrypto.scss'; // style
 
 class ChooseCrypto extends React.Component {

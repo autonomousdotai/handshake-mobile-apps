@@ -50,7 +50,7 @@ function HeaderBar(props) {
       {Caption(titleBar)}
       {/* <MultiLanguage /> */}
       {Wallet()}
-      { (pathname === URL.HANDSHAKE_WALLET) && BuyCrypto()}
+      {/* { (pathname === URL.HANDSHAKE_WALLET) && BuyCrypto()} */}
     </div>
   );
 }

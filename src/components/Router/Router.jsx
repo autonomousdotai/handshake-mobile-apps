@@ -211,7 +211,7 @@ class Router extends React.Component {
                         <ScrollToTop>
                           <Switch>
                             <Route exact path={URL.INDEX} render={() => {
-                              return <Redirect to={{ pathname: URL.HANDSHAKE_ATM }} />
+                              return <Redirect to={{ pathname: URL.PRODUCT_PREDICTION_URL }} />
                             }}
                             />
                             {/*<Route*/}

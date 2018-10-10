@@ -7,11 +7,17 @@
   display: flex;
   width: 100%;
   height: 100%;
-  min-width: 980px;
-  min-height: 600px;
+  min-width: 1024px;
+  min-height: 720px;
   overflow: hidden;
-  background: #ffffff url('../../assets/images/pex/ext-landing-page/background.svg');
-  background-size: cover;
+  background-color: #ffffff;
+  // background: #ffffff url('../../assets/images/pex/ext-landing-page/background.svg');
+  // background-size: cover;
+
+  @media screen and (max-width: 400px) {
+    min-width: unset;
+    min-height: unset;
+  }
 
   &Content {
     display: flex;
@@ -20,8 +26,31 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    h1 {
+    // h1 {
+    //   padding: 50px 0 30px;
+    // }
+    .Heading {
       padding: 50px 0 30px;
+      width: 830px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      .LineText {
+        font-size: 1.4rem;
+        font-weight: 700;
+        @media screen and (max-width: 400px) {
+          text-align: center;
+        }
+      }
+      @media screen and (max-width: 1160px) {
+        .LineText {
+          margin-bottom: 10px;
+        }
+        width: auto;
+        padding: 50px 15px 30px;
+        flex-direction: column;
+      }
     }
   }
 
@@ -31,29 +60,74 @@
     height: 0;
     width: 100%;
     flex: 1;
-    flex-direction: row;
-    justify-content: center;
-    align-items: stretch;
-    align-content: stretch;
+    flex-direction: column;
+    justify-content: flex-start;
+    // flex-direction: row;
+    // justify-content: center;
+    // align-items: stretch;
+    // align-content: stretch;
     .MacBook {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
+      // position: absolute;
+      // top: 0;
+      // left: 0;
+      // width: 100%;
+      // height: 100%;
+      // z-index: 1;
+      // position: absolute;
+      // width: 100%;
+      max-height: 100%;
+      // border: 5px solid yellow;
     }
     .FrameClip {
       position: absolute;
-      top: 6.9%;
-      bottom: 12.37%;
-      width: 100%;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
       z-index: 2;
       text-align: center;
+      padding-left: 15.84%;
+      padding-right: 16.77%;
+      padding-top: 34px;
+      padding-bottom: 80px;
+      // border: 67px solid rgba(214, 214, 214, 0.8);
+      /* border-top-width: 12px; */
+      /* border-bottom-width: 80px; */
+      /* border-left-width: 192px; */
+      /* border-right-width: 204px; */
+      box-sizing: border-box;
+      > img {
+        width: 100%;
+        display: none;
+      }
+      .FrameContent {
+        height: 100%;
+      }
       > img.GuideClip {
         height: 100%;
         margin-right: 3px;
       }
+      .FrameBorder {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        // border-top-left-radius: 30px;
+        // border-top-right-radius: 30px;
+      }
+      .videoClip {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+  .GuideClipAreaInner {
+    position: relative;
+    height: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    // border: 1px solid red;
+    @media screen and (max-width: 1569px) {
+      // height: auto;
     }
   }
   .Description {

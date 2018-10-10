@@ -70,6 +70,7 @@ class Profile extends React.Component {
     };
     // bind
     this.onSubmitVerifyPhone = :: this.onSubmitVerifyPhone;
+    this.onSubmitVerifyEmail = :: this.onSubmitVerifyEmail;
     this.onSubmitIDVerification = :: this.onSubmitIDVerification;
     this.addUsername = :: this.addUsername;
     this.selectPhoneRegionCode = :: this.selectPhoneRegionCode;
@@ -643,7 +644,7 @@ class Profile extends React.Component {
             </div>
           </Col>
         </Row>
-        <Row>
+        <Row style={{ display: 'none' }}>
           <Col md={12}>
             <div className="collapse-custom">
               <div className="head" onClick={() => this.setState(state => ({ idVerificationCollapse: !state.idVerificationCollapse }))}>
@@ -656,14 +657,26 @@ class Profile extends React.Component {
                   <Image className={this.state.idVerificationCollapse ? 'rotate' : ''} src={ExpandArrowSVG} alt="arrow" />
                 </div>
               </div>
-              <div className={`content ${this.state.idVerificationCollapse ? '' : 'd-none'}`}>
-                <p className="text">{messages.me.profile.text.id_verification.desc2}</p>
-                <p className="text">{messages.me.profile.text.id_verification.desc3}</p>
-                <p className="text">{messages.me.profile.text.id_verification.desc4}</p>
-                <p className="text">{messages.me.profile.text.id_verification.desc5}</p>
+              <div className={`content id-verification ${this.state.idVerificationCollapse ? '' : 'd-none'}`}>
                 <IDVerificationForm onSubmit={this.onSubmitIDVerification}>
                   <div>
-                    <p />
+                    <Row>
+                      <div className="col-12">
+                        <p className="label">
+                          {messages.me.profile.text.id_verification.desc2}
+                          <span>
+                            {messages.me.profile.text.id_verification.desc3}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="col-12">
+                        <Field
+                          name="full_name"
+                          className="form-control-custom form-control-custom-ex w-100"
+                          component={fieldCleave}
+                        />
+                      </div>
+                    </Row>
                     <Row>
                       <div className="col-12">
                         <Dropdown

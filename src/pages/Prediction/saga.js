@@ -93,7 +93,7 @@ export function* handleCountReport() {
     });
     yield put(updateCountReport(response.data.length));
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
 

@@ -11,7 +11,13 @@ const $http = ({
   const defaultHeaders = {
     'Content-Type': 'application/json',
   };
-  const completedHeaders = Object.assign({} , defaultHeaders, headers);
+  const completedHeaders = Object.assign({}, defaultHeaders,
+    // TODO: chrome-extension
+    (window.self !== window.top) ? {
+      ...headers,
+      'Request-From': 'extension',
+    } : { ...headers },
+  );
 
   if (url.startsWith(BASE_API.BASE_URL)) {
     const token = local.get(APP.AUTH_TOKEN);
