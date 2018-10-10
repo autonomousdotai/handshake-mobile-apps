@@ -130,6 +130,25 @@
   .react-select__control--is-disabled {
     background-color: #e9ecef;
   }
+
+  .PrivateOption {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .text {
+      padding: 0 5px;
+    }
+
+    label {
+      margin-bottom: 0;
+    }
+
+    img {
+      width: 20px;
+    }
+  }
 }
 
 .TimeGroup {
