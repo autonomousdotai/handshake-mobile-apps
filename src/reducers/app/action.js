@@ -21,7 +21,7 @@ export const APP_ACTION = {
   HIDE_SCAN_QRCODE: 'HIDE_SCAN_QRCODE',
 
   SHOW_QRCODE_CONTENT: 'SHOW_QRCODE_CONTENT',
-  HIDE_QRCODE_CONTENT: 'HIDE_QRCODE_CONTENT',  
+  HIDE_QRCODE_CONTENT: 'HIDE_QRCODE_CONTENT',
 
   NETWORK_ERROR: 'NETWORK_ERROR',
 
@@ -275,53 +275,57 @@ function getCountry(addrComponents) {
 }
 
 export const getUserLocation = ({ successFn, errorFn }) => (dispatch) => {
-  $http({
-    url: 'https://ipapi.co/json',
-    qs: { key: process.env.ipapiKey },
-  }).then((res) => {
-    const { data } = res;
+  try {
+    $http({
+      url: 'https://ipapi.co/json',
+      qs: { key: process.env.ipapiKey },
+    }).then((res) => {
+      const { data } = res;
 
-    const ipInfo = IpInfo.ipInfo(data);
-    ipInfo.locationMethod = LOCATION_METHODS.IP;
-    // get currency base on GPS
-    navigator.geolocation.getCurrentPosition((location) => {
-      const { coords: { latitude, longitude } } = location;
-      ipInfo.latitude = latitude;
-      ipInfo.longitude = longitude;
-      ipInfo.locationMethod = LOCATION_METHODS.GPS;
-      console.log(`------------GPS-------------${latitude}`);
+      const ipInfo = IpInfo.ipInfo(data);
+      ipInfo.locationMethod = LOCATION_METHODS.IP;
+      // get currency base on GPS
+      navigator.geolocation.getCurrentPosition((location) => {
+        const { coords: { latitude, longitude } } = location;
+        ipInfo.latitude = latitude;
+        ipInfo.longitude = longitude;
+        ipInfo.locationMethod = LOCATION_METHODS.GPS;
+        console.log(`------------GPS-------------${latitude}`);
 
-      axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&sensor=true`).then((response) => {
-        if (response.data.results[0] && response.data.results[0].address_components) {
-          const country = getCountry(response.data.results[0].address_components);
+        axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&sensor=true`).then((response) => {
+          if (response.data.results[0] && response.data.results[0].address_components) {
+            const country = getCountry(response.data.results[0].address_components);
 
-          ipInfo.addressDefault = response.data.results[0].formatted_address;
+            ipInfo.addressDefault = response.data.results[0].formatted_address;
 
-          if (country && Country[country]) {
-            ipInfo.currency = Country[country];
-            console.log(`------------GPS-------------${ipInfo.currency}`);
+            if (country && Country[country]) {
+              ipInfo.currency = Country[country];
+              console.log(`------------GPS-------------${ipInfo.currency}`);
+            }
           }
+          dispatch(setIpInfo(ipInfo));
+        });
+        if (successFn) {
+          successFn(ipInfo);
         }
-        dispatch(setIpInfo(ipInfo));
+      }, () => {
+        // console.log('zon')// fallback
+        if (successFn) {
+          successFn(ipInfo);
+        }
       });
-      if (successFn) {
-        successFn(ipInfo);
-      }
-    }, () => {
-      // console.log('zon')// fallback
-      if (successFn) {
-        successFn(ipInfo);
+
+      dispatch(setIpInfo(ipInfo));
+    }).catch((e) => {
+      // TO-DO: handle error
+      console.log(e);
+      if (errorFn) {
+        errorFn(e);
       }
     });
-
-    dispatch(setIpInfo(ipInfo));
-  }).catch((e) => {
-    // TO-DO: handle error
+  } catch (e) {
     console.log(e);
-    if (errorFn) {
-      errorFn(e);
-    }
-  });
+  }
 };
 
 function processGPS(ipInfo, dispatch) {
@@ -401,106 +405,150 @@ export const showPopupGetGPSPermission = () => (dispatch) => {
   }
 }
 
+const continueAfterInitApp = (language, ref, dispatch, data) => {
+  const ipInfoRes = { language: 'en', bannedPrediction: false, bannedCash: false };
+  const languageSaved = local.get(APP.LOCALE);
+
+  if (!languageSaved) {
+    ipInfoRes.language = data.languages?.split(',')?.[0] || 'en';
+  } else {
+    ipInfoRes.language = languageSaved;
+  }
+
+  const completedLanguage = language || ipInfoRes.language;
+
+  if (APP.isSupportedLanguages.indexOf(completedLanguage) >= 0) {
+    dispatch(setLanguage(completedLanguage, !language));
+  }
+
+  if (process.env.isProduction) {
+    // should use country code: .country ISO 3166-1 alpha-2
+    // https://ipapi.co/api/#complete-location
+    if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+      ipInfoRes.bannedPrediction = true;
+      dispatch(setBannedPrediction());
+    }
+    if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
+      ipInfoRes.bannedCash = true;
+      dispatch(setBannedCash());
+    }
+  }
+
+  auth({ ref, dispatch })
+    .then(() => {
+      dispatch(setRootLoading(false));
+    })
+    .catch(() => {
+      // TO-DO: handle error
+      dispatch(setRootLoading(false));
+    });
+};
+
 // |-- init
 export const initApp = (language, ref) => (dispatch) => {
-  $http({
-    url: 'https://ipapi.co/json',
-    qs: { key: process.env.ipapiKey },
-  }).then((res) => {
-    const { data } = res;
-    const ipInfo = IpInfo.ipInfo(data);
+  try {
+    $http({
+      url: 'https://ipapi.co/json',
+      qs: { key: process.env.ipapiKey },
+    }).then((res) => {
+      const { data } = res;
+      const ipInfo = IpInfo.ipInfo(data);
 
-    // show popup to get GPS permission
-    // if (!BrowserDetect.isDesktop) {
-    //   if (!local.get(APP.ALLOW_LOCATION_ACCESS)) {
-    //
-    //     dispatch(updateModal({
-    //       show: true,
-    //       title: null,
-    //       body: (
-    //         <div>
-    //           <div className="d-table w-100">
-    //             <div className="d-table-cell pr-2 align-top">
-    //               <span className="icon-location" style={{ fontSize: '42px' }} />
-    //             </div>
-    //             <div className="d-table-cell align-top">
-    //               <div><FormattedHTMLMessage id="askLocationPermission.label.1" /></div>
-    //               <div className="mt-1"><FormattedHTMLMessage id="askLocationPermission.label.2" /></div>
-    //             </div>
-    //           </div>
-    //           <div className="mt-3 float-right">
-    //             <button
-    //               className="btn btn-outline-primary"
-    //               onClick={() => {
-    //                 local.save(APP.ALLOW_LOCATION_ACCESS, 'deny');
-    //                 dispatch(updateModal({ show: false }));
-    //               }}
-    //             >
-    //               <FormattedMessage id="askLocationPermission.btn.dontAllow" />
-    //             </button>
-    //             <button
-    //               className="ml-2 btn btn-primary"
-    //               style={{ minWidth: '123px' }}
-    //               onClick={() => {
-    //                 local.save(APP.ALLOW_LOCATION_ACCESS, 'allow');
-    //                 dispatch(updateModal({ show: false }));
-    //
-    //                 processGPS(ipInfo, dispatch);
-    //               }}
-    //             >
-    //               <FormattedMessage id="askLocationPermission.btn.allow" />
-    //             </button>
-    //           </div>
-    //         </div>
-    //       )
-    //     }));
-    //   } else if (local.get(APP.ALLOW_LOCATION_ACCESS) === 'allow') {
-    //     processGPS(ipInfo, dispatch);
-    //   }
-    // }
+      // show popup to get GPS permission
+      // if (!BrowserDetect.isDesktop) {
+      //   if (!local.get(APP.ALLOW_LOCATION_ACCESS)) {
+      //
+      //     dispatch(updateModal({
+      //       show: true,
+      //       title: null,
+      //       body: (
+      //         <div>
+      //           <div className="d-table w-100">
+      //             <div className="d-table-cell pr-2 align-top">
+      //               <span className="icon-location" style={{ fontSize: '42px' }} />
+      //             </div>
+      //             <div className="d-table-cell align-top">
+      //               <div><FormattedHTMLMessage id="askLocationPermission.label.1" /></div>
+      //               <div className="mt-1"><FormattedHTMLMessage id="askLocationPermission.label.2" /></div>
+      //             </div>
+      //           </div>
+      //           <div className="mt-3 float-right">
+      //             <button
+      //               className="btn btn-outline-primary"
+      //               onClick={() => {
+      //                 local.save(APP.ALLOW_LOCATION_ACCESS, 'deny');
+      //                 dispatch(updateModal({ show: false }));
+      //               }}
+      //             >
+      //               <FormattedMessage id="askLocationPermission.btn.dontAllow" />
+      //             </button>
+      //             <button
+      //               className="ml-2 btn btn-primary"
+      //               style={{ minWidth: '123px' }}
+      //               onClick={() => {
+      //                 local.save(APP.ALLOW_LOCATION_ACCESS, 'allow');
+      //                 dispatch(updateModal({ show: false }));
+      //
+      //                 processGPS(ipInfo, dispatch);
+      //               }}
+      //             >
+      //               <FormattedMessage id="askLocationPermission.btn.allow" />
+      //             </button>
+      //           </div>
+      //         </div>
+      //       )
+      //     }));
+      //   } else if (local.get(APP.ALLOW_LOCATION_ACCESS) === 'allow') {
+      //     processGPS(ipInfo, dispatch);
+      //   }
+      // }
 
-    dispatch(setIpInfo(ipInfo));
+      dispatch(setIpInfo(ipInfo));
 
-    const ipInfoRes = { language: 'en', bannedPrediction: false, bannedCash: false };
-    const languageSaved = local.get(APP.LOCALE);
-
-    if (!languageSaved) {
-      ipInfoRes.language = data.languages.split(',')?.[0] || 'en';
-    } else {
-      ipInfoRes.language = languageSaved;
-    }
-
-    const completedLanguage = language || ipInfoRes.language;
-
-    if (APP.isSupportedLanguages.indexOf(completedLanguage) >= 0) {
-      dispatch(setLanguage(completedLanguage, !language));
-    }
-
-    if (process.env.isProduction) {
-      // should use country code: .country ISO 3166-1 alpha-2
-      // https://ipapi.co/api/#complete-location
-      if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
-        ipInfoRes.bannedPrediction = true;
-        dispatch(setBannedPrediction());
-      }
-      if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
-        ipInfoRes.bannedCash = true;
-        dispatch(setBannedCash());
-      }
-    }
-
-    auth({ ref, dispatch, ipInfo })
-      .then(() => {
-        dispatch(setRootLoading(false));
-      })
-      .catch(() => {
-        // TO-DO: handle error
-        dispatch(setRootLoading(false));
-      });
-  }).catch((e) => {
-    // TO-DO: handle error
+      // const ipInfoRes = { language: 'en', bannedPrediction: false, bannedCash: false };
+      // const languageSaved = local.get(APP.LOCALE);
+      //
+      // if (!languageSaved) {
+      //   ipInfoRes.language = data.languages.split(',')?.[0] || 'en';
+      // } else {
+      //   ipInfoRes.language = languageSaved;
+      // }
+      //
+      // const completedLanguage = language || ipInfoRes.language;
+      //
+      // if (APP.isSupportedLanguages.indexOf(completedLanguage) >= 0) {
+      //   dispatch(setLanguage(completedLanguage, !language));
+      // }
+      //
+      // if (process.env.isProduction) {
+      //   // should use country code: .country ISO 3166-1 alpha-2
+      //   // https://ipapi.co/api/#complete-location
+      //   if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+      //     ipInfoRes.bannedPrediction = true;
+      //     dispatch(setBannedPrediction());
+      //   }
+      //   if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
+      //     ipInfoRes.bannedCash = true;
+      //     dispatch(setBannedCash());
+      //   }
+      // }
+      //
+      // auth({ ref, dispatch, ipInfo })
+      //   .then(() => {
+      //     dispatch(setRootLoading(false));
+      //   })
+      //   .catch(() => {
+      //     // TO-DO: handle error
+      //     dispatch(setRootLoading(false));
+      //   });
+      continueAfterInitApp(language, ref, dispatch, data);
+    }).catch((e) => {
+      // TO-DO: handle error
+      dispatch(setRootLoading(false));
+      continueAfterInitApp(language, ref, dispatch, {});
+    });
+  } catch (e) {
     console.log(e);
-    dispatch(setRootLoading(false));
-  });
+  }
 };
 

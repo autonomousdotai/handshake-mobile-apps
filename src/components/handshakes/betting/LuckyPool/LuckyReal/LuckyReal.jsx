@@ -154,6 +154,7 @@ class LuckyReal extends React.Component {
         >
             Place another bet
         </Button>
+        <div className="termCondition"><a href="https://ninja.org/pex/luckydraw" onClick={() => this.props.onButtonClick()}>Terms & Conditions | Rules & Mechanics</a></div>
       </div>
     );
   }

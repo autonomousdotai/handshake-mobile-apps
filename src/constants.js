@@ -604,6 +604,7 @@ export const URL = {
   ATM_FOR_BUSINESS: '/atm-for-business',
   PRODUCT_PREDICTION_URL: '/prediction',
   PEX_INSTRUCTION_URL: '/pex/instructions',
+  PEX_LUCKY_DRAW_MECHANIC_URL: '/pex/luckydraw',
   PRODUCT_WALLET_URL: '/wallet',
   PRODUCT_PAYFORSTORES_URL: '/pay-for-stores',
   PRODUCT_PAYFORDEVS_URL: '/pay-for-devs',

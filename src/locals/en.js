@@ -1,6 +1,6 @@
 import { URL } from '@/constants';
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 export default {
   app: {
@@ -388,8 +388,8 @@ export default {
         {
           title: 'Place a bet:',
           content: 'Pick the market you want to bet (i.e. Brazil - Spain), the outcomes (i.e. Brazil wins) and the site (i.e. support or bet against the outcome)\n' +
-          'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
-          'The PEX Matching Engine will then find another order that bets against the odds you set.',
+            'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
+            'The PEX Matching Engine will then find another order that bets against the odds you set.',
         },
         {
           title: 'Wait for the report:',
@@ -551,8 +551,8 @@ export default {
   'landing_page.prediction.btnSubmitEmail': 'Go',
   'landing_page.prediction.joinTelegram': `Join the dojo on <a href="https://t.me/ninja_org" class="landing-link">Telegram</a>`,
   'landing_page.prediction.whitepaper': `Read our <a href="https://medium.com/@ninja_org/shakeninja-bex-1c938f18b3e8" class="landing-link">whitepaper</a> | Find us on <a href="https://github.com/ninjadotorg" class="landing-link">Github</a>`,
-  //'landing_page.prediction.youtubeVideoId': '-YYp9yW4RDQ',
-  'landing_page.prediction.disclaim':`Ninja is open-source, decentralized software that never holds user data, or user funds. As such, Ninja does not have the power to alter or restrict any actions made on the platform and so cannot be responsible for policing it. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never stake more than you are willing to lose. Play safe!.`,
+  // 'landing_page.prediction.youtubeVideoId': '-YYp9yW4RDQ',
+  'landing_page.prediction.disclaim': `Ninja is open-source, decentralized software that never holds user data, or user funds. As such, Ninja does not have the power to alter or restrict any actions made on the platform and so cannot be responsible for policing it. By freely choosing to use Ninja, the user accepts sole responsibility for their behavior and agrees to abide by the legalities of their governing jurisdiction. Ninja cannot be liable for legal, monetary or psychological damages should you do something stupid. Never stake more than you are willing to lose. Play safe!.`,
   'landing_page.prediction.btnJoinTelegram': 'Join the dojo on Telegram',
 
   'landing_page.wallet.breadcrumb': 'Wallet',
@@ -697,7 +697,7 @@ export default {
     },
     {
       question: 'Who do I contact if I have a problem or a question?',
-      answer: <span>You can chat to us on Telegram <a href="https://t.me/ninja_org" class="landing-link">t.me/ninja_org</a> or email <a href="mailto:support@ninja.org" class="landing-link" target="_top">support@ninja.org</a></span>,
+      answer: <span>You can chat to us on Telegram <a href="https://t.me/ninja_org" className="landing-link">t.me/ninja_org</a> or email <a href="mailto:support@ninja.org" className="landing-link" target="_top">support@ninja.org</a></span>,
     },
   ],
   'landing_page.cash-for-business.faq': [
@@ -723,7 +723,7 @@ export default {
     },
     {
       question: 'Who can I contact if I need help?',
-      answer: <span>You can contact us on through Telegram <a href="https://t.me/ninja_org" class="landing-link">t.me/ninja_org</a> or email <a href="mailto:support@ninja.org" class="landing-link" target="_top">support@ninja.org</a></span>,
+      answer: <span>You can contact us on through Telegram <a href="https://t.me/ninja_org" className="landing-link">t.me/ninja_org</a> or email <a href="mailto:support@ninja.org" className="landing-link" target="_top">support@ninja.org</a></span>,
     },
   ],
 
@@ -806,7 +806,7 @@ export default {
     {
       question: 'How do I start earning ETH/Bitcoin?/How do I put cryptocurrency in my wallet?',
       answer: <span>For instructions on how to play: <Link to={URL.PEX_INSTRUCTION_URL}>http://ninja.org/pex/instructions</Link></span>,
-    }
+    },
   ],
   'landing_page.wallet.faq': [
     {
@@ -823,7 +823,7 @@ export default {
     },
     {
       question: 'How do I create an account?',
-      answer: <span>You simply go to our website <a href="https://ninja.org/wallet">www.ninja.org/wallet</a>. It will auto creates your wallet BTC, ETH etc on your device. Or you can import/restore you have.</span>,
+      answer: `<span>You simply go to our website <a href="https://ninja.org/wallet">www.ninja.org/wallet</a>. It will auto creates your wallet BTC, ETH etc on your device. Or you can import/restore you have.</span>`,
     },
     {
       question: 'What countries can I use Ninja Wallet in?',
@@ -831,8 +831,8 @@ export default {
     },
     {
       question: 'What happens if I swap/lose my phone? Will I lose my wallet?',
-      answer: <span>We recommend all users backup their wallets as soon as they start using Ninja. We have explained how to backup your Ninja Wallet <a target="__blank" href="https://medium.com/@ninja_org/how-to-back-up-your-ninja-wallet-its-really-quite-easy-d98a5ec1a671">here</a>.</span>,
-    }
+      answer: `<span>We recommend all users backup their wallets as soon as they start using Ninja. We have explained how to backup your Ninja Wallet <a target="__blank" href="https://medium.com/@ninja_org/how-to-back-up-your-ninja-wallet-its-really-quite-easy-d98a5ec1a671">here</a>.</span>`,
+    },
   ],
   'landing_page.dad.faq': [
     {
@@ -841,7 +841,7 @@ export default {
     },
     {
       question: 'How does it work?',
-      answer: <span>Anyone can contribute their images to the DAD. <br/>All you need to do is join the platform, upload your photos, and any tags that will help to identify what they are, location etc.<br /><br />If you see a photo and you know where it was taken, or can add more information then just tag the image.</span>,
+      answer: <span>Anyone can contribute their images to the DAD.<br />All you need to do is join the platform, upload your photos, and any tags that will help to identify what they are, location etc.<br /><br />If you see a photo and you know where it was taken, or can add more information then just tag the image.</span>,
     },
     {
       question: 'Can anyone buy datasets from DAD?',
@@ -874,7 +874,7 @@ export default {
     {
       question: 'Once you have my data, do you have it forever?',
       answer: 'Yes all of the data that you contribute will be stored on the blockchain, this means it cannot be deleted. It also means that you will continue to receive payouts on DAD as long as your data is being sold.',
-    }
+    },
   ],
   COIN_EXCHANGE_LP_TRADE_EASY_TRADE_SAFE: {
     title: 'Trade Easy. Stay Safe',
@@ -1029,7 +1029,7 @@ export default {
         transactions: 'Transactions',
         dashboard: 'Dashboard',
         buyMoreCoin: 'Buy more coins now',
-      }
+      },
     },
     credit: {
       overview: {
@@ -1240,7 +1240,7 @@ export default {
     action: {
       payment: {
         button: {
-          checkout: 'Checkout'
+          checkout: 'Checkout',
         },
         label: {
           from_wallet: 'From wallet',
@@ -1252,39 +1252,39 @@ export default {
           select_wallet: 'Select a wallet',
         },
         error: {
-          insufficient: 'You have insufficient coin to make the transfer.'
+          insufficient: 'You have insufficient coin to make the transfer.',
         },
         menu: {
-          developer_docs: "Developer Docs",
-          payment_buttons: "Payment Buttons",
-          help: "Help & Support"
-        }
-      },
-      preferecens:{
-        list_item: {
-          wallet_name: "Wallet Name",
-          hide_balance: "Hide Balance",
-          backup_wallet: "Backup Wallet",
-          delete_wallet: "Delete Wallet",
+          developer_docs: 'Developer Docs',
+          payment_buttons: 'Payment Buttons',
+          help: 'Help & Support',
         },
-        update_name:{
-          title: "Wallet name",
-          label: "What do you call this wallet?",
-          button: {
-            save: "Save",
-          }
-        }
       },
-      redeem:{
-        title: "Redeem to coin",
-        your_code: "Reedem code",
-        giftcard: "Gift card",
-        value: "Value",
-        agree_text: "By clicking REDEEM, you agree to Gift Card & Promotional code {0} as applicable",
-        button_redeem: "Redeem now",
-        button_check: "Check redeem code",
-        swipe_button_redeem: "Swipe to redeem",
-        find_code: "How do find claim code?"
+      preferecens: {
+        list_item: {
+          wallet_name: 'Wallet Name',
+          hide_balance: 'Hide Balance',
+          backup_wallet: 'Backup Wallet',
+          delete_wallet: 'Delete Wallet',
+        },
+        update_name: {
+          title: 'Wallet name',
+          label: 'What do you call this wallet?',
+          button: {
+            save: 'Save',
+          },
+        },
+      },
+      redeem: {
+        title: 'Redeem to coin',
+        your_code: 'Reedem code',
+        giftcard: 'Gift card',
+        value: 'Value',
+        agree_text: 'By clicking REDEEM, you agree to Gift Card & Promotional code {0} as applicable',
+        button_redeem: 'Redeem now',
+        button_check: 'Check redeem code',
+        swipe_button_redeem: 'Swipe to redeem',
+        find_code: 'How do find claim code?',
       },
       remove: {
         title: 'Remove',
@@ -1308,7 +1308,7 @@ export default {
           wallet_balance: 'Wallet balance',
           scan_qrcode: 'Scan QR code',
           gas_limit: 'Gas Limit',
-          data: 'Data'
+          data: 'Data',
         },
         placeholder: {
           to_address: 'Wallet address...',
@@ -1353,7 +1353,7 @@ export default {
         success: {
           restore: 'Your Wallet restore success',
           save_alternative_currency: 'Save currency selected!',
-          save_crypto_address: 'Save format crypto address seleted!'
+          save_crypto_address: 'Save format crypto address seleted!',
         },
         label: {
           alternative_currency: 'Currency',
@@ -1363,10 +1363,10 @@ export default {
           short_address: 'Show short address',
           shortest_address: 'Show shortest address',
           hide_address: 'Hide address',
-          passcode: "Passcode",
-          push_notifications: "Push Notifications",
-          community: "Community",
-          wallet_account: "Wallet Account",
+          passcode: 'Passcode',
+          push_notifications: 'Push Notifications',
+          community: 'Community',
+          wallet_account: 'Wallet Account',
         },
         button: {
           restore: 'Restore now',
@@ -1376,7 +1376,7 @@ export default {
       import: {
         title: 'Add new / Import coin',
       },
-      add_token:{
+      add_token: {
         title: 'Add custom token',
       },
       add_collectible: {
@@ -1403,7 +1403,7 @@ export default {
           step2_msg1: 'Record these words carefully. Don\'t email it or screenshot it.',
           step3_msg1: 'Tap to put these words in the correct order.',
           need_secure: 'Need secure',
-          need_backup: 'Needs Backup'
+          need_backup: 'Needs Backup',
         },
         button: {
           continue: 'Continue',
@@ -1432,14 +1432,14 @@ export default {
           choose_wallet: 'Choose a wallet ...',
         },
         link: {
-          copy_address: "Copy address",
-          download_qrcode: "Download QR code",
+          copy_address: 'Copy address',
+          download_qrcode: 'Download QR code',
         },
         button: {
           share: 'Copy to share',
           request_amount: 'Request Specific amount ➔',
           done: 'Done',
-          text: 'Copy address'
+          text: 'Copy address',
         },
         success: {
           share: 'Wallet address copied to clipboard.',
@@ -1452,13 +1452,13 @@ export default {
           wallet_key: 'Wallet key',
           main_net: 'Mainnet wallets',
           test_net: 'Testnet',
-          header_coins: "Cryptocurrencies",
-          header_tokens: "ERC20 Tokens",
-          header_collectibles: "ERC721 Collectibles",
+          header_coins: 'Cryptocurrencies',
+          header_tokens: 'ERC20 Tokens',
+          header_collectibles: 'ERC721 Collectibles',
         },
         text: {
-          random: "Random",
-          specify_phrase: "Specify recovery Phrase"
+          random: 'Random',
+          specify_phrase: 'Specify recovery Phrase',
         },
         placeholder: {
           wallet_key: 'Wallet key',
@@ -1467,13 +1467,13 @@ export default {
         button: {
           create: 'Create wallet',
           add_new: '+ Add new',
-          done: "Done",
+          done: 'Done',
           request_free_eth: 'Request free ETH',
         },
-        error:{
-          recovery_words_invalid: "Cannot create wallet. Recovery words are invalid.",
-          random: "Cannot create wallet. Please reload and try again"
-        }
+        error: {
+          recovery_words_invalid: 'Cannot create wallet. Recovery words are invalid.',
+          random: 'Cannot create wallet. Please reload and try again',
+        },
       },
       scan_qrcode: {
         header: 'Scan QR code',
@@ -1485,7 +1485,7 @@ export default {
         title: 'View transaction history',
         header: 'Transaction history',
         label: {
-          balance_hidden: "Balance Hidden",
+          balance_hidden: 'Balance Hidden',
           failed: 'Failed',
           pending: 'Pending',
           unconfirmed: 'Unconfirmed',
@@ -1494,22 +1494,22 @@ export default {
           status: 'Status',
           confirmations: 'confirmations',
           success: 'success',
-          error: "Error",
+          error: 'Error',
           detail_etherscan: 'View detail on etherscan.io',
           view_all_etherscan: 'Watch etherscan',
-          self: "Self",
-          sent: "Sent",
-          received: "Received",
-          create: "Create",
-          transfer: "transfer",
-          from: "from",
-          to: "to",
-          internal_transactions: "Internal",
-          no_trans: "No transactions yet",
-          no_internal_trans: "No internal transactions yet",
-          coming_soon: "Coming soon ...",
-          send: "Send",
-          receive: "Receive",
+          self: 'Self',
+          sent: 'Sent',
+          received: 'Received',
+          create: 'Create',
+          transfer: 'transfer',
+          from: 'from',
+          to: 'to',
+          internal_transactions: 'Internal',
+          no_trans: 'No transactions yet',
+          no_internal_trans: 'No internal transactions yet',
+          coming_soon: 'Coming soon ...',
+          send: 'Send',
+          receive: 'Receive',
         },
       },
     },
