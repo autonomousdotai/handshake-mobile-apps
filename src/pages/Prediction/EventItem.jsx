@@ -1,15 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Countdown from '@/components/Countdown/Countdown';
-import Image from '@/components/core/presentation/Image';
 import CopyLink from '@/assets/images/share/link.svg';
-import commentIcon from '@/assets/images/icon/comment.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { URL } from '@/constants';
-import GA from '@/services/googleAnalytics';
+import { randomArrayItem } from '@/utils/array';
 import { formatAmount } from '@/utils/number';
 import OutcomeList from './OutcomeList';
+import { socialSharedMsg } from './constants';
 
 function renderEventName({ event }) {
   return (
@@ -58,22 +56,6 @@ function renderEventTotalBets({ event }) {
   );
 }
 
-function renderEventMessages({ event }) {
-  const commentLink = `${URL.COMMENTS_BY_SHAKE_INDEX}?objectId=event_${event.id}`;
-  return (
-    <Link
-      className="EventMessage"
-      to={commentLink}
-      onClick={() => {
-        GA.clickComment(event.name);
-      }}
-    >
-      <span className="EventMessageIcon"><Image src={commentIcon} /></span>
-      <div className="EventMessageText">Comments</div>
-    </Link>
-  );
-}
-
 function renderOutcomeList({ event, onClickOutcome }) {
   return (
     <OutcomeList event={event} onClick={onClickOutcome} />
@@ -95,8 +77,9 @@ function renderShareSocial(props) {
       title: 'COPY',
     },
   ];
+  const title = randomArrayItem(socialSharedMsg);
   const shareURL = `${window.location.origin}${URL.HANDSHAKE_PEX}?match=${id}`;
-  return (<ShareSocial title="Ninja" shareUrl={shareURL} socialList={socialList} />);
+  return (<ShareSocial title={title} shareUrl={shareURL} socialList={socialList} />);
 }
 
 function EventItem(props) {
@@ -110,7 +93,6 @@ function EventItem(props) {
           {renderEvenTimeLeft(props)}
           {renderEventTotalBets(props)}
         </div>
-        {/* {renderEventMessages(event)} */}
         {renderShareSocial(props)}
       </div>
     </div>

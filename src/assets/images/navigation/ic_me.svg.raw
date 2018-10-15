@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="20px" viewBox="0 0 19 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-gender_neutral_user</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-363.000000, -24.000000)" fill-rule="nonzero">
+            <g id="Group-15" transform="translate(13.000000, 15.000000)">
+                <g id="Group-28-Copy">
+                    <g id="icons8-gender_neutral_user" transform="translate(350.000000, 9.000000)">
+                        <path d="M10,10 C7.22222222,10 5,7.77777778 5,5 C5,2.22222222 7.22222222,0 10,0 C12.7777778,0 15,2.22222222 15,5 C15,7.77777778 12.7777778,10 10,10 Z" id="Shape" fill="#FFB74D"></path>
+                        <path d="M19,16.68125 C19,16.68125 16.3611111,11 9.5,11 C2.63888889,11 0,16.68125 0,16.68125 L0,20 L19,20 L19,16.68125 Z" id="Shape" fill="#607D8B"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

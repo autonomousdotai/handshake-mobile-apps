@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="15px" viewBox="0 0 12 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-marker</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="ATM" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Seller-info" transform="translate(-37.000000, -387.000000)" fill="#FF3D00" fill-rule="nonzero">
+            <g id="Group-4" transform="translate(15.000000, -491.000000)">
+                <g id="Group-76" transform="translate(19.000000, 807.000000)">
+                    <g id="Group-2">
+                        <g id="icons8-marker" transform="translate(3.000000, 71.000000)">
+                            <path d="M5.75,0 C2.93888889,0 0.00479166667,2.23227778 3.45491187e-16,5.43055556 C-0.00575,9.25781944 5.75,15.0138889 5.75,15.0138889 C5.75,15.0138889 11.5060694,9.26580556 11.5,5.43055556 C11.4948889,2.23706944 8.56111111,0 5.75,0 Z M5.75,7.98611111 C4.33869444,7.98611111 3.19444444,6.84186111 3.19444444,5.43055556 C3.19444444,4.01925 4.33869444,2.875 5.75,2.875 C7.16130556,2.875 8.30555556,4.01925 8.30555556,5.43055556 C8.30555556,6.84186111 7.16130556,7.98611111 5.75,7.98611111 Z" id="Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

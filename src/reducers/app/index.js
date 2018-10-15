@@ -52,10 +52,9 @@ function appReducter(state = {
   isBannedCash: false,
   isBannedPrediction: false,
   isBannedChecked: false,
+  isBannedIp: false,
 
   isNerworkError: false,
-
-  firechat: {},
 
   modal: {
     className: '',
@@ -66,6 +65,37 @@ function appReducter(state = {
   }
 }, action) {
   switch (action.type) {
+    case APP_ACTION.SHOW_CONFIRM:
+      return {
+        ...state,
+        passcodeData: action.payload,
+      };
+    case APP_ACTION.HIDE_CONFIRM:
+      return {
+        ...state,
+        passcodeData: action.payload,
+      };
+    case APP_ACTION.SHOW_SCAN_QRCODE:
+      return {
+        ...state,
+        scanQRCodeData: action.payload,
+      };
+    case APP_ACTION.HIDE_SCAN_QRCODE:
+      return {
+        ...state,
+        scanQRCodeData: action.payload,
+      };
+    case APP_ACTION.SHOW_QRCODE_CONTENT:
+      return {
+        ...state,
+        qRCodeContentData: action.payload,
+      };
+    case APP_ACTION.HIDE_QRCODE_CONTENT:
+      return {
+        ...state,
+        qRCodeContentData: action.payload,
+      };
+
     case APP_ACTION.SET_ROOT_LOADING:
       return {
         ...state,
@@ -235,9 +265,11 @@ function appReducter(state = {
 
     case APP_ACTION.IP_INFO: {
       local.save(APP.IP_INFO, action.payload);
+      const bannedCountries = ['US'];
       return {
         ...state,
         ipInfo: action.payload,
+        isBannedIp: bannedCountries.includes(action.payload.country),
       };
     }
 
@@ -259,13 +291,6 @@ function appReducter(state = {
       return {
         ...state,
         isBannedChecked: true,
-      };
-    }
-
-    case APP_ACTION.SET_FIRECHAT: {
-      return {
-        ...state,
-        firechat: action.payload,
       };
     }
 

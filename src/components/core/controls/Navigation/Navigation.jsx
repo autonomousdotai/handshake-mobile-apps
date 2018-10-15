@@ -57,7 +57,7 @@ class Navigation extends React.Component {
               <span>{this.props.intl.messages.app.navigation.me}</span>
             </Link>
           </li>
-          <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_PREDICTION]))}>
+          <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.HANDSHAKE_PREDICTION]))}>
             <Link to={URL.HANDSHAKE_EXCHANGE} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: discoverIcon }} />
               <span>{this.props.intl.messages.app.navigation.exchanges}</span>

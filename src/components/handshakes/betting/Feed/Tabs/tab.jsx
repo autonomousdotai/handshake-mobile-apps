@@ -7,7 +7,7 @@ class Tab extends React.Component {
     activeTab: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
-    className: PropTypes.string.isRequired,
+    className: PropTypes.string,
   };
 
   handleTabClick = () => {
@@ -20,7 +20,7 @@ class Tab extends React.Component {
     const classNames = className({
       TabItem: true,
       Active: (activeTab === label),
-    }, this.props.className);
+    }, this.props.className || '');
 
     return (
       <div className={classNames} onClick={this.handleTabClick}>

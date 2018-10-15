@@ -1,4 +1,6 @@
 
+$icon: '../../../assets/images/wallet/icons/coins/eth.svg';
+
 .confirm-button{
     @-webkit-keyframes slidetounlock {
         0% {
@@ -30,14 +32,14 @@
     .rangeslider-horizontal{
         height: 54px;
         border-radius: 30px;
-        background-color: #546FF7;
+        background-color: #007bff;
         .rangeslider__fill{
             background-color: #4CAF50;
             box-shadow: 7px 0px 15px 0px rgba(0, 0, 0, 0.4);
             border-radius: 30px 0 0 30px;
         }
         .rangeslider__handle{
-            background-image: url('../../../assets/images/wallet/icons/coins/eth.svg');            
+            background-image: url($icon);            
             background-color: transparent;
             background-color: #4CAF50;
             border: 0;

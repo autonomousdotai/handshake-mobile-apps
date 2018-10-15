@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/Giftomon.json');
+const abi = require('@/contracts/Wallet/Giftomon.json');
 
 export class Giftomon extends TokenERC721 {
 

@@ -1,0 +1,59 @@
+.roadmaps {
+
+  .time {
+    font-size: 24px;
+    color: #000000;
+    font-weight: 600;
+  }
+  .title {
+    font-size: 24px;
+    color: #000000;
+    font-weight: 500;
+  }
+  .content {
+    font-size: 16px;
+    color: #1D1D1B;
+  }
+  .left {
+    .barline {
+      position: absolute;
+      left: 0;
+      top: 28px;
+      width: 200px;
+    }
+    position: relative;
+    display: inline-block;
+    width: calc(50% + 3px);
+    //text-align: left;
+    padding-right: 10vw;
+    border-right: 6px solid black;
+
+    .circle {
+      position: absolute;
+      right: -10px;
+      top: 14px;
+      width: 14px;
+    }
+  }
+  .right {
+    .barline {
+      position: absolute;
+      right: 0;
+      top: 28px;
+      width: 200px;
+
+    }
+    position: relative;
+    display: inline-block;
+    width: calc(50% + 3px);
+    //text-align: right;
+    padding-left: 10vw;
+    border-left: 6px solid black;
+    .circle {
+      position: absolute;
+      left: -10px;
+      width: 14px;
+      top: 14px;
+    }
+  }
+}

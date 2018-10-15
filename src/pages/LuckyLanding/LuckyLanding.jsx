@@ -7,6 +7,8 @@ import LuckyLogoSVG from '@/assets/images/luckypool/lucky-landing-logo.svg';
 import CloseIcon from '@/assets/images/icon/close.svg';
 import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
+import GA from '@/services/googleAnalytics';
+
 
 import './LuckyLanding.scss';
 
@@ -22,6 +24,7 @@ class LuckyLanding extends React.Component {
             className="luckyLandingClose"
             //to={URL.HANDSHAKE_DISCOVER}
             onClick={() => {
+              GA.clickInstructionClose();
               this.props.onButtonClick();
             }}
           >
@@ -32,26 +35,36 @@ class LuckyLanding extends React.Component {
         </div>
         <div className="luckyTopContent">
           <div className="luckyLandingTitle">Hey Ninja!</div>
-          <div className="luckyTitleDesc">Take a look around.</div>
+          <div className="luckyTitleDesc">
+          We love seeing new masked faces!.
+          {/*<br/>
+          Here’s a guide and 3 free bets, all for you!*/}
+          </div>
         </div>
-
-        <Button
-          className="btnLuckyLanding guideButton"
-          onClick={() => {
-              this.props.onButtonClick();
-          }}
-        >
-          Quick start guide
-        </Button>
-
         <Button
           className="btnLuckyLanding gotItButton"
           onClick={() => {
+              GA.clickInstructionGotIt();
               this.props.onButtonClick();
           }}
         >
-          Got it
+        Play Now
         </Button>
+        <Link
+          className="btnLuckyLanding guideButton"
+
+          to={URL.PEX_INSTRUCTION_URL}
+          onClick={()=>{
+            GA.clickInstructionStartGuide();
+            this.props.onButtonClick();
+
+          }}
+        >
+            Quick start guide
+
+        </Link>
+
+
 
       </div>
     );

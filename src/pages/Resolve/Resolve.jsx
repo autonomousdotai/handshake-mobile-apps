@@ -56,7 +56,7 @@ class Resolve extends React.Component {
     const tokenValue = this.checkToken();
 
     this.props.loadMatches({
-      PATH_URL: `${API_URL.CRYPTOSIGN.ADMIN_MATCHES}`,
+      PATH_URL: `${API_URL.CRYPTOSIGN.ADMIN_RESOLVE}`,
       headers: { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' },
     });
   }

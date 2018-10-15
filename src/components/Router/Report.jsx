@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router-dom';
 import DynamicImport from '@/components/App/DynamicImport';
 import Loading from '@/components/core/presentation/Loading';
 import { URL } from '@/constants';
-import { setHeaderTitle, clearHeaderRight, clearHeaderLeft, showHeader } from '@/reducers/app/action';
+import { setHeaderTitle, clearHeaderRight, clearHeaderLeft, showHeader, hideHeader } from '@/reducers/app/action';
 
 const Report = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Report/Report')}>{Component => <Component {...props} />}</DynamicImport>);
 const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() => import('@/pages/Error/Page404')}>{Component => <Component {...props} />}</DynamicImport>);
@@ -20,7 +20,7 @@ class ReportRouter extends React.Component {
     clearHeaderRight: PropTypes.func.isRequired,
     clearHeaderLeft: PropTypes.func.isRequired,
     showHeader: PropTypes.func.isRequired,
-
+    hideHeader: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -30,6 +30,10 @@ class ReportRouter extends React.Component {
     this.props.clearHeaderRight();
     this.props.clearHeaderLeft();
     this.props.showHeader();
+  }
+
+  componentWillUnmount() {
+    this.props.hideHeader();
   }
 
   render() {
@@ -43,5 +47,5 @@ class ReportRouter extends React.Component {
 }
 
 export default connect(null, ({
-  setHeaderTitle, clearHeaderRight, clearHeaderLeft, showHeader,
+  setHeaderTitle, clearHeaderRight, clearHeaderLeft, showHeader, hideHeader,
 }))(ReportRouter);

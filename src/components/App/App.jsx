@@ -1,7 +1,8 @@
 import React from 'react';
 // redux
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter } from 'connected-react-router';
+
 // app
 import Root from '@/components/App/Root';
 // store

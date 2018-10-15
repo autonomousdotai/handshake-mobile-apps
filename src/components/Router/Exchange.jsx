@@ -12,6 +12,7 @@ const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() =
 
 const routerMap = [
   { path: URL.HANDSHAKE_CASH, component: Exchange },
+  { path: URL.HANDSHAKE_ATM, component: Exchange },
   { path: URL.HANDSHAKE_PREDICTION, component: Exchange },
   { path: URL.HANDSHAKE_EXCHANGE, component: Exchange },
   { path: URL.HANDSHAKE_PEX, component: Exchange },

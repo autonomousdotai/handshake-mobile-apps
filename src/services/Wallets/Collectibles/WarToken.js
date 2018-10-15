@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/WarToken.json');
+const abi = require('@/contracts/Wallet/WarToken.json');
 
 export class WarToken extends TokenERC721 {
 

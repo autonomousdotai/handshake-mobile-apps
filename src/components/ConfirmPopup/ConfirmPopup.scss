@@ -1,0 +1,43 @@
+@import './src/styles/style';
+.wrapperConfirm {
+  font-family: $font-family-base;
+  padding: rem-calc(40px 20px 40px 20px);
+  align-items: center;
+  .title {
+    font-size: rem-calc(20px);
+    font-weight: 400;
+    text-align: center;
+
+  }
+  .content {
+    margin-top: rem-calc(20px);
+    font-size: rem-calc(16px);
+
+  }
+  .btn {
+    border-radius: rem-calc(5px);
+    font-size: rem-calc(16px);
+    color: #FFFFFF;
+    letter-spacing: 0;
+    margin-top: rem-calc(40px);
+    border: none;
+    height: rem-calc(50px);
+    width: rem-calc(120px);
+  }
+  .wrapperButton {
+    display: flex;
+    justify-content: space-between;
+  }
+  .cancelButton {
+    background: transparent;
+    border: 1px solid #7a7a7a !important;
+    color: #333;
+    margin-left: rem-calc(10px);
+
+    //font-weight: $medium;
+  }
+  .okButton {
+    background: #2456FB;
+    //font-weight: $medium;
+  }
+}

@@ -54,3 +54,129 @@
     padding: 5px 0px;
   }
 }
+
+.dashboard {
+  .btn-close {
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .text-normal {
+    color: #828AA8;
+    font-weight: 400;
+  }
+  .text-black {
+    font-size: 16px;
+    color: #484848;
+  }
+  .green-color {
+    color: #259B24;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  .red-color {
+    color: #F86C4F;
+    font-weight: 500;
+    font-size: 18px;
+  }
+  .black-color {
+    font-size: 18px;
+    color: #000000;
+    font-weight: 500;
+  }
+  .primary-button {
+    background: #546FF7;
+    //font-size: 16px;
+    color: #FFFFFF;
+  }
+  .secondary-button {
+    background: #FCFDFF;
+    color: #828AA8;
+    box-shadow: 0 2px 4px 0 #D0D0D0;
+    border-radius: 5px;
+  }
+  .outline-button {
+    border: 2px solid #EBF0F6;
+    color: #828AA8;
+    background: #FCFDFF;
+  }
+  .danger-button {
+    color: #FFFFFF;
+    border-radius: 5px;
+    background: #D0021B;
+  }
+  .wrapper {
+    padding: 0 15px;
+    border-bottom: 2px solid #F1F2F6;
+    .tabs {
+      .tab {
+        display: inline-block;
+        padding-bottom: 5px;
+        margin-right: 22px;
+        margin-bottom: -1px;
+
+        font-size: 16px;
+        &.active {
+          color: #000000;
+          font-weight: 500;
+          border-bottom: 2px solid #4C63F1;
+        }
+      }
+
+    }
+  }
+
+  .content {
+    //padding: 0 15px;
+    .transaction {
+      margin: 15px 0px 20px;
+      .transaction-detail {
+        background: #FFFFFF;
+        border-radius: 5px;
+        padding: 15px;
+        .type-order {
+          font-weight: 600;
+          font-size: 15px;
+          color: #484848;
+        }
+        .status {
+          font-size: 15px;
+          color: #F5A623;
+          font-weight: 400;
+        }
+        .button-chat {
+          background: #FFFFFF;
+          box-shadow: 0 2px 11px 0 rgba(201,201,201,0.50);
+        }
+      }
+    }
+    .manage-assets {
+      padding-top: 1rem;
+      .btn-activate {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .lbl-depositing {
+        font-size: 15px;
+        color: #F5A623;
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+/** NoData Component **/
+.NoDataContainer {
+  text-align: center;
+  .NoDataTitle {
+    font-size: rem-calc(18px);
+    font-weight: 400;
+    margin-bottom: 15px;
+  }
+  .ShortDescription {
+    font-size: rem-calc(14px);
+    color: #8A8A8F;
+    margin: 15px 0;
+  }
+}

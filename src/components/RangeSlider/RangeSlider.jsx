@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Slider from 'react-rangeslider';
-import _ from 'lodash';
 import 'react-rangeslider/lib/index.css';
 
 class RangeSlider extends Component {
@@ -37,7 +36,7 @@ class RangeSlider extends Component {
     });
     const optionSlider = {
       ...props.options,
-      value: props.input.value !== '' ? _.toNumber(props.input.value) : _.toNumber(volume),
+      value: props.input.value !== '' ? parseInt(props.input.value, 10) : parseInt(volume, 10),
       onChange: this.handleOnChange,
     };
     const inputProps = props.input.value !== '' ? props.input : { ...props.input, value: volume };

@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/Axie.json');
+const abi = require('@/contracts/Wallet/Axie.json');
 
 export class Axie extends TokenERC721 {
 

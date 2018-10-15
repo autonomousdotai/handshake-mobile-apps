@@ -2,8 +2,8 @@ import { takeLatest, call, put, select, all } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/stores/api-saga';
 import { API_URL, URL } from '@/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
-import { handleLoadMatches } from '@/pages/Prediction/saga';
-import { isBalanceinInvalid } from '@/stores/common-saga';
+import { handleLoadMatches, handleLoadMatchDetail } from '@/pages/Prediction/saga';
+import { isBalanceInvalid } from '@/stores/common-saga';
 import { showAlert } from '@/stores/common-action';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { reportSelector } from './selector';
@@ -30,6 +30,7 @@ function* handleLoadReportsSaga({ cache = true }) {
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_REPORTS,
       type: 'LOAD_REPORTS',
       _path: 'reports',
+      _key: 'list',
     });
   } catch (e) {
     return console.error('handleLoadReportsSaga', e);
@@ -49,13 +50,15 @@ function* handleLoadCategories() {
   }
 }
 
-function* handleLoadCreateEventData() {
+function* handleLoadCreateEventData({ eventId }) {
   try {
     yield put(updateCreateEventLoading(true));
     yield all([
       call(handleLoadReportsSaga, {}),
+      eventId && call(handleLoadMatchDetail, { eventId }),
       call(handleLoadMatches, {}),
-      call(handleLoadCategories, {}),
+      // call(handleLoadCategories, {}),
+      call(isBalanceInvalid, {}),
     ]);
     yield put(updateCreateEventLoading(false));
   } catch (e) {
@@ -108,15 +111,15 @@ function* saveGenerateShareLinkToStore(data) {
   const { outcomeId, eventName } = data;
   const generateLink = yield call(handleGenerateShareLinkSaga, { outcomeId });
   return yield put(shareEvent({
-    url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${generateLink.data.slug_short}`,
+    url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${generateLink.data.slug}`,
     name: eventName,
   }));
 }
 
-function* handleCreateEventSaga({ values, isNew, selectedSource }) {
+function* handleCreateEventSaga({ values, isNew }) {
   try {
     yield put(updateCreateEventLoading(true));
-    const balanceInvalid = yield call(isBalanceinInvalid);
+    const balanceInvalid = yield call(isBalanceInvalid);
     if (balanceInvalid) {
       yield put(showAlert({
         message: MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', balanceInvalid),
@@ -151,14 +154,13 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
         }
       } else {
         // Create new event
-        const reportSource = {
-          source_id: selectedSource,
-          source: selectedSource ? undefined : {
-            name: '',
-            url: values.reports,
+        const { reports } = values;
+        const reportSource = reports.id ? { source_id: reports.id } : {
+          source: {
+            name: reports.value,
+            url: reports.value,
           },
         };
-        Object.keys(reportSource).forEach((k) => !reportSource[k] && delete reportSource[k]);
         const newEventData = {
           homeTeamName: values.homeTeamName || '',
           awayTeamName: values.awayTeamName || '',
@@ -166,16 +168,17 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           awayTeamCode: values.awayTeamCode || '',
           homeTeamFlag: values.homeTeamFlag || '',
           awayTeamFlag: values.awayTeamFlag || '',
-          name: values.eventName,
-          public: 1,
+          name: values.eventName.label,
+          public: values.private ? 0 : 1,
           date: values.closingTime,
           reportTime: values.reportingTime,
           disputeTime: values.disputeTime,
           market_fee: values.creatorFee,
           outcomes: values.outcomes,
-          category_id: values.category.id,
+          category_id: 7, // values.category.id, hard-code for now
           ...reportSource,
         };
+        console.log('newEventData', newEventData);
         const { data } = yield call(handleCreateNewEventSaga, { newEventData });
         if (data && data.length) {
           const eventData = data[0];
@@ -229,13 +232,12 @@ function* handleSendEmailCode({ email }) {
     const sendCode = yield call(apiPost, {
       PATH_URL: `user/verification/email/start?email=${email}`,
       type: 'SEND_EMAIL_CODE',
-      headers: { 'Content-Type': 'multipart/form-data' },
     });
-    if (sendCode.error) return null;
-    return yield put(verifyEmailCodePut(true));
+    if (sendCode.error) {
+      console.error('Failed to submit email: ', sendCode.error);
+    }
   } catch (e) {
     console.error('handleSendEmailCode', e);
-    return null;
   }
 }
 
@@ -246,7 +248,7 @@ function* handleVerifyEmail({ email, code }) {
       type: 'VERIFY_EMAIL',
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    if (verify.error) {
+    if (!verify.status) {
       return yield put(verifyEmailCodePut(false));
     }
     yield put(verifyEmailCodePut(true));

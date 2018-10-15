@@ -12,7 +12,6 @@
     "dynamic-import-webpack",
     "@babel/plugin-transform-react-jsx",
     "@babel/plugin-proposal-object-rest-spread",
-    "@babel/plugin-proposal-optional-chaining",
-    "transform-decorators-legacy"
+    "@babel/plugin-proposal-optional-chaining"
   ]
 }

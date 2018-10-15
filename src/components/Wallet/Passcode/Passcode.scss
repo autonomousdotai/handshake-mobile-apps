@@ -1,0 +1,99 @@
+.passscode{    
+  .passscode-logo{
+    margin: auto;
+    display: block;
+    height: 35px;
+  }
+  .passscode-title{
+      text-align: center; 
+      margin-bottom: 20px;
+      font-size: 18px;
+      margin-top: 30px;
+      color: #fff!important;
+
+      animation-name: lefttoright;
+      animation-duration: 0.4s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: 2;
+  }
+  .passscode-items{        
+      text-align: center; 
+      .passscode-item{
+        width: 23px;
+        height: 23px;
+        display: inline-block;
+        border-radius: 50%;
+        margin-right: 13px;
+        border: #fff 1px solid;
+        text-align: center;
+        margin-left: 13px;
+        // background: #9E9E9E;      
+          
+      }
+      .passscode-item.active{
+          background: #fff;//#2196F3;
+      }        
+  }
+  .passscode-items.aimation{
+      animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+  }
+  .passscode-keyboard{
+      position: fixed;
+      bottom: 30px;
+      width: 100%;
+      margin-left: 5%;
+      .passscode-keyboard-item{
+          width: 30%;
+          display: inline-block;
+          text-align: center;
+          font-size: 30px;
+          font-weight: 400;
+          // color: #3e3b3b;    
+          color: #fff;    
+          margin-bottom: 20px;  
+          span{
+            border-radius: 50%;
+            // border: #9E9E9E 1px solid;
+            height: 50px;
+            width: 50px;
+            display: inline-block;
+            svg{
+              width: 30px;
+              height: 30px
+            }
+          }    
+      }
+      .passscode-keyboard-item:active:hover{
+        background: #3d3688;//#b9e1f5;
+      }
+      .passscode-keyboard-item.cancel{
+        font-size: 20px;
+        font-weight: 200;
+      }
+  }
+  @keyframes shake {
+      10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+      }
+      
+      20%, 80% {
+        transform: translate3d(2px, 0, 0);
+      }
+    
+      30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+      }
+    
+      40%, 60% {
+        transform: translate3d(4px, 0, 0);
+      }
+    }
+    @keyframes lefttoright {
+      0%, 8.3% { left: -100%; opacity: 0; }
+      8.3%,25% { left: 25%; opacity: 1; }
+      33.33%, 100% { left: 110%; opacity: 0; }
+    }
+}

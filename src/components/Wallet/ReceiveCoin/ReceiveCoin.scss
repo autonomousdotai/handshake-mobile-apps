@@ -1,8 +1,3 @@
-.iconSuccessChecked{
-  margin-bottom: 1px;
-  margin-right: 5px;
-}
-
 .receive-coins{
   margin-top: 20px;
   padding: 0 5px;
@@ -58,10 +53,10 @@
     }
     .amountCoin{
       position: absolute;
-      background: transparent;      
+      background: transparent;
     }
   }
-  .switch-value{    
+  .switch-value{
     font-size: 12px;
     margin-bottom: 15px;
   }
@@ -72,22 +67,22 @@
     margin: auto;
     width: 250px;
     height: 250px;
-    padding: 10px;    
+    padding: 10px;
   }
 
-  .button-download{    
+  .button-download{
     width: 100%;
     padding: 12px;
     margin-top: 5px;
     margin-bottom: 10px;
     border-radius: 4px;
     font-weight: 100;
-    display: block;    
+    display: block;
     text-decoration: none;
     color: #fff !important;
     // background-color: #007bff;
-    // border-color: #007bff;   
-    background-color: #0BDD91 !important;     
+    // border-color: #007bff;
+    background-color: #0BDD91 !important;
     font-size: 1rem;
   }
 
@@ -108,23 +103,23 @@
       float: right;
     }
   }
-  
 
-  .div-amount {    
-    position: relative;    
+
+  .div-amount {
+    position: relative;
     margin-top: 15px;
 
     img{
       width: 24px;
     }
-    
-    .prepend{      
+
+    .prepend{
       padding: 3px;
       position: absolute;
       right: 8px;
-      color: #7b7b7b;      
+      color: #7b7b7b;
       top: 8px;
-      font-size: 14px;                  
+      font-size: 14px;
     }
     .prepend-button{
       z-index: 1;
@@ -159,14 +154,14 @@
       -moz-border-radius-bottomleft:5px;
       border-bottom-left-radius:5px;
       text-indent:0px;
-      border:1px solid #dcdcdc;      
-      color:#777777;      
+      border:1px solid #dcdcdc;
+      color:#777777;
       text-decoration:none;
       text-align:center;
       text-shadow:1px 1px 0px #ffffff;
 
 
-    }    
+    }
     input[type=text], input[type=tel], input[type=number]{
       font-size: 16px;
       line-height: 22px;

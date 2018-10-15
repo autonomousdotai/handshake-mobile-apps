@@ -5,10 +5,17 @@ import Slider from 'react-slick';
 import './Slider.scss';
 
 class SimpleSlider extends React.PureComponent {
+
+  componentDidMount() {
+    if (this.props.hasOwnProperty('onRef')) {
+      this.props.onRef(this);
+    }
+  }
+
   render() {
     const { settings, children } = this.props;
     return (
-      <Slider {...settings}>
+      <Slider ref={slider => this.slider = slider} {...settings}>
         {children}
       </Slider>
     );
@@ -17,7 +24,8 @@ class SimpleSlider extends React.PureComponent {
 
 SimpleSlider.propType = {
   settings: PropTypes.object.isRequired,
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  onRef: PropTypes.func,
 }
 
 export default SimpleSlider;

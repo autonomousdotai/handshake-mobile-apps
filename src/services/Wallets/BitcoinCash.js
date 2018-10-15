@@ -21,7 +21,7 @@ export class BitcoinCash extends Bitcoin {
   }
 
   setDefaultNetwork() {
-    bitcore.Networks.defaultNetwork = bitcore.Networks.testnet;
+    bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
   }
 
   getShortAddress() {
@@ -37,19 +37,22 @@ export class BitcoinCash extends Bitcoin {
 
   createAddressPrivatekey() {
     super.createAddressPrivatekey();
-    this.setDefaultNetwork();    
+    this.setDefaultNetwork();
     // get Cashaddr
     var address = new bitcore.PrivateKey(this.privateKey).toAddress();
     this.address = address.toString().split(':')[1];
   }
-  async getBalance() {
+  async getBalance(isFormatNumber) {
     this.setDefaultNetwork();
 
-    const url = `${this.network}/addr/${this.address}/balance`;    
+    const url = `${this.network}/addr/${this.address}/balance`;
     const response = await axios.get(url);
 
     if (response.status == 200) {
-      return response.data;
+      if(isFormatNumber)
+        return this.formatNumber(response.data);
+      else
+        return response.data;
     }
     return false;
   }
@@ -99,7 +102,7 @@ export class BitcoinCash extends Bitcoin {
           const rawTx = transaction.serialize();
           const txHash = await this.sendRawTx(rawTx);
 
-          return { status: 1, message: 'messages.bitcoin.success.transaction' };
+          return { status: 1, message: 'messages.bitcoin.success.transaction', data: { hash: txHash.txid } };
         }
 
         return { status: 0, message: 'messages.bitcoin.error.insufficient' };
@@ -264,7 +267,7 @@ export class BitcoinCash extends Bitcoin {
       is_sent: is_sent
     };
   }
-  
+
 }
 
 export default { BitcoinCash };

@@ -303,7 +303,7 @@ class FeedExchange extends React.PureComponent {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
-        this.props.history.push(`${URL.HANDSHAKE_ME}?id=${HANDSHAKE_ID.EXCHANGE}`);
+        this.props.history.push(`${URL.HANDSHAKE_ME}?id=${HANDSHAKE_ID.EXCHANGE}&tab=transaction`);
       },
     });
   }

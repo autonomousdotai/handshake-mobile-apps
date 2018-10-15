@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/CSCPreSaleFactory.json');
+const abi = require('@/contracts/Wallet/CSCPreSaleFactory.json');
 
 export class CSCPreSaleFactory extends TokenERC721 {
 

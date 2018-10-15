@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/CryptoClown.json');
+const abi = require('@/contracts/Wallet/CryptoClown.json');
 
 export class CryptoClown extends TokenERC721 {
 

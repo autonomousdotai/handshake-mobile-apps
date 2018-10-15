@@ -51,16 +51,8 @@ export class BetHandshakeHandler {
       }
     }, 3000 * i);
   }
-  controlShake = async (list) => {
-    for (let i = 0; i < list.length; i++) {
-      const element = list[i];
-      console.log('Element:', element);
 
-      this.handleContract(element, i);
-    }
-  };
-
-  addContract = async (item) => {
+  addContract = async (item, data) => {
     console.log('initContract', item);
 
     const {
@@ -80,26 +72,26 @@ export class BetHandshakeHandler {
       const {
         hash, error, payload,
       } = dataBlockchain;
-      logJson = payload;
+      logJson = `${payload}_data${data}`;
       realBlockHash = hash;
       if (hash == -1) {
         realBlockHash = '-1';
 
-        logJson = error.message;
+        logJson = `${error.message}_data${data}`;
         this.rollback(offchain);
       }
       GA.createBetNotMatchSuccess({ side, odds, amount, hash });
 
     } catch (e) {
       realBlockHash = '-1';
-      logJson = e.message;
+      logJson = `${e.message}_data${data}`;
     }
 
     this.saveTransaction(offchain, CONTRACT_METHOD.INIT, chainId, realBlockHash, contractAddress, logJson);
     return dataBlockchain;
   };
 
-  async shakeContract(item) {
+  async shakeContract(item, data) {
     console.log('shakeContract', item);
 
     const {
@@ -131,17 +123,18 @@ export class BetHandshakeHandler {
         hash, error, payload,
       } = result;
 
-      logJson = payload;
+      logJson = `${payload}_data${data}`;
       realBlockHash = hash;
       if (hash == -1) {
         realBlockHash = '-1';
-        logJson = error.message;
+        logJson = `${error.message}_data${data}`;
         this.rollback(offchain);
       }
       console.log('Hash:', hash);
       GA.createBetMatchedSuccess({ side, odds, amount, hash });
     } catch (e) {
-
+      realBlockHash = '-1';
+      logJson = `${e.message}_data${data}`;
     }
 
     this.saveTransaction(offchain, CONTRACT_METHOD.SHAKE, chainId, realBlockHash, contractAddress, logJson);
@@ -149,23 +142,24 @@ export class BetHandshakeHandler {
     return result;
   }
 
-  handleContract(element, i) {
+  handleContract(element, i, data) {
     setTimeout(() => {
       const isInit = isInitBet(element);
       console.log('Is Init Bet:', isInit);
       if (isInit) {
-        this.addContract(element);
+        this.addContract(element, data);
       } else {
-        this.shakeContract(element);
+        this.shakeContract(element, data);
       }
     }, 3000 * i);
   }
-  controlShake = async (list) => {
+  controlShake = async (list, balance) => {
     for (let i = 0; i < list.length; i++) {
       const element = list[i];
       console.log('Element:', element);
-
-      this.handleContract(element, i);
+      const jsonDataList = JSON.stringify(list);
+      const jsonData = `${jsonDataList}_balance:${balance}_gasPrice:${window.gasPrice}`;
+      this.handleContract(element, i, jsonData);
     }
   };
 

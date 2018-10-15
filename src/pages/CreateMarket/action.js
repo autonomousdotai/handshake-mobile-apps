@@ -1,4 +1,4 @@
-import { SET_DATA } from '@/stores/data-action';
+import { SET_DATA, REMOVE_DATA } from '@/stores/data-action';
 
 export const updateEmailPut = (value) => {
   return SET_DATA({
@@ -50,6 +50,14 @@ export const shareEvent = (value) => {
     type: 'CREATE_MARKET:SHARE_EVENT',
     _path: 'ui.shareEvent',
     _value: value,
+  });
+};
+
+export const removeShareEvent = (keys) => {
+  return REMOVE_DATA({
+    type: 'CREATE_MARKET:REMOVE_SHARE_EVENT',
+    _path: 'ui',
+    _value: keys,
   });
 };
 

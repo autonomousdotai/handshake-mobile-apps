@@ -1,0 +1,288 @@
+$highlight-button-color: #546FF7;
+$title-color: #868DAD;
+$input-hint-color: #BAC0DB;
+$height-el: 54px;
+$bg-color: #FAFBFF;
+
+.create-store-atm-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0px;
+  background-color: $bg-color;
+
+  .atm-tab-container {
+    background-color: white;
+    border: 1px solid #E5EAF8;
+    border-left: none;
+    border-right: none;
+    height: 39px;
+    .radio-container {
+      input:checked ~ button {
+        color: black;
+        font-weight: 500;
+      }
+      button[type=button] {
+        color: #868DAD;
+        font-size: 16px;
+        font-weight: normal;
+        text-align: left;
+        letter-spacing: 0;
+        span.align-middle {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .create-store-atm {
+    background: $bg-color;
+    padding: 0 15px;
+    padding-bottom: 70px;
+    font-size: initial;
+
+    .item-info {
+      margin: 10px 0px 20px 0px;
+    }
+
+    input[type=text], button[type=submit] {
+      height: $height-el;
+    }
+    .address-container {
+      position: relative;
+      input {
+        padding-right: 80px;
+      }
+      .address-update-btn {
+        position: absolute;
+        transform: translate(0, -50%);
+        top: 28px;
+        right: 10px;
+        background-color: #2196F3;
+        padding: 5px;
+        border-radius: 3px;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 10px;
+        &.close-map {
+          background-color: firebrick;
+        }
+      }
+    }
+    .phone-field {
+      display: flex;
+      flex-direction: column;
+
+      .select-list-country-code-wrapper {
+        left: initial;
+        bottom: initial;
+      }
+
+      >span span.phone-input-country, >span span.phone-input-number {
+        background: #FFFFFF;
+        border: 1px solid #E5EAF8;
+        border-radius: 4px;
+        padding: 0.375rem 0.75rem;
+        letter-spacing: 0;
+        height: $height-el;
+        vertical-align: middle;
+        width: 100px;
+      }
+
+      >span span.select-country-code {
+        color: $title-color;
+        font-size: 16px;
+        font-weight: normal;
+        text-align: left;
+        letter-spacing: 0;
+      }
+
+      >span span.phone-input-country {
+        border-right: none;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+
+      >span span.phone-input-number  {
+        width: 100%;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        input {
+          color: #495057;
+        }
+      }
+    }
+    .form-control-title {
+      font-size: 14px;
+      color: $title-color;
+      letter-spacing: 0.5px;
+      margin-top: 1rem;
+      font-weight: normal;
+      text-align: left;
+    }
+
+    .form-control-input {
+      background: #FFFFFF;
+      border: 1px solid #E5EAF8;
+      border-radius: 4px;
+      letter-spacing: 0;
+      &::placeholder {
+        color: $input-hint-color;
+      }
+    }
+
+    .atm-status {
+      background: #EDF0FA;
+      border-radius: 4px;
+      margin-top: 1rem;
+      padding: 15px;
+      .title {
+        color: #060E2E;
+        padding: 0;
+      }
+      .value {
+        padding: 0;
+      }
+    }
+    .atm-time {
+      background: #EDF0FA;
+      border-radius: 4px;
+      padding: 15px;
+      height: 107px;
+      display: flex;
+      justify-content: space-between;
+      .atm-time-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-start;
+      }
+      .from-time, .to-time {
+        align-items: center;
+        text-transform: uppercase;
+        color: #868DAD;
+        font-size: 14px;
+        font-weight: normal;
+        text-align: left;
+        letter-spacing: 0.5px;
+      }
+    }
+
+    .open-button {
+      background: #546FF7;
+      box-shadow: 0 2px 4px 0 #D0D0D0;
+      color: #FFFFFF;
+    }
+  }
+
+
+  .label-create {
+    width: 250px;
+    //text-transform: uppercase;
+    padding: 0;
+    font-weight: 400;
+    letter-spacing: 0;
+    font-size: 14px;
+    //line-height: 32px;
+    margin-top: 5px;
+  }
+
+  .create-exchange {
+    font-weight: 500;
+    color: #000000;
+    padding: 0 15px;
+    input {
+      font-weight: 500;
+      font-size: 16px;
+      color: #000000;
+      letter-spacing: 0;
+      text-align: left;
+      padding: 0;
+    }
+
+    .currency-selector {
+      img {
+        width: 24px;
+      }
+      span {
+        line-height: 24px;
+        vertical-align: middle;
+      }
+    }
+    .label {
+      margin-top: 20px;
+      margin-bottom: 5px;
+      font-weight: 700;
+      font-size: 14px;
+      color: #1E4EFF;
+      letter-spacing: 0;
+      text-align: left;
+      line-height: 14px;
+    }
+    .section {
+      background: #ffffff;
+      padding-left: 15px;
+      margin-left: -15px;
+      padding-right: 15px;
+      margin-right: -15px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+    .explanation {
+      color: #8A8A8F;
+      font-size: 10px;
+      font-weight: 400;
+    }
+    .estimate-price {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 0;
+      &.buy {
+        color: #4CD964;
+      }
+      &.sell {
+        color: #FF2D55;
+      }
+    }
+    .tooltip-price {
+      font-weight: 400;
+      font-size: 12px;
+      color: #5B5B5B;
+      letter-spacing: 0;
+      text-align: left;
+      line-height: 19px;
+    }
+    .dropdown-button {
+      background: none !important;
+      box-shadow: none !important;
+      border: none !important;
+      font-weight: 500 !important;
+      padding: 0 4px !important;
+    }
+  }
+
+  .form-text {
+    //margin: 0;
+    font-weight: 500;
+    font-size: 16px;
+    color: #1E4EFF;
+    letter-spacing: 0;
+  }
+
+  .create-exchange-local {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 500;
+    padding: 20px;
+    input {
+      font-weight: 500;
+      font-size: 16px;
+      color: #000000;
+      letter-spacing: 0;
+      text-align: left;
+      padding: 0;
+    }
+  }
+}

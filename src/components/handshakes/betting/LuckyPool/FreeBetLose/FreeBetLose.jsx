@@ -3,6 +3,7 @@ import Button from '@/components/core/controls/Button';
 import PropTypes from 'prop-types';
 import Image from '@/components/core/presentation/Image';
 import FreeBetLoseLogoSVG from '@/assets/images/luckypool/freebet_lose_logo.svg';
+import GA from '@/services/googleAnalytics';
 
 import './FreeBetLose.scss';
 
@@ -20,7 +21,11 @@ class FreeBetLose extends React.Component {
         <div className="freeBetLoseSmallDes">You deserve another shot.</div>
         <Button
           className="freeBetLoseButton"
-          onClick={() => this.props.onButtonClick()}
+          onClick={() => {
+            this.props.onButtonClick();
+            GA.clickGotItLoser();
+          }
+        }
 
         >
         Here’s a free bet

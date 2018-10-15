@@ -9,13 +9,21 @@ const EVENT_CATEGORY = {
   PREDICTION: 'Prediction',
   ORDER_BOOK: 'OrderBook',
   ME: 'Me/Prediction',
+  FREEBET: 'Freebet',
+  CREATE_OWN_MARKET: 'CreateOwnMarket',
 };
 const EVENT_ACTION = {
   //PREDICTION
   CLICK_CHOOSE_OUTCOME: 'Click choose an outcome',
   CLICK_BANNER: 'Click banner',
   CLICK_COMMENT: 'Click comments',
-
+  CLICK_CREATE_OWN_EVENT: 'Click create a bet',
+  CLICK_INSTRUCTION_START_GUIDE: 'Click instruction quick start guide',
+  CLICK_INSTRUCTION_GOT_IT: 'Click instruction play now button',
+  CLICK_INSTRUCTION_CLOSE: 'Click instruction close button',
+  CLICK_TOP_UP_WALLET: 'Click top up wallet',
+  CLICK_CLOSE_TOPUP_WALLET: 'Click close top up wallet ',
+  DID_FILL_UP_WALLET: 'Did fill up wallet',
   //ORDER BOOK
   CLICK_SUPPORT: 'Click support',
   CLICK_OPPOSE: 'Click oppose',
@@ -48,6 +56,14 @@ const EVENT_ACTION = {
   CLICK_ME_DISPUTE_API_SUCCESS: 'Click me dispute API successful',
   CLICK_ME_DISPUTE_API_FAILED: 'Click me dispute API failed',
 
+  //FREEBET
+  CLICK_GOT_IT_WINNER: 'Click Got it on winner popup',
+  CLICK_GOT_IT_LOSER: 'Click Got it on loser popup',
+  CLICK_NOTIFY_ME: 'Click notify me',
+
+  //Create Own Market
+  CLICK_CREATE_NEW_EVENT: 'Click create a new event',
+  CLICK_CREATE_NEW_OUTCOME: 'Click create a new outcome',
 
   CLICK_GO_BUTTON: 'Click go button',
   CLICK_COMMENTS_BOX: 'Click comments box',
@@ -155,6 +171,102 @@ class GoogleAnalyticsService {
 
     this.sendGAEvent(params);
   }
+
+  clickCreateOwnEvent() {
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.CLICK_CREATE_OWN_EVENT,
+    };
+    console.log(TAG, 'clickCreateOwnEvent', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  clickInstructionStartGuide() {
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.CLICK_INSTRUCTION_START_GUIDE,
+    };
+    console.log(TAG, 'clickInstructionStartGuide', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  clickInstructionGotIt() {
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.CLICK_INSTRUCTION_GOT_IT,
+    };
+    console.log(TAG, 'clickInstructionGotIt', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
+  clickInstructionClose() {
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.CLICK_INSTRUCTION_CLOSE,
+    };
+    console.log(TAG, 'clickInstructionClose', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  clickTopupWallet(result) {
+    const { balance = 0, total = 0 } = result;
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.CLICK_TOP_UP_WALLET,
+      label: `Balance ${balance} - Need Amount ${total}`,
+    };
+    console.log(TAG, 'clickTopupWallet', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  clickCloseTopupWallet() {
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.CLICK_CLOSE_TOPUP_WALLET,
+
+    };
+    console.log(TAG, 'clickCloseTopupWallet', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  didFillUpMoney() {
+    const params = {
+      category: EVENT_CATEGORY.PREDICTION,
+      action: EVENT_ACTION.DID_FILL_UP_WALLET,
+
+    };
+    console.log(TAG, 'didFillUpMoney', params);
+    try {
+      this.sendGAEvent(params);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   //ORDER BOOK
   /**
@@ -657,6 +769,82 @@ class GoogleAnalyticsService {
       this.sendGAEvent(params);
     } catch (err) {}
   }
+
+  //FREEBET
+  clickGotItWinner() {
+    const params = {
+      category: EVENT_CATEGORY.FREEBET,
+      action: EVENT_ACTION.CLICK_GOT_IT_WINNER,
+    };
+    console.log(TAG, 'clickGotItWinner', params);
+
+    try {
+      this.sendGAEvent(params);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  clickGotItLoser() {
+    const params = {
+      category: EVENT_CATEGORY.FREEBET,
+      action: EVENT_ACTION.CLICK_GOT_IT_LOSER,
+    };
+    console.log(TAG, 'clickGotItLoser', params);
+
+    try {
+      this.sendGAEvent(params);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  clickNotifyMe(email) {
+    const params = {
+      category: EVENT_CATEGORY.FREEBET,
+      action: EVENT_ACTION.CLICK_NOTIFY_ME,
+      label: `${email}`,
+    };
+    console.log(TAG, 'clickNotifyMe', params);
+
+    try {
+      this.sendGAEvent(params);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //Create your own market
+
+  clickCreateNewEvent(eventName, email = '', marketFee, uid='') {
+    const params = {
+      category: EVENT_CATEGORY.CREATE_OWN_MARKET,
+      action: EVENT_ACTION.CLICK_CREATE_NEW_EVENT,
+      label: `${eventName}-${email}-${marketFee}-${uid}`,
+    };
+    console.log(TAG, 'clickCreateNewEvent', params);
+
+    try {
+      this.sendGAEvent(params);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  clickCreateNewOutcome(email = '', marketFee, uid='') {
+    const params = {
+      category: EVENT_CATEGORY.CREATE_OWN_MARKET,
+      action: EVENT_ACTION.CLICK_CREATE_NEW_OUTCOME,
+      label: `${email}-${marketFee}-${uid}`,
+    };
+    console.log(TAG, 'clickCreateNewOutcome', params);
+
+    try {
+      this.sendGAEvent(params);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
 
 }
 

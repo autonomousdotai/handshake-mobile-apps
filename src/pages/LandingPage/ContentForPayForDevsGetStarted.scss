@@ -1,0 +1,72 @@
+@import './src/styles/style';
+
+.ct-pay-for-devs-get-started{
+  background: url('../../assets/images/landing/pay-for-devs/bg-getstarted.png') no-repeat top center;
+  background-color: white;
+}
+.pay-for-devs-get-started{
+  padding-top: 3rem;
+
+  .pd-heading{
+    font-weight: normal ! important;
+    color: Black;
+    padding-bottom: 1rem;
+  }
+
+  .getstart {
+    padding-bottom: 4rem;
+
+    .pd-content{
+      font-weight: 300;
+    }
+  }
+
+  .none-register{
+    padding: 8rem 0 6rem 0;
+    width: 100%;
+
+    .pd-heading{
+      font-size: 30px;
+    }
+
+    .pd-content{
+      margin: auto;
+      width: 50%;
+      height: 50%;
+      overflow: auto;
+      font-weight: 300;
+      font-size: 16px;
+    }
+
+  }
+
+  .code{
+    .card {
+
+      .row{
+        padding: 0.5rem 0;
+        font-weight: 300;
+        .label {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+  .register{
+    padding: 8rem 0 6rem 0;
+    width: 100%;
+
+    .pd-heading{
+      font-size: 30px;
+    }
+
+    .pd-content{
+      margin: auto;
+      width: 50%;
+      height: 50%;
+      overflow: auto;
+      font-weight: 300;
+      font-size: 16px;
+    }
+  }
+}

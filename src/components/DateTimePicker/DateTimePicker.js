@@ -113,7 +113,7 @@ class DateTimePicker extends Component {
         <input
           {...props.inputProps}
           onBlur={this.onOpenPopPicker(props)}
-          placeholder={props.placeholder}
+          // placeholder={props.placeholder}
           value={this.unixToLocal(props.value)}
         />
       </div>

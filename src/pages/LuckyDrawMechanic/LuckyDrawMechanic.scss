@@ -1,0 +1,78 @@
+@import './src/styles/style';
+
+.wrapperMechanicLuckyDraw {
+  font-family: $font-family-base;
+  font-size: 16px;
+  color: #484848;
+  line-height: 35px;
+
+  .desktop {
+    display: flex;
+
+  }
+  .wrapperLuckyDraw {
+
+    .wrapperContent {
+      width: 100%;
+      margin-top: 35px;
+    }
+    .luckyDrawContent {
+      margin-top: 20px;
+    }
+    .luckyDrawContentDesktop {
+      margin-right: 170px;
+      text-align: justify;
+      margin-top: 40px;
+
+    }
+
+    .yellowLine {
+      width: 198px;
+      height: 7px;
+      background-color: #F6DA25;
+      position: absolute;
+
+    }
+    .one {
+      top: -4px;
+      left: 0;
+    }
+    .two {
+      top: 9px;
+      left: 0;
+    }
+    .luckyDrawTitle {
+      font-size: rem-calc(30px);
+      font-weight: 800;
+    }
+  }
+  .wrapperTermCondition {
+    font-size: rem-calc(11px);
+    margin-top: 40px;
+  }
+  .wrapperMechanic {
+    margin-top: 40px;
+
+    .mechanicTitle {
+      font-size: rem-calc(30px);
+      font-weight: 800;
+    }
+    .mechanicContent {
+      margin-top: 20px;
+    }
+  }
+  .wrapperHeader {
+    margin-top: 20px;
+    .headerImage {
+      margin-bottom: 50px;
+    }
+    .pd-breadcrumb{
+      font-size: 16px;
+      color: #484848;
+      letter-spacing: 0;
+    }
+  }
+
+
+
+}

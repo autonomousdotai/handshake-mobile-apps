@@ -8,13 +8,30 @@ import { EXCHANGE_ACTIONS } from './action';
 import { EXCHANGE_ACTION } from '@/constants';
 import Dashboard from '@/models/Dashboard';
 import Referal from '@/models/Referal';
+import Deposit from '@/models/Deposit';
+import Handshake from '@/models/Handshake';
+import CashStore from "@/models/CashStore";
+import CashAtmPrice from "@/models/CashAtmPrice";
 
 const initListOfferPrice = [];
 initListOfferPrice.updatedAt = Date.now();
+const initDepositInfo = {};
+initDepositInfo.updatedAt = Date.now();
+
+const handleListPayload = (payload) => {
+  const result = [];
+  payload.map((handshake) => {
+    result.push(Handshake.handshake(handshake));
+  });
+
+  return result;
+};
 
 function exchangeReducter(state = {
   listOfferPrice: initListOfferPrice,
   isChooseFreeStart: false,
+  depositInfo: initDepositInfo,
+  listOfferPriceCashAtm: initListOfferPrice,
 }, action) {
   // console.log('exchangeReducter', JSON.stringify(action));
   switch (action.type) {
@@ -50,6 +67,18 @@ function exchangeReducter(state = {
         listOfferPrice,
       };
     }
+    case `${EXCHANGE_ACTIONS.GET_LIST_OFFER_PRICE_CASH_ATM}_SUCCESS`: {
+      const listOfferPriceCashAtm = action.payload.data.map((offerPrice) => {
+        const price = CashAtmPrice.cashAtmPrice(offerPrice);
+
+        return price;
+      });
+      listOfferPriceCashAtm.updatedAt = Date.now();
+      return {
+        ...state,
+        listOfferPriceCashAtm,
+      };
+    }
     case `${EXCHANGE_ACTIONS.GET_IP_INFORM}_SUCCESS`: {
       return { ...state, ipInfo: action.payload.data };
     }
@@ -67,6 +96,62 @@ function exchangeReducter(state = {
     }
     case `${EXCHANGE_ACTIONS.GET_REFERAL_INFO}_SUCCESS`: {
       return { ...state, referalInfo: Referal.referal(action.payload.data) };
+    }
+    case `${EXCHANGE_ACTIONS.GET_CREDIT_ATM}_SUCCESS`: {
+      const depositInfo = { };
+
+      Object.entries(action.payload.data.items).forEach(([key, value]) => {
+        console.log('key, value', key, value);
+        depositInfo[key] = Deposit.deposit(value);
+      });
+      depositInfo.updatedAt = Date.now();
+      return { ...state, depositInfo, creditRevenue: action.payload.data.revenue || '0' };
+    }
+    case `${EXCHANGE_ACTIONS.GET_TRANSACTION_CREDIT_ATM}_SUCCESS`: {
+      const list = handleListPayload(action.payload.data.handshakes);
+      return {
+        ...state,
+        creditTransactions: list,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.FIREBASE_CREDITS_DATA_CHANGE}_SUCCESS`: {
+      const itemDepositInfos = action.payload;
+      const oldDepositInfo = state.depositInfo;
+      console.log('oldDepositInfo', oldDepositInfo);
+      console.log('itemDepositInfos', itemDepositInfos);
+
+      const depositInfo = { ...oldDepositInfo };
+      console.log('depositInfo', depositInfo);
+
+      Object.keys(itemDepositInfos).forEach((itemDepositId) => {
+        const itemDeposit = Object.assign({}, itemDepositInfos[itemDepositId]);
+        const currency = itemDepositId.replace('credit_item_', '');
+        depositInfo[currency].balance = itemDeposit.balance;
+        depositInfo[currency].status = itemDeposit.status;
+        depositInfo[currency].subStatus = itemDeposit.sub_status;
+      });
+
+      depositInfo.updatedAt = Date.now();
+
+      return {
+        ...state, depositInfo,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.GET_STORE_ATM}_SUCCESS`: {
+      const cashStore = CashStore.cashStore(action.payload.data);
+      return {
+        ...state, cashStore,
+      };
+    }
+    case `${EXCHANGE_ACTIONS.GET_TRANSACTION_CASH_STORE}_SUCCESS`: {
+      const list = handleListPayload(action.payload.data.handshakes);
+      list.filter(handshake => handshake.offerFeedType === 'cash_order');
+
+      console.log('GET_TRANSACTION_CASH_STORE', list.filter(handshake => handshake.offerFeedType === 'cash_order'));
+      return {
+        ...state,
+        cashStoreTransaction: list.filter(handshake => handshake.offerFeedType === 'cash_order'),
+      };
     }
     default:
       return state;

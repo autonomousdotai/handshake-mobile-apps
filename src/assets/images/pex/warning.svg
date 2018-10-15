@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-attention</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="1" transform="translate(-11.000000, -14.000000)" fill="#FFFFFF" fill-rule="nonzero">
+            <g id="icons8-attention" transform="translate(11.000000, 14.000000)">
+                <path d="M8,0 C3.58894215,0 0,3.58894215 0,8 C0,12.4110578 3.58894215,16 8,16 C12.4110578,16 16,12.4110578 16,8 C16,3.58894215 12.4110578,0 8,0 Z M8,1.23076923 C11.7451926,1.23076923 14.7692308,4.254808 14.7692308,8 C14.7692308,11.7451926 11.7451926,14.7692308 8,14.7692308 C4.254808,14.7692308 1.23076923,11.7451926 1.23076923,8 C1.23076923,4.254808 4.254808,1.23076923 8,1.23076923 Z M7.38461538,4.30769231 L7.38461538,9.23076923 L8.61538462,9.23076923 L8.61538462,4.30769231 L7.38461538,4.30769231 Z M7.38461538,10.4615385 L7.38461538,11.6923077 L8.61538462,11.6923077 L8.61538462,10.4615385 L7.38461538,10.4615385 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

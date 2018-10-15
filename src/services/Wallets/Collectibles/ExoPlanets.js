@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/ExoPlanets.json');
+const abi = require('@/contracts/Wallet/ExoPlanets.json');
 
 export class ExoPlanets extends TokenERC721 {
 

@@ -28,6 +28,8 @@
   .luckyTitleDesc {
     font-size: rem-calc(15px);
     opacity: .6;
+    text-align: center;
+    margin-top: 10px;
   }
   .btnLuckyLanding {
     border-radius: rem-calc(5px);
@@ -47,14 +49,15 @@
     background: #2456FB;
     color: #FFFFFF;
     margin-top: 5%;
+    margin-bottom: rem-calc(30px);
+    margin-top: rem-calc(10px);
 
   }
   .btnLuckyLanding.gotItButton {
     background: white;
     color: #828AA8;
     border: 1px solid #828AA8;
-    margin-top: rem-calc(5px);
-    margin-bottom: rem-calc(30px);
+    margin-top: 5%;
 
   }
 

@@ -7,3 +7,18 @@ export const updateSide = (val) => {
     _value: val,
   });
 };
+
+export const predictionStatistics = (payload = {}) => {
+  return {
+    type: 'ORDER_PLACE:PREDICTION_STATISTICS',
+    ...payload,
+  };
+};
+
+export const predictionStatisticsPut = (value) => {
+  return SET_DATA({
+    type: 'ORDER_PLACE:PREDICTION_STATISTICS_PUT',
+    _path: 'orderPlace.statistics',
+    _value: value,
+  });
+};

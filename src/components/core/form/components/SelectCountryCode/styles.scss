@@ -6,6 +6,13 @@
   img {
     max-width: none !important;
   }
+  .current-flag {
+    display: inline;
+    margin-right: 10px;
+    font-size: 25px;
+    position: relative;
+    top: 5px;
+  }
 }
 .select-list-country-code-wrapper {
   position: absolute;

@@ -9,49 +9,52 @@ import iconIphone from '@/assets/images/landing/cash-for-business/iphone.svg';
 import iconLine from '@/assets/images/landing/cash-for-business/line.svg';
 import iconMinimumEffort from '@/assets/images/landing/cash-for-business/minimum-effort.svg';
 import iconSteadyIncome from '@/assets/images/landing/cash-for-business/steady-income.svg';
+import iconSchedule from '@/assets/images/landing/cash-for-business/schedule.svg';
 
 
 const features = [
   {
-    name: 'steady-income',
-    title: 'Steady income',
-    icon: iconSteadyIncome,
-    caption: <span>Surf on the crypto wave to earn up to <strong>30,000 USD/month</strong></span>
-  },
-  {
-    name: 'minimum-effort',
-    title: 'Minimum effort',
+    name: 'easy-setup',
+    title: 'Easy set up',
     icon: iconMinimumEffort,
-    caption: <span>Say goodbye to complex systems and bulky hardware. We work on mobile phones and tablets.</span>
+    caption: <span>No financial investment or extra manpower needed. All you need to set up is your smartphone</span>,
   },
   {
-    name: 'earn-more',
-    title: 'Earn more customers',
+    name: 'own-schedule',
+    title: 'Set your own schedule',
+    icon: iconSchedule,
+    caption: <span>You decide when and where you want to work. You’re the boss</span>,
+  },
+  {
+    name: 'great-income',
+    title: 'Make great income',
+    icon: iconSteadyIncome,
+    caption: <span>Earn up to <strong>1000 USD/month</strong> easily </span>,
+  },
+  {
+    name: 'grow-customer-base',
+    title: 'Grow your customer base',
     icon: iconEarnMore,
-    caption: <span>Attract crypto lovers and watch your customer base grow</span>
+    caption: <span>Convert crypto enthusiasts into regular customers</span>,
   }
 ]
 
 const howToSetUpATM = [
   {
     id: 1,
-    text: <span>Open <a href="https://ninja.org/cash">ninja.org/cash</a> on your phone or tablet</span>,
+    text: 'Register for free to become a Ninja ATM. We just need your phone number and email address',
   },
   {
     id: 2,
-    text: "Deposit fiat for crypto with a credit card",
+    text: 'Customers find you on the map showing nearby Ninja ATMs and come to your store to buy crypto with cash.',
   },
   {
     id: 3,
-    text: "Set up your profit margin and trade with people",
+    text: 'You conduct the transaction. Here’s how',
   },
   {
     id: 4,
-    text: "Top up anytime with just one click",
-  },
-  {
-    id: 5,
-    text: "Cash out quickly for instant profit",
+    text: 'You keep the commission from the transaction',
   },
 ]
 
@@ -66,7 +69,7 @@ class ContentForCashBusiness extends React.Component {
             features.map((feature, index) => {
               const { name, title, icon, caption } = feature;
               return (
-                <div key={name} className="col-12 col-md-4 mt-4">
+                <div key={name} className="col-12 col-md-3 mt-4">
                   <div><img src={icon} /></div>
                   <div className="feature-title">{title}</div>
                   <div><img src={iconLine} /></div>
@@ -81,12 +84,12 @@ class ContentForCashBusiness extends React.Component {
             <img src={iconIphone} />
           </div>
           <div className="col-12 col-md-6">
-            <div className="mt-5 headline">How to set up an ATM</div>
+            <div className="mt-5 headline">How does Ninja ATM work?</div>
             {
               howToSetUpATM.map(how => {
                 const { id, text } = how;
                 return (
-                  <div key={id} className="mt-5">
+                  <div key={id} className="my-5 py-4">
                     <span className="how-to-index rounded-circle">{id}</span>
                     <span className="how-to-text">{text}</span>
                   </div>
@@ -95,66 +98,6 @@ class ContentForCashBusiness extends React.Component {
             }
           </div>
         </div>
-        <div className="row mt-5">
-          <div className="col text-center headline">
-            A new revenue stream for your business,<br />
-            in addition to your regular atm
-          </div>
-        </div>
-        <div className="row mt-4">
-          <div className="col">
-            <table className="table table-striped">
-              <thead className="table-head">
-                <tr>
-                  <th scope="col" />
-                  <th scope="col">REGULAR ATM</th>
-                  <th scope="col">CRYPTO ATM</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Setup Fee</th>
-                  <td>$2,000 - $8,000</td>
-                  <td>None</td>
-                </tr>
-                <tr>
-                  <th scope="row">Machine maintenance</th>
-                  <td>$1,000/year</td>
-                  <td>None</td>
-                </tr>
-                <tr>
-                  <th scope="row">Sales bonus</th>
-                  <td>None</td>
-                  <td>Monthly</td>
-                </tr>
-                <tr>
-                  <th scope="row">Physical space</th>
-                  <td>Bulky - up to 10 sqft</td>
-                  <td>Pocket sized</td>
-                </tr>
-                <tr>
-                  <th scope="row">Profit</th>
-                  <td>Controlled by the bank provider</td>
-                  <td>Set your own profit margins</td>
-                </tr>
-                <tr>
-                  <th scope="row">Contract</th>
-                  <td>12 months minimum</td>
-                  <td>No fixed term contract</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="row text-center mt-5">
-          <div className="col">
-            <div className="headline">How Much Will You Be Charged On Ninja</div>
-            <div className="subHeadline mt-2">We provide you with an easy, on the go app to exchange coin to coin.<br />You provide the venue, and decide the price to preserve your profits.</div>
-            <div className="mt-2"><img src={iconCard} /></div>
-          </div>
-        </div>
-
       </div>
     );
   }

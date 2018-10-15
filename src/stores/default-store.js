@@ -1,7 +1,12 @@
 export default {
-  prediction: {},
+  prediction: {
+    events: [],
+    relevantEvents: [],
+  },
+  predictionDetail: {},
   reports: {},
   categories: {},
+  orderPlace: {},
   ui: {
     showedLuckyPool: false,
     side: null,
@@ -10,5 +15,9 @@ export default {
     countReport: 0,
     freeBet: {},
     isExistEmail: false,
+    totalBets: 0,
+  },
+  blockChain: {
+    insufficientGas: null,
   },
 };

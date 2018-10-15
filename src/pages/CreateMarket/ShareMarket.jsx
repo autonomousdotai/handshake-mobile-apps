@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
+import { randomArrayItem } from '@/utils/array';
 
 import ShareLink from '@/assets/images/icon/icon_share.svg';
 import FacebookSVG from '@/assets/images/icon/icon_facebook.svg';
 import TwitterSVG from '@/assets/images/icon/icon_twitter.svg';
+
+import { socialSharedMsg } from '@/pages/Prediction/constants';
 
 class ShareMarket extends React.Component {
   static propTypes = {
@@ -48,12 +51,13 @@ class ShareMarket extends React.Component {
         title: 'COPY',
       },
     ];
+    const title = randomArrayItem(socialSharedMsg);
     return (
       <div className="ShareEventToBuddies">
         <div className="ShareEventToBuddiesTitle">
           Invite your buddies to bet
         </div>
-        <ShareSocial title="Ninja" shareUrl={url} socialList={socialList} />
+        <ShareSocial title={title} shareUrl={url} socialList={socialList} />
       </div>
     );
   }

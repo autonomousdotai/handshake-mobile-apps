@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="13px" height="13px" viewBox="0 0 13 13" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>icons8-user</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="ATM" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Transaction" transform="translate(-39.000000, -605.000000)" fill="#828AA8" fill-rule="nonzero">
+            <g id="Group-75-Copy" transform="translate(15.000000, 250.000000)">
+                <g id="Group-74-Copy">
+                    <g id="Group-73" transform="translate(24.000000, 352.000000)">
+                        <g id="icons8-user" transform="translate(0.000000, 3.000000)">
+                            <path d="M6.5,0 C4.90451072,0 3.61111111,1.29339961 3.61111111,2.88888889 C3.61111111,4.48437817 4.90451072,5.77777778 6.5,5.77777778 C8.09548928,5.77777778 9.38888889,4.48437817 9.38888889,2.88888889 C9.38888889,1.29339961 8.09548928,0 6.5,0 Z M4.19650609,8.227973 C2.16200609,8.67863967 0,9.66694444 0,11.1944444 L0,13 L13,13 L13,11.1944444 C13,9.66694444 10.8379938,8.67863967 8.80349383,8.227973 C8.27627161,8.92925078 7.44466667,9.38888889 6.5,9.38888889 C5.55533333,9.38888889 4.72372832,8.92925078 4.19650609,8.227973 Z" id="Shape"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -17,6 +17,10 @@ export default class ExchangeCashHandshake extends BaseHandshake {
     return 'ExchangeCash';
   }
 
+  get contractFolder() {
+    return 'ATM';
+  }
+
   checkBalance = () => {
     const balance = wallet.getBalance();
     return balance;

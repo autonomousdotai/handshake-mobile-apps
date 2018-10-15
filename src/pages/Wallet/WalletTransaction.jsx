@@ -7,8 +7,8 @@ import iconReceived from '@/assets/images/icon/icon-received.svg';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import './Wallet.scss';
+import { HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS } from '@/constants';
 
-const _ = require('lodash');
 const moment = require('moment');
 
 class WalletTransaction extends React.Component {
@@ -50,21 +50,24 @@ class WalletTransaction extends React.Component {
             tx_fee = Number(Number(data.gasUsed) * gas_gwei / 1000000000);
           }
 
-          if(data.txreceipt_status) {
-            status = Number(data.txreceipt_status) > 0 ? messages.wallet.action.history.label.success : messages.wallet.action.history.label.failed;
+          if(data.pending){
+            status = messages.wallet.action.history.label.pending;
           }
-          else {
-            if(data.txreceipt_status == undefined) {
-              if(data.isError == "1") {
-                status = messages.wallet.action.history.label.error;
-              }
-              else {
-                status = messages.wallet.action.history.label.success;
+          else{
+            if(data.txreceipt_status) {
+              status = Number(data.txreceipt_status) > 0 ? messages.wallet.action.history.label.success : messages.wallet.action.history.label.failed;
+            }
+            else {
+              if(data.txreceipt_status == undefined) {
+                if(data.isError == "1") {
+                  status = messages.wallet.action.history.label.error;
+                }
+                else {
+                  status = messages.wallet.action.history.label.success;
+                }
               }
             }
           }
-
-
 
           result = {
             header: {
@@ -123,6 +126,7 @@ class WalletTransaction extends React.Component {
               is_sent: data.is_sent
             },
             body: {
+              transaction: data.txid,
               size: data.size,
               received_time: moment(data.time).format('llll'),
               mined_time: moment(data.blocktime).format('llll'),
@@ -181,9 +185,12 @@ class WalletTransaction extends React.Component {
           <span>{moment(detail.timeStamp).format('llll')}</span>
         </div>
         {
-          detail.header.coin == "ETH" ?
+          detail.header.coin == "ETH" &&
             <div className="url"><a target="_blank" href={""+wallet.getAPIUrlTransaction(detail.body.hash)}>{messages.wallet.action.history.label.detail_etherscan}</a></div>
-          : ""
+        }
+        {
+          detail.header.coin == "BTC" &&
+            <div className="url"><a target="_blank" href={""+wallet.getAPIUrlTransaction(detail.body.transaction)}>{messages.wallet.action.history.label.detail_blockchaininfo}</a></div>
         }
         <div className="confirmation">
           {
@@ -196,14 +203,14 @@ class WalletTransaction extends React.Component {
         </div>
 
         {
-          Object.keys(detail.body).map((char) => {
+          Object.keys(detail.body).map((char) => {console.log('')
             let val = detail.body[char] ? detail.body[char] : "";
 
             return (
               char == "internal_transactions" ?
                 (val.length > 0 ?
                   <div className="body" key={char}>
-                    <div className="key">{_.startCase(_.camelCase(char))}</div>
+                    <div className="key">{char.replace(/_/g, " ")}</div>
                     <div className="value">
                     {
                       val.map(e => {
@@ -219,7 +226,7 @@ class WalletTransaction extends React.Component {
                 : "")
               :
                 <div className="body" key={char}>
-                  <div className="key">{_.startCase(_.camelCase(char))}</div>
+                  <div className="key">{char.replace(/_/g, " ")}</div>
                   <div className="value">{val}</div>
                 </div>
             )

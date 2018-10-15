@@ -34,7 +34,7 @@ export default class NavigationBar extends Component {
         id: 'cash',
         name: 'cash',
         icon: cashIcon,
-        url: URL.HANDSHAKE_CASH,
+        url: URL.HANDSHAKE_ATM,
         position: 2,
       },
       // {

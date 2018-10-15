@@ -1,5 +1,4 @@
 import { APP_ACTION } from '@/reducers/app/action';
-// import { uuid } from '@/services/app';
 import $http from '@/services/api';
 import { BASE_API } from '@/constants';
 
@@ -20,7 +19,6 @@ export const createAPI = INIT => ({
   dispatch({ type: INIT });
 
   const url = `${BASE_URL}/${PATH_URL}`;
-  // const requestUuid = Date.now(); // uuid();
 
   // console.log(`app - api - calling - id${requestUuid}`, `${METHOD}:${PATH_URL}`);
 
@@ -29,7 +27,6 @@ export const createAPI = INIT => ({
   }).then((response) => {
     // console.log(`app - api - called - id${requestUuid}`);
     dispatch({ type: APP_ACTION.CALLED });
-
     if (response.data.status === 1 || response.data.status === 200) {
       dispatch({ type: `${INIT}_SUCCESS`, payload: response.data, ...more });
       if (successFn) successFn(response.data);

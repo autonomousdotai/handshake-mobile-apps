@@ -1,0 +1,65 @@
+@import './src/styles/style';
+
+.chosen-list{
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  .test{
+    background: lightgray;
+    .name {
+      color:black !important;
+    }
+  }
+
+  .coin:nth-child(3n) {
+    margin-right: 0;
+
+  }
+
+  .coin {
+    width: calc(33.33% - 6.66px);
+    text-align: center;
+    line-height: 1.8;
+    cursor: pointer;
+    margin-right: 10px;
+    padding: 15px 6px 15px;
+    border-radius: 4px;
+    transition: all .1s ease;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-top: 10px;
+    -webkit-box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 2px 24px rgba(0,0,0,.06);
+    -moz-box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 2px 24px rgba(0,0,0,.06);
+    box-shadow: 0 2px 2px rgba(0,0,0,.06), 0 2px 24px rgba(0,0,0,.06);
+
+    .icon{
+      width: 52px;
+      height: 52px;
+      margin: 0 auto 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        height: 42px;
+      }
+    }
+
+    .name{
+      font-size: 16px;
+    }
+
+    .fullName{
+      color:Silver;
+      font-size: 13px;
+    }
+
+    .balance{
+      font-size: 15px;
+    }
+  }
+}

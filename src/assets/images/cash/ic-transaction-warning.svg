@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+  <desc>Created with Sketch.</desc>
+  <defs></defs>
+  <g id="MOBILE-WEB-ATM" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="Open-ATM-(Personal-ATM---active)-Copy" transform="translate(-303.000000, -324.000000)">
+      <g id="Group-2" transform="translate(0.000000, 202.000000)">
+        <g id="Group-2-Copy-2">
+          <g id="Group-9" transform="translate(303.000000, 122.000000)">
+            <path d="M10.7327259,1.2246069 L17.5213249,13.0011703 C18.0729633,13.9581284 17.7443868,15.1810875 16.7874286,15.7327259 C16.4836686,15.9078284 16.1392141,16 15.7885989,16 L2.21140107,16 C1.10683157,16 0.211401071,15.1045695 0.211401071,14 C0.211401071,13.6493848 0.303572698,13.3049303 0.478675127,13.0011703 L7.26727406,1.2246069 C7.81891248,0.267648782 9.0418716,-0.0609277507 9.99882972,0.49071067 C10.3037805,0.66649955 10.5569371,0.919656064 10.7327259,1.2246069 Z" id="Path" fill="#FF8C42"></path>
+            <g id="Group-8" transform="translate(8.000000, 5.000000)" fill="#FFFFFF">
+              <polygon id="Path" points="0 0 0 6 2 6 2 0"></polygon>
+              <polygon id="Path" points="0 7 0 9 2 9 2 7"></polygon>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

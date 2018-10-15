@@ -49,12 +49,13 @@ class WalletItem extends React.Component {
     const { messages } = this.props.intl;
     const {wallet, settingWallet, onWarningClick} =  this.props;
     let html = <div><img className="safe" src={needBackup} /> <span className="warning" onClick={onWarningClick}>{messages.wallet.action.protect.text.need_backup}</span></div>;
-    
+
     return (html)
   }
 
   render(){
       const {wallet, onMoreClick, onAddressClick, isSortable, onItemClick} =  this.props;
+      const { messages } = this.props.intl;
       //const iconProtected = !wallet.protected ? iconWarning : iconSafe;
       let logo = require("@/assets/images/wallet/icons/coins/" + wallet.icon);
       try{ logo = require("@/assets/images/wallet/icons/coins/" + wallet.getCoinLogo());} catch (e){};
@@ -63,26 +64,29 @@ class WalletItem extends React.Component {
       return  (
 
         <div>
-            {!wallet.protected && <img className="safe" src={needBackup} /> }              
+            {!wallet.protected && <img className="safe" src={needBackup} /> }
             <img onClick={onItemClick} className="coin-logo" src={logo}/>
             <div className="item-center" onClick={onItemClick}>
-              <div className="name">{wallet.title}
-              {wallet.default ? <img className="iconDefault" src={iconChecked}/> : ''}
-              </div>  
-                <span className="balance"> {wallet.getShortBalance()} {wallet.name} </span>                
+              <div className="name">
+                {wallet.title}
+                {wallet.default ? <img className="iconDefault" src={iconChecked}/> : ''}
+              </div>
+              {!wallet.hideBalance ?
+              <span className="balance"> {wallet.getShortBalance()} {wallet.name} </span>
+              :<span className="balance">[{messages.wallet.action.history.label.balance_hidden}]</span> }
             </div>
-            
+
             {!isSortable ?
               <span className="item-right">
-                <span className="address" onClick={onAddressClick}>
+                <span className="address hidden-xss-down" onClick={onAddressClick}>
                     {this.showCryptoAddress}
                 </span>
                 <span className="more" onClick={onMoreClick}><img src={dontIcon}/></span>
-                
+
               </span>
             : ""}
-            
-            
+
+
             {/* <div className="address" onClick={onAddressClick}>
               {this.showCryptoAddress}
             </div> */}

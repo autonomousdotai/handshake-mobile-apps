@@ -1,0 +1,86 @@
+$blur_color: #868DAD;
+
+div.new-transaction-container {
+  height: 100%;
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+
+  form.form-new-transaction {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .form-el {
+      margin-bottom: 50px;
+    }
+
+    .input-group {
+      &label {
+        display: block;
+      }
+    }
+    .transaction-input {
+      margin: 5px 0px;
+      font-size: 16px;
+      line-height: 22px;
+      height: 54px;
+    }
+    .labelText {
+      margin-bottom: 10px;
+      margin-top: 10px;
+      font-weight: 400;
+    }
+    .dropdown-btn {
+      color: #495057;
+      background-color: #fff;
+      background-clip: padding-box;
+      border-radius: 0em 0.25rem 0.25rem 0em;
+      border: 1px solid #ced4da;
+      border-left: none;
+      &::before {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: 0.255em;
+        vertical-align: 0.255em;
+        content: "";
+        border-top: 0.3em solid;
+        border-right: 0.3em solid transparent;
+        border-bottom: 0;
+        border-left: 0.3em solid transparent;
+        color: $blur_color;
+        margin-right: 5px;
+      }
+      &:after {
+        display: none;
+      }
+      span {
+        color: $blur_color;
+      }
+    }
+    .submit-btn {
+      width: 100%;
+      background-color: #546FF7;
+      color: white;
+      height: 53px;
+      border-radius: 4px;
+    }
+    .input-with-trailing {
+      position: relative;
+      .prepend {
+        position: absolute;
+        top: 16px;
+        right: 10px;
+        color: $blur_color;
+      }
+      .prepend-qrcode {
+        top: 63px;
+      }
+      input {
+        padding-right: 50px;
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@ $color: #F0BC38;
 .stars-rating {
   span {
     margin-right: rem-calc(4.2px);
-    font-size: 14px;
+    font-size: 16px;
     color: $color;
     &:last-child {
       margin-right: 0;
@@ -30,12 +30,12 @@ $color: #F0BC38;
   }
   .half:before {
     //color: $color;
-    width: 7px;
+    width: 8px;
     @include not-full-style;
   }
   .three-fourths:before {
     //color: $color;
-    width: 9px;
+    width: 10px;
     @include not-full-style;
   }
   .full {

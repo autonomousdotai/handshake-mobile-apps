@@ -60,6 +60,25 @@
   </script>
   <!-- End Google Analytics -->
 
+  <!-- Custome user agent when loaded by iframe -->
+  <script>
+    if (window.self !== window.top) {
+      const windowInfo = window.name !== '' && JSON.parse(window.name);
+      const { name, ua } = windowInfo;
+      
+      if (window.navigator.userAgent !== ua) {
+        const userAgentProp = { configurable: true, get: function () { return ua; } };
+        try {
+          Object.defineProperty(window.navigator, 'userAgent', userAgentProp);
+        } catch (e) {
+          window.navigator = Object.create(navigator, {
+            userAgent: userAgentProp
+          });
+        }
+      }
+    }
+  </script>
+  <!-- End custom user agent -->
 </head>
 <body>
   <script>
@@ -93,6 +112,7 @@
     }, 2000);
   </script>
   <script src="https://js.stripe.com/v3/"></script>
+  <script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0068/4833.js" async="async"></script>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ htmlWebpackPlugin.options.env.social.googleTagmanagerId }}"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>

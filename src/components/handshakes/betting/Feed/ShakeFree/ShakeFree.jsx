@@ -332,8 +332,9 @@ class BetingShakeFree extends React.Component {
       type: 'text',
     };
 
-    const sideText = getKeyByValue(SIDE, this.state.side);
-    const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
+    // const sideText = getKeyByValue(SIDE, this.state.side);
+    // const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
+    const buttonText = disable ? 'Loading...' : `Bet now`;
 
     return (
       <form className="wrapperBettingShakeFree" onSubmit={this.onSubmit}>

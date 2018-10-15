@@ -1,110 +1,103 @@
+/* eslint react/require-default-props:0 */
+/* eslint react/prop-types: 0 */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // service, constant
-import local from '@/services/localStore';
-import { APP} from '@/constants';
 import { defaultOdds, defaultAmount } from '@/components/handshakes/betting/calculation';
-import { getKeyByValue } from '@/utils/object';
-import GA from '@/services/googleAnalytics';
 import BettingShakeFree from '@/components/handshakes/betting/Feed/ShakeFree';
-import { SIDE } from '@/components/handshakes/betting/constants.js';
+import { calcPercent } from '@/utils/number';
 import OrderPlace from './../OrderPlace';
+import Statistics from './../OrderPlace/Statistics';
 import { updateSide } from './../OrderPlace/action';
-import { updateSideSelector } from './../OrderPlace/selector';
+import { updateSideSelector, statisticsSelector } from './../OrderPlace/selector';
 
 // style
 import './Filter.scss';
 
-// //
-
-
-const freeAmount = 0.005;
-const TAG = 'BETTING_FILTER';
-
-const SELECTING_DEFAULT = {
-  id: '',
-  value: '',
-};
-
 class BettingFilter extends React.Component {
   static propTypes = {
-    //loadHandshakes: PropTypes.func.isRequired,
-    //checkFreeAvailable: PropTypes.func.isRequired,
+    freeAmount: PropTypes.number,
     setLoading: PropTypes.func,
     bettingShakeIsOpen: PropTypes.bool,
     selectedOutcome: PropTypes.object,
     selectedMatch: PropTypes.object,
     side: PropTypes.string,
     dispatch: PropTypes.func.isRequired,
-  }
+  };
 
   static defaultProps = {
     side: 'support',
-  }
+    freeAmount: 0.005,
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(updateSide('support'));
   }
 
-  getInfoShare(selectedMatch, selectedOutcome) {
-    const profile = local.get(APP.AUTH_PROFILE);
-    const ref = profile ? `&ref=${profile.username}` : '';
-    return {
-      title: `I put a bet on ${selectedMatch.value}. ${selectedOutcome.value}! Put your coin where your mouth is.`,
-      shareUrl: `${window.location.origin}/discover/${encodeURI(selectedMatch.value)}?match=${selectedMatch.id}&out_come=${selectedOutcome.id}${ref}?is_private=0`,
-    };
+  renderStatistics = (props) => {
+    const { statistics } = props;
+    if (!statistics) return null;
+    const totalPredict = Object.keys(statistics).reduce((acc, cur) => (
+      statistics[acc] + statistics[cur]
+    ));
+    const listItems = Object.keys(statistics).sort((a, b) => (b > a))
+      .map(key => ({
+        name: key,
+        percent: (statistics[key] && `${calcPercent(statistics[key], totalPredict)}%`) || '0%',
+      }));
+    return (
+      <Statistics listItems={listItems} />
+    );
   }
 
   render() {
-    const { support, against } = this.props;
-    const { isFree, isOpen } = this.props;
+    const {
+      selectedOutcome,
+      selectedMatch,
+      freeAmount,
+      isFree,
+      isOpen,
+      support,
+      against,
+      onSubmitClick,
+      onCancelClick,
+      handleBetFail,
+      dispatch,
+    } = this.props;
 
-    const selectedOutcome = this.props.selectedOutcome ? this.props.selectedOutcome : SELECTING_DEFAULT;
-    const selectedMatch = this.props.selectedMatch ? this.props.selectedMatch : SELECTING_DEFAULT;
+    const outcomeProps = selectedOutcome ? {
+      outcomeId: selectedOutcome.id,
+      outcomeHid: selectedOutcome.hid,
+      matchOutcome: selectedOutcome.value,
+    } : {};
 
-    const outcomeId = (selectedOutcome && selectedOutcome.id >= 0) ? selectedOutcome.id : null;
-    const outcomeHid = (selectedOutcome && selectedOutcome.hid >= 0) ? selectedOutcome.hid : null;
+    const matchProps = selectedMatch ? {
+      matchName: selectedMatch.value,
+      matchMarketFee: selectedMatch.marketFee,
+      closingDate: selectedMatch.date,
+      reportTime: selectedMatch.reportTime,
+    } : {};
 
-    const matchName = (selectedMatch && selectedMatch.value) ? selectedMatch.value : null;
-    const matchOutcome = (selectedOutcome && selectedOutcome.value) ? selectedOutcome.value : null;
-    const matchMarketFee = (selectedMatch && selectedMatch.marketFee) ? selectedMatch.marketFee : null;
-
-    const shareInfo = this.getInfoShare(selectedMatch, selectedOutcome);
-
-    const closingDate = (selectedMatch && selectedMatch.date) ? selectedMatch.date : null;
-    const reportTime = (selectedMatch && selectedMatch.reportTime) ? selectedMatch.reportTime : null;
-
-    // new code
     const bettingShake = {
+      isOpen,
       amountSupport: defaultAmount(against),
       amountAgainst: defaultAmount(support),
-      matchName,
-      isOpen,
-      matchOutcome,
-      matchMarketFee,
-      outcomeId,
-      outcomeHid,
       marketSupportOdds: defaultOdds(against),
       marketAgainstOdds: defaultOdds(support),
-      closingDate,
-      reportTime,
-      onSubmitClick: (()=>{
-        this.props.onSubmitClick(isFree);
-      }),
-      onCancelClick: this.props.onCancelClick,
-      handleBetFail: this.props.handleBetFail,
+      onSubmitClick: (() => onSubmitClick(isFree)),
+      onCancelClick,
+      handleBetFail,
+      ...outcomeProps,
+      ...matchProps,
     };
 
     const orderBook = { support, against };
-    const { side, dispatch } = this.props;
+
     return (
       <React.Fragment>
-        <div className="matchOutCome">
-          <span className="label">Outcome:</span>
-          <span className={`name ${side}`}>{matchOutcome}</span>
-        </div>
+        {this.renderStatistics(this.props)}
         {isFree ?
           <BettingShakeFree
             amount={freeAmount}
@@ -126,6 +119,7 @@ export default connect(
   (state) => {
     return {
       side: updateSideSelector(state),
+      statistics: statisticsSelector(state),
     };
   },
 )(BettingFilter);

@@ -42,32 +42,32 @@ export default class Token {
     });
     return result;
   };
-  deploy = async (address, privateKey, features, data) => {
-    try {
-      const web3 = this.neuron.getWeb3();
-      const tokenName = this.generateTokenName(features);
-      const compiled = this.neuron.getCompiled(tokenName);
-      const contract = new web3.eth.Contract(compiled.abi);
-      const deployInputs = this.combineDeployInputs(compiled, data);
-      const contractData = contract
-        .deploy({ data: compiled.bytecode, arguments: deployInputs })
-        .encodeABI();
-      const hash = await this.neuron.makeRawTransaction(
-        address,
-        privateKey,
-        contractData,
-      );
-      console.log(`${TAG} deloy hash = ${hash}`);
-      const receipt = await this.neuron.getTransactionReceipt(hash);
-      return {
-        contractAddress: receipt.contractAddress,
-        contractName: tokenName,
-      };
-    } catch (e) {
-      console.log(`token deploy fail: ${e.message}`);
-    }
-    return false;
-  };
+  // deploy = async (address, privateKey, features, data) => {
+  //   try {
+  //     const web3 = this.neuron.getWeb3();
+  //     const tokenName = this.generateTokenName(features);
+  //     const compiled = this.neuron.getCompiled(tokenName);
+  //     const contract = new web3.eth.Contract(compiled.abi);
+  //     const deployInputs = this.combineDeployInputs(compiled, data);
+  //     const contractData = contract
+  //       .deploy({ data: compiled.bytecode, arguments: deployInputs })
+  //       .encodeABI();
+  //     const hash = await this.neuron.makeRawTransaction(
+  //       address,
+  //       privateKey,
+  //       contractData,
+  //     );
+  //     console.log(`${TAG} deloy hash = ${hash}`);
+  //     const receipt = await this.neuron.getTransactionReceipt(hash);
+  //     return {
+  //       contractAddress: receipt.contractAddress,
+  //       contractName: tokenName,
+  //     };
+  //   } catch (e) {
+  //     console.log(`token deploy fail: ${e.message}`);
+  //   }
+  //   return false;
+  // };
   balanceOf = async (address, tokenName, tokenAddress, owner) => {
     const web3 = this.neuron.getWeb3();
     const compiled = await this.neuron.getCompiled(tokenName);

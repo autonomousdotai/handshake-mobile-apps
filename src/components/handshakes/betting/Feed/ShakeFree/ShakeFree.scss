@@ -1,11 +1,10 @@
 @import './src/styles/style';
 
 .wrapperBettingShakeFree {
-  // padding: rem-calc(30px 30px 30px 30px);
-  // background: #3A444C;
-  //box-shadow: 0 2px 4px 0 rgba(203,203,203,0.50);
   font-family: $font-family-base;
   height: 100%;
+  padding-top: 20px;
+  flex: 1;
   .rowWrapper {
     position: relative;
     display: flex;
@@ -22,7 +21,6 @@
     //margin-top: rem-calc(20px);
     display: flex;
     justify-content: space-between;
-    color: white;
     font-size: 0.75rem;
   }
 
@@ -38,15 +36,19 @@
   }
   .input {
     flex-basis: 48%;
-    background: rgba(216,216,216,0.14);
-    border: 2px solid rgba(255,255,255,0.15);
+    -webkit-appearance: none;
+    border: 1px solid #E5EAF8;
+    background-color:  transparent;
     font-size: rem-calc(14px);
-    color: #C8C7CC;
+    color: #000000;
     letter-spacing: 0;
     padding: rem-calc(10px 11px);
     width: 100%;
     &[name="odds"] {
       padding-right: 94px;
+    }
+    &::placeholder {
+      color: #BAC0DB;
     }
   }
   .amount {
@@ -57,7 +59,7 @@
     font-weight: 400;
     color: #FFFFFF;
     letter-spacing: 0;
-    position: relative; 
+    position: relative;
     top: 6px;
     left: 86%;
     @media (max-width: 330px) {
@@ -65,19 +67,12 @@
     }
   }
   .odds + .cryptoCurrency,
-  .yourOdds +  .cryptoCurrency, {
+  .yourOdds +  .cryptoCurrency {
     font-size: rem-calc(12px);
     font-weight: lighter;
-    color: #C8C7CC;
     position: absolute;
     bottom: 4px;
     right: 10px;
-    // @media (max-width: 375px) {
-    //   left: 67%;
-    // }
-    // @media (max-width: 330px) {
-    //   left: 60%;
-    // }
   }
   .gasPriceTitle {
     // width: 50%;
@@ -92,7 +87,6 @@
     flex-shrink: 0;
     flex-basis: 50%;
     font-size: rem-calc(12px);
-    color: #fff;
     letter-spacing: 0;
     line-height: rem-calc(22px);
     margin: 7px 0 0 0;
@@ -122,15 +116,11 @@
     }
   }
   .btnOK {
-    // background: $caribbean-green;
-    // border-radius: rem-calc(2px);
-    // font-size: rem-calc(16px);
-    // color: #FFFFFF;
-    // letter-spacing: 0;
-    // margin-top: rem-calc(20px);
-    // border: none;
-    // font-weight: $medium;
-
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
     margin-top: 15px;
     border: none;
     border-radius: 0;
@@ -138,6 +128,7 @@
     font-size: 0.75rem;
     line-height: 1.375rem;
     font-weight: normal;
+    height: 40px;
   }
   .btnRed {
     background: #FA6B49;
@@ -155,7 +146,6 @@
   }
 
   .freeAmount {
-    color: white;
     margin-top: rem-calc(20px);
   }
   .possibleWinningsValue {
@@ -168,21 +158,24 @@
     margin-top: 0;
     .itemToggle {
       &.btnBlue {
+        color: #ffffff;
         border: none;
         background: #0BDD91;
       }
       &.btnRed {
+        color: #ffffff;
         border: none;
         background: #fa6b49;
       }
+      color: #BAC0DB;
       flex: none;
       width: 48%;
       text-align: center;
       line-height: 1.375rem;
       background-color: transparent;
       padding: 0.4375rem;
-      border: 1px solid #979797;
-      font-weight: 400;
+      border: 1px solid #E5EAF8;
+      font-weight: unset;
     }
   }
 }

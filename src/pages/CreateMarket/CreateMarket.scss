@@ -13,10 +13,56 @@
     color: #d9534f;
   }
 }
+
+.EmailVerification {
+  margin-bottom: 0.7rem;
+
+  .FlexRow {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1rem;
+    justify-content: space-between;
+  }
+
+  .EmailCodeField {
+    flex: 1;
+    padding-right: 15px;
+  }
+
+  .EmailBtn {
+    min-width: 95px;
+    max-height: 47px;
+  }
+}
+
+#InsufficientGas {
+  background-color: #F75454;
+  color: #ffffff;
+  padding: 10px;
+  z-index: 5;
+  font-size: 13px;
+
+  a {
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+}
+
+.Sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  opacity: 0.9;
+}
+
 .ErrorMsg {
   display: inline-block;
   margin-top: 5px;
 }
+
 .EmailRequiredContainer {
   display: flex;
   padding: 10px 20px;
@@ -64,6 +110,7 @@
 }
 
 .CreateMarket {
+  height: 100%;
   padding: 0 15px;
   background-color: $gray;
 
@@ -82,6 +129,32 @@
   }
   .react-select__control--is-disabled {
     background-color: #e9ecef;
+  }
+
+  .PrivateOption {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .text {
+      padding: 0 5px;
+    }
+
+    label {
+      margin-bottom: 0;
+    }
+
+    img {
+      width: 20px;
+    }
+  }
+}
+
+.TimeGroup {
+  .CreateEventFormGroupTitle {
+    font-weight: normal;
+    text-transform: capitalize;
   }
 }
 
@@ -253,9 +326,11 @@
   margin: 0 -15px 5px -15px;
   padding: 15px;
   background-color: #ffffff;
-  > .CreateEventFormGroupTitle:first-child {
+
+  .CreateEventFormGroupTitle {
     font-size: rem-calc(16px);
   }
+
   button.AddMoreOutCome {
     color: #2456FB;
     font-size: rem-calc(16px);

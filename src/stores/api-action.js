@@ -13,11 +13,12 @@ export default {
     });
   },
   postFetch({ _path, type, _key, _value }) {
+    const data = (_key && _value) ? { [_key]: _value } : {};
     return SET_DATA({
       _path,
       type: `POST_${type}`,
       _value: {
-        [_key]: _value,
+        ...data,
         _meta: {
           isFetching: false,
         },

@@ -95,6 +95,7 @@ class FeedMeCash extends React.PureComponent {
       currency,
       fiatCurrency,
       showClock,
+      userAddress,
     } = this.props;
     // console.log('thisss', this.props);
     return (
@@ -132,6 +133,9 @@ class FeedMeCash extends React.PureComponent {
                 </div>
                 <div className="d-table-cell align-middle address-info">
                   <div className="name-shop">{nameShop}</div>
+                  {
+                    userAddress && (<div className="d-inline-block">{`${userAddress.substr(0, 4)}...${userAddress.substr(userAddress.length - 6)}`}</div>)
+                  }
                   {
                     showInfo && (<div className="d-inline-block">{address}</div>)
                   }

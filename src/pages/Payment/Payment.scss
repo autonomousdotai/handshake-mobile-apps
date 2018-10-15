@@ -1,0 +1,67 @@
+@import './src/styles/style';
+
+
+.checkout-wrapper {
+  .modal-custom-header {
+
+    .modal-custom-title{
+      font-weight: 400 !important;
+    }
+  }
+
+  .msg-error{
+    color: red;
+    width: 100%;
+    height: 200px;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+  }
+}
+
+.shop-info{
+  margin: 0 -15px 1px -15px;
+  padding: 12px;
+  overflow: hidden;
+  background:#d6d5d5;
+  .shop{
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+  .order{
+    float: right;
+    padding-bottom: 0px;
+  }
+}
+
+.order-info{
+  margin: 0 -15px;
+  padding: 12px;
+  overflow: hidden;
+  background:#e8e5e5;
+  .label{
+    float:left;
+    padding-bottom: 5px;
+  }
+  .key{
+    float: right;
+    padding-bottom: 5px;
+  }
+  .bold{
+    font-weight: 400;
+  }
+}
+
+.payment-success{
+  position:fixed;
+  top: 50%;
+  left: 50%;
+  width:20em;
+  height:18em;
+  margin-top: -9em; /*set to a negative number 1/2 of your height*/
+  margin-left: -10em; /*set to a negative number 1/2 of your width*/
+}

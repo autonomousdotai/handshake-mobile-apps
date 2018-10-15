@@ -36,20 +36,21 @@ import { UnicornGO } from '@/services/Wallets/Collectibles/UnicornGO';
 import { WarToken } from '@/services/Wallets/Collectibles/WarToken';
 
 import { APP, BASE_API } from '@/constants';
-import { StringHelper } from '@/services/helper';
+import Helper, { StringHelper } from '@/services/helper';
 import Neuron from '@/services/neuron/Neutron';
 import axios from 'axios';
-import { merge, trimEnd } from 'lodash';
 import { isEqual } from '@/utils/array.js';
 
 const bip39 = require('bip39');
 import qs from 'qs';
 import { Ripple } from '@/services/Wallets/Ripple.js';
 
+const CryptoJS = require('crypto-js');
+const SHA256 = require('crypto-js/sha256');
+
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
-
       Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, Ripple, BitcoinCashTestnet
     };
 
@@ -68,6 +69,8 @@ export class MasterWallet {
     static neutronTestNet = new Neuron(4);
 
     static KEY = 'wallets';
+
+    static QRCODE_TYPE = {"UNKNOW": 0, "URL": 1, "REDEEM": 2, "TRANSFER": 3, "CRYPTO_ADDRESS": 4};
 
     // Create an autonomous wallet:
 
@@ -181,7 +184,7 @@ export class MasterWallet {
     }
 
     static AddToken(newToken) {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
       if (wallets === false) return false;
       wallets.push(JSON.parse(JSON.stringify(newToken)));
       MasterWallet.UpdateLocalStore(wallets, true);
@@ -190,7 +193,10 @@ export class MasterWallet {
 
     static UpdateLocalStore(masterWallet, sync = false) {
 
-      localStore.save(MasterWallet.KEY, masterWallet);
+      // encrypt wallet:
+      let encryptWalletData = MasterWallet.encrypt(JSON.stringify(masterWallet));
+
+      localStore.save(MasterWallet.KEY, encryptWalletData);
 
       // call api update list address:
       if (sync){
@@ -200,7 +206,8 @@ export class MasterWallet {
     }
 
     static getListWalletAddressJson(){
-      const masterWallet = localStore.get(MasterWallet.KEY);
+
+      const masterWallet = MasterWallet.getWalletDataLocalString();
 
         let listAddresses = [];
 
@@ -218,17 +225,11 @@ export class MasterWallet {
         let listAddresses = MasterWallet.getListWalletAddressJson();
 
         console.log("update wallet addresses ...");
+        const token = localStore.get(APP.AUTH_TOKEN);
 
         const defaultHeaders = {
-          'Content-Type': 'application/json',
-        };
-        let headers = {};
-        const completedHeaders = merge(
-          defaultHeaders,
-          headers,
-        );
-        const token = localStore.get(APP.AUTH_TOKEN);
-        completedHeaders.Payload = token;
+          'Content-Type': 'application/json', Payload: token
+        };                        
 
         let data = new FormData();
         data.append ("wallet_addresses", listAddresses);
@@ -238,7 +239,7 @@ export class MasterWallet {
         let response = axios({
           method: 'POST',
           timeout: BASE_API.TIMEOUT,
-          headers: completedHeaders,
+          headers: defaultHeaders,
           url: `${BASE_API.BASE_URL}/${endpoint}`,
           data
         });
@@ -264,23 +265,18 @@ export class MasterWallet {
         "to": to_address,
       }
 
+      const token = localStore.get(APP.AUTH_TOKEN);
+
       const defaultHeaders = {
-        'Content-Type': 'application/json',
-        'Content': 'application/json',
-      };
-      let headers = {};
-      const completedHeaders = merge(
-        defaultHeaders,
-        headers,
-      );
-      const token = 'kpWdZ3Rzk9E6m7O4clDWLGWoDOjdx08Qn_zXjY5xaxPCKYB0D14p1CRjtw==';
-      completedHeaders.Payload = token;
+        'Content-Type': 'application/json', Payload: token
+      };                        
+      
       let endpoint = "user/notification";
 
       let response = axios.post(
         `${BASE_API.BASE_URL}/${endpoint}`,
          JSON.stringify(data),
-        {headers: completedHeaders}
+        {headers: defaultHeaders}
       )
 
       console.log("called NotifyUserTransfer ", response );
@@ -393,9 +389,34 @@ export class MasterWallet {
       return wallets;
     }
 
+    // get wallet data string local store:
+    static getWalletDataLocalString(){
+
+      const wallets = localStore.get(MasterWallet.KEY);
+
+      if (wallets == false) return false;
+
+      // check is json or encrypt data:
+      if (typeof(wallets) !== 'object'){
+        let walletDecrypt = MasterWallet.decrypt(wallets);
+        let walletsObject = MasterWallet.IsJsonString(walletDecrypt);
+        if (walletsObject !== false){
+          return walletsObject;
+        }
+      }
+      else{
+        // backup:
+        try {localStore.save('backup', CryptoJS.AES.encrypt(JSON.stringify(wallets), 'backup').toString());} catch (e){console.log(e);};
+        MasterWallet.UpdateLocalStore(wallets);
+      }
+
+      return wallets;
+    }
+
     // Get list wallet from store local:
     static getMasterWallet() {
-      const wallets = localStore.get(MasterWallet.KEY);
+
+      let wallets = MasterWallet.getWalletDataLocalString();
 
       if (wallets == false) return false;
 
@@ -419,12 +440,78 @@ export class MasterWallet {
         return MasterWallet.forceSetDefaultMainnet(listWallet);
       }
 
-      return listWallet;
+      return MasterWallet.fixBitcoinCashTestnet(listWallet);
+    }
+
+    static fixBitcoinCashTestnet(wallets){
+      let walletTemps = [];
+      if (process.env.isLive)
+      {
+        wallets.forEach((wallet) => {
+          if (wallet.name =='BCH'){
+            try {
+              // console.log("fix bch testnet");
+              let newBCHWallet = new BitcoinCash();
+              newBCHWallet.mnemonic = wallet.mnemonic;
+              newBCHWallet.network = BitcoinCash.Network.Mainnet;
+              newBCHWallet.protected = wallet.protected;
+              newBCHWallet.title = wallet.title;
+              newBCHWallet.balance = wallet.balance;
+              // create address, private-key ...
+              newBCHWallet.createAddressPrivatekey();
+
+              walletTemps.push(newBCHWallet);
+              // console.log("success fix bch testnet");
+            }
+            catch (e){
+              console.log(e);
+              walletTemps.push(wallet);
+            }
+          }
+          else{
+            walletTemps.push(wallet);
+          }
+        });
+        return walletTemps;
+      }
+      return wallets;
+    }
+
+    static getWallets(coinName = '') {
+      const wallets = MasterWallet.getWalletDataLocalString();
+
+      if (wallets === false) return false;
+
+      const BreakException = {};
+      let result = [];
+      try {
+        if (coinName !== '') {
+          let wallet = false;
+          wallets.forEach((walletJson) => {
+            if (coinName === walletJson.name) {
+              if (process.env.isLive) {
+                if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
+                  result.push(MasterWallet.convertObject(walletJson));
+                }
+              } else {
+                result.push(MasterWallet.convertObject(walletJson));
+              }
+            }
+          });
+        }
+        else {
+          result.push(MasterWallet.convertObject(walletJson));
+        }
+      } catch (e) {
+        if (e !== BreakException) throw e;
+      }
+
+      return result;
     }
 
     // Get list wallet from store local:
     static getWalletDefault(coinName = '') {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
 
       if (wallets === false) return false;
 
@@ -465,7 +552,7 @@ export class MasterWallet {
 
   // Get list reward wallet from store local:
     static getRewardWalletDefault(coinName = '') {
-      const wallets = localStore.get(MasterWallet.KEY);
+      const wallets = MasterWallet.getWalletDataLocalString();
 
       if (wallets === false) return false;
 
@@ -518,7 +605,7 @@ export class MasterWallet {
         if (walletJson.isCollectibles) wallet.isCollectibles = walletJson.isCollectibles;
         if (walletJson.secret) wallet.secret = walletJson.secret;
         if (walletJson.publicKey) wallet.publicKey = walletJson.publicKey;
-
+        if (walletJson.hideBalance) wallet.hideBalance = walletJson.hideBalance;
 
         return wallet;
       } catch (e) {
@@ -535,7 +622,16 @@ export class MasterWallet {
     }
     static restoreWallets(dataString) {
       try {
-        const jsonData = MasterWallet.IsJsonString(dataString);
+        let jsonData = MasterWallet.IsJsonString(dataString);
+
+        // check encrypt if not json ?
+        if (jsonData === false){
+          jsonData = MasterWallet.decrypt(dataString);
+          if (jsonData !== false){
+            jsonData = MasterWallet.IsJsonString(jsonData);
+          }
+        }
+
         let auth_token = false;
         let wallets = false;
         let chat_encryption_keypair = false;
@@ -574,7 +670,7 @@ export class MasterWallet {
           }
         }
       } catch (e) {
-        console.log('Wallet is invaild', e);
+        //console.log('Wallet is invaild', e);
       }
       return false;
     }
@@ -633,8 +729,127 @@ export class MasterWallet {
     }
 
     static log(data, key = MasterWallet.KEY) {
-      console.log(`%c ${StringHelper.format('{0}: ', key)}`, 'background: #222; color: #bada55', data);
+      //console.log(`%c ${StringHelper.format('{0}: ', key)}`, 'background: #222; color: #bada55', data);
     }
+    static encrypt(message) {
+      try{
+        let WALLET_SECRET_KEY = process.env.WALLET_SECRET_KEY;
+        let ciphertext = CryptoJS.AES.encrypt(message, WALLET_SECRET_KEY);
+        return ciphertext.toString();
+      }
+      catch (e){
+        console.log("encrypt", e);
+        return false;
+      }
+    }
+    static decrypt(ciphertext) {
+      try{
+        let WALLET_SECRET_KEY = process.env.WALLET_SECRET_KEY;
+        let bytes = CryptoJS.AES.decrypt(ciphertext, WALLET_SECRET_KEY);
+        let plaintext = bytes.toString(CryptoJS.enc.Utf8);
+        return plaintext;
+      }
+      catch (e){
+        console.log("decrypt", e);
+        return false;
+      }
+    }
+    /**
+    * Get coin type from its wallet address
+    * @param {String} address
+    */
+    static getCoinSymbolFromAddress(address){            
+      for (const i in MasterWallet.ListDefaultCoin){
+        let wallet = new MasterWallet.ListDefaultCoin[i]();
+        if (wallet.checkAddressValid(address) === true){
+          return {"symbol": wallet.name, "name": wallet.title, "address": address, "amount": ""};
+        }
+      }
+      return false;       
+    }
+
+    static getQRCodeDetail(text){
+      // 0: any data ...
+      // 1: website:
+      // 2: ninja-redeem:code?value=25
+      // 3: <coin-title>:<address>?amount=<number>
+      // 4: <address-only>
+      
+      let keyRedem = "ninja-redeem";
+
+      function url(text) {        
+        var urlRegex = /(https?:\/\/[^\s]+)/g;
+        if(!urlRegex.test(text)) {          
+          return false;
+        } else {
+          let match = text.match(urlRegex);
+          return match[0];
+        }        
+      }
+      function redeem(text){
+        if (text.includes(keyRedem)){
+          let dataSplit = text.split('?');
+          let code = dataSplit[0].split(':')[1];
+          let param = Helper.getQueryStrings("?"+dataSplit[1]);
+          return {"code": code, "value" : param['value']};
+        }               
+        return false; 
+      }
+      function transfer(text){         
+        let dataSplit = text.split('?');        
+        for (const i in MasterWallet.ListDefaultCoin){
+          let wallet = new MasterWallet.ListDefaultCoin[i]();
+          if (dataSplit[0].toLowerCase().includes((wallet.title.replace(/\s/g,'')).toLowerCase())){
+            let listData = dataSplit[0].split(':');
+            if(listData.length > 0){
+              let address = listData[1];
+              let param = Helper.getQueryStrings("?"+dataSplit[1]);              
+              return {"symbol": wallet.name, "address": address, "amount" : param['amount']};  
+            }
+            else{
+              return false;
+            }            
+          }
+        }          
+        return false;
+      }
+      function address(text){
+        return MasterWallet.getCoinSymbolFromAddress(text);
+      }
+      // let check:
+      // web:      
+      let result = {"type": MasterWallet.QRCODE_TYPE.UNKNOW, "data": {}, text: text};
+      
+      let tmpResult = url(text);      
+      if (tmpResult != false){
+        result.type = MasterWallet.QRCODE_TYPE.URL;
+        result.data = tmpResult;
+        return result;
+      }
+            
+      tmpResult = redeem(text);
+      
+      if (tmpResult != false){
+        result.type = MasterWallet.QRCODE_TYPE.REDEEM;
+        result.data = tmpResult;
+        return result;
+      }
+
+      tmpResult = transfer(text);
+      if (tmpResult != false){
+        result.type = MasterWallet.QRCODE_TYPE.TRANSFER;
+        result.data = tmpResult;
+        return result;
+      }
+      tmpResult = address(text);
+      if (tmpResult != false){
+        result.type = MasterWallet.QRCODE_TYPE.CRYPTO_ADDRESS;
+        result.data = tmpResult;
+        return result;
+      }      
+      return result;
+    }
+
 }
 
 export default { MasterWallet };

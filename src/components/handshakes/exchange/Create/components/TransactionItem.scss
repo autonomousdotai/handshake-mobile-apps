@@ -1,0 +1,55 @@
+@import './src/styles/style';
+
+.transaction-container {
+  background: #F7F8FC;
+  .empty-list {
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .transaction {
+    margin: 15px 0px 20px;
+    .transaction-detail {
+      background: #FFFFFF;
+      padding: 15px;
+      .type-order {
+        font-weight: 600;
+        font-size: 15px;
+        color: #484848;
+      }
+      .status {
+        font-size: 15px;
+        color: #F5A623;
+        font-weight: 400;
+      }
+      .button-chat {
+        background: #FFFFFF;
+        box-shadow: 0 2px 11px 0 rgba(201,201,201,0.50);
+      }
+      .transfer-now {
+        color: rgb(82, 106, 251);
+      }
+    }
+
+    .text-normal {
+      font-weight: 400;
+    }
+
+    .processing {
+      font-size: 16px;
+      color: #FF3D37;
+      letter-spacing: 0;
+    }
+    .success {
+      font-size: 16px;
+      color: #34CF81;
+      letter-spacing: 0;
+    }
+    .transferring {
+      font-size: 16px;
+      color: #FF8C42;
+      letter-spacing: 0;
+    }
+  }
+}

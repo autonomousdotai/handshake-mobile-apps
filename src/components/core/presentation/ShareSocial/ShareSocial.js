@@ -117,7 +117,7 @@ class ShareSocial extends PureComponent {
         return;
       default:
         // facebook
-        rawUrlShare = `https://www.facebook.com/sharer/sharer.php?u=${shortLink}&amp;title=${title}`;
+        rawUrlShare = `https://www.facebook.com/sharer/sharer.php?u=${shortLink}&quote=${title}`;
         break;
     }
     Helper.popupCenter(rawUrlShare, 'facebook', 670, 340);

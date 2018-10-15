@@ -6,10 +6,24 @@ import arrowDownSVG from '@/assets/images/icon/arrow-down.svg';
 import './NoData.scss';
 
 class NoData extends React.PureComponent {
-  render() {
-    const { className, message, isShowArrowDown, ...props } = this.props;
+  static propTypes = {
+    className: PropTypes.string,
+    message: PropTypes.string,
+    isShowArrowDown: PropTypes.bool,
+    children: PropTypes.node,
+  };
+
+  static defaultProps = {
+    className: undefined,
+    message: undefined,
+    isShowArrowDown: false,
+    children: undefined,
+  };
+
+  defaultBody = (props) => {
+    const { className, message, isShowArrowDown } = props;
     return (
-      <div className={`no-data ${className || ''}`} {...props}>
+      <div className={`no-data ${className || ''}`}>
         <div>
           <img className="img-fluid img" src={nodataNinjaSVG} alt="nodata ninja" />
           <p className="text">{ message }</p>
@@ -18,16 +32,18 @@ class NoData extends React.PureComponent {
       </div>
     );
   }
-}
 
-NoData.propTypes = {
-  className: PropTypes.string,
-  message: PropTypes.string,
-  isShowArrowDown: PropTypes.bool,
-};
+  renderComponent = (props) => {
+    const { children } = props;
+    if (children) {
+      return children;
+    }
+    return this.defaultBody(props);
+  }
 
-NoData.defaultProps = {
-  isShowArrowDown: false,
+  render() {
+    return this.renderComponent(this.props);
+  }
 }
 
 export default NoData;

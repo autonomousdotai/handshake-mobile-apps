@@ -162,12 +162,8 @@ module.exports = function webpackConfig(env, argv = {}) {
         { from: 'src/assets/images/template/og_image.png', to: 'images' },
         { from: 'src/robots.txt', to: '.' },
         { from: 'src/google59d0f1640e2aac21.html', to: '.' },
+        { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },
       ]),
-      // new OfflinePlugin({
-      //   appShell: '/',
-      //   responseStrategy: 'network-first',
-      //   autoUpdate: true,
-      // }),
     ],
     performance: { hints: false },
     devtool: false,
@@ -219,6 +215,7 @@ module.exports = function webpackConfig(env, argv = {}) {
           favicon: xPath('src/assets/favicon.png'),
           env: appEnvConfig,
         }),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       ],
       module: {
         rules: [

@@ -61,8 +61,10 @@ class BettingReport extends React.Component {
   setInitials(matches) {
     const { resolved } = this.props;
     if (matches.length > 0) {
-      const newMatches = resolved ? matches.filter((item) => this.hasDisputeOutcome(item)) : matches;
-      const newOutcome = resolved ? this.filterDisputeOutcome(matches[0].outcomes) : matches[0].outcomes;
+      //const newMatches = resolved ? matches.filter((item) => this.hasDisputeOutcome(item)) : matches;
+      //const newOutcome = resolved ? this.filterDisputeOutcome(matches[0].outcomes) : matches[0].outcomes;
+      const newMatches = matches;
+      const newOutcome = matches[0].outcomes;
 
       this.setState({
         matches: newMatches,
@@ -117,8 +119,10 @@ class BettingReport extends React.Component {
         final.push(obj);
         return final;
       });
-      const newOutcome = resolved ? updatedMatch[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : updatedMatch[0].outcomes;
-      console.log(TAG, 'newOutcome:', newOutcome);
+      //const newOutcome = resolved ? updatedMatch[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : updatedMatch[0].outcomes;
+      const newOutcome = updatedMatch[0].outcomes;
+
+      //console.log(TAG, 'newOutcome:', newOutcome);
       this.setState({
         outcomes: newOutcome,
         activeMatchData: updatedMatch[0],

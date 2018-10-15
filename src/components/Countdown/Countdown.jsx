@@ -10,13 +10,19 @@ export default class Countdown extends Component {
     endTime: PropTypes.number.isRequired, // milliseconds
     renderer: PropTypes.func,
     separator: PropTypes.string,
+    format: PropTypes.string,
     onComplete: PropTypes.func,
+    timeLeftToWarning: PropTypes.number,
+    onWarning: PropTypes.func,
+    hideHours: PropTypes.bool
   };
 
   static defaultProps = {
     classNames: null,
     separator: ':',
     onComplete: undefined,
+    format: null,
+    hideHours: false
   };
 
   constructor(props) {
@@ -26,12 +32,20 @@ export default class Countdown extends Component {
       hours: null,
       minutes: null,
       seconds: null,
+      warning: null,
     };
     this.mounted = false;
   }
 
   componentDidMount() {
+    const { timeLeftToWarning } = this.props;
     this.mounted = true;
+
+    if(timeLeftToWarning){
+      let warning = this.convertToSeconds(timeLeftToWarning);
+      this.setState({ warning });
+    }
+
     this.interval = setInterval(() => {
       const date = this.calculateCountdown(this.props);
       if (date && this.mounted) {
@@ -46,6 +60,20 @@ export default class Countdown extends Component {
     this.stop();
   }
 
+  convertToSeconds = (date) => {
+    let result = 0;
+
+    if (date.toString().length === 10){
+      result = date * 1000;
+    }
+    else{
+      result = date;
+    }
+
+    result = parseInt((Math.max(0, result - Date.now()) / 1000).toFixed(0), 10);
+    return result;
+  }
+
   stop = () => {
     this.mounted = false;
     clearInterval(this.interval);
@@ -58,11 +86,15 @@ export default class Countdown extends Component {
     return s;
   }
 
-  calculateCountdown = ({ endTime, onComplete }) => {
-    const end = (endTime.toString().length === 10) ? endTime * 1000 : endTime;
-    const seconds = parseInt((Math.max(0, end - Date.now()) / 1000).toFixed(0), 10);
+  calculateCountdown = ({ endTime, onComplete, timeLeftToWarning, onWarning }) => {
+    const seconds = this.convertToSeconds(endTime);
 
-    if (seconds <= 0) {
+    const { warning } = this.state;
+
+    if(warning && onWarning && warning == seconds){
+      onWarning();
+    }
+    else if (seconds <= 0) {
       this.stop();
       if (onComplete) {
         onComplete();
@@ -107,10 +139,13 @@ export default class Countdown extends Component {
     if (state.days > 0) return null;
     return (
       <div className="CountdownTime">
-        {this.renderHours(state.hours)}
-        {state.minutes && this.renderSeparator(props.separator)}
+        {/* {
+          !props.format || (props.format && props.format.indexOf("HH") >= 0) && this.renderHours(state.hours)
+        } */}
+        {!props.hideHours && state.hours && this.renderHours(state.hours)}
+        {!props.hideHours && state.hours && state.minutes && this.renderSeparator(props.separator)}
         {this.renderMinutes(state.minutes)}
-        {state.seconds && this.renderSeparator(props.separator)}
+        {state.minutes && state.seconds && this.renderSeparator(props.separator)}
         {this.renderSeconds(state.seconds)}
       </div>
     );

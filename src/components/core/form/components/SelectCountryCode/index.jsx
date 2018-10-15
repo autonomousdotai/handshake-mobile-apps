@@ -39,7 +39,7 @@ class SelectCountryCode extends React.Component {
     });
     if (!this.state.showSelect) {
       setTimeout(() => {
-        this.selectListCountryCode.focus();
+        this?.selectListCountryCode?.focus();
       }, 500);
     }
   };
@@ -55,12 +55,15 @@ class SelectCountryCode extends React.Component {
   }
 
   render() {
-    const { countryCode, onChange, color } = this.props;
+    const { countryCode, onChange, color, showFlag } = this.props;
     const { showSelect, strFilterCountry } = this.state;
     const filteredCountries = COUNTRIES.filter(c => c.name.toUpperCase().includes(strFilterCountry.toUpperCase()));
+    const currentCountry = filteredCountries?.find(item => item?.dialCode === countryCode);
     return (
       <span>
         <span className="select-country-code" onClick={this.toggleShowSelect}>
+
+          { showFlag && <div className="current-flag">{currentCountry?.flag}</div> }
           <span>{countryCode}</span>
           <img className="ml-2" src={color === '#000000' ? iconArrowBlack : iconArrowWhite} />
         </span>

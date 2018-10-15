@@ -25,8 +25,21 @@ const taggingConfig = {
       showPopupMeNotEnoughCoin: 'show_popup_me_not_enough_coin',
       showPopupCreateNotEnoughCoin: 'show_popup_create_not_enough_coin',
       buySuccess: 'buy_success',
+      showPopupReceiveCoin: 'show_popup_receive_coin',
     },
   },
-}
+  depositATM: {
+    category: 'Deposit ATM',
+    action: {
+      depositSuccess: 'deposit_success',
+    },
+  },
+  depositCashATM: {
+    category: 'Deposit Cash ATM',
+    action: {
+      depositSuccess: 'deposit_success',
+    },
+  },
+};
 
 export default taggingConfig;

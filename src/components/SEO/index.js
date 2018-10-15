@@ -112,3 +112,32 @@ export const SEOPayForStores = (
     />
   </Helmet>
 );
+
+
+export const SEOShop = (
+  <Helmet>
+    <title>Ninja Shop: Buy products with cash. Secure, anonymous, easy</title>
+    <meta
+      name="description"
+      content="Ninja Shop: Buy products with cash. Secure, anonymous, easy"
+    />
+    <meta
+      name="keywords"
+      content="Ninja Shop: Buy products with cash. Secure, anonymous, easy"
+    />
+  </Helmet>
+);
+
+export const SEOBecomeAtm = (
+  <Helmet>
+    <title>Earn Passive Income with Ninja ATM</title>
+    <meta
+      name="description"
+      content="Ninja ATM is a tool to sell coin for cash. Become our ATM for FREE to generate new source of income with no initial investment"
+    />
+    <meta
+      name="keywords"
+      content="Earn Passive Income"
+    />
+  </Helmet>
+);

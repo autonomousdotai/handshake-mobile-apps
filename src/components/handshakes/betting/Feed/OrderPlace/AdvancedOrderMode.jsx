@@ -61,19 +61,20 @@ class AdvancedOrderMode extends React.Component {
 
   render() {
     const { bettingShake, orderBook, theme } = this.props;
-    console.log("Avanced:", this.props);
     const { side, onCancelClick, handleBetFail } = bettingShake;
     const { disable } = this.state;
     const buttonClass = theme;
-    const sideText = getKeyByValue(SIDE, side);
-    const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
+    // const sideText = getKeyByValue(SIDE, side);
+    // const buttonText = disable ? 'Loading...' : `Place ${sideText} order`;
+    const buttonText = disable ? 'Loading...' : `Bet now`;
 
     return (
       <React.Fragment>
         <BettingShake
           {...bettingShake}
+          dispatch={this.props.dispatch}
           onClickSubmit={(click) => { this.onButtonSubmit = click }}
-          handleBetFail={ () => { handleBetFail(); }}
+          handleBetFail={ (value) => { handleBetFail(value); }}
           onCancelClick={() => { onCancelClick();}}
         />
         <Button block isLoading={disable} disabled={disable} className={buttonClass} onClick={this.handleClick}>{buttonText}</Button>

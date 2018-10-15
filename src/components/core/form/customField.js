@@ -1,3 +1,4 @@
+/* eslint react/prop-types:0 */
 import React from 'react';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap';
 import Cleave from 'cleave.js/react';
@@ -201,7 +202,7 @@ export const fieldCleave = customField(({
 ));
 
 export const fieldPhoneInput = customField(({
-  onChange, onBlur, onFocus, value, propsCleave, className, placeholder, color,
+  onChange, onBlur, onFocus, value, propsCleave, className, placeholder, color, showFlag
 }) => {
   const splittedNumbers = value.split('-');
   let countryCode = '';
@@ -215,11 +216,63 @@ export const fieldPhoneInput = customField(({
   }
   return (
     <span>
-      <span style={{ display: 'table-cell' }}>
-        <SelectCountryCode countryCode={countryCode} onChange={newCountryCode => onChange(`${newCountryCode}-${phoneNumber}`)} color={color} />
+      <span className="phone-input-country" style={{ display: 'table-cell' }}>
+        <SelectCountryCode showFlag={showFlag} countryCode={countryCode} onChange={newCountryCode => onChange(`${newCountryCode}-${phoneNumber}`)} color={color} />
       </span>
-      <span style={{ display: 'table-cell' }} className="pl-2"><input type="tel" placeholder={placeholder} className="form-control-custom form-control-custom-ex w-100 input-no-border" value={phoneNumber} onChange={e => onChange(`${countryCode}-${e.target.value}`)} /></span>
+      <span style={{ display: 'table-cell' }} className="pl-2 phone-input-number"><input type="tel" placeholder={placeholder} className="form-control-custom form-control-custom-ex w-100 input-no-border" value={phoneNumber} onChange={e => onChange(`${countryCode}-${e.target.value}`)} /></span>
     </span>
+  );
+});
+
+export const fieldDaySelector = customField(({ onChange, value, intl }) => {
+  const { messages } = intl;
+
+  // { `${id_od_day}`: `${name_of_day}` }
+  const days = {
+    1: messages.create.atm.days.sunday,
+    2: messages.create.atm.days.monday,
+    3: messages.create.atm.days.tuesday,
+    4: messages.create.atm.days.wednesday,
+    5: messages.create.atm.days.thursday,
+    6: messages.create.atm.days.friday,
+    7: messages.create.atm.days.saturday,
+  };
+
+  // select all as default
+  if (Object.keys(value).length === 0) {
+    const selectAll = {};
+    Object.keys(days).forEach(key => { selectAll[key] = true; });
+    onChange(selectAll);
+  }
+
+  return (
+    <ul className="date-selector">
+      {Object.entries(days).map(([id, name]) => {
+        return (
+          <li key={id}>
+            <label>
+              <input
+                checked={value[id]}
+                type="checkbox"
+                name="selectedDay"
+                onChange={
+                  ({ target: { checked } }) => {
+                    let newValue = { ...value };
+                    if (checked === true) {
+                      newValue = { ...newValue, [id]: true };
+                    } else {
+                      delete newValue[id];
+                    }
+                    return onChange(newValue);
+                  }
+                }
+              />
+              {name}
+            </label>
+          </li>
+        );
+      })}
+    </ul>
   );
 });
 

@@ -43,6 +43,7 @@ class Index extends React.PureComponent {
     const { name, children, type, btnToggleLeftMenu, fullWidthContent,
       modal: { className, show, body, title, centered },
     } = this.props;
+    console.log(this.props);
     const logo = <a href="/" className="d-inline-block mt-1"><img src={imgNinja} width="100" /></a>;
     const navLinks = (
       <span>
@@ -53,7 +54,7 @@ class Index extends React.PureComponent {
     const btnJoin = <Link className="btn btn-primary-landing" to={URL.RECRUITING}><FormattedMessage id="landing_page.btn.joinOurTeam" /></Link>
 
     return (
-      <div className="landing-page">
+      <div className={"landing-page ct-" + name}>
         {SEOHome}
         <div className="landing-background">
           <div>

@@ -1,4 +1,6 @@
 .choose-coin {
+  margin-bottom: 60px;
+  background-color: #ffffff;
   .specific-amount {
     padding: 10px;
     background: linear-gradient(0deg, #85A1F8 0%, #617BFF 100%);
@@ -87,6 +89,31 @@
       padding: 10px 15px;
     }
   }
+
+  .ex-sticky-note-popup {
+    bottom: 0px;
+  }
+}
+
+.ex-sticky-note {
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 414px;
+  background-color: black;
+  z-index: 2;
+  padding: 10px 0;
+  .btn-become {
+    min-width: 200px;
+    border: 1px solid white;
+    background: black;
+    color: white;
+  }
 }
 
 .credit-card {
@@ -121,5 +148,81 @@
     .btn-submit-cc {
       background: #546FF7;
     }
+  }
+
+  .bodyShareAddress {
+    text-align: center;
+    .input-group {
+      height: 50px;
+    }
+  }
+
+  .bodyTitle{
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-top: 5px;
+  }
+
+  .dropdown-item{
+    border-bottom: 1px solid #ededed;
+    padding: 0.5rem 1.5rem;
+  }
+
+  .box-addresses{
+    margin-top: 10px;
+    position: relative;
+    height: 50px;
+    background: #fff;
+    text-align: center;
+    .box-hide-wallet{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+    .box-address{
+      margin-top: 0;
+      position: absolute;
+      background: #fff;
+      left: 0;
+      top: 0;
+      width: 100%;
+    }
+    .btn-group > .btn:first-child{
+      color: transparent;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .btn-group > .btn:last-child{
+      border-bottom-width: 0;
+    }
+    .btn-group .dropdown-menu{
+      width: 100%;
+    }
+  }
+
+  div.receivewallet-wrapper {
+    margin-top: 0;
+    margin-bottom: 0;
+    height: 55px;
+    .amountCoinTemp{
+      position: absolute;
+    }
+    .amountCoin{
+      position: absolute;
+      background: transparent;
+    }
+  }
+
+  .addressDivPopup {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 14px;
+    word-wrap:break-word;
+    color: #059fb3;
+    font-weight: 400;
+    font-family: monospace;
+    letter-spacing: 1px;
   }
 }

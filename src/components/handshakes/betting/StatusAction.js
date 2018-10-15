@@ -67,7 +67,7 @@ export const getStatusLabel = (item) => {
     || (!matched && role === ROLE.INITER && status >= BET_BLOCKCHAIN_STATUS.STATUS_INITED)
     || (!matched && status === BET_BLOCKCHAIN_STATUS.DISPUTED && isExpiredDate(disputeTime))) {
       //CANCEL ACTION
-      return cancelAction(status);
+      return cancelAction(status, disputeTime);
   }
 
   if ((matched && result === BETTING_RESULT.DRAW && (isExpiredDate(disputeTime) || status === BET_BLOCKCHAIN_STATUS.STATUS_RESOLVED)) //Draw and over dispute time
@@ -189,7 +189,7 @@ const pendingAction = (blockchainStatus) => {
   return { title: label, isAction, status: strStatus };
 };
 
-const cancelAction = (blockchainStatus) => {
+const cancelAction = (blockchainStatus, disputeTime) => {
   console.log(TAG, 'cancelAction');
 
   let label = null;
@@ -206,9 +206,15 @@ const cancelAction = (blockchainStatus) => {
       strStatus = BETTING_STATUS_LABEL.CANCELLED;
       break;
     default: // !isMatch && role === ROLE.INITER && blockchainStatus === BET_BLOCKCHAIN_STATUS.STATUS_INITED)
+      if (isExpiredDate(disputeTime)) {
+        strStatus = BETTING_STATUS_LABEL.BET_CANCEL_OVER;
+      } else {
+        strStatus = BETTING_STATUS_LABEL.BET_WAIT_MATCHING;
+      }
       label = BETTING_STATUS_LABEL.CANCEL;
-      strStatus = BETTING_STATUS_LABEL.BET_WAIT_MATCHING;
       isAction = true;
+
+
       break;
   }
   return { title: label, isAction, status: strStatus };
@@ -266,7 +272,6 @@ const winOrLose = (resultStatus, side = SIDE.SUPPORT, disputeTime) => {
       isAction = true;
     } else {
       const time = leftTime(disputeTime);
-      console.log(TAG, 'TIME:', time);
       strStatus = BETTING_STATUS_LABEL.WIN + BETTING_STATUS_LABEL.WIN_WAIT.replace('{{value}}', time);
       isAction = false;
     }

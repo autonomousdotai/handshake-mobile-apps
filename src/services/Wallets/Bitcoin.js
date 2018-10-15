@@ -28,6 +28,11 @@ export class Bitcoin extends Wallet {
     bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
   }
 
+  getAPIUrlTransaction(transaction_no) {
+    let url = "https://www.blockchain.com/btc/tx/"+transaction_no;
+    return url;
+  }
+
   createAddressPrivatekey() {
     this.setDefaultNetwork();
 
@@ -48,14 +53,17 @@ export class Bitcoin extends Wallet {
     this.privateKey = derived.privateKey.toString();
   }
 
-  async getBalance() {
+  async getBalance(isFormatNumber) {
     this.setDefaultNetwork();
 
     const url = `${this.network}/addr/${this.address}/balance`;
     const response = await axios.get(url);
 
     if (response.status == 200) {
-      return await satoshi.toBitcoin(response.data);
+      if(isFormatNumber)
+        return this.formatNumber(await satoshi.toBitcoin(response.data));
+      else
+        return await satoshi.toBitcoin(response.data);
     }
     return false;
   }
@@ -87,6 +95,9 @@ export class Bitcoin extends Wallet {
       console.log('bitcore.Networks.defaultNetwork', bitcore.Networks.defaultNetwork);
       console.log('server', this.network);
       console.log(StringHelper.format('Your wallet balance is currently {0} ETH', balance));
+
+      amountToSend = parseFloat(amountToSend).toFixed(8)
+      console.log('amountToSend fixed', amountToSend);
 
       if (!balance || balance == 0 || balance <= amountToSend) {
         return { status: 0, message: 'messages.bitcoin.error.insufficient' };
@@ -124,17 +135,7 @@ export class Bitcoin extends Wallet {
         return { status: 0, message: 'messages.bitcoin.error.insufficient' };
       }
     } catch (error) {
-      return { status: 0, message: 'messages.bitcoin.error.insufficient' };
-    }
-  }
-
-  testSend = async () => {
-    try {
-      const rawTx = `0100000001c9145d3963d7797e082c2d5c8a4fb01be0f43a304c83cc0a5274b37a0c76052f000000008a47304402200153ac0358bbd7f37d5c5f2257171441cf0d7a1fff01b36587c22ea59ea418cc0220252946c129791c49b3b0595a3d941fc6ce5cd86d4546d02d7b61db097fb0f0a9014104e7b9622873c89ed59099a8cee116d8dc0ddcf2d2d621406a915ced195a22d5945f0069912799da727cbcc5df85a9311b9a589e61b7a9edc03625e145920da169ffffffff01e8030000000000001976a9148cfd31aec2e23e54848ede7b8aabce5d52dd12d688ac00000000`;
-      const txHash = await this.sendRawTx(rawTx);
-      return { status: 1, message: 'messages.bitcoin.success.transaction', data: { hash: txHash.txid } };
-    } catch (error) {
-      console.log('testSend', error);
+      console.log('error', error);
       return { status: 0, message: 'messages.bitcoin.error.insufficient' };
     }
   }
@@ -205,6 +206,10 @@ export class Bitcoin extends Wallet {
 
   async listInternalTransactions() {
     return [];
+  }
+
+  async getTransaction() {
+    return false;
   }
 
   async getTransactionHistory(pageno) {

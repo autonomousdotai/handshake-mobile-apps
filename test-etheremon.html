@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Etheremon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <script type="text/javascript">
+      String.prototype.hexEncode = function(){
+        var hex, i;
+
+        var result = "";
+        for (i=0; i<this.length; i++) {
+          hex = this.charCodeAt(i).toString(16);
+          result += ("000"+hex).slice(-4);
+        }
+
+        return result
+      }
+      String.prototype.hexDecode = function(){
+        var j;
+        var hexes = this.match(/.{1,4}/g) || [];
+        var back = "";
+        for(j = 0; j<hexes.length; j++) {
+            back += String.fromCharCode(parseInt(hexes[j], 16));
+        }
+
+        return back;
+      }
+
+      function toHex(str) {
+        var hex = '';
+        for(var i=0;i<str.length;i++) {
+          hex += ''+str.charCodeAt(i).toString(16);
+        }
+        return hex;
+      }
+      function ConvertData(txt){
+        var web3 = new Web3();
+        var str = "0x15834ebd000000000000000000000000000000000000000000000000000000000000001b00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000006";
+        if(txt.value){
+          str += web3.toHex(txt.value);
+        }
+
+        alert(str);
+        $("#data").val(str);
+      }
+
+    </script>
+  </head>
+  <body>
+      <h1 class="text-center mb-3">KYARI</h1>
+      <div class="text-center p-2" style="background: url(https://www.etheremon.com/01f9d997a3ff62eccf378c292594190c.jpg) no-repeat">
+        <img src="https://www.etheremon.com/5033835c0cefbda1a8fadbdf7f103736.png" style="width:250px" />
+        <p class="mb-3  mt-3">
+          <!-- <button class="btn btn-primary" onclick="window.location.href='http://localhost:8080/payment?order_id=123&amount=0.01&coin=eth&sa=0x7640FEc99F4AEbD75af6D51E0975e9Eb6F5c1991&ca=0x1c0abE5b12257451DDcbe51f53f3F888dde32842&confirm_url=http://localhost:8080/test-confirmation.html'"> -->
+          <form action="/payment/transfer" method="GET">
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <div class="input-group-text">order id</div>
+              </div>
+              <input type="text" class="form-control" id="order_id" name="order_id" placeholder="order_id" value="12345">
+            </div>
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <div class="input-group-text">to</div>
+              </div>
+              <input type="text" class="form-control" id="to" name="to" placeholder="address" value="0x5f480ca354304aae88d7dd66cd4735c59d543af0">
+            </div>
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <div class="input-group-text">gas limit</div>
+              </div>
+              <input type="text" class="form-control" id="gas_limit" name="gas_limit" value="600000">
+            </div>
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <div class="input-group-text">amount</div>
+              </div>
+              <input type="text" class="form-control" id="amount" name="amount" value="0">
+            </div>
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <div class="input-group-text">data</div>
+              </div>
+              <!-- <input type="text" class="form-control" onchange="ConvertData(this);">
+              <input type="hidden" id="data" name="data" value="0x3f151924ebd1b4006"> -->
+              <textarea class="form-control" rows="2" id="data" name="data"></textarea>
+            </div>
+
+            <div class="input-group mb-1">
+              <div class="input-group-prepend">
+                <div class="input-group-text">confirm_url</div>
+              </div>
+              <input type="text" class="form-control" id="confirm_url" name="confirm_url" value="http://localhost:8080/test-confirmation-etheremon.html">
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-3">Catch now with 0 ETH</button>
+          </form>
+
+        </p>
+      </div>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+  </body>
+
+
+
+</html>

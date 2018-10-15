@@ -5,22 +5,20 @@ import { connect } from 'react-redux';
 import { withFirebase } from 'react-redux-firebase';
 // contants
 // actions
-import { setFirechat, setFirebaseUser } from '@/reducers/app/action';
+import { setFirebaseUser } from '@/reducers/app/action';
 import { authUpdate } from '@/reducers/auth/action';
 // components
 import Loading from '@/components/core/presentation/Loading';
 import Router from '@/components/Router/Router';
 // chat
 import md5 from 'md5';
-import Firechat from '@/pages/Chat/Firechat';
-import _ from 'lodash';
+import { isEmpty } from '@/utils/is';
 
 class Handle extends React.Component {
   static propTypes = {
     auth: PropTypes.object.isRequired,
     firebase: PropTypes.object.isRequired,
     authUpdate: PropTypes.func.isRequired,
-    setFirechat: PropTypes.func.isRequired,
     setFirebaseUser: PropTypes.func.isRequired,
     firebaseApp: PropTypes.object.isRequired,
   }
@@ -29,7 +27,6 @@ class Handle extends React.Component {
     super(props);
 
     this.firebase = ::this.firebase;
-    this.firechat = ::this.firechat;
     this.notification = ::this.notification;
 
     this.state = {
@@ -40,7 +37,6 @@ class Handle extends React.Component {
 
   componentDidMount() {
     this.firebase();
-    this.firechat();
     this.notification();
   }
 
@@ -57,29 +53,9 @@ class Handle extends React.Component {
     this.props.firebase.watchEvent('value', `/config`);
   }
 
-  firechat() {
-    this.signInFirebase(() => {
-      const chatInstance = new Firechat(this.props.firebase, this.props.firebase.database().ref('chat'));
-      this.props.setFirechat(chatInstance);
-
-      // initialize firechat with signed in firebase user
-      const firebaseAuth = this.props.firebaseApp.auth;
-      const { profile } = this.props.auth;
-      const userId = firebaseAuth.uid || '';
-      const userName = profile ? profile.username : `${userId.substr(10, 8)}`;
-
-      if (userId && userName) {
-        chatInstance.setUser(userId, userName, true, (firechatUser) => {
-          this.props.setFirebaseUser(firechatUser);
-          chatInstance.resumeSession();
-        });
-      }
-    });
-  }
-
   signInFirebase(cb) {
     const { profile, token } = this.props.auth;
-    if (_.isEmpty(profile) || _.isEmpty(token)) {
+    if (isEmpty(profile) || isEmpty(token)) {
       setTimeout(() => {
         this.signInFirebase(cb);
       }, 100);
@@ -147,6 +123,5 @@ export default compose(withFirebase, connect(state => ({
   firebaseApp: state.firebase,
 }), {
   authUpdate,
-  setFirechat,
   setFirebaseUser,
 }))(Handle);

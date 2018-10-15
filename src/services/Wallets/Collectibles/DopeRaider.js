@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const abi = require('@/contracts/DopeRaider.json');
+const abi = require('@/contracts/Wallet/DopeRaider.json');
 
 export class DopeRaider extends TokenERC721 {
 

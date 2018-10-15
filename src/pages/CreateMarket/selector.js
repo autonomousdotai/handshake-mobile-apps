@@ -1,17 +1,24 @@
-import _ from 'lodash';
+import { isEmpty } from '@/utils/is';
 
 export const hasEmail = (state) => {
-  if (_.isEmpty(state.auth.profile)) return null;
-  return !!state.auth.profile.email;
+  if (isEmpty(state.auth.profile)) return null;
+  return state.auth.profile.email;
+};
+export const uId = (state) => {
+  if (isEmpty(state.auth.profile)) return null;
+  return state.auth.profile.id;
 };
 
-export const eventSelector = (state) => state.prediction.events;
+export const eventDetailSelector = (state, props) => {
+  const { eventId } = props.match.params;
+  return state.predictionDetail[eventId] || {};
+};
 
 export const reportSelector = (state) => {
   return (state.reports.list || []).map(r => {
     return Object.assign({}, r, {
-      value: r.id,
-      label: `${r.name} - ${r.url}`,
+      value: r.id.toString(),
+      label: r.url,
     });
   });
 };
@@ -21,6 +28,8 @@ export const categorySelector = (state) => {
     label: c.name,
   }));
 };
+
+export const insufficientGas = (state) => state.blockChain.insufficientGas;
 
 export const shareEventSelector = (state) => state.ui.shareEvent;
 

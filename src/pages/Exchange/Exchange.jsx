@@ -3,12 +3,14 @@ import NavigationBar from '@/modules/NavigationBar/NavigationBar';
 import DynamicImport from '@/components/App/DynamicImport';
 import Prediction from '@/pages/Prediction/Prediction';
 import Loading from '@/components/core/presentation/Loading';
+
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { URL } from '@/constants';
 import { withRouter } from 'react-router-dom';
 
 import local from '@/services/localStore';
+import Header from '@/pages/Wallet/Header';
 
 const Discover = props => (
   <DynamicImport
@@ -33,6 +35,7 @@ const keyLastSelectedExchangeId = 'lastSelectedExchangeId';
 const mapComponent = {
   [URL.HANDSHAKE_PREDICTION]: { url: URL.HANDSHAKE_PREDICTION, component: Prediction },
   [URL.HANDSHAKE_CASH]: { url: URL.HANDSHAKE_CASH, component: Discover },
+  [URL.HANDSHAKE_ATM]: { url: URL.HANDSHAKE_ATM, component: Discover },
 };
 
 const defaultUrl = URL.HANDSHAKE_PREDICTION;
@@ -72,22 +75,24 @@ class Exchange extends React.Component {
     return <Component history={this.props.history} />;
   }
 
+  renderNavigationBar = (props, state) => {
+    const { hideNavigationBar } = props;
+    const { selectedMenuId } = state;
+
+    if (hideNavigationBar) return null;
+    return (
+      <NavigationBar
+        selectedMenuId={selectedMenuId}
+        onClickMenuItem={this.handleClickMenuItem}
+      />
+    );
+  }
+
   render() {
-    const { messages } = this.props.intl;
-    const { intl, hideNavigationBar } = this.props;
-
-    const { selectedMenuId } = this.state;
-
+    const { props, state } = this;
     return (
       <div className="Exchange">
-        {
-          !hideNavigationBar && (
-            <NavigationBar
-              selectedMenuId={selectedMenuId}
-              onClickMenuItem={this.handleClickMenuItem}
-            />
-          )
-        }
+        {/* {this.renderNavigationBar(props, state)} */}
         {this.getPageComponent()}
       </div>
     );

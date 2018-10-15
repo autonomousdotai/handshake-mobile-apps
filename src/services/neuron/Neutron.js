@@ -139,6 +139,7 @@ class Neuron {
       // }
 
       let nonce = await this.getNonce(address);
+
       nonce = nonce.toString(16);
       const balance = new BN(await web3.eth.getBalance(address));
 

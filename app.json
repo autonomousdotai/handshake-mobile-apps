@@ -44,6 +44,12 @@
     },
     "PredictionHandshakeFileName": {
       "required": true
+    },
+    "isDojo": {
+      "required": true
+    },
+    "WALLET_SECRET_KEY": {
+      "required": true
     }
   },
   "formation": {

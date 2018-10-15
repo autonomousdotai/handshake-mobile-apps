@@ -12,25 +12,15 @@ import {required} from '@/components/core/form/validation'
 import {MasterWallet} from "@/services/Wallets/MasterWallet";
 import {TokenERC20} from "@/services/Wallets/Tokens/TokenERC20";
 import { bindActionCreators } from "redux";
-import {showAlert} from '@/reducers/app/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
-import { Input as Input2, InputGroup, InputGroupAddon } from 'reactstrap';
-import { StringHelper } from '@/services/helper';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
+import { ICON } from '@/styles/images';
 import PropTypes from 'prop-types';
-
 import './AddToken.scss';
 import Dropdown from '@/components/core/controls/Dropdown';
-
 import iconQRCodeWhite from '@/assets/images/icon/scan-qr-code.svg';
 
-import bgBox from '@/assets/images/pages/wallet/bg-box-wallet-coin.svg';
-
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
-
-const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefined);
-
 const nameFormAddToken = 'addToken';
 const AddNewTokenForm = createForm({ propsReduxForm: { form: nameFormAddToken, enableReinitialize: true, clearSubmitErrors: true}});
 
@@ -75,13 +65,7 @@ class AddToken extends React.Component {
     this.showAlert(mst, 'danger', 3000);
   }
   showSuccess(mst) {
-    this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
+    this.showAlert(mst, 'success', 4000, ICON.SuccessChecked() );
   }
 
   componentDidMount() {
@@ -95,12 +79,6 @@ class AddToken extends React.Component {
     this.props.clearFields(nameFormAddToken, false, false, "contractAddress", "tokenName", "tokenSymbol", "tokenDecimals");
   }
 
-  componentWillUnmount() {
-
-  }
-  componentDidUpdate (){
-
-  }
   componentWillReceiveProps() {
     if (!this.props.formAddTokenIsActive && this.state.formAddTokenIsActive != this.props.formAddTokenIsActive){
       this.props.clearFields(nameFormAddToken, false, false, "contractAddress", "tokenName", "tokenSymbol", "tokenDecimals");
@@ -112,28 +90,16 @@ class AddToken extends React.Component {
     }
   }
 
-  showLoading = () => {
-    this.props.showLoading({message: '',});
-  }
-
-  hideLoading = () => {
-    this.props.hideLoading();
-  }
-
-
   onFinish = () => {
-
     const { onFinish } = this.props;
 
     if (onFinish) {
       onFinish({"data": this.state.tokenType});
     } else {
-
     }
   }
 
   getWalletDefault = () =>{
-
     let coinDefault = 'ETH';
 
     let wallets = MasterWallet.getMasterWallet();

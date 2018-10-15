@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ReactDOM from 'react-dom';
 
 import { setLanguage } from '@/reducers/app/action';
 import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl';
@@ -10,11 +11,11 @@ import createForm from '@/components/core/form/createForm';
 import { fieldInput } from '@/components/core/form/customField';
 import { email, required } from '@/components/core/form/validation';
 import $http from '@/services/api';
-import { BASE_API, LANDING_PAGE_TYPE } from '@/constants';
 import { Link } from 'react-router-dom';
+import { URL, BASE_API, LANDING_PAGE_TYPE } from '@/constants';
+import iconSubmitEmail from '@/assets/images/icon/landingpage/email_submit.svg';
 
 import './styles.scss';
-
 const nameFormSubscribeEmail = 'subscribeEmail';
 const FormSubscribeEmail = createForm({
   propsReduxForm: {
@@ -47,6 +48,47 @@ class Index extends React.PureComponent {
         console.log('err subscribe email', err);
       });
   };
+  openTelegram = () => {
+    window.open('https://t.me/ninja_org', '_blank');
+  }
+
+  becomeAtm = () => {
+    const { name } = this.props;
+    if (name === 'cash') {
+      window.location = URL.ATM_FOR_BUSINESS;
+    } else if (name === 'cash-for-business') {
+      window.location = URL.LANDING_BECOME_ATM;
+    }
+  }
+  scrollToFAQ() {
+    const faqNode = ReactDOM.findDOMNode(this.refs.faq)
+
+    if (faqNode && location.href.includes('#faq')) {
+      faqNode.scrollIntoView({
+          behaviour: 'smooth',
+          block: 'start',
+          inline: 'center',
+      });
+    }
+  }
+  componentDidMount() {
+    this.scrollToFAQ();
+  }
+
+  renderDisclaim(name) {
+    return (
+      <div className="row">
+        <div className="col">
+          <div className="pd-disclaim">Disclaimer</div>
+          <div className="pd-small-content">
+            <FormattedMessage id={`landing_page.${name}.disclaim`} />
+          </div>
+          <p className="pd-small-content">Need more information? Check out our <a href="#faq"
+          >FAQ</a> and <a href="http://ninja.org/pex/instructions">instructions</a> on how to play.</p>
+        </div>
+      </div>
+    );
+  }
 
   render() {
     const { messages, locale } = this.props.intl;
@@ -64,6 +106,9 @@ class Index extends React.PureComponent {
       messages[`landing_page.${name}.btnSubmitEmail`] || 'Submit';
     const youtubeVideoId = messages[`landing_page.${name}.youtubeVideoId`];
     const faq = messages[`landing_page.${name}.faq`];
+    const disclaim = messages[`landing_page.${name}.disclaim`];
+    const btnBecomeAtm = messages[`landing_page.${name}.btnBecomeAtm`];
+    const btnJoinTelegram = messages[`landing_page.${name}.btnJoinTelegram`];
 
     const { url: categoryUrl, text: categoryText } = LANDING_PAGE_TYPE[type];
     return (
@@ -109,18 +154,15 @@ class Index extends React.PureComponent {
                         <span>
                     {!hasSubscribed ? (
                       <FormSubscribeEmail onSubmit={this.handleSubmit}>
-                        <div className="text-email">
-                          <FormattedHTMLMessage id={`landing_page.${name}.textEmail`} />
+                      {messages[`landing_page.${name}.label.sendLinkToEmail`] && (
+                        <div className="d-table-cell align-top text-send-link">
+                          <FormattedMessage id={`landing_page.${name}.label.sendLinkToEmail`} />
                         </div>
-                        <div className="d-table w-100">
-                          {
-                            messages[`landing_page.${name}.label.sendLinkToEmail`] && (
-                              <div className="d-table-cell align-top text-send-link">
-                                <FormattedMessage id={`landing_page.${name}.label.sendLinkToEmail`} />
-                              </div>
-                            )
-                          }
-                          <div className="d-table-cell align-top">
+                      )
+                      }
+                        <div className="wrapperEmail">
+
+                          <div className="emailField">
                             <Field
                               name="email"
                               className="form-control control-subscribe-email"
@@ -129,15 +171,36 @@ class Index extends React.PureComponent {
                               validate={[required, email]}
                               component={fieldInput}
                             />
-                          </div>
-                          <div className="d-table-cell align-top">
+                            <div className="emailSubmit">
                             <button
-                              type="submit"
-                              className="btn btn-primary-landing w-100 ml-1"
-                            >
-                              {btnSubmitEmail}
-                            </button>
+                                type="submit"
+                                className="btnEmail"
+                              >
+                                {/*btnSubmitEmail*/}
+                                <img src={iconSubmitEmail} alt="iconSubmitEmail" />
+                              </button>
                           </div>
+                          </div>
+
+                          {
+                            btnBecomeAtm ? (
+                              <button className="btnTelegram" type="button"
+                                      onClick={()=> {
+                                        this.becomeAtm();
+                                      }}
+                              ><FormattedHTMLMessage id={`landing_page.${name}.btnBecomeAtm`} /></button>
+                            ) : btnJoinTelegram ?  (
+                              <button className="btnTelegram"
+                                      onClick={()=> {
+                                        this.openTelegram();
+                                      }}
+                              >Join the dojo on Telegram</button>
+                            ) : null
+                          }
+
+                        </div>
+                        <div className="mt-4 text-email">
+                          <FormattedHTMLMessage id={`landing_page.${name}.textEmail`} />
                         </div>
                       </FormSubscribeEmail>
                     ) : (
@@ -173,13 +236,14 @@ class Index extends React.PureComponent {
                   </div>
                 </div>
 
+                {messages[`landing_page.${name}.content`] &&
                 <div className="row mt-5">
                   <div className="col">
                     <div className="pd-content">
                       {messages[`landing_page.${name}.content`]}
                     </div>
                   </div>
-                </div>
+                </div>}
                 {imgContent && (
                   <div className="row mt-5">
                     <div className="col">
@@ -194,7 +258,7 @@ class Index extends React.PureComponent {
           }
           {
             faq && (
-              <div className="row">
+              <div className="row mt-5" id="faq" ref="faq" >
                 <div className="col">
                   <div className="pd-faq">
                     {messages.COIN_EXCHANGE_LP_FAQ_TITLE}
@@ -215,6 +279,7 @@ class Index extends React.PureComponent {
               </div>
             )
           }
+          {disclaim && this.renderDisclaim(name)}
         </div>
       </LandingWrapper>
     );

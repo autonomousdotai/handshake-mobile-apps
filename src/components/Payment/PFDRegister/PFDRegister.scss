@@ -1,0 +1,18 @@
+.cryptoCurrency{
+  width: 100%;
+
+  .item {
+    overflow-y: hidden;
+  }
+
+  .item:last-child{
+    border: none;
+  }
+
+  .verify-first{
+    padding:1rem 0;
+    text-align: center;
+    font-style: italic;
+  }
+}
+

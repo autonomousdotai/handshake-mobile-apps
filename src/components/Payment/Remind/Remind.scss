@@ -1,0 +1,28 @@
+.float-button-remind-payment{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  user-select: none;
+  border: 1px solid transparent;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight:400;
+  line-height: 1.5;
+  border-radius: 1.5rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  box-shadow: 0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
+  color: seashell;
+  background-color: #00a093;
+  border-color: #bae0dd;
+}
+
+
+.remind-checkout-wrapper{
+  margin:2rem 0;
+  padding:0 1rem;
+
+  .text{
+    padding-bottom: 1rem;
+  }
+}

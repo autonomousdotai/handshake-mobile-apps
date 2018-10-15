@@ -1,0 +1,106 @@
+.rf-phone-input {
+  display: flex;
+  input.btn {
+    height: 54px;
+    width: 100px;
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  input.number {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
+}
+
+.rf-type-atm-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0px;
+  span {
+    color: #868DAD;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    letter-spacing: 0;
+  }
+
+  .rf-type-atm-radio-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* Hide the browser's default checkbox */
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      &:checked ~ .checkmark {
+        background-color: #2196F3;
+
+        /* Show the checkmark when checked */
+        &:after {
+          display: block;
+        }
+      }
+    }
+
+  /* Create a custom checkbox */
+    .checkmark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 25px;
+      width: 25px;
+      background-color: white;
+      border-radius: 4px;
+      border: 1px solid #E5EAF8;
+
+      /* Create the checkmark/indicator (hidden when not checked) */
+      &:after {
+        content: "";
+        position: absolute;
+        left: 9px;
+        top: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+.rf-status-atm {
+  display: flex;
+  height: 107px;
+  background: #EDF0FA;
+  border-radius: 4px 4px 4px 4px;
+  padding: 0px 20px;
+  justify-content: space-between;
+  align-items: center;
+  .rf-status-atm-title > span {
+    color: #060E2E;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: left;
+    letter-spacing: 0;
+  }
+}
+
+.hour-selector-container {
+  width: 150px;
+  margin: auto;
+  select {
+    height: 54px;
+  }
+}

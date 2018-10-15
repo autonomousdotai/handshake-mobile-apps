@@ -10,7 +10,7 @@ const BigNumber = require('bignumber.js');
 
 const EthereumTx = require('ethereumjs-tx');
 
-const compiled = require('@/contracts/Shuriken.json');
+const compiled = require('@/contracts/Wallet/Shuriken.json');
 
 const erc20Abi = compiled.abi;
 

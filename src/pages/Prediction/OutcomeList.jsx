@@ -1,8 +1,10 @@
 import React from 'react';
+import cx from 'classnames';
 import propTypes from 'prop-types';
 import ScrollableList from '@/components/ScrollableList/ScrollableList';
 import { generatedBackgroundCss } from '@/utils/css.js';
 import { smartTrim, countWords } from '@/utils/string';
+import { URL } from '@/constants';
 
 const BACKGROUND_COLORS = [
   '#000000',
@@ -28,8 +30,11 @@ function buildOutcomeItem(outcome) {
   } else {
     handledStr = smartTrim(name, name.length / 2);
   }
+  const cls = cx('OutcomeItem', {
+    AddMoreOutcome: outcome.id === URL.HANDSHAKE_PEX_CREATOR,
+  });
   return (
-    <div className="OutcomeItem" style={styleCss}>
+    <div className={cls} style={styleCss}>
       {handledStr[0] && <span>{handledStr[0]}</span>}
       {handledStr[1] && <span>{handledStr[1]}</span>}
     </div>
@@ -39,10 +44,11 @@ function buildOutcomeItem(outcome) {
 function OutcomeList(props) {
   const { event, onClick } = props;
   const { outcomes } = event;
+  const data = outcomes.concat({ id: URL.HANDSHAKE_PEX_CREATOR, name: '+' });
   return (
     <div className="OutcomeList">
       <ScrollableList
-        data={outcomes}
+        data={data}
         event={event}
         itemRenderer={(outcome) => buildOutcomeItem(outcome, event)}
         onClickItem={onClick}

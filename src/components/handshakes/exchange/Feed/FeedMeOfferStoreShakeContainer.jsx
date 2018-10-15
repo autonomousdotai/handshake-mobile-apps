@@ -17,7 +17,7 @@ import {
 } from '@/constants';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { ExchangeCashHandshake } from '@/services/neuron';
-import { FormattedMessage } from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { getUserLocation, showAlert } from '@/reducers/app/action';
@@ -42,6 +42,12 @@ import {
 } from '@/reducers/exchange/action';
 import Rate from '@/components/core/controls/Rate/Rate';
 import { BigNumber } from 'bignumber.js';
+import Modal from '@/components/core/controls/Modal';
+import QrReader from 'react-qr-reader';
+import BrowserDetect from "@/services/browser-detect";
+import Feed from '@/components/core/presentation/Feed/Feed';
+import Button from '@/components/core/controls/Button/Button';
+import ModalDialog from '@/components/core/controls/ModalDialog';
 
 class FeedMeOfferStoreShakeContainer extends React.PureComponent {
   constructor(props) {
@@ -55,7 +61,17 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
 
     this.state = {
       numStars: 0,
+      delay: 300,
+      qrCodeOpen: false,
+      legacyMode: false,
+      transferAddress: '',
+      modalContent: '',
     };
+  }
+
+  componentDidMount() {
+    let legacyMode = (BrowserDetect.isChrome && BrowserDetect.isIphone); // show choose file or take photo
+    this.setState({legacyMode: legacyMode});
   }
 
   trackingOnchain = (offerStoreId, offerStoreShakeId, txHash, action, reason, currency) => {
@@ -324,6 +340,123 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
   //   return message;
   // }
 
+  handleScan = (data) => {
+    console.log('handleScan', data);
+    // const {rfChange} = this.props;
+    if (data) {
+      let value = data.split(',');
+      console.log('handleScan value', value);
+
+      // this.setState({
+      //   inputAddressAmountValue: value[0],
+      // });
+      // rfChange(nameFormSendWallet, 'to_address', value[0]);
+      // if (value.length == 2) {
+      //   this.setState({
+      //     inputSendAmountValue: value[1],
+      //   });
+      //
+      //   //rfChange(nameFormSendWallet, 'amountCoin', value[1]);
+      //   this.updateAddressAmountValue(null, value[1]);
+      // }
+      this.modalScanQrCodeRef.close();
+
+      this.confirmUsingScannedAddress(value[0]);
+    }
+  }
+
+  handleError(err) {
+    consolelog('error wc', err);
+  }
+
+  oncloseQrCode=() => {
+    this.setState({ qrCodeOpen: false });
+  }
+
+  openQrcode = () => {
+    this.modalRef.close();
+
+    if (!this.state.legacyMode){
+      this.setState({ qrCodeOpen: true });
+      this.modalScanQrCodeRef.open();
+    }
+    else{
+      this.openImageDialog();
+    }
+  }
+
+  openImageDialog = () => {
+    this.refs.qrReader1.openImageDialog();
+  }
+
+  completeShakedOffer = () => {
+    const { offer } = this;
+    const { currency, userAddress } = offer;
+    const wallet = MasterWallet.getWalletDefault(currency);
+    wallet.address = userAddress;
+
+    this.props.hideLoading();
+
+    this.setState({
+      modalContent:
+        (
+          <div className="py-2">
+            <Feed className="feed p-2" background="#259B24">
+              <div className="text-white d-flex align-items-center" style={{ minHeight: '50px' }}>
+                <div><FormattedMessage id="completeOfferConfirm" values={{ }} /></div>
+              </div>
+            </Feed>
+            <Button className="mt-2" block onClick={() => this.openQrcode()}><FormattedMessage id="ex.shop.shake.button.using.scan.address" /></Button>
+            <Button block className="mt-2" onClick={() => this.handleConfirmUsingAddress(userAddress)}><FormattedMessage id="ex.shop.shake.button.using.default.address" /></Button>
+            <Button block className="btn btn-secondary" onClick={this.cancelAction}><FormattedMessage id="ex.btn.notNow" /></Button>
+          </div>
+        ),
+    }, () => {
+      this.modalRef.open();
+    });
+  }
+
+  cancelAction = () => {
+    this.modalRef.close();
+  }
+
+  confirmUsingScannedAddress = (scanAddress) => {
+    const { offer } = this;
+    const { currency, } = offer;
+    const wallet = MasterWallet.getWalletDefault(currency);
+    wallet.address = scanAddress;
+    const shortenScanAddress = wallet.getShortAddress();
+
+    const message = <FormattedMessage id="ex.shop.shake.message.using.which.address" values={{ scanAddress: shortenScanAddress }} />;
+    this.setState({
+      modalContent:
+        (
+          <div className="py-2">
+            <Feed className="feed p-2" background="#259B24">
+              <div className="text-white d-flex align-items-center" style={{ minHeight: '50px' }}>
+                <div>{message}</div>
+              </div>
+            </Feed>
+            <Button className="mt-2" block onClick={() => this.handleConfirmUsingAddress(scanAddress)}><FormattedMessage id="ex.shop.shake.button.using.scan.address" /></Button>
+            <Button block className="btn btn-secondary" onClick={() => this.openQrcode()}><FormattedMessage id="ex.shop.shake.button.using.scan.rescan" /></Button>
+          </div>
+        ),
+    }, () => {
+      this.modalRef.open();
+    });
+  }
+
+  handleConfirmUsingAddress = (address) => {
+    console.log('handleConfirmUsingAddress', address);
+    this.modalRef.close();
+
+    this.setState({ transferAddress: address }, () => {
+      const { transferAddress } = this.state;
+      console.log('handleConfirmUsingAddress', transferAddress);
+      this.continuteCompleteShakedOffer();
+    });
+  }
+
   getActionButtons = () => {
     const { status, confirmOfferAction } = this.props;
     const { offer } = this;
@@ -354,14 +487,13 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE: {
             // actionButtons = 'Reject'; // complete: nguoi nhan cash
             message = <FormattedMessage id="rejectOfferConfirmForShop" values={{ }} />;
-            const message2 = <FormattedMessage id="completeOfferConfirm" values={{ }} />;
             actionButtons = (
               <div className="mt-3">
                 {offer.type === EXCHANGE_ACTION.SELL &&
                 <span className="d-inline-block auto-width">
                   <button
                     className="btn btn-block btn-confirm"
-                    onClick={() => confirmOfferAction(message2, this.handleCompleteShakedOffer)}
+                    onClick={() => this.handleCompleteShakedOffer()}
                   ><FormattedMessage id="btn.complete" />
                   </button>
                 </span>
@@ -400,14 +532,13 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
           case HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.SHAKE: {
             // actionButtons = 'Reject'; // complete: nguoi nhan cash
             message = <FormattedMessage id="rejectOfferConfirm" values={{ }} />;
-            const message2 = <FormattedMessage id="completeOfferConfirm" values={{ }} />;
             actionButtons = (
               <div className="mt-3">
                 {offer.type === EXCHANGE_ACTION.BUY &&
                 <span className="d-inline-block auto-width">
                   <button
                     className="btn btn-block btn-confirm"
-                    onClick={() => confirmOfferAction(message2, this.handleCompleteShakedOffer)}
+                    onClick={() => this.handleCompleteShakedOffer()}
                   ><FormattedMessage id="btn.complete" />
                   </button>
                 </span>
@@ -558,36 +689,50 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
 
   handleCompleteShakedOffer = async () => {
     const { offer } = this;
+    const {
+      id, currency, type, freeStart, amount, totalAmount,
+    } = offer;
+    console.log('handleCompleteShakedOffer', offer);
+
+    this.props.showLoading();
+
+    // if (currency === CRYPTO_CURRENCY.ETH) {
+    if ((type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER && freeStart === '') ||
+      (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED)) {
+      const wallet = MasterWallet.getWalletDefault(currency);
+      const balance = await wallet.getBalance();
+      const fee = await wallet.getFee(NB_BLOCKS, true);
+
+      console.log(' address balance fee', wallet.address, balance, fee);
+
+      if (!this.checkMainNetDefaultWallet(wallet)) {
+        this.props.hideLoading();
+        return;
+      }
+
+      let transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? new BigNumber(totalAmount) : new BigNumber(amount);
+
+      const pendingBalance = await this.getPendingBalance();
+      console.log('pendingBalance',pendingBalance);
+
+      if (this.showNotEnoughCoinAlert(balance, transferAmount.plus(new BigNumber(pendingBalance)).toNumber(), 2 * fee, currency)) {
+        this.props.hideLoading();
+        return;
+      }
+    }
+    // }
+
+    this.completeShakedOffer();
+  }
+
+  continuteCompleteShakedOffer = async () => {
+    const { offer } = this;
     const { initUserId } = this.props;
     const {
       id, currency, type, freeStart, amount, totalAmount,
     } = offer;
 
     this.props.showLoading();
-
-    // if (currency === CRYPTO_CURRENCY.ETH) {
-      if ((type === EXCHANGE_ACTION.SELL && this.userType === HANDSHAKE_USER.OWNER && freeStart === '') ||
-        (type === EXCHANGE_ACTION.BUY && this.userType === HANDSHAKE_USER.SHAKED)) {
-        const wallet = MasterWallet.getWalletDefault(currency);
-        const balance = await wallet.getBalance();
-        const fee = await wallet.getFee(NB_BLOCKS, true);
-
-        if (!this.checkMainNetDefaultWallet(wallet)) {
-          this.props.hideLoading();
-          return;
-        }
-
-        let transferAmount = new BigNumber(amount).isLessThan(new BigNumber(totalAmount)) ? new BigNumber(totalAmount) : new BigNumber(amount);
-
-        const pendingBalance = await this.getPendingBalance();
-        console.log('pendingBalance',pendingBalance);
-
-        if (this.showNotEnoughCoinAlert(balance, transferAmount.plus(new BigNumber(pendingBalance)).toNumber(), 2 * fee, currency)) {
-          this.props.hideLoading();
-          return;
-        }
-      }
-    // }
 
     this.props.completeOfferItem({
       PATH_URL: `${API_URL.EXCHANGE.OFFER_STORES}/${initUserId}/${API_URL.EXCHANGE.SHAKES}/${id}/complete`,
@@ -603,9 +748,10 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     const { data } = responseData;
     const offerShake = Offer.offer(data);
     const {
-      hid, currency, type, offChainId, amount, status, userAddress, totalAmount, fee,
+      hid, currency, type, offChainId, amount, status, totalAmount, fee,
     } = offerShake;
     const { freeStart } = offer;
+    const { transferAddress: userAddress } = this.state;
 
     console.log('handleCompleteShakedOfferSuccess', responseData);
 
@@ -623,11 +769,14 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
 
     const wallet = MasterWallet.getWalletDefault(currency);
     wallet.transfer(userAddress, transferAmount, NB_BLOCKS).then((success) => {
+      console.log('address', wallet.address);
+      console.log('userAddress', userAddress);
+      console.log('transferAmount', transferAmount);
       console.log('transfer', success);
 
-      const { data } = success;
+      const { status, data } = success;
 
-      if (data) {
+      if (status === 1 && data) {
         const { hash: txHash } = data;
         this.trackingTransfer(initUserId, offerShake.id, txHash);
       } else {
@@ -675,6 +824,7 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
       timeOut: 2000,
       type: 'success',
       callBack: () => {
+        this.setState({ transferAddress: '' });
         // if (refreshPage) {
         //   refreshPage();
         // }
@@ -1055,6 +1205,8 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
     const {
       extraData, status, getDisplayName,
     } = this.props;
+    const { messages } = this.props.intl;
+    const { modalContent } = this.state;
 
     const offer = Offer.offer(JSON.parse(extraData));
     this.offer = offer;
@@ -1110,12 +1262,29 @@ class FeedMeOfferStoreShakeContainer extends React.PureComponent {
       currency: offer.currency,
       fiatCurrency: offer.fiatCurrency,
       showClock,
+      userAddress: offer.userAddress,
     };
 
     return (
       <div>
         <FeedMeCash {...this.props} {...feedProps} />
         <Rate onRef={e => this.rateRef = e} startNum={5} onSubmit={this.handleSubmitRating} ratingOnClick={this.handleOnClickRating} />
+        <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeRef = modal}>
+          {this.state.qrCodeOpen || this.state.legacyMode ?
+            <QrReader
+              ref="qrReader1"
+              delay={this.state.delay}
+              onScan={(data) => { this.handleScan(data); }}
+              onError={this.handleError}
+              style={{ width: '100%', height: '100%' }}
+              legacyMode={this.state.legacyMode}
+              showViewFinder={false}
+            />
+            : ''}
+        </Modal>
+        <ModalDialog onRef={modal => this.modalRef = modal}>
+          {modalContent}
+        </ModalDialog>
       </div>
     );
   }
@@ -1146,4 +1315,4 @@ const mapDispatch = ({
   getUserLocation,
 });
 
-export default connect(mapState, mapDispatch)(FeedMeOfferStoreShakeContainer);
+export default injectIntl(connect(mapState, mapDispatch)(FeedMeOfferStoreShakeContainer));

@@ -42,6 +42,18 @@ export const maxValue = max => value =>
   ) : (
     undefined
   ));
+export const minValueEqual = min => value =>
+  (value && value < min ? (
+    <FormattedMessage id="error.greaterThan.equal" values={{ min }} />
+  ) : (
+    undefined
+  ));
+export const maxValueEqual = max => value =>
+  (value && value > max ? (
+    <FormattedMessage id="error.lessThan.equal" values={{ max }} />
+  ) : (
+    undefined
+  ));
 // const minValue13 = minValue(13)
 export const email = value =>
   (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
@@ -55,3 +67,19 @@ export const email = value =>
 //     value && !/^(0|[1-9][0-9]{9})$/i.test(value)
 //         ? 'Invalid phone number, must be 10 digits'
 //         : undefined
+
+export const isNormalInteger = (str) => {
+  const n = Math.floor(Number(str));
+  if (n !== Infinity && String(n) === str && n >= 0) {
+    return undefined;
+  } else {
+    return <FormattedMessage id="error.mustBeAPositiveInteger" />;
+  }
+}
+
+export const requiredDaySelector = value => {
+  if (value) {
+    return Object.keys(value)?.length !== 0 ? undefined : <FormattedMessage id="error.required" />;
+  }
+  return <FormattedMessage id="error.required" />;
+};

@@ -19,12 +19,13 @@ import {
   getBalance, getEstimateGas, foundShakeList, parseBigNumber,
   formatAmount,formatOdds, findUserBet, parseJsonString,
 } from '@/components/handshakes/betting/utils.js';
+import { getGasPrice } from '@/utils/gasPrice';
 
 // components
 import Button from '@/components/core/controls/Button';
 import Feed from '@/components/core/presentation/Feed';
 import { showAlert } from '@/reducers/app/action';
-
+import ConfirmPopup from '@/components/ConfirmPopup';
 
 import { isSameAddress, isRightNetwork } from '@/components/handshakes/betting/validation.js';
 
@@ -133,7 +134,7 @@ class FeedBetting extends React.Component {
       isLoading: true,
     });
     const balance = await getBalance();
-
+    await getGasPrice();
     let message = null;
     const {
       hid,
@@ -187,7 +188,9 @@ class FeedBetting extends React.Component {
         this.refundFree(offchain);
         break;
       case BETTING_STATUS_LABEL.DISPUTE:
-        this.disputeOnChain(offchain, hid);
+        //this.disputeOnChain(offchain, hid);
+        this.handleClickDispute(offchain, hid);
+
         break;
       default:
         break;
@@ -210,7 +213,8 @@ class FeedBetting extends React.Component {
         this.refundOnChain(offchain, hid);
         break;
       case BETTING_STATUS_LABEL.DISPUTE:
-        this.disputeOnChain(offchain, hid);
+        //this.disputeOnChain(offchain, hid);
+        this.handleClickDispute(offchain, hid);
         break;
       default:
         break;
@@ -480,25 +484,38 @@ class FeedBetting extends React.Component {
     });
   }
 
-  renderStatus = () => {
-    const { statusTitle } = this.state;
-    return <div className="statusBetting" dangerouslySetInnerHTML={{ __html: statusTitle }} />;
-  }
+  handleClickDispute = (offchain, hid) => {
+    console.log(TAG, 'handleClickDispute');
+    const {
+      onShowModalDialog
+    } = this.props;
 
-
-  renderItem(matchedAmount, amount, winMatch, winValue) {
-    return (
-      <div className="bettingInfoValues">
-        <div>
-          {<div className="value">{matchedAmount}/{amount} ETH</div>}
-        </div>
-        <div>
-          <div className="value">{winMatch}/{winValue} ETH</div>
-        </div>
-      </div>
-    );
+    const title = `Don't agree with the result?`;
+    const content = MESSAGE.DISPUTE_CONFIRM;
+    onShowModalDialog({
+      show: true,
+      modalContent: (<ConfirmPopup
+        title={title}
+        content={content}
+        cancelButtonTitle="Cancel"
+        okButtonTitle="Dispute"
+        cancelButtonClick={() => {
+          onShowModalDialog({ show: false });
+          this.setState({
+            isLoading: false,
+          });
+        }}
+        okButtonClick= {() => {
+          this.disputeOnChain(offchain, hid);
+          onShowModalDialog({ show: false });
+        }}
+        />),
+      propsModal: {
+        //className: 'modal-me-cash-more-info',
+      },
+    });
   }
-  renderItemShake(shakerList) {
+  calculateDisplayValueShaker(shakerList) {
     let displayWinMatch = 0;
     let displayAmount = 0;
     let displayMatchedAmount = 0;
@@ -527,31 +544,10 @@ class FeedBetting extends React.Component {
       displayWinMatch = formatAmount(displayWinMatch);
       displayAmount = formatAmount(displayAmount);
       displayWinValue = formatAmount(displayWinValue);
-
-      // console.log(TAG, ' renderShaker',
-      //                   ' displayMatchedAmount:', displayMatchedAmount,
-      //                   ' displayWinMatch:', displayWinMatch,
-      //                   ' displayAmount:', displayAmount,
-      //                   ' displayWinValue:', displayWinValue,
-      //                 );
-
-      return (this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue));
     }
-    return null;
+    return { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue };
   }
-
-  renderShaker() {
-
-    const { shakedItemList } = this.state;
-
-    return (
-      <div>
-        {this.renderItemShake(shakedItemList)}
-      </div>
-    );
-  }
-
-  renderMaker() {
+  calculateDisplayValueMaker() {
     const { itemInfo } = this.state;
     const { amount, odds, remainingAmount, matched } = itemInfo;
     const amountBN = parseBigNumber(amount);
@@ -577,11 +573,30 @@ class FeedBetting extends React.Component {
     const displayMatchedAmount = formatAmount(amountMatch);
     const displayWinMatch = formatAmount(winMatch);
     const displayWinValue = formatAmount(winValue);
+    return { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue };
+  }
 
+  renderStatus = () => {
+    const { statusTitle } = this.state;
+    return <div className="statusBetting" dangerouslySetInnerHTML={{ __html: statusTitle }} />;
+  }
+
+
+  renderItem(matchedAmount, amount, winMatch, winValue) {
     return (
-      this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue)
+      <div className="clearfix">
+        <div className="bettingInfo">
+          <div className="description">Matched</div>
+          <div className="value">{matchedAmount}/{amount} ETH</div>
+        </div>
+        <div className="bettingInfoValues">
+          <div className="description">You could win</div>
+          <div className="value">{winMatch}/{winValue} ETH</div>
+        </div>
+      </div>
     );
   }
+
   renderButton(buttonClassName) {
     const {
       actionTitle, isLoading,
@@ -601,8 +616,8 @@ class FeedBetting extends React.Component {
 
     const progress = totalDisputeAmount / totalAmount * 100;
     const pgText = `${formatAmount(totalDisputeAmount)} ETH of ${formatOdds(progress)}% outcome pool`;
-    console.log(TAG, 'renderProgressBar', 'totalAmount:', totalAmount,'totalDisputeAmount:', totalDisputeAmount);
-    console.log(TAG, 'renderProgressBar', 'totalAmount:', formatAmount(totalAmount),'totalDisputeAmount:', formatAmount(totalDisputeAmount));
+    //console.log(TAG, 'renderProgressBar', 'totalAmount:', totalAmount,'totalDisputeAmount:', totalDisputeAmount);
+    //console.log(TAG, 'renderProgressBar', 'totalAmount:', formatAmount(totalAmount),'totalDisputeAmount:', formatAmount(totalDisputeAmount));
 
     return (
       <div>
@@ -630,7 +645,7 @@ class FeedBetting extends React.Component {
 
   render() {
     const {
-      actionTitle, isAction, itemInfo, isLoading, eventName, predictName
+      actionTitle, isAction, itemInfo, isLoading, eventName, predictName, shakedItemList,
     } = this.state;
 
     //const {extraData} = this.props;
@@ -638,8 +653,8 @@ class FeedBetting extends React.Component {
     const { side, odds, role } = itemInfo;
 
     const colorBySide = side === 1 ? `support` : 'oppose';
-
-
+    const displayValues = role === ROLE.INITER ? this.calculateDisplayValueMaker() : this.calculateDisplayValueShaker(shakedItemList);
+    const { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue } = displayValues;
     console.log(TAG, 'render', isLoading);
     return (
       <div>
@@ -661,13 +676,7 @@ class FeedBetting extends React.Component {
             </div>
             <div className="oddName"><span className="odds-text-feed">Odds</span> <span className={`odds-value-feed-${colorBySide}`}>{odds}</span></div>
           </div>
-          <div className="clearfix">
-            <div className="bettingInfo">
-              <div className="description">Matched</div>
-              <div className="description">You could win</div>
-            </div>
-            {role === ROLE.INITER ? this.renderMaker() : this.renderShaker()}
-          </div>
+          {this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue)}
           {this.renderBottom(itemInfo)}
         </Feed>
       </div>

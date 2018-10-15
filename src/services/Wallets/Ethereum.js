@@ -4,6 +4,8 @@ import configs from '@/configs';
 import { StringHelper } from '@/services/helper';
 import {MasterWallet} from "./MasterWallet";
 import Tx from 'ethereumjs-tx';
+import { getEstimateGas } from "@/components/handshakes/betting/utils";
+import { getGasPrice } from "@/utils/gasPrice";
 
 const Web3 = require('web3');
 const EthereumTx = require('ethereumjs-tx');
@@ -58,11 +60,14 @@ export class Ethereum extends Wallet {
     return new Web3(new Web3.providers.HttpProvider(this.network));
   }
 
-  async getBalance() {
+  async getBalance(isFormatNumber) {
     try {
       const web3 = this.getWeb3();
       const balance = await web3.eth.getBalance(this.address);
-      return Web3.utils.fromWei(balance.toString());
+      if(isFormatNumber)
+        return this.formatNumber(Web3.utils.fromWei(balance.toString()));
+      else
+        return Web3.utils.fromWei(balance.toString());
     } catch (error) {
       //alert(error);
       return this.balance;
@@ -70,19 +75,18 @@ export class Ethereum extends Wallet {
   }
 
   async getFee() {
-    const wallet = MasterWallet.getWalletDefault('ETH');
-    const neuron = wallet.chainId === 4 ? MasterWallet.neutronTestNet : MasterWallet.neutronMainNet; // new Neuron(chainId);
-    return neuron.caculateLimitGasWithEthUnit(neuron.gasPrice);
+    await getGasPrice();
+    return await getEstimateGas();
 
-    // const web3 = new Web3(new Web3.providers.HttpProvider(this.network));
+    // const web3 = this.getWeb3();
     // const gasPrice = new BN(await web3.eth.getGasPrice());
+    // //const estimateGas = new BN(balance).div(gasPrice);
+    // const limitedGas = 210000;
+    // //const estimatedGas = await BN.min(estimateGas, limitedGas);
     //
-    // const limitedGas = new BN(150000);
-    //
-    // const estimatedGas = limitedGas.mul(gasPrice);
-
-    // console.log('getFee, gasPrice', gasPrice.toString());
-    // console.log('getFee, estimateGas', estimatedGas.toString());
+    // console.log('transfer gasPrice->', parseInt(gasPrice));
+    // //console.log('transfer estimatedGas->', String(estimatedGas));
+    // console.log('transfer limitedGas->', String(limitedGas));
 
     // return Web3.utils.fromWei(estimatedGas);
   }
@@ -97,9 +101,8 @@ export class Ethereum extends Wallet {
     return true;
   }
 
-  async transfer(toAddress, amountToSend) {
+  async transfer(toAddress, amountToSend, data="", gasLimit=210000) {
     const web3 = this.getWeb3();
-
     if (!web3.utils.isAddress(toAddress)) {
       return { status: 0, message: 'messages.ethereum.error.invalid_address2' };
     }
@@ -112,10 +115,12 @@ export class Ethereum extends Wallet {
       if (balance == 0 || balance <= amountToSend) {
         return { status: 0, message: 'messages.ethereum.error.insufficient' };
       }
-
+      //await getGasPrice();
       const gasPrice = new BN(await web3.eth.getGasPrice());
+      //const gasPrice = window.gasPrice;
+
       const estimateGas = new BN(balance).div(gasPrice);
-      const limitedGas = 210000;
+      const limitedGas = gasLimit;
       const estimatedGas = await BN.min(estimateGas, limitedGas);
       const chainId = await web3.eth.net.getId();
 
@@ -136,25 +141,29 @@ export class Ethereum extends Wallet {
         const rawTx = {
           nonce: web3.utils.toHex(nonce),
           gasPrice: web3.utils.toHex(gasPrice),
-          gasLimit: estimatedGas,
-          data: "",
+          gasLimit: web3.utils.toHex(estimatedGas),
+          data: data,
           from: this.address,
           chainId: this.chainId,
           to: toAddress,
+          value: Web3.utils.toHex(web3.utils.toWei(String(amountToSend || 0), 'ether'))
         };
         console.log('rawTx->', rawTx);
         const tx = new Tx(rawTx);
-        if (amountToSend) {
-          tx.value = Web3.utils.toHex(web3.utils.toWei(String(amountToSend), 'ether'));
-        }
+        // if (amountToSend) {
+        //   tx.value = ;
+        // }
+        console.log('tx.value->', tx.value);
         tx.sign(Buffer.from(this.privateKey, 'hex'));
+        console.log('tx.sign->...', tx);
         const serializedTx = tx.serialize();
         const rawTxHex = `0x${serializedTx.toString('hex')}`;
+        console.log('trawTxHex->', rawTxHex);
         return new Promise((resolve, reject) => {
           web3.eth
             .sendSignedTransaction(rawTxHex)
             .on('transactionHash', (hash) => {
-
+              console.log('hash->', hash);
               resolve({ status: 1, message: 'messages.ethereum.success.transaction',
                 data: {hash: hash}
               });
@@ -280,7 +289,7 @@ export class Ethereum extends Wallet {
     return result;
   }
 
-  formatNumber(value){
+  formatNumber(value, decimal=6){
     let result = 0, count = 0;
     try {
       if(!isNaN(value)) result = Number(value);
@@ -288,8 +297,8 @@ export class Ethereum extends Wallet {
       if (Math.floor(value) !== value)
           count = value.toString().split(".")[1].length || 0;
 
-      if(count > 6)
-        result = value.toFixed(6);
+      if(count > decimal)
+        result = Number(value).toFixed(decimal);
     }
     catch(e) {
       result = 0;
@@ -341,6 +350,23 @@ export class Ethereum extends Wallet {
       is_sent: is_sent,
       is_error: is_error
     };
+  }
+
+  async getTransaction(hash) {
+    let result = false;
+    const API_KEY = configs.network[4].apikeyEtherscan;
+    const url = `${this.constructor.API[this.getNetworkName()]}?module=proxy&action=eth_getTransactionByHash&txhash=${hash}&apikey=${API_KEY}`;
+    const response = await axios.get(url);
+    if (response.status == 200) {
+      result = response.data.result;
+
+      const web3 = this.getWeb3();
+      result.gas = web3.utils.hexToNumber(result.gas);
+      result.gasPrice = web3.utils.hexToNumber(result.gasPrice);
+      result.value = web3.utils.hexToNumber(result.value);
+      result.transactionIndex = web3.utils.hexToNumber(result.transactionIndex);
+    }
+    return result;
   }
 
   cookIT(data){

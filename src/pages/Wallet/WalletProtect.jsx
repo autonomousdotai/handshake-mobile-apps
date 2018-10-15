@@ -8,7 +8,6 @@ import Button from '@/components/core/controls/Button';
 import Checkbox from '@/components/core/forms/Checkbox/Checkbox';
 import Modal from '@/components/core/controls/Modal';
 import ModalDialog from '@/components/core/controls/ModalDialog';
-import { differenceWith } from 'lodash';
 
 class WalletProtect extends React.Component {
   static propTypes = {
@@ -23,13 +22,12 @@ class WalletProtect extends React.Component {
       step: this.props.step,
       arr_random: [],
       arr_confirm: [],
-      active: this.props.active
     };
   }
 
-  componentWillReceiveProps() {
-    if (!this.props.active)
-      this.setState({step1_confirm: false, step: this.props.step, arr_confirm: []});
+  componentDidMount() {
+    //this.setState({step1_confirm: false, step: this.props.step, arr_confirm: []});
+    console.log(this.state.step);
   }
 
   get showStep1() {
@@ -46,7 +44,7 @@ class WalletProtect extends React.Component {
           </div>
           <div className="msg3">
             <Checkbox name="checkBoxProtected" label={messages.wallet.action.protect.text.step1_label}
-              checked={this.state.step1_confirm}
+              defaultChecked={this.state.step1_confirm}
               onClick={() => { this.setState({step1_confirm: !this.state.step1_confirm}); }} />
           </div>
           <Button className="button-wallet" block disabled={!this.state.step1_confirm} type="submit" onClick={this.doStep1}>Continue</Button>
@@ -198,7 +196,6 @@ class WalletProtect extends React.Component {
 
 	render(){
     const { messages } = this.props.intl;
-
 		return (
       <div>
         {this.showStep1}
@@ -218,7 +215,6 @@ class WalletProtect extends React.Component {
 WalletProtect.propTypes = {
   wallet: PropTypes.any,
   step: PropTypes.any,
-  active: PropTypes.bool,
   onCopy: PropTypes.func
 };
 

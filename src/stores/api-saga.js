@@ -15,17 +15,22 @@ import { isFunction } from '@/utils/is';
  * @param data The payload sent to server
  * @returns {*}
  */
-function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_URL, PATH_URL, successFn, errorFn }) {
+function* callApi({ _path, _key, type, method, data, headers, BASE_URL = BASE_API.BASE_URL, PATH_URL, successFn, errorFn }) {
   if (!PATH_URL) throw new Error('URL is required');
   if (!type) throw new Error('Action type is required');
   if (_path) yield put(apiAction.preFetch({ _path, type }));
+
   const url = `${BASE_URL}/${PATH_URL}`;
-  let respondedData = {}; // { status, result, error }
+
+  let respondedData = {};
   try {
-    const response = yield call($http, { url, data, method });
-    const { status } = response.data;
-    if (status === 1 || status === 200) {
-      respondedData = { status, data: response.data.data };
+    const response = yield call($http, { url, data, method, headers });
+    if (response.status === 200) {
+      if (response.data.status === 1) {
+        respondedData = { status: response.data.status, data: response.data.data };
+      } else {
+        respondedData = response.data; // status, data, message, code
+      }
     } else {
       console.error('callAPI (status): ', response);
       respondedData = { status: response.status, error: response.statusText };
@@ -45,7 +50,7 @@ function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_UR
       yield put(apiAction.postFetch({
         _path,
         type,
-        _key: _key || 'list',
+        _key,
         _value: respondedData.data,
       }));
     }
@@ -53,11 +58,27 @@ function* callApi({ _path, _key, type, method, data, BASE_URL = BASE_API.BASE_UR
 }
 
 function* apiGet(actions) {
-  return yield callApi({ ...actions, method: 'GET' });
+  return yield callApi({
+    ...actions,
+    method: 'GET',
+    // TODO: chrome-extension
+    headers: (window.self !== window.top) ? {
+      ...actions.headers,
+      'Request-From': 'extension',
+    } : { ...actions.headers },
+  });
 }
 
 function* apiPost(actions) {
   return yield callApi({ ...actions, method: 'POST' });
 }
 
-export { apiGet, apiPost, callApi };
+function* apiPostForm(actions) {
+  return yield callApi({
+    ...actions,
+    method: 'POST',
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+}
+
+export { apiGet, apiPost, apiPostForm, callApi };

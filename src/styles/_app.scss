@@ -1,21 +1,14 @@
+
 .app {
-  max-width: $app-width;
+  padding: 0 0 60px 0;
   margin: 0 auto;
-  background-color: $white;
   min-height: 100vh;
-  position: relative;
-  padding-top: $header-height + 10px;
-  padding-bottom: $footer-height;
+  max-width: $app-width;
   overflow: hidden;
+  background-color: $white;
   &.hide-header {
     padding-top: 0;
   }
-  //* {
-  //  user-select: none !important;
-  //  *:focus {
-  //    user-select: none !important;
-  //  }
-  //}
 }
 
 .header {
@@ -66,15 +59,16 @@
 
 
 .footer {
-  height: $footer-height;
   position: fixed;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  height: $footer-height;
   width: 100%;
   max-width: $app-width;
-  background-color: rgba(248, 248, 248, 0.95);
+  background: #FFFFFF;
   z-index: 2;
+  box-shadow: 0 -2px 13px 0 rgba(221,235,242,0.50);
   ul {
     list-style: none;
     padding: 0;
@@ -85,10 +79,14 @@
       width: 20%;
       a {
         cursor: pointer;
-        display: block;
+        //display: block;
         height: $footer-height;
         position: relative;
         color: $text-gray;
+        flex-flow: column;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         > div {
           svg {
             margin: 0 auto;
@@ -110,30 +108,38 @@
         span {
           text-align: center;
           position: absolute;
-          width: 100%;
+          //width: 100%;
           bottom: 7px;
           display: block;
           margin: 0;
+          padding: 2px 5px;
           font-size: 10px;
           letter-spacing: 0.7px;
+          color: #606060;
+          font-weight: $normal;
         }
       }
       &.selected {
-        svg {
-          path {
-            fill: $deep-blue;
-          }
-        }
+        //svg {
+        //  path {
+        //    //fill: $deep-blue;
+        //  }
+        //}
         a {
-          color: $deep-blue;
-        }
-        .chat-icon {
-          svg {
-            g {
-              stroke: $deep-blue;
-            }
+          //color: rgba(248, 248, 248, 0.95);
+          span {
+            background-color: #1E4EFF;
+            border-radius: 9px;
+            color: #ffffff;
           }
         }
+        //.chat-icon {
+        //  svg {
+        //    g {
+        //      stroke: $deep-blue;
+        //    }
+        //  }
+        //}
       }
     }
   }
@@ -202,7 +208,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 1100;
   background-color: rgba($color: $black, $alpha: 0.3);
   display: none;
   &.show {

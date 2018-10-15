@@ -1,0 +1,84 @@
+$highlight-color: #546ff7;
+$invalid-color: #f83c37;
+$placeholder-padding: 8px;
+$placeholder-font-size: 16px;
+$placeholder-font-size-small: 14px;
+$placeholder-transition: 200ms ease-in-out;
+$placeholder-color: #A3B5CE;
+$input-font-size: 16px;
+$input-top: 20px;
+$input-height: 30px;
+$input-border-color: #A2B4CD;
+$wrapper-margin: 20px 0;
+
+.form-input {
+  margin: $wrapper-margin;
+  width: 100%;
+
+  label {
+    position:relative;
+    display:block;
+    width:100%;
+    min-height:$input-height + $input-top;
+  }
+
+  .placeholder {
+    position:absolute;
+    display:block;
+    top:($input-height / 2) + $placeholder-padding;
+    z-index:2;
+    font-size:$placeholder-font-size;
+    transition:all $placeholder-transition;
+    width:100%;
+    cursor:text;
+    color: $placeholder-color;
+  }
+
+  input, textarea {
+    position:absolute;
+    top:$input-top;
+    z-index:1;
+    width:100%;
+    font-size:$input-font-size;
+    border:0;
+    border-bottom:1px solid $input-border-color;
+    transition: border-color $placeholder-transition;
+    outline:none;
+    padding: 0;
+    margin: 0;
+    font-weight: 300;
+    color: black;
+    border-radius: 0;
+  }
+  
+  textarea {
+    min-height:$input-height;
+    padding: $placeholder-padding 0;
+  }
+  
+  input {
+    height:$input-height; 
+  }
+
+  input:focus,
+  input:valid,
+  textarea:focus,
+  textarea:valid {
+    & + .placeholder {
+      top:0;
+      cursor:inherit;
+      font-size:$placeholder-font-size-small;
+      color:$highlight-color;
+    }
+
+    border-bottom:1px solid $highlight-color;
+  }
+
+  input:invalid,  
+  textarea:invalid {   
+    & + .placeholder {        
+        color:$invalid-color;
+      } 
+    border-bottom:1px solid $invalid-color;
+  }
+}

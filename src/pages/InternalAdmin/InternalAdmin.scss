@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700');
+
+$base-spacing-unit: 24px;
+$half-spacing-unit: $base-spacing-unit / 2;
+
+$color-alpha: #1772FF;
+$color-form-highlight: rgba(1,1,1,0.05);
+
+*, *:before, *:after {
+	box-sizing:border-box;
+}
+
+
+h1,h2,h3,h4,h5,h6 {
+	margin:0;
+}
+
+table {
+	width:100%;
+	border:1px solid $color-form-highlight;
+}
+
+table th {
+	width:100%;
+  background:#000;
+  color: white;
+  padding:($half-spacing-unit * 1.5) 0;
+  text-align:center;
+  height: 60px;
+}
+
+table>thead>tr {
+  padding: 0px;
+}
+
+table tr {
+  display:flex;
+  align-items: center;
+	width:100%;
+	padding:($half-spacing-unit * 1.5) 0;
+
+	&:nth-of-type(odd) {
+		background:$color-form-highlight;
+  }
+  &:hover {
+    background: rgba(1, 1, 1, 0.1);
+  }
+}
+
+table td, table th {
+	flex: 1 1 20%;
+	text-align:center;
+}
+
+table th {
+	text-transform:uppercase;
+}
+
+tr.show-more-btn {
+  cursor: pointer;
+  span {
+    margin: 0px;
+    font-weight: bold;
+    color: blue;
+  }
+}

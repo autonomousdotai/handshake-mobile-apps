@@ -1,5 +1,16 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Ethereum } from '@/services/Wallets/Ethereum.js';
+import { Bitcoin } from '@/services/Wallets/Bitcoin';
+import { BitcoinCash } from '@/services/Wallets/BitcoinCash';
+import axios from 'axios';
+
+// for reusable
+const sampleCrypto = {
+  ETH: new Ethereum(),
+  BTC: new Bitcoin(),
+  BCH: new BitcoinCash(),
+};
 
 function deg2rad(deg) {
   return deg * (Math.PI / 180);
@@ -85,9 +96,55 @@ export const getErrorMessageFromCode = (error) => {
     case -323:
       result = <FormattedMessage id="ex.error.323" />;
       break;
+    case -324:
+      result = <FormattedMessage id="ex.error.324" />;
+      break;
+    case -325:
+      result = <FormattedMessage id="ex.error.325" />;
+      break;
+    case -326:
+      result = <FormattedMessage id="ex.error.326" />;
+      break;
+    case -327:
+      result = <FormattedMessage id="ex.error.327" />;
+      break;
     default:
       result = messageFromApi || <FormattedMessage id="ex.error.default" />;
   }
   return result;
 };
 
+/**
+ * Get coin type from its wallet address
+ * @param {String} walletAddress
+ */
+export const getCryptoFromAddress = (walletAddress) => {
+  let rs;
+  Object.keys(sampleCrypto)?.forEach(crypto => {
+    if (sampleCrypto[crypto]?.checkAddressValid(walletAddress) === true) {
+      rs = crypto;
+    }
+  });
+
+  return rs;
+};
+
+export const getAddressFromLatLng = ({ lat, lng }) => {
+  if (lat && lng) {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&sensor=true&key=${process.env.GOOGLE_API_KEY}`).then((response) => {
+      const address = response.data.results[0] && response.data.results[0].formatted_address;
+      return address;
+    });
+  }
+  return Promise.reject(new Error('Missing latlng'));
+};
+
+export const getGeoCodeFromAddress = (inputAddress) => {
+  if (inputAddress) {
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${inputAddress}&sensor=true&key=${process.env.GOOGLE_API_KEY}`).then((response) => {
+      const location = response.data.results[0] && response.data.results[0].geometry.location;
+      return location;
+    });
+  }
+  return Promise.reject(new Error('Missing inputAddress'));
+};
