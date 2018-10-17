@@ -453,7 +453,7 @@ class Prediction extends React.Component {
       <div className={Prediction.displayName}>
         <Loading isLoading={props.isLoading} />
         {/*<Banner />*/}
-        <PexCreateBtn dispath={props.dispatch} />
+        <PexCreateBtn dispatch={props.dispatch} />
         {this.renderReport(props)}
         {this.renderEventList(props)}
         {this.renderBetMode(props, state)}

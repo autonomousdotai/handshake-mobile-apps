@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Loading from '@/components/Loading';
 import GasAlert from '@/pages/CreateMarket/GasAlert';
-import { isValidEmailCode, eventDetailSelector } from '@/pages/CreateMarket/selector';
+import { eventDetailSelector } from '@/pages/CreateMarket/selector';
 import { eventSelector } from '@/pages/Prediction/selector';
 import { URL } from '@/constants';
 import CreateEventForm from './CreateEventForm';
@@ -25,7 +25,6 @@ class CreateMarket extends React.Component {
     hasEmail: PropTypes.any,
     uId: PropTypes.any,
     insufficientGas: PropTypes.any,
-    isValidEmailCode: PropTypes.bool,
     eventDetail: PropTypes.object,
   };
 
@@ -36,7 +35,6 @@ class CreateMarket extends React.Component {
     match: {},
     eventDetail: {},
     insufficientGas: undefined,
-    isValidEmailCode: undefined,
   };
 
   constructor(props) {
@@ -108,7 +106,6 @@ class CreateMarket extends React.Component {
         hasEmail={props.hasEmail}
         uid={props.uId}
         insufficientGas={props.insufficientGas}
-        isValidEmailCode={props.isValidEmailCode}
       />
     );
   }
@@ -136,7 +133,6 @@ export default connect(
       eventList: eventSelector(state, props),
       eventDetail: eventDetailSelector(state, props),
       isLoading: isLoading(state),
-      isValidEmailCode: isValidEmailCode(state),
       reportList: reportSelector(state),
       categoryList: categorySelector(state),
       shareEvent: shareEventSelector(state),

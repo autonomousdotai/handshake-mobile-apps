@@ -74,6 +74,43 @@ export class Ethereum extends Wallet {
     }
   }
 
+  getGasPrice = async (speed=1) => {
+    return new Promise((resolve, reject) => {
+    axios.get('https://ethgasstation.info/json/ethgasAPI.json')
+      .then(({ data }) => {// 10 gwei units - so divide by 10 to get in gwei
+        let result = 41;
+        if(speed == 0){
+          result = (data.safeLow / 10).toString();
+        }
+        else if(speed == 2){
+          result = (data.fast / 10).toString();
+        }
+        else if(speed == 3){
+          result= (data.fastest / 10).toString();
+        }
+        else{
+          result = (data.average / 10).toString();
+        }
+
+        resolve(result);
+      })
+      .catch((error) => {
+        console.log('Failed to get data from ethGasStation: ', error);
+        resolve(41);
+        // axios
+        //   .get(`https://api.etherscan.io/api?module=proxy&action=eth_gasPrice&apikey=${process.env.apikeyEtherscan}`)
+        //   .then(({ data }) => {
+        //     const gasPrice = Number(data.result).toString();
+        //     resolve(Web3.utils.fromWei(gasPrice, 'gwei'));
+        //   })
+        //   .catch((error) => {
+        //     resolve(41);
+        //   });
+      });
+    })
+  }
+
+
   async getFee() {
     await getGasPrice();
     return await getEstimateGas();
@@ -101,7 +138,7 @@ export class Ethereum extends Wallet {
     return true;
   }
 
-  async transfer(toAddress, amountToSend, data="", gasLimit=210000) {
+  async transfer(toAddress, amountToSend, data="", gasLimit=210000, gasPrice) {
     const web3 = this.getWeb3();
     if (!web3.utils.isAddress(toAddress)) {
       return { status: 0, message: 'messages.ethereum.error.invalid_address2' };
@@ -115,9 +152,11 @@ export class Ethereum extends Wallet {
       if (balance == 0 || balance <= amountToSend) {
         return { status: 0, message: 'messages.ethereum.error.insufficient' };
       }
-      //await getGasPrice();
-      const gasPrice = new BN(await web3.eth.getGasPrice());
-      //const gasPrice = window.gasPrice;
+
+      if(!gasPrice){
+        gasPrice = await this.getGasPrice(3);
+      }
+      gasPrice = new BN(gasPrice * 1000000000);// converts the gwei price to wei;
 
       const estimateGas = new BN(balance).div(gasPrice);
       const limitedGas = gasLimit;

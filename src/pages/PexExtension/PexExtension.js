@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { EXT } from '@/constants';
 import Logo from '@/assets/images/pex/ext-landing-page/logo.svg';
-import ChromeLogo from '@/assets/images/pex/ext-landing-page/chrome-logo.svg';
+import ChromeLogo from '@/assets/images/pex/ext-landing-page/icon_chrome.svg';
 import MacBook from '@/assets/images/pex/ext-landing-page/macbook.svg';
 
 import './PexExtension.scss';
@@ -31,7 +31,11 @@ class PexExtension extends React.Component {
 
   setFrameClip = (frame) => {
     const { clientWidth, clientHeight } = this.macbook.current;
-    frame.setAttribute('style', `width: ${clientWidth * (clientHeight / clientWidth)}px; height: ${clientHeight}px`);
+    const style = `
+       width: ${clientWidth * (clientHeight / clientWidth)}px;
+       height: ${clientHeight}px;
+    `;
+    frame.setAttribute('style', style);
     this.setDimensionHeading();
   };
 
@@ -58,12 +62,12 @@ class PexExtension extends React.Component {
                 <img src={Logo} alt="Ninja Extension" />
               </span>
               <div className="LineText">
-                <span className="HighlightText">Outsmart</span> the Internet <br />
+                <span className="HeadLine"><span className="HighlightText">Outsmart</span> the Internet</span>
                 <span className="Describes">Predict the future of politics, technology, money and sports.</span>
               </div>
             </div>
             <div className="ActionGetApp">
-              <span className="NoteText">You unclocked excluse access</span>
+              <span className="NoteText">You unlocked exclusive access</span>
               <a href={EXT.URL} target="blank" alt="Extension App" className="btn btn-primary">
                 <img src={ChromeLogo} alt="Chrome Logo" />
                 <span>Add to Chrome</span>
@@ -95,10 +99,6 @@ class PexExtension extends React.Component {
               </div>
             </div>
           </div>
-          {/* <div className="Description">
-            <span>Bet on anything, against anyone on the Internet.</span>
-            <a href={URL_EXT} target="blank" title="Add to chrome" className="btn btn-warning">Add to chrome</a>
-          </div> */}
         </div>
       </React.Fragment>
     );

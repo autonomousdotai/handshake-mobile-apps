@@ -37,7 +37,6 @@ class CreateEventForm extends Component {
     formAction: PropTypes.func,
     dispatch: PropTypes.func,
     onSelect: PropTypes.func,
-    isValidEmailCode: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -52,7 +51,6 @@ class CreateEventForm extends Component {
     initialValues: {},
     shareEvent: null,
     eventList: [],
-    isValidEmailCode: undefined,
   };
 
   constructor(props) {
@@ -356,10 +354,7 @@ class CreateEventForm extends Component {
           {this.renderTimeGroup(props, state)}
         </div>
         <div className="CreateEventFormBlock">
-          <EmailVerification
-            hasEmail={props.hasEmail}
-            isValidEmailCode={props.isValidEmailCode}
-          />
+          <EmailVerification />
           <button
             type="submit"
             className="btn btn-primary btn-block"

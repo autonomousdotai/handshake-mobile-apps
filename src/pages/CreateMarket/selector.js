@@ -4,10 +4,16 @@ export const hasEmail = (state) => {
   if (isEmpty(state.auth.profile)) return null;
   return state.auth.profile.email;
 };
+
 export const uId = (state) => {
   if (isEmpty(state.auth.profile)) return null;
   return state.auth.profile.id;
 };
+
+export const isEmailVerified = (state) => {
+  if (isEmpty(state.auth.profile)) return null;
+  return state.auth.profile.verified;
+}
 
 export const eventDetailSelector = (state, props) => {
   const { eventId } = props.match.params;

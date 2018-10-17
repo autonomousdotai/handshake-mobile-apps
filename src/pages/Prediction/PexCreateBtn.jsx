@@ -8,6 +8,7 @@ import GA from '@/services/googleAnalytics';
 
 class PexCreateBtn extends React.PureComponent {
   render() {
+    console.log('this.props.dispatch', this.props.dispatch);
     return (
       <div id="PexCreateBtn" >
         <div className="Idea">
@@ -29,11 +30,7 @@ class PexCreateBtn extends React.PureComponent {
 }
 
 PexCreateBtn.propTypes = {
-  dispatch: PropTypes.func,
-}
-
-PexCreateBtn.defaultProps = {
-  dispatch: undefined,
+  dispatch: PropTypes.func.isRequired,
 }
 
 
