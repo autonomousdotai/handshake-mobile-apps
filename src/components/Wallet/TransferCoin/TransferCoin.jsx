@@ -22,6 +22,9 @@ import './TransferCoin.scss';
 import { ICON } from '@/styles/images';
 import BrowserDetect from '@/services/browser-detect';
 import WalletSelected from '@/components/Wallet/WalletSelected';
+import Slider from 'react-rangeslider'
+
+
 
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -59,7 +62,9 @@ class Transfer extends React.Component {
       inputSendAmountValue: 0,
       inputSendMoneyValue: 0,
       legacyMode: false,
-      walletNotFound: ''
+      walletNotFound: '',
+      volume: 0,
+      listFeeObject: false
     }
   }
 
@@ -264,6 +269,7 @@ class Transfer extends React.Component {
 
     this.setState({wallets: listWalletCoin, walletDefault, walletSelected: walletDefault}, ()=>{
       this.props.rfChange(nameFormSendWallet, 'walletSelected', walletDefault);
+      this.getFeeLevel(walletDefault);
     });
   }
 
@@ -385,22 +391,24 @@ class Transfer extends React.Component {
 submitSendCoin=()=>{
   this.setState({isRestoreLoading: true});
   this.modalConfirmTranferRef.close();
-    this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue).then(success => {
+  let fee = this.state.listFeeObject ? this.state.listFeeObject.listFee[this.state.volume].value : 0;
+  let option = {"fee": fee};
+  this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue, option).then(success => {
 
-        this.setState({isRestoreLoading: false});
-        if (success.hasOwnProperty('status')){
-          if (success.status == 1){
-            this.showSuccess(this.getMessage(success.message));
-            this.onFinish(success.data);
-            MasterWallet.NotifyUserTransfer(this.state.walletSelected.address, this.state.inputAddressAmountValue);
-            // start cron get balance auto ...
-            // todo hanlde it ...
-          }
-          else{
-            this.showError(this.getMessage(success.message));
-          }
+      this.setState({isRestoreLoading: false});
+      if (success.hasOwnProperty('status')){
+        if (success.status == 1){
+          this.showSuccess(this.getMessage(success.message));
+          this.onFinish(success.data);
+          MasterWallet.NotifyUserTransfer(this.state.walletSelected.address, this.state.inputAddressAmountValue);
+          // start cron get balance auto ...
+          // todo hanlde it ...
         }
-    });
+        else{
+          this.showError(this.getMessage(success.message));
+        }
+      }
+  });
 }
 
 // For Qrcode:
@@ -458,6 +466,32 @@ selectWallet = async (walletSelected) => {
     await this.setRate(walletSelected.name);
     this.updateAddressAmountValue(null, this.state.inputSendAmountValue);
   }
+  // show fee?
+  this.getFeeLevel(walletSelected);
+  
+}
+
+async getFeeLevel(walletSelected){
+  let listFee = await walletSelected.getLevelFee();
+  let listFeeObject = false;
+  console.log(listFee);
+  if(listFee){
+    let labels = {};
+    let min = 0;
+    let max = listFee.length-1;
+    for (var i = 0; i < listFee.length; i ++){
+      labels[i.toString()] = listFee[i].title;
+    }
+    listFeeObject = {'listFee': listFee, 'labels': labels, 'min': min, "max": max};    
+  }
+  this.setState({listFeeObject: listFeeObject, volume: 1});
+    
+}
+
+handleOnChange = (value) => {
+  this.setState({
+    volume: value
+  })
 }
 
 render() {
@@ -468,10 +502,11 @@ render() {
   const { walletNotFound, walletSelected, wallets } = this.state;
 
   let amount = this.state.inputSendAmountValue;
-  try {amount= parseFloat(amount).toFixed(8)}catch (e){}
+  try {amount= parseFloat(amount).toFixed(8)}catch (e){}  
 
   return (
-    <div>
+    <div>        
+
         {/* Dialog confirm transfer coin */}
         <ModalDialog title="Confirmation" onRef={modal => this.modalConfirmTranferRef = modal}>
         <div className="bodyConfirm"><span>{messages.wallet.action.transfer.text.confirm_transfer} {amount} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
@@ -547,10 +582,26 @@ render() {
               </div>
             }
 
+            {this.state.listFeeObject && 
+            <div>
+              <p className="labelText">{messages.wallet.action.transfer.label.feel_level} {this.state.listFeeObject.listFee[this.state.volume].description}</p>
+              <div className="fee-level-box">
+                <Slider
+                  min={this.state.listFeeObject.min}
+                  max={this.state.listFeeObject.max}
+                  tooltip={false}
+                  labels={this.state.listFeeObject.labels}
+                  value={this.state.volume}                
+                  onChange={this.handleOnChange}
+                />
+              </div>
+            </div>
+            }
+
             <div>
               <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>
               { walletSelected && <WalletSelected wallets={wallets} walletSelected={walletSelected} onSelect={wallet => { this.selectWallet(wallet); }}></WalletSelected> }
-            </div>
+            </div>            
 
             <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button.transfer}</Button>
           </div>

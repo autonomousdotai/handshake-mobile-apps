@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { Wallet } from '@/services/Wallets/Wallet';
+import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 
 import './TopUp.scss';
 
@@ -62,7 +63,9 @@ class TopUp extends React.Component {
         <div className="Describe">Send ETH to your ninja prediction wallet address</div>
         <div className="WalletAddress">
           <span className="Address">{address}</span>
-          <span className="HelpIcon" title="Copy to clipboard" onClick={this.copyToClipboard(address)}>?</span>
+          <span className="HelpIcon" title="Copy to clipboard" onClick={this.copyToClipboard(address)}>
+            <img src={CopyIcon} alt="Copy to clipboard" />
+          </span>
         </div>
       </div>
     );

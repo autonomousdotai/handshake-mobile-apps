@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { shakeItem, initFreeHandshake } from '@/reducers/handshake/action';
 import { HANDSHAKE_ID, API_URL, APP } from '@/constants';
 import { getGasPrice } from '@/utils/gasPrice';
+import { Tooltip } from 'reactstrap';
+import IconInfo from '@/assets/images/icon/question-circle.svg';
 
 // components
 import Button from '@/components/core/controls/Button';
@@ -69,6 +71,8 @@ class BetingShakeFree extends React.Component {
       winValue: 0,
       disable: false,
       side: SIDE.SUPPORT,
+      openTooltip: false,
+
     };
 
 
@@ -259,6 +263,27 @@ class BetingShakeFree extends React.Component {
     }
   }
 
+  renderToolTip = (tooltip, openTooltip) => {
+    if (tooltip.length === 0) return null;
+    return (
+      <span className="wrapperTooltipShakeFree">
+        <img src={IconInfo} alt="" id="TooltipPrivate" width="12" />
+        <Tooltip
+          placement="right"
+          isOpen={openTooltip}
+          target="TooltipPrivate"
+          toggle={() => {
+            this.setState({
+              openTooltip: !openTooltip,
+            });
+        }}
+        >
+          {tooltip}
+        </Tooltip>
+      </span>
+    );
+  }
+
   renderInputField(props) {
     const {
       label,
@@ -270,13 +295,16 @@ class BetingShakeFree extends React.Component {
       value,
       defaultValue,
       isInput = true,
+      tooltip = '',
       ...newProps
     } = props;
-    const { oddValue, amountValue } = this.state;
-    //console.log('Label Default Value:', label, defaultValue);
+    const { oddValue, amountValue, openTooltip } = this.state;
     return (
       <div className="rowWrapper">
-        <label className="label" htmlFor={id}>{label}</label>
+        <div className="titleLable">
+          <label className="label" htmlFor={id}>{label}</label>
+          {this.renderToolTip(tooltip, openTooltip)}
+        </div>
         {
           isInput ? (
             <input
@@ -330,6 +358,8 @@ class BetingShakeFree extends React.Component {
       infoText: isChangeOdds ? 'Your Odds' : 'Market Odds',
       isShowInfoText: true,
       type: 'text',
+      tooltip: MESSAGE.ODDS_TOOLTIP,
+
     };
 
     // const sideText = getKeyByValue(SIDE, this.state.side);

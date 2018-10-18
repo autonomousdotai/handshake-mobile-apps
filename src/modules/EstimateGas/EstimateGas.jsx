@@ -1,5 +1,5 @@
 import React from 'react';
-import { getGasPrice, formatAmount } from '@/components/handshakes/betting/utils.js';
+import { getGasPrice, formatAmount, getEstimateGas } from '@/components/handshakes/betting/utils.js';
 import './EstimateGas.scss';
 
 class EstimateGas extends React.Component {
@@ -10,7 +10,7 @@ class EstimateGas extends React.Component {
   }
 
   async componentDidMount() {
-    const estimateGas = getGasPrice();
+    const estimateGas = await getEstimateGas();
     this.setState({
       estimateGas,
     });
@@ -21,8 +21,8 @@ class EstimateGas extends React.Component {
 
     return (
       <div className="estimateRowWrapper">
-        <div className="gasPriceTitle">Current gas price per transaction (Gwei)</div>
-        <div className="estimateGasValue">{formatAmount(estimateGas)}</div>
+        <div className="gasPriceTitle">Gas price</div>
+        <div className="estimateGasValue">{formatAmount(estimateGas)} ETH</div>
       </div>
     );
   }

@@ -1316,6 +1316,7 @@ export default {
           scan_qrcode: 'Scan QR code',
           gas_limit: 'Gas Limit',
           data: 'Data',
+          feel_level: 'Fee:',
         },
         placeholder: {
           to_address: 'Wallet address...',

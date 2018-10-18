@@ -6,6 +6,23 @@
 
 .sendwallet-wrapper{
 
+  .rangeslider-horizontal {
+    .rangeslider__fill {
+      background-color: #607bed;
+    }
+    .rangeslider__handle{
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 -1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  ul.rangeslider__labels .rangeslider__label-item:first-child {
+    padding-right: 20px;
+  }
+  .fee-level-box{
+    height: 45px;
+    margin-top: -5px;
+  }
+
   margin: auto;
   width: 100%;
   margin-bottom: 5px;
@@ -272,7 +289,10 @@
 
   .address{
     font-size: 1rem;
+    font-weight:300;
+    color:black;
   }
+
   .col-2, .col-5, .col-6, .col-4{
     padding: 0 0.5rem;
     line-height: 1.9;
@@ -283,6 +303,21 @@
   @media (max-width: 330px){
     .col-5{
       flex: 0 0 60%;
+    }
+
+    .lastCol{
+      margin-left: 16.5%;
+      text-align: left;
+
+      .arrow{
+        top: 0;
+        padding-right: 0;
+      }
+    }
+
+    .col-5{
+      flex:none;
+      max-width: 83%;
     }
 
     .balance{
