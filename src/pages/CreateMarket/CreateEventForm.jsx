@@ -330,7 +330,7 @@ class CreateEventForm extends Component {
     });
     const { isNew, shareEvent } = props;
     if (shareEvent) {
-      return (<ShareMarket shareEvent={shareEvent} isNew={isNew} />);
+      return (<ShareMarket shareEvent={shareEvent} isNew={isNew} dispatch={props.dispatch} />);
     }
     return (
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>
