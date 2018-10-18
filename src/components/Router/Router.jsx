@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
 // constants
@@ -184,69 +185,68 @@ class Router extends React.Component {
 
   render() {
     return (
-      <BrowserRouter>
-        <Switch>
-          {
-            BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterLandingPageMain} />
-          }
+      <Switch>
+        {
+          BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterLandingPageMain} />
+        }
 
-          <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
-          <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
-          <Route exact path={URL.RECRUITING} component={Recruiting} />
-          <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
-          <Route path={URL.ATM_FOR_BUSINESS} render={() => <ProjectDetail type="landing" name="cash-for-business" img={imgDad} contentComponent={<ContentForCashBusiness />} />} />
-          <Route exact path={URL.CASH_FOR_BUSINESS} render={() => {
-            return <Redirect to={{ pathname: URL.ATM_FOR_BUSINESS }} />
+        <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
+        <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
+        <Route exact path={URL.RECRUITING} component={Recruiting} />
+        <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
+        <Route path={URL.ATM_FOR_BUSINESS} render={() => <ProjectDetail type="landing" name="cash-for-business" img={imgDad} contentComponent={<ContentForCashBusiness />} />} />
+        <Route exact path={URL.CASH_FOR_BUSINESS} render={() => {
+          return <Redirect to={{ pathname: URL.ATM_FOR_BUSINESS }} />
+        }}
+        />
+        <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
+        <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
+        <Route path={URL.LANDING_BECOME_ATM} render={() => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} />} />
+        {routesUsingDesktopLayout}
+
+        {/* Cash on mobile uses a completely different layout! */}
+        {/* <Route path={URL.HANDSHAKE_CASH} component={Discover} /> */}
+        <Route
+          path={URL.INDEX}
+          render={props => {
+            return (
+              <Layout {...props}>
+                {
+                  this.state.firebaseApp.config.isMaintain
+                    ? <Maintain />
+                    : (
+                      <ScrollToTop>
+                        <Switch>
+                          <Route exact path={URL.INDEX} render={() => {
+                            return <Redirect to={{ pathname: URL.PRODUCT_PREDICTION_URL }} />
+                          }}
+                          />
+                          {/*<Route*/}
+                          {/*exact*/}
+                          {/*path={URL.INDEX}*/}
+                          {/*render={() => {*/}
+                          {/*if (process.env.isDojo) {*/}
+                          {/*return <Redirect to={{ pathname: URL.HANDSHAKE_CASH }} />*/}
+                          {/*}*/}
+                          {/*return <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} />*/}
+                          {/*}}*/}
+                          {/*/>*/}
+                          {routesUsingMobileLayout}
+                          <Route component={Page404} />
+                        </Switch>
+                      </ScrollToTop>
+                    )
+                }
+              </Layout>
+            )
           }}
-          />
-          <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
-          <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
-          <Route path={URL.LANDING_BECOME_ATM} render={() => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} />} />
-          {routesUsingDesktopLayout}
-
-          {/* Cash on mobile uses a completely different layout! */}
-          {/* <Route path={URL.HANDSHAKE_CASH} component={Discover} /> */}
-          <Route
-            path={URL.INDEX}
-            render={props => {
-              return (
-                <Layout {...props}>
-                  {
-                    this.state.firebaseApp.config.isMaintain
-                      ? <Maintain />
-                      : (
-                        <ScrollToTop>
-                          <Switch>
-                            <Route exact path={URL.INDEX} render={() => {
-                              return <Redirect to={{ pathname: URL.PRODUCT_PREDICTION_URL }} />
-                            }}
-                            />
-                            {/*<Route*/}
-                            {/*exact*/}
-                            {/*path={URL.INDEX}*/}
-                            {/*render={() => {*/}
-                            {/*if (process.env.isDojo) {*/}
-                            {/*return <Redirect to={{ pathname: URL.HANDSHAKE_CASH }} />*/}
-                            {/*}*/}
-                            {/*return <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} />*/}
-                            {/*}}*/}
-                            {/*/>*/}
-                            {routesUsingMobileLayout}
-                            <Route component={Page404} />
-                          </Switch>
-                        </ScrollToTop>
-                      )
-                  }
-                </Layout>
-              )
-            }}
-          />
-        </Switch>
-      </BrowserRouter>
+        />
+      </Switch>
     );
   }
 }
 
 export default connect(state => ({
   firebaseApp: state.firebase.data,
+  router: state.router,
 }))(Router);
