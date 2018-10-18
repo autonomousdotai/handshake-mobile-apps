@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import qs from 'querystring';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { randomArrayItem } from '@/utils/array';
+import { withRouter } from 'react-router-dom';
 
 import ShareLink from '@/assets/images/icon/icon_share.svg';
 import FacebookSVG from '@/assets/images/icon/icon_facebook.svg';
@@ -26,11 +28,17 @@ class ShareMarket extends React.Component {
     </span>
   );
 
+  onClickViewEvent = () => {
+    this.props.history.push(this.props.shareEvent.url);
+  }
+
   renderMessage = (props) => {
+    console.log('props.shareEvent.url', props.shareEvent.url);
     const type = props.isNew ? 'event' : 'outcome';
     return (
       <div className="ShareEventMessage">
-        Your {type}  was successfully created!
+        Your {type} was successfully created!
+        <a onClick={this.onClickViewEvent}>View Event</a>
       </div>
     );
   }
@@ -77,4 +85,4 @@ class ShareMarket extends React.Component {
   }
 }
 
-export default ShareMarket;
+export default withRouter(ShareMarket);
