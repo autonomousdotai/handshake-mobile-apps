@@ -1,19 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import qs from 'querystring';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { randomArrayItem } from '@/utils/array';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { push } from 'connected-react-router';
 
+import { URL } from '@/constants';
 import ShareLink from '@/assets/images/icon/icon_share.svg';
 import FacebookSVG from '@/assets/images/icon/icon_facebook.svg';
 import TwitterSVG from '@/assets/images/icon/icon_twitter.svg';
-
 import { socialSharedMsg } from '@/pages/Prediction/constants';
 
 class ShareMarket extends React.Component {
   static propTypes = {
     shareEvent: PropTypes.object,
+    dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -28,18 +29,26 @@ class ShareMarket extends React.Component {
     </span>
   );
 
-  onClickViewEvent = () => {
-    this.props.history.push(this.props.shareEvent.url);
-  }
-
   renderMessage = (props) => {
-    console.log('props.shareEvent.url', props.shareEvent.url);
     const type = props.isNew ? 'event' : 'outcome';
+    const { url } = props.shareEvent;
+    const toUrl = {
+      pathname: URL.HANDSHAKE_PEX,
+      search: url.substring(url.indexOf('?')),
+    };
     return (
-      <div className="ShareEventMessage">
-        Your {type} was successfully created!
-        <a onClick={this.onClickViewEvent}>View Event</a>
-      </div>
+      <React.Fragment>
+        <div className="ShareEventMessage">
+          Your {type} was successfully created!
+        </div>
+        <Link
+          className="ViewSharedEvent"
+          to={toUrl}
+          onClick={() => { props.dispatch(push(toUrl)); }}
+        >
+          View Event
+        </Link>
+      </React.Fragment>
     );
   }
 
@@ -85,4 +94,4 @@ class ShareMarket extends React.Component {
   }
 }
 
-export default withRouter(ShareMarket);
+export default ShareMarket;

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
 import Loading from '@/components/Loading';
 import GasAlert from '@/pages/CreateMarket/GasAlert';
 import { eventDetailSelector } from '@/pages/CreateMarket/selector';
@@ -65,7 +66,8 @@ class CreateMarket extends React.Component {
       eventId: item.id || 0,
       selectedEvent: item,
     });
-    this.props.history.push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id || ''}`); // eslint-disable-line
+    this.props.dispatch(push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id || ''}`));
+    // this.props.history.push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id || ''}`); // eslint-disable-line
   }
 
   renderCreateEventForm = (props, state) => {
