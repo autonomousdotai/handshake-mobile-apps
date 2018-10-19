@@ -12,7 +12,7 @@ class PexCreateBtn extends React.PureComponent {
     return (
       <div id="PexCreateBtn" >
         <div className="Idea">
-          <img src={IconIdea} alt="" className="IconIdea" />
+          {/*<img src={IconIdea} alt="" className="IconIdea" />*/}
           <span>Wanna start a new bet?</span>
         </div>
         <Link
@@ -22,7 +22,7 @@ class PexCreateBtn extends React.PureComponent {
             GA.clickCreateOwnEvent();
           }}
         >
-          <button className="btn btn-report">Create now</button>
+          <div className="btnCreate">Create now</div>
         </Link>
       </div>
     );
