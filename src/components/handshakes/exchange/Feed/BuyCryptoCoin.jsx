@@ -148,7 +148,7 @@ class BuyCryptoCoin extends React.Component {
         console.log('onHide', this.isShow);
       });
       this.scrollListener();
-    }, 7000);
+    }, 6000);
     this.attachScrollListener();
   }
 
