@@ -66,15 +66,15 @@ module.exports = function webpackConfig(env, argv = {}) {
           test: /\.scss$/,
           use: [
             'style-loader',
-            'css-loader',
-            'postcss-loader',
+            { loader: 'css-loader', options: { sourceMap: true } },
+            { loader: 'postcss-loader', options: { sourceMap: true } },
             {
               loader: 'resolve-url-loader',
               options: {
                 keepQuery: true,
               },
             },
-            'sass-loader',
+            { loader: 'sass-loader', options: { sourceMap: true } },
           ],
         },
       ],
