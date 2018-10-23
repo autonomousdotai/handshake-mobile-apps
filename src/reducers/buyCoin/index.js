@@ -90,7 +90,10 @@ const buyCoinReducter = (state = initialState, action) => {
           ...state,
           packages: {
             ...state.packages,
-            [name]: { ...quoteReverse, fiatAmountOverLimit, show },
+            [name]: {
+              ...state.packages[name],
+              [quoteReverse?.currency]: { ...quoteReverse, fiatAmountOverLimit, show },
+            },
           },
         };
       }

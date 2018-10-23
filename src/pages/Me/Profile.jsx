@@ -488,6 +488,11 @@ class Profile extends React.Component {
     return (
       <Grid className="profile">
         <Row>
+          <div className="head_text">
+            <span>{messages.me.profile.head_text}</span>
+          </div>
+        </Row>
+        <Row>
           <Col md={12}>
             <div className="collapse-custom">
               <div

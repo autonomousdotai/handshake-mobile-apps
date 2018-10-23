@@ -27,7 +27,7 @@ class Shop extends React.Component {
       const { data:source } = result;
       this.setState({ products: source.data.products});
     });
-    $zopim.livechat.button.hide();
+    // $zopim.livechat.button.hide();
   }
 
   videoOrImage(firstGallery, productName) {

@@ -1,5 +1,11 @@
 @import './src/styles/style';
 .profile {
+  .head_text {
+    padding: 15px;
+    background: aliceblue;
+    font-weight: 300;
+    text-align: center;
+  }
   .collapse-custom {
     border-bottom: 1px solid #f0f0f0;
     font-weight: $normal;

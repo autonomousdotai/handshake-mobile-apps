@@ -231,6 +231,7 @@ export default {
   'ex.error.325': 'Credit price changed',
   'ex.error.326': 'We don’t have enough coin for your request! Please try with smaller amount.',
   'ex.error.327': 'Credit item status is invalid',
+  'ex.error.331': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': `WELCOME TO OUR <br/> EARLY BIRD PROGRAM!`,
@@ -917,6 +918,7 @@ export default {
   // me page
   me: {
     profile: {
+      head_text: 'Our verification process only takes a few minutes in working hour. It will be longer during night time and weekend.',
       username: {
         exist: 'Name already exists',
         success: 'Your alias has been recorded',
@@ -1113,9 +1115,10 @@ export default {
     cod_form: {
       cod: 'Cash on Delivery',
       buy_btn: 'Buy',
-      your_address: 'Meet up address',
+      your_address: 'Only available in Ho Chi Minh City for now',
       your_phone: 'Phone number',
       time: 'Time to delivery & Note',
+      default_time: 'As soon as possible',
     },
     cash: {
       credit: {
@@ -1754,11 +1757,11 @@ export default {
       payment_methods: {
         bank: 'Bank Transfer',
         cod: 'COD',
-        cod_info: 'Cash on delivery.',
+        cod_info: 'State your time and place for meeting up and we will exchange in person.',
       },
       verify: {
         notYet: {
-          title: 'You are not verified yet! Verify now to start trading with good price.',
+          title: 'You are not verified yet It only take a few minutes!',
           action: 'Verify now',
         },
         rejected: {
@@ -1766,7 +1769,7 @@ export default {
           action: 'Verify now',
         },
         processing: {
-          title: 'We are verifying your account. Please kindly wait.',
+          title: 'Verifying your account. We will send you an email once we are done.',
           action: 'Please wait',
         },
         verified: {

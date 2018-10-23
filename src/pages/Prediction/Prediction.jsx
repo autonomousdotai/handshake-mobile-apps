@@ -80,7 +80,7 @@ class Prediction extends React.Component {
     if (eventId) {
       this.props.dispatch(loadRelevantEvents({eventId}));
     }
-    $zopim.livechat.button.hide();
+    // $zopim.livechat.button.hide();
   }
 
   componentWillUnmount() {

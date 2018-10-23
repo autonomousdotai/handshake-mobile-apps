@@ -105,7 +105,7 @@ class CreateBettingEvent extends React.Component {
        headers: { 'Content-Type': 'application/json' },
        data: [{ name: values.outcome, public: 0 }],
        successFn: async (response) => {
-         console.log(response.data);
+         console.log('OUTCOME SUCCESS', response.data);
          this.fetchShareUrl(response.data[0].id);
          this.props.showAlert({
            message: <div className="text-center">Outcome added successfully.</div>,
@@ -289,7 +289,7 @@ class CreateBettingEvent extends React.Component {
     const fetchUrl = $http({
       url: `${BASE_API.BASE_URL}/cryptosign/outcome/generate_link`,
       data: {
-        outcome_id: id,
+        match_id: id,
       },
       headers: { 'Content-Type': 'application/json' },
       method: 'post',

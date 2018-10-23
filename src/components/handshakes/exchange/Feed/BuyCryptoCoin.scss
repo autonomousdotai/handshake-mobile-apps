@@ -1,6 +1,6 @@
 .buy-crypto-coin-container {
   padding-bottom: 60px;
-  background-color: #F2F2F2;
+  background-color: white;
   min-height: 100vh;
   input, textarea {
     &::placeholder {
@@ -17,6 +17,7 @@
     padding: 10px;
     justify-content: space-between;
     .package-item {
+      box-shadow: 0px 0px 15px 5px #F2F2F2;
       width: 48%;
       height: 197px;
       background: #FFFFFF;

@@ -92,13 +92,13 @@ function* handleCreateNewEventSaga({ newEventData }) {
   }
 }
 
-function* handleGenerateShareLinkSaga({ outcomeId, ...payload }) {
+function* handleGenerateShareLinkSaga({ matchId, ...payload }) {
   try {
     return yield call(apiPost, {
       PATH_URL: `${API_URL.CRYPTOSIGN.GENERATE_LINK}`,
       type: 'GENERATE_SHARE_LINK',
       data: {
-        outcome_id: outcomeId,
+        match_id: matchId,
       },
       ...payload,
     });
@@ -107,9 +107,8 @@ function* handleGenerateShareLinkSaga({ outcomeId, ...payload }) {
   }
 }
 
-function* saveGenerateShareLinkToStore(data) {
-  const { outcomeId, eventName } = data;
-  const generateLink = yield call(handleGenerateShareLinkSaga, { outcomeId });
+function* saveGenerateShareLinkToStore({ matchId, eventName }) {
+  const generateLink = yield call(handleGenerateShareLinkSaga, { matchId });
   return yield put(shareEvent({
     url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${generateLink.data.slug}`,
     name: eventName,
@@ -134,6 +133,7 @@ function* handleCreateEventSaga({ values, isNew }) {
           eventId,
           newOutcomeList,
         });
+        console.log('Add New outcomes', addOutcomeResult);
         if (!addOutcomeResult.error) {
           const inputData = addOutcomeResult.data.map(o => {
             return {
@@ -147,9 +147,9 @@ function* handleCreateEventSaga({ values, isNew }) {
               contractName: o.contract.json_name,
             };
           });
-          const outcomeId = addOutcomeResult.data[0].id;
+          const matchId = addOutcomeResult.data[0].match_id;
           const eventName = addOutcomeResult.data[0].name;
-          yield saveGenerateShareLinkToStore({ outcomeId, eventName });
+          yield saveGenerateShareLinkToStore({ matchId, eventName });
           betHandshakeHandler.createNewEvent(inputData);
         }
       } else {
@@ -196,9 +196,9 @@ function* handleCreateEventSaga({ values, isNew }) {
               contractName: contract.json_name,
             };
           });
-          const outcomeId = eventData.outcomes[0].id;
+          const matchId = eventData.id;
           const eventName = eventData.name;
-          yield saveGenerateShareLinkToStore({ outcomeId, eventName });
+          yield saveGenerateShareLinkToStore({ matchId, eventName });
           betHandshakeHandler.createNewEvent(inputData);
         }
       }

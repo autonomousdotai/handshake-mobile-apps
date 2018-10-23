@@ -127,18 +127,21 @@ class BuyCryptoCoin extends React.Component {
   }
 
   componentDidMount() {
-    const { country } = this.props;
+    const { country, intl: { messages } } = this.props;
     // this.getBasePrice(this.props.wallet?.currency);
     this.updatePhoneNumber(this.props.authProfile?.phone);
 
     // need to get bank info in user country, global bank also
     this.getBankInfoFromCountry(country);
 
+    this.updateTimeAndNote(messages.create.cod_form.default_time);
+
     // get package data
     this.getPackageData();
 
     // this.checkUserVerified();
     setTimeout(() => {
+      /*eslint-disable */
       $zopim.livechat.window.onShow(() => {
         this.isShow = true;
         console.log('onShow', this.isShow);
@@ -148,6 +151,7 @@ class BuyCryptoCoin extends React.Component {
         console.log('onHide', this.isShow);
       });
       this.scrollListener();
+      /* eslint-enable */
     }, 6000);
     this.attachScrollListener();
   }
@@ -159,7 +163,7 @@ class BuyCryptoCoin extends React.Component {
   }
 
   scrollListener = async () => {
-    console.log('scrollListener',);
+    /*eslint-disable */
     if (!this.isShow) {
       $zopim(() => {
         $zopim.livechat.button.hide();
@@ -168,6 +172,7 @@ class BuyCryptoCoin extends React.Component {
         $zopim.livechat.button.show();
       });
     }
+    /* eslint-enable */
   }
 
   attachScrollListener() {
@@ -177,9 +182,11 @@ class BuyCryptoCoin extends React.Component {
   }
 
   detachScrollListener() {
+    /*eslint-disable */
     $zopim.livechat.button.hide();
     window.removeEventListener('scroll', this.scrollListener);
     window.removeEventListener('resize', this.scrollListener);
+    /* eslint-enable */
   }
 
   getPackageData = () => {
@@ -249,6 +256,10 @@ class BuyCryptoCoin extends React.Component {
 
   updatePhoneNumber = (phone) => {
     phone && this.props.rfChange(nameBuyCryptoForm, 'phone', phone);
+  }
+
+  updateTimeAndNote = (noteAndTime = '') => {
+    this.props.rfChange(nameBuyCryptoForm, 'noteAndTime', noteAndTime);
   }
 
   updatePaymentMethod = (method) => {
@@ -630,6 +641,7 @@ class BuyCryptoCoin extends React.Component {
 
   renderPackages = () => {
     const { packages } = this.props;
+    const { currency } = this.state;
     return (
       <div className="package-container">
         {
@@ -637,7 +649,10 @@ class BuyCryptoCoin extends React.Component {
             const {
               name, show,
             } = item;
-            const packageData = packages[name];
+            const packageGroup = packages[name];
+            const packageData = packageGroup && packageGroup[currency];
+
+            if (!packageData) return null;
 
             return show && packageData && (
               <div key={name} className={`package-item ${name}`}>
@@ -683,7 +698,6 @@ class BuyCryptoCoin extends React.Component {
   }
 
   onFirstClickBuy = () => {
-    console.log('onFirstClickBuy',);
     gtag.event({
       category: taggingConfig.coin.category,
       action: taggingConfig.coin.action.click_buy,
@@ -769,7 +783,8 @@ class BuyCryptoCoin extends React.Component {
                       }}
                     />
                   }
-                  onFirstClick={this.onFirstClickBuy}
+                  onConfirm={this.onFirstClickBuy}
+                  onCancel={this.onFirstClickBuy}
                 />
               </div>
             </FormBuyCrypto>
