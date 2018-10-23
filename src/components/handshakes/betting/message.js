@@ -59,6 +59,7 @@ export const MESSAGE_SERVER = {
   1042: 'Your account can\'t get free ETH.',
 
   1062: 'Redeem code is invalid',
+  1063: 'Redeem code is invalid',
 };
 
 export const MESSAGE = {
