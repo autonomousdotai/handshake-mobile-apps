@@ -4,11 +4,30 @@ import Countdown from '@/components/Countdown/Countdown';
 import CopyLink from '@/assets/images/share/link.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { URL } from '@/constants';
+import Image from '@/components/core/presentation/Image';
 import { randomArrayItem } from '@/utils/array';
+import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
+import TimeSVG from '@/assets/images/pex/time.svg';
+import CoinSVG from '@/assets/images/pex/coin.svg';
+
+
 import { formatAmount } from '@/utils/number';
 import OutcomeList from './OutcomeList';
 import { socialSharedMsg } from './constants';
 
+function renderEventSource({ event }) {
+  const { source } = event;
+  const { name, url_icon: urlSource, url } = source;
+  const sourceName = name || url;
+  return (
+    <div className="SourceLogo">
+      <div className="LogoImage">
+        <Image src={urlSource} alt="sourceLogo" width="23" />
+      </div>
+      <div className="SourceTitle">{sourceName}</div>
+    </div>
+  );
+}
 function renderEventName({ event }) {
   return (
     <div className="EventName">
@@ -31,14 +50,17 @@ function renderEventNumberOfPlayers({ event }) {
       break;
   }
   return (
-    <div className="EventNumberOfPlayer">{msg}</div>
+    <div className="EventNumberOfPlayer">
+      <span><Image src={NumberPlayersSVG} alt="NumberPlayersSVG" /></span>
+      <span className="NumberOfPlayerTitle">{msg}</span>
+    </div>
   );
 }
 
 function renderEvenTimeLeft({ event, onCountdownComplete }) {
   return (
     <div className="EventTimeLeft">
-      <span className="EventTimeLeftText">Time left</span>
+      <span><Image src={TimeSVG} alt="TimeSVG" /></span>
       <span className="EventTimeLeftValue">
         <Countdown endTime={event.date} onComplete={onCountdownComplete} />
       </span>
@@ -50,7 +72,7 @@ function renderEventTotalBets({ event }) {
   const totalBets = !event.total_bets ? 0 : formatAmount(event.total_bets);
   return (
     <div className="EventTotalBet">
-      <span className="EventTotalBetText">Total bets</span>
+      <span><Image src={CoinSVG} alt="CoinSVG" /></span>
       <span className="EventTotalBetValue">{`${totalBets} ETH`}</span>
     </div>
   );
@@ -85,13 +107,14 @@ function renderShareSocial(props) {
 function EventItem(props) {
   return (
     <div className="EventItem">
+      {renderEventSource(props)}
       {renderEventName(props)}
-      {renderEventNumberOfPlayers(props)}
       {renderOutcomeList(props)}
       <div className="EventDetails">
         <div className="EvenFirstGroup">
           {renderEvenTimeLeft(props)}
           {renderEventTotalBets(props)}
+          {renderEventNumberOfPlayers(props)}
         </div>
         {renderShareSocial(props)}
       </div>

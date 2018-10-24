@@ -80,6 +80,7 @@ class Prediction extends React.Component {
     if (eventId) {
       this.props.dispatch(loadRelevantEvents({eventId}));
     }
+    // $zopim.livechat.button.hide();
   }
 
   componentWillUnmount() {
@@ -124,9 +125,10 @@ class Prediction extends React.Component {
     this.closeOrderPlace();
     if (!this.props.isExistEmail && isFree) {
       this.modalEmailPopupRef.open();
-    } else {
-      isFree ? this.modalLuckyFree.open() : this.modalLuckyReal.open();
     }
+    // else {
+    //   isFree ? this.modalLuckyFree.open() : this.modalLuckyReal.open();
+    // }
   }
 
   checkFreeAvailabe = (props) => {
@@ -301,11 +303,13 @@ class Prediction extends React.Component {
             />
           );
         })}
-        {this.renderRelevantEventList(props)}
-        <Disclaimer />
+
       </div>
     );
   };
+  renderDislaimer = () => {
+    return (<Disclaimer />);
+  }
 
   renderRelevantEventList = (props) => {
     if (!props.isSharePage) return null;
@@ -456,10 +460,12 @@ class Prediction extends React.Component {
         <PexCreateBtn dispatch={props.dispatch} />
         {this.renderReport(props)}
         {this.renderEventList(props)}
-        {this.renderBetMode(props, state)}
+        {this.renderRelevantEventList(props)}
         {this.renderViewAllEvent(props, state)}
-        {this.renderLuckyReal()}
-        {this.renderLuckyFree()}
+        {this.renderDislaimer()}
+        {this.renderBetMode(props, state)}
+        {/*{this.renderLuckyReal()}*/}
+        {/*{this.renderLuckyFree()}*/}
         {this.renderLuckyLanding()}
         {this.renderFreeBetLose()}
         {this.renderFreeBetWin()}

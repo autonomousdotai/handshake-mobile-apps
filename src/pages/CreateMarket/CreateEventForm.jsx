@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import IconPlus from '@/assets/images/icon/icon-plus.svg';
 import IconTrash from '@/assets/images/icon/icon-trash.svg';
-import IconInfo from '@/assets/images/icon/icons8-info_filled.svg';
+import IconInfo from '@/assets/images/icon/question-circle.svg';
 import moment from 'moment';
 import { Tooltip } from 'reactstrap';
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker';
@@ -330,7 +330,7 @@ class CreateEventForm extends Component {
     });
     const { isNew, shareEvent } = props;
     if (shareEvent) {
-      return (<ShareMarket shareEvent={shareEvent} isNew={isNew} />);
+      return (<ShareMarket shareEvent={shareEvent} isNew={isNew} dispatch={props.dispatch} />);
     }
     return (
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>

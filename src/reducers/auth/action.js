@@ -19,6 +19,7 @@ export const ACTIONS = {
   COMPLETE_PROFILE: 'COMPLETE_PROFILE',
   SUBMIT_EMAIL_SUBCRIBE: 'SUBMIT_EMAIL_SUBCRIBE',
   VERIFY_REDEEM_CODE: 'VERIFY_REDEEM_CODE',
+  GET_ID_VERIFICATION: 'GET_ID_VERIFICATION',
 };
 
 export const fetchProfile = createAPI(ACTIONS.AUTH_FETCH);
@@ -34,6 +35,7 @@ export const verifyID = createAPI(ACTIONS.VERIFY_ID);
 export const submitEmail = createAPI(ACTIONS.SUBMIT_EMAIL);
 export const checkUsernameExist = createAPI(ACTIONS.CHECK_USERNAME);
 export const submitEmailSubcribe = createAPI(ACTIONS.SUBMIT_EMAIL_SUBCRIBE);
+export const getIdVerification = createAPI(ACTIONS.GET_ID_VERIFICATION);
 
 // wallet:
 export const getFreeETH = createAPI(ACTIONS.GET_FREE_ETH);

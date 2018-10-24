@@ -1,12 +1,13 @@
 import { uniqBy } from '@/utils/array';
 import { ACTIONS } from './action';
 
-// const TAG = 'InternalWithdrawReducer';
+const initialState = {
+  orderList: [],
+  page: null,
+};
+
 const internalAdminReducter = (
-  state = {
-    orderList: [],
-    page: null,
-  },
+  state = initialState,
   action,
 ) => {
   switch (action.type) {
@@ -34,6 +35,8 @@ const internalAdminReducter = (
         };
       }
       return state;
+    case ACTIONS.INTERNAL_ADMIN_RESET:
+      return initialState;
     default:
       return state;
   }

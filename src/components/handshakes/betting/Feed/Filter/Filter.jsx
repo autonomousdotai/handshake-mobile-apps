@@ -28,7 +28,7 @@ class BettingFilter extends React.Component {
 
   static defaultProps = {
     side: 'support',
-    freeAmount: 0.005,
+    freeAmount: 0.03,
   };
 
   componentDidMount() {

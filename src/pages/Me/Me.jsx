@@ -5,23 +5,18 @@ import PropTypes from 'prop-types';
 import { withFirebase } from 'react-redux-firebase';
 // action, mock
 import { fireBaseBettingChange, fireBaseExchangeDataChange, loadMyHandshakeList } from '@/reducers/me/action';
-import {
-  API_URL,
-  APP,
-  EXCHANGE_FEED_TYPE,
-  HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS,
-  HANDSHAKE_ID,
-  HANDSHAKE_ID_DEFAULT,
-  URL,
-} from '@/constants';
-import { injectIntl } from 'react-intl';
+import { API_URL, APP, HANDSHAKE_ID, HANDSHAKE_ID_DEFAULT, URL } from '@/constants';
+import { FormattedMessage, injectIntl } from 'react-intl';
 // components
 import { Link } from 'react-router-dom';
 import { Col, Grid, Row } from 'react-bootstrap';
 import NoData from '@/components/core/presentation/NoData';
 import {
-  fireBaseCreditsDataChange, getDashboardInfo, getListOfferPrice, getOfferStores,
-  reviewOffer
+  fireBaseCreditsDataChange,
+  getDashboardInfo,
+  getListOfferPrice,
+  getOfferStores,
+  reviewOffer,
 } from '@/reducers/exchange/action';
 import FeedPromise from '@/components/handshakes/promise/Feed';
 import FeedBetting from '@/components/handshakes/betting/Feed';
@@ -29,10 +24,8 @@ import FeedExchange from '@/components/handshakes/exchange/Feed/FeedMe';
 import FeedSeed from '@/components/handshakes/seed/Feed';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Image from '@/components/core/presentation/Image';
-import ToggleSwitch from '@/components/core/presentation/ToggleSwitch';
 // style
 import AvatarSVG from '@/assets/images/icon/avatar.svg';
-import ShopSVG from '@/assets/images/icon/icons8-shop_filled.svg';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { setOfflineStatus } from '@/reducers/auth/action';
 import local from '@/services/localStore';
@@ -47,17 +40,16 @@ import { change, Field } from 'redux-form';
 import Modal from '@/components/core/controls/Modal/Modal';
 import BackupWallet from '@/components/Wallet/BackupWallet/BackupWallet';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
-import { FormattedMessage } from 'react-intl';
 import loadingSVG from '@/assets/images/icon/loading.gif';
 import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
-import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
-import ManageAssets from "./Tabs/ManageAssets";
-import Transaction from "./Tabs/Transaction";
-import cx from "classnames";
+import ManageAssets from './Tabs/ManageAssets';
+import Transaction from './Tabs/Transaction';
 
 import NoDataImage from '@/assets/images/pages/Prediction/nodata.svg';
+
+import NinjaCoinTransaction from '@/components/handshakes/exchange/BuyCoinTransaction/Transaction';
 
 const TAG = 'Me';
 const maps = {
@@ -75,15 +67,20 @@ const CASH_TAB = {
 
 const CATEGORIES = [
   {
-    value: HANDSHAKE_ID.CREDIT,
-    text: 'CC',
+    value: HANDSHAKE_ID.NINJA_COIN,
+    text: 'Coin',
     priority: 0,
   },
-  {
-    value: HANDSHAKE_ID.EXCHANGE,
-    text: 'ATM',
-    priority: 1,
-  },
+  // {
+  //   value: HANDSHAKE_ID.CREDIT,
+  //   text: 'CC',
+  //   priority: 0,
+  // },
+  // {
+  //   value: HANDSHAKE_ID.EXCHANGE,
+  //   text: 'ATM',
+  //   priority: 1,
+  // },
   {
     value: HANDSHAKE_ID.BETTING,
     text: 'Bet',
@@ -232,13 +229,13 @@ class Me extends React.Component {
     // @TODO: chrome-ext
     if (window.self === window.top) {
       if (nextProps.me.list.length === 0 && nextProps.me.list.updatedAt !== prevState.me.list.updatedAt
-        && prevState.handshakeIdActive !== HANDSHAKE_ID.CREDIT && prevState.firstTime) {
-        rfChange(nameFormFilterFeeds, 'feedType', HANDSHAKE_ID.CREDIT);
+        && prevState.handshakeIdActive !== HANDSHAKE_ID.NINJA_COIN && prevState.firstTime) {
+        rfChange(nameFormFilterFeeds, 'feedType', HANDSHAKE_ID.NINJA_COIN);
         rfChange(nameFormFilterFeeds, 'cash-show-type', CASH_TAB.DASHBOARD);
-        Me.loadMyHandshakeListStatic(nextProps, HANDSHAKE_ID.CREDIT);
-        return { handshakeIdActive: HANDSHAKE_ID.CREDIT, firstTime: false };
+        Me.loadMyHandshakeListStatic(nextProps, HANDSHAKE_ID.NINJA_COIN);
+        return { handshakeIdActive: HANDSHAKE_ID.NINJA_COIN, firstTime: false };
       }
-     }
+    }
 
     return null;
   }
@@ -250,6 +247,30 @@ class Me extends React.Component {
       qs.type = handshakeIdActive;
     }
     nextProps.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE, qs });
+  }
+
+  scrollListener = async () => {
+    console.log('scrollListener',);
+    if (!this.isShow) {
+      $zopim(() => {
+        $zopim.livechat.button.hide();
+        $zopim.livechat.button.setOffsetVerticalMobile(70);
+        $zopim.livechat.button.setOffsetHorizontalMobile(10);
+        $zopim.livechat.button.show();
+      });
+    }
+  }
+
+  attachScrollListener() {
+    window.addEventListener('scroll', this.scrollListener);
+    window.addEventListener('resize', this.scrollListener);
+    this.scrollListener();
+  }
+
+  detachScrollListener() {
+    $zopim.livechat.button.hide();
+    window.removeEventListener('scroll', this.scrollListener);
+    window.removeEventListener('resize', this.scrollListener);
   }
 
   componentDidMount() {
@@ -277,6 +298,18 @@ class Me extends React.Component {
     this.loadMyHandshakeList();
     this.getOfferStore();
     // this.getDashboardInfo();
+    setTimeout(() => {
+      $zopim.livechat.window.onShow(() => {
+        this.isShow = true;
+        console.log('onShow', this.isShow);
+      });
+      $zopim.livechat.window.onHide(() => {
+        this.isShow = false;
+        console.log('onHide', this.isShow);
+      });
+      this.scrollListener();
+    }, 6000);
+    this.attachScrollListener();
   }
 
   componentWillUnmount() {
@@ -286,6 +319,7 @@ class Me extends React.Component {
       handshakeIdActive: handshakeDefault,
       firstTime: true,
     });
+    this.detachScrollListener();
   }
 
   setLoading = (loadingState) => {
@@ -593,6 +627,11 @@ class Me extends React.Component {
                     <div className="content">
                       {<Component history={this.props.history} setLoading={this.setLoading}></Component>}
                     </div>
+                  </div>) : this.state.handshakeIdActive === HANDSHAKE_ID.NINJA_COIN ? (
+                  <div className="dashboard">
+                    <div className="content">
+                      <NinjaCoinTransaction />
+                    </div>
                   </div>) : listFeed && listFeed.length > 0 ? (
                     listFeed.map((handshake) => {
                     const FeedComponent = maps[handshake.type];
@@ -631,7 +670,7 @@ class Me extends React.Component {
                 (
                   <NoData>
                     <div className="NoDataContainer">
-                      <div className="NoDataTitle">Nothing here</div>
+                      {/*<div className="NoDataTitle">Nothing here</div>*/}
                       <img src={NoDataImage} alt="Nothing herer" />
                       <div className="ShortDescription">
                         Oops! <br />

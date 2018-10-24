@@ -61,7 +61,7 @@ class BetMode extends React.Component {
       GA.clickFree(selectedOutcome.value);
     }
   }
-  
+
   async openPopup(selectedOutcome) {
     this.setState({
       bettingShakeIsOpen: true,
@@ -115,7 +115,7 @@ class BetMode extends React.Component {
             isFree={false}
           />
         </div>
-        <div className="BetModeItem" label="Free bet">
+        <div className="BetModeItem" label="Use a redeem code">
           <BettingFilter
             {...props}
             isFree

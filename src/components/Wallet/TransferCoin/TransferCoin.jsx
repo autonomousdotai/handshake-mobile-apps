@@ -22,6 +22,8 @@ import './TransferCoin.scss';
 import { ICON } from '@/styles/images';
 import BrowserDetect from '@/services/browser-detect';
 import WalletSelected from '@/components/Wallet/WalletSelected';
+import Slider from 'react-rangeslider'
+
 
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -59,7 +61,9 @@ class Transfer extends React.Component {
       inputSendAmountValue: 0,
       inputSendMoneyValue: 0,
       legacyMode: false,
-      walletNotFound: ''
+      walletNotFound: '',
+      volume: 0,
+      listFeeObject: false
     }
   }
 
@@ -264,10 +268,12 @@ class Transfer extends React.Component {
 
     this.setState({wallets: listWalletCoin, walletDefault, walletSelected: walletDefault}, ()=>{
       this.props.rfChange(nameFormSendWallet, 'walletSelected', walletDefault);
+      this.getFeeLevel(walletDefault);
     });
   }
 
   getBalanceWallets = async () => {
+    const { messages } = this.props.intl;
     let { wallets, walletSelected, walletDefault } = this.state;
     if(wallets && wallets.length){
       for(let i in wallets){
@@ -289,7 +295,7 @@ class Transfer extends React.Component {
       if(coinName){
         this.setState({walletNotFound:
           <div className="walletNotFound">
-            {coinName} wallet is not found to transfer
+            {coinName} {messages.wallet.action.transfer.error.wallet_not_found}
           </div>
         }, ()=> {
 
@@ -314,7 +320,7 @@ class Transfer extends React.Component {
       // check amount:
 
       if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amountCoin']))
-        errors.amountCoin = `${messages.wallet.action.transfer.error}`
+        errors.amountCoin = `${messages.wallet.action.transfer.error.not_enough_coin}`
     }
     return errors
   }
@@ -385,22 +391,24 @@ class Transfer extends React.Component {
 submitSendCoin=()=>{
   this.setState({isRestoreLoading: true});
   this.modalConfirmTranferRef.close();
-    this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue).then(success => {
+  let fee = this.state.listFeeObject ? this.state.listFeeObject.listFee[this.state.volume].value : 0;
+  let option = {"fee": fee};
+  this.state.walletSelected.transfer(this.state.inputAddressAmountValue, this.state.inputSendAmountValue, option).then(success => {
 
-        this.setState({isRestoreLoading: false});
-        if (success.hasOwnProperty('status')){
-          if (success.status == 1){
-            this.showSuccess(this.getMessage(success.message));
-            this.onFinish(success.data);
-            MasterWallet.NotifyUserTransfer(this.state.walletSelected.address, this.state.inputAddressAmountValue);
-            // start cron get balance auto ...
-            // todo hanlde it ...
-          }
-          else{
-            this.showError(this.getMessage(success.message));
-          }
+      this.setState({isRestoreLoading: false});
+      if (success.hasOwnProperty('status')){
+        if (success.status == 1){
+          this.showSuccess(this.getMessage(success.message));
+          this.onFinish(success.data);
+          MasterWallet.NotifyUserTransfer(this.state.walletSelected.address, this.state.inputAddressAmountValue);
+          // start cron get balance auto ...
+          // todo hanlde it ...
         }
-    });
+        else{
+          this.showError(this.getMessage(success.message));
+        }
+      }
+  });
 }
 
 // For Qrcode:
@@ -410,7 +418,7 @@ handleScan=(data) =>{
     let qrCodeResult = MasterWallet.getQRCodeDetail(data);
     if (qrCodeResult){
       let dataType = qrCodeResult['type'];
-      if (dataType == MasterWallet.QRCODE_TYPE.TRANSFER){
+      if (dataType == MasterWallet.QRCODE_TYPE.TRANSFER || dataType == MasterWallet.QRCODE_TYPE.CRYPTO_ADDRESS){
           this.setState({
             inputAddressAmountValue: qrCodeResult.data.address, inputSendAmountValue: qrCodeResult.data.amount
           });
@@ -458,6 +466,53 @@ selectWallet = async (walletSelected) => {
     await this.setRate(walletSelected.name);
     this.updateAddressAmountValue(null, this.state.inputSendAmountValue);
   }
+  // show fee?
+  this.getFeeLevel(walletSelected);
+
+}
+
+async getFeeLevel(walletSelected){
+  let listFee = await walletSelected.getLevelFee();
+  let listFeeObject = false;
+
+  if(listFee){
+    let labels = {};
+    let min = 0;
+    let max = listFee.length-1;
+    for (var i = 0; i < listFee.length; i ++){
+      labels[i.toString()] = listFee[i].title;
+    }
+    listFeeObject = {'listFee': listFee, 'labels': labels, 'min': min, "max": max};
+  }
+  this.setState({listFeeObject: listFeeObject, volume: 1});
+
+}
+
+handleOnChange = (value) => {
+  this.setState({
+    volume: value
+  })
+}
+
+calcMaxAmount = () => {
+  const { walletSelected, listFeeObject, volume } = this.state;
+  const { messages } = this.props.intl;
+
+  let result = 0;
+
+  if(walletSelected && listFeeObject){
+    result = walletSelected.balance - listFeeObject.listFee[volume].feePrice;
+    //result = walletSelected.formatNumber(result, 10);
+  }
+
+  if(result < 0) {
+    this.showError(messages.wallet.action.transfer.error.max_amount);
+    result = 0;
+  }
+
+  this.setState({inputSendAmountValue: result}, ()=>{
+    this.updateAddressAmountValue(null, result);
+  });
 }
 
 render() {
@@ -472,6 +527,7 @@ render() {
 
   return (
     <div>
+
         {/* Dialog confirm transfer coin */}
         <ModalDialog title="Confirmation" onRef={modal => this.modalConfirmTranferRef = modal}>
         <div className="bodyConfirm"><span>{messages.wallet.action.transfer.text.confirm_transfer} {amount} {this.state.walletSelected ? this.state.walletSelected.name : ''}?</span></div>
@@ -514,7 +570,12 @@ render() {
             />
             <span onClick={() => { this.openQrcode() }} className="icon-qr-code-black">{ICON.QRCode()}</span>
           </div>
-          <p className="labelText">{messages.wallet.action.transfer.label.amount}</p>
+          <div className="row">
+            <div className="col-6"><p className="labelText">{messages.wallet.action.transfer.label.amount}</p></div>
+            { walletSelected && (walletSelected.name == 'ETH' || walletSelected.name == 'BTC') &&
+              <div className="col-6"><p className="maxAmount" onClick={() => this.calcMaxAmount()}>{messages.wallet.action.transfer.label.max_amount}</p></div>
+            }
+          </div>
             <div className="div-amount">
               <div className="prepend">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</div>
               <Field
@@ -545,6 +606,22 @@ render() {
                   autoComplete="off"
                 />
               </div>
+            }
+
+            {this.state.listFeeObject &&
+            <div>
+              <p className="labelText">{messages.wallet.action.transfer.label.feel_level} {this.state.listFeeObject.listFee[this.state.volume].description}</p>
+              <div className="fee-level-box">
+                <Slider
+                  min={this.state.listFeeObject.min}
+                  max={this.state.listFeeObject.max}
+                  tooltip={false}
+                  labels={this.state.listFeeObject.labels}
+                  value={this.state.volume}
+                  onChange={this.handleOnChange}
+                />
+              </div>
+            </div>
             }
 
             <div>

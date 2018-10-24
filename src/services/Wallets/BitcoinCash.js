@@ -24,6 +24,16 @@ export class BitcoinCash extends Bitcoin {
     bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
   }
 
+  getAPIUrlTransaction(transaction_no) {
+    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}bch-insight.bitpay.com/#/tx/${transaction_no}`;
+    return url;
+  }
+
+  getAPIUrlAddress() {
+    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}bch-insight.bitpay.com/address/${this.address}`;
+    return url;
+  }
+
   getShortAddress() {
     return this.address.replace(this.address.substr(4, 34), '...');
   }
@@ -57,20 +67,25 @@ export class BitcoinCash extends Bitcoin {
     return false;
   }
 
-  async transfer(toAddress, amountToSend, blocks = NB_BLOCKS) {
+  async transfer(toAddress, amountToSend, opt) {
     try {
       if (!bitcore.Address.isValid(toAddress)) {
         return { status: 0, message: 'messages.bitcoin.error.invalid_address2' };
       }
 
-      console.log(`transfered from address:${this.address}`);
+      let blocks = opt.blocks || NB_BLOCKS;
+      let fee = opt.fee || 0;
+
+      console.log('toAddress:', toAddress,
+      '\n param blocks:', blocks,
+      '\n param fee:', fee);
 
       // Check balance:
       const balance = await this.getBalance();
-
-      console.log('bitcore.Networks.defaultNetwork', bitcore.Networks.defaultNetwork);
-      console.log('server', this.network);
-      console.log(StringHelper.format('Your wallet balance is currently {0} BHC', balance));
+      console.log('defaultNetwork: ', bitcore.Networks.defaultNetwork,
+      '\n server', this.network,
+      '\n balance:', balance,
+      '\n amountToSend:', amountToSend);
 
       if (!balance || balance == 0 || balance <= amountToSend) {
         return { status: 0, message: 'messages.bitcoin.error.insufficient' };
@@ -82,7 +97,9 @@ export class BitcoinCash extends Bitcoin {
       amountToSend = amountBig.times(satoShiRate).toString();
 
       const data = {};
-      const fee = await this.getFee(blocks);
+      if(!fee){
+        fee = await this.getFee(blocks);
+      }
 
       if (fee) {
         data.fee = fee;
@@ -268,6 +285,11 @@ export class BitcoinCash extends Bitcoin {
     };
   }
 
+  getLevelFee = async () => {
+    return new Promise((resolve, reject) => {
+      resolve(false);
+    });
+  }
 }
 
 export default { BitcoinCash };

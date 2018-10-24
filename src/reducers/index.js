@@ -8,6 +8,7 @@ import comment from './comment';
 import admin from './admin';
 import internalWithdraw from './internalWithdraw';
 import internalAdmin from './internalAdmin';
+import buyCoin from './buyCoin';
 // import firebase from './firebase';
 
 export default {
@@ -21,5 +22,6 @@ export default {
   admin,
   internalWithdraw,
   internalAdmin,
+  buyCoin,
   // firebase,
 };

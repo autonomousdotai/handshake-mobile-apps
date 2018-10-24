@@ -27,7 +27,7 @@ class Root extends React.Component {
     return (
       <I18n>
         <div className="root">
-          <Handle setLanguage={this.setLanguage} refer={this.refer} />
+          <Handle setLanguage={this.setLanguage} />
         </div>
       </I18n>
     );
@@ -36,4 +36,5 @@ class Root extends React.Component {
 
 export default connect(state => ({
   app: state.app,
+  router: state.router,
 }), { initApp })(Root);

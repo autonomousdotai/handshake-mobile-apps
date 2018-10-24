@@ -128,8 +128,6 @@ class EmailVerification extends Component {
   }
 
   renderComponent = (props, state) => {
-    console.log('props.isEmailVerified', props.isEmailVerified);
-    console.log('props.hasEmail', props.hasEmail);
     if (props.hasEmail && props.isEmailVerified) {
       return this.renderHasEmail(props, state);
     }

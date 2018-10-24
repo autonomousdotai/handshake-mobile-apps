@@ -1,5 +1,12 @@
 @import './src/styles/style';
 .profile {
+  .head_text {
+    padding: 15px;
+    background: aliceblue;
+    font-weight: 300;
+    text-align: center;
+    font-size: 12px;
+  }
   .collapse-custom {
     border-bottom: 1px solid #f0f0f0;
     font-weight: $normal;
@@ -27,6 +34,9 @@
           position: absolute;
           right: 21px;
           top: 4px;
+        }
+        .has-level {
+          right: 60px;
         }
         width: 10%;
         text-align: right;
@@ -90,6 +100,29 @@
         }
         .send-btn {
           width: 20%;
+        }
+      }
+
+      &.id-verification {
+        .label {
+          display: block;
+          font-weight: 400;
+          span {
+            display: block;
+            font-size: rem-calc(14px);
+            color: $oslo-gray;
+            font-weight: normal;
+          }
+        }
+        .hide_upload_zone {
+          display: none;
+        }
+        .progress {
+            height: rem-calc(25px);
+        }
+        .btn-primary {
+          background-color: $blue;
+          border-color: $blue;
         }
       }
     }
