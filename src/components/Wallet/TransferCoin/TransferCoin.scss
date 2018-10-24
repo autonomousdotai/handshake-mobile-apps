@@ -15,6 +15,13 @@
     }
   }
 
+  .maxAmount{
+    color:#007bff;
+    text-align: right;
+    margin: 10px 0;
+    font-weight:400;
+  }
+
   ul.rangeslider__labels .rangeslider__label-item:first-child {
     padding-right: 20px;
   }
@@ -297,10 +304,10 @@
     padding: 0 0.5rem;
     line-height: 1.9;
   }
+}
 
-
-
-  @media (max-width: 330px){
+@media (max-width: 330px){
+  .walletSelected {
     .col-5{
       flex: 0 0 60%;
     }
@@ -326,6 +333,13 @@
 
     .arrow{
       float: right;
+    }
+  }
+
+  .sendwallet-wrapper{
+    .fee-level-box{
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
   }
 }

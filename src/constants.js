@@ -639,6 +639,7 @@ export const URL = {
   CC_PAYMENT_URL: '/cc-payment',
   BUY_BY_CC_URL: '/buy-by-credit-card',
   BUY_COIN_URL: '/coin',
+  BUY_COIN_FAQ_URL: '/coin/faq',
 
   ESCROW_WITHDRAW_SUCCESS: '/escrow/withdraw/success',
 
@@ -651,6 +652,7 @@ export const URL = {
   INTERNAL_ADMIN_URL: '/admin/coin/:type',
   CASH_STORE_URL: '/cash_store',
   LANDING_BECOME_ATM: '/become-atm',
+  INTERNAL_ADMIN_DASHBOARD_URL: '/internal-admin-dashboard',
 };
 
 export const LANDING_PAGE_TYPE = {

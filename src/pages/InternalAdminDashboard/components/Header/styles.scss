@@ -1,0 +1,17 @@
+.internal-admin-header-container {
+  height: 60px;
+  background: grey;
+  padding: 10px;
+  display: flex;
+  padding-left: 40px;
+  font-size: 20px;
+  color: white;
+  position: fixed;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  font-weight: 400;
+  .header-title {
+    font-size: 30px;
+  }
+}

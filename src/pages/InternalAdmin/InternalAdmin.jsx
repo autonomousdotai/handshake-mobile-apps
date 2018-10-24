@@ -6,13 +6,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { API_URL, URL } from '@/constants';
 import debounce from '@/utils/debounce';
-import { loadCashOrderList, sendCashOrder } from '@/reducers/internalAdmin/action';
+import { loadCashOrderList, sendCashOrder, reset } from '@/reducers/internalAdmin/action';
 import './InternalAdmin.scss';
 import { FormattedDate } from 'react-intl';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import Helper from '@/services/helper';
 import { formatMoneyByLocale } from '@/services/offer-util';
+import { withRouter } from 'react-router-dom';
 
 const STATUS = {
   pending: {
@@ -78,16 +79,11 @@ class InternalAdmin extends Component {
   }
 
   componentDidMount() {
-    // redirect to home page if wrong key
-    // if (!this.checkAuth()) {
-    //   window.location.pathname = '/';
-    //   return null;
-    // }
-
     if (this.state.login) {
-      const { type } = this.props?.match?.params;
-      const { ref_code } = Helper.getQueryStrings(window.location.search);
-      this.setState({ type_order: type, ref_code }, () => {
+      const type = this.props.type || this.props?.match?.params?.type;
+      const searchParams = Helper.getQueryStrings(window.location.search);
+      const refCode = this.props.refCode || searchParams?.ref_code;
+      this.setState({ type_order: type, ref_code: refCode }, () => {
         this.loadOrderList();
       });
 
@@ -95,8 +91,19 @@ class InternalAdmin extends Component {
     } else {
       this.props.history.push(`${URL.ADMIN_ID_VERIFICATION}?redirect=${window.location.pathname}`);
     }
-
     return null;
+  }
+
+  resetState = (onDone) => {
+    const state = {
+      type: DEFAULT_TYPE,
+      isFinished: false,
+      page: null,
+      type_order: '',
+      ref_code: '',
+      login: this.token.length > 0,
+    };
+    this.setState(state, onDone);
   }
 
   getAdminHash() {
@@ -107,7 +114,18 @@ class InternalAdmin extends Component {
     window.onscroll = backupScroll;
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.type !== this.props.type) {
+      this.props.reset();
+      this.resetState(() => {
+        const searchParams = Helper.getQueryStrings(window.location.search);
+        const refCode = this.props.refCode || searchParams?.ref_code;
+        this.setState({ type_order: nextProps.type, ref_code: refCode }, () => {
+          this.loadOrderList();
+          this.setupInitifyLoad();
+        });
+      });
+    }
     if (nextProps.orderList && JSON.stringify(nextProps.orderList) !== JSON.stringify(this.props.orderList)) {
       // this.resetTable();
     }
@@ -121,7 +139,7 @@ class InternalAdmin extends Component {
   }
 
   autoLoadMore() {
-    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+    if ((window.innerHeight + window.pageYOffset) >= (document.body.offsetHeight - 80)) { // 80 is distance from this to top of window
       this.loadOrderList();
     }
   }
@@ -194,6 +212,9 @@ class InternalAdmin extends Component {
     this.props.loadCashOrderList({
       PATH_URL: API_URL.INTERNAL.GET_COIN_ORDER,
       qs,
+      more: {
+        types: this.props.type,
+      },
       successFn: this.onSuccess,
     });
   }
@@ -447,11 +468,16 @@ InternalAdmin.propTypes = {
   match: PropTypes.object.isRequired,
   loadCashOrderList: PropTypes.func.isRequired,
   sendCashOrder: PropTypes.func.isRequired,
+  reset: PropTypes.func.isRequired,
+  type: PropTypes.string,
+  refCode: PropTypes.string,
 };
 
 InternalAdmin.defaultProps = {
   orderList: [],
   page: null,
+  type: null,
+  refCode: null,
 };
 
 const mapState = (state) => {
@@ -461,4 +487,4 @@ const mapState = (state) => {
   };
 };
 
-export default connect(mapState, { loadCashOrderList, sendCashOrder })(InternalAdmin);
+export default connect(mapState, { loadCashOrderList, sendCashOrder, reset })(withRouter(InternalAdmin));

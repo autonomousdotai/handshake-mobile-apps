@@ -3,7 +3,9 @@ import { createAPI } from '@/reducers/action';
 export const ACTIONS = {
   LOAD_INTERNAL_ADMIN_CASH_ORDER: 'LOAD_INTERNAL_ADMIN_CASH_ORDER',
   INTERNAL_ADMIN_SEND_CASH_ORDER: 'INTERNAL_ADMIN_SEND_CASH_ORDER',
+  INTERNAL_ADMIN_RESET: 'INTERNAL_ADMIN_RESET',
 };
 
+export const reset = () => ({ type: ACTIONS.INTERNAL_ADMIN_RESET });
 export const loadCashOrderList = createAPI(ACTIONS.LOAD_INTERNAL_ADMIN_CASH_ORDER);
 export const sendCashOrder = createAPI(ACTIONS.INTERNAL_ADMIN_SEND_CASH_ORDER);

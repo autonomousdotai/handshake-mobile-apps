@@ -55,16 +55,16 @@ export const CRYPTO_ICONS = {
 
 const listPackages = {
   [COUNTRY_LIST.VN]: [
-    { name: 'basic', fiatAmount: 20000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
-    { name: 'pro', fiatAmount: 60000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
+    { name: 'basic', intlKeyName: 'basic_package_name', fiatAmount: 20000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
+    { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 60000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
   ],
   [COUNTRY_LIST.HK]: [
-    { name: 'basic', fiatAmount: 5000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
-    { name: 'pro', fiatAmount: 10000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
+    { name: 'basic', intlKeyName: 'basic_package_name', fiatAmount: 5000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
+    { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 10000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
   ],
   default: [
-    { name: 'basic', fiatAmount: 600, fiatCurrency: FIAT_CURRENCY.USD, show: true },
-    { name: 'pro', fiatAmount: 1000, fiatCurrency: FIAT_CURRENCY.USD, show: true },
+    { name: 'basic', intlKeyName: 'basic_package_name', fiatAmount: 600, fiatCurrency: FIAT_CURRENCY.USD, show: true },
+    { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 1000, fiatCurrency: FIAT_CURRENCY.USD, show: true },
   ],
 };
 
@@ -640,14 +640,14 @@ class BuyCryptoCoin extends React.Component {
   }
 
   renderPackages = () => {
-    const { packages } = this.props;
+    const { packages, intl: { messages } } = this.props;
     const { currency } = this.state;
     return (
       <div className="package-container">
         {
           this.state.packages?.map((item) => {
             const {
-              name, show,
+              name, show, intlKeyName,
             } = item;
             const packageGroup = packages[name];
             const packageData = packageGroup && packageGroup[currency];
@@ -656,7 +656,7 @@ class BuyCryptoCoin extends React.Component {
 
             return show && packageData && (
               <div key={name} className={`package-item ${name}`}>
-                <span className="name"><FormattedMessage id={`cc.label.${name}`} /></span>
+                <span className="name">{messages.buy_coin.label[intlKeyName]}</span>
                 <div className="price-amount-group">
                   <span className={`fiat-amount ${packageData.show?.fiatCurrency === FIAT_CURRENCY.USD ? 'usd' : ''}`}>{formatMoney(packageData.show?.fiatAmount)} {packageData.show?.fiatCurrency}</span>
                   <span className="amount">{packageData?.amount || '---'} {packageData?.currency}</span>
@@ -711,7 +711,7 @@ class BuyCryptoCoin extends React.Component {
     const { coinMoneyExchange, paymentMethod } = this.props;
     const { currency, forcePaymentMethod, isValidToSubmit } = this.state;
 
-    const showState = [-1, 0, 2];
+    const showState = [-1, 0, 2, 1];
 
     return (
       <div>

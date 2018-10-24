@@ -349,6 +349,7 @@ export class Bitcoin extends Wallet {
         let calcTimeFee = (item) => {
           try{
             let value = (item.feePerKb / 100000000);
+            let feePrice = value;
             value = this.formatNumber(value, 8);
 
             let min = item.nbBlocks * 10;
@@ -356,17 +357,17 @@ export class Bitcoin extends Wallet {
             if(title == "Economy")
               title = 'Low';
             else if(title == "SuperEconomy")
-              title = 'Super Low';
+              title = 'Lowest';
             else if(title == "Urgent")
               min = min/2;
 
-            return {title, description: `${value} BTC ~ ${min} min${min > 1 ? 's' : ''}`, value: item.feePerKb};
+            return {title, description: `${value} BTC ~ ${min} min${min > 1 ? 's' : ''}`, value: item.feePerKb, feePrice};
           }
           catch(e){
             console.error(e);
           }
 
-          return {title: title, description: '', value: 0};
+          return {title: title, description: '', value: 0, feePrice: 0};
         }
 
 
@@ -380,7 +381,7 @@ export class Bitcoin extends Wallet {
             }
 
             if(!isDup && item.level != removeLevel){
-              result.push(calcTimeFee(item));
+              result.unshift(calcTimeFee(item));
             }
 
             lastValue = item.feePerKb;

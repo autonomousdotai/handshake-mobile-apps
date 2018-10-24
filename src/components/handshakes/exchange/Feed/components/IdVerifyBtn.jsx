@@ -5,15 +5,17 @@ import { push } from 'connected-react-router';
 import { URL } from '@/constants';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import './styles.scss';
 
 class IdVerifyBtn extends React.PureComponent {
   checkUserVerified = () => {
     const { messages } = this.props.intl;
-    const { authProfile: { idVerified } } = this.props;
+    const { authProfile: { idVerified, idVerificationLevel } } = this.props;
 
     let timeShow = 0;
     let title = '';
     let action = '';
+    let className = '';
 
     switch (idVerified) {
       case 0: {
@@ -29,6 +31,16 @@ class IdVerifyBtn extends React.PureComponent {
         break;
       }
       case 1: {
+        timeShow = 24 * 60 * 60 * 1000;
+        if (idVerificationLevel === 1) {
+          title = messages.buy_coin.label.verify.verified.level_1.title;
+          action = messages.buy_coin.label.verify.verified.level_1.action;
+          className = 'info';
+        } else if (idVerificationLevel === 2) {
+          title = messages.buy_coin.label.verify.verified.level_2.title;
+          action = messages.buy_coin.label.verify.verified.level_2.action;
+          className = 'info';
+        }
         break;
       }
       case 2: {
@@ -41,14 +53,14 @@ class IdVerifyBtn extends React.PureComponent {
       }
     }
 
-    return { title, action };
+    return { title, action, className };
   }
 
   render() {
     const { dispatch } = this.props;
-    const { title, action } = this.checkUserVerified();
+    const { title, action, className } = this.checkUserVerified();
     return (
-      <div id="PexCreateBtn" >
+      <div id="PexCreateBtn" className={className} >
         <div className="Idea">
           <span>{title}</span>
           &nbsp;<Link

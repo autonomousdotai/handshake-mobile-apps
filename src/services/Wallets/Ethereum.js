@@ -126,15 +126,16 @@ export class Ethereum extends Wallet {
             let gasPrice = Number(data / 10);
             let estimatedGas = defaultGasLimit * (new BN(gasPrice * 1000000000));
             let ethEstimateGas = Number(web3.utils.fromWei(estimatedGas.toString()));
+            let feePrice = ethEstimateGas;
             ethEstimateGas = this.formatNumber(ethEstimateGas, 8);
 
-            return {title: title, description: `${ethEstimateGas} ETH ~ ${min} min${min > 1 ? 's' : ''}`, value: gasPrice.toString()};
+            return {title, description: `${ethEstimateGas} ETH ~ ${min} min${min > 1 ? 's' : ''}`, value: gasPrice.toString(), feePrice};
           }
           catch(e){
             console.error(e);
           }
 
-          return {title: title, description: '', value: 0};
+          return {title, description: '', value: 0, feePrice: 0};
         }
 
         axios.get('https://ethgasstation.info/json/ethgasAPI.json')
