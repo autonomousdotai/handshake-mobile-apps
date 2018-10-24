@@ -462,7 +462,7 @@ class Prediction extends React.Component {
         {this.renderEventList(props)}
         {this.renderRelevantEventList(props)}
         {this.renderViewAllEvent(props, state)}
-        {this.renderDislaimer()}
+        {!props.isLoading && this.renderDislaimer()}
         {this.renderBetMode(props, state)}
         {/*{this.renderLuckyReal()}*/}
         {/*{this.renderLuckyFree()}*/}

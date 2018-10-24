@@ -13,8 +13,8 @@ import {
   shareEvent,
   sendEmailCode,
   verifyEmail,
-  updateEmailPut,
   verifyEmailCodePut,
+  updateProfile,
   updateCreateEventLoading,
 } from './action';
 
@@ -34,19 +34,6 @@ function* handleLoadReportsSaga({ cache = true }) {
     });
   } catch (e) {
     return console.error('handleLoadReportsSaga', e);
-  }
-}
-
-function* handleLoadCategories() {
-  try {
-    return yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_CATEGORIES,
-      type: 'LOAD_CATEGORIES',
-      _path: 'categories',
-    });
-  } catch (e) {
-    console.error(e);
-    return null;
   }
 }
 
@@ -220,10 +207,11 @@ function* handleUpdateEmail({ email }) {
       data: userProfile,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    return yield put(updateEmailPut(responded.data.email));
+    if (responded.status) {
+      yield put(updateProfile(responded));
+    }
   } catch (e) {
     console.error('handleUpdateEmail', e);
-    return null;
   }
 }
 
