@@ -268,6 +268,7 @@ class Me extends React.Component {
   }
 
   detachScrollListener() {
+    this.isShow = true;
     $zopim.livechat.button.hide();
     window.removeEventListener('scroll', this.scrollListener);
     window.removeEventListener('resize', this.scrollListener);

@@ -1,20 +1,29 @@
 import React, { Component } from 'react';
 import DynamicImport from '@/components/App/DynamicImport';
 import Loading from '@/components/core/presentation/Loading';
-import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
+// import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
+import { STATUS } from '@/pages/Admin/AdminIDVerification';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
 
 const AdminIDVerification = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Admin/AdminIDVerification')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
-// const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
+const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
 
 const scopeCss = (className) => `internal-admin-${className}`;
 
 const menus = {
-  idVerification: {
-    name: 'Admin',
+  idVerificationProcessing: {
+    name: 'Admin - Processing',
     components: <AdminIDVerification />,
+  },
+  idVerificationVerified: {
+    name: 'Admin - Verified',
+    components: <AdminIDVerification status={STATUS.VERIFIED} />,
+  },
+  idVerificationRejected: {
+    name: 'Admin - Rejected',
+    components: <AdminIDVerification status={STATUS.REJECTED} />,
   },
   buyCoinBank: {
     name: 'Buy Coin - BANK',
@@ -30,7 +39,7 @@ class InternalAdminDashboard extends Component {
   constructor() {
     super();
     this.state = {
-      selectedMenuId: 'idVerification',
+      selectedMenuId: 'idVerificationProcessing',
     };
   }
 
