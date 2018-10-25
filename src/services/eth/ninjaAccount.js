@@ -8,8 +8,8 @@ export function getUserAddress(coinName = 'ETH') {
   return MasterWallet.getWalletDefault(coinName).address;
 }
 
-export function getChainId() {
-  const { chainId } = MasterWallet.getWalletDefault('ETH').wallet;
+export function getChainId(coinName = 'ETH') {
+  const { chainId } = MasterWallet.getWalletDefault(coinName).wallet;
   if (!chainId) {
     console.error('Fail to get chainId from default wallet');
     return null;
