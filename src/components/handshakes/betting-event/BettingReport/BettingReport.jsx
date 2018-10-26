@@ -7,6 +7,7 @@ import {
   getBalance, getEstimateGas,
 } from '@/components/handshakes/betting/utils';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
+import Checkbox from '@/components/core/controls/Checkbox';
 
 import { BASE_API } from '@/constants';
 import { Alert } from 'reactstrap';
@@ -42,6 +43,8 @@ class BettingReport extends React.Component {
       disable: false,
       final: [],
       errorMessage: '',
+      reportChecked: false,
+
     };
     this.toggle = this.toggle.bind(this);
     // side: 0 (unknown), 1 (support), 2 (against)
@@ -196,6 +199,11 @@ class BettingReport extends React.Component {
     }
     return null;
   }
+  checkReportStatus = (reportChecked) => {
+    this.setState({
+      reportChecked: !reportChecked,
+    });
+  }
   onSubmit= async (event) => {
     const radios = [];
     if (localStorage.getItem('disable') === false) {
@@ -312,43 +320,69 @@ class BettingReport extends React.Component {
       final: finalCopy,
     });
   }
+  renderCheckNotHappend = () => {
+    return (
+      <div className="wrapperCheckNotHappend">
+        <Checkbox
+          className="checkboxInput"
+          name="checkreport"
+          checked={this.state.reportChecked}
+          onChange={() => {
+            this.checkReportStatus(this.state.reportChecked);
+          }}
+        />
+        <div className="checkReportTitle"
+          onClick={() => {
+            this.checkReportStatus(this.state.reportChecked);
+          }}
+        >This event not happen
+        </div>
+      </div>
+    );
+  }
+  renderEvents() {
+    return (
+      <FormGroup disabled={this.state.disable}>
+        <Label for="matchSelect">Select Event</Label>
+        <Input type="select" name="select" id="matchSelect" onChange={(event) => { this.onChangeEvent(event, 'selectedMatch'); }} disabled={this.state.disable}>
+          {this.state.matches && this.state.matches.length > 0 && this.state.matches.map(item => <option key={item.id}>{item.name} id:{item.id}</option>)}
+        </Input>
+      </FormGroup>
+    );
+  }
+  renderOucomes() {
+    return (
+      <div className="wrapperOutcomes">
+        <Label for="outcomeSelect">Outcomes</Label><br />
+        {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>{item.name}<br />
+          {/* side: 1 (support), 2 (against), 3 (draw) */}
+          <div className="result">
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
+              Support
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
+              Oppose
+              </Label>
+            </FormGroup>
+          </div>
+          <br /><br />
+        </Label>))}
+      </div>
+    );
+  }
 
   render() {
     return (
       <div className="form-admin">
         <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }}>
-          <FormGroup disabled={this.state.disable}>
-            <Label for="matchSelect">Select Event</Label>
-            <Input type="select" name="select" id="matchSelect" onChange={(event) => { this.onChangeEvent(event, 'selectedMatch'); }} disabled={this.state.disable}>
-              {this.state.matches && this.state.matches.length > 0 && this.state.matches.map(item => <option key={item.id}>{item.name} id:{item.id}</option>)}
-            </Input>
-          </FormGroup>
-          <Label for="outcomeSelect">Outcomes</Label><br />
-          {/* <FormGroup id="outcomeSelect" onChange={(event) => { this.onChangeOutcome(event, 'selectedOutcome'); }} disabled={this.state.disable}> */}
-          {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>{item.name}<br />
-            {/* side: 1 (support), 2 (against), 3 (draw) */}
-            <div className="result">
-              {/*<FormGroup check>
-                <Label check>
-                  <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.DRAW); }} required value="0" />{' '}
-                Draw
-                </Label>
-              </FormGroup>*/}
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
-                Support
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
-                Oppose
-                </Label>
-              </FormGroup>
-            </div>
-            <br /><br />
-          </Label>))}
+          {this.renderEvents()}
+          {this.renderCheckNotHappend()}
+          {this.renderOucomes()}
           <br /> <br />
 
           <Button disabled={this.state.disable} onClick={this.onSubmit}>Submit</Button>
