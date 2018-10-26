@@ -1,6 +1,6 @@
 .buy-crypto-coin-container {
   padding-bottom: 60px;
-  background-color: white;
+  background-color: transparent;
   min-height: 100vh;
   input, textarea {
     &::placeholder {
@@ -19,10 +19,10 @@
     .package-item {
       box-shadow: 0px 0px 15px 5px #F2F2F2;
       width: 48%;
-      height: 197px;
       background: #FFFFFF;
       border-radius: 8px 8px 8px 8px;
       text-align: center;
+      max-height: 210px;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
@@ -46,7 +46,7 @@
           color: #889EB5;
           font-size: 16px;
           font-weight: normal;
-          text-align: left;
+          text-align: center;
           letter-spacing: 0;
         }
       }
@@ -101,8 +101,7 @@
     width: 100%;
   }
   .buy-crypto-coin-specific-amount {
-    padding: 25px 10px;
-    background: white;
+    background: transparent;
   }
   .label-1 {
     height: 32px;

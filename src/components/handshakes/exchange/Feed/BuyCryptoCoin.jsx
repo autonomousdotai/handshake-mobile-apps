@@ -142,11 +142,11 @@ class BuyCryptoCoin extends React.Component {
     // this.checkUserVerified();
     setTimeout(() => {
       /*eslint-disable */
-      $zopim.livechat.window.onShow(() => {
+      window?.$zopim?.livechat?.window?.onShow(() => {
         this.isShow = true;
         console.log('onShow', this.isShow);
       });
-      $zopim.livechat.window.onHide(() => {
+      window?.$zopim?.livechat?.window?.onHide(() => {
         this.isShow = false;
         console.log('onHide', this.isShow);
       });
@@ -165,11 +165,11 @@ class BuyCryptoCoin extends React.Component {
   scrollListener = async () => {
     /*eslint-disable */
     if (!this.isShow) {
-      $zopim(() => {
-        $zopim.livechat.button.hide();
-        $zopim.livechat.button.setOffsetVerticalMobile(70);
-        $zopim.livechat.button.setOffsetHorizontalMobile(10);
-        $zopim.livechat.button.show();
+      window?.$zopim(() => {
+        window?.$zopim?.livechat.button.hide();
+        window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
+        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+        window?.$zopim?.livechat.button.show();
       });
     }
     /* eslint-enable */
@@ -184,7 +184,7 @@ class BuyCryptoCoin extends React.Component {
   detachScrollListener() {
     this.isShow = true;
     /*eslint-disable */
-    $zopim.livechat.button.hide();
+    window?.$zopim?.livechat.button.hide();
     window.removeEventListener('scroll', this.scrollListener);
     window.removeEventListener('resize', this.scrollListener);
     /* eslint-enable */
@@ -725,10 +725,6 @@ class BuyCryptoCoin extends React.Component {
           }
           <div className={scopedCss('specific-amount')}>
             <FormBuyCrypto onSubmit={this.onSubmit} validate={this.validateForm}>
-              <div className="label-1">
-                <span>{messages.buy_coin.label.header.buy_crypto}</span>
-                <span>{messages.buy_coin.label.header.with_ninja_coin}</span>
-              </div>
               <div className="input-group mt-4">
                 <Field
                   withRef
