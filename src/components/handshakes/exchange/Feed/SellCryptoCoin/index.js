@@ -5,18 +5,17 @@ import { sellCryptoGetCoinInfo, sellCryptoOrder } from '@/reducers/sellCoin/acti
 import { API_URL, CRYPTO_CURRENCY } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert } from '@/reducers/app/action';
-import { Field, formValueSelector } from 'redux-form';
+import { Field, formValueSelector, change } from 'redux-form';
 import { required } from '@/components/core/form/validation';
 import { fieldInput } from '@/components/core/form/customField';
 import createForm from '@/components/core/form/createForm';
 import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
+import arrowIcon from '@/assets/images/icon/right-arrow-white.svg';
+import { formatMoneyByLocale } from '@/services/offer-util';
 import OrderInfo from './components/OrderInfo';
-
-const CRYPTO_CURRENCY_SUPPORT = {
-  ...CRYPTO_CURRENCY,
-  BCH: 'BCH',
-};
+import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
+import './SellCryptoCoin.scss';
 
 const sellCoinFormName = 'SellCoinForm';
 const FormSellCoin = createForm({
@@ -26,13 +25,12 @@ const FormSellCoin = createForm({
 });
 const formSellCoinSelector = formValueSelector(sellCoinFormName);
 
-const DEFAULT_CURRENCY = CRYPTO_CURRENCY_SUPPORT.ETH;
+const scopedCss = (className) => `sell-crypto-coin-${className}`;
+
 class SellCryptoCoin extends Component {
   constructor() {
     super();
     this.state = {
-      currency: DEFAULT_CURRENCY,
-      amount: 0,
       userInfo: {},
     };
 
@@ -43,20 +41,12 @@ class SellCryptoCoin extends Component {
     this.getCoinInfo();
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     // get coin info if currency or amount changes
-    if (nextState.amount !== this.state.amount || nextState.currency !== this.state.currency) {
-      this.getCoinInfo(nextState.amount, nextState.currency);
+    if (nextProps?.currency?.amount !== this.props?.currency?.amount || nextProps.currency?.currency !== this.props?.currency?.currency) {
+      this.getCoinInfo(nextProps?.currency?.amount, nextProps?.currency?.currency);
     }
     return true;
-  }
-
-  onAmountChange = (e) => {
-    this.setState({ amount: e?.target?.value });
-  }
-
-  onCurrencyChange = (e) => {
-    this.setState({ currency: e?.target?.value || DEFAULT_CURRENCY });
   }
 
   onAddUserInfo = (e) => {
@@ -69,8 +59,8 @@ class SellCryptoCoin extends Component {
     });
   }
 
-  ongetCoinInfoError = (e) => {
-    this.setState({ amount: 0 });
+  onGetCoinInfoError = (e) => {
+    this.updateCurrency({ amount: 0 });
     this.props.showAlert({
       message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
       timeOut: 3000,
@@ -84,12 +74,11 @@ class SellCryptoCoin extends Component {
   onMakeOrderFailed = (e) => {}
 
   onSubmit = (values) => {
-    const { idVerificationLevel, coinInfo, userInfo } = this.props;
-    const { amount, currency } = this.state;
+    const { idVerificationLevel, coinInfo, userInfo, currency } = this.props;
     const data = {
       type: 'bank',
-      amount: String(amount),
-      currency,
+      amount: String(currency?.amount),
+      currency: currency?.currency,
       fiat_amount: String(coinInfo?.fiatAmount),
       fiat_currency: coinInfo?.fiatCurrency,
       fiat_local_amount: String(coinInfo?.fiatLocalAmount),
@@ -107,12 +96,21 @@ class SellCryptoCoin extends Component {
   }
 
 
-  getCoinInfo(amount = this.state.amount, currency = this.state.currency) {
+  getCoinInfo(amount = this.props.currency?.amount, currency = this.props.currency?.currency) {
     const { idVerificationLevel, fiatCurrencyByCountry } = this.props;
     const level = idVerificationLevel === 0 ? 1 : idVerificationLevel;
-    this.props.sellCryptoGetCoinInfo({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=${Number.parseFloat(amount) || 0}&currency=${currency}&fiat_currency=${fiatCurrencyByCountry}&level=${level}`,
-      errorFn: this.ongetCoinInfoError,
+    if (amount >= 0 && currency && fiatCurrencyByCountry) {
+      this.props.sellCryptoGetCoinInfo({
+        PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=${Number.parseFloat(amount) || 0}&currency=${currency}&fiat_currency=${fiatCurrencyByCountry}&level=${level}`,
+        errorFn: this.onGetCoinInfoError,
+      });
+    }
+  }
+
+  updateCurrency = (currencyData) => {
+    this.props.change(sellCoinFormName, 'currency', {
+      ...this.props.currency,
+      ...currencyData,
     });
   }
 
@@ -143,24 +141,33 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { orderInfo } = this.props;
-    const { amount, currency } = this.state;
+    const { orderInfo, coinInfo, fiatCurrencyByCountry } = this.props;
     if (orderInfo && orderInfo.id) {
       return <OrderInfo />;
     }
 
     return (
-      <FormSellCoin onSubmit={this.onSubmit}>
-        <input placeholder="Amount" onChange={this.onAmountChange} value={amount} />
-        <select value={currency} onChange={this.onCurrencyChange}>
-          {
-            Object.entries(CRYPTO_CURRENCY_SUPPORT).map(([key, value]) => (
-              <option key={key} value={value}>{value}</option>
-            ))
-          }
-        </select>
-        {this.renderUserInfoInput()}
-        <ConfirmButton label="Sell coin" />
+      <FormSellCoin onSubmit={this.onSubmit} className={scopedCss('container')}>
+        <div className="currency-group">
+          <span className="label">Amount</span>
+          <Field
+            name="currency"
+            component={currencyInputField}
+            validate={currencyValidator}
+          />
+          <input
+            placeholder="Price_"
+            value={`${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry}`}
+            disabled
+          />
+        </div>
+        <div className="user-input-group">
+          {this.renderUserInfoInput()}
+        </div>
+        <ConfirmButton
+          label={<span>Next <img alt="" src={arrowIcon} width={12} /></span>}
+          buttonClassName="next-btn"
+        />
       </FormSellCoin>
     );
   }
@@ -172,12 +179,14 @@ const mapStateToProps = (state) => ({
   fiatCurrencyByCountry: state.app.inInfo?.currency || 'VND',
   idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
+  currency: formSellCoinSelector(state, 'currency'),
 });
 
 const mapDispatchToProps = {
   sellCryptoGetCoinInfo,
   showAlert,
   sellCryptoOrder,
+  change,
 };
 
 SellCryptoCoin.propTypes = {

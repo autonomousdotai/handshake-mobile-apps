@@ -1,0 +1,22 @@
+.currency-input-container {
+  width: 100%;
+  position: relative;
+  input {
+    width: 100%;
+  }
+  .currency-input-currency-selector {
+    position: absolute;
+    right: 10px;
+    height: 100%;
+    background-color: transparent;
+    button {
+      background: transparent;
+      border: none;
+      color: #748599;
+      font-size: 18px;
+      font-weight: normal;
+      text-align: left;
+      letter-spacing: 0;
+    }
+  }
+}

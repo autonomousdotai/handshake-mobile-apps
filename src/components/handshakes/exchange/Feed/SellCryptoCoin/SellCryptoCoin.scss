@@ -1,1 +1,49 @@
-. {}
+.sell-crypto-coin-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  > div.currency-group {
+    width: 100%;
+    margin-bottom: 50px;
+    .label {
+      color: #FFFFFF;
+      font-size: 18px;
+      font-weight: normal;
+      text-align: left;
+      letter-spacing: 0;
+    }
+  }
+  > div.user-input-group {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  input {
+    height: 54px;
+    background: #FFFFFF;
+    border: 1.5px solid #E1E9F0;
+    border-radius: 4px 4px 4px 4px;
+    padding: 15px;
+    color: #495057;
+    width: 100%;
+    margin: 5px 0px;
+    &::placeholder {
+      color: #A5BED4;
+      font-size: 18px;
+      font-weight: normal;
+      text-align: left;
+      letter-spacing: 0;
+    }
+  }
+  .next-btn {
+    height: 53px;
+    background: #2989FF;
+    font-size: 18px;
+    font-weight: 500;
+    width: 100%;
+    letter-spacing: 0;
+    border: 0 solid #EDF0FA;
+    color: white;
+    text-align: center;
+    border-radius: 4px 4px 4px 4px;
+  }
+}
