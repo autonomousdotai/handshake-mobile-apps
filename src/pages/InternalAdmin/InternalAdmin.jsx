@@ -324,7 +324,7 @@ class InternalAdmin extends Component {
           } else if (order.status === STATUS.processing.id) {
             result = (
               <div>
-                <button onClick={() => this.processing(order)} className="btn btn-primary">
+                <button onClick={() => this.send(order)} className="btn btn-primary">
                   Send
                 </button>
                 &nbsp;&nbsp;&nbsp;
