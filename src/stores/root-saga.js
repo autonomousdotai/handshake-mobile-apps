@@ -3,10 +3,12 @@ import predictionSaga from '@/pages/Prediction/saga';
 import createMarketSaga from '@/pages/CreateMarket/saga';
 import PexExtensionSaga from '@/pages/PexExtension/saga';
 import orderPlaceSaga from '@/components/handshakes/betting/Feed/OrderPlace/saga';
+import guruSaga from '@/guru/store/saga';
 
 export default function* rootSaga() {
   yield spawn(predictionSaga);
   yield spawn(createMarketSaga);
   yield spawn(PexExtensionSaga);
   yield spawn(orderPlaceSaga);
+  yield spawn(guruSaga);
 }

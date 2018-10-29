@@ -5699,8 +5699,8 @@ handlebars@^4.0.11:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1540783301"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/84c684406d5f3dca6fc1c00a61cc54daa3932573"
+  version "0.0.1540822889"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/d650167c1a98d1d2ee6d366efeac6ebd4f9dd3e9"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"
@@ -6193,6 +6193,11 @@ imagemin@^5.3.1:
     p-pipe "^1.1.0"
     pify "^2.3.0"
     replace-ext "^1.0.0"
+
+immer@^1.7.4:
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-1.7.4.tgz#b9a833a61cbeee477a3694870b172c590837a963"
+  integrity sha512-mZpvQe9LXc+lg3hhcT/2M6Apej43FSs6hS2Bt4HrQxyI6hVJugukLgH2KdSBL/fIOmahHmQvpWU37BWzFLDp1Q==
 
 immutable@^3.8.1:
   version "3.8.2"

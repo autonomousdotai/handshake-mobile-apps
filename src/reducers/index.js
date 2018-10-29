@@ -1,4 +1,5 @@
 import { reducer as form } from 'redux-form';
+import guru from '@/guru/store/reducer';
 import discover from './discover';
 import exchange from './exchange';
 import handshake from './handshake';
@@ -12,6 +13,7 @@ import buyCoin from './buyCoin';
 // import firebase from './firebase';
 
 export default {
+  guru,
   discover,
   exchange,
   form,
