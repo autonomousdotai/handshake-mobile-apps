@@ -146,6 +146,8 @@ class InternalAdmin extends Component {
       type_order: '',
       ref_code: '',
       login: this.token.length > 0,
+      action: EXCHANGE_ACTION.BUY,
+      statusList: STATUS,
     };
     this.setState(state, onDone);
   }
@@ -159,12 +161,15 @@ class InternalAdmin extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.type !== this.props.type) {
+    if (nextProps.type !== this.props.type || nextProps.action !== this.props.action) {
       this.props.reset();
       this.resetState(() => {
+        const action = this.props.action;
+        const statusList = action === EXCHANGE_ACTION.BUY ? STATUS : SELL_STATUS;
+        const defaultType = Object.values(statusList)[0].id;
         const searchParams = Helper.getQueryStrings(window.location.search);
-        const refCode = this.props.refCode || searchParams?.ref_code;
-        this.setState({ type_order: nextProps.type, ref_code: refCode }, () => {
+        const refCode = nextProps.refCode || searchParams?.ref_code;
+        this.setState({ type_order: nextProps.type, ref_code: refCode, action, statusList, type: defaultType }, () => {
           this.loadOrderList();
           this.setupInitifyLoad();
         });
