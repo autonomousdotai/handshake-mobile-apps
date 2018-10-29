@@ -17,7 +17,7 @@ class ProjectInfo extends React.Component {
     const progressPrev = (Number(project.fundingAmount || 0)/Number(project.target|| 1) * 100).toFixed(2);
     const progress = smProject ? (Number(smProject.fundingAmount || 0)/Number(smProject.target|| 1) * 100).toFixed(2) : progressPrev;
     const numFunder = smProject ? smProject.numFunder : (project.numberOfFunder || (<img src={LoadingGif} style={{ width: '50px', height: '50px' }} />));
-    const fundAmount = smProject ? smProject.fundAmount : '0';
+    const fundAmount = smProject ? smProject.fundAmount : 0;
     return (
       <div className="fund-item float-right" style={{ marginTop: '-10px' }}>
         <label htmlFor="" className="fund-item-value">{project.displayLifeTime}</label>
