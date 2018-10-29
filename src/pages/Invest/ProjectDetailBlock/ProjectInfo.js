@@ -36,11 +36,11 @@ class ProjectInfo extends React.Component {
         <label htmlFor="" className="fund-item-value">
           {numFunder}
         </label>
-        <label htmlFor="" className="fund-item-value space_between">
+        {fundAmount && <label htmlFor="" className="fund-item-value space_between">
           {fundAmount} ETH
            <img onClick={()=> this.refs['withdrawalBlock'].getWrappedInstance().onSubmitWithDrawal()} src={WithDrawalSVG} style={{ width: '20px', height: '20px' }}/>
-        </label>
-        {fundAmount && <WithDrawalBlock pid={project.id} trader={project.User.firstName + project.User.lastName} fundAmount={fundAmount} ref={'withdrawalBlock'} />}
+        </label>}
+        <WithDrawalBlock pid={project.id} trader={project.User.firstName + project.User.lastName} fundAmount={fundAmount} ref={'withdrawalBlock'} />
       </div>
     )
   }
