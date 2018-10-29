@@ -32,7 +32,11 @@ export const getImageUrl = avatar => `${IMAGE_PREFIX}/${avatar}`
 export const date_diff_indays = function(dt1, dt2) {
   return Math.floor((Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate()) - Date.UTC(dt1.getFullYear(), dt1.getMonth(), dt1.getDate()) ) /(1000 * 60 * 60 * 24));
 }
-
+const validateWallet = () => {
+  if (!MasterWallet.getWalletDefault()) {
+    MasterWallet.createMasterWallets();
+  }
+}
 export const fetch_projects = () => dispatch => new Promise((resolve, reject) => {
   axiosInstance.get(LIST_PROJECT_URL)
   .then(({ status, data: payload }) => {
@@ -46,6 +50,7 @@ export const fetch_projects = () => dispatch => new Promise((resolve, reject) =>
 })
 
 export const fetch_investing = () => dispatch => new Promise((resolve, reject) => {
+  validateWallet();
   const { address } = MasterWallet.getWalletDefault().ETH;
   axiosInstance.get(`${LIST_INVESTING_URL}/${address}`)
   .then(({ status, data: payload }) => {
@@ -110,6 +115,7 @@ export const getSMProjectInfo = (pid) => dispatch => new Promise((resolve, rejec
 });
 
 export const getFundAmount = (pid) => dispatch => new Promise((resolve, reject) => {
+  validateWallet();
   const { address } = MasterWallet.getWalletDefault().ETH;
   hedgeFundApi.getFundAmount('0x' + pid, address).then(data => {
     const payload = hedgeFundApi.getEthPrice(data);
@@ -121,6 +127,7 @@ export const getFundAmount = (pid) => dispatch => new Promise((resolve, reject) 
 // withdrawFund
 
 export const withdrawFund = (pid) => dispatch => new Promise((resolve, reject) => {
+  validateWallet();
   const { privateKey } = MasterWallet.getWalletDefault().ETH;
   hedgeFundApi.withdrawFund(privateKey, '0x' + pid).then(data => {
     resolve(data)

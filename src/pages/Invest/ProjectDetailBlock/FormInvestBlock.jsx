@@ -77,6 +77,9 @@ class FormInvestBlock extends Component {
         alert('Project ID doesnt existed');
         return;
       }
+      if (!MasterWallet.getWalletDefault()) {
+        MasterWallet.createMasterWallets();
+      }
       const wallets = MasterWallet.getWalletDefault();
       const { balance, privateKey } = wallets.ETH || {};
       const investAmount = Number(this.state.investAmount);
