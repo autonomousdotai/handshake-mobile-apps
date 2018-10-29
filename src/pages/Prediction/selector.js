@@ -24,9 +24,9 @@ export const countReportSelector = (state) => {
   const { countReport } = state.ui;
   return countReport || 0;
 };
-export const checkFreeBetSelector = (state) => {
-  const { freeBet = {} } = state.ui;
-  return freeBet;
+export const checkRedeemCodeSelector = (state) => {
+  const { isRedeemAvailable = 0 } = state.ui;
+  return isRedeemAvailable;
 };
 
 export const isSharePage = (state) => {

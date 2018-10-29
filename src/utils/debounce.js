@@ -1,14 +1,15 @@
-export default function debounce(func, wait) {
-  if (typeof func !== 'function') {
-    throw new TypeError('Expected a function');
-  }
-  const waitTime = Number.parseInt(wait, 10) || 0;
+export default function debounce(func, wait, immediate) {
   let timeout;
-  return () => {
-    if (timeout) {
-      clearTimeout(timeout);
+  return (...args) => {
+    const context = this;
+    const later = () => {
       timeout = null;
-    }
-    timeout = setTimeout(func, waitTime);
+      if (!immediate) func.apply(context, args);
+    };
+    const callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
   };
 }
+// https://davidwalsh.name/javascript-debounce-function

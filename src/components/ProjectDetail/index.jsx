@@ -260,7 +260,7 @@ class Index extends React.PureComponent {
             faq && (
               <div className="row mt-5" id="faq" ref="faq" >
                 <div className="col">
-                  <div className="pd-faq">
+                  <div className={entireContentComponent ? "pd-faq" : "pd-faq-no-content"}>
                     {messages.COIN_EXCHANGE_LP_FAQ_TITLE}
                   </div>
                   <div>

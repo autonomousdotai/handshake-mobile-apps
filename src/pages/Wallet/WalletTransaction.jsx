@@ -203,7 +203,7 @@ class WalletTransaction extends React.Component {
         </div>
 
         {
-          Object.keys(detail.body).map((char) => {console.log('')
+          Object.keys(detail.body).map((char) => {
             let val = detail.body[char] ? detail.body[char] : "";
 
             return (

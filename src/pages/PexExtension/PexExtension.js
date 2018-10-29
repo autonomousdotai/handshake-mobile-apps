@@ -67,7 +67,7 @@ class PexExtension extends React.Component {
               </div>
             </div>
             <div className="ActionGetApp">
-              <span className="NoteText">You unlocked exclusive access</span>
+              <span className="NoteText">You've unlocked exclusive access</span>
               <a href={EXT.URL} target="blank" alt="Extension App" className="btn btn-primary">
                 <img src={ChromeLogo} alt="Chrome Logo" />
                 <span>Add to Chrome</span>

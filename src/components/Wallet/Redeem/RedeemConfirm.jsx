@@ -57,7 +57,7 @@ class RedeemConfirm extends React.Component {
       contentWalletSelected: '',
       modalListCoin: '',            
       cryptoValue: "",
-      expired_date: this.props.data.expired_date || "",
+      expired_date: this.props.data.expiration_date || "",
     };    
   }
 
@@ -68,7 +68,8 @@ class RedeemConfirm extends React.Component {
   onRedeemConfirm=()=>{
     if (this.walletSelected){      
       this.props.verifyRedeemCode({
-        PATH_URL: 'user/verification/redeem-code/check?redeem='+this.state.redeemCode+"&to-address="+this.state.walletSelected.address+"&currency="+this.state.walletSelected.name,
+        PATH_URL: "wallet/gift-card/redeem",
+        data: {"code": this.state.redeemCode,"to_eth_address": this.state.walletSelected.address},
         METHOD: 'POST',
         successFn: (res) => {        
           if(res){
@@ -88,7 +89,7 @@ class RedeemConfirm extends React.Component {
 
   getWalletDefault = () =>{    
 
-    let support = ["ETH", "BTC", "BCH"];
+    let support = ["ETH"];
 
     let wallets = MasterWallet.getMasterWallet();
     
@@ -153,28 +154,28 @@ class RedeemConfirm extends React.Component {
     if(this.state.walletSelected){
       let icon = ''; try{ icon = require("@/assets/images/icon/wallet/coins/" + this.state.walletSelected.name.toLowerCase() + '.svg')} catch (ex){};
       
-      this.props.getFiatCurrency({
-        PATH_URL: API_URL.EXCHANGE.GET_FIAT_CURRENCY,
-        qs: {fiat_currency: 'USD', currency: this.state.walletSelected.name},
-        successFn: (res) => {
-          let data = res.data;
-          let rate = data.price;
-          let money = 25;//this.state.giftcardValue;
+      // this.props.getFiatCurrency({
+      //   PATH_URL: API_URL.EXCHANGE.GET_FIAT_CURRENCY,
+      //   qs: {fiat_currency: 'USD', currency: this.state.walletSelected.name},
+      //   successFn: (res) => {
+      //     let data = res.data;
+      //     let rate = data.price;
+      //     let money = 25;//this.state.giftcardValue;
 
-          let amount = Number(money)/rate;
-          // if(amount && amount < 1e-6){
-          //   amount = Number(amount).toFixed(8);
-          // }
-          amount = Number((parseFloat(amount)).toFixed(8));
-          let cryptoValue = `${amount} ${this.state.walletSelected.name}`;
-          this.setState({cryptoValue: cryptoValue});        
-        },
-        errorFn: (err) => {
-          console.log("Error", err);          
-          let cryptoValue = `0 ${this.state.walletSelected.name}`;
-          this.setState({cryptoValue: cryptoValue});        
-        },
-      });                
+      //     let amount = Number(money)/rate;
+      //     // if(amount && amount < 1e-6){
+      //     //   amount = Number(amount).toFixed(8);
+      //     // }
+      //     amount = Number((parseFloat(amount)).toFixed(8));
+      //     let cryptoValue = `${amount} ${this.state.walletSelected.name}`;
+      //     this.setState({cryptoValue: cryptoValue});        
+      //   },
+      //   errorFn: (err) => {
+      //     console.log("Error", err);          
+      //     let cryptoValue = `0 ${this.state.walletSelected.name}`;
+      //     this.setState({cryptoValue: cryptoValue});        
+      //   },
+      // });                
       
       this.setState({
         contentWalletSelected:                      
@@ -213,7 +214,7 @@ class RedeemConfirm extends React.Component {
             </div>           
             </ModalDialog>
 
-            <ModalDialog onRef={modal => this.modalRedeenSuccessRef = modal}> 
+            <ModalDialog onRef={modal => this.modalRedeenSuccessRef = modal} onClose={this.props.onFinish}> 
               <div className="box-header-success"><img src={success} /></div>
               <div className="re-term-header">Redeem Successful</div>
 
@@ -231,12 +232,12 @@ class RedeemConfirm extends React.Component {
             <div className="box-value">
                 <div className="giftcard-value">
                   <div className="v-title">{messages.wallet.action.redeem.giftcard}</div> 
-                  <div className="v-value">${this.state.giftcardValue}</div></div>   
+                  <div className="v-value">{this.state.giftcardValue} ETH</div></div>   
 
-                <div className="coin-value">
+                {/* <div className="coin-value">
                   <div className="v-title">{messages.wallet.action.redeem.value}</div> 
                   <div className="v-value">{this.state.cryptoValue}</div>
-                </div>     
+                </div>      */}
             </div>
 
                 
@@ -265,5 +266,9 @@ const mapDispatchToProps = (dispatch) => ({
   verifyRedeemCode: bindActionCreators(verifyRedeemCode, dispatch),   
   getFiatCurrency: bindActionCreators(getFiatCurrency, dispatch),
 });
+
+RedeemConfirm.propTypes = {  
+  onFinish: PropTypes.func,
+};
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(RedeemConfirm));

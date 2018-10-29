@@ -57,6 +57,9 @@ export const MESSAGE_SERVER = {
   1040: 'Busy day for Handshakes - we\'re out of freebies! Please try again tomorrow.',
   1041: 'You can only request free Handshakes once.',
   1042: 'Your account can\'t get free ETH.',
+
+  1062: 'Redeem code is invalid',
+  1063: 'Redeem code is invalid',
 };
 
 export const MESSAGE = {
@@ -74,6 +77,7 @@ export const MESSAGE = {
   WITHDRAW_SUCCESS: 'Success! Your winnings have been withdrawn to your wallet.',
   DIFFERENCE_ADDRESS: `Current address isn't same as which you used to create bet`,
   DISPUTE_CONFIRM: 'Results will be reviewed if over 50% of players dispute it.',
+  ODDS_TOOLTIP: 'Enter the odds you want to bet on. Example, the odds 4.0 means you could win 3 ETH for every 1 ETH you put down.',
 };
 
 export const BETTING_STATUS_LABEL =

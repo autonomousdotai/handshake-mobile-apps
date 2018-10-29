@@ -13,6 +13,7 @@ export const createAPI = INIT => ({
   errorFn,
   qs,
   headers,
+  ...rest
 }) => (dispatch) => {
   dispatch({ type: APP_ACTION.CALLING });
 
@@ -23,7 +24,7 @@ export const createAPI = INIT => ({
   // console.log(`app - api - calling - id${requestUuid}`, `${METHOD}:${PATH_URL}`);
 
   $http({
-    url, data, id, qs, headers, method: METHOD,
+    url, data, id, qs, headers, method: METHOD, ...rest,
   }).then((response) => {
     // console.log(`app - api - called - id${requestUuid}`);
     dispatch({ type: APP_ACTION.CALLED });

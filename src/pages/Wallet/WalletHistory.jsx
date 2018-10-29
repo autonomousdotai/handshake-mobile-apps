@@ -230,7 +230,7 @@ class WalletHistory extends React.Component {
               </div>
               {
                 tran.addresses.map((addr) => {
-                  return <div key={addr}>{addr}</div>
+                  return <div key={addr} className="addr">{addr}</div>
                 })
               }
             </div>

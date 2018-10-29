@@ -32,6 +32,7 @@ export default class ExchangeHandshake extends BaseHandshake {
     return this.chainId === 4 ? window.gasPrice || 20 : window.gasPrice || 20;
   }
 
+
   /**
    * @dev Initiate handshake by CoinOwner
    */

@@ -49,7 +49,7 @@ export const getReportCount = (payload = {}) => {
   };
 };
 
-export const checkFreeBet = (payload = {}) => {
+export const checkRedeemCode = (payload = {}) => {
   return {
     type: 'PREDICTION:CHECK_FREE_AVAILABLE',
     ...payload,
@@ -68,7 +68,7 @@ export const updateShowedLuckyPool = () => {
 export const updateFreeBet = (value) => {
   return SET_DATA({
     type: 'PREDICTION:UPDATE_FREE_BET',
-    _path: 'ui.freeBet',
+    _path: 'ui.isRedeemAvailable',
     _value: value,
   });
 };

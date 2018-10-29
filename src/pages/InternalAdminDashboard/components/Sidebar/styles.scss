@@ -1,0 +1,77 @@
+.internal-admin-sidebar-container {
+  .internal-admin-sidebar-collapse-icon {
+    position: fixed;
+    z-index: 1;
+    color: green;
+    font-weight: bold;
+    top: 10px;
+    background-color: white;
+    height: 40px;
+    width: 200px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-radius: 3px;
+    padding: 10px;
+    box-shadow: 0px 0px 1px 1px white;
+    transition: transform 200ms;
+    transform: translateX(-177px);
+    cursor: pointer;
+    &:hover {
+      transform: translateX(-80px);
+    }
+  }
+  .internal-admin-sidebar-sidebar {
+    width: 240px;
+    background: white;
+    min-height: 100vh;
+    position: fixed;
+    top: 0px;
+    display: flex;
+    z-index: 1;
+    flex-direction: column;
+    transition: transform 200ms;
+    align-items: flex-start;
+    transform: translateX(-240px);
+    &.expanded {
+      transform: translateX(0px);
+    }
+    .internal-admin-sidebar-header {
+      height: 60px;
+      background: grey;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+    }
+    .internal-admin-sidebar-body {
+      width: 100%;
+      padding: 20px 0px;
+      .internal-admin-sidebar-item {
+        &:hover {
+          background: rgba(1,1,1,0.06);
+        }
+        cursor: pointer;
+        width: 100%;
+        width: 100%;
+        padding: 10px 15px;
+        font-weight: 400;
+        &.selected {
+          color: green;
+          font-weight: 500;
+          background: gainsboro;
+        }
+      }
+    }
+  }
+  .internal-admin-sidebar-overlay {
+    background-color: rgba(1,1,1,0.7);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0px;
+  }
+}

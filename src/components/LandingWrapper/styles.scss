@@ -90,4 +90,14 @@ $button-color: #484848;
     text-decoration: underline;
     color: #484848;
   }
+  .landing-table {
+    width: 100%;
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding-left: 10px;
+      width: 50%;
+    }
+  }
 }

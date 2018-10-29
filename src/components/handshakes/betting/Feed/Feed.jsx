@@ -616,8 +616,6 @@ class FeedBetting extends React.Component {
 
     const progress = totalDisputeAmount / totalAmount * 100;
     const pgText = `${formatAmount(totalDisputeAmount)} ETH of ${formatOdds(progress)}% outcome pool`;
-    //console.log(TAG, 'renderProgressBar', 'totalAmount:', totalAmount,'totalDisputeAmount:', totalDisputeAmount);
-    //console.log(TAG, 'renderProgressBar', 'totalAmount:', formatAmount(totalAmount),'totalDisputeAmount:', formatAmount(totalDisputeAmount));
 
     return (
       <div>
@@ -648,14 +646,11 @@ class FeedBetting extends React.Component {
       actionTitle, isAction, itemInfo, isLoading, eventName, predictName, shakedItemList,
     } = this.state;
 
-    //const {extraData} = this.props;
-
     const { side, odds, role } = itemInfo;
 
     const colorBySide = side === 1 ? `support` : 'oppose';
     const displayValues = role === ROLE.INITER ? this.calculateDisplayValueMaker() : this.calculateDisplayValueShaker(shakedItemList);
     const { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue } = displayValues;
-    console.log(TAG, 'render', isLoading);
     return (
       <div>
         {/* Feed */}

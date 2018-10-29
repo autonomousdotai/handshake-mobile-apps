@@ -280,7 +280,9 @@ class Wallet extends React.Component {
     } else {
       this.splitWalletData(listWallet);
       await this.getListBalace(listWallet);
-    }        
+    }
+
+    // $zopim.livechat.button.hide();
   }
 
   async getSetting(){
@@ -718,7 +720,7 @@ class Wallet extends React.Component {
           exportPrivateContent: (
               <div className="export-private-key">
                 <div className="ex-title">{messages.wallet.action.export_private_key.title}</div>
-                <QRCode size={230} value={this.state.walletSelected.privateKey} onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.showToast(messages.wallet.action.copy.success);}} />
+                <QRCode size={230} value={this.state.walletSelected.privateKey} onClick={() => { Clipboard.copy(this.state.walletSelected.privateKey); this.showToast(messages.wallet.action.copy.success);}} />
                 <div className="ex-desc">{messages.wallet.action.export_private_key.desc} </div>
                 <Button onClick={()=> {Clipboard.copy(this.state.walletSelected.privateKey); this.showToast(messages.wallet.action.copy.success);}}>Copy</Button>
               </div>
@@ -824,7 +826,6 @@ class Wallet extends React.Component {
 
   closeTransfer = () => {
     this.setState({ modalTransferCoin: '' });
-    console.log("closeTransfer");
   }
 
   closeBuyCoin = () => {
@@ -893,7 +894,7 @@ class Wallet extends React.Component {
 
   getETHFree=()=> {
     window.open('https://www.rinkeby.io/#faucet', '_blank');
-    // let data="ninja-redeem:NINJA101F8DC?value=234";
+    // let data="ninja-redeem:NINJA-1C1QN0r5SItfzGqp06graZPLZR2?value=234";
     // let result = MasterWallet.getQRCodeDetail(data);
     // this.props.showQRCodeContent({
     //   data: result
@@ -914,8 +915,9 @@ class Wallet extends React.Component {
         (
           <Redeem
             data={data}
-            onFinish={(result) => {
+            onFinish={(result) => {              
               this.modalRedeemRef.close();
+              this.setState({redeemContent: ''});                            
              }}
           />
         ),

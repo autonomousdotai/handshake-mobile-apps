@@ -7,6 +7,7 @@ import { codeValidator, emailValidator, required } from '@/pages/CreateMarket/va
 import { Field, formValueSelector } from 'redux-form';
 import { sendEmailCode, verifyEmail } from '@/pages/CreateMarket/action';
 import { createEventFormName } from '@/pages/CreateMarket/constants';
+import { hasEmail, isValidEmailCode, isEmailVerified } from './selector';
 
 class EmailVerification extends Component {
   static displayName = 'EmailVerification';
@@ -55,7 +56,6 @@ class EmailVerification extends Component {
   }
 
   renderEmailBox = (props, state) => {
-    const isValid = !emailValidator(props.email || '');
     return (
       <div className="FlexRow">
         <Field
@@ -72,7 +72,7 @@ class EmailVerification extends Component {
           type="button"
           className="btn btn-primary EmailBtn"
           onClick={this.sendEmail}
-          disabled={!isValid || state.isEmailSent}
+          disabled={emailValidator(props.email || '') || state.isEmailSent}
         >
           Get code
         </button>
@@ -128,7 +128,7 @@ class EmailVerification extends Component {
   }
 
   renderComponent = (props, state) => {
-    if (props.hasEmail) {
+    if (props.hasEmail && props.isEmailVerified) {
       return this.renderHasEmail(props, state);
     }
     return (
@@ -157,6 +157,9 @@ const formSelector = formValueSelector(createEventFormName);
 export default connect(
   (state) => {
     return {
+      hasEmail: hasEmail(state),
+      isEmailVerified: isEmailVerified(state),
+      isValidEmailCode: isValidEmailCode(state),
       email: formSelector(state, 'email'),
       emailCode: formSelector(state, 'emailCode'),
     };

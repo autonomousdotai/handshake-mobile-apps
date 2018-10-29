@@ -12,6 +12,7 @@ class UploadZone extends React.PureComponent {
     onDrop: PropTypes.func,
     acceptMimeType: PropTypes.array,
     dropLabel: PropTypes.string,
+    dropZoneRef: PropTypes.any,
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ class UploadZone extends React.PureComponent {
     onDrop: () => { },
     acceptMimeType: [],
     dropLabel: '',
+    dropZoneRef: () => {},
   };
 
   constructor(props) {
@@ -43,11 +45,12 @@ class UploadZone extends React.PureComponent {
       multiple,
       acceptMimeType,
       dropLabel,
+      dropZoneRef,
     } = this.props;
     return (
       <section>
         <div>
-          <Dropzone multiple={multiple} onDrop={this.onDrop} accept={acceptMimeType.join(',')} className={`uploadzone ${className}`}>
+          <Dropzone multiple={multiple} onDrop={this.onDrop} accept={acceptMimeType.join(',')} className={`uploadzone ${className}`} ref={dropZoneRef}>
             <p className="label">{dropLabel}</p>
             {this.state.files.length > 0 ? (
               <aside>

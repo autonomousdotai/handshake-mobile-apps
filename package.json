@@ -13,6 +13,11 @@
     "serve-heroku": "node ./serve.js",
     "ngrok": "ngrok http 8080 -host-header=localhost:8080"
   },
+  "devDependencies": {
+    "@types/googlemaps": "^3.30.16",
+    "@types/markerclustererplus": "^2.1.33",
+    "@types/react": "^16.4.18"
+  },
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
@@ -23,6 +28,7 @@
     "@babel/preset-react": "^7.0.0-beta.51",
     "@babel/runtime": "^7.0.0-beta.51",
     "@firebase/app-types": "^0.3.2",
+    "@sindresorhus/class-names": "^0.1.0",
     "adyen-cse-web": "git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22",
     "autoprefixer": "^9.1.5",
     "axios": "^0.18.0",
@@ -82,11 +88,14 @@
     "prop-types": "^15.6.1",
     "qrcode.react": "^0.8.0",
     "qs": "^6.5.2",
+    "query-string": "^6.2.0",
     "raw-loader": "github:webpack-contrib/raw-loader#80be65e7968915c0b5d0e47a5b9b59497bb82df9",
     "rc-time-picker": "^3.4.0",
     "react": "^16.4.0",
     "react-autosuggest": "^9.3.4",
     "react-bootstrap": "^0.32.1",
+    "react-bootstrap-table-next": "^1.3.0",
+    "react-bootstrap-table2-filter": "^1.0.1",
     "react-bottomsheet": "^1.1.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-datetime": "^2.14.0",

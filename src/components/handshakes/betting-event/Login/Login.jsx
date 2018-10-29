@@ -4,6 +4,7 @@ import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { API_URL } from '@/constants';
 import { connect } from 'react-redux';
 import { userAuthenticate } from '@/reducers/admin/action';
+import md5 from 'md5';
 
 
 class Login extends React.Component {
@@ -52,6 +53,7 @@ class Login extends React.Component {
         const token = response.data.access_token;
         localStorage.setItem('Token', token);
         localStorage.setItem('TokenInit', new Date());
+        sessionStorage.setItem('admin_hash', md5(`${email}/${password}`));
       }),
     });
   }

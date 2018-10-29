@@ -18,7 +18,7 @@ class Shop extends React.Component {
       products: [],
     };
   }
-  
+
   componentDidMount() {
     // get products
     const url = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.PRODUCTS}?is_marketplace=0&group=1&page_size=20`;
@@ -27,12 +27,13 @@ class Shop extends React.Component {
       const { data:source } = result;
       this.setState({ products: source.data.products});
     });
+    // $zopim.livechat.button.hide();
   }
 
   videoOrImage(firstGallery, productName) {
     if (firstGallery.is_video) {
       // video
-      return  <VideoYoutube 
+      return  <VideoYoutube
                 videoUrl={firstGallery.youtube_url}
                 imageUrl={firstGallery.image}
                 imageAlt={productName}
@@ -52,16 +53,13 @@ class Shop extends React.Component {
     const { products } = this.state;
     return (
       <div className="Shop">
-        {/* <div className="header-block">
-          <h1>Ninja Shop</h1>
-        </div> */}
         <div className="products">
         {
           products.map(product => <div key={product.product_id} className="product" onClick={() => this.onSeeMore(product.product_slug)}>
             {this.videoOrImage(product.galleries[0], product.product_name)}
             <p className="product-name">
               {product.product_name}
-            </p> 
+            </p>
             <div className="price-review">
               <div className="price">
                 <img src={EthSVG} alt="Eth" />&nbsp;

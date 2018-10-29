@@ -1,0 +1,337 @@
+.buy-crypto-coin-container {
+  padding-bottom: 60px;
+  background-color: white;
+  min-height: 100vh;
+  input, textarea {
+    &::placeholder {
+      color: #A5BED4;
+      font-size: 16px;
+      font-weight: normal;
+      text-align: left;
+      letter-spacing: 0;
+    }
+  }
+  .package-container {
+    margin-top: 20px;
+    display: flex;
+    padding: 10px;
+    justify-content: space-between;
+    .package-item {
+      box-shadow: 0px 0px 15px 5px #F2F2F2;
+      width: 48%;
+      height: 197px;
+      background: #FFFFFF;
+      border-radius: 8px 8px 8px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 20px;
+      .price-amount-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .fiat-amount {
+          color: #0A2240;
+          font-size: 18px;
+          font-weight: 500;
+          text-align: left;
+          letter-spacing: 0;
+          text-align: center;
+          &.usd::before {
+            content: '$';
+          }
+        }
+        .amount {
+          color: #889EB5;
+          font-size: 16px;
+          font-weight: normal;
+          text-align: left;
+          letter-spacing: 0;
+        }
+      }
+      &.basic {
+        .name {
+          color: #34CF81;
+        }
+        .package-buy-now  {
+          background: #34CF81;
+        }
+      }
+      &.pro {
+        .name {
+          color: #FFBA48;
+        }
+        .package-buy-now  {
+          background: #FFBA48;
+        }
+      }
+      .name {
+        font-size: 20px;
+        font-weight: bold;
+        text-align: left;
+        letter-spacing: 0;
+        text-align: center;
+      }
+      .package-buy-now {
+        height: 36px;
+        color: #FFFFFF;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+        letter-spacing: 0;
+        width: 100%;
+      }
+    }
+  }
+  .buy-btn {
+    padding: 10px 30px;
+    color: white;
+    font-size: 18px;
+    line-height: 30px;
+    border: none;
+    width: 100%;
+    background: #2989FF;
+    border-radius: 4px 4px 4px 4px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .buy-btn-container {
+    text-align: center;
+    width: 100%;
+  }
+  .buy-crypto-coin-specific-amount {
+    padding: 25px 10px;
+    background: white;
+  }
+  .label-1 {
+    height: 32px;
+    font-size: 20px;
+    text-align: center;
+    letter-spacing: 0;
+    font-weight: bold;
+    :nth-child(1) {
+      color: #2989FF;
+    }
+  }
+  .label-2 {
+    opacity: 0.6;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+  }
+  .form-control-cc {
+    margin-right: 120px;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+  .dropdown-button {
+    background: #EDF2F8;
+    position: absolute;
+    right: 0px;
+    width: 126px;
+    border: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    height: 48px;
+    z-index: 10;
+
+    font-size: 18px;
+    color: #211D2C;
+  }
+  .btn-submit-specific {
+    background: #001890;
+    font-size: 18px;
+    line-height: 30px;
+  }
+  .by-package {
+    padding: 10px;
+    .p-label-choose {
+      font-size: 16px;
+      color: #211D2C;
+    }
+    .package {
+      padding: 10px;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 16px;
+      color: #FFFFFF;
+      text-align: center;
+      width: 100%;
+    }
+    .p-basic {
+      background: #68AEFF;
+    }
+    .p-pro {
+      background: #FFBA48;
+    }
+    .p-plus {
+      background: #FF2C46;
+    }
+    .p-price {
+      font-weight: 500;
+      font-size: 18px;
+      color: #211D2C;
+    }
+    .p-saving {
+      font-weight: 500;
+      font-size: 14px;
+      color: #FF2C46;
+      margin-left: 8px;
+    }
+    .p-amount {
+      font-size: 16px;
+      color: #5766A4;
+      line-height: 19px;
+    }
+    .btn-p-buy-now {
+      background: #f6f8fe;
+      font-weight: 500;
+      font-size: 16px;
+      color: #546FF7;
+      padding: 10px 15px;
+    }
+  }
+
+  .ex-sticky-note-popup {
+    bottom: 0px;
+  }
+
+  .choose-coin-payment-method-container {
+    transition: opacity 250ms, max-height 300ms;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    max-height: 0px;
+    margin: 0px;
+    background: #F5F8FC;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 0;
+    &.cod {
+      opacity: 1;
+      max-height: 300px;
+    }
+    &.bank {
+      opacity: 1;
+    }
+  }
+
+  .cod-form-container {
+    padding: 20px;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    .cod-field {
+      margin: 5px 0px;
+      height: 54px;
+      background: #FFFFFF;
+      border: 1.5px solid #E1E9F0;
+      border-radius: 4px 4px 4px 4px;
+    }
+  }
+
+  ul.bank-info-container {
+    height: 195px;
+    margin-top: 20px;
+    padding: 10px;
+    > li {
+      list-style: none;
+      display: flex;
+      padding: 5px 0px;
+      >div.title {
+        width: 100%;
+      }
+      >:nth-child(1) {
+        width: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        > span {
+          color: #889EB5;
+          font-size: 14px;
+          font-weight: normal;
+          text-align: left;
+          letter-spacing: 0;
+        }
+      }
+      >:nth-child(2) {
+        width: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        > span {
+          color: #092136;
+          font-size: 14px;
+          font-weight: normal;
+          text-align: left;
+          letter-spacing: 0;
+          text-transform: uppercase;
+        }
+      }
+      &:first-child span {
+        color: #092136;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: left;
+        letter-spacing: 0;
+      }
+    }
+  }
+
+  #PexCreateBtn {
+    font-size: 16px;
+    font-weight: 400;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2;
+    color: white;
+    letter-spacing: 0;
+    background: #F75454;
+
+    .Idea {
+      padding: 7px;
+      .verify-link {
+        color: white;
+        font-weight: bold;
+      }
+    }
+
+    .IconIdea {
+      padding-right: rem-calc(5px);
+      max-width: 30px;
+    }
+
+    button {
+      color: #000000;
+      background-color: #FDEE4B;
+      width: 115px;
+      height: 35px;
+      font-size: 15px;
+      font-weight: 400;
+      border-radius: rem-calc(20px);
+      box-shadow: 0 6px 0 0 #D9CB34;
+    }
+  }
+}
+
+.ex-sticky-note {
+  font-size: 14px;
+  text-align: center;
+  color: white;
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 414px;
+  background-color: black;
+  z-index: 2;
+  padding: 10px 0;
+  .btn-become {
+    min-width: 200px;
+    border: 1px solid white;
+    background: black;
+    color: white;
+  }
+}

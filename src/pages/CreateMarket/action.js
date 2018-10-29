@@ -1,12 +1,12 @@
 import { SET_DATA, REMOVE_DATA } from '@/stores/data-action';
+import { ACTIONS } from '@/reducers/auth/action';
 
-export const updateEmailPut = (value) => {
-  return SET_DATA({
-    type: 'CREATE_MARKET:UPDATE_EMAIL_PUT',
-    _path: 'auth.profile.email',
-    _value: value,
-  });
-};
+export const updateProfile = (payload) => {
+  return {
+    type: `${ACTIONS.AUTH_FETCH}_SUCCESS`,
+    payload,
+  };
+}
 
 export const updateEmailFetch = (payload = {}) => {
   return {
