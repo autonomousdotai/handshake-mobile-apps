@@ -1,0 +1,31 @@
+.crypto-coin-container {
+  background-color: #F5F8FC;
+  .crypto-coin-tabs {
+    justify-content: center;
+    display: flex;
+    padding: 40px 0px;
+    height: 159px;
+    background-color: #14447F;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    > div {
+      padding: 0px 10px;
+      color: #A5BED4;
+      font-size: 16px;
+      font-weight: normal;
+      text-align: left;
+      letter-spacing: 0;
+      line-height: 32px;
+      text-transform: uppercase;
+      &.selected {
+        color: #FFFFFF;
+        font-weight: bold;
+      }
+    }
+  }
+  .crypto-coin-tab-body {
+    position: relative;
+    padding: 15px;
+    top: -70px;
+  }
+}

@@ -50,7 +50,10 @@ const ContentForWallet = createDynamicImport(() => import('@/pages/LandingPage/C
 const ContentForPrediction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPrediction'), Loading);
 const ContentForPexInstruction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPexInstruction'), Loading);
 const LuckyDrawMechanic = createDynamicImport(() => import('@/pages/LuckyDrawMechanic/LuckyDrawMechanic'), Loading);
-const RouterBuyCryptoCoin = createDynamicImport(() => import('@/components/Router/BuyCryptoCoin'), Loading);
+const Discover = createDynamicImport(() => import('@/pages/Discover/Discover'), Loading);
+const RouterCCConfirm = createDynamicImport(() => import('@/components/Router/CCConfirm'), Loading);
+const RouterBuyCC = createDynamicImport(() => import('@/components/Router/Credit'), Loading);
+const RouterCryptoCoin = createDynamicImport(() => import('@/components/Router/CryptoCoin'), Loading);
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
 const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
 const RouterInternalAdmin = createDynamicImport(() => import('@/components/Router/InternalAdmin'), Loading);
@@ -78,8 +81,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.REPORT, component: RouterReport },
   // { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
   // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
-  { path: URL.BUY_COIN_URL, component: RouterBuyCryptoCoin },
-
+  { path: URL.CRYPTO_COIN_URL, component: RouterCryptoCoin },
   { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
   {
     path: URL.PRODUCT_DAD_URL,

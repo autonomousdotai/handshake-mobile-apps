@@ -1974,4 +1974,41 @@ export default {
       submitButtonTitle: 'Submit',
     },
   },
+  sell_coin: {
+    label: 'Sell coin',
+    order: {
+      inputs: {
+        currency: {
+          amount: 'Amount',
+        },
+        bank_owner: 'Bank Owner',
+        bank_name: 'Bank Name',
+        bank_number: 'Bank Number',
+        phone: 'Phone Number',
+      },
+      btn: {
+        submit_order: 'Next',
+      },
+      confirm_popup: {
+        msg: 'Are you sure?',
+        confirm_btn: 'Sure',
+        cancel_btn: 'Cancel',
+      },
+    },
+    summary: {
+      label: 'Summary',
+      info: {
+        code: 'Code',
+        receiving: 'Receiving',
+        selling: 'Selling',
+        address: 'Address',
+        notes: ['Note 1', 'Note 2'],
+      },
+      btn: {
+        close_summary: 'Finish',
+      },
+    },
+  },
+  'coin_tabs.sell': 'SELL COIN',
+  'coin_tabs.buy': 'BUY COIN',
 };
