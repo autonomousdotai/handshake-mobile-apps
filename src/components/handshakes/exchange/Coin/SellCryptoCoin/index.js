@@ -13,7 +13,7 @@ import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmBu
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import arrowIcon from '@/assets/images/icon/right-arrow-white.svg';
 import { formatMoneyByLocale } from '@/services/offer-util';
-import { injectIntl } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import OrderInfo from './components/OrderInfo';
 import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
 import './SellCryptoCoin.scss';
@@ -160,7 +160,7 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { orderInfo, coinInfo, fiatCurrencyByCountry, currency, className } = this.props;
+    const { orderInfo, coinInfo, fiatCurrencyByCountry, currency, className, formError } = this.props;
     const { isGettingCoinInfo } = this.state;
     const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
     const fiatAmount = currency?.amount ?
@@ -173,11 +173,11 @@ class SellCryptoCoin extends Component {
     return (
       <FormSellCoin onSubmit={this.onSubmit} className={`${scopedCss('container')} ${className}`}>
         <div className="currency-group">
-          <span className="label">{this.getLocalStr().order?.inputs?.currency?.amount}</span>
           <Field
             name="currency"
             component={currencyInputField}
             validate={currencyValidator}
+            placeholder={this.getLocalStr().order?.inputs?.currency?.amount}
           />
           <div className="fiat-amount-container">
             <input
@@ -191,6 +191,19 @@ class SellCryptoCoin extends Component {
           {this.renderUserInfoInput()}
         </div>
         <ConfirmButton
+          disabled={!!formError}
+          message={
+            <FormattedMessage
+              id="sell_coin_confirm_popup.msg"
+              values={{
+                fiatAmount: fiatAmount || 0,
+                amount: currency?.amount || 0,
+                currency: currency?.currency || '',
+              }}
+            />
+          }
+          confirmText={<FormattedMessage id="sell_coin_confirm_popup.confirm_text" />}
+          cancelText={<FormattedMessage id="sell_coin_confirm_popup.cancel_text" />}
           label={<span>{this.getLocalStr().order?.btn?.submit_order} <img alt="" src={arrowIcon} width={12} /></span>}
           buttonClassName="next-btn"
         />
@@ -206,6 +219,7 @@ const mapStateToProps = (state) => ({
   idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
   currency: formSellCoinSelector(state, 'currency'),
+  formError: !!state.form[sellCoinFormName]?.syncErrors,
 });
 
 const mapDispatchToProps = {
@@ -240,6 +254,7 @@ SellCryptoCoin.propTypes = {
   sellCryptoOrder: PropTypes.func.isRequired,
   hideLoading: PropTypes.func.isRequired,
   showLoading: PropTypes.func.isRequired,
+  formError: PropTypes.bool.isRequired,
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin));

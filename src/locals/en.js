@@ -1967,6 +1967,9 @@ export default {
   'buy_coin_confirm_popup.cancel_text': 'Cancel',
   'buy_coin.verify.need_selfie_verifiy': 'You are buying more than {fiatAmount} {fiatCurrency}. Please verify your account to increase the limit',
   'buy_coin.verify.need_selfie_verifiy_action': 'Verify now',
+  'sell_coin_confirm_popup.msg': 'Sell {amount} {currency} for {fiatAmount}?',
+  'sell_coin_confirm_popup.confirm_text': 'Confirm',
+  'sell_coin_confirm_popup.cancel_text': 'Cancel',
   review: {
     title: 'Review',
     label: {
@@ -1981,22 +1984,17 @@ export default {
         currency: {
           amount: 'Amount',
         },
-        bank_owner: 'Bank Owner',
+        bank_owner: 'Account Name',
         bank_name: 'Bank Name',
-        bank_number: 'Bank Number',
+        bank_number: 'Account Number',
         phone: 'Phone Number',
       },
       btn: {
         submit_order: 'Next',
       },
-      confirm_popup: {
-        msg: 'Are you sure?',
-        confirm_btn: 'Sure',
-        cancel_btn: 'Cancel',
-      },
     },
     summary: {
-      label: 'Summary',
+      label: 'Your Selling Order',
       info: {
         code: 'Code',
         receiving: 'Receiving',

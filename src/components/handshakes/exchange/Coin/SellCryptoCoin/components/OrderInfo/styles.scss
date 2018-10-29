@@ -50,6 +50,20 @@
     text-align: center;
     padding: 20px;
     margin: 40px 0px;
+    .address-wallet {
+      margin: 15px 5px;
+      padding: 5px;
+      font-weight: 400;
+      border: dotted 1px;
+      word-break: break-all;
+      border-radius: 3px;
+      .copy-icon {
+        display: inline-block;
+        margin: 0px 10px;
+        position: relative;
+        top: -5px;
+      }
+    }
   }
   .sell-crypto-coin-summary-note-txt {
     height: 42px;

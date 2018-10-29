@@ -61,7 +61,7 @@ export default class CurrencyInput extends Component {
 
   render() {
     const { currency, amount } = this.state;
-    const { onFocus, onBlur, markError } = this.props;
+    const { onFocus, onBlur, markError, placeholder } = this.props;
     return (
       <div className={scopedCss('container')}>
         <Cleave
@@ -74,7 +74,7 @@ export default class CurrencyInput extends Component {
             numeralThousandsGroupStyle: 'thousand',
             numeralIntegerScale: 9,
           }}
-          placeholder="0.0"
+          placeholder={placeholder}
           onChange={this.onAmountChange}
         />
         <UncontrolledButtonDropdown className={scopedCss('currency-selector')}>
@@ -101,6 +101,7 @@ CurrencyInput.defaultProps = {
   onFocus: () => {},
   onBlur: () => {},
   markError: false,
+  placeholder: '0.0',
 };
 CurrencyInput.propTypes = {
   onChange: PropTypes.func.isRequired,
@@ -108,4 +109,5 @@ CurrencyInput.propTypes = {
   onBlur: PropTypes.func,
   value: PropTypes.object,
   markError: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
