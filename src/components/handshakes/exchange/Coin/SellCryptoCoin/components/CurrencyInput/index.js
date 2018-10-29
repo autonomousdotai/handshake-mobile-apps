@@ -100,10 +100,12 @@ CurrencyInput.defaultProps = {
   value: {},
   onFocus: () => {},
   onBlur: () => {},
+  markError: false,
 };
 CurrencyInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func,
   onBlur: PropTypes.func,
   value: PropTypes.object,
+  markError: PropTypes.bool,
 };

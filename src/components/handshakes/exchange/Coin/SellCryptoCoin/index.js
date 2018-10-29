@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sellCryptoGetCoinInfo, sellCryptoOrder } from '@/reducers/sellCoin/action';
-import { API_URL, CRYPTO_CURRENCY } from '@/constants';
+import { API_URL } from '@/constants';
 import debounce from '@/utils/debounce';
-import { showAlert } from '@/reducers/app/action';
+import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import { Field, formValueSelector, change } from 'redux-form';
 import { required } from '@/components/core/form/validation';
 import { fieldInput } from '@/components/core/form/customField';
@@ -22,6 +22,11 @@ const sellCoinFormName = 'SellCoinForm';
 const FormSellCoin = createForm({
   propsReduxForm: {
     form: sellCoinFormName,
+    initialValues: {
+      currency: {
+        amount: 0,
+      },
+    },
   },
 });
 const formSellCoinSelector = formValueSelector(sellCoinFormName);
@@ -33,13 +38,10 @@ class SellCryptoCoin extends Component {
     super();
     this.state = {
       userInfo: {},
+      isGettingCoinInfo: false,
     };
 
     this.getCoinInfo = debounce(::this.getCoinInfo, 1000);
-  }
-
-  componentDidMount() {
-    this.getCoinInfo();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -61,6 +63,7 @@ class SellCryptoCoin extends Component {
   }
 
   onGetCoinInfoError = (e) => {
+    this.setState({ isGettingCoinInfo: false });
     this.updateCurrency({ amount: 0 });
     this.props.showAlert({
       message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
@@ -69,12 +72,20 @@ class SellCryptoCoin extends Component {
     });
   }
 
-  onMakeOrderSuccess = (res) => {
+  onGetCoinInfoSuccess = () => {
+    this.setState({ isGettingCoinInfo: false });
   }
 
-  onMakeOrderFailed = (e) => {}
+  onMakeOrderSuccess = () => {
+    this.props.hideLoading();
+  }
 
-  onSubmit = (values) => {
+  onMakeOrderFailed = (e) => {
+    console.warn(e);
+    this.props.hideLoading();
+  }
+
+  onSubmit = () => {
     const { idVerificationLevel, coinInfo, userInfo, currency } = this.props;
     const data = {
       type: 'bank',
@@ -94,6 +105,7 @@ class SellCryptoCoin extends Component {
       successFn: this.onMakeOrderSuccess,
       errorFn: this.onMakeOrderFailed,
     });
+    this.props.showLoading();
   }
 
   getLocalStr = () => {
@@ -105,9 +117,11 @@ class SellCryptoCoin extends Component {
     const { idVerificationLevel, fiatCurrencyByCountry } = this.props;
     const level = idVerificationLevel === 0 ? 1 : idVerificationLevel;
     if (amount >= 0 && currency && fiatCurrencyByCountry) {
+      this.setState({ isGettingCoinInfo: true });
       this.props.sellCryptoGetCoinInfo({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=${Number.parseFloat(amount) || 0}&currency=${currency}&fiat_currency=${fiatCurrencyByCountry}&level=${level}`,
         errorFn: this.onGetCoinInfoError,
+        successFn: this.onGetCoinInfoSuccess,
       });
     }
   }
@@ -146,7 +160,8 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { orderInfo, coinInfo, fiatCurrencyByCountry, currency } = this.props;
+    const { orderInfo, coinInfo, fiatCurrencyByCountry, currency, className } = this.props;
+    const { isGettingCoinInfo } = this.state;
     const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
     const fiatAmount = currency?.amount ?
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
@@ -156,7 +171,7 @@ class SellCryptoCoin extends Component {
     }
 
     return (
-      <FormSellCoin onSubmit={this.onSubmit} className={scopedCss('container')}>
+      <FormSellCoin onSubmit={this.onSubmit} className={`${scopedCss('container')} ${className}`}>
         <div className="currency-group">
           <span className="label">{this.getLocalStr().order?.inputs?.currency?.amount}</span>
           <Field
@@ -164,10 +179,13 @@ class SellCryptoCoin extends Component {
             component={currencyInputField}
             validate={currencyValidator}
           />
-          <input
-            value={fiatAmount}
-            disabled
-          />
+          <div className="fiat-amount-container">
+            <input
+              value={fiatAmount}
+              disabled
+            />
+            <div className={isGettingCoinInfo ? 'loading' : ''} />
+          </div>
         </div>
         <div className="user-input-group">
           {this.renderUserInfoInput()}
@@ -195,11 +213,33 @@ const mapDispatchToProps = {
   showAlert,
   sellCryptoOrder,
   change,
+  showLoading,
+  hideLoading,
+};
+
+SellCryptoCoin.defaultProps = {
+  className: '',
+  currency: null,
 };
 
 SellCryptoCoin.propTypes = {
   sellCryptoGetCoinInfo: PropTypes.func.isRequired,
   orderInfo: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
+  fiatCurrencyByCountry: PropTypes.string.isRequired,
+  currency: PropTypes.object,
+  idVerificationLevel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+  ]).isRequired,
+  coinInfo: PropTypes.object.isRequired,
+  userInfo: PropTypes.object.isRequired,
+  className: PropTypes.string,
+  change: PropTypes.func.isRequired,
+  showAlert: PropTypes.func.isRequired,
+  sellCryptoOrder: PropTypes.func.isRequired,
+  hideLoading: PropTypes.func.isRequired,
+  showLoading: PropTypes.func.isRequired,
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin));

@@ -19,6 +19,11 @@
     display: flex;
     flex-direction: column;
     .sell-crypto-coin-summary-info-item {
+      border-bottom: 1px solid #EBF1F7;
+      padding: 5px 0px;
+      &:last-child {
+        border-bottom: none;
+      }
       :nth-child(1) {
         height: 19px;
         color: #889EB5;

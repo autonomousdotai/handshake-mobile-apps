@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { sellCryptoFinishOrder } from '@/reducers/sellCoin/action';
 import QrCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
+import { formatMoneyByLocale } from '@/services/offer-util';
 import './styles.scss';
 
 const scopedCss = (className) => `sell-crypto-coin-summary-${className}`;
@@ -32,7 +33,7 @@ class OrderInfo extends Component {
       },
       {
         name: this.getLocalStr().info?.receiving,
-        value: `${fiatLocalAmount || ''} ${fiatLocalCurrency || ''}`,
+        value: `${formatMoneyByLocale(fiatLocalAmount) || ''} ${fiatLocalCurrency || ''}`,
       },
       {
         name: this.getLocalStr().info?.selling,
@@ -94,6 +95,7 @@ const mapDispatchToProps = {
 OrderInfo.propTypes = {
   sellCryptoFinishOrder: PropTypes.func.isRequired,
   orderInfo: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(OrderInfo));
