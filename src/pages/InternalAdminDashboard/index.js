@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 // import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 import AdminIDVerification, { STATUS } from '@/pages/Admin/AdminIDVerification';
+import { EXCHANGE_ACTION, URL } from '@/constants';
+import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
+import queryString from 'query-string';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
-import { EXCHANGE_ACTION } from '@/constants';
-import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 
 // const AdminIDVerification = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Admin/AdminIDVerification')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
 // const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
@@ -47,24 +48,63 @@ const menus = {
 class InternalAdminDashboard extends Component {
   constructor() {
     super();
+    this.token = this.getAdminHash() || '';
     this.state = {
       selectedMenuId: 'idVerificationProcessing',
+      queryParams: {},
+      queryTab: null,
     };
   }
 
+  componentDidMount() {
+    if (this.checkAuth()) {
+      this.queryHandler();
+    }
+  }
+
+  getAdminHash() {
+    return sessionStorage.getItem('admin_hash');
+  }
+
   onMenuSelect = (idMenu) => {
-    this.setState({ selectedMenuId: idMenu });
+    if (menus[idMenu]) {
+      this.setState({ selectedMenuId: idMenu });
+    }
+  }
+
+  checkAuth = () => {
+    console.log(this.token);
+    if (this.token.length > 0) {
+      return true;
+    }
+    this.props.history.push(`${URL.ADMIN_ID_VERIFICATION}?redirect=/internal-admin-dashboard`);
+    return false;
+  }
+
+  queryHandler = () => {
+    const { tab, ...queryParams } = this.parseQuery();
+    if (tab) {
+      this.onMenuSelect(tab);
+      this.setState({ queryTab: tab, queryParams });
+    }
+  }
+
+  parseQuery = () => {
+    return queryString.parse(window?.location?.search) || {};
   }
 
   renderBody = () => {
-    const { selectedMenuId } = this.state;
+    const { selectedMenuId, queryTab, queryParams } = this.state;
     const menuData = menus[selectedMenuId];
     if (!menuData) return null;
     const { components: MyComponent, params } = menuData;
-    return <MyComponent {...params} />;
+    return <MyComponent {...params} {... queryTab === selectedMenuId ? queryParams : {}} />;
   }
 
   render() {
+    if (!this.checkAuth()) {
+      return null;
+    }
     return (
       <main>
         <Header title={menus[this.state.selectedMenuId]?.name} />
