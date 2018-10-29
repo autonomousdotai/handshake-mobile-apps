@@ -150,6 +150,7 @@
     @include breakpoint('md') {
       height: 100vh;
       padding-top: 20vh;
+      min-height: 600px;
     }
     @include breakpoint-max('md') {
       padding-top: 50px;
