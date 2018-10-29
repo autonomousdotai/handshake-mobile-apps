@@ -303,7 +303,7 @@ class InternalAdmin extends Component {
 
   processSellCoin(order = {}) {
     this.props.sendCashOrder({
-      PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}`,
+      PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}/pick`,
       METHOD: 'PUT',
     });
   }
