@@ -323,9 +323,15 @@ class InternalAdmin extends Component {
             );
           } else if (order.status === STATUS.processing.id) {
             result = (
-              <button onClick={() => this.processing(order)} className="btn btn-primary">
-                Send
-              </button>
+              <div>
+                <button onClick={() => this.processing(order)} className="btn btn-primary">
+                  Send
+                </button>
+                &nbsp;&nbsp;&nbsp;
+                <button onClick={() => this.reject(order)} className="btn btn-primary">
+                  Reject
+                </button>
+              </div>
             );
           } else if (order.status === STATUS.transfer_failed.id) {
             result = (
