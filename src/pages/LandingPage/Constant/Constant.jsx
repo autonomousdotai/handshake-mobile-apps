@@ -138,8 +138,8 @@ class ConstantLandingPage extends React.Component {
                   <div className="slogan">Untraceable, stable, digital cash.</div>
                 </div>
                 <p className="main">We&apos;re looking for creative, exceptional people to help build the new currency of the internet.</p>
-                <p style={{ margin: '38px 0 60px' }}><Link to="/recruiting?project=Constant" className="btn-constant">Join the Constant team</Link></p>
-                <p style={{ fontWeight: 'bold' }}>Receive curated development and community updates.</p>
+                {/* <p style={{ margin: '38px 0 60px' }}><Link to="/recruiting?project=Constant" className="btn-constant">Join the Constant team</Link></p> */}
+                <p style={{ marginTop: '38px', fontWeight: 'bold' }}>Receive curated development and community updates.</p>
                 {
                   !hasSubscribed
                     ? (

@@ -29,7 +29,7 @@
     background-color: rgba(255, 255, 255, 0.95);
     z-index: 10;
     @include breakpoint-max('md') {
-      padding: 20px;
+      padding: 20px 0;
     }
     @include breakpoint('md') {
       &.block5 {
@@ -160,6 +160,8 @@
     &.block-1 {
       .landing-page-constant-heading {
         line-height: 24px;
+        margin-bottom: 6vh;
+        margin-top: 8vh;
       }
       .slogan {
         font-size: 18px;
@@ -168,6 +170,12 @@
       }
       p.main {
         font-size: 17px;
+      }
+      @include breakpoint-max('md') {
+        .landing-page-constant-heading {
+          margin-top: 0;
+          margin-bottom: 30px;
+        }
       }
     }
     &.block-5 {
