@@ -312,7 +312,13 @@ class InternalAdmin extends Component {
         case 'bank': {
           if (order.status === STATUS.fiat_transferring.id) {
             result = (
-              <button onClick={() => this.send(order)} className="btn btn-primary">
+              <button onClick={() => this.process(order)} className="btn btn-primary">
+                Process
+              </button>
+            );
+          } else if (order.status === STATUS.processing.id) {
+            result = (
+              <button onClick={() => this.processing(order)} className="btn btn-primary">
                 Send
               </button>
             );
@@ -363,7 +369,7 @@ class InternalAdmin extends Component {
     } else if (order.status === SELL_STATUS.fiat_transferring.id) {
       result = (
         <button onClick={() => this.finish(order)} className="btn btn-primary">
-            Finish
+          Finish
         </button>
       );
     }
