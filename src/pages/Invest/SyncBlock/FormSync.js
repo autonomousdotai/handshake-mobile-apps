@@ -28,6 +28,9 @@ class FormPassword extends React.Component {
             <div>
                 <InputGroup style={{ marginTop: 15, marginBottom: 10 }}>
                 <label htmlFor='' className='label'>
+                    {'Create your password to encryp the wallet.'}
+                </label>
+                <label htmlFor='' className='label'>
                     {'Note: please create a strong password that is eight characters including one uppercase letter, one special character and alphanumeric characters. Never disclose your password to anyone as it might result in your loss'}
                 </label>
                 <Input type={'password'} value={this.state.password} placeholder='Enter your password' onChange={this.handlePasswordChange} />
