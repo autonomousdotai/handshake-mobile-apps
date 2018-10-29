@@ -47,6 +47,11 @@ const sellCoinReducter = (state = initialState, action) => {
         ...state,
         orderInfo: {},
       };
+    case SELL_COIN_ACTIONS.SELL_COIN_FINISH_ORDER:
+      return {
+        ...state,
+        orderInfo: {},
+      };
     default:
       return state;
   }

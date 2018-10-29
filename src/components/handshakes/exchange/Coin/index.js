@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import BuyCryptoCoin from '@/components/handshakes/exchange/Feed/BuyCryptoCoin';
 import SellCryptoCoin from '@/components/handshakes/exchange/Feed/SellCryptoCoin';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import './styles.scss';
 
 const TABS = {
   BUYCOIN: {
-    name: 'BUY COIN',
+    name: 'coin_tabs.buy',
     component: <BuyCryptoCoin />,
   },
   SELLCOIN: {
-    name: 'SELL COIN',
+    name: 'coin_tabs.sell',
     component: <SellCryptoCoin />,
   },
 };
@@ -34,8 +35,9 @@ class Coin extends Component {
 
   renderTabs = () => {
     const { currentTabId } = this.state;
+
     return Object.entries(TABS).map(([key, data]) => (
-      <div className={key === currentTabId ? 'selected' : ''} key={key} onClick={() => this.onChangeTab(key)}>{data?.name}</div>
+      <div className={key === currentTabId ? 'selected' : ''} key={key} onClick={() => this.onChangeTab(key)}><FormattedMessage id={data?.name} /></div>
     ));
   }
 
@@ -67,4 +69,4 @@ const mapDispatchToProps = {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Coin);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Coin));

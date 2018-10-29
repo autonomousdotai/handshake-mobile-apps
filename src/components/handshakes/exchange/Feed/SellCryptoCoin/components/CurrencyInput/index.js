@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { CRYPTO_CURRENCY } from '@/constants';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap';
 import arrowDownIcon from '@/assets/images/icon/expand-arrow.svg';
+import Cleave from 'cleave.js/react';
 import './styles.scss';
 
 const CRYPTO_CURRENCY_SUPPORT = {
@@ -40,7 +41,7 @@ export default class CurrencyInput extends Component {
   }
 
   onAmountChange = (e) => {
-    this.setState({ amount: e?.target?.value });
+    this.setState({ amount: Number.parseFloat(e?.target?.value?.replace(/,/g, '')) });
   }
 
   onCurrencyChange = (value) => {
@@ -60,10 +61,22 @@ export default class CurrencyInput extends Component {
 
   render() {
     const { currency, amount } = this.state;
-    const { onFocus, onBlur } = this.props;
+    const { onFocus, onBlur, markError } = this.props;
     return (
       <div className={scopedCss('container')}>
-        <input onFocus={() => onFocus()} onBlur={() => onBlur()} placeholder="0.0" onChange={this.onAmountChange} value={amount} />
+        <Cleave
+          className={markError ? 'error' : ''}
+          onFocus={() => onFocus()}
+          onBlur={() => onBlur()}
+          value={amount || amount === 0 ? amount : ''}
+          options={{
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand',
+            numeralIntegerScale: 9,
+          }}
+          placeholder="0.0"
+          onChange={this.onAmountChange}
+        />
         <UncontrolledButtonDropdown className={scopedCss('currency-selector')}>
           <DropdownToggle color="light" block>
             <img style={{ opacity: 0.5, margin: '0px 5px' }} alt="" src={arrowDownIcon} width={12} /> {currency}

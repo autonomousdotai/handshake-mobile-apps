@@ -3,6 +3,9 @@
   position: relative;
   input {
     width: 100%;
+    &.error {
+      border-color: #dc3545;
+    }
   }
   .currency-input-currency-selector {
     position: absolute;

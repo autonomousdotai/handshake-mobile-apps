@@ -10,7 +10,7 @@ const renderField = (field) => {
   const shouldShowError = !!(touched && error);
   return (
     <div className="currency-input-field">
-      <CurrencyInput value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} />
+      <CurrencyInput value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} markError={shouldShowError} />
       {
         shouldShowError &&
         <span className="error">{meta.error}</span>

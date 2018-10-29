@@ -13,6 +13,7 @@ import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmBu
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import arrowIcon from '@/assets/images/icon/right-arrow-white.svg';
 import { formatMoneyByLocale } from '@/services/offer-util';
+import { injectIntl } from 'react-intl';
 import OrderInfo from './components/OrderInfo';
 import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
 import './SellCryptoCoin.scss';
@@ -95,6 +96,10 @@ class SellCryptoCoin extends Component {
     });
   }
 
+  getLocalStr = () => {
+    const { intl: { messages } } = this.props;
+    return messages?.sell_coin || {};
+  };
 
   getCoinInfo(amount = this.props.currency?.amount, currency = this.props.currency?.currency) {
     const { idVerificationLevel, fiatCurrencyByCountry } = this.props;
@@ -117,16 +122,16 @@ class SellCryptoCoin extends Component {
   renderUserInfoInput = () => {
     const fields = {
       bankOwner: {
-        placeholder: 'Bank Owner',
+        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
       },
       bankName: {
-        placeholder: 'Bank Name',
+        placeholder: this.getLocalStr().order?.inputs?.bank_name,
       },
       bankNumber: {
-        placeholder: 'Bank Number',
+        placeholder: this.getLocalStr().order?.inputs?.bank_number,
       },
       phoneNumber: {
-        placeholder: 'Phone number',
+        placeholder: this.getLocalStr().order?.inputs?.phone,
       },
     };
     return Object.entries(fields).map(([fieldName, data]) => (
@@ -141,7 +146,11 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { orderInfo, coinInfo, fiatCurrencyByCountry } = this.props;
+    const { orderInfo, coinInfo, fiatCurrencyByCountry, currency } = this.props;
+    const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
+    const fiatAmount = currency?.amount ?
+      `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
+      `0 ${fiatCurrency}`;
     if (orderInfo && orderInfo.id) {
       return <OrderInfo />;
     }
@@ -149,15 +158,14 @@ class SellCryptoCoin extends Component {
     return (
       <FormSellCoin onSubmit={this.onSubmit} className={scopedCss('container')}>
         <div className="currency-group">
-          <span className="label">Amount</span>
+          <span className="label">{this.getLocalStr().order?.inputs?.currency?.amount}</span>
           <Field
             name="currency"
             component={currencyInputField}
             validate={currencyValidator}
           />
           <input
-            placeholder="Price_"
-            value={`${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry}`}
+            value={fiatAmount}
             disabled
           />
         </div>
@@ -165,7 +173,7 @@ class SellCryptoCoin extends Component {
           {this.renderUserInfoInput()}
         </div>
         <ConfirmButton
-          label={<span>Next <img alt="" src={arrowIcon} width={12} /></span>}
+          label={<span>{this.getLocalStr().order?.btn?.submit_order} <img alt="" src={arrowIcon} width={12} /></span>}
           buttonClassName="next-btn"
         />
       </FormSellCoin>
@@ -191,6 +199,7 @@ const mapDispatchToProps = {
 
 SellCryptoCoin.propTypes = {
   sellCryptoGetCoinInfo: PropTypes.func.isRequired,
+  orderInfo: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin);
+export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin));
