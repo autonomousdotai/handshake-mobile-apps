@@ -1,42 +1,46 @@
 import React, { Component } from 'react';
-import DynamicImport from '@/components/App/DynamicImport';
-import Loading from '@/components/core/presentation/Loading';
 // import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
-import { STATUS } from '@/pages/Admin/AdminIDVerification';
+import AdminIDVerification, { STATUS } from '@/pages/Admin/AdminIDVerification';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
 import { EXCHANGE_ACTION } from '@/constants';
+import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 
-const AdminIDVerification = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Admin/AdminIDVerification')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
-const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
+// const AdminIDVerification = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Admin/AdminIDVerification')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
+// const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
 
 const scopeCss = (className) => `internal-admin-${className}`;
 
 const menus = {
   idVerificationProcessing: {
     name: 'Admin - Processing',
-    components: <AdminIDVerification />,
+    components: AdminIDVerification,
   },
   idVerificationVerified: {
     name: 'Admin - Verified',
-    components: <AdminIDVerification status={STATUS.VERIFIED} />,
+    components: AdminIDVerification,
+    params: { status: STATUS.VERIFIED },
   },
   idVerificationRejected: {
     name: 'Admin - Rejected',
-    components: <AdminIDVerification status={STATUS.REJECTED} />,
+    components: AdminIDVerification,
+    params: { status: STATUS.REJECTED },
   },
   buyCoinBank: {
     name: 'Buy Coin - BANK',
-    components: <InternalAdmin type="bank" />,
+    components: InternalAdmin,
+    params: { type: 'bank', action: EXCHANGE_ACTION.BUY },
   },
   buyCoinCod: {
     name: 'Buy Coin - COD',
-    components: <InternalAdmin type="cod" />,
+    components: InternalAdmin,
+    params: { type: 'cod', action: EXCHANGE_ACTION.BUY },
   },
   sellCoinBank: {
     name: 'Sell Coin - BANK',
-    components: <InternalAdmin type="bank" action={EXCHANGE_ACTION.SELL} />,
+    components: InternalAdmin,
+    params: { type: 'bank', action: EXCHANGE_ACTION.SELL },
   },
 };
 
@@ -56,7 +60,8 @@ class InternalAdminDashboard extends Component {
     const { selectedMenuId } = this.state;
     const menuData = menus[selectedMenuId];
     if (!menuData) return null;
-    return menuData?.components || null;
+    const { components: MyComponent, params } = menuData;
+    return <MyComponent {...params} />;
   }
 
   render() {
