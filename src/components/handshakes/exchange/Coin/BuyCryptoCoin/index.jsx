@@ -33,7 +33,7 @@ import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmBu
 import AtmCashTransferInfo from '@/components/handshakes/exchange/AtmCashTransferInfo';
 import Modal from '@/components/core/controls/Modal/Modal';
 import { formatMoney } from '@/services/offer-util';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
 import IdVerifyBtn from '@/components/handshakes/exchange/Feed/components/IdVerifyBtn';
@@ -43,8 +43,6 @@ import coinMoneyExchangeField from './reduxFormFields/coinMoneyExchangeField';
 import fieldCheckBoxList from './reduxFormFields/paymentMethodCheckbox';
 import coinMoneyExchangeValidator from './reduxFormFields/coinMoneyExchangeField/validator';
 import walletSelectorValidator from './reduxFormFields/walletSelector/validator';
-
-import '../styles.scss';
 import './BuyCryptoCoin.scss';
 
 export const CRYPTO_ICONS = {
@@ -165,7 +163,7 @@ class BuyCryptoCoin extends React.Component {
   scrollListener = async () => {
     /*eslint-disable */
     if (!this.isShow) {
-      window?.$zopim(() => {
+      window?.$zopim && window?.$zopim(() => {
         window?.$zopim?.livechat.button.hide();
         window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
         window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
@@ -707,7 +705,7 @@ class BuyCryptoCoin extends React.Component {
 
   render() {
     console.log('STATE', this.state);
-    const { authProfile: { idVerified } } = this.props;
+    const { authProfile: { idVerified }, className } = this.props;
     const { messages } = this.props.intl;
     const { coinMoneyExchange, paymentMethod } = this.props;
     const { currency, forcePaymentMethod, isValidToSubmit } = this.state;
@@ -715,7 +713,7 @@ class BuyCryptoCoin extends React.Component {
     const showState = [-1, 0, 2, 1];
 
     return (
-      <div>
+      <div className={className} >
         <div className={`discover-overlay ${this.state.isLoading ? 'show' : ''}`}>
           <Image src={loadingSVG} alt="loading" width="100" />
         </div>
@@ -838,6 +836,7 @@ BuyCryptoCoin.defaultProps = {
   coinMoneyExchange: {},
   coinInfo: {},
   packages: {},
+  className: '',
 };
 
 BuyCryptoCoin.propTypes = {
@@ -869,6 +868,7 @@ BuyCryptoCoin.propTypes = {
   buyCryptoGetPackage: PropTypes.func.isRequired,
   idVerificationLevel: PropTypes.number.isRequired,
   fiatLimit: PropTypes.number.isRequired,
+  className: PropTypes.string,
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(BuyCryptoCoin));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(BuyCryptoCoin)));

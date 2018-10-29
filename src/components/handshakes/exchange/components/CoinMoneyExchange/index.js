@@ -9,7 +9,7 @@ import debounce from '@/utils/debounce';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import Cleave from 'cleave.js/react';
 import { showAlert } from '@/reducers/app/action';
-import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Feed/BuyCryptoCoin';
+import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
 import { isOverLimit } from '@/reducers/buyCoin/index';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';

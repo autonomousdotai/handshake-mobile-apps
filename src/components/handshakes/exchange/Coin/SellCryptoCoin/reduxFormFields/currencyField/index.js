@@ -4,13 +4,13 @@ import validator from './validator';
 import './styles.scss';
 
 const renderField = (field) => {
-  const { input, meta } = field;
+  const { input, meta, placeholder } = field;
   const { onChange, onFocus, onBlur, value } = input;
   const { error, touched } = meta;
   const shouldShowError = !!(touched && error);
   return (
     <div className="currency-input-field">
-      <CurrencyInput value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} markError={shouldShowError} />
+      <CurrencyInput placeholder={placeholder} value={value} onChange={onChange} onFocus={onFocus} onBlur={onBlur} markError={shouldShowError} />
       {
         shouldShowError &&
         <span className="error">{meta.error}</span>

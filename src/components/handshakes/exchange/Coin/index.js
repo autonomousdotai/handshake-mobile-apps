@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import BuyCryptoCoin from '@/components/handshakes/exchange/Feed/BuyCryptoCoin';
-import SellCryptoCoin from '@/components/handshakes/exchange/Feed/SellCryptoCoin';
+import BuyCryptoCoin from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
+import SellCryptoCoin from '@/components/handshakes/exchange/Coin/SellCryptoCoin';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import './styles.scss';
 
 const TABS = {
   BUYCOIN: {
     name: 'coin_tabs.buy',
-    component: <BuyCryptoCoin />,
+    component: <BuyCryptoCoin className="fadeIn" />,
   },
   SELLCOIN: {
     name: 'coin_tabs.sell',
-    component: <SellCryptoCoin />,
+    component: <SellCryptoCoin className="fadeIn" />,
   },
 };
 
@@ -23,7 +22,7 @@ class Coin extends Component {
   constructor() {
     super();
     this.state = {
-      currentTabId: Object.keys(TABS)[1],
+      currentTabId: Object.keys(TABS)[0],
     };
   }
 
@@ -61,12 +60,4 @@ class Coin extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-
-});
-
-const mapDispatchToProps = {
-
-};
-
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Coin));
+export default injectIntl(connect(null, null)(Coin));

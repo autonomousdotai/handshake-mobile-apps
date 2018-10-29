@@ -19,6 +19,11 @@
     display: flex;
     flex-direction: column;
     .sell-crypto-coin-summary-info-item {
+      border-bottom: 1px solid #EBF1F7;
+      padding: 5px 0px;
+      &:last-child {
+        border-bottom: none;
+      }
       :nth-child(1) {
         height: 19px;
         color: #889EB5;
@@ -45,6 +50,20 @@
     text-align: center;
     padding: 20px;
     margin: 40px 0px;
+    .address-wallet {
+      margin: 15px 5px;
+      padding: 5px;
+      font-weight: 400;
+      border: dotted 1px;
+      word-break: break-all;
+      border-radius: 3px;
+      .copy-icon {
+        display: inline-block;
+        margin: 0px 10px;
+        position: relative;
+        top: -5px;
+      }
+    }
   }
   .sell-crypto-coin-summary-note-txt {
     height: 42px;

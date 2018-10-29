@@ -2,8 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { sellCryptoFinishOrder } from '@/reducers/sellCoin/action';
+import { showAlert } from '@/reducers/app/action';
 import QrCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
+import { formatMoneyByLocale } from '@/services/offer-util';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import iconCopy from '@/assets/images/icon/icon-copy.svg';
 import './styles.scss';
 
 const scopedCss = (className) => `sell-crypto-coin-summary-${className}`;
@@ -18,13 +22,29 @@ class OrderInfo extends Component {
     return messages?.sell_coin?.summary || {};
   };
 
-  shortIt(str = '') {
-    const [START, END] = [9, 10];
-    return `${str.substr(0, START)}...${str.substr(-END)}`;
+  copied = () => {
+    const { messages: { atm_cash_transfer_info } } = this.props.intl;
+    this.props.showAlert({
+      message: atm_cash_transfer_info.copied,
+      timeOut: 3000,
+      isShowClose: true,
+      type: 'success',
+    });
+  }
+
+  renderAddressWallet = (text) => {
+    return (
+      <CopyToClipboard text={text} onCopy={this.copied}>
+        <div className="address-wallet">
+          <span>{text}</span>
+          <div className="copy-icon"><img alt="copy-icon" src={iconCopy} /></div>
+        </div>
+      </CopyToClipboard>
+    );
   }
 
   renderInfo = () => {
-    const { orderInfo: { refCode, address, fiatLocalAmount, fiatLocalCurrency, amount, currency } } = this.props;
+    const { orderInfo: { refCode, fiatLocalAmount, fiatLocalCurrency, amount, currency } } = this.props;
     const infos = [
       {
         name: this.getLocalStr().info?.code,
@@ -32,15 +52,11 @@ class OrderInfo extends Component {
       },
       {
         name: this.getLocalStr().info?.receiving,
-        value: `${fiatLocalAmount || ''} ${fiatLocalCurrency || ''}`,
+        value: `${formatMoneyByLocale(fiatLocalAmount) || ''} ${fiatLocalCurrency || ''}`,
       },
       {
         name: this.getLocalStr().info?.selling,
         value: `${amount || ''} ${currency || ''}`,
-      },
-      {
-        name: this.getLocalStr().info?.address,
-        value: this.shortIt(address || ''),
       },
     ];
     return (
@@ -74,6 +90,7 @@ class OrderInfo extends Component {
         <span className={scopedCss('summary-txt')}>{this.getLocalStr().label}</span>
         {this.renderInfo()}
         <div className={scopedCss('qr-container')}>
+          { address && this.renderAddressWallet(address) }
           { address && <QrCode value={address} />}
           {this.renderNotes()}
         </div>
@@ -89,11 +106,14 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   sellCryptoFinishOrder,
+  showAlert,
 };
 
 OrderInfo.propTypes = {
   sellCryptoFinishOrder: PropTypes.func.isRequired,
   orderInfo: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
+  showAlert: PropTypes.func.isRequired,
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(OrderInfo));

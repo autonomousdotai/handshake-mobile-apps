@@ -46,4 +46,43 @@
     text-align: center;
     border-radius: 4px 4px 4px 4px;
   }
+
+  .fiat-amount-container {
+    position: relative;
+    .loading {
+      width: 100%;
+      background-color: #E1E9F0;
+      height: 3px;
+      border: none;
+      animation: loading 2s ease 0s infinite alternate;
+      position: absolute;
+      bottom: 5px;
+      margin: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+  
+      @keyframes loading {
+        10% {
+          background-color: #2b2d42;
+          width: 10%;
+        }
+        25% {
+          background-color: #8d99ae;
+          width: 25%;
+        }
+        50% {
+          background-color: #edf2f4;
+          width: 50%;
+        }
+        75% {
+          background-color: #d0efb1;
+          width: 75%;
+        }
+        100% {
+          background-color: #b3d89c;
+          width: 100%;
+        }
+      }
+    }
+  }
 }
