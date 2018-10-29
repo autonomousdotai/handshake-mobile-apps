@@ -37,6 +37,9 @@ class Handle extends React.Component {
 
   componentDidMount() {
     this.firebase();
+    this.signInFirebase((user) => {
+      this.props.setFirebaseUser(user);
+    });
     this.notification();
   }
 
