@@ -67,7 +67,7 @@ class LinkWallet extends Component {
       var body = (
         <div>
           <label htmlFor='' className='label'>
-              {'Link this wallet to other device. Before proceeding, make sure you already opened the page that allow to link Ninja wallet. (ex: NinjaFund desktop website)'}
+              {'Allows you to link your Ninja wallet to Ninja trader wallet. Before starting, note that you will need to link this wallet to the trader portal so make sure you already opened the Ninja fund trader portal on your desktop.'}
             </label>
           {this.props.syncWallet && <label style={{ color: 'red', fontWeight: '400' }}>Noted: Your wallet is synced</label>}
           <Button
