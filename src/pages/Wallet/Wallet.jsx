@@ -280,30 +280,7 @@ class Wallet extends React.Component {
     } else {
       this.splitWalletData(listWallet);
       await this.getListBalace(listWallet);
-    }
-    
-    // let eth = new Ethereum();
-    // eth.network = "https://rinkeby.infura.io/";
-    // eth.address = "0x1c0abE5b12257451DDcbe51f53f3F888dde32842";
-    // eth.privateKey = "8563aadf70a33fd058bec918f406187cc03e0f144fd3b7202266fcee15813372";
-
-    // let toAddress = "0x4AF3CEaE9Cebf2e6Af258E0eC353cCBA8cA96162";
-
-    // let balance = await eth.getBalance();
-
-    // console.log("balance1", balance);
-
-    // let tx = await eth.transfer(toAddress, 0.00001);
-
-    // console.log("tx", tx);
-    
-    // let balance2 = await eth.getBalancePending();
-    
-    // console.log("balance2", balance2);
-    // setTimeout(console.log("balance3", eth.getBalancePending()), 2000);
-    // setTimeout(console.log("balance4", eth.getBalancePending()), 3000);
-    // setTimeout(console.log("balance5", eth.getBalancePending()), 4000);
-    
+    }        
   }
 
   async getSetting(){

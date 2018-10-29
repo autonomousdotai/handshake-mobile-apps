@@ -77,37 +77,37 @@ export class Ethereum extends Wallet {
   async getBalancePending() {
     try {
       const web3 = this.getWeb3();
-      const balance = await web3.eth.getBalance(this.address);      
+      
+      const balance = await web3.eth.getBalance(this.address);  
+      
+      let totalBalance = Number (balance);
 
-      // var subscription = web3.eth.subscribe('pendingTransactions', function(error, result){
-      //   if (!error){
-      //       console.log("subscription result=> ", result);
-      //     }
-      //   else{
-      //     console.log("subscription error=> ", error);
-      //   }
-      //   })
-      //   .on("data", function(transaction){            
-      //       console.log("transaction=>", transaction);
-      //   });
-      console.log("check pending ...");
-      web3.eth.filter("pending").watch(
-        function(error, result){
-            if (!error) {
-                var transaction = web3.eth.getTransaction(result);
-                console.log("transaction", transaction);
-                // save the transaction somewhere (e.g. DB)
-            }
-            else{
-              console.log("error", error);
-            }
+      console.log("check pending ...");                   
+      let result = await this.getTransactionHistory(1, 5);
+
+      if (result){
+        console.log("result", result);
+        for (var i = 0; i < result.length; i ++){
+          let item = result[0];
+          // is pending
+          if (item.isError == "0" && item.confirmations== "0")
+          {                        
+            totalBalance = totalBalance - (Number(item.gasPrice) + Number(item.value));
+            console.log("totalBalance: ", totalBalance);      
+          }
         }
-    )
-
-      return Web3.utils.fromWei(balance.toString());
-    } catch (error) {      
-      return this.balance;
+        if (totalBalance < 0){
+          totalBalance = 0;
+        }
+        return Web3.utils.fromWei(totalBalance.toString());
+      }
+      else{
+        return Web3.utils.fromWei(balance.toString());
+      }                        
+    } catch (error) {     
+      console.log('error', error);       
     }
+    return this.balance;
   }
 
   async getFee() {
@@ -263,10 +263,10 @@ export class Ethereum extends Wallet {
     }
   }
 
-  async getTransactionHistory(pageno) {
+  async getTransactionHistory(pageno, offset=20) {
     let result = [];
     const API_KEY = configs.network[4].apikeyEtherscan;
-    const url = `${this.constructor.API[this.getNetworkName()]}?module=account&action=txlist&address=${this.address}&startblock=0&endblock=99999999&page=${pageno}&offset=20&sort=desc&apikey=${API_KEY}`;
+    const url = `${this.constructor.API[this.getNetworkName()]}?module=account&action=txlist&address=${this.address}&startblock=0&endblock=99999999&page=${pageno}&offset=${offset}&sort=desc&apikey=${API_KEY}`;
     const response = await axios.get(url);
     if (response.status == 200) {
       result = response.data.result;
