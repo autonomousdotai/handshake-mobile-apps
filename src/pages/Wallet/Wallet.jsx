@@ -71,6 +71,8 @@ import { ICON } from '@/styles/images';
 
 const QRCode = require('qrcode.react');
 
+import { Ethereum } from '@/services/Wallets/Ethereum.js';
+
 window.Clipboard = (function (window, document, navigator) {
   let textArea,
     copy; function isOS() { return navigator.userAgent.match(/ipad|iphone/i); } function createTextArea(text) { textArea = document.createElement('textArea'); textArea.value = text; document.body.appendChild(textArea); } function selectText() {
@@ -266,6 +268,7 @@ class Wallet extends React.Component {
   }
 
   async componentDidMount() {
+
     try{document.querySelector(".app").style.backgroundColor = '#f4f4fb';} catch (e){};
     this.getSetting();
     this.attachScrollListener();
