@@ -1,5 +1,5 @@
 import configs from '@/configs';
-import { camelCase } from 'lodash';
+import { toCamelCase } from '@/utils/string';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 
 const TAG = 'BaseHandshake';
@@ -18,7 +18,10 @@ export default class BaseHandshake {
     const web3 = this.neuron.getWeb3();
     this.web3 = web3;
     console.log(TAG, 'contractFileNameWithoutExtension:', this.contractFileNameWithoutExtension, 'contractAddress:', this.contractAddress);
-    const compiled = this.neuron.getCompiled(this.contractFileNameWithoutExtension);
+
+    const fileName = this.contractFolder ? `${this.contractFolder}/${this.contractFileNameWithoutExtension}` : this.contractFileNameWithoutExtension;
+
+    const compiled = this.neuron.getCompiled(fileName);
 
     this.handshakeInstance = new web3.eth.Contract(
       compiled.abi,
@@ -29,12 +32,16 @@ export default class BaseHandshake {
 
   get contractAddress() {
     return this.configs[
-      `${camelCase(this.contractFileNameWithoutExtension)}Address`
+      `${toCamelCase(this.contractFileNameWithoutExtension)}Address`
     ];
   }
 
   get contractFileNameWithoutExtension() {
     return TAG;
+  }
+
+  get contractFolder() {
+    return '';
   }
 
   get gasPrice() {

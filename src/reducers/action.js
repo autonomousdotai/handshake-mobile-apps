@@ -1,5 +1,4 @@
 import { APP_ACTION } from '@/reducers/app/action';
-// import { uuid } from '@/services/app';
 import $http from '@/services/api';
 import { BASE_API } from '@/constants';
 import axios from 'axios';
@@ -15,18 +14,18 @@ export const createAPI = INIT => ({
   errorFn,
   qs,
   headers,
+  ...rest
 }) => (dispatch) => {
   dispatch({ type: APP_ACTION.CALLING });
 
   dispatch({ type: INIT });
 
   const url = `${BASE_URL}/${PATH_URL}`;
-  // const requestUuid = Date.now(); // uuid();
 
   // console.log(`app - api - calling - id${requestUuid}`, `${METHOD}:${PATH_URL}`);
 
   $http({
-    url, data, id, qs, headers, method: METHOD,
+    url, data, id, qs, headers, method: METHOD, ...rest,
   }).then((response) => {
     // console.log(`app - api - called - id${requestUuid}`);
     dispatch({ type: APP_ACTION.CALLED });

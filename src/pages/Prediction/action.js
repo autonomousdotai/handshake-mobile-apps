@@ -6,6 +6,27 @@ export const loadMatches = (payload = {}) => {
     ...payload,
   };
 };
+export const loadRelevantEvents = (payload = {}) => {
+  return {
+    type: 'PREDICTION:LOAD_RELEVANT_EVENTS',
+    ...payload,
+  };
+};
+export const updateEvents = (events=[]) => {
+  return SET_DATA({
+    type: 'PREDICTION:LOAD_MATCHES',
+    _path: 'prediction.events',
+    _value: events,
+  });
+}
+
+export const updateRelevantEvents = (events=[]) => {
+  return SET_DATA({
+    type: 'PREDICTION:LOAD_RELEVANT_EVENTS',
+    _path: 'prediction.relevantEvents',
+    _value: events,
+  });
+}
 
 export const removeExpiredEvent = (payload = {}) => {
   return {
@@ -28,7 +49,7 @@ export const getReportCount = (payload = {}) => {
   };
 };
 
-export const checkFreeBet = (payload = {}) => {
+export const checkRedeemCode = (payload = {}) => {
   return {
     type: 'PREDICTION:CHECK_FREE_AVAILABLE',
     ...payload,
@@ -47,7 +68,7 @@ export const updateShowedLuckyPool = () => {
 export const updateFreeBet = (value) => {
   return SET_DATA({
     type: 'PREDICTION:UPDATE_FREE_BET',
-    _path: 'ui.freeBet',
+    _path: 'ui.isRedeemAvailable',
     _value: value,
   });
 };
@@ -81,3 +102,12 @@ export const updateTotalBets = (value) => {
     _value: value,
   });
 };
+
+export const updateEventList = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:UPDATE_EVENTS',
+    _path: 'prediction.events',
+    _value: value,
+  });
+};
+

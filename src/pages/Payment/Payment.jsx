@@ -9,17 +9,20 @@ import {getFiatCurrency} from '@/reducers/exchange/action';
 import { bindActionCreators } from "redux";
 import Modal from '@/components/core/controls/Modal';
 import ModalDialog from '@/components/core/controls/ModalDialog';
+import Register from '@/components/Payment/PFDRegister';
 import Checkout from './Checkout';
 import ChooseCrypto from './ChooseCrypto';
 import Complete from './Complete';
 import Overview from './Overview';
 import DevDoc from './DevDoc';
 import { API_URL } from "@/constants";
-import { showAlert } from '@/reducers/app/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
+import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import ReactBottomsheet from 'react-bottomsheet';
 import HeaderMore from './HeaderMore';
 import qs from 'querystring';
+import { set, getJSON } from 'js-cookie';
+import { ICON } from '@/styles/images';
+import { PAYMENT_REMIND } from '@/constants';
 
 // style
 import './Payment.scss';
@@ -43,6 +46,7 @@ class Payment extends React.Component {
       modalChooseCrypto: '',
       modalCheckout: '',
       modalComplete: '',
+      modalRegister: '',
       msgError: '',
       toAddresses: false,
       isCryptoCurrency: false,
@@ -52,40 +56,26 @@ class Payment extends React.Component {
     this.props.setHeaderRight(this.headerRight());
   }
 
-  showAlert(msg, type = 'success', timeOut = 5000, icon = '') {
-    this.props.showAlert({
-      message: <div className="textCenter">{icon}{msg}</div>,
-      timeOut,
-      type,
-      callBack: () => {},
-    });
-  }
-  showToast(mst) {
-    this.showAlert(mst, 'primary', 2000);
-  }
-  showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
-  }
-
   componentDidMount() {
     this.checkPayNinja();
-    //this.successPayNinja();
   }
 
   async checkPayNinja() {
     const querystring = window.location.search.replace('?', '');
     this.querystringParsed = qs.parse(querystring);
-    let { order_id, to, amount, currency:currency, confirm_url } = this.querystringParsed;
+    let { order_id, to, amount, currency:currency, confirm_url, act } = this.querystringParsed;
 
+
+    if (act && act == "register") {
+      this.setState({
+        modalRegister: <Register
+        />
+        }, () => {
+          this.modalRegisterRef.open();
+        }
+      );
+      return;
+    }
 
     if (!order_id && !amount && !confirm_url) {
       this.setState({isShowInfo: true});
@@ -245,7 +235,7 @@ class Payment extends React.Component {
     return result;
   }
 
-  getRate(fiatCurrency, cryptoCurrency){console.log('getRate', fiatCurrency, cryptoCurrency);
+  getRate(fiatCurrency, cryptoCurrency){
     return new Promise((resolve, reject) => {
 
       this.props.getFiatCurrency({
@@ -312,6 +302,8 @@ class Payment extends React.Component {
   }
 
   closeCheckout = () => {
+    set(PAYMENT_REMIND, '');
+
     if(this.state.isCryptoCurrency){
       if(this.state.fullBackUrl && this.state.modalCheckout){
         window.location.href = this.state.fullBackUrl;
@@ -333,6 +325,7 @@ class Payment extends React.Component {
       modalCheckout: ''
       }, () => {
         this.modalCompleteRef.open();
+        set(PAYMENT_REMIND, "");
       }
     );
   }
@@ -413,6 +406,8 @@ class Payment extends React.Component {
 
   render = () => {
     const { messages } = this.props.intl;
+    const { modalRegister } = this.state;
+
     return (
 
       <div>
@@ -431,6 +426,10 @@ class Payment extends React.Component {
 
         <Modal title="Developer Documents" onRef={modal => this.modalDevDocRef = modal}>
           <DevDoc />
+        </Modal>
+
+        <Modal title="Register" onRef={modal => this.modalRegisterRef = modal}>
+          {modalRegister}
         </Modal>
 
         {

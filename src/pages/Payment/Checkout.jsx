@@ -1,28 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field, clearFields, change } from 'redux-form';
+import { clearFields, change } from 'redux-form';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Button from '@/components/core/controls/Button';
 import ModalDialog from '@/components/core/controls/ModalDialog';
-import Modal from '@/components/core/controls/Modal';
-import createForm from '@/components/core/form/createForm';
 import ListCoin from '@/components/Wallet/ListCoin';
 import { getCryptoPrice } from '@/reducers/exchange/action';
 import { bindActionCreators } from 'redux';
 import { MasterWallet } from "@/services/Wallets/MasterWallet";
-import { showAlert } from '@/reducers/app/action';
-import { showLoading, hideLoading } from '@/reducers/app/action';
-import iconSuccessChecked from '@/assets/images/icon/icon-checked-green.svg';
+import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
 import iconClock from '@/assets/images/icon/pay/clock.svg';
 import Countdown from '@/components/Countdown/Countdown';
+import { set, getJSON } from 'js-cookie';
+import { PAYMENT_REMIND } from '@/constants';
 
 // style
 import './Checkout.scss';
-
-
-const nameFormSendWallet = 'sendWallet';
-const SendWalletForm = createForm({ propsReduxForm: { form: nameFormSendWallet, enableReinitialize: true, clearSubmitErrors: true}});
 
 window.Clipboard = (function (window, document, navigator) {
   let textArea,
@@ -68,20 +62,37 @@ class Checkout extends React.Component {
   showError(mst) {
     this.showAlert(mst, 'danger', 3000);
   }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 5000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-  showLoading() {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
+
+  async componentDidMount() {
+    this.props.showLoading();
+    await this.getWalletDefault();
     this.props.hideLoading();
+
+    this.getBalanceWallets();
+    this.remindPayment();
   }
 
-  componentDidMount() {
-    this.showLoading();
-    this.getWalletDefault();
+  remindPayment = () => {
+    set(PAYMENT_REMIND, JSON.stringify({url:window.location.href, time: new Date().getTime()}));
   }
+
+  getBalanceWallets = async () => {
+    let { wallets, walletSelected, walletDefault } = this.state;
+
+    if(wallets){
+      for(let i in wallets){
+        wallets[i].balance = await wallets[i].getBalance(true);
+        if(walletSelected.name == wallets[i].name && walletSelected.address == wallets[i].address && walletSelected.network == wallets[i].network){
+          walletSelected.balance = wallets[i].balance;
+          MasterWallet.UpdateBalanceItem(walletSelected);
+          this.checkValid();
+        }
+      }
+
+      this.setState({wallets, walletSelected, walletDefault});
+    }
+  }
+
 
   copyToClipboard =(text) => {
     const textField = document.createElement('textarea');
@@ -108,7 +119,7 @@ class Checkout extends React.Component {
   onRefesh = () => {
     const { onRefesh } = this.props;
     if (onRefesh && typeof onRefesh === 'function') {
-      this.showLoading();
+      this.props.showLoading();
       this.setState({isExpired: false, isWarning: false});
       onRefesh();
     }
@@ -128,9 +139,8 @@ class Checkout extends React.Component {
           if (process.env.isLive){
             wal.text = wal.getShortAddress() + " (" + wal.className + " " + wal.name + ")";
           }
-          wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
 
-          wal.balance = wal.formatNumber(await wal.getBalance());
+          wal.id = wal.address + "-" + wal.getNetworkName() + wal.name;
           listWalletCoin.push(wal);
         }
       }
@@ -148,23 +158,15 @@ class Checkout extends React.Component {
         walletDefault.text = walletDefault.getShortAddress() + " (" + walletDefault.className + " " + walletDefault.name + ")";
       }
       walletDefault.id = walletDefault.address + "-" + walletDefault.getNetworkName() + walletDefault.name;
-
-      // get balance for first item + update to local store:
-      this.setState({walletSelected: walletDefault});
-      MasterWallet.UpdateBalanceItem(walletDefault);
     }
 
     let endDate = new Date(), warningDate = new Date();
     // endDate.setSeconds(endDate.getSeconds() + 15);
     // warningDate.setSeconds(warningDate.getSeconds() + 5);
-
     endDate.setMinutes(endDate.getMinutes() + 5);
     warningDate.setMinutes(warningDate.getMinutes() + 1);
 
-    this.setState({wallets: listWalletCoin, walletSelected: walletDefault, event:{end: endDate.getTime(), warning: warningDate.getTime()}, isExpired: false, isWarning: false}, ()=>{
-      this.checkValid();
-      this.hideLoading();
-    });
+    this.setState({wallets: listWalletCoin, walletSelected: walletDefault, event:{end: endDate.getTime(), warning: warningDate.getTime()}, isExpired: false, isWarning: false});
   }
 
   checkValid = () =>{
@@ -235,20 +237,6 @@ class Checkout extends React.Component {
     Clipboard.copy(this.state.toAddress);
     this.showToast(messages.wallet.action.copy.message);
   }
-
-  // onItemSelectedWallet = (item) =>{
-
-  //   let wallet = MasterWallet.convertObject(item);
-  //   this.setState({walletSelected: wallet});
-
-  //   wallet.getBalance().then(result => {
-  //     wallet.balance = wallet.formatNumber(result);
-  //     this.setState({walletSelected: wallet}, ()=>{
-  //       MasterWallet.UpdateBalanceItem(wallet);
-  //       this.checkValid();
-  //     });
-  //   });
-  // }
 
   selectWallet = (walletSelected) => {
 

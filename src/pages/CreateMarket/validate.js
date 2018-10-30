@@ -23,7 +23,7 @@ export const emailValidator = (value) => {
  * Validator URL
  * @param value
  */
-export const urlValidator = (value) => {
+export const urlValidator = (value = '') => {
   return isURL(value.toString()) ? null : ('Invalid URL');
 };
 

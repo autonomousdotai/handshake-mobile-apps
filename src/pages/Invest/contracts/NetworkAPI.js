@@ -35,4 +35,4 @@ class NetworkAPI {
     }
 }
 
-module.exports = NetworkAPI
+export default NetworkAPI;

@@ -1,0 +1,30 @@
+.status-btn {
+  width: 70px;
+  padding: 5px;
+  text-align: center;
+  border-radius: 3px;
+  &.open {
+    background-color: green;
+  }
+  &.sent {
+    background-color: grey;
+    color: black;
+  }
+}
+.submit-btn {
+  margin: 10px 0px;
+}
+
+.input-form {
+  padding: 10px 5px;
+}
+
+.internal-withdraw-modal {
+  max-width: none;
+  .modal-backdrop {
+    max-width: none;
+  }
+  .modal-dialog-content {
+    width: 500px;
+  }
+}

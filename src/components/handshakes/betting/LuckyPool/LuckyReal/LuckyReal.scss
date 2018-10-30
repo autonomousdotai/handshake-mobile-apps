@@ -15,8 +15,10 @@
     letter-spacing: 0;
     margin-top: rem-calc(10px);
     border: none;
-    height: rem-calc(50px);
+    height: rem-calc(44px);
     //font-weight: $medium;
+    font-size: rem-calc(14px);
+
   }
   .luckyDes {
     text-align: center;
@@ -56,6 +58,8 @@
       border: none;
       height: rem-calc(40px);
       font-weight: 400;
+      font-size: rem-calc(14px);
+
     }
     .emailPopupInput {
       background: white;
@@ -73,6 +77,12 @@
       margin-top: rem-calc(20px);
     }
 
+
+  }
+  .termCondition {
+    font-size: rem-calc(12px);
+    text-align: center;
+    margin-top: 15px;
   }
 
 

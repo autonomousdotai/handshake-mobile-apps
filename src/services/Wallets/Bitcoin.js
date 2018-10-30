@@ -3,10 +3,12 @@ import satoshi from 'satoshi-bitcoin';
 import { StringHelper } from '@/services/helper';
 import { Wallet } from '@/services/Wallets/Wallet';
 import { NB_BLOCKS } from '@/constants';
+import { set, getJSON } from 'js-cookie';
 
 const bitcore = require('bitcore-lib');
 const BigNumber = require('bignumber.js');
 const moment = require('moment');
+const COOKIE_LEVEL_FEES = 'btc_level_fees';
 
 export class Bitcoin extends Wallet {
   static Network = { Mainnet: 'https://insight.bitpay.com/api' }
@@ -26,6 +28,16 @@ export class Bitcoin extends Wallet {
 
   setDefaultNetwork() {
     bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
+  }
+
+  getAPIUrlTransaction(transaction_no) {
+    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}insight.bitpay.com/tx/${transaction_no}`;
+    return url;
+  }
+
+  getAPIUrlAddress() {
+    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}insight.bitpay.com/address/${this.address}`;
+    return url;
   }
 
   createAddressPrivatekey() {
@@ -63,11 +75,6 @@ export class Bitcoin extends Wallet {
     return false;
   }
 
-  getAPIUrlAddress() {
-    let url = bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? "https://bitpay.com/api/txs/?address="+this.address : "https://test-insight.bitpay.com/address/"+this.address;
-    return url;
-  }
-
   checkAddressValid(toAddress) {
     if (!bitcore.Address.isValid(toAddress)) {
       return 'messages.bitcoin.error.invalid_address';
@@ -76,20 +83,27 @@ export class Bitcoin extends Wallet {
   }
 
 
-  async transfer(toAddress, amountToSend, blocks = NB_BLOCKS) {
+  async transfer(toAddress, amountToSend, opt={}) {
     try {
       if (!bitcore.Address.isValid(toAddress)) {
         return { status: 0, message: 'messages.bitcoin.error.invalid_address2' };
       }
 
-      console.log(`transfered from address:${this.address}`);
+      let blocks = opt.blocks || NB_BLOCKS;
+      let fee = opt.fee || 0;
+
+      console.log('toAddress:', toAddress,
+      '\n param blocks:', blocks,
+      '\n param fee:', fee);
 
       // Check balance:
       const balance = await this.getBalance();
+      amountToSend = parseFloat(amountToSend).toFixed(8)
 
-      console.log('bitcore.Networks.defaultNetwork', bitcore.Networks.defaultNetwork);
-      console.log('server', this.network);
-      console.log(StringHelper.format('Your wallet balance is currently {0} ETH', balance));
+      console.log('defaultNetwork: ', bitcore.Networks.defaultNetwork,
+      '\n server', this.network,
+      '\n balance:', balance,
+      '\n amountToSend:', amountToSend);
 
       if (!balance || balance == 0 || balance <= amountToSend) {
         return { status: 0, message: 'messages.bitcoin.error.insufficient' };
@@ -97,24 +111,23 @@ export class Bitcoin extends Wallet {
 
       // each BTC can be split into 100,000,000 units. Each unit of bitcoin, or 0.00000001 bitcoin, is called a satoshi
       const amountBig = new BigNumber(amountToSend.toString());
-      const satoShiRate = new BigNumber('100000000');
-      amountToSend = amountBig.times(satoShiRate).toString();
+      const satoshiRate = new BigNumber('100000000');
+      amountToSend = amountBig.times(satoshiRate).toString();
 
-      const data = {};
-      const fee = await this.getFee(blocks);
+      if(!fee){
+        fee = await this.getFee(blocks);
+      }
 
       if (fee) {
-        data.fee = fee;
         const utxos = await this.utxosForAmount(Number(amountToSend) + Number(fee));
 
         if (utxos != false) {
-          data.utxos = utxos;
           const fromAddress = this.address;
           const privateKey = this.privateKey;
           const transaction = new bitcore.Transaction()
-            .from(data.utxos)
+            .from(utxos)
             .change(fromAddress)
-            .fee(data.fee)
+            .fee(fee)
             .to(toAddress, Number(amountToSend))
             .sign(privateKey);
 
@@ -127,6 +140,7 @@ export class Bitcoin extends Wallet {
         return { status: 0, message: 'messages.bitcoin.error.insufficient' };
       }
     } catch (error) {
+      console.log('error', error);
       return { status: 0, message: 'messages.bitcoin.error.insufficient' };
     }
   }
@@ -231,17 +245,17 @@ export class Bitcoin extends Wallet {
     return result;
   }
 
-  formatNumber(value){
+  formatNumber(value, decimal=6){
     let result = value, count = 0;
     try {
       if (Math.floor(value) !== value)
           count = value.toString().split(".")[1].length || 0;
 
-      if(count > 6)
-        result = value.toFixed(6);
+      if(count > decimal)
+        result = value.toFixed(decimal);
     }
     catch(e) {
-
+      result = value;
     }
 
     return result;
@@ -321,6 +335,70 @@ export class Bitcoin extends Wallet {
 
   cookIT(data) {
     return false;
+  }
+
+  getLevelFee = async () => {
+    return new Promise((resolve, reject) => {
+      let result = getJSON(COOKIE_LEVEL_FEES);
+      if(result && result.length){
+        resolve(result);
+      }
+      else{
+        result = [];
+
+        let calcTimeFee = (item) => {
+          try{
+            let value = (item.feePerKb / 100000000);
+            let feePrice = value;
+            value = this.formatNumber(value, 8);
+
+            let min = item.nbBlocks * 10;
+            let title = item.level.charAt(0).toUpperCase() + item.level.slice(1);;
+            if(title == "Economy")
+              title = 'Low';
+            else if(title == "SuperEconomy")
+              title = 'Lowest';
+            else if(title == "Urgent")
+              min = min/2;
+
+            return {title, description: `${value} BTC ~ ${min} min${min > 1 ? 's' : ''}`, value: item.feePerKb, feePrice};
+          }
+          catch(e){
+            console.error(e);
+          }
+
+          return {title: title, description: '', value: 0, feePrice: 0};
+        }
+
+
+        axios.get(`https://bws.bitpay.com/bws/api/v2/feelevels/?coin=btc&network=${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? 'livenet' : 'testnet'}`)
+        .then(({ data }) => {
+          let isDup = false, lastValue = 0, removeLevel = 'superEconomy';
+          for(let item of data){
+            if(lastValue == item.feePerKb){
+              isDup = true;
+              removeLevel = '';
+            }
+
+            if(!isDup && item.level != removeLevel){
+              result.unshift(calcTimeFee(item));
+            }
+
+            lastValue = item.feePerKb;
+            isDup = false;
+          }
+
+          let now = new Date();
+          now.setTime(now.getTime() + (60 * 1000));
+          set(COOKIE_LEVEL_FEES, JSON.stringify(result), {expires: now});
+          resolve(result);
+        })
+        .catch((error) => {
+          console.log('getLevelFee:', error);
+          resolve(false);
+        });
+      }
+    })
   }
 }
 

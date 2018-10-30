@@ -1,18 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Countdown from '@/components/Countdown/Countdown';
-import Image from '@/components/core/presentation/Image';
 import CopyLink from '@/assets/images/share/link.svg';
-import commentIcon from '@/assets/images/icon/comment.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { URL } from '@/constants';
-import GA from '@/services/googleAnalytics';
+import Image from '@/components/core/presentation/Image';
 import { randomArrayItem } from '@/utils/array';
+import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
+import TimeSVG from '@/assets/images/pex/time.svg';
+import CoinSVG from '@/assets/images/pex/coin.svg';
+
+
 import { formatAmount } from '@/utils/number';
 import OutcomeList from './OutcomeList';
 import { socialSharedMsg } from './constants';
 
+function renderEventSource({ event }) {
+  const { source } = event;
+  const { name, url_icon: urlSource, url } = source;
+  const sourceName = name || url;
+  return (
+    <div className="SourceLogo">
+      <div className="LogoImage">
+        <Image src={urlSource} alt="sourceLogo" width="23" />
+      </div>
+      <div className="SourceTitle">{sourceName}</div>
+    </div>
+  );
+}
 function renderEventName({ event }) {
   return (
     <div className="EventName">
@@ -35,14 +50,17 @@ function renderEventNumberOfPlayers({ event }) {
       break;
   }
   return (
-    <div className="EventNumberOfPlayer">{msg}</div>
+    <div className="EventNumberOfPlayer">
+      <span><Image src={NumberPlayersSVG} alt="NumberPlayersSVG" /></span>
+      <span className="NumberOfPlayerTitle">{msg}</span>
+    </div>
   );
 }
 
 function renderEvenTimeLeft({ event, onCountdownComplete }) {
   return (
     <div className="EventTimeLeft">
-      <span className="EventTimeLeftText">Time left</span>
+      <span><Image src={TimeSVG} alt="TimeSVG" /></span>
       <span className="EventTimeLeftValue">
         <Countdown endTime={event.date} onComplete={onCountdownComplete} />
       </span>
@@ -54,25 +72,9 @@ function renderEventTotalBets({ event }) {
   const totalBets = !event.total_bets ? 0 : formatAmount(event.total_bets);
   return (
     <div className="EventTotalBet">
-      <span className="EventTotalBetText">Total bets</span>
+      <span><Image src={CoinSVG} alt="CoinSVG" /></span>
       <span className="EventTotalBetValue">{`${totalBets} ETH`}</span>
     </div>
-  );
-}
-
-function renderEventMessages({ event }) {
-  const commentLink = `${URL.COMMENTS_BY_SHAKE_INDEX}?objectId=event_${event.id}`;
-  return (
-    <Link
-      className="EventMessage"
-      to={commentLink}
-      onClick={() => {
-        GA.clickComment(event.name);
-      }}
-    >
-      <span className="EventMessageIcon"><Image src={commentIcon} /></span>
-      <div className="EventMessageText">Comments</div>
-    </Link>
   );
 }
 
@@ -105,15 +107,15 @@ function renderShareSocial(props) {
 function EventItem(props) {
   return (
     <div className="EventItem">
+      {renderEventSource(props)}
       {renderEventName(props)}
-      {renderEventNumberOfPlayers(props)}
       {renderOutcomeList(props)}
       <div className="EventDetails">
         <div className="EvenFirstGroup">
           {renderEvenTimeLeft(props)}
           {renderEventTotalBets(props)}
+          {renderEventNumberOfPlayers(props)}
         </div>
-        {/* {renderEventMessages(event)} */}
         {renderShareSocial(props)}
       </div>
     </div>

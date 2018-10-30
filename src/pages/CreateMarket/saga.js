@@ -2,7 +2,7 @@ import { takeLatest, call, put, select, all } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/stores/api-saga';
 import { API_URL, URL } from '@/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
-import { handleLoadMatches } from '@/pages/Prediction/saga';
+import { handleLoadMatches, handleLoadMatchDetail } from '@/pages/Prediction/saga';
 import { isBalanceInvalid } from '@/stores/common-saga';
 import { showAlert } from '@/stores/common-action';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
@@ -13,8 +13,8 @@ import {
   shareEvent,
   sendEmailCode,
   verifyEmail,
-  updateEmailPut,
   verifyEmailCodePut,
+  updateProfile,
   updateCreateEventLoading,
 } from './action';
 
@@ -30,32 +30,21 @@ function* handleLoadReportsSaga({ cache = true }) {
       PATH_URL: API_URL.CRYPTOSIGN.LOAD_REPORTS,
       type: 'LOAD_REPORTS',
       _path: 'reports',
+      _key: 'list',
     });
   } catch (e) {
     return console.error('handleLoadReportsSaga', e);
   }
 }
 
-function* handleLoadCategories() {
-  try {
-    return yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_CATEGORIES,
-      type: 'LOAD_CATEGORIES',
-      _path: 'categories',
-    });
-  } catch (e) {
-    console.error(e);
-    return null;
-  }
-}
-
-function* handleLoadCreateEventData() {
+function* handleLoadCreateEventData({ eventId }) {
   try {
     yield put(updateCreateEventLoading(true));
     yield all([
       call(handleLoadReportsSaga, {}),
+      eventId && call(handleLoadMatchDetail, { eventId }),
       call(handleLoadMatches, {}),
-      call(handleLoadCategories, {}),
+      // call(handleLoadCategories, {}),
       call(isBalanceInvalid, {}),
     ]);
     yield put(updateCreateEventLoading(false));
@@ -90,13 +79,13 @@ function* handleCreateNewEventSaga({ newEventData }) {
   }
 }
 
-function* handleGenerateShareLinkSaga({ outcomeId, ...payload }) {
+function* handleGenerateShareLinkSaga({ matchId, ...payload }) {
   try {
     return yield call(apiPost, {
       PATH_URL: `${API_URL.CRYPTOSIGN.GENERATE_LINK}`,
       type: 'GENERATE_SHARE_LINK',
       data: {
-        outcome_id: outcomeId,
+        match_id: matchId,
       },
       ...payload,
     });
@@ -105,16 +94,15 @@ function* handleGenerateShareLinkSaga({ outcomeId, ...payload }) {
   }
 }
 
-function* saveGenerateShareLinkToStore(data) {
-  const { outcomeId, eventName } = data;
-  const generateLink = yield call(handleGenerateShareLinkSaga, { outcomeId });
+function* saveGenerateShareLinkToStore({ matchId, eventName }) {
+  const generateLink = yield call(handleGenerateShareLinkSaga, { matchId });
   return yield put(shareEvent({
-    url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${generateLink.data.slug_short}`,
+    url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${generateLink.data.slug}`,
     name: eventName,
   }));
 }
 
-function* handleCreateEventSaga({ values, isNew, selectedSource }) {
+function* handleCreateEventSaga({ values, isNew }) {
   try {
     yield put(updateCreateEventLoading(true));
     const balanceInvalid = yield call(isBalanceInvalid);
@@ -132,6 +120,7 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           eventId,
           newOutcomeList,
         });
+        console.log('Add New outcomes', addOutcomeResult);
         if (!addOutcomeResult.error) {
           const inputData = addOutcomeResult.data.map(o => {
             return {
@@ -145,21 +134,20 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
               contractName: o.contract.json_name,
             };
           });
-          const outcomeId = addOutcomeResult.data[0].id;
+          const matchId = addOutcomeResult.data[0].match_id;
           const eventName = addOutcomeResult.data[0].name;
-          yield saveGenerateShareLinkToStore({ outcomeId, eventName });
+          yield saveGenerateShareLinkToStore({ matchId, eventName });
           betHandshakeHandler.createNewEvent(inputData);
         }
       } else {
         // Create new event
-        const reportSource = {
-          source_id: selectedSource,
-          source: selectedSource ? undefined : {
-            name: '',
-            url: values.reports,
+        const { reports } = values;
+        const reportSource = reports.id ? { source_id: reports.id } : {
+          source: {
+            name: reports.value,
+            url: reports.value,
           },
         };
-        Object.keys(reportSource).forEach((k) => !reportSource[k] && delete reportSource[k]);
         const newEventData = {
           homeTeamName: values.homeTeamName || '',
           awayTeamName: values.awayTeamName || '',
@@ -167,8 +155,8 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           awayTeamCode: values.awayTeamCode || '',
           homeTeamFlag: values.homeTeamFlag || '',
           awayTeamFlag: values.awayTeamFlag || '',
-          name: values.eventName,
-          public: 1,
+          name: values.eventName.label,
+          public: values.private ? 0 : 1,
           date: values.closingTime,
           reportTime: values.reportingTime,
           disputeTime: values.disputeTime,
@@ -177,6 +165,7 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
           category_id: 7, // values.category.id, hard-code for now
           ...reportSource,
         };
+        console.log('newEventData', newEventData);
         const { data } = yield call(handleCreateNewEventSaga, { newEventData });
         if (data && data.length) {
           const eventData = data[0];
@@ -194,9 +183,9 @@ function* handleCreateEventSaga({ values, isNew, selectedSource }) {
               contractName: contract.json_name,
             };
           });
-          const outcomeId = eventData.outcomes[0].id;
+          const matchId = eventData.id;
           const eventName = eventData.name;
-          yield saveGenerateShareLinkToStore({ outcomeId, eventName });
+          yield saveGenerateShareLinkToStore({ matchId, eventName });
           betHandshakeHandler.createNewEvent(inputData);
         }
       }
@@ -218,10 +207,11 @@ function* handleUpdateEmail({ email }) {
       data: userProfile,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    return yield put(updateEmailPut(responded.data.email));
+    if (responded.status) {
+      yield put(updateProfile(responded));
+    }
   } catch (e) {
     console.error('handleUpdateEmail', e);
-    return null;
   }
 }
 

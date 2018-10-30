@@ -2,26 +2,69 @@ import { takeLatest, call, select, put } from 'redux-saga/effects';
 import { apiGet } from '@/stores/api-saga';
 import { REMOVE_DATA } from '@/stores/data-action';
 import { API_URL } from '@/constants';
-import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, updateFreeBet, checkExistSubcribeEmail, updateCountReport, updateExistEmail } from './action';
-import { eventSelector } from './selector';
+import {
+  loadMatches, getReportCount, removeExpiredEvent,
+  checkRedeemCode, updateFreeBet, checkExistSubcribeEmail,
+  updateCountReport, updateExistEmail,
+  loadRelevantEvents, updateRelevantEvents, updateEvents,
+} from './action';
+import { eventSelector, relevantEventSelector } from './selector';
 
-export function* handleLoadMatches({ cache = true, source }) {
+export function* handleLoadMatchDetail({ eventId }) {
+  try {
+    yield call(apiGet, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${eventId}`,
+      type: 'LOAD_MATCH_DETAIL',
+      _key: eventId,
+      _path: 'predictionDetail',
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function* handleLoadMatches({ isDetail, source }) {
+  try {
+    if (isDetail) {
+      const { data } = yield call(apiGet, {
+        PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${isDetail}`,
+        type: 'LOAD_MATCH_DETAIL_SHARE',
+        // _key: 'events',
+        _path: 'prediction',
+      });
+      if (data) {
+        yield put(updateEvents([data]));
+      }
+    } else {
+      const PATH_URL = source ? `${API_URL.CRYPTOSIGN.LOAD_MATCHES}?source=${source}` : API_URL.CRYPTOSIGN.LOAD_MATCHES;
+      yield call(apiGet, {
+        PATH_URL,
+        type: 'LOAD_MATCHES',
+        _key: 'events',
+        _path: 'prediction',
+      });
+    }
+  } catch (e) {
+    console.error('handleLoadMachesSaga', e);
+  }
+}
+
+export function* handleLoadRelevantEvents({ cache = true, eventId }) {
   try {
     if (cache) {
-      const events = yield select(eventSelector);
+      const events = yield select(relevantEventSelector);
       if (events && events.length) {
         return events;
       }
     }
-    const PATH_URL = source ? `${API_URL.CRYPTOSIGN.LOAD_MATCHES}?source=${source}` : API_URL.CRYPTOSIGN.LOAD_MATCHES;
-    return yield call(apiGet, {
+    const PATH_URL = `${API_URL.CRYPTOSIGN.RELEVANT_EVENTS}?match=${eventId}`;
+    const response = yield call(apiGet, {
       PATH_URL,
-      type: 'LOAD_MATCHES',
-      _key: 'events',
-      _path: 'prediction',
+      type: 'LOAD_RELEVANT_EVENTS',
     });
+    yield put(updateRelevantEvents(response.data));
   } catch (e) {
-    return console.error('handleLoadMachesSaga', e);
+    console.error('handleLoadRelevantMachesSaga', e);
   }
 }
 
@@ -48,23 +91,21 @@ export function* handleCountReport() {
       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
       type: 'COUNT_REPORT',
     });
-    //console.log('handleCountReport', response.data);
     yield put(updateCountReport(response.data.length));
   } catch (e) {
-    console.log(e);
-    //return console.error('handleCountReport', e);
+    console.error(e);
   }
 }
 
-export function* handleFreeBet() {
+export function* handleCheckRedeem() {
   try {
     const response = yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.CHECK_FREE_AVAILABLE,
-      type: 'CHECK_FREE_AVAILABLE',
+      PATH_URL: API_URL.CRYPTOSIGN.CHECK_REDEEM_CODE,
+      type: 'CHECK_REDEEM_CODE',
     });
-    yield put(updateFreeBet(response.data));
+    yield put(updateFreeBet(response.status));
   } catch (e) {
-    console.error('handleFreeBet', e);
+    console.error('handleCheckRedeem', e);
   }
 }
 
@@ -79,8 +120,6 @@ export function* handleCheckExistEmail() {
 
       yield put(updateExistEmail(emailExist));
     }
-
-
   } catch (e) {
     console.error('handleFreeBet', e);
   }
@@ -89,8 +128,9 @@ export function* handleCheckExistEmail() {
 
 export default function* predictionSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
+  yield takeLatest(loadRelevantEvents().type, handleLoadRelevantEvents);
   yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
-  yield takeLatest(checkFreeBet().type, handleFreeBet);
+  yield takeLatest(checkRedeemCode().type, handleCheckRedeem);
   yield takeLatest(checkExistSubcribeEmail().type, handleCheckExistEmail);
 }

@@ -1,0 +1,16 @@
+// style
+@import './src/styles/style';
+
+.uploadzone {
+  border: 2px dashed #ededed;
+  padding: 10px 20px;
+  border-radius: 5px;
+}
+
+.uploadzone p.label, .uploadzone ul {
+  margin: 0px;
+}
+
+.uploadzone p.label, {
+  color: #8a8a8f;
+}

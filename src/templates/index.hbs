@@ -65,7 +65,7 @@
     if (window.self !== window.top) {
       const windowInfo = window.name !== '' && JSON.parse(window.name);
       const { name, ua } = windowInfo;
-      
+
       if (window.navigator.userAgent !== ua) {
         const userAgentProp = { configurable: true, get: function () { return ua; } };
         try {
@@ -111,7 +111,24 @@
       initSocial();
     }, 2000);
   </script>
-  <script src="https://js.stripe.com/v3/"></script>
+  <!--Start of Zendesk Chat Script-->
+  <script type="text/javascript">
+    function initZendesk() {
+      console.log('initZendesk',);
+      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+        d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+        $.src="https://v2.zopim.com/?65ZUCjjecRCrh62mTkRnytF5ZLvPMfg0";z.t=+new Date;$.
+          type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+    }
+
+    setTimeout(function () {
+      initZendesk();
+    }, 5000);
+
+  </script>
+  <!--End of Zendesk Chat Script-->
+  <!--<script src="https://js.stripe.com/v3/"></script>-->
   <script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0068/4833.js" async="async"></script>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ htmlWebpackPlugin.options.env.social.googleTagmanagerId }}"

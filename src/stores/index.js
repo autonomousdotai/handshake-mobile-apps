@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { firebaseReducer, reactReduxFirebase } from 'react-redux-firebase';
 import createSagaMiddleware from 'redux-saga';
 import thunk from 'redux-thunk';
@@ -34,7 +34,6 @@ const reducerList = {
   app: appReducer,
   auth: authReducer,
   firebase: firebaseReducer,
-  router: routerReducer,
   ...reducers,
 };
 const defaultReducer = (s = {}) => s;
@@ -54,7 +53,7 @@ const createStoreWithFirebase = compose(
 )(createStore);
 
 const rootReducer = reduceReducers(AppReducers, dataReducer);
-const store = createStoreWithFirebase(rootReducer, defaultStore);
+const store = createStoreWithFirebase(connectRouter(history)(rootReducer), defaultStore);
 
 sagaMiddleware.run(rootSaga);
 

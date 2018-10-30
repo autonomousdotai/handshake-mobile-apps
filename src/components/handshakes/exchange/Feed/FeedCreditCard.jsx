@@ -355,15 +355,15 @@ class FeedCreditCard extends React.Component {
     if (handleSubmit) {
       handleSubmit(values);
     } else {
-      const { userProfile: { creditCard } } = this.props;
+      // const { userProfile: { creditCard } } = this.props;
 
       let cc = {};
 
       // Use existing credit card
-      if (creditCard.ccNumber.length > 0 && !this.state.isNewCCOpen) {
-        cc = { token: 'true' };
-        this.handleCreateCCOrder(cc);
-      } else {
+      // if (creditCard.ccNumber.length > 0 && !this.state.isNewCCOpen) {
+      //   cc = { token: 'true' };
+      //   this.handleCreateCCOrder(cc);
+      // } else {
         const { cc_number, cc_expired, cc_cvc, cc_email } = values;
         const mmYY = cc_expired.split('/');
         // const params = new URLSearchParams();
@@ -495,7 +495,7 @@ class FeedCreditCard extends React.Component {
         //     // callBack: this.handleBuySuccess
         //     });
         //   });
-      }
+      // }
       // console.log('handleSubmit', cc);
     }
   };

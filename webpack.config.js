@@ -66,15 +66,15 @@ module.exports = function webpackConfig(env, argv = {}) {
           test: /\.scss$/,
           use: [
             'style-loader',
-            'css-loader',
-            'postcss-loader',
+            { loader: 'css-loader', options: { sourceMap: true } },
+            { loader: 'postcss-loader', options: { sourceMap: true } },
             {
               loader: 'resolve-url-loader',
               options: {
                 keepQuery: true,
               },
             },
-            'sass-loader',
+            { loader: 'sass-loader', options: { sourceMap: true } },
           ],
         },
       ],
@@ -161,14 +161,9 @@ module.exports = function webpackConfig(env, argv = {}) {
         { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
         { from: 'src/assets/images/template/og_image.png', to: 'images' },
         { from: 'src/robots.txt', to: '.' },
-        { from: 'src/google59d0f1640e2aac21.html', to: '.' },
-        { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },
+        // { from: 'src/google59d0f1640e2aac21.html', to: '.' },
+        // { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },
       ]),
-      // new OfflinePlugin({
-      //   appShell: '/',
-      //   responseStrategy: 'network-first',
-      //   autoUpdate: true,
-      // }),
     ],
     performance: { hints: false },
     devtool: false,
@@ -220,6 +215,7 @@ module.exports = function webpackConfig(env, argv = {}) {
           favicon: xPath('src/assets/favicon.png'),
           env: appEnvConfig,
         }),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
       ],
       module: {
         rules: [

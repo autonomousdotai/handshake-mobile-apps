@@ -4,16 +4,20 @@ import PropTypes from 'prop-types';
 import { reduxForm, Field, FieldArray, touch } from 'redux-form';
 import IconPlus from '@/assets/images/icon/icon-plus.svg';
 import IconTrash from '@/assets/images/icon/icon-trash.svg';
+import IconInfo from '@/assets/images/icon/question-circle.svg';
 import moment from 'moment';
+import { Tooltip } from 'reactstrap';
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker';
+import GA from '@/services/googleAnalytics';
+import { getGasPrice } from '@/utils/gasPrice';
 import { renderField } from './form';
-import { required, urlValidator } from './validate';
+import { required } from './validate';
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
 import { createEventFormName } from './constants';
 import EmailVerification from './EmailVerification';
-import GA from '@/services/googleAnalytics';
-import { getGasPrice } from '@/utils/gasPrice';
+import EventName from './EventName';
+import ReportSource from './ReportSource';
 
 const minStep = 15;
 const secStep = minStep * 60;
@@ -32,7 +36,7 @@ class CreateEventForm extends Component {
     eventList: PropTypes.array,
     formAction: PropTypes.func,
     dispatch: PropTypes.func,
-    isValidEmailCode: PropTypes.bool,
+    onSelect: PropTypes.func,
   };
 
   static defaultProps = {
@@ -41,12 +45,12 @@ class CreateEventForm extends Component {
     categoryList: undefined,
     formAction: undefined,
     dispatch: undefined,
+    onSelect: undefined,
     isNew: true,
     hasEmail: false,
     initialValues: {},
     shareEvent: null,
     eventList: [],
-    isValidEmailCode: undefined,
   };
 
   constructor(props) {
@@ -55,12 +59,11 @@ class CreateEventForm extends Component {
       closingTime: props.initialValues.closingTime,
       reportingTime: props.initialValues.reportingTime,
       disputeTime: props.initialValues.disputeTime,
-      selectedReportSource: {},
+      privateTooltip: false,
     };
   }
 
   onCreateNewEvent = async (values, dispatch, props) => {
-    console.log('CreateEventForm values: ', values);
     const { eventName, creatorFee } = values;
     await getGasPrice();
     if (props.isNew) {
@@ -71,7 +74,6 @@ class CreateEventForm extends Component {
     dispatch(createEvent({
       values,
       isNew: props.isNew,
-      selectedSource: this.state.selectedReportSource.value || null,
     }));
   }
 
@@ -81,6 +83,10 @@ class CreateEventForm extends Component {
     });
   }
 
+  dispatchTouchAction = (fieldName) => {
+    return this.props.dispatch(this.props.formAction(touch, fieldName));
+  };
+
   addMoreOutcomes = (fields) => {
     const allData = fields.getAll();
     const lastIndex = allData.length - 1;
@@ -89,8 +95,7 @@ class CreateEventForm extends Component {
     if (isValid) {
       fields.push({});
     } else {
-      const { dispatch, formAction } = this.props;
-      dispatch(formAction(touch, `outcomes[${lastIndex}].name`));
+      this.dispatchTouchAction(`outcomes[${lastIndex}].name`);
     }
   }
 
@@ -105,7 +110,7 @@ class CreateEventForm extends Component {
         <input
           className="form-control"
           {...inputProps}
-          value={this.unixToDateFormat(value)}
+          defaultValue={this.unixToDateFormat(value)}
         />
       </div>
     );
@@ -132,10 +137,6 @@ class CreateEventForm extends Component {
     return oldData.every((i) => i.name !== newItem.name) ? undefined : 'Outcome already exists';
   }
 
-  reportSelected = (value) => {
-    this.setFieldValueToState('selectedReportSource', value);
-  }
-
   renderGroupTitle = (title) => {
     return (<div className="CreateEventFormGroupTitle">{title}</div>);
   }
@@ -144,38 +145,29 @@ class CreateEventForm extends Component {
     return (<div className="CreateEventFormGroupNote">{text}</div>);
   }
 
-  renderEventSuggest = (props) => {
+  renderPrivateOption = (props, state) => {
     return (
-      <React.Fragment>
-        {this.renderGroupTitle('EVENT')}
-        <Field
-          type="autoSuggestion"
-          name="eventName"
-          className="form-group"
-          fieldClass="form-control"
-          placeholder="e.g. UEFA - Spain vs Portugal"
-          onSelect={props.onSelect}
-          source={props.eventList}
-          validate={required}
-          component={renderField}
-        />
-      </React.Fragment>
-    );
-  };
-
-  renderCategories = (props) => {
-    return (
-      <Field
-        name="category"
-        type="select"
-        label="Category"
-        placeholder="Select a category..."
-        className="form-group"
-        disabled={!props.isNew}
-        validate={required}
-        component={renderField}
-        options={props.categoryList}
-      />
+      <div className="PrivateOption">
+        <label className="switch">
+          <Field
+            name="private"
+            component="input"
+            type="checkbox"
+            disabled={!props.isNew}
+          />
+          <span className="slider round" />
+        </label>
+        <span className="text">Private</span>
+        <img src={IconInfo} alt="" id="TooltipPrivate" />
+        <Tooltip
+          placement="right"
+          isOpen={state.privateTooltip}
+          target="TooltipPrivate"
+          toggle={() => this.setFieldValueToState('privateTooltip', !state.privateTooltip)}
+        >
+          This event will only be available for those who have the URL shared.
+        </Tooltip>
+      </div>
     );
   }
 
@@ -253,30 +245,6 @@ class CreateEventForm extends Component {
         />
         {this.renderGroupNote(textNote)}
       </div>
-    );
-  }
-
-  renderReport = (props) => {
-    const reportList = props.reportList.map(item => ({ ...item, name: item.url }));
-    const validate = props.isNew ? [required, urlValidator] : [];
-    const textNote = 'You must report the result to close the bet and get your fee.';
-    return (
-      <React.Fragment>
-        {this.renderGroupTitle('REPORT')}
-        {this.renderGroupNote(textNote)}
-        <Field
-          type="autoSuggestion"
-          name="reports"
-          className="form-group"
-          fieldClass="form-control"
-          placeholder="Result URL e.g. livescore.com"
-          onSelect={this.reportSelected}
-          source={reportList}
-          disabled={!props.isNew}
-          validate={validate}
-          component={renderField}
-        />
-      </React.Fragment>
     );
   }
 
@@ -362,13 +330,13 @@ class CreateEventForm extends Component {
     });
     const { isNew, shareEvent } = props;
     if (shareEvent) {
-      return (<ShareMarket shareEvent={shareEvent} isNew={isNew} />);
+      return (<ShareMarket shareEvent={shareEvent} isNew={isNew} dispatch={props.dispatch} />);
     }
     return (
       <form className={cls} onSubmit={props.handleSubmit(this.onCreateNewEvent)}>
         <div className="CreateEventFormBlock">
-          {this.renderEventSuggest(props, state)}
-          {/* {this.renderCategories(props, state)} */}
+          <EventName eventList={props.eventList} onSelect={props.onSelect} />
+          {this.renderPrivateOption(props, state)}
           <FieldArray
             name="outcomes"
             isNew={props.isNew}
@@ -378,12 +346,15 @@ class CreateEventForm extends Component {
         </div>
         {this.renderFee(props)}
         <div className="CreateEventFormBlock">
-          {this.renderReport(props)}
-          {this.renderTimeGroup(props, state)}
-          <EmailVerification
-            hasEmail={props.hasEmail}
-            isValidEmailCode={props.isValidEmailCode}
+          <ReportSource
+            reportList={props.reportList}
+            disabled={!props.isNew}
+            dispatchFormAction={(fieldName) => this.dispatchTouchAction(fieldName)}
           />
+          {this.renderTimeGroup(props, state)}
+        </div>
+        <div className="CreateEventFormBlock">
+          <EmailVerification />
           <button
             type="submit"
             className="btn btn-primary btn-block"

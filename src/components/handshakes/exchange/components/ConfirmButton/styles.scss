@@ -1,0 +1,35 @@
+.confirm-btn-container {
+  .confirm-btn {
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .confirm-btn-content {
+    padding: 20px;
+    text-align: center;
+    .confirm-btn-desc {
+      font-weight: bold;
+      color: #2c2c2c;
+    }
+    .confirm-btn-container {
+      padding: 10px 0px;
+      >button {
+        width: 100px;
+        border: solid 1px;
+        margin: 0px 5px;
+        border-radius: 3px;
+        color: white;
+        padding: 5px 10px;
+      }
+      .confirm-btn-cancel {
+        background: transparent;
+        border: 1px solid #7a7a7a;
+        color: #333;
+        margin-left: rem-calc(10px);
+      }
+      .confirm-btn-ok {
+        background: #2456FB;
+      }
+    }
+  }
+}

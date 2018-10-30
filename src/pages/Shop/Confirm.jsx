@@ -1,11 +1,10 @@
 import React from 'react';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import qs from 'qs';
 import $http from '@/services/api';
 import { getJSON } from 'js-cookie';
-import { CUSTOMER_ADDRESS_INFO } from '@/constants';
+import { CUSTOMER_ADDRESS_INFO, AUTONOMOUS_END_POINT } from '@/constants';
 // style
 import './Confirm.scss';
 
@@ -40,7 +39,7 @@ class Confirm extends React.Component {
       // call to confirm hash
       const { email, orderNum } = getJSON(CUSTOMER_ADDRESS_INFO);
       this.orderNum = orderNum;
-      const url = `https://dev.autonomous.ai/api-v2/order-api/order/eth/charges?order_id=${queryObject.order_id}&email=${email}&hash=${queryObject.hash}`;
+      const url = `${AUTONOMOUS_END_POINT.BASE}/order-api/order/eth/charges?order_id=${queryObject.order_id}&email=${email}&hash=${queryObject.hash}`;
       const confirmOrder = $http({ url, method: 'POST' });
       confirmOrder.then(result => {
         if (result.data.status < 1) {

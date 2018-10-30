@@ -11,6 +11,10 @@ export default class ExchangeHandshake extends BaseHandshake {
     return 'ExchangeHandshake';
   }
 
+  get contractFolder() {
+    return 'ATM';
+  }
+
   checkBalance = () => {
     const balance = wallet.getBalance();
     return balance;
@@ -27,6 +31,7 @@ export default class ExchangeHandshake extends BaseHandshake {
   get gasPrice() {
     return this.chainId === 4 ? window.gasPrice || 20 : window.gasPrice || 20;
   }
+
 
   /**
    * @dev Initiate handshake by CoinOwner

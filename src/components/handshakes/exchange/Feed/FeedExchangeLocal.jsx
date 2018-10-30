@@ -25,7 +25,6 @@ import {formatAmountCurrency, getHandshakeUserType} from "@/services/offer-util"
 import {hideLoading, showAlert, showLoading} from '@/reducers/app/action';
 import {getDistanceFromLatLonInKm, getErrorMessageFromCode} from '../utils';
 import {ExchangeHandshake,} from '@/services/neuron';
-import _sample from "lodash/sample";
 import {feedBackgroundColors} from "@/components/handshakes/exchange/config";
 import {BigNumber} from "bignumber.js";
 import "./FeedExchangeLocal.scss"
@@ -46,7 +45,6 @@ class FeedExchangeLocal extends React.PureComponent {
     this.state = {
       modalContent: '',
     };
-    this.mainColor = _sample(feedBackgroundColors)
   }
 
   showLoading = () => {

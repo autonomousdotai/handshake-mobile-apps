@@ -19,7 +19,8 @@ import { CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, API_URL, FIAT_CURRENCY } from '@
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Field, change } from 'redux-form';
-import { debounce, compact } from 'lodash';
+import debounce from '@/utils/debounce';
+import { compact } from '@/utils/array';
 import { getCashFromCrypto, sendAtmCashTransfer } from '@/reducers/exchange/action';
 import { showAlert, showScanQRCode } from '@/reducers/app/action';
 import { getErrorMessageFromCode, getCryptoFromAddress } from '@/components/handshakes/exchange/utils';

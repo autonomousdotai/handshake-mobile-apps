@@ -2,7 +2,7 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 // action, mock
-import {CRYPTO_CURRENCY, FIAT_CURRENCY,} from '@/constants';
+import { CRYPTO_CURRENCY, FIAT_CURRENCY, API_URL } from '@/constants';
 import {FormattedDate, FormattedMessage, injectIntl} from 'react-intl';
 // components
 // style
@@ -12,12 +12,13 @@ import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
 import iconEthereum from '@/assets/images/icon/coin/eth.svg';
 import iconBitcoinCash from '@/assets/images/icon/coin/bch.svg';
 import iconUsd from '@/assets/images/icon/coin/icons8-us_dollar.svg';
-
+import { cancelAtmCashTransfer } from '@/reducers/exchange/action';
 import './TransactionItem.scss';
 import CashStoreTransaction from "@/models/CashStoreTransaction";
 import cx from 'classnames';
 
 import icWarning from '@/assets/images/cash/ic-transaction-warning.svg';
+import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
 
 export const CRYPTO_ICONS = {
   [CRYPTO_CURRENCY.ETH]: iconEthereum,
@@ -31,6 +32,8 @@ export const CASH_ORDER_STATUS = {
   SUCCESS: 'success',
   TRANSFERRING: 'transferring',
   CANCELLED: 'cancelled',
+  FAILED: 'transfer_failed',
+  FIAT_TRANSFERRING: 'fiat_transferring',
 };
 
 class TransactionItem extends React.Component {
@@ -41,15 +44,39 @@ class TransactionItem extends React.Component {
     };
   }
 
-  static getDerivedStateFromProps(nextProps) {
-    if (nextProps.extraData && nextProps.initAt) {
-      let transaction = {};
-      transaction = CashStoreTransaction.cashStoreTransaction(JSON.parse(nextProps.extraData));
-      transaction.createdAt = new Date(nextProps.initAt * 1000).toISOString();
-      return { transaction };
-    }
+  componentDidMount() {
+    const { extraData, initAt } = this.props;
+    this.getTransaction(extraData, initAt);
+  }
 
-    return null;
+  UNSAFE_componentWillReceiveProps({ extraData, initAt }) {
+    this.getTransaction(extraData, initAt);
+  }
+
+  onCancelOrder = () => {
+    const { transaction } = this.state;
+    this.props.cancelAtmCashTransfer({
+      PATH_URL: `${API_URL.EXCHANGE.SEND_ATM_CASH_TRANSFER}/${transaction.id}`,
+      METHOD: 'DELETE',
+      successFn: (res) => {
+        const { data } = res;
+        const updatedTransaction = data && CashStoreTransaction.cashStoreTransaction(data);
+        updatedTransaction && this.setState({ transaction: updatedTransaction });
+      },
+    });
+  }
+
+  getTransaction = (extraData, initAt) => {
+    try {
+      if (extraData && initAt) {
+        let transaction = {};
+        transaction = CashStoreTransaction.cashStoreTransaction(JSON.parse(extraData));
+        transaction.createdAt = new Date(initAt * 1000).toISOString();
+        this.setState({ transaction });
+      }
+    } catch (e) {
+      console.warn('getTransaction', e);
+    }
   }
 
   ellipsisText(text = '') {
@@ -149,9 +176,19 @@ class TransactionItem extends React.Component {
                 {messages.create.atm.transactions.status}
               </div>
               <div className="d-table-cell text-right">
-                <span className={cx('text-normal', `${status}`)}>{messages.create.atm.transactions.statusValues[status]}</span>
+                <span className={cx('text-normal', `${status}`)}>{messages.create.atm.transactions.statusValues[status] || '---'}</span>
               </div>
             </div>
+            {
+              status === CASH_ORDER_STATUS.PROCESSING && (
+                <div className="d-table w-100" style={{ textAlign: 'center' }}>
+                  <ConfirmButton
+                    onConfirm={this.onCancelOrder}
+                    label={messages.create.atm.transactions.cancel_order}
+                  />
+                </div>
+              )
+            }
           </div>
 
         </div>
@@ -166,6 +203,7 @@ const mapState = state => ({
 
 const mapDispatch = dispatch => ({
   rfChange: bindActionCreators(change, dispatch),
+  cancelAtmCashTransfer: bindActionCreators(cancelAtmCashTransfer, dispatch),
 });
 
 export default injectIntl(connect(mapState, mapDispatch)(TransactionItem));

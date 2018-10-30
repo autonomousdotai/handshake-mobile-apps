@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ReactDOM from 'react-dom';
 
 import { setLanguage } from '@/reducers/app/action';
 import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl';
@@ -10,12 +11,11 @@ import createForm from '@/components/core/form/createForm';
 import { fieldInput } from '@/components/core/form/customField';
 import { email, required } from '@/components/core/form/validation';
 import $http from '@/services/api';
-import { BASE_API, LANDING_PAGE_TYPE } from '@/constants';
 import { Link } from 'react-router-dom';
+import { URL, BASE_API, LANDING_PAGE_TYPE } from '@/constants';
 import iconSubmitEmail from '@/assets/images/icon/landingpage/email_submit.svg';
 
 import './styles.scss';
-import { URL } from '@/constants';
 const nameFormSubscribeEmail = 'subscribeEmail';
 const FormSubscribeEmail = createForm({
   propsReduxForm: {
@@ -60,15 +60,31 @@ class Index extends React.PureComponent {
       window.location = URL.LANDING_BECOME_ATM;
     }
   }
+  scrollToFAQ() {
+    const faqNode = ReactDOM.findDOMNode(this.refs.faq)
+
+    if (faqNode && location.href.includes('#faq')) {
+      faqNode.scrollIntoView({
+          behaviour: 'smooth',
+          block: 'start',
+          inline: 'center',
+      });
+    }
+  }
+  componentDidMount() {
+    this.scrollToFAQ();
+  }
+
   renderDisclaim(name) {
     return (
       <div className="row">
         <div className="col">
-          <div className="pd-faq">Disclaimer</div>
-          <div className="pd-content">
+          <div className="pd-disclaim">Disclaimer</div>
+          <div className="pd-small-content">
             <FormattedMessage id={`landing_page.${name}.disclaim`} />
           </div>
-          <p className="pd-content">Need more information? Check out our FAQ and <a href="http://ninja.org/pex/instructions">instructions</a> on how to play.</p>
+          <p className="pd-small-content">Need more information? Check out our <a href="#faq"
+          >FAQ</a> and <a href="http://ninja.org/pex/instructions">instructions</a> on how to play.</p>
         </div>
       </div>
     );
@@ -242,9 +258,9 @@ class Index extends React.PureComponent {
           }
           {
             faq && (
-              <div className="row mt-5">
+              <div className="row mt-5" id="faq" ref="faq" >
                 <div className="col">
-                  <div className="pd-faq">
+                  <div className={entireContentComponent ? "pd-faq" : "pd-faq-no-content"}>
                     {messages.COIN_EXCHANGE_LP_FAQ_TITLE}
                   </div>
                   <div>

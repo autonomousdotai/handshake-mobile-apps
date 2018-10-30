@@ -4,8 +4,8 @@
 import React from 'react';
 import Select from 'react-select';
 import classNames from 'classnames';
-import AutoSuggestion from '@/components/AutoSuggestion/AutoSuggestion';
 import RangeSlider from '@/components/RangeSlider/RangeSlider';
+import CreatableSelect from 'react-select/lib/Creatable';
 
 function selectControl(props) {
   const { name, value, onChange } = props.input;
@@ -24,6 +24,25 @@ function selectControl(props) {
   );
 }
 
+function creatableSelect(props) {
+  const { name, value, onChange } = props.input;
+  return (
+    <CreatableSelect
+      // className={props.className}
+      classNamePrefix="react-select"
+      name={name}
+      value={value}
+      onChange={onChange}
+      isClearable
+      placeholder={props.placeholder}
+      options={props.dataSource}
+      isDisabled={props.disabled}
+      getOptionLabel={props.getOptionLabel}
+      getOptionValue={props.getOptionValue}
+    />
+  );
+}
+
 function inputControl(props) {
   return (
     <input
@@ -32,32 +51,6 @@ function inputControl(props) {
       placeholder={props.placeholder}
       type={props.type}
       disabled={props.disabled}
-    />
-  );
-}
-
-function autoSuggestion(props) {
-  const { placeholder, source } = props;
-  const { name, value, onChange } = props.input;
-  let nextValue = (typeof value === 'string' || typeof value === 'number')
-    ? source.find(o => (o.name === value || o.id === value)) : value.toString();
-  if (typeof nextValue === 'object') {
-    nextValue = nextValue.name;
-  }
-  const asProps = {
-    ...props,
-    input: {
-      ...props.input,
-      value: nextValue,
-    },
-  };
-  return (
-    <AutoSuggestion
-      {...asProps}
-      name={name}
-      placeholder={placeholder}
-      value={nextValue}
-      onChange={onChange}
     />
   );
 }
@@ -76,8 +69,8 @@ function renderByType(props) {
   switch (props.type) {
     case 'select':
       return selectControl(props);
-    case 'autoSuggestion':
-      return autoSuggestion(props);
+    case 'creatableSelect':
+      return creatableSelect(props);
     case 'rangeSlider':
       return rangeSlider(props);
     default:

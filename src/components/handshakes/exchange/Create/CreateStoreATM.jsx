@@ -23,6 +23,7 @@ import { fieldAtmStatus, fieldTimePicker, fieldTypeAtm, mapField } from './redux
 import './CreateStoreATM.scss';
 import '../styles.scss';
 import Transaction from './components/Transaction';
+import { addressValidation } from './validation';
 
 export const CASH_ATM_TAB = {
   INFO: 'INFO',
@@ -535,7 +536,7 @@ class Component extends React.Component {
                         className="form-control form-control-input"
                         placeholder={messages.create.atm.text.addressHint}
                         component={fieldInput}
-                        validate={[required]}
+                        validate={[required, addressValidation]}
                       />
                       <div className={`address-update-btn ${this.state.showMap && 'close-map'}`} onClick={this.toggleGoogleMap}>
                         <span>{ this.state.showMap ? 'Close Maps' : 'Open Maps' }</span>

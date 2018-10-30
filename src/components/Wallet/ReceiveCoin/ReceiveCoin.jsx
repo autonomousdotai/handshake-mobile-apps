@@ -9,7 +9,6 @@ import { bindActionCreators } from "redux";
 import Button from '@/components/core/controls/Button';
 import { API_URL } from "@/constants";
 import {getFiatCurrency} from '@/reducers/exchange/action';
-import Modal from '@/components/core/controls/Modal';
 import {MasterWallet} from "@/services/Wallets/MasterWallet";
 
 import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
@@ -18,7 +17,6 @@ import createForm from '@/components/core/form/createForm';
 import './ReceiveCoin.scss';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow-green.svg';
 import iconSwitch from '@/assets/images/icon/icon-switch.png';
-
 
 const QRCode = require('qrcode.react');
 
@@ -90,18 +88,6 @@ class ReceiveCoin extends React.Component {
   showToast(mst) {
     this.showAlert(mst, 'primary', 2000);
   }
-  showError(mst) {
-    this.showAlert(mst, 'danger', 3000);
-  }
-  showSuccess(mst) {
-    this.showAlert(mst, 'success', 4000, <img className="iconSuccessChecked" src={iconSuccessChecked} />);
-  }
-  showLoading(status) {
-    this.props.showLoading({ message: '' });
-  }
-  hideLoading() {
-    this.props.hideLoading();
-  }
 
   componentDidMount() {
     this.getWalletDefault();
@@ -139,14 +125,6 @@ class ReceiveCoin extends React.Component {
 
   resetForm(){
     this.props.clearFields(nameFormReceiveWallet, false, false, "amountCoin", "amountCoinTemp");
-  }
-
-  showLoading = () => {
-    this.props.showLoading({message: '',});
-  }
-
-  hideLoading = () => {
-    this.props.hideLoading();
   }
 
   onFinish = () => {
@@ -304,14 +282,21 @@ class ReceiveCoin extends React.Component {
     });
   }
 
-
-  genDataReceive(){
+  // get qrcode value
+  genQRCodeValue(){
     if (this.state.walletSelected){
-      let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
-      if (this.state.isCurrency){
-        value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : ''); 
+      let amountValue = this.state.inputSendAmountValue.trim() != "" ? this.state.inputSendAmountValue.trim() : "";
+      if(this.state.isCurrency){
+        amountValue = this.state.switchValue != '' ? this.state.switchValue.toString() : "";
       }
+      if (amountValue != ""){
+        //<coin-title>:<address>?amount=<amount>
+        return ((this.state.walletSelected.className.replace(/\s/g,'')).toLowerCase() + ":" + this.state.walletSelected.address + "?amount=" + amountValue.toString()).trim();;
+      }
+      // address only if amount is none
+      return this.state.walletSelected.address;
     }
+    return "";
   }
 
   render() {
@@ -319,15 +304,20 @@ class ReceiveCoin extends React.Component {
     let { currency } = this.props;
     if(!currency) currency = "USD";
 
+    const qrCodeValue = this.genQRCodeValue();
+
     let showDivAmount = this.state.walletSelected && this.state.rate;
 
-    let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
-    if (this.state.isCurrency){
-      value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : '');
-    }
-    let qrCodeValue = (this.state.walletSelected ? this.state.walletSelected.address : '') + value;
+    // let value = (this.state.inputSendAmountValue != '' ? `,${this.state.inputSendAmountValue}` : '');
+    // if (this.state.isCurrency){
+    //   value = (this.state.switchValue != '' ? `,${this.state.switchValue}` : '');
+    // }
+    // let qrCodeValue = (this.state.walletSelected ? this.state.walletSelected.address : '') + value;
+
     let symbol = this.state.isCurrency ? currency : (this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : '');
+
     let placeholder = ((this.state.inputSendAmountValue == 0 || this.state.inputSendAmountValue.toString() == '') ? "0.0" : this.state.inputSendAmountValue.toString() ) + " " + symbol
+
     return (
       <div className="receive-coins">
           {/* <div className="bodyTitle"><span>{messages.wallet.action.receive.message} { this.state.walletSelected ? this.state.walletSelected.name : ''} </span></div> */}
@@ -368,15 +358,16 @@ class ReceiveCoin extends React.Component {
             </div>
 
             <div className="box-qr-code">
-                <QRCode size={230} value={qrCodeValue} onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.showToast(messages.wallet.action.receive.success.share);}} />
+                <QRCode size={230} value={qrCodeValue} onClick={() => { Clipboard.copy(qrCodeValue); this.showToast(messages.wallet.action.receive.success.share);}} />
             </div>
 
-            {/* <div className="box-link">
+
+            <div className="box-link">
               <a className="link-copy-address" onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.showToast(messages.wallet.action.receive.success.share);}}>{messages.wallet.action.receive.link.copy_address}</a>
-              <a className="link-download" ref={(ref) => this.downloadRef = ref} onClick={()=> {this.download(value);}}>
+              <a className="link-download" ref={(ref) => this.downloadRef = ref} onClick={()=> {this.download(qrCodeValue);}}>
                 {messages.wallet.action.receive.link.download_qrcode}
               </a>
-            </div> */}
+            </div>
             
             {/* Don't support for Collectibles */}
             { !this.state.walletSelected.isCollectibles ?
@@ -426,13 +417,13 @@ class ReceiveCoin extends React.Component {
 
             {/* <div className="link-request-custom-amount" onClick={() => { this.modalCustomAmountRef.open(); this.setState({ inputSendAmountValue: '' }); }}>{messages.wallet.action.receive.button.request_amount}</div> */}
 
-            <a className="button-download" ref={(ref) => this.downloadRef = ref} onClick={()=> {this.download(value);}}>
+            {/* <a className="button-download" ref={(ref) => this.downloadRef = ref} onClick={()=> {this.download(value);}}>
                 {messages.wallet.action.receive.link.download_qrcode}
             </a>
 
             <Button className="button" cssType="primary" onClick={() => { Clipboard.copy(this.state.walletSelected.address); this.showToast(messages.wallet.action.receive.success.share);}} >
               {messages.wallet.action.receive.button.text}
-            </Button>
+            </Button> */}
           </div>
 
       </div>

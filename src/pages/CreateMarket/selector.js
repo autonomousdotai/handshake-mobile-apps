@@ -4,18 +4,27 @@ export const hasEmail = (state) => {
   if (isEmpty(state.auth.profile)) return null;
   return state.auth.profile.email;
 };
+
 export const uId = (state) => {
   if (isEmpty(state.auth.profile)) return null;
   return state.auth.profile.id;
 };
 
-export const eventSelector = (state) => state.prediction.events;
+export const isEmailVerified = (state) => {
+  if (isEmpty(state.auth.profile)) return null;
+  return state.auth.profile.verified;
+}
+
+export const eventDetailSelector = (state, props) => {
+  const { eventId } = props.match.params;
+  return state.predictionDetail[eventId] || {};
+};
 
 export const reportSelector = (state) => {
   return (state.reports.list || []).map(r => {
     return Object.assign({}, r, {
-      value: r.id,
-      label: `${r.name} - ${r.url}`,
+      value: r.id.toString(),
+      label: r.url,
     });
   });
 };

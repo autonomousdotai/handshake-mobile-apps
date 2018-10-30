@@ -1,0 +1,20 @@
+@import './src/styles/style';
+
+.review {
+  width: 100%;
+  height: 100%;
+  max-width: $app-width;
+  margin: 0 auto;
+  padding: rem-calc(0 15px);
+  background-color: $white;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .title {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-weight: $semi-bold;
+    font-size: rem-calc(28px);
+    color: $black;
+  }
+}

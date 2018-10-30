@@ -97,6 +97,16 @@ class WalletPreferences extends React.Component {
                   </div>
               </div>
 
+              <div className="item" onClick={this.props.onExportPrivateKeyClick}>
+                  <div className="name">
+                      <label>{this.messages.wallet.action.preferecens.list_item.export_private_key}</label>
+                  </div>
+                  <div className="value">
+
+                  </div>
+              </div>
+
+
               <div className="item" onClick={this.props.onDeleteWalletClick}>
                   <div className="name">
                       <label className="text-danger">{this.messages.wallet.action.preferecens.list_item.delete_wallet}</label>

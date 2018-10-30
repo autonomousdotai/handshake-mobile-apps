@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import isEqual from '@/utils/isEqual';
 // component
 import Image from '@/components/core/presentation/Image';
 // style
@@ -22,7 +22,7 @@ class Dropdown extends React.PureComponent {
     this.onItemSelected = ::this.onItemSelected;
     this.setDefaultItem = ::this.setDefaultItem;
     this.filterSource = ::this.filterSource;
-    this.handleShow = ::this.handleShow;    
+    this.handleShow = ::this.handleShow;
   }
   // will store item selecting
   itemSelecting = {};
@@ -157,7 +157,7 @@ Dropdown.propTypes = {
   afterSetDefault: PropTypes.func,
   hasSearch: PropTypes.bool,
   isShow: PropTypes.bool,
-  
+
 };
 
 Dropdown.defaultProps = {

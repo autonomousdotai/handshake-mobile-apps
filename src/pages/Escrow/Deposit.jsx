@@ -29,8 +29,7 @@ import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
 import CreditATM from '@/services/neuron/neuron-creditatm';
-import Helper from '@/services/helper';
-import _ from 'lodash';
+import { isEmpty } from '@/utils/is';
 import { BigNumber } from 'bignumber.js';
 import axios from 'axios';
 import './CommonStyle.scss';
@@ -340,7 +339,7 @@ class EscrowDeposit extends React.Component {
 
       const { updatedAt, ...rest } = depositInfo;
 
-      if (_.isEmpty(rest)) {
+      if (isEmpty(rest)) {
         this.createCreditATM();
       } else {
         this.handleDeposit();

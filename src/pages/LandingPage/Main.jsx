@@ -80,7 +80,7 @@ const products = [
     // to: URL.PRODUCT_FUND_URL,
     href: URL.PRODUCT_FUND_URL,
   },
-]
+];
 
 const researches = [
   {
@@ -93,9 +93,9 @@ const researches = [
     title: <FormattedMessage id="landing_page.researches.internetCash.title" />,
     subTitle: <FormattedMessage id="landing_page.researches.internetCash.subTitle" />,
     img: imgInternetCash,
-    to: URL.RESEARCH_INTERNET_CASH_URL,
-  }
-]
+    to: '/constant',
+  },
+];
 
 import shurikenIcon from '@/assets/images/ninja/shuriken-icon.svg';
 import playVideoButton from '@/assets/images/ninja/play-video-button.svg';
@@ -111,7 +111,7 @@ class Main extends React.PureComponent {
   }
   constructor(props) {
     super(props);
-    this.changeCountry = ::this.changeCountry;
+    this.changeCountry = :: this.changeCountry;
   }
 
   componentDidMount() {
@@ -169,32 +169,32 @@ class Main extends React.PureComponent {
               </div>
             </div>
           ) : (
-            <div>
-              <div className="row mt-5">
-                <div className="col">
-                  <div className="landing-header"><FormattedMessage id="landing_page.header.research" /></div>
-                  <div className="landing-subHeader"><FormattedMessage id="landing_page.subHeader.research" /></div>
+              <div>
+                <div className="row mt-5">
+                  <div className="col">
+                    <div className="landing-header"><FormattedMessage id="landing_page.header.research" /></div>
+                    <div className="landing-subHeader"><FormattedMessage id="landing_page.subHeader.research" /></div>
+                  </div>
+                </div>
+
+                <div className="row" style={{ marginTop: '18px' }}>
+                  {
+                    researches.map((product, index) => {
+                      const { title, subTitle, img, to } = product
+                      return (
+                        <div className="col-12 col-sm-6 product" key={index}>
+                          <Link to={to}>
+                            <div><img src={img} className="img-fluid" /></div>
+                            <div className="landing-title my-1">{title}</div>
+                            <div className="landing-sub-title">{subTitle}</div>
+                          </Link>
+                        </div>
+                      )
+                    })
+                  }
                 </div>
               </div>
-
-              <div className="row" style={{ marginTop: '18px' }}>
-                {
-                  researches.map((product, index) => {
-                    const { title, subTitle, img, to } = product
-                    return (
-                      <div className="col-12 col-sm-6 product" key={index}>
-                        <Link to={to}>
-                          <div><img src={img} className="img-fluid" /></div>
-                          <div className="landing-title my-1">{title}</div>
-                          <div className="landing-sub-title">{subTitle}</div>
-                        </Link>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-            </div>
-          )
+            )
         }
       </LandingWrapper>
     )

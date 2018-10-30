@@ -16,8 +16,10 @@
     letter-spacing: 0;
     margin-top: rem-calc(10px);
     border: none;
-    height: rem-calc(50px);
+    height: rem-calc(44px);
     //font-weight: $medium;
+    font-size: rem-calc(14px);
+
   }
   .luckyFreeDes {
     text-align: center;
@@ -36,5 +38,10 @@
     background: #F5F5F5;
     border-radius: rem-calc(5px);
     padding: rem-calc(5px 3px);
+  }
+  .termCondition {
+    font-size: rem-calc(12px);
+    text-align: center;
+    margin-top: 15px;
   }
 }

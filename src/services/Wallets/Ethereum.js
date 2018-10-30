@@ -5,9 +5,10 @@ import { StringHelper } from '@/services/helper';
 import {MasterWallet} from "./MasterWallet";
 import Tx from 'ethereumjs-tx';
 import { getEstimateGas } from "@/components/handshakes/betting/utils";
+import { getGasPrice } from "@/utils/gasPrice";
+import { set, getJSON } from 'js-cookie';
 
 const Web3 = require('web3');
-const EthereumTx = require('ethereumjs-tx');
 const hdkey = require('hdkey');
 const ethUtil = require('ethereumjs-util');
 const bip39 = require('bip39');
@@ -15,6 +16,8 @@ const moment = require('moment');
 const BN = Web3.utils.BN;
 
 var MobileDetect = require('mobile-detect');
+const defaultGasLimit = 21000;
+const COOKIE_LEVEL_FEES = 'eth_level_fees';
 
 export class Ethereum extends Wallet {
   static Network = { Mainnet: 'https://mainnet.infura.io/', Rinkeby: 'https://rinkeby.infura.io/' }
@@ -73,20 +76,139 @@ export class Ethereum extends Wallet {
     }
   }
 
+  async getBalancePending() {
+    try {
+      const web3 = this.getWeb3();
+      
+      const balance = await web3.eth.getBalance(this.address);  
+      
+      let totalBalance = Number (balance);
+
+      console.log("check pending ...");                   
+      let result = await this.getTransactionHistory(1, 5);
+
+      if (result){
+        console.log("result", result);
+        for (var i = 0; i < result.length; i ++){
+          let item = result[0];
+          // is pending
+          if (item.isError == "0" && item.confirmations== "0")
+          {                        
+            totalBalance = totalBalance - (Number(item.gasPrice) + Number(item.value));
+            console.log("totalBalance: ", totalBalance);      
+          }
+        }
+        if (totalBalance < 0){
+          totalBalance = 0;
+        }
+        return Web3.utils.fromWei(totalBalance.toString());
+      }
+      else{
+        return Web3.utils.fromWei(balance.toString());
+      }                        
+    } catch (error) {     
+      console.log('error', error);       
+    }
+    return this.balance;
+  }
+
+  getGasPrice = async (speed=1) => {
+    return new Promise((resolve, reject) => {
+    axios.get('https://ethgasstation.info/json/ethgasAPI.json')
+      .then(({ data }) => {// 10 gwei units - so divide by 10 to get in gwei
+        let result = 41;
+        if(speed == 0){
+          result = (data.safeLow / 10).toString();
+        }
+        else if(speed == 2){
+          result = (data.fast / 10).toString();
+        }
+        else if(speed == 3){
+          result= (data.fastest / 10).toString();
+        }
+        else{
+          result = (data.average / 10).toString();
+        }
+
+        resolve(result);
+      })
+      .catch((error) => {
+        console.log('Failed to get data from ethGasStation: ', error);
+        resolve(41);
+        // axios
+        //   .get(`https://api.etherscan.io/api?module=proxy&action=eth_gasPrice&apikey=${process.env.apikeyEtherscan}`)
+        //   .then(({ data }) => {
+        //     const gasPrice = Number(data.result).toString();
+        //     resolve(Web3.utils.fromWei(gasPrice, 'gwei'));
+        //   })
+        //   .catch((error) => {
+        //     resolve(41);
+        //   });
+      });
+    })
+  }
+
+  getLevelFee = async () => {
+    return new Promise((resolve, reject) => {
+      let result = getJSON(COOKIE_LEVEL_FEES);
+      if(result && result.length){
+        resolve(result);
+      }
+      else{
+        result = [];
+        const web3 = this.getWeb3();
+        let calcGasTimeFee = (data, title, min) => {
+          try{
+            let gasPrice = Number(data / 10);
+            let estimatedGas = defaultGasLimit * (new BN(gasPrice * 1000000000));
+            let ethEstimateGas = Number(web3.utils.fromWei(estimatedGas.toString()));
+            let feePrice = ethEstimateGas;
+            ethEstimateGas = this.formatNumber(ethEstimateGas, 8);
+
+            return {title, description: `${ethEstimateGas} ETH ~ ${min} min${min > 1 ? 's' : ''}`, value: gasPrice.toString(), feePrice};
+          }
+          catch(e){
+            console.error(e);
+          }
+
+          return {title, description: '', value: 0, feePrice: 0};
+        }
+
+        axios.get('https://ethgasstation.info/json/ethgasAPI.json')
+        .then(({ data }) => {// 10 gwei units - so divide by 10 to get in gwei
+
+          if(data.safeLow){
+            result.push(calcGasTimeFee(data.safeLow, 'Low', 30));
+          }
+
+          if(data.average){
+            result.push(calcGasTimeFee(data.average, 'Normal', 5));
+          }
+
+          if(data.fast){
+            result.push(calcGasTimeFee(data.fast, 'Priority', 2));
+          }
+
+          if(data.fastest){
+            result.push(calcGasTimeFee(data.fastest, 'Urgent', 1));
+          }
+
+          let now = new Date();
+          now.setTime(now.getTime() + (60 * 1000));
+          set(COOKIE_LEVEL_FEES, JSON.stringify(result), {expires: now});
+          resolve(result);
+        })
+        .catch((error) => {
+          console.log('getLevelFee:', error);
+          resolve(false);
+        });
+      }
+    })
+  }
+
   async getFee() {
+    await getGasPrice();
     return await getEstimateGas();
-
-    // const web3 = this.getWeb3();
-    // const gasPrice = new BN(await web3.eth.getGasPrice());
-    // //const estimateGas = new BN(balance).div(gasPrice);
-    // const limitedGas = 210000;
-    // //const estimatedGas = await BN.min(estimateGas, limitedGas);
-    //
-    // console.log('transfer gasPrice->', parseInt(gasPrice));
-    // //console.log('transfer estimatedGas->', String(estimatedGas));
-    // console.log('transfer limitedGas->', String(limitedGas));
-
-    // return Web3.utils.fromWei(estimatedGas);
   }
 
 
@@ -99,36 +221,56 @@ export class Ethereum extends Wallet {
     return true;
   }
 
-  async transfer(toAddress, amountToSend) {
+async transfer(toAddress, amountToSend, opt={}) {
+
+    let data = opt.data || "";
+    let fee = opt.fee || 0
+    let gasLimit = opt.gasLimit || defaultGasLimit;
+
+    console.log('toAddress:', toAddress,
+    '\n data:', data,
+    '\n gasLimit:', gasLimit,
+    '\n fee:', fee);
+
     const web3 = this.getWeb3();
     if (!web3.utils.isAddress(toAddress)) {
       return { status: 0, message: 'messages.ethereum.error.invalid_address2' };
     }
 
-    try {
+     try {
 
       let balance = await web3.eth.getBalance(this.address);
-      balance = await Web3.utils.fromWei(balance.toString());
+      balance = await web3.utils.fromWei(balance.toString());
 
       if (balance == 0 || balance <= amountToSend) {
         return { status: 0, message: 'messages.ethereum.error.insufficient' };
       }
 
-      const gasPrice = new BN(await web3.eth.getGasPrice());
+      if(!fee){
+        fee = await this.getGasPrice(3);
+      }
+      let gasPrice = new BN(Number(fee) * 1000000000);// converts the gwei price to wei;
+
       const estimateGas = new BN(balance).div(gasPrice);
-      const limitedGas = 210000;
+      const limitedGas = gasLimit;
       const estimatedGas = await BN.min(estimateGas, limitedGas);
       const chainId = await web3.eth.net.getId();
 
-      console.log('transfer gasPrice->', parseInt(gasPrice));
-      console.log('transfer estimatedGas->', String(estimatedGas));
-      console.log('transfer limitedGas->', String(limitedGas));
-      console.log('transfer chainid->', chainId);
-      //console.log('transfer payloadData', payloadData);
+      console.log('transfer gasPrice:', parseInt(gasPrice),
+      '\n estimatedGas:', String(estimatedGas),
+      '\n limitedGas:', String(limitedGas),
+      '\n chainid:', chainId);
 
-      const totalAmountFee = Number(amountToSend)+Number(web3.utils.fromWei(String(limitedGas * gasPrice)));
-      if(totalAmountFee > balance) {
-        console.log(totalAmountFee, balance, Number(web3.utils.fromWei(String(limitedGas * gasPrice))));
+      const totalEstimatedGas = limitedGas * gasPrice;
+      const totalAmountFee = Number(amountToSend)+Number(web3.utils.fromWei(String(totalEstimatedGas)));
+
+      console.log('totalAmountFee:', totalAmountFee,
+      '\n balance=', balance,
+      '\n gasLimit=', gasLimit,
+      '\n totalEstimatedGas=', totalEstimatedGas, Number(web3.utils.fromWei(String(totalEstimatedGas))),
+      '\n amountToSend=', amountToSend);
+
+      if(totalAmountFee > Number(balance)) {
         return { status: 0, message: 'messages.ethereum.error.insufficient_gas' };
       }
 
@@ -137,25 +279,26 @@ export class Ethereum extends Wallet {
         const rawTx = {
           nonce: web3.utils.toHex(nonce),
           gasPrice: web3.utils.toHex(gasPrice),
-          gasLimit: estimatedGas,
-          data: "",
+          gasLimit: web3.utils.toHex(estimatedGas),
+          data: data,
           from: this.address,
           chainId: this.chainId,
           to: toAddress,
+          value: Web3.utils.toHex(web3.utils.toWei(String(amountToSend || 0), 'ether'))
         };
         console.log('rawTx->', rawTx);
         const tx = new Tx(rawTx);
-        if (amountToSend) {
-          tx.value = Web3.utils.toHex(web3.utils.toWei(String(amountToSend), 'ether'));
-        }
+        console.log('tx.value->', tx.value);
         tx.sign(Buffer.from(this.privateKey, 'hex'));
+        console.log('tx.sign->...', tx);
         const serializedTx = tx.serialize();
         const rawTxHex = `0x${serializedTx.toString('hex')}`;
+        console.log('trawTxHex->', rawTxHex);
         return new Promise((resolve, reject) => {
           web3.eth
             .sendSignedTransaction(rawTxHex)
             .on('transactionHash', (hash) => {
-
+              console.log('hash->', hash);
               resolve({ status: 1, message: 'messages.ethereum.success.transaction',
                 data: {hash: hash}
               });
@@ -170,7 +313,6 @@ export class Ethereum extends Wallet {
         console.log("error", error);
         return { status: 0, message: 'messages.ethereum.error.insufficient' };
       });
-
     } catch (error) {
       console.log("error", error);
       return { status: 0, message: 'messages.ethereum.error.insufficient' };
@@ -191,7 +333,6 @@ export class Ethereum extends Wallet {
       });
     return nonce;
   };
-
 
   // Transction history....
   getAPIUrlAddress(tab) {
@@ -219,10 +360,10 @@ export class Ethereum extends Wallet {
     }
   }
 
-  async getTransactionHistory(pageno) {
+  async getTransactionHistory(pageno, offset=20) {
     let result = [];
     const API_KEY = configs.network[4].apikeyEtherscan;
-    const url = `${this.constructor.API[this.getNetworkName()]}?module=account&action=txlist&address=${this.address}&startblock=0&endblock=99999999&page=${pageno}&offset=20&sort=desc&apikey=${API_KEY}`;
+    const url = `${this.constructor.API[this.getNetworkName()]}?module=account&action=txlist&address=${this.address}&startblock=0&endblock=99999999&page=${pageno}&offset=${offset}&sort=desc&apikey=${API_KEY}`;
     const response = await axios.get(url);
     if (response.status == 200) {
       result = response.data.result;
@@ -282,7 +423,7 @@ export class Ethereum extends Wallet {
   }
 
   formatNumber(value, decimal=6){
-    let result = 0, count = 0;
+    let result = value, count = 0;
     try {
       if(!isNaN(value)) result = Number(value);
 
@@ -293,7 +434,7 @@ export class Ethereum extends Wallet {
         result = Number(value).toFixed(decimal);
     }
     catch(e) {
-      result = 0;
+      result = value;
     }
 
     return result;

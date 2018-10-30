@@ -13,6 +13,7 @@ import discoverIcon from '@/assets/images/navigation/ic_atm.svg.raw';
 import chatIcon from '@/assets/images/navigation/ic_prediction.svg.raw';
 import walletIcon from '@/assets/images/navigation/ic_wallet.svg.raw';
 import shopIcon from '@/assets/images/navigation/ic_shop.svg.raw';
+import investIcon from '@/assets/images/navigation/ic_invest.svg.raw';
 
 class Navigation extends React.Component {
   static propTypes = {
@@ -52,18 +53,18 @@ class Navigation extends React.Component {
     return (
       <footer className="footer">
         <ul>
-          <li className={cn(this.checkSelected(URL.BUY_BY_CC_URL))}>
-            <Link to={URL.BUY_BY_CC_URL} onClick={this.props.clearHeaderBack}>
+          <li className={cn(this.checkSelected(URL.BUY_COIN_URL))}>
+            <Link to={URL.BUY_COIN_URL} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: creditIcon }} />
-              <span>{this.props.intl.messages.app.navigation.credit.toUpperCase()}</span>
+              <span>{this.props.intl.messages.app.navigation.ninjaCoin.toUpperCase()}</span>
             </Link>
           </li>
-          <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.CASH_STORE_URL]))}>
-            <Link to={URL.HANDSHAKE_ATM} onClick={this.props.clearHeaderBack}>
-              <div dangerouslySetInnerHTML={{ __html: discoverIcon }} />
-              <span>{this.props.intl.messages.app.navigation.atm.toUpperCase()}</span>
-            </Link>
-          </li>
+          {/*<li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.CASH_STORE_URL]))}>*/}
+            {/*<Link to={URL.HANDSHAKE_ATM} onClick={this.props.clearHeaderBack}>*/}
+              {/*<div dangerouslySetInnerHTML={{ __html: discoverIcon }} />*/}
+              {/*<span>{this.props.intl.messages.app.navigation.atm.toUpperCase()}</span>*/}
+            {/*</Link>*/}
+          {/*</li>*/}
           <li className={cn(this.checkSelected(URL.PRODUCT_PREDICTION_URL))}>
             <Link to={URL.PRODUCT_PREDICTION_URL} onClick={this.props.clearHeaderBack}>
               <div className="chat-icon" dangerouslySetInnerHTML={{ __html: chatIcon }} />
@@ -80,6 +81,12 @@ class Navigation extends React.Component {
             <Link to={URL.SHOP_URL_INDEX} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: shopIcon }} />
               <span>{this.props.intl.messages.app.navigation.shop.toUpperCase()}</span>
+            </Link>
+          </li>
+          <li className={cn(this.checkSelected(URL.INVEST_URL))}>
+            <Link to={URL.INVEST_URL} onClick={this.props.clearHeaderBack}>
+              <div className="chat-icon" dangerouslySetInnerHTML={{ __html: investIcon }} />
+              <span>{this.props.intl.messages.app.navigation.bet.toUpperCase()}</span>
             </Link>
           </li>
           <li className={cn(this.checkSelected([URL.HANDSHAKE_ME_INDEX]))}>

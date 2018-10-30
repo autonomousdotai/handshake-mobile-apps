@@ -113,6 +113,15 @@
   height: 100%;
   padding: 0 15px;
   background-color: $gray;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .CreateEventForm {
+    padding-bottom: 50px;
+  }
 
   .form-control {
     height: 46px;
@@ -129,6 +138,25 @@
   }
   .react-select__control--is-disabled {
     background-color: #e9ecef;
+  }
+
+  .PrivateOption {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5px;
+
+    .text {
+      padding: 0 5px;
+    }
+
+    label {
+      margin-bottom: 0;
+    }
+
+    img {
+      width: 20px;
+    }
   }
 }
 
@@ -307,9 +335,11 @@
   margin: 0 -15px 5px -15px;
   padding: 15px;
   background-color: #ffffff;
-  > .CreateEventFormGroupTitle:first-child {
+
+  .CreateEventFormGroupTitle {
     font-size: rem-calc(16px);
   }
+
   button.AddMoreOutCome {
     color: #2456FB;
     font-size: rem-calc(16px);
@@ -334,7 +364,7 @@
 
 // Share Market
 .ShareMarketContainer {
-  padding: 40px 20px;
+  padding: 40px 10px;
   text-align: center;
 
   .checkmark {
@@ -378,7 +408,8 @@
 
   .ShareEventMessage {
     position: relative;
-    padding-bottom: 80px;
+    padding-bottom: 60px;
+    font-size: 15px;
     &:after {
       content: '';
       display: inline-block;
@@ -386,15 +417,20 @@
       background-color: #E4E4E4;
       width: 100px;
       position: absolute;
-      bottom: 40px;
+      bottom: 30px;
       left: 50%;
       margin-left: -50px;
     }
   }
 
+  .ViewSharedEvent {
+    color: #007bff !important;
+  }
+
   .ShareEventToBuddies {
     .ShareEventToBuddiesTitle {
       margin-bottom: 20px;
+      margin-top: 20px;
     }
     .share-social {
       display: flex;

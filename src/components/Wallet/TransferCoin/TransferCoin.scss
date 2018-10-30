@@ -1,8 +1,34 @@
-.iconSuccessChecked{
-  margin-bottom: 1px;
-  margin-right: 5px;
+.walletNotFound{
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 2rem 0;
 }
+
 .sendwallet-wrapper{
+
+  .rangeslider-horizontal {
+    .rangeslider__fill {
+      background-color: #607bed;
+    }
+    .rangeslider__handle{
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 -1px 2px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .maxAmount{
+    color:#007bff;
+    text-align: right;
+    margin: 10px 0;
+    font-weight:400;
+  }
+
+  ul.rangeslider__labels .rangeslider__label-item:first-child {
+    padding-right: 20px;
+  }
+  .fee-level-box{
+    height: 45px;
+    margin-top: -5px;
+  }
 
   margin: auto;
   width: 100%;
@@ -118,11 +144,12 @@
 
 .div-amount {
   padding-bottom: 10px;
+  position: relative;
 
   .prepend{
-    padding-top: 11px;
+    padding-top: 10px;
     position: absolute;
-    right: 50px;
+    right: 10px;
     color: #7b7b7b;
   }
 
@@ -269,17 +296,35 @@
 
   .address{
     font-size: 1rem;
+    font-weight:300;
+    color:black;
   }
+
   .col-2, .col-5, .col-6, .col-4{
     padding: 0 0.5rem;
     line-height: 1.9;
   }
+}
 
-
-
-  @media (max-width: 330px){
+@media (max-width: 330px){
+  .walletSelected {
     .col-5{
       flex: 0 0 60%;
+    }
+
+    .lastCol{
+      margin-left: 16.5%;
+      text-align: left;
+
+      .arrow{
+        top: 0;
+        padding-right: 0;
+      }
+    }
+
+    .col-5{
+      flex:none;
+      max-width: 83%;
     }
 
     .balance{
@@ -288,6 +333,13 @@
 
     .arrow{
       float: right;
+    }
+  }
+
+  .sendwallet-wrapper{
+    .fee-level-box{
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
   }
 }

@@ -35,7 +35,6 @@ import './Discover.scss';
 import { showPopupGetGPSPermission } from '@/reducers/app/action';
 import local from '@/services/localStore';
 import Modal from '@/components/core/controls/Modal/Modal';
-// import _debounce from 'lodash/debounce';
 import AtmCashTransfer from '@/components/handshakes/exchange/AtmCashTransfer';
 import CreateStoreATM, { CASH_ATM_TAB } from '@/components/handshakes/exchange/Create/CreateStoreATM';
 import moment from "moment/moment";

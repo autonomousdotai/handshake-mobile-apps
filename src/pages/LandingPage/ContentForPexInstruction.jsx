@@ -133,7 +133,7 @@ class ContentForPexInstruction extends React.Component {
   renderStep4() {
     return (
       <div className="wrapperGuideStep">
-        <div className="stepNumber">4</div>
+        <div className="stepNumber">3</div>
         <div className="pexHeadline">Place a bet.</div>
         <p className="content">Open <a href="https://ninja.org/pex">ninja.org/pex</a></p>
         <p className="content">First, pick an <strong>event</strong> (i.e. Man. City— Newcastle), the <strong>outcome</strong> (Man. City wins) and the side (support or bet against the outcome).</p>
@@ -164,7 +164,7 @@ class ContentForPexInstruction extends React.Component {
   renderStep5() {
     return (
       <div className="wrapperGuideStep">
-        <div className="stepNumber">5</div>
+        <div className="stepNumber">4</div>
         <div className="pexHeadline">Wait for the result.</div>
         <p className="content">Once the event ends, the reporter of the market will report the result within the reporting window (set by the market creator).</p>
         <div className="wrapperGuideCenter wrapperImages imageBlock" >
@@ -195,7 +195,7 @@ class ContentForPexInstruction extends React.Component {
             {this.renderTopContent()}
             {this.renderStep1()}
             {this.renderStep2()}
-            {this.renderStep3()}
+            {/*this.renderStep3()*/}
             {this.renderStep4()}
             {this.renderStep5()}
           </div>

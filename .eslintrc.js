@@ -1,7 +1,7 @@
 module.exports = {
   "extends": ["airbnb", "plugin:react/recommended"],
   "parser": "babel-eslint",
-  "plugins": ["react", "prettier", "import", "babel"],
+  "plugins": ["react", "import", "babel"],
   "env": {
     "node": true,
     "browser": true
@@ -38,6 +38,7 @@ module.exports = {
     "function-paren-newline": 0,
     "jsx-a11y/label-has-for": 0,
     "object-curly-newline": 0,
+    "react/sort-comp": 0,
     "import/no-unresolved": "off", // TODO[1]:
     "import/extensions": "off" // TODO[1]:
   },

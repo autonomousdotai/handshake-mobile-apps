@@ -4,7 +4,7 @@ import { GoogleMap, withGoogleMap, withScriptjs } from 'react-google-maps';
 import PropTypes from 'prop-types';
 import currentLocationIndicator from '@/assets/images/icon/current-location-indicator.png';
 import { getAddressFromLatLng } from '@/components/handshakes/exchange/utils';
-import { debounce } from 'lodash';
+import debounce from '@/utils/debounce';
 import './styles.scss';
 
 let mapInstance = null;

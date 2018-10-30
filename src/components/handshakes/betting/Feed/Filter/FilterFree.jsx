@@ -416,8 +416,6 @@ class BettingFilterFree extends React.Component {
     const { tradedVolum } = this.props;
     const selectedOutcome = this.props.selectedOutcome ? this.props.selectedOutcome : SELECTING_DEFAULT;
     const selectedMatch = this.props.selectedMatch ? this.props.selectedMatch : SELECTING_DEFAULT;
-    console.log('Selected Outcome:', selectedOutcome);
-    console.log('Selected Match:', selectedMatch);
 
 
     const outcomeId = (selectedOutcome && selectedOutcome.id >= 0) ? selectedOutcome.id : null;

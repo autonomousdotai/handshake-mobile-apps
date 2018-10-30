@@ -46,9 +46,10 @@ export const HANDSHAKE_ID = { // important
   WALLET_RECEIVE: 8,
   CREATE_EVENT: 9,
   CREDIT: 10,
+  NINJA_COIN: 22,
 };
 
-export const HANDSHAKE_ID_DEFAULT = 3;
+export const HANDSHAKE_ID_DEFAULT = HANDSHAKE_ID.BETTING;
 
 export const HANDSHAKE_NAME = {
   // [HANDSHAKE_ID.PROMISE]: { name: 'Promise', priority: 3 },
@@ -200,6 +201,8 @@ export const API_URL = {
     INIT_HANDSHAKE_FREE: 'cryptosign/handshake/create_free_bet',
     SHAKE: 'cryptosign/handshake/shake',
     LOAD_MATCHES: 'cryptosign/match',
+    LOAD_MATCHES_DETAIL: 'cryptosign/match',
+    RELEVANT_EVENTS: 'cryptosign/match/relevant-event',
     MATCHES_REPORT: 'cryptosign/match/report',
     COUNT_REPORT: 'cryptosign/match/report',
     ADMIN_MATCHES: 'cryptosign/admin/match/report',
@@ -207,7 +210,7 @@ export const API_URL = {
     LOAD_HANDSHAKES: 'cryptosign/handshake',
     LOAD_REPORTS: 'cryptosign/source',
     LOAD_CATEGORIES: 'cryptosign/category',
-    CHECK_FREE_AVAILABLE: 'cryptosign/handshake/check_free_bet',
+    CHECK_REDEEM_CODE: 'cryptosign/handshake/check_redeem_code',
     UNINIT_HANDSHAKE: 'cryptosign/handshake/uninit',
     UNINIT_HANDSHAKE_FREE: 'cryptosign/handshake/uninit_free_bet',
     COLLECT: 'cryptosign/handshake/collect',
@@ -258,7 +261,13 @@ export const API_URL = {
     CASH_STORE_ATM: 'exchange/cash/store',
     CRYPTO_TO_CASH: 'exchange/cash/price', // GET /cash/price?amount=1&currency=ETH
     SEND_ATM_CASH_TRANSFER: 'exchange/cash/order',
+    CANCEL_ATM_CASH_TRANSFER: 'exchange/cash/order', // DELETE /cash/order/{id}
     GET_CASH_CENTER_BANK: 'exchange/cash/center', // GET /cash/center/HK (HK === country code)
+    BUY_CRYPTO_ORDER: 'exchange/coin/order', // POST /coin/order
+    BUY_CRYPTO_GET_COIN_INFO: 'exchange/coin/quote', // GET /coin/quote?amount=0.1&currency=ETH&fiat_currency=VND
+    BUY_CRYPTO_GET_BANK_INFO: 'exchange/coin/center', // GET /coin/center/XX
+    BUY_CRYPTO_SAVE_RECEIPT: 'exchange/coin/order', // POST /coin/{id}
+    BUY_CRYPTO_QUOTE_REVERSE: 'exchange/coin/quote-reverse', // GET /coin/quote-reverse?fiat_amount=20000000&currency=ETH&fiat_currency=VND&type=cod
   },
   SEED: {
     BASE: 'seed',
@@ -287,10 +296,20 @@ export const API_URL = {
   USER: {
     PROFILE: 'user/profile',
     CHECK_EXIST_EMAIL: 'user/check-email-exist',
+    ID_VERIFICATION: 'user/id_verification',
   },
   INTERNAL: {
     GET_WITHDRAW_LIST: 'exchange/internal/credit/withdraw',
     COMPLETE_WITHDRAW: 'exchange/internal/credit/withdraw',
+    GET_CASH_ORDER: 'exchange/cash/order', // `GET /cash/order?status=processing|tranferring|success`
+    GET_COIN_ORDER: 'exchange/coin/order', // `GET /cash/order?status=processing|tranferring|success`
+    GET_SELLING_COIN_ORDER: 'exchange/coin/selling-order', // `GET /cash/order?status=processing|tranferring|success`
+    REVIEW_COIN_ORDER: 'exchange/coin/review', // `GET /cash/order?status=processing|tranferring|success`
+  },
+  ID_VERIFICATION: {
+    LIST_DOCUMENTS: 'id_verification/list',
+    UPDATE_STATUS: 'id_verification/update',
+    GET_DOCUMENT: 'id_verification/get',
   },
 };
 
@@ -530,6 +549,7 @@ export const URL = {
   INDEX: '/',
 
   ADMIN: '/admin',
+  ADMIN_ID_VERIFICATION: '/admin/id-verification',
   REPORT: '/report',
   RESOLVE: '/resolve',
   LUCKY_POOL: '/lucky',
@@ -561,11 +581,17 @@ export const URL = {
   HANDSHAKE_CHAT_DETAIL: '/whisper/:userId',
   HANDSHAKE_CHAT_ROOM_DETAIL: '/whisper/room/:roomId',
 
+  WALLET_EXTENSION: '/wallet-extension',
   HANDSHAKE_WALLET: '/wallet',
   HANDSHAKE_WALLET_INDEX: '/wallet',
 
+  HANDSHAKE_PAYMENT_TRANSFER: '/payment/transfer',
+  HANDSHAKE_PAYMENT_TRANSFER_INDEX: '/payment/transfer',
+
   HANDSHAKE_PAYMENT: '/payment',
   HANDSHAKE_PAYMENT_INDEX: '/payment',
+
+
 
   HANDSHAKE_CREATE: '/create',
   HANDSHAKE_CREATE_INDEX: '/create',
@@ -579,6 +605,7 @@ export const URL = {
   COMMENTS_BY_SHAKE: '/comments',
   COMMENTS_BY_SHAKE_INDEX: '/comments',
 
+  LANDING_PAGE_CONSTANT: '/constant',
   LANDING_PAGE_SHURIKEN: '/shuriken',
   LANDING_PAGE_SHURIKEN_INDEX: '/shuriken',
 
@@ -596,6 +623,7 @@ export const URL = {
   ATM_FOR_BUSINESS: '/atm-for-business',
   PRODUCT_PREDICTION_URL: '/prediction',
   PEX_INSTRUCTION_URL: '/pex/instructions',
+  PEX_LUCKY_DRAW_MECHANIC_URL: '/pex/luckydraw',
   PRODUCT_WALLET_URL: '/wallet',
   PRODUCT_PAYFORSTORES_URL: '/pay-for-stores',
   PRODUCT_PAYFORDEVS_URL: '/pay-for-devs',
@@ -612,6 +640,8 @@ export const URL = {
 
   CC_PAYMENT_URL: '/cc-payment',
   BUY_BY_CC_URL: '/buy-by-credit-card',
+  BUY_COIN_URL: '/coin',
+  BUY_COIN_FAQ_URL: '/coin/faq',
 
   ESCROW_WITHDRAW_SUCCESS: '/escrow/withdraw/success',
 
@@ -621,6 +651,7 @@ export const URL = {
   SHOP_URL_DETAIL: '/shop/:slug',
 
   INTERNAL_WITHDRAW_URL: '/d2l0aGRyYXdfZm9yX2dvZA/:superKey',
+  INTERNAL_ADMIN_URL: '/admin/coin/:type',
   CASH_STORE_URL: '/cash_store',
   LANDING_BECOME_ATM: '/become-atm',
 
@@ -632,6 +663,7 @@ export const URL = {
   INVEST_INVESTING_LIST: '/invest/investing',
 
 
+  INTERNAL_ADMIN_DASHBOARD_URL: '/internal-admin-dashboard',
 };
 
 export const LANDING_PAGE_TYPE = {
@@ -964,6 +996,7 @@ export const Country = {
   AN: 'ANG',
 };
 
+export const PAYMENT_REMIND = 'payment_remind';
 export const CUSTOMER_ADDRESS_INFO = 'CUSTOMER_ADDRESS_INFO';
 export const AUTONOMOUS_END_POINT = {
   BASE: 'https://www.autonomous.ai/api-v2',
@@ -1224,4 +1257,9 @@ export const COUNTRY_LIST = {
   "ZM": "ZM - Zambia",
   "ZR": "ZR - Zaire",
   "ZW": "ZW - Zimbabwe"
+}
+
+export const EXT = {
+  URL: 'https://chrome.google.com/webstore/detail/ninja-prediction/lmbfnjfjefcjgbddmaijlmkkpfipbjhb',
+  CLIP_SOURCE: 'https://www.youtube.com/embed/Cpswr7hGtiA?rel=0&amp;autoplay=1&amp;loop=1&playlist=Cpswr7hGtiA'
 }

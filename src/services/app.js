@@ -1,5 +1,4 @@
 import React from 'react';
-import uuidv1 from 'uuid/v1';
 import DynamicImport from '@/components/App/DynamicImport';
 
 export const createDynamicImport = (load, loading, isNotFound = false) => {
@@ -11,6 +10,4 @@ export const createDynamicImport = (load, loading, isNotFound = false) => {
   return dynamicImport;
 };
 
-export const uuid = () => uuidv1();
-
-export default { createDynamicImport, uuid };
+export default { createDynamicImport };

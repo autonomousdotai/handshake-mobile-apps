@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import _sample from 'lodash/sample';
 import { BigNumber } from 'bignumber.js';
 
 import Feed from '@/components/core/presentation/Feed/Feed';
@@ -47,7 +46,6 @@ class FeedMe extends React.PureComponent {
       modalContent: '',
       numStars: 0,
     };
-    this.mainColor = _sample(feedBackgroundColors);
   }
 
   showLoading = () => {

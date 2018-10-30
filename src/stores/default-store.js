@@ -1,5 +1,9 @@
 export default {
-  prediction: {},
+  prediction: {
+    events: [],
+    relevantEvents: [],
+  },
+  predictionDetail: {},
   reports: {},
   categories: {},
   orderPlace: {},
@@ -9,9 +13,9 @@ export default {
     shareEvent: null,
     isCreateEventLoading: false,
     countReport: 0,
-    freeBet: {},
     isExistEmail: false,
     totalBets: 0,
+    isRedeemAvailable: 0,
   },
   blockChain: {
     insufficientGas: null,

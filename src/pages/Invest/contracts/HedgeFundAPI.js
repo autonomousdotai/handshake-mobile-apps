@@ -1,6 +1,6 @@
 const PrivateKeyProvider = require('truffle-privatekey-provider')
 const Web3js = require('web3')
-const NetworkAPI = require('./NetworkAPI')
+import NetworkAPI from './NetworkAPI';
 const axios = require('axios')
 /*
   Note:
@@ -249,4 +249,5 @@ class HedgeFundAPI extends NetworkAPI {
   }
 }
 
-module.exports = HedgeFundAPI
+// module.exports = HedgeFundAPI
+export default HedgeFundAPI;
