@@ -704,7 +704,6 @@ class BuyCryptoCoin extends React.Component {
   }
 
   render() {
-    console.log('STATE', this.state);
     const { authProfile: { idVerified }, className } = this.props;
     const { messages } = this.props.intl;
     const { coinMoneyExchange, paymentMethod } = this.props;

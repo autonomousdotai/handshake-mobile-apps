@@ -1,23 +1,48 @@
-.review-list {
-  background: #F5F8FC;
-  .review {
-    margin: 10px;
-    .review-content {
+.review-list-container {
+  .review-list {
+    background: #F5F8FC;
+    padding: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    .review {
+      padding: 10px 20px;
       display: flex;
-      flex-direction: column;
-      padding: 0px 10px;
-      .name {
-        font-family: MotivaSans-Regular;
-        font-size: 14px;
-        color: #748599;
-        letter-spacing: 0;
+      align-items: flex-start;
+      flex-direction: row;
+      >:first-child {
+        width: 40px;
       }
-      .content {
-        font-family: AzoSans-Regular;
-        font-size: 14px;
-        color: #0A2240;
-        letter-spacing: 0;
+      .review-content {
+        width: calc(100% - 45px);
+        display: flex;
+        flex-direction: column;
+        padding: 0px 10px;
+        .name {
+          font-size: 14px;
+          color: #748599;
+          letter-spacing: 0;
+        }
+        .content {
+          font-size: 14px;
+          color: #0A2240;
+          letter-spacing: 0;
+          word-break: break-all;
+        }
       }
     }
+  }
+  button {
+    color: white;
+    font-size: 13px;
+    border: none;
+    width: 100%;
+    background: #2989FF;
+    border-radius: 4px 4px 4px 4px;
+    font-weight: 500;
+    letter-spacing: 0;
+    cursor: pointer;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    padding: 5px;
   }
 }

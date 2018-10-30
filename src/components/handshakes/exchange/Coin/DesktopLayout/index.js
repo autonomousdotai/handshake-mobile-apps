@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Header from './Header';
 import PricePanel from './PricePanel';
 import Contact from './Contact';
+import Review from '@/components/handshakes/exchange/Coin/ReviewList';
 import './styles.scss';
 
 const scopedCss = (className) => `crypto-coin-desktop-${className}`;
@@ -20,6 +21,7 @@ class CoinDesktop extends Component {
             </div>
             <div className={scopedCss('right-container')}>
               <Contact />
+              <Review />
             </div>
           </div>
         </div>

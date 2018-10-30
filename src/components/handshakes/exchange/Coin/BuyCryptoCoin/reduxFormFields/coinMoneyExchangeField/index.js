@@ -8,7 +8,6 @@ const coinMoneyExchangeField = ({ input, currency, paymentMethod, meta }) => {
   const { onChange, onBlur, onFocus } = input;
   const { error, touched } = meta;
   const shouldShowError = !!(touched && error);
-
   return (
     <div className="coin-money-exchange-field">
       <CoinMoneyExchange

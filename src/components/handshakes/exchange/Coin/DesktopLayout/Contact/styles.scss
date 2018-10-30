@@ -1,4 +1,5 @@
 .crypto-coin-contact-container {
+  margin-bottom: 30px;
   background: #F5F8FC;
   padding: 10px;
   .crypto-coin-contact-item {
@@ -7,7 +8,8 @@
     padding: 10px;
     margin: 5px;
     background-color: white;
-    border-radius: 3px;
+    box-shadow: 0 2px 4px 0 rgba(203,203,203,0.50);
+    border-radius: 4px;
     > img {
       width: 20px;
       height: 20px;
