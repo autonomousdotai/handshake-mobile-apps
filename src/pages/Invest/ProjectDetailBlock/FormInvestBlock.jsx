@@ -132,6 +132,7 @@ class FormInvestBlock extends Component {
               </div>}
             {this.state.estimateGasValue && <div>
               <div style={{ textAlign: 'center' }}>{`Congrats! Please say “Yes” to invest with ${this.props.trader}`}</div>
+              <div style={{ textAlign: 'center' }}>{`Note: You could vote to stop investing while the project is running`}</div>
               <div style={{ textAlign: 'center' }}>{`ETH Fee: ${this.state.estimateGasValue}`}</div>
               <button style={{ margin: '5%', display: 'inline-block', width: '40%', backgroundColor: '#546FF7', color: '#fff', fontWeight: 500, padding: '10px' }} onClick={this.handleCancelTransaction}>No</button>
               <button style={{ margin: '5%', display: 'inline-block', width: '40%', backgroundColor: '#546FF7', color: '#fff', fontWeight: 500, padding: '10px' }} onClick={this.handleConfirmTransaction} disabled={this.state.isUserConfirmed}>Yes</button>
