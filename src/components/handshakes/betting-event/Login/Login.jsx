@@ -54,6 +54,11 @@ class Login extends React.Component {
         localStorage.setItem('Token', token);
         localStorage.setItem('TokenInit', new Date());
         sessionStorage.setItem('admin_hash', md5(`${email}/${password}`));
+
+        // callback called if login successfully
+        if (typeof this.props?.onLoggedIn === 'function') {
+          this.props.onLoggedIn();
+        }
       }),
     });
   }
