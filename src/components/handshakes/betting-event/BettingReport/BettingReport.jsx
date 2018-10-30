@@ -122,10 +122,8 @@ class BettingReport extends React.Component {
         final.push(obj);
         return final;
       });
-      //const newOutcome = resolved ? updatedMatch[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : updatedMatch[0].outcomes;
       const newOutcome = updatedMatch[0].outcomes;
 
-      //console.log(TAG, 'newOutcome:', newOutcome);
       this.setState({
         outcomes: newOutcome,
         activeMatchData: updatedMatch[0],
@@ -204,83 +202,106 @@ class BettingReport extends React.Component {
       reportChecked: !reportChecked,
     });
   }
-  onSubmit= async (event) => {
-    const radios = [];
-    if (localStorage.getItem('disable') === false) {
-      return null;
-    }
-    if (this.state.outcomes && this.state.outcomes.length === 0) {
-      return null;
-    }
-    if (document.getElementsByTagName('form')) {
-      const inputs = document.getElementsByTagName('form')[0].elements;
-      // Loop and find only the Radios
-      for (let i = 0; i < inputs.length; ++i) {
-        if (inputs[i].type == 'radio') {
-          radios.push(inputs[i]);
+  validateData = ()=> {
+    if (!this.state.reportChecked) {
+      const radios = [];
+      if (localStorage.getItem('disable') === false) {
+        return null;
+      }
+      if (this.state.outcomes && this.state.outcomes.length === 0) {
+        return null;
+      }
+      if (document.getElementsByTagName('form')) {
+        const inputs = document.getElementsByTagName('form')[0].elements;
+        // Loop and find only the Radios
+        for (let i = 0; i < inputs.length; ++i) {
+          if (inputs[i].type == 'radio') {
+            radios.push(inputs[i]);
+          }
         }
       }
-    }
-    const valid = radios.length > 0 && radios.map((item) => {
-      if (item.checked) {
-        return true;
+      const valid = radios.length > 0 && radios.map((item) => {
+        if (item.checked) {
+          return true;
+        }
+        return false;
+      });
+      const trueValues = valid.filter(item => item == true);
+      if (trueValues.length < radios.length / 3) {
+
+        return { status: false, message: 'Please select atleast 1 option in each row.'};
       }
-      return false;
-    });
-    const trueValues = valid.filter(item => item == true);
-    if (trueValues.length < radios.length / 3) {
-      this.props.showAlert({
-        message: <div className="text-center">Please select atleast 1 option in each row.</div>,
+    }
+    return { status: true, message: '' };
+  }
+  onSubmit= async (event) => {
+    const validData = this.validateData();
+    if (!validData.status) {
+      this.props.showAlert ({
+        message: <div className="text-center">{validData.message}</div>,
         timeOut: 3000,
         type: 'danger',
         callBack: () => {},
       });
-    } else {
-      const { isAdmin } = this.props;
-      const isValid = await this.validate(this.state.final);
-      console.log(TAG, 'isValide:', isValid);
-      const { status, message } = isValid;
-      if (status) {
-
-        const tokenValue = token || this.checkToken();
-        const authenticate = { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' };
-        const headers = isAdmin ? authenticate : null;
-        console.log('Final State:', this.state.final);
-
-        const url = isAdmin ? `${BASE_API.BASE_URL}/cryptosign/admin/match/report/${this.state.activeMatchData.id}` :
-                    `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
-
-        const submit = $http({
-          url,
-          data: {
-            result: this.state.final,
-          },
-          //qs: { dispute: resolved ? 1 : 0 },
-          headers: headers,
-          method: 'post',
-        });
-
-
-        submit.then((response) => {
-          response.data.status === 1 && this.setState({
-            disable: true,
-          });
-
-          response.data.status === 1 && this.onReportSuccess(response);
-
-          response.data.status === 0 && this.onReportFailed(response);
-        });
-
-      } else {
-        this.props.showAlert({
-          message: <div className="text-center">{message}</div>,
-          timeOut: 3000,
-          type: 'danger',
-          callBack: () => {
-          },
-        });
-      }
+      return;
     }
+    const { isAdmin } = this.props;
+    const isValid = await this.validate(this.state.final);
+    const { status, message } = isValid;
+    if (status) {
+
+      const tokenValue = token || this.checkToken();
+      const authenticate = { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' };
+      const headers = isAdmin ? authenticate : null;
+      let result = this.state.final;
+
+      if (this.state.reportChecked) {
+        const finalCopy = [];
+
+        this.state.outcomes.forEach(item => {
+          const newItem = Object.assign({}, item);
+          newItem.side = BETTING_RESULT.DRAW;
+
+          finalCopy.push(newItem);
+        });
+        result = finalCopy;
+      }
+
+
+      const url = isAdmin ? `${BASE_API.BASE_URL}/cryptosign/admin/match/report/${this.state.activeMatchData.id}` :
+                  `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
+
+      const submit = $http({
+        url,
+        data: {
+          result,
+        },
+        headers: headers,
+        method: 'post',
+      });
+
+
+      submit.then((response) => {
+        response.data.status === 1 && this.setState({
+          disable: true,
+        });
+
+        response.data.status === 1 && this.onReportSuccess(response);
+
+        response.data.status === 0 && this.onReportFailed(response);
+      });
+
+
+    } else {
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        },
+      });
+    }
+
   }
   onReportSuccess = (response) => {
     this.disablePage();
@@ -307,18 +328,22 @@ class BettingReport extends React.Component {
 
   }
   onChangeFinal=(item, result) => {
-    console.log(item, result);
-    const finalCopy = [...this.state.outcomes];
-    finalCopy.map((outcomeItem) => {
-      if (outcomeItem.id === item.id) {
-        outcomeItem.side = result;
-        outcomeItem.outcome_id = item.id;
-      }
-      return outcomeItem;
-    });
-    this.setState({
-      final: finalCopy,
-    });
+    if (!this.state.reportChecked) {
+
+      let finalCopy = Array.from(Object.create(this.state.outcomes));
+      finalCopy.map((outcomeItem) => {
+        if (outcomeItem.id === item.id) {
+          outcomeItem.side = result;
+          outcomeItem.outcome_id = item.id;
+        }
+        return outcomeItem;
+      });
+
+      this.setState({
+        final: finalCopy,
+      });
+    }
+
   }
   renderCheckNotHappend = () => {
     return (
@@ -351,6 +376,7 @@ class BettingReport extends React.Component {
     );
   }
   renderOucomes() {
+    const disabled = this.state.reportChecked ? true : false;
     return (
       <div className="wrapperOutcomes">
         <Label for="outcomeSelect">Outcomes</Label><br />
@@ -359,13 +385,13 @@ class BettingReport extends React.Component {
           <div className="result">
             <FormGroup check>
               <Label check>
-                <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
+                <Input type="radio" disabled={disabled} name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
               Support
               </Label>
             </FormGroup>
             <FormGroup check>
               <Label check>
-                <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
+                <Input type="radio" disabled={disabled} name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
               Oppose
               </Label>
             </FormGroup>
