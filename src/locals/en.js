@@ -326,7 +326,7 @@ export default {
   'escrow.label.yourSellingPrice': 'Your selling price',
   'escrow.label.sellingPriceCaption': '= Market price + your percentage',
   'escrow.btn.depositNow': 'Deposit now',
-  'escrow.btn.depositSuccessMessage': 'Succesful!',
+  'escrow.btn.depositSuccessMessage': 'Successful!',
   'escrow.label.wallet.setDefaultWallet': 'You must set default wallet {currency}',
 
   'dashboard.heading': 'Dashboard',
@@ -1932,7 +1932,7 @@ export default {
           need_selfie_verifiy: 'You are buying more than 500 usd. Please provide additional verification to increase your limit',
         },
       },
-      success: 'Succesful!',
+      success: 'Successful!',
     },
     buy_package_without_wallet_address_notice: 'Please choose your wallet first.',
   },
