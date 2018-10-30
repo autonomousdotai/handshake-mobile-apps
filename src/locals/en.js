@@ -1975,6 +1975,7 @@ export default {
     label: {
       description: 'How is your experience with Ninja Coin?',
       submitButtonTitle: 'Submit',
+      loadMore: 'Load more',
     },
   },
   sell_coin: {
