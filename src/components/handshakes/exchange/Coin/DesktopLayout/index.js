@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Header from './Header';
 import PricePanel from './PricePanel';
+import Contact from './Contact';
 import './styles.scss';
 
 const scopedCss = (className) => `crypto-coin-desktop-${className}`;
@@ -17,7 +18,9 @@ class CoinDesktop extends Component {
             <div className={scopedCss('main-container')}>
               {this.props.children}
             </div>
-            <div className={scopedCss('right-container')}>Right</div>
+            <div className={scopedCss('right-container')}>
+              <Contact />
+            </div>
           </div>
         </div>
       </div>

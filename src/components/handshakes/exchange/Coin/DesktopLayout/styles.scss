@@ -1,9 +1,5 @@
 .crypto-coin-desktop-container {
   background: white;
-  .crypto-coin-desktop-header {
-    height: 70px;
-    border: solid 1px;
-  }
   .crypto-coin-desktop-body {
     display: flex;
     justify-content: space-between;
@@ -13,7 +9,6 @@
   }
   .crypto-coin-desktop-right-container {
     width: 25%;
-    border: solid 1px;
   }
   .crypto-coin-desktop-main-container {
     width: 40%;
