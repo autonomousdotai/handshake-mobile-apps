@@ -1,0 +1,23 @@
+.review-list {
+  background: #F5F8FC;
+  .review {
+    margin: 10px;
+    .review-content {
+      display: flex;
+      flex-direction: column;
+      padding: 0px 10px;
+      .name {
+        font-family: MotivaSans-Regular;
+        font-size: 14px;
+        color: #748599;
+        letter-spacing: 0;
+      }
+      .content {
+        font-family: AzoSans-Regular;
+        font-size: 14px;
+        color: #0A2240;
+        letter-spacing: 0;
+      }
+    }
+  }
+}
