@@ -326,7 +326,7 @@ export const resetLinkWallet = () => dispatch => dispatch({ type: ACTIONS.SYNCED
 import TransactionStorage from './transactions';
 export const fetchTransactions = pid => dispatch => {
   const trxStorage = new TransactionStorage(pid);
-  const payload = trxStorage.getTransactions();
+  const payload = trxStorage.getTransactions().sort(() => -1);
   dispatch({ type: ACTIONS.FETCH_TRANSACTIONS, payload });
 }
 

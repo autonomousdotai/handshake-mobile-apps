@@ -16,6 +16,7 @@ const linkToEtherScan = (tx) => `${etherScanTxUrl}/${tx}`;
 const transformString = str => str.substring(0, 7) + '...'+ str.substring(str.length-5, str.length);
 import ProjectInfo from './ProjectDetailBlock/ProjectInfo';
 import FormInvestBlock from './ProjectDetailBlock/FormInvestBlock';
+import VoteStopBlock from './ProjectDetailBlock/VoteStopBlock';
 import OrderHistory from './ProjectDetailBlock/OrderHistory';
 export const CRYPTO_ICONS = {
   ETH: iconEthereum,
@@ -96,12 +97,14 @@ class ProjectDetail extends Component {
                 {/* <label htmlFor="" className="fund-label">Target Earning</label> */}
                 <label htmlFor="" className="fund-label">Number of investor</label>
                 <label htmlFor="" className="fund-label">Your fund</label>
+                <label htmlFor="" className="fund-label">State</label>
               </div>
               <ProjectInfo project={project} />
               </div>
             </div>
           </div>
           {isNotExpired && project.state === 'INITFUND' && <FormInvestBlock pid={project.id} trader={project.User.firstName + project.User.lastName} />}
+          {project.state === 'READY' || project.state === 'RELEASE' && <VoteStopBlock pid={project.id} trader={project.User.firstName + project.User.lastName} />}
           <OrderHistory pid={project.id} />
         </div>
     );

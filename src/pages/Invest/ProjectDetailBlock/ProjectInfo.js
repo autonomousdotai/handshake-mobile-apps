@@ -5,6 +5,16 @@ import LoadingGif from '../loading.svg';
 import WithDrawalSVG from '../withdraw.svg';
 import WithDrawalBlock from './WithDrawalBlock';
 
+const getState = (state) => {
+  switch(Number(state)) {
+    case 1: return 'FUNDING';
+    case 2: return 'READY';
+    case 3: return 'RUNNING';
+    case 4: return 'STOP';
+    case 5: return 'CLOSED';
+    default: return state;
+  }
+};
 class ProjectInfo extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +28,7 @@ class ProjectInfo extends React.Component {
     const progress = smProject ? (Number(smProject.fundingAmount || 0)/Number(smProject.target|| 1) * 100).toFixed(2) : progressPrev;
     const numFunder = smProject ? smProject.numFunder : (project.numberOfFunder || (<img src={LoadingGif} style={{ width: '50px', height: '50px' }} />));
     const fundAmount = smProject ? smProject.fundAmount : '0';
+    const state = smProject ? smProject.state : project.state;
     return (
       <div className="fund-item float-right" style={{ marginTop: '-10px' }}>
         <label htmlFor="" className="fund-item-value">{project.displayLifeTime}</label>
@@ -39,6 +50,9 @@ class ProjectInfo extends React.Component {
         <label htmlFor="" className="fund-item-value space_between">
           {fundAmount} ETH
            {fundAmount !== '0' && <img onClick={()=> this.refs['withdrawalBlock'].getWrappedInstance().onSubmitWithDrawal()} src={WithDrawalSVG} style={{ width: '20px', height: '20px' }}/>}
+        </label>
+        <label htmlFor="" className="fund-item-value">
+          {getState(state)}
         </label>
         <WithDrawalBlock pid={project.id} trader={project.User.firstName + project.User.lastName} fundAmount={fundAmount} ref={'withdrawalBlock'} />
       </div>
