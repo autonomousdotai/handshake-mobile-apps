@@ -5,6 +5,7 @@
     background: aliceblue;
     font-weight: 300;
     text-align: center;
+    font-size: 12px;
   }
   .collapse-custom {
     border-bottom: 1px solid #f0f0f0;
@@ -63,7 +64,7 @@
         font-size: 1rem;
       }
       .submit-btn {
-        width: 100%;
+        //width: 100%;
         margin-top: rem-calc(17px);
       }
       .phone-block {

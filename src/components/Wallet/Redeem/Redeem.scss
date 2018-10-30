@@ -82,8 +82,8 @@
         border-top: solid 1px #EAEAEC;        
         border-bottom: solid 1px #EAEAEC;
         .giftcard-value{
-            float: left;
-            width: 50%;            
+            // float: left;
+            // width: 50%;            
             padding: 10px 0;
         }
         .coin-value{
@@ -98,7 +98,8 @@
         }
         .v-value{
             font-weight: 400;
-            font-size: 18px;
+            font-size: 22px;
+            color: #bf4b51
         }
     }
     .error{

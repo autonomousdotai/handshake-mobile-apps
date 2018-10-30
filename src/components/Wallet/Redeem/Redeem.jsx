@@ -46,16 +46,29 @@ class Redeem extends React.Component {
   }
 
   checkRedeemCode=()=>{
+    const { messages } = this.props.intl;    
+    let data = {"code": this.state.redeemCode}
     this.props.verifyRedeemCode({
-      PATH_URL: 'user/verification/redeem-code/check?code='+this.state.redeemCode,
+      PATH_URL: 'wallet/gift-card/check',
+      data: data,
       METHOD: 'POST',
-      successFn: (res) => {        
-        if(res){
-          this.setState({data: res.data}, ()=>{            
-            this.openConfirm();
-          })
-          
-        }        
+      successFn: (res) => { 
+        this.setState({data: res.data}, ()=>{            
+          this.openConfirm();
+        })       
+        if(res && res.data){
+          if (res.data.amount > 0 && !res.data.status){
+            this.setState({data: res.data}, ()=>{            
+              this.openConfirm();
+            })
+          } 
+          else{
+            this.setState({error: messages.wallet.action.redeem.invalid_code});
+          }                   
+        }  
+        else{
+          this.setState({error: messages.wallet.action.redeem.invalid_code});
+        }      
       },
       errorFn: (e) =>{    
         this.openConfirm();     
@@ -68,7 +81,7 @@ class Redeem extends React.Component {
   }  
 
   openConfirm=()=>{
-    this.setState({contentRedeemConfirm: <RedeemConfirm data={this.state.data} />}, ()=>{
+    this.setState({contentRedeemConfirm: <RedeemConfirm onFinish={this.props.onFinish} data={this.state.data} />}, ()=>{
       this.modalRedeemConfirmRef.open();
     });
   }
@@ -97,7 +110,7 @@ class Redeem extends React.Component {
                 <Button onClick={this.checkRedeemCode}>{messages.wallet.action.redeem.button_check}</Button>
               </div>
               <div className="findcode">
-                <a href="#">
+                <a target="_blank" href="https://www.autonomous.ai/gift-card?ref=ninja-wallet-redeem">
                   {messages.wallet.action.redeem.find_code}
                 </a>            
               </div>
@@ -115,5 +128,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({  
   verifyRedeemCode: bindActionCreators(verifyRedeemCode, dispatch),   
 });
+
+RedeemConfirm.propTypes = {  
+  onFinish: PropTypes.func,
+};
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(Redeem));

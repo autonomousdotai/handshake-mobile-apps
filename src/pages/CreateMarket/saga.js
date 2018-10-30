@@ -4,7 +4,6 @@ import { API_URL, URL } from '@/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { handleLoadMatches, handleLoadMatchDetail } from '@/pages/Prediction/saga';
 import { isBalanceInvalid } from '@/stores/common-saga';
-import { getAddress } from '@/components/handshakes/betting/utils.js';
 import { showAlert } from '@/stores/common-action';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { reportSelector } from './selector';
@@ -14,8 +13,8 @@ import {
   shareEvent,
   sendEmailCode,
   verifyEmail,
-  updateEmailPut,
   verifyEmailCodePut,
+  updateProfile,
   updateCreateEventLoading,
 } from './action';
 
@@ -35,19 +34,6 @@ function* handleLoadReportsSaga({ cache = true }) {
     });
   } catch (e) {
     return console.error('handleLoadReportsSaga', e);
-  }
-}
-
-function* handleLoadCategories() {
-  try {
-    return yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.LOAD_CATEGORIES,
-      type: 'LOAD_CATEGORIES',
-      _path: 'categories',
-    });
-  } catch (e) {
-    console.error(e);
-    return null;
   }
 }
 
@@ -116,60 +102,92 @@ function* saveGenerateShareLinkToStore({ matchId, eventName }) {
   }));
 }
 
-function* handleCreateEventSaga({ values, isNew, selectedSource, grantPermission }) {
+function* handleCreateEventSaga({ values, isNew }) {
   try {
     yield put(updateCreateEventLoading(true));
-
-    if (!isNew) {
-      // Add new outcomes
-      const newOutcomeList = values.outcomes.filter(o => !o.id).map(i => Object.assign({}, i, { public: 1 }));
-      const { eventId } = values;
-      const addOutcomeResult = yield call(handleAddOutcomesSaga, {
-        eventId,
-        newOutcomeList,
-      });
-      if (!addOutcomeResult.error) {
-        const matchId = addOutcomeResult.data[0].match_id;
-        const eventName = addOutcomeResult.data[0].name;
-        yield saveGenerateShareLinkToStore({ matchId, eventName });
-      }
+    const balanceInvalid = yield call(isBalanceInvalid);
+    if (balanceInvalid) {
+      yield put(showAlert({
+        message: MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', balanceInvalid),
+      }));
     } else {
-      // Create new event
-      const { reports } = values;
-      const reportSource = reports.id ? { source_id: reports.id } : {
-        source: {
-          name: reports.value,
-          url: reports.value,
-        },
-      };
-
-      Object.keys(reportSource).forEach((k) => !reportSource[k] && delete reportSource[k]);
-      const newEventData = {
-        homeTeamName: values.homeTeamName || '',
-        awayTeamName: values.awayTeamName || '',
-        homeTeamCode: values.homeTeamCode || '',
-        awayTeamCode: values.awayTeamCode || '',
-        homeTeamFlag: values.homeTeamFlag || '',
-        awayTeamFlag: values.awayTeamFlag || '',
-        name: values.eventName.label,
-        public: values.private ? 0 : 1,
-        date: values.closingTime,
-        reportTime: values.reportingTime,
-        disputeTime: values.disputeTime,
-        market_fee: values.creatorFee,
-        outcomes: values.outcomes,
-        grant_permission: grantPermission,
-        creator_wallet_address: getAddress(),
-        category_id: 7, // values.category.id, hard-code for now
-        ...reportSource,
-      };
-      const { data } = yield call(handleCreateNewEventSaga, { newEventData });
-      if (data && data.length) {
-        const eventData = data[0];
-
-        const matchId = eventData.id;
-        const eventName = eventData.name;
-        yield saveGenerateShareLinkToStore({ matchId, eventName });
+      const betHandshakeHandler = BetHandshakeHandler.getShareManager();
+      if (!isNew) {
+        // Add new outcomes
+        const newOutcomeList = values.outcomes.filter(o => !o.id).map(i => Object.assign({}, i, { public: 1 }));
+        const { eventId } = values;
+        const addOutcomeResult = yield call(handleAddOutcomesSaga, {
+          eventId,
+          newOutcomeList,
+        });
+        console.log('Add New outcomes', addOutcomeResult);
+        if (!addOutcomeResult.error) {
+          const inputData = addOutcomeResult.data.map(o => {
+            return {
+              fee: values.creatorFee,
+              source: `${values.reports || '-'}`,
+              closingTime: values.closingTime,
+              reportTime: values.reportingTime,
+              disputeTime: values.disputeTime,
+              offchain: o.id,
+              contractAddress: o.contract.contract_address,
+              contractName: o.contract.json_name,
+            };
+          });
+          const matchId = addOutcomeResult.data[0].match_id;
+          const eventName = addOutcomeResult.data[0].name;
+          yield saveGenerateShareLinkToStore({ matchId, eventName });
+          betHandshakeHandler.createNewEvent(inputData);
+        }
+      } else {
+        // Create new event
+        const { reports } = values;
+        const reportSource = reports.id ? { source_id: reports.id } : {
+          source: {
+            name: reports.value,
+            url: reports.value,
+          },
+        };
+        const newEventData = {
+          homeTeamName: values.homeTeamName || '',
+          awayTeamName: values.awayTeamName || '',
+          homeTeamCode: values.homeTeamCode || '',
+          awayTeamCode: values.awayTeamCode || '',
+          homeTeamFlag: values.homeTeamFlag || '',
+          awayTeamFlag: values.awayTeamFlag || '',
+          name: values.eventName.label,
+          public: values.private ? 0 : 1,
+          date: values.closingTime,
+          reportTime: values.reportingTime,
+          disputeTime: values.disputeTime,
+          market_fee: values.creatorFee,
+          outcomes: values.outcomes,
+          category_id: 7, // values.category.id, hard-code for now
+          ...reportSource,
+        };
+        console.log('newEventData', newEventData);
+        const { data } = yield call(handleCreateNewEventSaga, { newEventData });
+        if (data && data.length) {
+          const eventData = data[0];
+          const { contract } = eventData;
+          console.log('Contract:', contract);
+          const inputData = eventData.outcomes.map(o => {
+            return {
+              fee: eventData.market_fee,
+              source: eventData.source_name,
+              closingTime: eventData.date,
+              reportTime: eventData.reportTime,
+              disputeTime: eventData.disputeTime,
+              offchain: o.id,
+              contractAddress: contract.contract_address,
+              contractName: contract.json_name,
+            };
+          });
+          const matchId = eventData.id;
+          const eventName = eventData.name;
+          yield saveGenerateShareLinkToStore({ matchId, eventName });
+          betHandshakeHandler.createNewEvent(inputData);
+        }
       }
     }
   } catch (e) {
@@ -189,10 +207,11 @@ function* handleUpdateEmail({ email }) {
       data: userProfile,
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    return yield put(updateEmailPut(responded.data.email));
+    if (responded.status) {
+      yield put(updateProfile(responded));
+    }
   } catch (e) {
     console.error('handleUpdateEmail', e);
-    return null;
   }
 }
 

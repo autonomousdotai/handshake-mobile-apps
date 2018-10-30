@@ -57,6 +57,9 @@ export const MESSAGE_SERVER = {
   1040: 'Busy day for Handshakes - we\'re out of freebies! Please try again tomorrow.',
   1041: 'You can only request free Handshakes once.',
   1042: 'Your account can\'t get free ETH.',
+
+  1062: 'Redeem code is invalid',
+  1063: 'Redeem code is invalid',
 };
 
 export const MESSAGE = {

@@ -499,7 +499,7 @@ export default {
   'landing_page.researches.uncommons.title': 'Uncommons',
   'landing_page.researches.uncommons.subTitle': 'The people\'s blockchain.',
 
-  'landing_page.researches.internetCash.title': 'Internet Cash',
+  'landing_page.researches.internetCash.title': 'Constant',
   'landing_page.researches.internetCash.subTitle': 'The Internet deserves to have its own native currency.',
 
   'landing_page.label.footer': `Building blockchain powered apps, tools and solutions for the new wild west world web.<br />Join the dojo: <a href="https://t.me/ninja_org" class="landing-link">t.me/ninja_org</a><br />Contact us: <a href="mailto:support@ninja.org" class="landing-link" target="_top">support@ninja.org</a>`,
@@ -573,7 +573,7 @@ export default {
   'landing_page.pay-for-devs.subHeading': 'Millions of people are looking to spend their cryptocurrency in a secure, convenient way. Bring the currency of the future into your online store today and stop relying on the sluggish banking industry. No wait times, no bank charges, no card fees.',
   'landing_page.pay-for-devs.textEmail': 'Be the first to hear when we launch',
 
-  'landing_page.internet-cash.breadcrumb': 'Internet Cash',
+  'landing_page.internet-cash.breadcrumb': 'Constant',
   'landing_page.internet-cash.heading': 'The Internet deserves to have its own native currency.',
   'landing_page.internet-cash.subHeading': 'While Bitcoin emerges as a powerful currency, it fails to be the everyday currency.  Bitcoin will never be the currency that you can use to pay for coffee or buy a t-shirt.  This project aims to build a new kind of cryptocurrency that behaves like cash in everyday life.',
   'landing_page.internet-cash.textEmail': 'Be the first to know when we launch',
@@ -962,7 +962,7 @@ export default {
     },
     {
       question: 'What payment method can I use?',
-      answer:`<table class="landing-table">
+      answer: `<table class="landing-table">
          <thead>
             <tr>
               <th>Buying method</th>
@@ -1048,7 +1048,7 @@ export default {
   // me page
   me: {
     profile: {
-      head_text: 'Our verification process only takes a few minutes in working hour. It will be longer during night time and weekend.',
+      head_text: 'Our verification process typically takes just a few minutes. This may take slightly longer outside business hours. Your information will remain 100% private.',
       username: {
         exist: 'Name already exists',
         success: 'Your alias has been recorded',
@@ -1075,7 +1075,7 @@ export default {
               invalidDocument: 'Please choose a document type',
               invalidFrontImage: 'Please upload front page of your document',
               invalidBackImage: 'Please upload back page of your document',
-              invalidEmail: 'Please upload email of your document',
+              invalidEmail: 'Your email address is missing! Are you sure you don’t want to receive transaction info?',
               invalidSelfieImage: 'Please upload a selife photo with your document',
             },
           },
@@ -1117,32 +1117,41 @@ export default {
           },
         },
         email: {
-          label: 'Email Verification',
+          label: 'Email',
           desc1: 'You may prefer to receive updates and notifications via email. This is also optional.',
-          desc2: 'Prefer to receive notifications and updates via email?',
+          desc2: 'Verify your email. You will receive transaction info through this email address',
           desc3: 'Enter your email',
           desc4: 'Enter the secret code sent to your email.',
           button: {
-            send: 'Send',
+            send: 'OK',
             submit: 'Verify your email',
           },
         },
         id_verification: {
           label: 'ID Verification',
-          desc1: 'Your account must be verified to comply with relevant anti-money laundering (AML) and counter-terrorism financing (CTF) laws and regulations',
-          desc2: 'Name',
-          desc3: 'Valid Document Number',
-          desc4: 'Document type',
-          desc5: 'Identity Card Front Side',
-          desc6: 'Please make sure that the photo is complete and clearly visible, in JPG or PNG format. Id card must be in the valid period.',
-          desc7: 'Identity Card Back Side',
-          desc8: 'Identity Card Front Side With Ninja Background',
-          desc9: 'Please make sure that the photo is complete and clearly visible, in JPG format And make sure the text in the paper exactly is  ‘Ninja.org MMDDYY’',
+          desc1: 'To comply with relevant anti-money laundering (AML) and counter-terrorism financing (CTF) laws and regulations.',
+          desc2: 'Full Name',
+          desc3: 'Document Number',
+          desc4: 'Document Type',
+          desc5: 'Front Side',
+          desc6: 'Please upload a JPG or PNG of both sides of your passport, ID card or driving license.',
+          desc7: 'Back Side',
+          desc8: 'Selfie with Identity Card',
+          desc9: 'Please take a selfie with your previous ID card and a piece of paper writing "I am in Ninja\'s dojo". Make sure that the photo is complete and clearly visible, in JPG or PNG format.',
           desc10: 'Email',
+          desc11: 'Identification Document',
+          desc12: 'Level 1 verification: Trade with a limit of 500 USD a day.',
+          desc13: 'Level 2 verification: Trade with the top limit of 5000 USD a day.',
           uploading: 'Uploading',
           button: {
             upload: 'Upload file',
             submit: 'Submit',
+          },
+          status: {
+            processing: 'Processing',
+            level1: 'Level 1',
+            finished: 'Finished',
+            rejected: 'Rejected',
           },
         },
       },
@@ -1439,13 +1448,14 @@ export default {
       redeem: {
         title: 'Redeem to coin',
         your_code: 'Reedem code',
-        giftcard: 'Gift card',
+        giftcard: 'Gift Amount',
         value: 'Value',
         agree_text: 'By clicking REDEEM, you agree to Gift Card & Promotional code {0} as applicable',
         button_redeem: 'Redeem now',
         button_check: 'Check redeem code',
         swipe_button_redeem: 'Swipe to redeem',
         find_code: 'How do find claim code?',
+        invalid_code: "Invalid redeem code"
       },
       remove: {
         title: 'Remove',
@@ -1471,6 +1481,7 @@ export default {
           gas_limit: 'Gas Limit',
           data: 'Data',
           feel_level: 'Fee:',
+          max_amount: 'Max amount'
         },
         placeholder: {
           to_address: 'Wallet address...',
@@ -1479,7 +1490,12 @@ export default {
         text: {
           confirm_transfer: 'Are you sure you want to transfer out ',
         },
-        error: 'You don\'t have enough coin right now.',
+        error: {
+          not_enough_coin: 'You don\'t have enough coin right now.',
+          max_amount: 'Your balance isn\'t enough to transaction fee.',
+          wallet_not_found: ' wallet is not found to transfer.'
+
+        },
         button: {
           transfer: 'Transfer',
           confirm: 'Confirm',

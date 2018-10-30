@@ -12,6 +12,12 @@ import { Table, Button } from 'react-bootstrap';
 import './Admin.scss';
 import Helper from '@/services/helper';
 
+export const STATUS = {
+  VERIFIED: 1,
+  REJECTED: -1,
+  PROCESSING: 0,
+};
+
 const IMAGE_BASE_URL = process.env.CDN_URL;
 const DOCUMENT_TYPES = [
   'Passport',
@@ -44,12 +50,12 @@ class AdminIDVerification extends React.Component {
 
   componentDidMount() {
     if (this.state.login) {
-      this.fetchDocuments();
+      this.fetchDocuments(this.props.status);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { login } = nextProps;
+    const { login, status } = nextProps;
     const newLogin = login === true ? login : this.state.login;
     this.setState({
       login: newLogin,
@@ -59,7 +65,7 @@ class AdminIDVerification extends React.Component {
         this.props.history.push(`${redirect}`);
       } else {
         setTimeout(() => {
-          this.fetchDocuments();
+          this.fetchDocuments(status);
         }, 500);
       }
     });
@@ -69,14 +75,14 @@ class AdminIDVerification extends React.Component {
     return sessionStorage.getItem('admin_hash');
   }
 
-  fetchDocuments() {
+  fetchDocuments(status = STATUS.PROCESSING) {
     if (!this.state.login) {
       return;
     }
     const { uid } = Helper.getQueryStrings(window.location.search);
     this.token = this.token || this.getAdminHash() || '';
     this.props.loadIDVerificationDocuments({
-      PATH_URL: `${API_URL.ID_VERIFICATION.LIST_DOCUMENTS}${ uid ? '?uid=' + uid : '' }`,
+      PATH_URL: `${API_URL.ID_VERIFICATION.LIST_DOCUMENTS}?status=${status}${uid ? (`&uid=${uid}`) : ''}`,
       headers: { AdminHash: this.token },
       successFn: (response) => {
         if (response.status === 1) {
@@ -199,12 +205,24 @@ class AdminIDVerification extends React.Component {
                     <td><a href={selfieImage} target="_blank" rel="noopener noreferrer">{item.selfie_image ? (<Image src={selfieImage} width="200" />) : ''}</a></td>
                     <td>{uploadDate}</td>
                     <td>
-                      <div style={this.state.actions[item.id] ? { display: 'none' } : {}}>
-                        <Button bsSize="small" bsStyle="success" onClick={() => this.approve(item.id)}>Approve</Button> <Button bsSize="small" bsStyle="danger" onClick={() => this.reject(item.id)}>Reject</Button>
-                      </div>
-                      <div style={!this.state.actions[item.id] ? { display: 'none' } : {}}>
-                        <Button bsSize="small" bsStyle="info" onClick={() => this.confirm(item.id)}>{this.state.actions[item.id] === 1 ? 'Approve' : 'Reject'} ?</Button> <Button bsSize="small" bsStyle="info" onClick={() => this.cancel(item.id)}>Cancel</Button>
-                      </div>
+                      {
+                        item.status === STATUS.PROCESSING ? (
+                          <React.Fragment>
+                            <div style={this.state.actions[item.id] ? { display: 'none' } : {}}>
+                              <Button bsSize="small" bsStyle="success" onClick={() => this.approve(item.id)}>Approve</Button> <Button bsSize="small" bsStyle="danger" onClick={() => this.reject(item.id)}>Reject</Button>
+                            </div>
+                            <div style={!this.state.actions[item.id] ? { display: 'none' } : {}}>
+                              <Button bsSize="small" bsStyle="info" onClick={() => this.confirm(item.id)}>{this.state.actions[item.id] === 1 ? 'Approve' : 'Reject'} ?</Button> <Button bsSize="small" bsStyle="info" onClick={() => this.cancel(item.id)}>Cancel</Button>
+                            </div>
+                          </React.Fragment>
+                        ) : (
+                          <span>
+                            {
+                              item.status === STATUS.VERIFIED ? 'Verified' : (item.status === STATUS.REJECTED && 'Rejected')
+                            }
+                          </span>
+                        )
+                      }
                     </td>
                   </tr>
                 );

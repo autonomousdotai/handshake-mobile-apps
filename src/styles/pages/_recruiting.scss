@@ -1,0 +1,167 @@
+.recruiting-intro {
+  .intro-text {
+    margin-top: 21px;
+    color: white;
+  }
+  .intro-text-2 {
+    //line-height: 39px;
+    font-size: 26px;
+  }
+  .intro-text-3 {
+    line-height: 39px;
+    font-size: 21px;
+  }
+  height: 305px;
+  background: url('https://d81hjzk5ckbe4.cloudfront.net/t2Tf4m0pqHzg2JGLE4dqOpjcqEQ=/1440x300/filters:quality(100)/https://d2q7nqismduvva.cloudfront.net/static/images/talents/hero-talents.png') no-repeat center top;
+}
+
+.recruiting {
+  .btn-menu {
+    border: 1px solid lightgrey;
+    color: #484848;
+  }
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+  .recruiting-filter-by-project {
+    margin-bottom: 30px;
+    .recruiting-filter-by-project-title {
+      font-weight: bold;
+      display: inline-block;
+      margin-right: 20px;
+    }
+    .recruiting-filter-by-project-list {
+      display: inline-block;
+      margin-right: 10px;
+      ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li {
+          display: inline-block;
+          span {
+            cursor: pointer;
+            display: block;
+            margin: 0 10px;
+            padding: 0 20px;
+            border: 1px solid #484848;
+            line-height: 30px;
+            border-radius: 8px;
+          }
+          &.active {
+            span {
+              background-color: #484848;
+              color: $white;
+            }
+          }
+        }
+      }
+    }
+    .recruiting-filter-by-project-search {
+      width: 235px;
+      display: inline-block;
+      @include breakpoint-max('lg') {
+        margin-top: 20px;
+      }
+      input {
+        display: inline-block;
+        width: 200px;
+        margin-left: 10px;
+      }
+    }
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+  .recruiting-category-item {
+    padding: 8px;
+    margin-bottom: 5px;
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    &.active {
+      background: url('https://d2q7nqismduvva.cloudfront.net/static/images/icon-png-jpg/arrow-active.png') no-repeat center top;
+      background-size: 100% 100%;
+    }
+  }
+  .recruiting-job {
+    border: 1px solid #cdcdcd;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px 0 rgba(201, 201, 201, 0.5);
+    .job-name {
+      font-weight: 600;
+      font-size: 24px;
+      color: #3a9bfb;
+    }
+    .job-project {
+      font-weight: 400;
+      font-size: 16px;
+      color: #333;
+    }
+    .job-location {
+      font-weight: 400;
+      font-size: 14px;
+      color: #333;
+    }
+    .job-summary {
+      font-weight: 400;
+      font-size: 16px;
+      color: #828282;
+    }
+    .job-skill {
+      display: inline-block;
+      border: 1px solid #282a2d;
+      border-radius: 4px;
+      padding: 7px 15px;
+      color: #484848;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  }
+  .backdrop {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: black;
+    opacity: 0.6;
+    z-index: 1;
+  }
+  .left-menu {
+    //d-none d-md-block
+    //display: block;
+    //border: 1px solid lightgrey;
+    .category-items {
+      height: 90%;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: white;
+    width: 280px;
+    z-index: 111;
+  }
+
+}
+.job-social {
+  display: inline-block;
+  img {
+    width: 40px;
+    margin-right: 4px;
+  }
+}
+.job-text-pr {
+  font-weight: 700;
+  font-size: 16px;
+  color: #111;
+}

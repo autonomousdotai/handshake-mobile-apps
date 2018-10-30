@@ -39,7 +39,7 @@ class ShareMarket extends React.Component {
     return (
       <React.Fragment>
         <div className="ShareEventMessage">
-        Your {type} was created successfully! <br/> The event will be approved in approx. 1 hour.
+          Your {type} was successfully created!
         </div>
         <Link
           className="ViewSharedEvent"

@@ -72,11 +72,11 @@
           "type": "uint256"
         },
         {
-          "name": "totalMatchedStake",
+          "name": "totalOpenStake",
           "type": "uint256"
         },
         {
-          "name": "totalOpenStake",
+          "name": "totalMatchedStake",
           "type": "uint256"
         },
         {
@@ -85,10 +85,6 @@
         },
         {
           "name": "resolved",
-          "type": "bool"
-        },
-        {
-          "name": "isGrantedPermission",
           "type": "bool"
         }
       ],
@@ -164,21 +160,6 @@
         {
           "indexed": false,
           "name": "hid",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "closingTime",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "reportTime",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "disputeTime",
           "type": "uint256"
         },
         {
@@ -418,11 +399,6 @@
         },
         {
           "indexed": false,
-          "name": "outcome",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
           "name": "state",
           "type": "uint256"
         },
@@ -450,6 +426,35 @@
         }
       ],
       "name": "__resolve",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "hid",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "offchain",
+          "type": "bytes32"
+        }
+      ],
+      "name": "__shutdownMarket",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "offchain",
+          "type": "bytes32"
+        }
+      ],
+      "name": "__shutdownAllMarkets",
       "type": "event"
     },
     {
@@ -550,10 +555,6 @@
           "type": "bytes32"
         },
         {
-          "name": "isGrantedPermission",
-          "type": "bool"
-        },
-        {
           "name": "closingWindow",
           "type": "uint256"
         },
@@ -571,90 +572,6 @@
         }
       ],
       "name": "createMarket",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "creator",
-          "type": "address"
-        },
-        {
-          "name": "fee",
-          "type": "uint256"
-        },
-        {
-          "name": "source",
-          "type": "bytes32"
-        },
-        {
-          "name": "isGrantedPermission",
-          "type": "bool"
-        },
-        {
-          "name": "closingWindow",
-          "type": "uint256"
-        },
-        {
-          "name": "reportWindow",
-          "type": "uint256"
-        },
-        {
-          "name": "disputeWindow",
-          "type": "uint256"
-        },
-        {
-          "name": "offchain",
-          "type": "bytes32"
-        }
-      ],
-      "name": "createMarketForShurikenUser",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "creator",
-          "type": "address"
-        },
-        {
-          "name": "fee",
-          "type": "uint256"
-        },
-        {
-          "name": "source",
-          "type": "bytes32"
-        },
-        {
-          "name": "isGrantedPermission",
-          "type": "bool"
-        },
-        {
-          "name": "closingWindow",
-          "type": "uint256"
-        },
-        {
-          "name": "reportWindow",
-          "type": "uint256"
-        },
-        {
-          "name": "disputeWindow",
-          "type": "uint256"
-        },
-        {
-          "name": "offchain",
-          "type": "bytes32"
-        }
-      ],
-      "name": "_createMarket",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -935,51 +852,7 @@
           "type": "bytes32"
         }
       ],
-      "name": "reportForCreator",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "hid",
-          "type": "uint256"
-        },
-        {
-          "name": "outcome",
-          "type": "uint256"
-        },
-        {
-          "name": "offchain",
-          "type": "bytes32"
-        }
-      ],
       "name": "report",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "hid",
-          "type": "uint256"
-        },
-        {
-          "name": "sender",
-          "type": "address"
-        },
-        {
-          "name": "offchain",
-          "type": "bytes32"
-        }
-      ],
-      "name": "disputeTestDrive",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -1024,20 +897,45 @@
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "hid",
+          "type": "uint256"
+        },
+        {
+          "name": "offchain",
+          "type": "bytes32"
+        }
+      ],
+      "name": "shutdownMarket",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "offchain",
+          "type": "bytes32"
+        }
+      ],
+      "name": "shutdownAllMarkets",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     }
   ],
   "compiler": {
     "name": "solc",
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
-  "networks": {
-    "1536728870185": {
-      "events": {},
-      "links": {},
-      "address": "0xa617c2450eada5120f8c58e39bc86007bd3edba9",
-      "transactionHash": "0xd6628ce97bdda8eafc211c5da55812c614be300cec60149ef82c91095db44a4f"
-    }
-  },
+  "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-10-15T08:23:50.640Z"
+  "updatedAt": "2018-07-17T03:06:44.634Z"
 }

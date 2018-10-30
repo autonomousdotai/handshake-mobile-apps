@@ -210,7 +210,7 @@ export const API_URL = {
     LOAD_HANDSHAKES: 'cryptosign/handshake',
     LOAD_REPORTS: 'cryptosign/source',
     LOAD_CATEGORIES: 'cryptosign/category',
-    CHECK_FREE_AVAILABLE: 'cryptosign/handshake/check_free_bet',
+    CHECK_REDEEM_CODE: 'cryptosign/handshake/check_redeem_code',
     UNINIT_HANDSHAKE: 'cryptosign/handshake/uninit',
     UNINIT_HANDSHAKE_FREE: 'cryptosign/handshake/uninit_free_bet',
     COLLECT: 'cryptosign/handshake/collect',
@@ -303,6 +303,7 @@ export const API_URL = {
     COMPLETE_WITHDRAW: 'exchange/internal/credit/withdraw',
     GET_CASH_ORDER: 'exchange/cash/order', // `GET /cash/order?status=processing|tranferring|success`
     GET_COIN_ORDER: 'exchange/coin/order', // `GET /cash/order?status=processing|tranferring|success`
+    GET_SELLING_COIN_ORDER: 'exchange/coin/selling-order', // `GET /cash/order?status=processing|tranferring|success`
     REVIEW_COIN_ORDER: 'exchange/coin/review', // `GET /cash/order?status=processing|tranferring|success`
   },
   ID_VERIFICATION: {
@@ -604,6 +605,7 @@ export const URL = {
   COMMENTS_BY_SHAKE: '/comments',
   COMMENTS_BY_SHAKE_INDEX: '/comments',
 
+  LANDING_PAGE_CONSTANT: '/constant',
   LANDING_PAGE_SHURIKEN: '/shuriken',
   LANDING_PAGE_SHURIKEN_INDEX: '/shuriken',
 

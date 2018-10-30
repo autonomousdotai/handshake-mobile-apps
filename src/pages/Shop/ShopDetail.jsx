@@ -117,9 +117,6 @@ class ShopDetail extends React.Component {
     if (country.id) {
       const url = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.CHANGE_COUNTRY}?country=${country.id}`;
       await $http({ url, method: 'PUT', withCredentials: true });
-      // // get current country
-      // const urlCurrentCountry = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.CURRENT_COUNTRY}`;
-      // await $http({ url: urlCurrentCountry, method: 'GET', withCredentials: true });
       this.updateShippingAndTax();
     }
   }
@@ -169,7 +166,6 @@ class ShopDetail extends React.Component {
       this.zipRef.value = addressInfo.zip;
       this.cityRef.value = addressInfo.city;
       this.stateRef.value = addressInfo.state;
-      // countryCode = addressInfo.country;
     } else if (ipInfo) {
       this.cityRef.value = ipInfo.city;
       this.stateRef.value = ipInfo.regionCode;
@@ -184,7 +180,6 @@ class ShopDetail extends React.Component {
 
   updateQuantity(e) {
     this.setState({ quantity: parseInt(e.target.value) }, () => {
-      // after set state
       this.updateShippingAndTax();
     });
   }

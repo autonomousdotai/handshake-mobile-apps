@@ -25,7 +25,6 @@ import WalletSelected from '@/components/Wallet/WalletSelected';
 import Slider from 'react-rangeslider'
 
 
-
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
 const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefined);
@@ -274,6 +273,7 @@ class Transfer extends React.Component {
   }
 
   getBalanceWallets = async () => {
+    const { messages } = this.props.intl;
     let { wallets, walletSelected, walletDefault } = this.state;
     if(wallets && wallets.length){
       for(let i in wallets){
@@ -295,7 +295,7 @@ class Transfer extends React.Component {
       if(coinName){
         this.setState({walletNotFound:
           <div className="walletNotFound">
-            {coinName} wallet is not found to transfer
+            {coinName} {messages.wallet.action.transfer.error.wallet_not_found}
           </div>
         }, ()=> {
 
@@ -320,7 +320,7 @@ class Transfer extends React.Component {
       // check amount:
 
       if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amountCoin']))
-        errors.amountCoin = `${messages.wallet.action.transfer.error}`
+        errors.amountCoin = `${messages.wallet.action.transfer.error.not_enough_coin}`
     }
     return errors
   }
@@ -468,13 +468,13 @@ selectWallet = async (walletSelected) => {
   }
   // show fee?
   this.getFeeLevel(walletSelected);
-  
+
 }
 
 async getFeeLevel(walletSelected){
   let listFee = await walletSelected.getLevelFee();
   let listFeeObject = false;
-  console.log(listFee);
+
   if(listFee){
     let labels = {};
     let min = 0;
@@ -482,16 +482,37 @@ async getFeeLevel(walletSelected){
     for (var i = 0; i < listFee.length; i ++){
       labels[i.toString()] = listFee[i].title;
     }
-    listFeeObject = {'listFee': listFee, 'labels': labels, 'min': min, "max": max};    
+    listFeeObject = {'listFee': listFee, 'labels': labels, 'min': min, "max": max};
   }
   this.setState({listFeeObject: listFeeObject, volume: 1});
-    
+
 }
 
 handleOnChange = (value) => {
   this.setState({
     volume: value
   })
+}
+
+calcMaxAmount = () => {
+  const { walletSelected, listFeeObject, volume } = this.state;
+  const { messages } = this.props.intl;
+
+  let result = 0;
+
+  if(walletSelected && listFeeObject){
+    result = walletSelected.balance - listFeeObject.listFee[volume].feePrice;
+    //result = walletSelected.formatNumber(result, 10);
+  }
+
+  if(result < 0) {
+    this.showError(messages.wallet.action.transfer.error.max_amount);
+    result = 0;
+  }
+
+  this.setState({inputSendAmountValue: result}, ()=>{
+    this.updateAddressAmountValue(null, result);
+  });
 }
 
 render() {
@@ -502,10 +523,10 @@ render() {
   const { walletNotFound, walletSelected, wallets } = this.state;
 
   let amount = this.state.inputSendAmountValue;
-  try {amount= parseFloat(amount).toFixed(8)}catch (e){}  
+  try {amount= parseFloat(amount).toFixed(8)}catch (e){}
 
   return (
-    <div>        
+    <div>
 
         {/* Dialog confirm transfer coin */}
         <ModalDialog title="Confirmation" onRef={modal => this.modalConfirmTranferRef = modal}>
@@ -549,7 +570,12 @@ render() {
             />
             <span onClick={() => { this.openQrcode() }} className="icon-qr-code-black">{ICON.QRCode()}</span>
           </div>
-          <p className="labelText">{messages.wallet.action.transfer.label.amount}</p>
+          <div className="row">
+            <div className="col-6"><p className="labelText">{messages.wallet.action.transfer.label.amount}</p></div>
+            { walletSelected && (walletSelected.name == 'ETH' || walletSelected.name == 'BTC') &&
+              <div className="col-6"><p className="maxAmount" onClick={() => this.calcMaxAmount()}>{messages.wallet.action.transfer.label.max_amount}</p></div>
+            }
+          </div>
             <div className="div-amount">
               <div className="prepend">{ this.state.walletSelected ? StringHelper.format("{0}", this.state.walletSelected.name) : ''}</div>
               <Field
@@ -582,7 +608,7 @@ render() {
               </div>
             }
 
-            {this.state.listFeeObject && 
+            {this.state.listFeeObject &&
             <div>
               <p className="labelText">{messages.wallet.action.transfer.label.feel_level} {this.state.listFeeObject.listFee[this.state.volume].description}</p>
               <div className="fee-level-box">
@@ -591,7 +617,7 @@ render() {
                   max={this.state.listFeeObject.max}
                   tooltip={false}
                   labels={this.state.listFeeObject.labels}
-                  value={this.state.volume}                
+                  value={this.state.volume}
                   onChange={this.handleOnChange}
                 />
               </div>
@@ -601,7 +627,7 @@ render() {
             <div>
               <p className="labelText">{messages.wallet.action.transfer.label.from_wallet}</p>
               { walletSelected && <WalletSelected wallets={wallets} walletSelected={walletSelected} onSelect={wallet => { this.selectWallet(wallet); }}></WalletSelected> }
-            </div>            
+            </div>
 
             <Button className="button-wallet-cpn" isLoading={this.state.isRestoreLoading}  type="submit" block={true}>{messages.wallet.action.transfer.button.transfer}</Button>
           </div>

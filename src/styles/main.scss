@@ -4,6 +4,7 @@
 @import "var";
 @import "responsive";
 @import "functions";
+@import "mixin";
 @import "animate";
 
 body {
@@ -27,3 +28,6 @@ button {
 @import "app/splash";
 @import "app";
 @import "forms/dropdown-input";
+
+@import "pages/landing-constant";
+@import "pages/recruiting";

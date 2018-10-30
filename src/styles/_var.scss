@@ -76,3 +76,10 @@ $disable-color: #fa6b49;
 * Animation
 * ======================================================================== */
 $animation-duration: 0.5s;
+
+$points: (
+  xs: 576px,
+  sm: 768px,
+  md: 992px,
+  lg: 1200px
+);

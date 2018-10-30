@@ -15,8 +15,11 @@ export default class BettingHandshake extends BaseHandshake {
     // });
   }
   get contractFileNameWithoutExtension() {
+    // return process.env.isProduction ? 'PredictionHandshake' : 'PredictionHandshakeDev';
+    //return process.env.PredictionHandshakeFileName;
     if (this.contractFileName) {
-      return `Prediction/${this.contractFileName}`;
+      const folder = process.env.isLive ? 'live' : 'stag';
+      return `Prediction/${folder}/${this.contractFileName}`;
     }
     return null;
   }

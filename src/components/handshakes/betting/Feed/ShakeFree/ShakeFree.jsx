@@ -72,7 +72,7 @@ class BetingShakeFree extends React.Component {
       disable: false,
       side: SIDE.SUPPORT,
       openTooltip: false,
-
+      redeemCode: '',
     };
 
 
@@ -81,9 +81,11 @@ class BetingShakeFree extends React.Component {
     this.renderForm = ::this.renderForm;
     this.onToggleChange = ::this.onToggleChange;
   }
+
   componentDidMount() {
     this.updateDefautValues();
   }
+
   async componentWillReceiveProps(nextProps) {
 
     this.updateDefautValues();
@@ -97,7 +99,7 @@ class BetingShakeFree extends React.Component {
   async onSubmit(e) {
     e.preventDefault();
 
-    const { oddValue, amountValue } = this.state;
+    const { oddValue, amountValue, redeemCode } = this.state;
 
     const { matchName, matchOutcome, closingDate, onSubmitClick } = this.props;
 
@@ -123,8 +125,7 @@ class BetingShakeFree extends React.Component {
     const validate = await validateBet(amountBN, odds, closingDate, matchName, matchOutcome, true);
     const { status, message } = validate;
     if (status) {
-      this.initHandshake(amountBN, odds);
-      onSubmitClick();
+      this.initHandshake(amountBN, odds, redeemCode);
     } else if (message) {
       GA.createBetNotSuccess(message);
       this.props.showAlert({
@@ -155,13 +156,12 @@ class BetingShakeFree extends React.Component {
     }, () => this.updateTotal());
 
     // Event tracking
-    //GA.clickChooseASide(id);
+    // GA.clickChooseASide(id);
     if (side === SIDE.SUPPORT) {
       GA.clickSupport(matchOutcome);
     } else {
       GA.clickOppose(matchOutcome);
     }
-
   }
 
   updateDefautValues() {
@@ -185,7 +185,7 @@ class BetingShakeFree extends React.Component {
     });
   }
 
-  initHandshake(amount, odds) {
+  initHandshake(amount, odds, redeemCode) {
     const { outcomeId, matchName, matchOutcome } = this.props;
     const { extraData } = this.state;
     const side = this.toggleRef.value;
@@ -195,9 +195,8 @@ class BetingShakeFree extends React.Component {
     extraData.event_odds = odds;
     extraData.event_bet = amount;
     const params = {
-
+      redeem: redeemCode,
       type: HANDSHAKE_ID.BETTING,
-
       outcome_id: outcomeId,
       odds: `${odds}`,
       extra_data: JSON.stringify(extraData),
@@ -223,7 +222,6 @@ class BetingShakeFree extends React.Component {
     const { status, data } = successData;
 
     if (status && data) {
-      const { outcomeHid } = this.props;
       const { match } = data;
       const isExist = match;
       let message = MESSAGE.CREATE_BET_NOT_MATCH;
@@ -237,13 +235,16 @@ class BetingShakeFree extends React.Component {
         callBack: () => {
         },
       });
-      //this.props.onCreateBetSuccess();
+      this.props.onSubmitClick();
+      // this.props.onCreateBetSuccess();
       // send ga event
       try {
         const { matchName, matchOutcome } = this.props;
         const side = this.toggleRef.value;
         GA.createBetSuccess(matchName, matchOutcome, side);
-      } catch (err) { }
+      } catch (err) {
+        console.error(err);
+      }
     }
   }
 
@@ -258,6 +259,9 @@ class BetingShakeFree extends React.Component {
         type: 'danger',
         callBack: () => {
         },
+      });
+      this.setState({
+        disable: false,
       });
       GA.createBetFailed(message);
     }
@@ -281,6 +285,30 @@ class BetingShakeFree extends React.Component {
           {tooltip}
         </Tooltip>
       </span>
+    );
+  }
+
+  renderRedeemCode = (props, state) => {
+    return (
+      <div className="rowWrapper">
+        <div className="titleLable">
+          <label className="label" htmlFor="redeemCode">Redeem Code</label>
+        </div>
+        <input
+          className="form-control-custom input value"
+          id="redeemCode"
+          type="text"
+          value={state.redeemCode}
+          autoComplete="off"
+          onChange={(evt) => {
+            const val = evt.target.value;
+            if (val.length > 7) return;
+            this.setState({
+              redeemCode: val,
+            });
+          }}
+        />
+      </div>
     );
   }
 
@@ -371,7 +399,8 @@ class BetingShakeFree extends React.Component {
         {/* <p className="titleForm text-center">BET FREE ON THE OUTCOME</p> */}
         {<Toggle ref={(component) => { this.toggleRef = component; }} onChange={this.onToggleChange} />}
         {/* this.renderInputField(amountField) */}
-        <div className="freeAmount">You have {amount} ETH FREE to bet!</div>
+        <div className="freeAmount">You have <b>{amount} ETH</b> FREE to bet!</div>
+        {this.renderRedeemCode(this.props, this.state)}
         {isShowOdds && this.renderInputField(oddsField)}
         <div className="rowWrapper">
           <div>Possible winnings</div>

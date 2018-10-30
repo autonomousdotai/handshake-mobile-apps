@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { API_URL, URL } from '@/constants';
+import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { loadCashOrderList, sendCashOrder, reset } from '@/reducers/internalAdmin/action';
 import './InternalAdmin.scss';
@@ -54,6 +54,45 @@ const STATUS = {
   },
 };
 
+const SELL_STATUS = {
+  fiat_transferring: {
+    id: 'fiat_transferring',
+    name: 'Fiat transferring',
+  },
+  transferring: {
+    id: 'transferring',
+    name: 'Sending',
+  },
+  pending: {
+    id: 'pending',
+    name: 'Created',
+  },
+  processing: {
+    id: 'processing',
+    name: 'Processing',
+  },
+  success: {
+    id: 'success',
+    name: 'Sent',
+  },
+  cancelled: {
+    id: 'cancelled',
+    name: 'Canceled',
+  },
+  rejected: {
+    id: 'rejected',
+    name: 'Rejected',
+  },
+  transfer_failed: {
+    id: 'transfer_failed',
+    name: 'Failed',
+  },
+  expired: {
+    id: 'expired',
+    name: 'Expired',
+  },
+};
+
 const backupScroll = window.onscroll;
 const DEFAULT_TYPE = Object.values(STATUS)[0].id;
 
@@ -69,6 +108,8 @@ class InternalAdmin extends Component {
       type_order: '',
       ref_code: '',
       login: this.token.length > 0,
+      action: EXCHANGE_ACTION.BUY,
+      statusList: STATUS,
     };
 
     this.send = :: this.send;
@@ -81,9 +122,12 @@ class InternalAdmin extends Component {
   componentDidMount() {
     if (this.state.login) {
       const type = this.props.type || this.props?.match?.params?.type;
+      const action = this.props.action;
+      const statusList = action === EXCHANGE_ACTION.BUY ? STATUS : SELL_STATUS;
+      const defaultType = Object.values(statusList)[0].id;
       const searchParams = Helper.getQueryStrings(window.location.search);
       const refCode = this.props.refCode || searchParams?.ref_code;
-      this.setState({ type_order: type, ref_code: refCode }, () => {
+      this.setState({ type_order: type, ref_code: refCode, action, statusList, type: defaultType }, () => {
         this.loadOrderList();
       });
 
@@ -102,6 +146,8 @@ class InternalAdmin extends Component {
       type_order: '',
       ref_code: '',
       login: this.token.length > 0,
+      action: EXCHANGE_ACTION.BUY,
+      statusList: STATUS,
     };
     this.setState(state, onDone);
   }
@@ -115,12 +161,15 @@ class InternalAdmin extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (nextProps.type !== this.props.type) {
+    if (nextProps.type !== this.props.type || nextProps.action !== this.props.action) {
       this.props.reset();
       this.resetState(() => {
+        const action = this.props.action;
+        const statusList = action === EXCHANGE_ACTION.BUY ? STATUS : SELL_STATUS;
+        const defaultType = Object.values(statusList)[0].id;
         const searchParams = Helper.getQueryStrings(window.location.search);
-        const refCode = this.props.refCode || searchParams?.ref_code;
-        this.setState({ type_order: nextProps.type, ref_code: refCode }, () => {
+        const refCode = nextProps.refCode || searchParams?.ref_code;
+        this.setState({ type_order: nextProps.type, ref_code: refCode, action, statusList, type: defaultType }, () => {
           this.loadOrderList();
           this.setupInitifyLoad();
         });
@@ -160,12 +209,14 @@ class InternalAdmin extends Component {
   }
 
   getStatus(order = {}) {
-    return STATUS[order.status]?.name || '---';
+    const { statusList } = this.state;
+    return statusList[order.status]?.name || '---';
   }
 
   isLastType() {
-    const len = Object.keys(STATUS).length;
-    const index = Object.values(STATUS).findIndex(item => item.id === this.state.type);
+    const { statusList } = this.state;
+    const len = Object.keys(statusList).length;
+    const index = Object.values(statusList).findIndex(item => item.id === this.state.type);
     if (index === (len - 1)) {
       return true;
     }
@@ -181,7 +232,8 @@ class InternalAdmin extends Component {
       }
 
       // load next type of order
-      const types = Object.keys(STATUS);
+      const { statusList } = this.state;
+      const types = Object.keys(statusList);
       const foundIndex = types.indexOf(this.state.type);
       if (types[foundIndex + 1]) {
         this.setState({ type: types[foundIndex + 1], page: null }, this.autoLoadMore);
@@ -192,6 +244,7 @@ class InternalAdmin extends Component {
   }
 
   loadOrderList(status = this.state.type) {
+    const { action } = this.state;
     if (this.state.isFinished) {
       return;
     }
@@ -210,7 +263,7 @@ class InternalAdmin extends Component {
     }
 
     this.props.loadCashOrderList({
-      PATH_URL: API_URL.INTERNAL.GET_COIN_ORDER,
+      PATH_URL: action === EXCHANGE_ACTION.BUY ? API_URL.INTERNAL.GET_COIN_ORDER : API_URL.INTERNAL.GET_SELLING_COIN_ORDER,
       qs,
       more: {
         types: this.props.type,
@@ -248,59 +301,88 @@ class InternalAdmin extends Component {
     });
   }
 
+  finish(order = {}) {
+    this.props.sendCashOrder({
+      PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}`,
+      METHOD: 'POST',
+    });
+  }
+
   renderActionBtn(order = {}) {
     let result = null;
-    switch (order.type) {
-      case 'bank': {
-        if (order.status === STATUS.fiat_transferring.id) {
-          result = (
-            <button onClick={() => this.send(order)} className="btn btn-primary">
-              Send
-            </button>
-          );
-        } else if (order.status === STATUS.transfer_failed.id) {
-          result = (
-            <button onClick={() => this.send(order)} className="btn btn-primary">
-              ReSend
-            </button>
-          );
-        }
-        break;
-      }
-      case 'cod': {
-        if (order.status === STATUS.pending.id) {
-          result = (
-            <button onClick={() => this.process(order)} className="btn btn-primary">
-              Process
-            </button>
-          );
-        } else if (order.status === STATUS.processing.id) {
-          result = (
-            <div>
-              <button onClick={() => this.send(order)} className="btn btn-primary">
-                Send
+    const { action } = this.state;
+
+    if (action === EXCHANGE_ACTION.BUY) {
+      switch (order.type) {
+        case 'bank': {
+          if (order.status === STATUS.fiat_transferring.id) {
+            result = (
+              <button onClick={() => this.process(order)} className="btn btn-primary">
+                Process
               </button>
-              &nbsp;&nbsp;&nbsp;
-              <button onClick={() => this.reject(order)} className="btn btn-primary">
-                Reject
-              </button>
-            </div>
-          );
-        } else if (order.status === STATUS.transfer_failed.id) {
-          result = (
-            <div>
+            );
+          } else if (order.status === STATUS.processing.id) {
+            result = (
+              <div>
+                <button onClick={() => this.send(order)} className="btn btn-primary">
+                  Send
+                </button>
+                &nbsp;&nbsp;&nbsp;
+                <button onClick={() => this.reject(order)} className="btn btn-primary">
+                  Reject
+                </button>
+              </div>
+            );
+          } else if (order.status === STATUS.transfer_failed.id) {
+            result = (
               <button onClick={() => this.send(order)} className="btn btn-primary">
                 ReSend
               </button>
-            </div>
-          );
+            );
+          }
+          break;
         }
+        case 'cod': {
+          if (order.status === STATUS.pending.id) {
+            result = (
+              <button onClick={() => this.process(order)} className="btn btn-primary">
+                Process
+              </button>
+            );
+          } else if (order.status === STATUS.processing.id) {
+            result = (
+              <div>
+                <button onClick={() => this.send(order)} className="btn btn-primary">
+                  Send
+                </button>
+                &nbsp;&nbsp;&nbsp;
+                <button onClick={() => this.reject(order)} className="btn btn-primary">
+                  Reject
+                </button>
+              </div>
+            );
+          } else if (order.status === STATUS.transfer_failed.id) {
+            result = (
+              <div>
+                <button onClick={() => this.send(order)} className="btn btn-primary">
+                  ReSend
+                </button>
+              </div>
+            );
+          }
 
-        break;
-      }
-      default: {
+          break;
+        }
+        default: {
 
+        }
       }
+    } else if (order.status === SELL_STATUS.fiat_transferring.id) {
+      result = (
+        <button onClick={() => this.finish(order)} className="btn btn-primary">
+          Finish
+        </button>
+      );
     }
 
     return result;

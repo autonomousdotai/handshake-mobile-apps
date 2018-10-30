@@ -141,9 +141,12 @@ class ContentForPrediction extends React.Component {
       <section className="section">
         <div className="wrapperIntroduce">
           <div className="column contentIntroduce">
-            <p className="pexSmallTitle">Outsmart the internet</p>
-            <p className="pexContent">Can you predict the future of science, politics, money and sports - and win crypto while doing it?</p>
-            <button className="pexButton">Add to chrome</button>
+            <p className="pexSmallTitle"><strong>Bet on anything against anyone, anywhere. Guaranteed payout. Your odds. 100% anonymous.</strong></p>
+            <p className="pexContent">You create the bets, set the odds, and play directly with other parties. Bet with blockchain technology to bypass the bookies and the books - take down the house and make your own luck.</p>
+            {/*this.renderEmail()*/}
+            {/*hasSubscribed && this.renderThanksSubcribe()*/}
+            <p className="pexContent btnMobileOpen">To play, please open <u>ninja.org/prediction</u> on your mobile browser.</p>
+            <p><a href="https://t.me/ninja_org"><u>Join the dojo on Telegram</u></a></p>
           </div>
           <div className="column">
             <img className="" src={imgIntroduce} alt="imgHowToPlay" width="850" />
@@ -159,40 +162,6 @@ class ContentForPrediction extends React.Component {
     return (
       <PexRoadMap ref="roadmap" className="wrapperBlock" />
 
-    );
-  }
-  renderExperts() {
-    return (
-      <section className="section wrapperHowToPlay">
-        <div className="wrapperBlock">
-          <div className="column">
-            <img className="imageLeft" src={imgHowToPlay} alt="imgHowToPlay" width="350" />
-          </div>
-          <div className="column wrapperContentHowToPlay">
-            <div className="wrappeContent">
-              <div className="pexHeadLine">Calling all experts</div>
-              <div className="pexContent">What do you know that others don't? Are you a stock market whiz, a weather guru, a politics ? Make clever predicitons and monetize your smarts.</div>
-              <div className="pexContent">It isn't a gamble if you know what you're doing. Turn told you so into crypto.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-  renderBlockChain() {
-    return (
-      <section className="section bg-gradient-mobile">
-        <div className="wrapperMobile wrapperBlock">
-          <div className="contentBlock column contentMobile">
-            <div className="pexHeadLine">Mobile Web App</div>
-            <div className="pexContent">No download or signup required. <br/> Simply open up your browser and you’re ready to go.</div>
-            <img className="imageContent" src={imgMobileIcon} alt="imgMobileIcon" width="400" />
-          </div>
-          <div className="column">
-            <img className="rightImageFirst" src={imgMobileGuide1} alt="imgMobileGuide1" width="350" />
-          </div>
-        </div>
-      </section>
     );
   }
   renderHowToPlay() {
@@ -340,9 +309,11 @@ class ContentForPrediction extends React.Component {
     return (
       <div className=''>
         {/*<img src={imgPredictionContent} className='w-100' />*/}
-        {this.renderIntroduce()}
-        {this.renderExperts()}
+        { this.renderIntroduce()}
         {this.renderHowToPlay()}
+        {/*this.renderExtension()*/}
+        {this.renderMobileGuide()}
+        {/*this.renderExample()*/}
         {this.renderMarket()}
         {this.renderAnonymous()}
         {this.renderTransparency()}

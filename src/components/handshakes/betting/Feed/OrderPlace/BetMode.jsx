@@ -15,7 +15,7 @@ class BetMode extends React.Component {
   static propTypes = {
     selectedOutcome: PropTypes.object,
     selectedMatch: PropTypes.object,
-    freeAvailable: PropTypes.bool,
+    freeAvailable: PropTypes.number,
   }
 
   static defaultProps = {
@@ -41,7 +41,6 @@ class BetMode extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { selectedOutcome, support, against, freeAvailable } = nextProps;
-    // console.log(TAG, 'componentWillReceiveProps', 'support:', support, 'against:', against, 'isFirstFree', isFirstFree);
     const filterSupport = support && support.length > 0 && support.filter(item => item.amount >= CRYPTOSIGN_MINIMUM_MONEY);
     const filterAgainst = against && against.length > 0 && against.filter(item => item.amount >= CRYPTOSIGN_MINIMUM_MONEY);
     this.setState({
@@ -61,13 +60,12 @@ class BetMode extends React.Component {
       GA.clickFree(selectedOutcome.value);
     }
   }
-  
+
   async openPopup(selectedOutcome) {
     this.setState({
       bettingShakeIsOpen: true,
     });
     this.callGetHandshakes(selectedOutcome);
-    //await this.checkShowFreeBanner();
   }
 
   callGetHandshakes(item) {
@@ -95,14 +93,6 @@ class BetMode extends React.Component {
   }
 
   async checkShowFreeBanner() {
-    /*
-    const balance = await getBalance();
-    console.log(TAG, 'checkShowFreeBanner', balance, typeof balance);
-    if (balance === '0') {
-      // Call API check if show free
-      this.callCheckFirstFree();
-    }
-    */
     this.callCheckFirstFree();
   }
 
@@ -115,7 +105,7 @@ class BetMode extends React.Component {
             isFree={false}
           />
         </div>
-        <div className="BetModeItem" label="Free bet">
+        <div className="BetModeItem" label="Use a redeem code">
           <BettingFilter
             {...props}
             isFree

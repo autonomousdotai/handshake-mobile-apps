@@ -182,6 +182,7 @@ class BuyCryptoCoin extends React.Component {
   }
 
   detachScrollListener() {
+    this.isShow = true;
     /*eslint-disable */
     $zopim.livechat.button.hide();
     window.removeEventListener('scroll', this.scrollListener);
