@@ -761,7 +761,7 @@ class BuyCryptoCoin extends React.Component {
                 <ConfirmButton
                   validate={this.checkUserVerified}
                   disabled={!isValidToSubmit}
-                  label={`${messages.create.cod_form.buy_btn} ${coinMoneyExchange?.amount} ${CRYPTO_CURRENCY_NAME[currency] || ''}`}
+                  label={`${messages.create.cod_form.buy_btn} ${coinMoneyExchange?.amount || 0} ${CRYPTO_CURRENCY_NAME[currency] || ''}`}
                   confirmText={<FormattedMessage id="buy_coin_confirm_popup.confirm_text" />}
                   cancelText={<FormattedMessage id="buy_coin_confirm_popup.cancel_text" />}
                   buttonClassName="buy-btn"
