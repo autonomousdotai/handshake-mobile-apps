@@ -1,0 +1,13 @@
+.crypto-coin-price-panel-container {
+  .crypto-coin-price-panel-label {
+    font-weight: bold;
+    font-size: 18px;
+    color: #343538;
+    letter-spacing: 0.35px;
+    margin-bottom: 20px;
+  }
+  > div {
+    border-bottom: solid 1px #979797;
+    padding: 20px 0px;
+  }
+}

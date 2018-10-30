@@ -10,6 +10,7 @@ import internalWithdraw from './internalWithdraw';
 import internalAdmin from './internalAdmin';
 import buyCoin from './buyCoin';
 import sellCoin from './sellCoin';
+import coin from './coin';
 // import firebase from './firebase';
 
 export default {
@@ -25,5 +26,6 @@ export default {
   internalAdmin,
   buyCoin,
   sellCoin,
+  coin,
   // firebase,
 };
