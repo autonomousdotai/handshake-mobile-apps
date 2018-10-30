@@ -41,11 +41,11 @@ class CryptoPrice extends Component {
     const { crypto } = this.state;
     if (!crypto?.id) return;
     this.props.coinGetSellPrice({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=1&currency=${crypto?.id}&fiat_currency=${'VND'}&type=bank&level=${1}&user_check=1`,
+      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=1&currency=${crypto?.id}&fiat_currency=${'VND'}&type=bank&level=${1}&user_check=1&check=1`,
       more: { name: crypto?.id },
     });
     this.props.coinGetBuyPrice({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=1&currency=${crypto?.id}&fiat_currency=VND&type=bank&level=${1}&user_check=1`,
+      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=1&currency=${crypto?.id}&fiat_currency=VND&type=bank&level=${1}&user_check=1&check=1`,
       more: { name: crypto?.id },
     });
   }
