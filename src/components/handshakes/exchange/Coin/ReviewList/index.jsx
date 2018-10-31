@@ -64,7 +64,8 @@ class ReviewList extends React.Component {
     }
   }
 
-  autoLoadMore = () => {
+  autoLoadMore = (e) => {
+    e.preventDefault();
     this.getReviewCoin();
   }
 
@@ -85,26 +86,25 @@ class ReviewList extends React.Component {
     const { reviewList } = this.props;
     const { messages } = this.props.intl;
     return (
-      <React.Fragment>
+      <div className="review-list-container">
         <Grid className="review-list">
           {
             reviewList && reviewList.map(item => {
               return (
-                <Row className="review">
+                <Row key={item?.id} className="review">
                   <div><Image src={loadingSVG} alt="loading" width="30" /></div>
                   <div className="review-content">
-                    <div className="name">{item.name}</div>
-                    <div className="content">{item.review}</div>
+                    <div className="name">{item?.name}</div>
+                    <div className="content">{item?.review}</div>
                   </div>
                 </Row>);
             })
           }
-
         </Grid>
         { !isFinished &&
           <button onClick={this.autoLoadMore}>{messages.review.label.loadMore}</button>
         }
-      </React.Fragment>
+      </div>
     );
   }
 }

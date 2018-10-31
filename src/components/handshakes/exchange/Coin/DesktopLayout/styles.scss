@@ -1,0 +1,16 @@
+.crypto-coin-desktop-container {
+  background: white;
+  .crypto-coin-desktop-body {
+    display: flex;
+    justify-content: space-between;
+  }
+  .crypto-coin-desktop-left-container {
+    width: 25%;
+  }
+  .crypto-coin-desktop-right-container {
+    width: 25%;
+  }
+  .crypto-coin-desktop-main-container {
+    width: 40%;
+  }
+}

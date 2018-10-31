@@ -131,8 +131,6 @@ class CoinMoneyExchange extends Component {
     if (amount === null) {
       this.getQuoteReverse();
     }
-
-    this.onChangeCallbackHandler();
   }
 
   showLoading(isShow = true) {
@@ -214,7 +212,7 @@ class CoinMoneyExchange extends Component {
       this.props.buyCryptoQuoteReverse({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_QUOTE_REVERSE}?fiat_amount=${_fiatAmount}&currency=${currency}&fiat_currency=${_fiatCurrency}&type=${paymentMethod}&level=${level}`,
         errorFn: this.ongetQuoteReverseError,
-        successFn: () => { this.showLoading(false); },
+        successFn: () => { this.showLoading(false); this.onChangeCallbackHandler(); },
       });
     }
   }
@@ -234,7 +232,7 @@ class CoinMoneyExchange extends Component {
       this.props.buyCryptoGetCoinInfo({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=${parsedAmount}&currency=${currency}&fiat_currency=${_fiatCurrency}&level=${level}`,
         errorFn: this.onGetCoinInfoError,
-        successFn: () => { this.showLoading(false); },
+        successFn: () => { this.showLoading(false); this.onChangeCallbackHandler(); },
       });
     }
   }
