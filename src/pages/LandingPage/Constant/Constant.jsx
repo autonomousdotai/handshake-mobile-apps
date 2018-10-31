@@ -112,16 +112,16 @@ class ConstantLandingPage extends React.Component {
                 >
                   <ul>
                     <li>
-                      <Link to="/product">Product</Link>
+                      <a href="https://ninja.org/product">Product</a>
                     </li>
                     <li>
-                      <Link to="/research">Research</Link>
+                      <a href="https://ninja.org/research">Research</a>
                     </li>
                     {/* <li>
                       <Link to="/">Team</Link>
                     </li> */}
                     <li>
-                      <Link to="/recruiting?project=Constant" className="btn-constant">Join the Constant team</Link>
+                      <a href="https://ninja.org/recruiting?project=Constant" className="btn-constant">Join the Constant team</a>
                     </li>
                   </ul>
                 </div>
@@ -231,7 +231,7 @@ class ConstantLandingPage extends React.Component {
             </div>
           </div>
         </section>
-      </main >
+      </main>
     );
   }
 }
