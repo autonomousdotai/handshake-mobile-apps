@@ -58,7 +58,7 @@ class Coin extends Component {
         </div>
         <div className={scopedCss('tab-body')}>
           {
-            showState.indexOf(idVerified) > 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} />
+            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} />
           }
           {this.renderTabComponent()}
         </div>
