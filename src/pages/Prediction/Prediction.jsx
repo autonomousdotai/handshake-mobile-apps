@@ -80,11 +80,53 @@ class Prediction extends React.Component {
     if (eventId) {
       this.props.dispatch(loadRelevantEvents({eventId}));
     }
-    // $zopim.livechat.button.hide();
+    setTimeout(() => {
+      /*eslint-disable */
+      window?.$zopim?.livechat?.window?.onShow(() => {
+        this.isShow = true;
+        console.log('onShow', this.isShow);
+      });
+      window?.$zopim?.livechat?.window?.onHide(() => {
+        this.isShow = false;
+        console.log('onHide', this.isShow);
+      });
+      this.scrollListener();
+      /* eslint-enable */
+    }, 6000);
+    this.attachScrollListener();
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+    this.detachScrollListener();
+  }
+
+  scrollListener = async () => {
+    /*eslint-disable */
+    if (!this.isShow) {
+      window?.$zopim && window?.$zopim(() => {
+        window?.$zopim?.livechat.button.hide();
+        window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
+        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+        window?.$zopim?.livechat.button.show();
+      });
+    }
+    /* eslint-enable */
+  }
+
+  attachScrollListener() {
+    window.addEventListener('scroll', this.scrollListener);
+    window.addEventListener('resize', this.scrollListener);
+    this.scrollListener();
+  }
+
+  detachScrollListener() {
+    this.isShow = true;
+    /*eslint-disable */
+    window?.$zopim?.livechat.button.hide();
+    window.removeEventListener('scroll', this.scrollListener);
+    window.removeEventListener('resize', this.scrollListener);
+    /* eslint-enable */
   }
 
   onCountdownComplete = (eventId) => {

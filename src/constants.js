@@ -23,7 +23,7 @@ export const APP = {
   SETTING: 'setting',
   OFFLINE_STATUS: 'offline_status',
   ALLOW_LOCATION_ACCESS: 'allow_location_access',
-  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'],
+  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es', 'vi'],
   CC_SOURCE: 'cc_source',
   CC_PRICE: 'cc_price',
   CC_ADDRESS: 'cc_address',
@@ -655,6 +655,15 @@ export const URL = {
   INTERNAL_ADMIN_URL: '/admin/coin/:type',
   CASH_STORE_URL: '/cash_store',
   LANDING_BECOME_ATM: '/become-atm',
+
+  INVEST_PROJECT_LIST: '/invest/project',
+  INVEST_TRADER_LIST: '/invest/trader',
+  INVEST_PROJECT_INFO: '/invest/project/:projectID',
+  INVEST_TRADER_INFO: '/invest/trader/:traderID',
+  INVEST_URL: '/invest',
+  INVEST_INVESTING_LIST: '/invest/investing',
+
+
   INTERNAL_ADMIN_DASHBOARD_URL: '/internal-admin-dashboard',
 };
 

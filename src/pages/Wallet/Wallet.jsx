@@ -251,17 +251,6 @@ class Wallet extends React.Component {
     }
   }
 
-  attachScrollListener() {
-    // window.addEventListener('scroll', this.listener);
-    // window.addEventListener('resize', this.listener);
-    // this.listener();
-  }
-
-  detachScrollListener() {
-    // window.removeEventListener('scroll', this.listener);
-    // window.removeEventListener('resize', this.listener);
-  }
-
   componentWillUnmount() {
     try{document.querySelector(".app").style.backgroundColor = '#ffffff';} catch (e){};
     this.detachScrollListener();
@@ -282,7 +271,48 @@ class Wallet extends React.Component {
       await this.getListBalace(listWallet);
     }
 
-    // $zopim.livechat.button.hide();
+    setTimeout(() => {
+      /*eslint-disable */
+      window?.$zopim?.livechat?.window?.onShow(() => {
+        this.isShow = true;
+        console.log('onShow', this.isShow);
+      });
+      window?.$zopim?.livechat?.window?.onHide(() => {
+        this.isShow = false;
+        console.log('onHide', this.isShow);
+      });
+      this.scrollListener();
+      /* eslint-enable */
+    }, 6000);
+    this.attachScrollListener();
+  }
+
+  scrollListener = async () => {
+    /*eslint-disable */
+    if (!this.isShow) {
+      window?.$zopim && window?.$zopim(() => {
+        window?.$zopim?.livechat.button.hide();
+        window?.$zopim?.livechat.button.setOffsetVerticalMobile(120);
+        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+        window?.$zopim?.livechat.button.show();
+      });
+    }
+    /* eslint-enable */
+  }
+
+  attachScrollListener() {
+    window.addEventListener('scroll', this.scrollListener);
+    window.addEventListener('resize', this.scrollListener);
+    this.scrollListener();
+  }
+
+  detachScrollListener() {
+    this.isShow = true;
+    /*eslint-disable */
+    window?.$zopim?.livechat.button.hide();
+    window.removeEventListener('scroll', this.scrollListener);
+    window.removeEventListener('resize', this.scrollListener);
+    /* eslint-enable */
   }
 
   async getSetting(){
@@ -915,9 +945,9 @@ class Wallet extends React.Component {
         (
           <Redeem
             data={data}
-            onFinish={(result) => {              
+            onFinish={(result) => {
               this.modalRedeemRef.close();
-              this.setState({redeemContent: ''});                            
+              this.setState({redeemContent: ''});
              }}
           />
         ),

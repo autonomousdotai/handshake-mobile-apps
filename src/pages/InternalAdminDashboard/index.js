@@ -4,6 +4,7 @@ import AdminIDVerification, { STATUS } from '@/pages/Admin/AdminIDVerification';
 import { EXCHANGE_ACTION, URL } from '@/constants';
 import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 import queryString from 'query-string';
+import Login from '@/components/handshakes/betting-event/Login';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
@@ -77,7 +78,6 @@ class InternalAdminDashboard extends Component {
     if (this.token.length > 0) {
       return true;
     }
-    this.props.history.push(`${URL.ADMIN_ID_VERIFICATION}?redirect=/internal-admin-dashboard`);
     return false;
   }
 
@@ -93,6 +93,10 @@ class InternalAdminDashboard extends Component {
     return queryString.parse(window?.location?.search) || {};
   }
 
+  reload = () => {
+    window?.location?.reload && window?.location?.reload();
+  }
+
   renderBody = () => {
     const { selectedMenuId, queryTab, queryParams } = this.state;
     const menuData = menus[selectedMenuId];
@@ -103,7 +107,7 @@ class InternalAdminDashboard extends Component {
 
   render() {
     if (!this.checkAuth()) {
-      return null;
+      return <Login onLoggedIn={this.reload} />;
     }
     return (
       <main>

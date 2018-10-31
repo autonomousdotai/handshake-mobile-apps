@@ -28,6 +28,13 @@ import {
 
 import LandingWrapper from '@/components/LandingWrapper';
 
+import shurikenIcon from '@/assets/images/ninja/shuriken-icon.svg';
+import playVideoButton from '@/assets/images/ninja/play-video-button.svg';
+import videoLeftCover from '@/assets/images/ninja/video-left-cover.jpg';
+import videoRightCover from '@/assets/images/ninja/video-right-cover.jpg';
+import phoneIcon from '@/assets/images/ninja/phone-icon.svg';
+import './Main.scss';
+
 const products = [
   {
     name: 'cash',
@@ -97,13 +104,6 @@ const researches = [
   },
 ];
 
-import shurikenIcon from '@/assets/images/ninja/shuriken-icon.svg';
-import playVideoButton from '@/assets/images/ninja/play-video-button.svg';
-import videoLeftCover from '@/assets/images/ninja/video-left-cover.jpg';
-import videoRightCover from '@/assets/images/ninja/video-right-cover.jpg';
-import phoneIcon from '@/assets/images/ninja/phone-icon.svg';
-import './Main.scss';
-
 class Main extends React.PureComponent {
   static propTypes = {
     setLanguage: PropTypes.func.isRequired,
@@ -115,7 +115,7 @@ class Main extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log('mobile', this.props)
+    console.log('mobile', this.props);
     const appContainer = document.getElementById('app');
     appContainer.classList.add('mobileTabletApp');
   }
@@ -142,7 +142,7 @@ class Main extends React.PureComponent {
               <div className="row" style={{ marginTop: '18px' }}>
                 {
                   products.map((product, index) => {
-                    const { title, subTitle, img, to, href, name } = product
+                    const { title, subTitle, img, to, href, name } = product;
 
                     const content = (
                       <div>
@@ -150,20 +150,20 @@ class Main extends React.PureComponent {
                         <div className="landing-title my-1">{title}</div>
                         <div className="landing-sub-title">{subTitle}</div>
                       </div>
-                    )
-                    let element = React.cloneElement(<Link to="" />, { to }, content)
+                    );
+                    let element = React.cloneElement(<Link to="" />, { to }, content);
                     if (href) {
-                      element = React.createElement('a', { href }, content)
+                      element = React.createElement('a', { href }, content);
                     }
                     if (name === 'dad') {
-                      element = !BrowserDetect.isDesktop ? React.createElement('a', { href }, content) : React.cloneElement(<Link to="" />, { to }, content)
+                      element = !BrowserDetect.isDesktop ? React.createElement('a', { href }, content) : React.cloneElement(<Link to="" />, { to }, content);
                     }
 
                     return (
                       <div className="col-12 col-sm-6 col-md-4 product" key={index}>
                         {element}
                       </div>
-                    )
+                    );
                   })
                 }
               </div>
@@ -180,7 +180,18 @@ class Main extends React.PureComponent {
                 <div className="row" style={{ marginTop: '18px' }}>
                   {
                     researches.map((product, index) => {
-                      const { title, subTitle, img, to } = product
+                      const { title, subTitle, img, to } = product;
+                      if (to === '/constant') {
+                        return (
+                          <div className="col-12 col-sm-6 product" key={index}>
+                            <a href="http://constant.money">
+                              <div><img src={img} className="img-fluid" /></div>
+                              <div className="landing-title my-1">{title}</div>
+                              <div className="landing-sub-title">{subTitle}</div>
+                            </a>
+                          </div>
+                        );
+                      }
                       return (
                         <div className="col-12 col-sm-6 product" key={index}>
                           <Link to={to}>
@@ -189,7 +200,7 @@ class Main extends React.PureComponent {
                             <div className="landing-sub-title">{subTitle}</div>
                           </Link>
                         </div>
-                      )
+                      );
                     })
                   }
                 </div>
@@ -197,7 +208,7 @@ class Main extends React.PureComponent {
             )
         }
       </LandingWrapper>
-    )
+    );
   }
 }
 
