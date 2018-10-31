@@ -7,6 +7,7 @@ import me from './me';
 import comment from './comment';
 import admin from './admin';
 import internalWithdraw from './internalWithdraw';
+import invest from './invest';
 import internalAdmin from './internalAdmin';
 import buyCoin from './buyCoin';
 import sellCoin from './sellCoin';
@@ -28,4 +29,5 @@ export default {
   sellCoin,
   coin,
   // firebase,
+  invest
 };
