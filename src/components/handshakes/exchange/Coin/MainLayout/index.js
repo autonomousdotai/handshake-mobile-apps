@@ -10,11 +10,11 @@ import './styles.scss';
 const TABS = {
   BUYCOIN: {
     name: 'coin_tabs.buy',
-    component: <BuyCryptoCoin className="fadeIn" />,
+    component: BuyCryptoCoin,
   },
   SELLCOIN: {
     name: 'coin_tabs.sell',
-    component: <SellCryptoCoin className="fadeIn" />,
+    component: SellCryptoCoin,
   },
 };
 
@@ -44,8 +44,16 @@ class Coin extends Component {
 
   renderTabComponent = () => {
     const { currentTabId } = this.state;
-    const tab = TABS[currentTabId];
-    return tab?.component;
+    return (
+      <React.Fragment>
+        {
+          Object.entries(TABS).map(([key, data]) => {
+            const Com = data?.component;
+            return <Com key={key} className={key === currentTabId ? 'fadeIn' : 'hidden'} />;
+          })
+        }
+      </React.Fragment>
+    );
   }
 
   render() {

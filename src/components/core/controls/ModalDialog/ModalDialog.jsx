@@ -31,7 +31,7 @@ class ModalDialog extends React.Component {
     this.contentRef && this.contentRef.classList.add('zoomIn');
     this.currentOffset = window.scrollY;
     document.body.classList.add('hide-scroll');
-    const freezeStyle = `height: 100%; position: fixed`;
+    const freezeStyle = `height: 100%; position: fixed; width: 100%`;
     document.body.setAttribute('style', freezeStyle);
   }
 

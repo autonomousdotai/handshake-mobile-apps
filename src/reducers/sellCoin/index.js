@@ -16,6 +16,7 @@ const initialState = {
   coinInfo: {},
   fiatAmountOverLimit: false,
   orderInfo: {},
+  generatedAddress: null,
 };
 
 const sellCoinReducter = (state = initialState, action) => {
@@ -49,9 +50,16 @@ const sellCoinReducter = (state = initialState, action) => {
       };
     case SELL_COIN_ACTIONS.SELL_COIN_FINISH_ORDER:
       return {
-        ...state,
-        orderInfo: {},
+        initialState,
       };
+    case `${SELL_COIN_ACTIONS.SELL_COIN_GENERATE_ADDRESS}_SUCCESS`:
+      if (action?.payload?.data) {
+        return {
+          ...state,
+          generatedAddress: action?.payload?.data,
+        };
+      }
+      break;
     default:
       return state;
   }
