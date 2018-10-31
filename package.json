@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-decorators": "^7.1.2",
+    "babel-plugin-transform-decorators": "^6.24.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
     "@babel/plugin-proposal-optional-chaining": "^7.0.0-beta.51",
     "@babel/plugin-transform-react-jsx": "^7.0.0-beta.51",
