@@ -327,7 +327,7 @@ export default {
   'escrow.label.yourSellingPrice': 'Your selling price',
   'escrow.label.sellingPriceCaption': '= Market price + your percentage',
   'escrow.btn.depositNow': 'Deposit now',
-  'escrow.btn.depositSuccessMessage': 'Succesful!',
+  'escrow.btn.depositSuccessMessage': 'Successful!',
   'escrow.label.wallet.setDefaultWallet': 'You must set default wallet {currency}',
 
   'dashboard.heading': 'Dashboard',
@@ -387,8 +387,8 @@ export default {
         {
           title: 'Place a bet:',
           content: 'Pick the market you want to bet (i.e. Brazil - Spain), the outcomes (i.e. Brazil wins) and the site (i.e. support or bet against the outcome)\n' +
-            'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
-            'The PEX Matching Engine will then find another order that bets against the odds you set.',
+          'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
+          'The PEX Matching Engine will then find another order that bets against the odds you set.',
         },
         {
           title: 'Wait for the report:',
@@ -1933,7 +1933,7 @@ export default {
           need_selfie_verifiy: 'You are buying more than 500 usd. Please provide additional verification to increase your limit',
         },
       },
-      success: 'Succesful!',
+      success: 'Successful!',
     },
     buy_package_without_wallet_address_notice: 'Please choose your wallet first.',
   },
@@ -1968,11 +1968,60 @@ export default {
   'buy_coin_confirm_popup.cancel_text': 'Cancel',
   'buy_coin.verify.need_selfie_verifiy': 'You are buying more than {fiatAmount} {fiatCurrency}. Please verify your account to increase the limit',
   'buy_coin.verify.need_selfie_verifiy_action': 'Verify now',
+  'sell_coin_confirm_popup.msg': 'Sell {amount} {currency} for {fiatAmount}?',
+  'sell_coin_confirm_popup.confirm_text': 'Confirm',
+  'sell_coin_confirm_popup.cancel_text': 'Cancel',
   review: {
     title: 'Review',
     label: {
       description: 'How is your experience with Ninja Coin?',
       submitButtonTitle: 'Submit',
+      loadMore: 'Load more',
+      comments: 'comments',
     },
   },
+  sell_coin: {
+    label: 'Sell coin',
+    order: {
+      inputs: {
+        currency: {
+          amount: 'Amount',
+        },
+        bank_owner: 'Account Name',
+        bank_name: 'Bank Name',
+        bank_number: 'Account Number',
+        phone: 'Phone Number',
+      },
+      btn: {
+        submit_order: 'Next',
+      },
+    },
+    summary: {
+      label: 'Your Selling Order',
+      info: {
+        code: 'Code',
+        receiving: 'Receiving',
+        selling: 'Selling',
+        address: 'Address',
+        notes: ['Note 1', 'Note 2'],
+      },
+      btn: {
+        close_summary: 'Finish',
+      },
+    },
+  },
+  coin_crypto: {
+    price_panel: {
+      price: 'Price',
+      sell: 'Sell',
+      buy: 'Buy',
+    },
+    contact: {
+      faq: 'FAQs',
+      chat_with_us: 'Chat with us Online Support',
+      phone_cs: '0902 425 186',
+    },
+  },
+  'coin_tabs.sell': 'SELL COIN',
+  'coin_tabs.buy': 'BUY COIN',
 };

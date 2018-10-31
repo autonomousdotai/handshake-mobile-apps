@@ -10,6 +10,7 @@ const languages = {
   ko: Object.assign({}, en, i18n.ko),
   ru: Object.assign({}, en, i18n.ru),
   es: Object.assign({}, en, i18n.es),
+  vi: Object.assign({}, en, i18n.vi),
 };
 
 export default languages;
