@@ -6,6 +6,7 @@ import { showAlert } from '@/reducers/app/action';
 import QrCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
 import { formatMoneyByLocale } from '@/services/offer-util';
+import ClockCount from '@/components/handshakes/exchange/components/ClockCount';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import iconCopy from '@/assets/images/icon/icon-copy.svg';
 import './styles.scss';
@@ -15,6 +16,9 @@ const scopedCss = (className) => `sell-crypto-coin-summary-${className}`;
 class OrderInfo extends Component {
   onFinish = () => {
     this.props.sellCryptoFinishOrder();
+  }
+
+  onCountdownExpired = () => {
   }
 
   getLocalStr = () => {
@@ -72,22 +76,35 @@ class OrderInfo extends Component {
   }
 
   renderNotes = () => {
-    const notes = this.getLocalStr().info?.notes || [];
+    const notes = this.getLocalStr().info?.notes || {};
     return (
-      <ul className={scopedCss('note-txt')}>
-        {
-          // eslint-disable-next-line
-          notes.map((note, index) => (<li key={index}>{note}</li>))
-        }
-      </ul>
+      <div className={scopedCss('note-txt')}>
+        <div>
+          <span>{notes.main_note}</span>
+          <span>{notes.sub_note}</span>
+        </div>
+        <ul>
+          {
+            // eslint-disable-next-line
+            notes.list?.map((note, index) => (<li key={index}>{note}</li>))
+          }
+        </ul>
+      </div>
     );
   }
 
   render() {
-    const { orderInfo: { address } } = this.props;
+    const { orderInfo: { address }, className } = this.props;
     return (
-      <div className={scopedCss('container')}>
+      <div className={`${scopedCss('container')} ${className}`}>
         <span className={scopedCss('summary-txt')}>{this.getLocalStr().label}</span>
+        <ClockCount
+          internalClockdown
+          loop
+          duration={300}
+          className={scopedCss('countdown')}
+          onExpired={this.onCountdownExpired}
+        />
         {this.renderInfo()}
         <div className={scopedCss('qr-container')}>
           { address && this.renderAddressWallet(address) }
@@ -109,11 +126,16 @@ const mapDispatchToProps = {
   showAlert,
 };
 
+OrderInfo.defaultProps = {
+  className: '',
+};
+
 OrderInfo.propTypes = {
   sellCryptoFinishOrder: PropTypes.func.isRequired,
   orderInfo: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   showAlert: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
 export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(OrderInfo));

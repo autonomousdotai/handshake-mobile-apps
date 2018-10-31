@@ -167,7 +167,7 @@ class SellCryptoCoin extends Component {
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
       `0 ${fiatCurrency}`;
     if (orderInfo && orderInfo.id) {
-      return <OrderInfo />;
+      return <OrderInfo className={className} />;
     }
 
     return (

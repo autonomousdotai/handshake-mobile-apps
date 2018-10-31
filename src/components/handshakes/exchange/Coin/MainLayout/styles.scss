@@ -35,6 +35,10 @@
     animation-fill-mode: both;
   }
 
+  .hidden {
+    display: none
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
