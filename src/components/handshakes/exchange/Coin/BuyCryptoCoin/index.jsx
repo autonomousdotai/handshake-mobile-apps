@@ -101,7 +101,6 @@ class BuyCryptoCoin extends React.Component {
     this.state = {
       currency: CRYPTO_CURRENCY.BTC,
       isLoading: false,
-      forcePaymentMethod: null,
       modalContent: null,
       modalTitle: null,
       isValidToSubmit: false,
@@ -206,16 +205,6 @@ class BuyCryptoCoin extends React.Component {
     if (wallet?.currency !== this.props.wallet?.currency) {
       // this.getBasePrice(wallet?.currency);
       this.setState({ currency: wallet?.currency }, this.getPackageData);
-    }
-
-    if (fiatAmountOverLimit !== this.props.fiatAmountOverLimit) {
-      if (fiatAmountOverLimit) {
-        this.setState({ forcePaymentMethod: PAYMENT_METHODS.BANK_TRANSFER }, () => {
-          this.updatePaymentMethod(this.state.forcePaymentMethod);
-        });
-      } else {
-        this.setState({ forcePaymentMethod: null });
-      }
     }
 
     // get bank info if country change
@@ -704,12 +693,11 @@ class BuyCryptoCoin extends React.Component {
   }
 
   render() {
-    const { authProfile: { idVerified }, className } = this.props;
+    const { className } = this.props;
     const { messages } = this.props.intl;
     const { coinMoneyExchange, paymentMethod } = this.props;
-    const { currency, forcePaymentMethod, isValidToSubmit } = this.state;
+    const { currency, isValidToSubmit } = this.state;
 
-    const showState = [-1, 0, 2, 1];
 
     return (
       <div className={className} >
@@ -717,9 +705,6 @@ class BuyCryptoCoin extends React.Component {
           <Image src={loadingSVG} alt="loading" width="100" />
         </div>
         <div className={scopedCss('container')}>
-          {
-            showState.indexOf(idVerified) > 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} />
-          }
           <div className={scopedCss('specific-amount')}>
             <FormBuyCrypto onSubmit={this.onSubmit} validate={this.validateForm}>
               <div className="input-group mt-4">
@@ -750,7 +735,6 @@ class BuyCryptoCoin extends React.Component {
                   titles={messages.buy_coin.label.payment_methods}
                   name="paymentMethod"
                   items={PAYMENT_METHODS}
-                  disabled={forcePaymentMethod}
                   extraInfo={{
                     [PAYMENT_METHODS.COD]: messages.buy_coin.label.payment_methods.cod_info,
                   }}
@@ -761,7 +745,7 @@ class BuyCryptoCoin extends React.Component {
                 <ConfirmButton
                   validate={this.checkUserVerified}
                   disabled={!isValidToSubmit}
-                  label={`${messages.create.cod_form.buy_btn} ${coinMoneyExchange?.amount} ${CRYPTO_CURRENCY_NAME[currency] || ''}`}
+                  label={`${messages.create.cod_form.buy_btn} ${coinMoneyExchange?.amount || 0} ${CRYPTO_CURRENCY_NAME[currency] || ''}`}
                   confirmText={<FormattedMessage id="buy_coin_confirm_popup.confirm_text" />}
                   cancelText={<FormattedMessage id="buy_coin_confirm_popup.cancel_text" />}
                   buttonClassName="buy-btn"

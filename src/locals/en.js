@@ -1977,6 +1977,7 @@ export default {
       description: 'How is your experience with Ninja Coin?',
       submitButtonTitle: 'Submit',
       loadMore: 'Load more',
+      comments: 'comments',
     },
   },
   sell_coin: {
@@ -2007,6 +2008,18 @@ export default {
       btn: {
         close_summary: 'Finish',
       },
+    },
+  },
+  coin_crypto: {
+    price_panel: {
+      price: 'Price',
+      sell: 'Sell',
+      buy: 'Buy',
+    },
+    contact: {
+      faq: 'FAQs',
+      chat_with_us: 'Chat with us Online Support',
+      phone_cs: '0902 425 186',
     },
   },
   'coin_tabs.sell': 'SELL COIN',

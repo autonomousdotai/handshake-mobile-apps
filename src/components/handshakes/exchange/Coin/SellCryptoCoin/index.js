@@ -135,11 +135,11 @@ class SellCryptoCoin extends Component {
 
   renderUserInfoInput = () => {
     const fields = {
-      bankOwner: {
-        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
-      },
       bankName: {
         placeholder: this.getLocalStr().order?.inputs?.bank_name,
+      },
+      bankOwner: {
+        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
       },
       bankNumber: {
         placeholder: this.getLocalStr().order?.inputs?.bank_number,
