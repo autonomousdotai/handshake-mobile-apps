@@ -23,7 +23,7 @@ export const APP = {
   SETTING: 'setting',
   OFFLINE_STATUS: 'offline_status',
   ALLOW_LOCATION_ACCESS: 'allow_location_access',
-  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'],
+  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es', 'vi'],
   CC_SOURCE: 'cc_source',
   CC_PRICE: 'cc_price',
   CC_ADDRESS: 'cc_address',
