@@ -6,9 +6,13 @@ const initialState = {
 
 const guruReducer = (state = initialState, action) => {
   return produce(state, draft => {
-    // switch (action.type) {
-    //   case 'GET_EVENTS_SUCCESS':
-    // }
+    switch (action.type) {
+      case 'GURU:UPDATE_EVENTS':
+        draft.guru.events = action.events;
+        break;
+      default:
+        break;
+    }
   });
 };
 

@@ -38,6 +38,8 @@ const RouterExchange = createDynamicImport(() => import('@/components/Router/Exc
 const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/CreateMarket'), Loading);
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
+const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
 const LandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -62,6 +64,7 @@ const InternalAdminDashboard = createDynamicImport(() => import('@/pages/Interna
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
   { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
+  { path: URL.HANDSHAKE_GURU, component: RouterGuru },
   { path: URL.HANDSHAKE_PEX, component: RouterExchange },
   { path: URL.HANDSHAKE_PEX_UPDATER, component: CreateOwnMarket },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },

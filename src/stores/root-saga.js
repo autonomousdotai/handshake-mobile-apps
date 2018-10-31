@@ -3,7 +3,7 @@ import predictionSaga from '@/pages/Prediction/saga';
 import createMarketSaga from '@/pages/CreateMarket/saga';
 import PexExtensionSaga from '@/pages/PexExtension/saga';
 import orderPlaceSaga from '@/components/handshakes/betting/Feed/OrderPlace/saga';
-import guruSaga from '@/guru/store/saga';
+import guruSaga from '@/guru/stores/saga';
 
 export default function* rootSaga() {
   yield spawn(predictionSaga);
