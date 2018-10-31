@@ -250,15 +250,16 @@ class Me extends React.Component {
   }
 
   scrollListener = async () => {
-    console.log('scrollListener',);
+    /*eslint-disable */
     if (!this.isShow) {
-      $zopim(() => {
-        $zopim.livechat.button.hide();
-        $zopim.livechat.button.setOffsetVerticalMobile(70);
-        $zopim.livechat.button.setOffsetHorizontalMobile(10);
-        $zopim.livechat.button.show();
+      window?.$zopim && window?.$zopim(() => {
+        window?.$zopim?.livechat.button.hide();
+        window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
+        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+        window?.$zopim?.livechat.button.show();
       });
     }
+    /* eslint-enable */
   }
 
   attachScrollListener() {
@@ -269,9 +270,11 @@ class Me extends React.Component {
 
   detachScrollListener() {
     this.isShow = true;
-    $zopim.livechat.button.hide();
+    /*eslint-disable */
+    window?.$zopim?.livechat.button.hide();
     window.removeEventListener('scroll', this.scrollListener);
     window.removeEventListener('resize', this.scrollListener);
+    /* eslint-enable */
   }
 
   componentDidMount() {
@@ -300,15 +303,17 @@ class Me extends React.Component {
     this.getOfferStore();
     // this.getDashboardInfo();
     setTimeout(() => {
-      $zopim.livechat.window.onShow(() => {
+      /*eslint-disable */
+      window?.$zopim?.livechat?.window?.onShow(() => {
         this.isShow = true;
         console.log('onShow', this.isShow);
       });
-      $zopim.livechat.window.onHide(() => {
+      window?.$zopim?.livechat?.window?.onHide(() => {
         this.isShow = false;
         console.log('onHide', this.isShow);
       });
       this.scrollListener();
+      /* eslint-enable */
     }, 6000);
     this.attachScrollListener();
   }
