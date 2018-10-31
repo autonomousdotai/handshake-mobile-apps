@@ -4,6 +4,13 @@
   background: white;
   border-radius: 5px;
   min-height: calc(100vh - 90px);
+  .sell-crypto-coin-summary-countdown {
+    display: block;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: green;
+  }
   .sell-crypto-coin-summary-summary-txt {
     text-transform: uppercase;
     color: #0A2240;
@@ -16,6 +23,7 @@
     display: block;
   }
   .sell-crypto-coin-summary-summary-info {
+    margin: 10px 0px;
     display: flex;
     flex-direction: column;
     .sell-crypto-coin-summary-info-item {
@@ -66,7 +74,6 @@
     }
   }
   .sell-crypto-coin-summary-note-txt {
-    height: 42px;
     color: #0A2240;
     font-size: 14px;
     font-weight: normal;
@@ -75,6 +82,22 @@
     padding: 0px;
     margin: 15px 10px;
     line-height: 21px;
+    > div {
+      text-align: center;
+      :first-child {
+        display: block;
+        font-weight: bold;
+        color: red;
+        font-size: 17px;
+      }
+      :last-child {
+        color: #889EB5;
+      }
+    }
+    > ul {
+      padding: 0px;
+      margin: 15px 10px;
+    }
   }
   .sell-crypto-coin-summary-btn {
     height: 53px;

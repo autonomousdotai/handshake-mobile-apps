@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { sellCryptoFinishOrder } from '@/reducers/sellCoin/action';
 import { showAlert } from '@/reducers/app/action';
 import QrCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
 import { formatMoneyByLocale } from '@/services/offer-util';
+import ClockCount from '@/components/handshakes/exchange/components/ClockCount';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import iconCopy from '@/assets/images/icon/icon-copy.svg';
 import './styles.scss';
@@ -14,7 +14,17 @@ const scopedCss = (className) => `sell-crypto-coin-summary-${className}`;
 
 class OrderInfo extends Component {
   onFinish = () => {
-    this.props.sellCryptoFinishOrder();
+    const { onFinish } = this.props;
+    if (typeof onFinish === 'function') {
+      onFinish();
+    }
+  }
+
+  onCountdownExpired = () => {
+    const { getCoinInfo } = this.props;
+    if (typeof getCoinInfo === 'function') {
+      getCoinInfo();
+    }
   }
 
   getLocalStr = () => {
@@ -32,6 +42,15 @@ class OrderInfo extends Component {
     });
   }
 
+  isValidToSubmit = () => {
+    const { orderInfo, generatedAddress } = this.props;
+    const { fiatLocalAmount, fiatLocalCurrency, amount, currency } = orderInfo;
+    if (!generatedAddress || !fiatLocalAmount || !amount || !fiatLocalCurrency || !currency) {
+      return false;
+    }
+    return true;
+  }
+
   renderAddressWallet = (text) => {
     return (
       <CopyToClipboard text={text} onCopy={this.copied}>
@@ -44,12 +63,8 @@ class OrderInfo extends Component {
   }
 
   renderInfo = () => {
-    const { orderInfo: { refCode, fiatLocalAmount, fiatLocalCurrency, amount, currency } } = this.props;
+    const { orderInfo: { fiatLocalAmount, fiatLocalCurrency, amount, currency } } = this.props;
     const infos = [
-      {
-        name: this.getLocalStr().info?.code,
-        value: refCode || '',
-      },
       {
         name: this.getLocalStr().info?.receiving,
         value: `${formatMoneyByLocale(fiatLocalAmount) || ''} ${fiatLocalCurrency || ''}`,
@@ -72,48 +87,64 @@ class OrderInfo extends Component {
   }
 
   renderNotes = () => {
-    const notes = this.getLocalStr().info?.notes || [];
+    const notes = this.getLocalStr().info?.notes || {};
     return (
-      <ul className={scopedCss('note-txt')}>
-        {
-          // eslint-disable-next-line
-          notes.map((note, index) => (<li key={index}>{note}</li>))
-        }
-      </ul>
+      <div className={scopedCss('note-txt')}>
+        <div>
+          <span>{notes.main_note}</span>
+          <span>{notes.sub_note}</span>
+        </div>
+        <ul>
+          {
+            // eslint-disable-next-line
+            notes.list?.map((note, index) => (<li key={index}>{note}</li>))
+          }
+        </ul>
+      </div>
     );
   }
 
   render() {
-    const { orderInfo: { address } } = this.props;
+    const { className, generatedAddress } = this.props;
     return (
-      <div className={scopedCss('container')}>
+      <div className={`${scopedCss('container')} ${className}`}>
         <span className={scopedCss('summary-txt')}>{this.getLocalStr().label}</span>
+        <ClockCount
+          internalClockdown
+          loop
+          duration={300}
+          className={scopedCss('countdown')}
+          onExpired={this.onCountdownExpired}
+        />
         {this.renderInfo()}
         <div className={scopedCss('qr-container')}>
-          { address && this.renderAddressWallet(address) }
-          { address && <QrCode value={address} />}
+          { generatedAddress && this.renderAddressWallet(generatedAddress) }
+          { generatedAddress && <QrCode value={generatedAddress} />}
           {this.renderNotes()}
         </div>
-        <button onClick={this.onFinish} className={scopedCss('btn')}>{this.getLocalStr().btn?.close_summary}</button>
+        <button disabled={!this.isValidToSubmit()} onClick={this.onFinish} className={scopedCss('btn')}>{this.getLocalStr().btn?.close_summary}</button>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  orderInfo: state.sellCoin.orderInfo,
-});
-
 const mapDispatchToProps = {
-  sellCryptoFinishOrder,
   showAlert,
 };
 
+OrderInfo.defaultProps = {
+  className: '',
+  onFinish: null,
+};
+
 OrderInfo.propTypes = {
-  sellCryptoFinishOrder: PropTypes.func.isRequired,
   orderInfo: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   showAlert: PropTypes.func.isRequired,
+  className: PropTypes.string,
+  generatedAddress: PropTypes.string.isRequired,
+  onFinish: PropTypes.func,
+  getCoinInfo: PropTypes.func.isRequired,
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(OrderInfo));
+export default injectIntl(connect(null, mapDispatchToProps)(OrderInfo));
