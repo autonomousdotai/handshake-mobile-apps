@@ -181,6 +181,10 @@ class Router extends React.Component {
   }
 
   render() {
+    if (window.location.hostname === 'constant.money') {
+      document.title = 'Constant - Untraceable, stable, digital cash';
+      return <Route path="/" render={() => <LandingConstant />} />;
+    }
     return (
       <Switch>
         {
@@ -230,7 +234,7 @@ class Router extends React.Component {
                     )
                 }
               </Layout>
-            )
+            );
           }}
         />
       </Switch>
