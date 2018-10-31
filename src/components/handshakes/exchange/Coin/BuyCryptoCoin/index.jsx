@@ -693,12 +693,11 @@ class BuyCryptoCoin extends React.Component {
   }
 
   render() {
-    const { authProfile: { idVerified }, className } = this.props;
+    const { className } = this.props;
     const { messages } = this.props.intl;
     const { coinMoneyExchange, paymentMethod } = this.props;
     const { currency, isValidToSubmit } = this.state;
 
-    const showState = [-1, 0, 2, 1];
 
     return (
       <div className={className} >
@@ -706,9 +705,6 @@ class BuyCryptoCoin extends React.Component {
           <Image src={loadingSVG} alt="loading" width="100" />
         </div>
         <div className={scopedCss('container')}>
-          {
-            showState.indexOf(idVerified) > 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} />
-          }
           <div className={scopedCss('specific-amount')}>
             <FormBuyCrypto onSubmit={this.onSubmit} validate={this.validateForm}>
               <div className="input-group mt-4">
