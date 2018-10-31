@@ -139,17 +139,17 @@ class ContentForPexInstruction extends React.Component {
         <p className="content">First, pick an <strong>event</strong> (i.e. Man. City— Newcastle), the <strong>outcome</strong> (Man. City wins) and the side (support or bet against the outcome).</p>
         <div className="wrapperGuideCenter wrapperImages">
           <div className="imageBlock">
-            <div className="content">Figure 4.1</div>
-            <img src={StepFourth1} width="450" alt="StepThree1" />
+            <div className="content">Figure 3.1</div>
+            <img src={StepFourth1} width="450" alt="StepFourth1" />
           </div>
           <div className="imageBlock">
-            <div className="content">Figure 4.2</div>
-            <img src={StepFourth2} width="450" alt="StepThree2" />
+            <div className="content">Figure 3.2</div>
+            <img src={StepFourth2} width="450" alt="StepFourth1" />
           </div>
         </div>
         <br />
         <div className="content">
-          <p>Then enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 4.0). <i>(Figure 4.1, Figure 4.2)</i></p>
+          <p>Then enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 4.0). <i>(Figure 3.1, Figure 3.2)</i></p>
           <p><strong>Example</strong>: The odds 4.0 means you could win 3 ETH for every 1 ETH you put down.Total winnings: 1 ETH + 3TH = 4ETH</p>
           <p>Tap <strong>Bet Now.</strong></p>
           <p>The stake will be put into an escrow smart contract. The <strong>Prediction Matching Engine</strong> will then find another user to bet against the odds you’ve set.</p>
@@ -168,13 +168,13 @@ class ContentForPexInstruction extends React.Component {
         <div className="pexHeadline">Wait for the result.</div>
         <p className="content">Once the event ends, the reporter of the market will report the result within the reporting window (set by the market creator).</p>
         <div className="wrapperGuideCenter wrapperImages imageBlock" >
-          <div className="content">Figure 5.1</div>
+          <div className="content">Figure 4.1</div>
           <img src={StepFifth1} width="450" alt="StepFifth1" />
         </div>
         <br />
         <div className="content">
           <p>There will be a short window to dispute the result (again set by the market creator).</p>
-          <p>After which the result will be final and verified. If you win, your winnings will be automatically transferred from the escrow smart contract to your account. <i>(Figure 5.1)</i></p>
+          <p>After which the result will be final and verified. If you win, your winnings will be automatically transferred from the escrow smart contract to your account. <i>(Figure 4.1)</i></p>
           <p>Or if the result was successfully disputed, you’ll be completely refunded.</p>
           <p>And that’s it!</p>
           <p><strong>Happy forecasting Ninjas!</strong></p>
