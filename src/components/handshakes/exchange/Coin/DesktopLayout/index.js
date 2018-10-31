@@ -5,11 +5,13 @@ import PricePanel from './PricePanel';
 import Contact from './Contact';
 import Review from '@/components/handshakes/exchange/Coin/ReviewList';
 import './styles.scss';
+import { connect } from 'react-redux';
 
 const scopedCss = (className) => `crypto-coin-desktop-${className}`;
 
 class CoinDesktop extends Component {
   render() {
+    const { numReview } = this.props;
     return (
       <div className={scopedCss('container')}>
         <div className="container">
@@ -21,7 +23,7 @@ class CoinDesktop extends Component {
             </div>
             <div className={scopedCss('right-container')}>
               <Contact />
-              <Review />
+              { numReview > 0 && <Review /> }
             </div>
           </div>
         </div>
@@ -34,4 +36,11 @@ CoinDesktop.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default CoinDesktop;
+const mapStateToProps = (state) => ({
+  numReview: state.exchange.numReview,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CoinDesktop);

@@ -35,6 +35,7 @@ function exchangeReducter(state = {
   depositInfo: initDepositInfo,
   listOfferPriceCashAtm: initListOfferPrice,
   reviewList: [],
+  numReview: 0,
 }, action) {
   // console.log('exchangeReducter', JSON.stringify(action));
   switch (action.type) {
@@ -177,6 +178,7 @@ function exchangeReducter(state = {
         return {
           ...state,
           reviewList: newList,
+          numReview: action?.payload?.count,
         };
       }
       return state;

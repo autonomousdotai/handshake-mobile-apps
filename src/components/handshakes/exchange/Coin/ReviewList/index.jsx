@@ -83,11 +83,11 @@ class ReviewList extends React.Component {
   render() {
     console.log('render ReviewList', this.props.reviewList);
     const { isFinished } = this.state;
-    const { reviewList } = this.props;
+    const { reviewList, numReview } = this.props;
     const { messages } = this.props.intl;
     return (
       <div className="review-list-container">
-        <span className="review-list-count-comment">178 {messages.review.label.comments}</span>
+        <span className="review-list-count-comment">{numReview} {messages.review.label.comments}</span>
         <Grid className="review-list">
           {
             reviewList && reviewList.map(item => {
@@ -112,6 +112,7 @@ class ReviewList extends React.Component {
 
 const mapStateToProps = (state) => ({
   reviewList: state.exchange.reviewList,
+  numReview: state.exchange.numReview,
 });
 
 const mapDispatchToProps = (dispatch) => ({
