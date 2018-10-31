@@ -6,10 +6,27 @@ import Contact from './Contact';
 import Review from '@/components/handshakes/exchange/Coin/ReviewList';
 import './styles.scss';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { API_URL } from '@/constants';
+import { getReviewBuyCoin } from '@/reducers/exchange/action';
 
 const scopedCss = (className) => `crypto-coin-desktop-${className}`;
 
 class CoinDesktop extends Component {
+  componentDidMount() {
+    this.getReviewCoin();
+  }
+
+  getReviewCoin = () => {
+    const qs = {};
+    this.props.getReviewBuyCoin({
+      PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
+      qs,
+      METHOD: 'GET',
+      // errorFn: this.handleReviewOfferFailed,
+    });
+  }
+
   render() {
     const { numReview } = this.props;
     return (
@@ -41,6 +58,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  getReviewBuyCoin: bindActionCreators(getReviewBuyCoin, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CoinDesktop);
