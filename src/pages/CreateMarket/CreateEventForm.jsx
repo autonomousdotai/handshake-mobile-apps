@@ -8,6 +8,7 @@ import IconInfo from '@/assets/images/icon/question-circle.svg';
 import moment from 'moment';
 import { Tooltip } from 'reactstrap';
 import DateTimePicker from '@/components/DateTimePicker/DateTimePicker';
+import Checkbox from '@/components/core/controls/Checkbox';
 import GA from '@/services/googleAnalytics';
 import { getGasPrice } from '@/utils/gasPrice';
 import { renderField } from './form';
@@ -59,6 +60,8 @@ class CreateEventForm extends Component {
       closingTime: props.initialValues.closingTime,
       reportingTime: props.initialValues.reportingTime,
       disputeTime: props.initialValues.disputeTime,
+      selectedReportSource: {},
+      reportChecked: props.initialValues.grantPermission,
       privateTooltip: false,
     };
   }
@@ -74,6 +77,8 @@ class CreateEventForm extends Component {
     dispatch(createEvent({
       values,
       isNew: props.isNew,
+      selectedSource: this.state.selectedReportSource.value || null,
+      grantPermission: this.state.reportChecked,
     }));
   }
 
@@ -136,6 +141,13 @@ class CreateEventForm extends Component {
     const oldData = value.slice(0, lastIndex);
     return oldData.every((i) => i.name !== newItem.name) ? undefined : 'Outcome already exists';
   }
+  checkReportStatus = (reportChecked, disabled) => {
+    if (!disabled) {
+      this.setState({
+        reportChecked: !reportChecked,
+      });
+    }
+  }
 
   renderGroupTitle = (title) => {
     return (<div className="CreateEventFormGroupTitle">{title}</div>);
@@ -143,6 +155,28 @@ class CreateEventForm extends Component {
 
   renderGroupNote = (text) => {
     return (<div className="CreateEventFormGroupNote">{text}</div>);
+  }
+  renderCheckReport = (props) => {
+    const { eventId } = props.initialValues;
+    const disabled = eventId ? true : false;
+    return (
+      <div className="wrapperCheckReport">
+        <Checkbox
+          className="checkboxInput"
+          name="checkreport"
+          checked={this.state.reportChecked}
+          onChange={() => {
+            this.checkReportStatus(this.state.reportChecked, disabled);
+          }}
+        />
+        <div className="checkReportTitle"
+          onClick={() => {
+            this.checkReportStatus(this.state.reportChecked, disabled);
+          }}
+        >Ninja will report for me
+        </div>
+      </div>
+    );
   }
 
   renderPrivateOption = (props, state) => {
@@ -352,6 +386,7 @@ class CreateEventForm extends Component {
             dispatchFormAction={(fieldName) => this.dispatchTouchAction(fieldName)}
           />
           {this.renderTimeGroup(props, state)}
+          {this.renderCheckReport(props)}
         </div>
         <div className="CreateEventFormBlock">
           <EmailVerification />

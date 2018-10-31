@@ -7,6 +7,7 @@ import {
   getBalance, getEstimateGas,
 } from '@/components/handshakes/betting/utils';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
+import Checkbox from '@/components/core/controls/Checkbox';
 
 import { BASE_API } from '@/constants';
 import { Alert } from 'reactstrap';
@@ -42,6 +43,8 @@ class BettingReport extends React.Component {
       disable: false,
       final: [],
       errorMessage: '',
+      reportChecked: false,
+
     };
     this.toggle = this.toggle.bind(this);
     // side: 0 (unknown), 1 (support), 2 (against)
@@ -119,10 +122,8 @@ class BettingReport extends React.Component {
         final.push(obj);
         return final;
       });
-      //const newOutcome = resolved ? updatedMatch[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : updatedMatch[0].outcomes;
       const newOutcome = updatedMatch[0].outcomes;
 
-      //console.log(TAG, 'newOutcome:', newOutcome);
       this.setState({
         outcomes: newOutcome,
         activeMatchData: updatedMatch[0],
@@ -161,7 +162,6 @@ class BettingReport extends React.Component {
 
 
   disablePage() {
-    console.log('Disable Page');
     localStorage.setItem('disable', true);
     setTimeout(() => {
       localStorage.setItem('disable', false);
@@ -180,10 +180,7 @@ class BettingReport extends React.Component {
     if (!isAdmin) {
       const balance = await getBalance();
       const estimatedGas = await getEstimateGas();
-      console.log(TAG, 'estimate Gas:', estimatedGas);
       const totalGas = estimatedGas * outcomes.length;
-      console.log(TAG, 'Outcomes Length:', outcomes.length);
-      console.log(TAG, 'totalGas', totalGas);
 
       if (totalGas > balance) {
         message = MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', totalGas);
@@ -200,83 +197,111 @@ class BettingReport extends React.Component {
     }
     return null;
   }
-  onSubmit= async (event) => {
-    const radios = [];
-    if (localStorage.getItem('disable') === false) {
-      return null;
-    }
-    if (this.state.outcomes && this.state.outcomes.length === 0) {
-      return null;
-    }
-    if (document.getElementsByTagName('form')) {
-      const inputs = document.getElementsByTagName('form')[0].elements;
-      // Loop and find only the Radios
-      for (let i = 0; i < inputs.length; ++i) {
-        if (inputs[i].type == 'radio') {
-          radios.push(inputs[i]);
+  checkReportStatus = (reportChecked) => {
+    this.setState({
+      reportChecked: !reportChecked,
+    });
+  }
+  validateData = ()=> {
+    if (!this.state.reportChecked) {
+      const radios = [];
+      if (localStorage.getItem('disable') === false) {
+        return null;
+      }
+      if (this.state.outcomes && this.state.outcomes.length === 0) {
+        return null;
+      }
+      if (document.getElementsByTagName('form')) {
+        const inputs = document.getElementsByTagName('form')[0].elements;
+        // Loop and find only the Radios
+        for (let i = 0; i < inputs.length; ++i) {
+          if (inputs[i].type == 'radio') {
+            radios.push(inputs[i]);
+          }
         }
       }
-    }
-    const valid = radios.length > 0 && radios.map((item) => {
-      if (item.checked) {
-        return true;
+      const valid = radios.length > 0 && radios.map((item) => {
+        if (item.checked) {
+          return true;
+        }
+        return false;
+      });
+      const trueValues = valid.filter(item => item == true);
+      if (trueValues.length < radios.length / 3) {
+
+        return { status: false, message: 'Please select atleast 1 option in each row.'};
       }
-      return false;
-    });
-    const trueValues = valid.filter(item => item == true);
-    if (trueValues.length < radios.length / 3) {
-      this.props.showAlert({
-        message: <div className="text-center">Please select atleast 1 option in each row.</div>,
+    }
+    return { status: true, message: '' };
+  }
+  onSubmit= async (event) => {
+    const validData = this.validateData();
+    if (!validData.status) {
+      this.props.showAlert ({
+        message: <div className="text-center">{validData.message}</div>,
         timeOut: 3000,
         type: 'danger',
         callBack: () => {},
       });
-    } else {
-      const { isAdmin } = this.props;
-      const isValid = await this.validate(this.state.final);
-      console.log(TAG, 'isValide:', isValid);
-      const { status, message } = isValid;
-      if (status) {
-
-        const tokenValue = token || this.checkToken();
-        const authenticate = { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' };
-        const headers = isAdmin ? authenticate : null;
-        console.log('Final State:', this.state.final);
-
-        const url = isAdmin ? `${BASE_API.BASE_URL}/cryptosign/admin/match/report/${this.state.activeMatchData.id}` :
-                    `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
-
-        const submit = $http({
-          url,
-          data: {
-            result: this.state.final,
-          },
-          //qs: { dispute: resolved ? 1 : 0 },
-          headers: headers,
-          method: 'post',
-        });
-
-
-        submit.then((response) => {
-          response.data.status === 1 && this.setState({
-            disable: true,
-          });
-
-          response.data.status === 1 && this.onReportSuccess(response);
-
-          response.data.status === 0 && this.onReportFailed(response);
-        });
-
-      } else {
-        this.props.showAlert({
-          message: <div className="text-center">{message}</div>,
-          timeOut: 3000,
-          type: 'danger',
-          callBack: () => {
-          },
-        });
-      }
+      return;
     }
+    const { isAdmin } = this.props;
+    const isValid = await this.validate(this.state.final);
+    const { status, message } = isValid;
+    if (status) {
+
+      const tokenValue = token || this.checkToken();
+      const authenticate = { Authorization: `Bearer ${tokenValue}`, 'Content-Type': 'application/json' };
+      const headers = isAdmin ? authenticate : null;
+      let result = this.state.final;
+
+      if (this.state.reportChecked) {
+        const finalCopy = [];
+
+        this.state.outcomes.forEach(item => {
+          const newItem = Object.assign({}, item);
+          newItem.side = BETTING_RESULT.DRAW;
+
+          finalCopy.push(newItem);
+        });
+        result = finalCopy;
+      }
+
+
+      const url = isAdmin ? `${BASE_API.BASE_URL}/cryptosign/admin/match/report/${this.state.activeMatchData.id}` :
+                  `${BASE_API.BASE_URL}/cryptosign/match/report/${this.state.activeMatchData.id}`;
+
+      const submit = $http({
+        url,
+        data: {
+          result,
+        },
+        headers: headers,
+        method: 'post',
+      });
+
+
+      submit.then((response) => {
+        response.data.status === 1 && this.setState({
+          disable: true,
+        });
+
+        response.data.status === 1 && this.onReportSuccess(response);
+
+        response.data.status === 0 && this.onReportFailed(response);
+      });
+
+
+    } else {
+      this.props.showAlert({
+        message: <div className="text-center">{message}</div>,
+        timeOut: 3000,
+        type: 'danger',
+        callBack: () => {
+        },
+      });
+    }
+
   }
   onReportSuccess = (response) => {
     this.disablePage();
@@ -303,56 +328,87 @@ class BettingReport extends React.Component {
 
   }
   onChangeFinal=(item, result) => {
-    console.log(item, result);
-    const finalCopy = [...this.state.outcomes];
-    finalCopy.map((outcomeItem) => {
-      if (outcomeItem.id === item.id) {
-        outcomeItem.side = result;
-        outcomeItem.outcome_id = item.id;
-      }
-      return outcomeItem;
-    });
-    this.setState({
-      final: finalCopy,
-    });
+    if (!this.state.reportChecked) {
+
+      let finalCopy = Array.from(Object.create(this.state.outcomes));
+      finalCopy.map((outcomeItem) => {
+        if (outcomeItem.id === item.id) {
+          outcomeItem.side = result;
+          outcomeItem.outcome_id = item.id;
+        }
+        return outcomeItem;
+      });
+
+      this.setState({
+        final: finalCopy,
+      });
+    }
+
+  }
+  renderCheckNotHappend = () => {
+    return (
+      <div className="wrapperCheckNotHappend">
+        <Checkbox
+          className="checkboxInput"
+          name="checkreport"
+          checked={this.state.reportChecked}
+          onChange={() => {
+            this.checkReportStatus(this.state.reportChecked);
+          }}
+        />
+        <div className="checkReportTitle"
+          onClick={() => {
+            this.checkReportStatus(this.state.reportChecked);
+          }}
+        >This event not happen
+        </div>
+      </div>
+    );
+  }
+  renderEvents() {
+    return (
+      <FormGroup disabled={this.state.disable}>
+        <Label for="matchSelect">Select Event</Label>
+        <Input type="select" name="select" id="matchSelect" onChange={(event) => { this.onChangeEvent(event, 'selectedMatch'); }} disabled={this.state.disable}>
+          {this.state.matches && this.state.matches.length > 0 && this.state.matches.map(item => <option key={item.id}>{item.name} id:{item.id}</option>)}
+        </Input>
+      </FormGroup>
+    );
+  }
+  renderOucomes() {
+    const disabled = this.state.reportChecked ? true : false;
+    return (
+      <div className="wrapperOutcomes">
+        <Label for="outcomeSelect">Outcomes</Label><br />
+        {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>{item.name}<br />
+          {/* side: 1 (support), 2 (against), 3 (draw) */}
+          <div className="result">
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" disabled={disabled} name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
+              Support
+              </Label>
+            </FormGroup>
+            <FormGroup check>
+              <Label check>
+                <Input type="radio" disabled={disabled} name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
+              Oppose
+              </Label>
+            </FormGroup>
+          </div>
+          <br /><br />
+        </Label>))}
+      </div>
+    );
   }
 
   render() {
     return (
       <div className="form-admin">
         <Form style={{ margin: '1em', WebkitAppearance: 'menulist' }}>
-          <FormGroup disabled={this.state.disable}>
-            <Label for="matchSelect">Select Event</Label>
-            <Input type="select" name="select" id="matchSelect" onChange={(event) => { this.onChangeEvent(event, 'selectedMatch'); }} disabled={this.state.disable}>
-              {this.state.matches && this.state.matches.length > 0 && this.state.matches.map(item => <option key={item.id}>{item.name} id:{item.id}</option>)}
-            </Input>
-          </FormGroup>
-          <Label for="outcomeSelect">Outcomes</Label><br />
-          {/* <FormGroup id="outcomeSelect" onChange={(event) => { this.onChangeOutcome(event, 'selectedOutcome'); }} disabled={this.state.disable}> */}
-          {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>{item.name}<br />
-            {/* side: 1 (support), 2 (against), 3 (draw) */}
-            <div className="result">
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.DRAW); }} required value="0" />{' '}
-                Draw
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
-                Support
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
-                Oppose
-                </Label>
-              </FormGroup>
-            </div>
-            <br /><br />
-          </Label>))}
+          {this.renderEvents()}
+          {this.renderCheckNotHappend()}
+          {this.renderOucomes()}
           <br /> <br />
 
           <Button disabled={this.state.disable} onClick={this.onSubmit}>Submit</Button>
