@@ -136,7 +136,6 @@
     "style-loader": "^0.21.0",
     "styled-components": "^3.3.0",
     "tls": "^0.0.1",
-    "truffle-privatekey-provider": "^0.1.0",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
