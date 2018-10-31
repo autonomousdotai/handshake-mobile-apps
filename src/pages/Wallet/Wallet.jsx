@@ -253,14 +253,14 @@ class Wallet extends React.Component {
 
   componentWillUnmount() {
     try{document.querySelector(".app").style.backgroundColor = '#ffffff';} catch (e){};
-    this.detachScrollListener();
+    // this.detachScrollListener();
   }
 
   async componentDidMount() {
 
     try{document.querySelector(".app").style.backgroundColor = '#f4f4fb';} catch (e){};
     this.getSetting();
-    this.attachScrollListener();
+    // this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
 
     if (listWallet == false) {
@@ -271,49 +271,49 @@ class Wallet extends React.Component {
       await this.getListBalace(listWallet);
     }
 
-    setTimeout(() => {
-      /*eslint-disable */
-      window?.$zopim?.livechat?.window?.onShow(() => {
-        this.isShow = true;
-        console.log('onShow', this.isShow);
-      });
-      window?.$zopim?.livechat?.window?.onHide(() => {
-        this.isShow = false;
-        console.log('onHide', this.isShow);
-      });
-      this.scrollListener();
-      /* eslint-enable */
-    }, 6000);
-    this.attachScrollListener();
+  //   setTimeout(() => {
+  //     /*eslint-disable */
+  //     window?.$zopim?.livechat?.window?.onShow(() => {
+  //       this.isShow = true;
+  //       console.log('onShow', this.isShow);
+  //     });
+  //     window?.$zopim?.livechat?.window?.onHide(() => {
+  //       this.isShow = false;
+  //       console.log('onHide', this.isShow);
+  //     });
+  //     this.scrollListener();
+  //     /* eslint-enable */
+  //   }, 6000);
+  //   this.attachScrollListener();
   }
 
-  scrollListener = async () => {
-    /*eslint-disable */
-    if (!this.isShow) {
-      window?.$zopim && window?.$zopim(() => {
-        window?.$zopim?.livechat.button.hide();
-        window?.$zopim?.livechat.button.setOffsetVerticalMobile(120);
-        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
-        window?.$zopim?.livechat.button.show();
-      });
-    }
-    /* eslint-enable */
-  }
+  // scrollListener = async () => {
+  //   /*eslint-disable */
+  //   if (!this.isShow) {
+  //     window?.$zopim && window?.$zopim(() => {
+  //       window?.$zopim?.livechat.button.hide();
+  //       window?.$zopim?.livechat.button.setOffsetVerticalMobile(120);
+  //       window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+  //       window?.$zopim?.livechat.button.show();
+  //     });
+  //   }
+  //   /* eslint-enable */
+  // }
 
-  attachScrollListener() {
-    window.addEventListener('scroll', this.scrollListener);
-    window.addEventListener('resize', this.scrollListener);
-    this.scrollListener();
-  }
+  // attachScrollListener() {
+  //   window.addEventListener('scroll', this.scrollListener);
+  //   window.addEventListener('resize', this.scrollListener);
+  //   this.scrollListener();
+  // }
 
-  detachScrollListener() {
-    this.isShow = true;
-    /*eslint-disable */
-    window?.$zopim?.livechat.button.hide();
-    window.removeEventListener('scroll', this.scrollListener);
-    window.removeEventListener('resize', this.scrollListener);
-    /* eslint-enable */
-  }
+  // detachScrollListener() {
+  //   this.isShow = true;
+  //   /*eslint-disable */
+  //   window?.$zopim?.livechat.button.hide();
+  //   window.removeEventListener('scroll', this.scrollListener);
+  //   window.removeEventListener('resize', this.scrollListener);
+  //   /* eslint-enable */
+  // }
 
   async getSetting(){
     let setting = local.get(APP.SETTING), alternateCurrency = "USD";
