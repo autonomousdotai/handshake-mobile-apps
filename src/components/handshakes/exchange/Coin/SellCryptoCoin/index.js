@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { sellCryptoGetCoinInfo, sellCryptoOrder } from '@/reducers/sellCoin/action';
-import { API_URL } from '@/constants';
+import { withRouter } from 'react-router-dom';
+import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder } from '@/reducers/sellCoin/action';
+import { API_URL, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import { Field, formValueSelector, change } from 'redux-form';
@@ -37,11 +38,23 @@ class SellCryptoCoin extends Component {
   constructor() {
     super();
     this.state = {
-      userInfo: {},
+      userInfo: null,
       isGettingCoinInfo: false,
     };
 
     this.getCoinInfo = debounce(::this.getCoinInfo, 1000);
+  }
+
+  static getDerivedStateFromProps(nextProps) {
+    const state = {};
+    if (nextProps.currency) {
+      state.currency = nextProps.currency;
+    }
+
+    if (Object.keys(nextProps.userInfo || {}).length) {
+      state.userInfo = nextProps.userInfo;
+    }
+    return state;
   }
 
   shouldComponentUpdate(nextProps) {
@@ -50,16 +63,6 @@ class SellCryptoCoin extends Component {
       this.getCoinInfo(nextProps?.currency?.amount, nextProps?.currency?.currency);
     }
     return true;
-  }
-
-  onAddUserInfo = (e) => {
-    const type = e?.target?.dataset?.id;
-    this.setState({
-      userInfo: {
-        ...this.state.userInfo,
-        [type]: e?.target?.value || '',
-      },
-    });
   }
 
   onGetCoinInfoError = (e) => {
@@ -78,15 +81,40 @@ class SellCryptoCoin extends Component {
 
   onMakeOrderSuccess = () => {
     this.props.hideLoading();
+    this.props.sellCryptoFinishOrder();
+    this.props.showAlert({
+      message: <div className="text-center">Successful</div>,
+      timeOut: 3000,
+      type: 'success',
+      callBack: () => {
+        this.props.history?.push(URL.HANDSHAKE_ME);
+      },
+    });
   }
 
   onMakeOrderFailed = (e) => {
     console.warn(e);
     this.props.hideLoading();
+    this.props.showAlert({
+      message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
+      timeOut: 3000,
+      type: 'danger',
+    });
+  }
+
+  onPrepareForOrder = () => {
+    const { currency } = this.state;
+    if (currency?.currency) {
+      this.props.sellCryptoGenerateAddress({
+        PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GENERATE_ADDRESS}?currency=${currency?.currency}`,
+        method: 'POST',
+      });
+    }
   }
 
   onSubmit = () => {
-    const { idVerificationLevel, coinInfo, userInfo, currency } = this.props;
+    const { idVerificationLevel, coinInfo, generatedAddress } = this.props;
+    const { currency, userInfo } = this.state;
     const data = {
       type: 'bank',
       amount: String(currency?.amount),
@@ -97,6 +125,7 @@ class SellCryptoCoin extends Component {
       fiat_local_currency: coinInfo?.fiatLocalCurrency,
       level: String(idVerificationLevel),
       user_info: userInfo,
+      address: generatedAddress,
     };
     this.props.sellCryptoOrder({
       PATH_URL: API_URL.EXCHANGE.SELL_COIN_ORDER,
@@ -113,7 +142,7 @@ class SellCryptoCoin extends Component {
     return messages?.sell_coin || {};
   };
 
-  getCoinInfo(amount = this.props.currency?.amount, currency = this.props.currency?.currency) {
+  getCoinInfo(amount = this.state.currency?.amount, currency = this.state.currency?.currency) {
     const { idVerificationLevel, fiatCurrencyByCountry } = this.props;
     const level = idVerificationLevel === 0 ? 1 : idVerificationLevel;
     if (amount >= 0 && currency && fiatCurrencyByCountry) {
@@ -160,18 +189,31 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { orderInfo, coinInfo, fiatCurrencyByCountry, currency, className, formError } = this.props;
-    const { isGettingCoinInfo } = this.state;
+    const { generatedAddress, coinInfo, fiatCurrencyByCountry, className, formError } = this.props;
+    const { isGettingCoinInfo, currency } = this.state;
     const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
     const fiatAmount = currency?.amount ?
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
       `0 ${fiatCurrency}`;
-    if (orderInfo && orderInfo.id) {
-      return <OrderInfo className={className} />;
+    if (generatedAddress) {
+      return (
+        <OrderInfo
+          className={className}
+          generatedAddress={generatedAddress}
+          onFinish={this.onSubmit}
+          getCoinInfo={this.getCoinInfo}
+          orderInfo={{
+            fiatLocalAmount: coinInfo?.fiatLocalAmount || 0,
+            fiatLocalCurrency: fiatCurrency,
+            amount: currency?.amount || 0,
+            currency: currency?.currency,
+          }}
+        />
+      );
     }
 
     return (
-      <FormSellCoin onSubmit={this.onSubmit} className={`${scopedCss('container')} ${className}`}>
+      <FormSellCoin onSubmit={this.onPrepareForOrder} className={`${scopedCss('container')} ${className}`}>
         <div className="currency-group">
           <Field
             name="currency"
@@ -220,6 +262,7 @@ const mapStateToProps = (state) => ({
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
   currency: formSellCoinSelector(state, 'currency'),
   formError: !!state.form[sellCoinFormName]?.syncErrors,
+  generatedAddress: state.sellCoin?.generatedAddress,
 });
 
 const mapDispatchToProps = {
@@ -229,16 +272,19 @@ const mapDispatchToProps = {
   change,
   showLoading,
   hideLoading,
+  sellCryptoGenerateAddress,
+  sellCryptoFinishOrder,
 };
 
 SellCryptoCoin.defaultProps = {
   className: '',
   currency: null,
+  generatedAddress: null,
 };
 
 SellCryptoCoin.propTypes = {
+  sellCryptoFinishOrder: PropTypes.func.isRequired,
   sellCryptoGetCoinInfo: PropTypes.func.isRequired,
-  orderInfo: PropTypes.object.isRequired,
   intl: PropTypes.object.isRequired,
   fiatCurrencyByCountry: PropTypes.string.isRequired,
   currency: PropTypes.object,
@@ -247,14 +293,16 @@ SellCryptoCoin.propTypes = {
     PropTypes.number,
   ]).isRequired,
   coinInfo: PropTypes.object.isRequired,
-  userInfo: PropTypes.object.isRequired,
   className: PropTypes.string,
   change: PropTypes.func.isRequired,
   showAlert: PropTypes.func.isRequired,
   sellCryptoOrder: PropTypes.func.isRequired,
   hideLoading: PropTypes.func.isRequired,
   showLoading: PropTypes.func.isRequired,
+  sellCryptoGenerateAddress: PropTypes.func.isRequired,
   formError: PropTypes.bool.isRequired,
+  generatedAddress: PropTypes.string,
+  history: PropTypes.object.isRequired,
 };
 
-export default injectIntl(connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin));
+export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin)));

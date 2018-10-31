@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import debounce from '@/utils/debounce';
 
 const MAX_TIME = 30 * 60; // in seconds
 
@@ -17,6 +18,7 @@ class ClockCount extends PureComponent {
 
     this.count = :: this.count;
     this.clearTimer = :: this.clearTimer;
+    this.onExpired = debounce(:: this.onExpired, 1200);
   }
 
   componentDidMount() {
@@ -27,6 +29,13 @@ class ClockCount extends PureComponent {
   componentWillUnmount() {
     // clear timer
     this.clearTimer();
+  }
+
+  onExpired() {
+    const { onExpired } = this.props;
+    if (typeof onExpired === 'function') {
+      onExpired();
+    }
   }
 
   initTimer = () => {
@@ -47,7 +56,7 @@ class ClockCount extends PureComponent {
   }
 
   count() {
-    const { startAt, duration, onExpired, internalClockdown, loop } = this.props;
+    const { startAt, duration, internalClockdown, loop } = this.props;
     const { startAtInternal } = this.state;
     const startTime = internalClockdown ? startAtInternal : startAt;
     const now = moment();
@@ -60,9 +69,7 @@ class ClockCount extends PureComponent {
       const time = `${this.padIt(min)}:${this.padIt(second)}`;
       this.setState({ time });
     } else {
-      if (typeof onExpired === 'function') {
-        onExpired();
-      }
+      this.onExpired();
       if (loop && internalClockdown) {
         // update start time of the timer for another cycle
         this.setState({ startAtInternal: new Date() }, this.initTimer);

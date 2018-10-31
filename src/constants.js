@@ -270,6 +270,7 @@ export const API_URL = {
     BUY_CRYPTO_QUOTE_REVERSE: 'exchange/coin/quote-reverse', // GET /coin/quote-reverse?fiat_amount=20000000&currency=ETH&fiat_currency=VND&type=cod
     SELL_COIN_GET_COIN_INFO: 'exchange/coin/quote', // GET /coin/quote?amount=0.1&currency=ETH&fiat_currency=VND&direction=sell
     SELL_COIN_ORDER: 'exchange/coin/selling-order', // POST /coin/selling-order
+    SELL_COIN_GENERATE_ADDRESS: 'exchange/coin/generate-address', // POST /coin/generate-address?currency=BTC
   },
   SEED: {
     BASE: 'seed',
