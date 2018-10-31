@@ -1,4 +1,4 @@
-const PrivateKeyProvider = require('truffle-privatekey-provider')
+// const PrivateKeyProvider = require('truffle-privatekey-provider')
 const Web3js = require('web3')
 import NetworkAPI from './NetworkAPI';
 const axios = require('axios')
@@ -93,14 +93,14 @@ class HedgeFundAPI extends NetworkAPI {
         throw new Error('Not login metamask!')
       }
     } else {
-      let privateProvider = new PrivateKeyProvider(privateKey, this.network)
-      var web3js = new Web3js(privateProvider)
-      var account = web3js.eth.accounts.privateKeyToAccount(
-        validatingPrivateKey(privateKey)
-      ).address
-      if (!account) {
-        throw new Error('Can not get public address from private key')
-      }
+      // let privateProvider = new PrivateKeyProvider(privateKey, this.network)
+      // var web3js = new Web3js(privateProvider)
+      // var account = web3js.eth.accounts.privateKeyToAccount(
+      //   validatingPrivateKey(privateKey)
+      // ).address
+      // if (!account) {
+      //   throw new Error('Can not get public address from private key')
+      // }
     }
     return account;
   }
@@ -115,14 +115,14 @@ class HedgeFundAPI extends NetworkAPI {
         throw new Error('Not login metamask!')
       }
     } else {
-      let privateProvider = new PrivateKeyProvider(privateKey, this.network)
-      var web3js = new Web3js(privateProvider)
-      var account = web3js.eth.accounts.privateKeyToAccount(
-        validatingPrivateKey(privateKey)
-      ).address
-      if (!account) {
-        throw new Error('Can not get public address from private key')
-      }
+      // let privateProvider = new PrivateKeyProvider(privateKey, this.network)
+      // var web3js = new Web3js(privateProvider)
+      // var account = web3js.eth.accounts.privateKeyToAccount(
+      //   validatingPrivateKey(privateKey)
+      // ).address
+      // if (!account) {
+      //   throw new Error('Can not get public address from private key')
+      // }
     }
     let contract = new web3js.eth.Contract(this.ABI, this.contractAddress)
     let sendF = contract.methods[method](...params).send.bind(this, {

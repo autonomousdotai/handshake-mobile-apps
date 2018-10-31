@@ -387,8 +387,8 @@ export default {
         {
           title: 'Place a bet:',
           content: 'Pick the market you want to bet (i.e. Brazil - Spain), the outcomes (i.e. Brazil wins) and the site (i.e. support or bet against the outcome)\n' +
-            'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
-            'The PEX Matching Engine will then find another order that bets against the odds you set.',
+          'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
+          'The PEX Matching Engine will then find another order that bets against the odds you set.',
         },
         {
           title: 'Wait for the report:',
