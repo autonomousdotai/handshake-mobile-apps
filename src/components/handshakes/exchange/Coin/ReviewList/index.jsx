@@ -87,6 +87,7 @@ class ReviewList extends React.Component {
     const { messages } = this.props.intl;
     return (
       <div className="review-list-container">
+        <span className="review-list-count-comment">178 {messages.review.label.comments}</span>
         <Grid className="review-list">
           {
             reviewList && reviewList.map(item => {
