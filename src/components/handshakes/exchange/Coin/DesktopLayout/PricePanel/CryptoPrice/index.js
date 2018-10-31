@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { coinGetSellPrice, coinGetBuyPrice } from '@/reducers/coin/action';
 import { connect } from 'react-redux';
 import { formatMoneyByLocale } from '@/services/offer-util';
+import { injectIntl } from 'react-intl';
 import {
   API_URL,
 } from '@/constants';
@@ -37,14 +38,19 @@ class CryptoPrice extends Component {
     return true;
   }
 
+  getLocalStr = () => {
+    const { intl: { messages } } = this.props;
+    return messages?.coin_crypto?.price_panel || {};
+  }
+
   getPrice = () => {
     const { crypto } = this.state;
     if (!crypto?.id) return;
-    this.props.coinGetSellPrice({
+    this.props.coinGetBuyPrice({
       PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=1&currency=${crypto?.id}&fiat_currency=${'VND'}&type=bank&level=${1}&user_check=1&check=1`,
       more: { name: crypto?.id },
     });
-    this.props.coinGetBuyPrice({
+    this.props.coinGetSellPrice({
       PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=1&currency=${crypto?.id}&fiat_currency=VND&type=bank&level=${1}&user_check=1&check=1`,
       more: { name: crypto?.id },
     });
@@ -64,16 +70,16 @@ class CryptoPrice extends Component {
           <img src={this.state.crypto?.logo} alt="" />
           <span>{this.state.crypto?.name}</span>
         </div>
-        {sellPrice && (
-          <div className={scopedCss('sell')}>
-            <span>Sell</span>
-            <span>{sellPriceStr}</span>
-          </div>
-        )}
         {buyPrice && (
           <div className={scopedCss('buy')}>
-            <span>Buy</span>
+            <span>{this.getLocalStr().buy}</span>
             <span>{buyPriceStr}</span>
+          </div>
+        )}
+        {sellPrice && (
+          <div className={scopedCss('sell')}>
+            <span>{this.getLocalStr().sell}</span>
+            <span>{sellPriceStr}</span>
           </div>
         )}
       </div>
@@ -104,6 +110,7 @@ CryptoPrice.propTypes = {
   buyPrice: PropTypes.object,
   coinGetBuyPrice: PropTypes.func.isRequired,
   coinGetSellPrice: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
-export default connect(mapState, mapDispatch)(CryptoPrice);
+export default injectIntl(connect(mapState, mapDispatch)(CryptoPrice));
