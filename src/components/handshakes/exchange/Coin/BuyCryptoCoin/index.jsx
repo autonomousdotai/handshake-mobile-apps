@@ -101,7 +101,6 @@ class BuyCryptoCoin extends React.Component {
     this.state = {
       currency: CRYPTO_CURRENCY.BTC,
       isLoading: false,
-      forcePaymentMethod: null,
       modalContent: null,
       modalTitle: null,
       isValidToSubmit: false,
@@ -206,16 +205,6 @@ class BuyCryptoCoin extends React.Component {
     if (wallet?.currency !== this.props.wallet?.currency) {
       // this.getBasePrice(wallet?.currency);
       this.setState({ currency: wallet?.currency }, this.getPackageData);
-    }
-
-    if (fiatAmountOverLimit !== this.props.fiatAmountOverLimit) {
-      if (fiatAmountOverLimit) {
-        this.setState({ forcePaymentMethod: PAYMENT_METHODS.BANK_TRANSFER }, () => {
-          this.updatePaymentMethod(this.state.forcePaymentMethod);
-        });
-      } else {
-        this.setState({ forcePaymentMethod: null });
-      }
     }
 
     // get bank info if country change
@@ -707,7 +696,7 @@ class BuyCryptoCoin extends React.Component {
     const { authProfile: { idVerified }, className } = this.props;
     const { messages } = this.props.intl;
     const { coinMoneyExchange, paymentMethod } = this.props;
-    const { currency, forcePaymentMethod, isValidToSubmit } = this.state;
+    const { currency, isValidToSubmit } = this.state;
 
     const showState = [-1, 0, 2, 1];
 
@@ -750,7 +739,6 @@ class BuyCryptoCoin extends React.Component {
                   titles={messages.buy_coin.label.payment_methods}
                   name="paymentMethod"
                   items={PAYMENT_METHODS}
-                  disabled={forcePaymentMethod}
                   extraInfo={{
                     [PAYMENT_METHODS.COD]: messages.buy_coin.label.payment_methods.cod_info,
                   }}
