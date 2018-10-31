@@ -1,0 +1,48 @@
+.traderItem{
+  background-color: #fff;
+  padding:28px 20px 5px 20px;
+  margin-bottom:9px;
+  max-height: 454px;
+  clear:'both';
+  cursor: pointer;
+  box-shadow: 0 5px 14px -8px rgba(102,102,102,0.50);
+  &-right {
+    float:right;
+    font-size: 14px;
+    text-transform: uppercase;
+    width: 50%;
+    label {
+      width: 100%;
+    }
+    .red {
+      color: red;
+    }
+    .green {
+      color: green;
+    }
+    .grey {
+      color: grey;
+    }
+    .fontSmall {
+      font-size: 11px;
+    }
+  }
+  &-left {
+    float:left;
+    position: relative;
+    img {
+      display: block;
+    }
+  }
+}
+
+.avatar_non {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}

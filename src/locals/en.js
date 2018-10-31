@@ -16,6 +16,7 @@ export default {
       credit: 'CC',
       shop: 'Shop',
       ninjaCoin: 'Coin',
+      invest: 'Invest'
     },
   },
   buy: 'Buy',

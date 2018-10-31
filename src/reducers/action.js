@@ -1,6 +1,7 @@
 import { APP_ACTION } from '@/reducers/app/action';
 import $http from '@/services/api';
 import { BASE_API } from '@/constants';
+import axios from 'axios';
 
 export const createAPI = INIT => ({
   BASE_URL = BASE_API.BASE_URL,
@@ -44,5 +45,10 @@ export const createAPI = INIT => ({
     dispatch({ type: `${INIT}_FAILED`, payload: e });
   });
 };
+
+export const axiosInstance = axios.create({
+  baseURL: 'http://35.198.235.226:9000/api',
+  timeout: 5000
+})
 
 export default { createAPI };

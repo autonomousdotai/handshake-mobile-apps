@@ -18,3 +18,4 @@ export const calcPercent = (n, t) => {
   return parseFloat(result.toString().length >= 5 ? result.toFixed(2) : result);
 };
 
+export const currencyFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
