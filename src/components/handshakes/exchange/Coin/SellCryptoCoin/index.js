@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder } from '@/reducers/sellCoin/action';
+import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList } from '@/reducers/sellCoin/action';
 import { API_URL, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
@@ -17,6 +17,7 @@ import { formatMoneyByLocale } from '@/services/offer-util';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import OrderInfo from './components/OrderInfo';
 import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
+import bankNameInputField from './reduxFormFields/bankNameField';
 import './SellCryptoCoin.scss';
 
 const sellCoinFormName = 'SellCoinForm';
@@ -57,12 +58,21 @@ class SellCryptoCoin extends Component {
     return state;
   }
 
+  componentDidMount() {
+    // get bank list for autocomplete bank name
+    this.sellCryptoGetBankList();
+  }
+
   shouldComponentUpdate(nextProps) {
     // get coin info if currency or amount changes
     if (nextProps?.currency?.amount !== this.props?.currency?.amount || nextProps.currency?.currency !== this.props?.currency?.currency) {
       this.getCoinInfo(nextProps?.currency?.amount, nextProps?.currency?.currency);
     }
     return true;
+  }
+
+  componentDidCatch(e) {
+    console.warn(e);
   }
 
   onGetCoinInfoError = (e) => {
@@ -155,6 +165,13 @@ class SellCryptoCoin extends Component {
     }
   }
 
+  sellCryptoGetBankList = () => {
+    const { country } = this.props;
+    this.props.sellCryptoGetBankList({
+      PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GET_BANK_LIST}/${country}`,
+    });
+  }
+
   updateCurrency = (currencyData) => {
     this.props.change(sellCoinFormName, 'currency', {
       ...this.props.currency,
@@ -163,9 +180,12 @@ class SellCryptoCoin extends Component {
   }
 
   renderUserInfoInput = () => {
+    const { bankList } = this.props;
     const fields = {
       bankName: {
         placeholder: this.getLocalStr().order?.inputs?.bank_name,
+        component: bankNameInputField,
+        listData: bankList.map(bank => bank.name),
       },
       bankOwner: {
         placeholder: this.getLocalStr().order?.inputs?.bank_owner,
@@ -177,13 +197,14 @@ class SellCryptoCoin extends Component {
         placeholder: this.getLocalStr().order?.inputs?.phone,
       },
     };
-    return Object.entries(fields).map(([fieldName, data]) => (
+    return Object.entries(fields).map(([fieldName, { placeholder, component, ...rest }]) => (
       <Field
-        placeholder={data.placeholder}
+        placeholder={placeholder || ''}
         key={fieldName}
         name={fieldName}
-        component={fieldInput}
+        component={component || fieldInput}
         validate={required}
+        {...rest}
       />
     ));
   }
@@ -257,12 +278,14 @@ class SellCryptoCoin extends Component {
 const mapStateToProps = (state) => ({
   coinInfo: state.sellCoin.coinInfo,
   orderInfo: state.sellCoin.orderInfo,
+  bankList: state.sellCoin.bankList,
   fiatCurrencyByCountry: state.app.inInfo?.currency || 'VND',
   idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
   currency: formSellCoinSelector(state, 'currency'),
   formError: !!state.form[sellCoinFormName]?.syncErrors,
   generatedAddress: state.sellCoin?.generatedAddress,
+  country: state.app.ipInfo?.country,
 });
 
 const mapDispatchToProps = {
@@ -274,6 +297,7 @@ const mapDispatchToProps = {
   hideLoading,
   sellCryptoGenerateAddress,
   sellCryptoFinishOrder,
+  sellCryptoGetBankList,
 };
 
 SellCryptoCoin.defaultProps = {
@@ -293,6 +317,7 @@ SellCryptoCoin.propTypes = {
     PropTypes.number,
   ]).isRequired,
   coinInfo: PropTypes.object.isRequired,
+  bankList: PropTypes.array.isRequired,
   className: PropTypes.string,
   change: PropTypes.func.isRequired,
   showAlert: PropTypes.func.isRequired,
@@ -300,6 +325,7 @@ SellCryptoCoin.propTypes = {
   hideLoading: PropTypes.func.isRequired,
   showLoading: PropTypes.func.isRequired,
   sellCryptoGenerateAddress: PropTypes.func.isRequired,
+  sellCryptoGetBankList: PropTypes.func.isRequired,
   formError: PropTypes.bool.isRequired,
   generatedAddress: PropTypes.string,
   history: PropTypes.object.isRequired,

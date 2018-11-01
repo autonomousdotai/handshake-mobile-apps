@@ -20,12 +20,13 @@
       text-transform: uppercase;
       color: #0A2240;
       font-size: 18px;
+      text-align: center;
       padding: 10px;
     }
     .package-container {
       display: flex;
       padding: 10px;
-      justify-content: space-between;
+      justify-content: space-around;
       .package-item {
         box-shadow: 0px 0px 15px 5px #F2F2F2;
         width: 48%;

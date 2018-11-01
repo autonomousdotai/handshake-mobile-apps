@@ -17,6 +17,7 @@ const initialState = {
   fiatAmountOverLimit: false,
   orderInfo: {},
   generatedAddress: null,
+  bankList: [],
 };
 
 const sellCoinReducter = (state = initialState, action) => {
@@ -57,6 +58,14 @@ const sellCoinReducter = (state = initialState, action) => {
         return {
           ...state,
           generatedAddress: action?.payload?.data,
+        };
+      }
+      break;
+    case `${SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST}_SUCCESS`:
+      if (action?.payload?.data) {
+        return {
+          ...state,
+          bankList: action?.payload?.data,
         };
       }
       break;
