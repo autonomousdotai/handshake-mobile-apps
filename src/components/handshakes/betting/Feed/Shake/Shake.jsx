@@ -249,7 +249,7 @@ class BetingShake extends React.Component {
       label: 'Amount',
       className: 'amount',
       placeholder: '0.00',
-      type: 'text',
+      type: 'number',
       tooltip: '',
     };
     const oddsField = {
@@ -262,7 +262,7 @@ class BetingShake extends React.Component {
       defaultValue: marketOdds,
       infoText: isChangeOdds ? 'Your Odds' : 'Market Odds',
       isShowInfoText: true,
-      type: 'text',
+      type: 'number',
       tooltip: MESSAGE.ODDS_TOOLTIP,
     };
 
@@ -307,7 +307,7 @@ class BetingShake extends React.Component {
       id,
       infoText = 'ETH',
       isShowInfoText = true,
-      type = 'text',
+      type = 'number',
       value,
       defaultValue,
       isInput = true,

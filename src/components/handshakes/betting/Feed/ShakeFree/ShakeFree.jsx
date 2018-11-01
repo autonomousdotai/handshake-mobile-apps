@@ -319,7 +319,7 @@ class BetingShakeFree extends React.Component {
       id,
       infoText = 'ETH',
       isShowInfoText = true,
-      type = 'text',
+      type = 'number',
       value,
       defaultValue,
       isInput = true,
@@ -385,7 +385,7 @@ class BetingShakeFree extends React.Component {
       defaultValue: marketOdds,
       infoText: isChangeOdds ? 'Your Odds' : 'Market Odds',
       isShowInfoText: true,
-      type: 'text',
+      type: 'number',
       tooltip: MESSAGE.ODDS_TOOLTIP,
 
     };
