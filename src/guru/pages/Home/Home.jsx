@@ -5,7 +5,7 @@ import { injectIntl } from 'react-intl';
 import Card from '@/guru/components/Card/Card';
 import { isJSON } from '@/utils/object';
 import { loadMatches } from './action';
-import { isLoading, eventSelector, isSharePage } from './selector';
+import { eventSelector, isSharePage } from './selector';
 
 class Home extends Component {
   static propTypes = {
@@ -55,11 +55,7 @@ class Home extends Component {
   }
 
   renderCardList = (props) => {
-    if (props.isLoading) return null;
     const { eventList } = props;
-    if (!eventList || !eventList.length) {
-      return (<p className="NoMsg">No event found</p>);
-    }
     return (
       <div className="CardList">
         { eventList.map(eventItem => this.renderCardItem(eventItem)) }
@@ -82,7 +78,6 @@ class Home extends Component {
 export default injectIntl(connect(
   (state) => {
     return {
-      isLoading: isLoading(state),
       eventList: eventSelector(state),
       isSharePage: isSharePage(state),
     };

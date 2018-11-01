@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Countdown from '@/components/Countdown/Countdown';
 import CopyLink from '@/assets/images/share/link.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
+import Statistics from '@/guru/components/Statistics/Statistics';
 import { URL } from '@/constants';
 import Image from '@/components/core/presentation/Image';
 import { randomArrayItem } from '@/utils/array';
@@ -10,8 +11,7 @@ import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
 import TimeSVG from '@/assets/images/pex/time.svg';
 import CoinSVG from '@/assets/images/pex/coin.svg';
 
-
-import { formatAmount } from '@/utils/number';
+import { formatAmount, calcPercent } from '@/utils/number';
 import OutcomeList from './OutcomeList';
 import { socialSharedMsg } from './constants';
 
@@ -28,10 +28,21 @@ function renderEventSource({ event }) {
     </div>
   );
 }
+
 function renderEventName({ event }) {
   return (
     <div className="EventName">
       {event.name}
+    </div>
+  );
+}
+
+function renderEventImage({ event }) {
+  const imageEvent = event.image_url;
+  if (!imageEvent) return null;
+  return (
+    <div className="EventImage">
+      <Image src={imageEvent} alt="Event Image" />
     </div>
   );
 }
@@ -78,6 +89,22 @@ function renderEventTotalBets({ event }) {
   );
 }
 
+function renderStatistics({ event }) {
+  const statistics = event.bets_side;
+  if (!statistics || !event.total_bets) return null;
+  const totalPredict = Object.keys(statistics).reduce((acc, cur) => (
+    statistics[acc] + statistics[cur]
+  ));
+  const listItems = Object.keys(statistics).sort((a, b) => (b > a))
+    .map(key => ({
+      name: key === 'support' ? 'Yes' : 'No',
+      percent: (statistics[key] && Math.round(calcPercent(statistics[key], totalPredict))) || 0,
+    }));
+  return (
+    <Statistics listItems={listItems} />
+  );
+}
+
 function renderOutcomeList({ event, onClickOutcome }) {
   return (
     <OutcomeList event={event} onClick={onClickOutcome} />
@@ -108,16 +135,20 @@ function EventItem(props) {
   return (
     <div className="EventItem">
       {renderEventSource(props)}
-      {renderEventName(props)}
-      {renderOutcomeList(props)}
+      <div className="EventHeading">
+        {renderEventName(props)}
+        {renderEventImage(props)}
+      </div>
       <div className="EventDetails">
         <div className="EvenFirstGroup">
           {renderEvenTimeLeft(props)}
           {renderEventTotalBets(props)}
           {renderEventNumberOfPlayers(props)}
+          {renderShareSocial(props)}
         </div>
-        {renderShareSocial(props)}
+        {renderStatistics(props)}
       </div>
+      {renderOutcomeList(props)}
     </div>
   );
 }

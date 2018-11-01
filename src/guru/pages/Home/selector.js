@@ -5,11 +5,6 @@ export const queryStringSelector = (state) => {
   return state.router.location.search;
 };
 
-export const isLoading = (state) => {
-  if (!state.guru._meta) return false;
-  return state.guru._meta.isFetching;
-};
-
 export const eventSelector = (state) => {
   const queryString = queryStringSelector(state);
   const urlParams = qs.parse(queryString.slice(1));

@@ -1,5 +1,5 @@
 import { reducer as form } from 'redux-form';
-import guru from '@/guru/store/reducer';
+import guru from '@/guru/stores/reducer';
 import discover from './discover';
 import exchange from './exchange';
 import handshake from './handshake';
