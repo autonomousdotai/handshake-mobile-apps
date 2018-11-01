@@ -161,7 +161,6 @@ class BettingReport extends React.Component {
 
 
   disablePage() {
-    console.log('Disable Page');
     localStorage.setItem('disable', true);
     setTimeout(() => {
       localStorage.setItem('disable', false);
