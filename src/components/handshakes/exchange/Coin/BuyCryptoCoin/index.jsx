@@ -36,7 +36,6 @@ import { formatMoney } from '@/services/offer-util';
 import { Link, withRouter } from 'react-router-dom';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
-import IdVerifyBtn from '@/components/handshakes/exchange/Feed/components/IdVerifyBtn';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import walletSelectorField from './reduxFormFields/walletSelector';
 import coinMoneyExchangeField from './reduxFormFields/coinMoneyExchangeField';
@@ -195,7 +194,7 @@ class BuyCryptoCoin extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { country, authProfile, wallet, fiatAmountOverLimit } = nextProps;
+    const { country, authProfile, wallet } = nextProps;
 
     // update phone number from props
     if (authProfile?.phone !== this.props.authProfile?.phone) {
@@ -630,57 +629,73 @@ class BuyCryptoCoin extends React.Component {
   renderPackages = () => {
     const { packages, intl: { messages } } = this.props;
     const { currency } = this.state;
+    const packageDatas = [];
+    this.state.packages?.forEach((item) => {
+      const {
+        name, show, intlKeyName,
+      } = item;
+      const packageGroup = packages[name];
+      const packageData = packageGroup && packageGroup[currency];
+      if (show && packageData) {
+        packageDatas.push({
+          name,
+          intlKeyName,
+          packageData,
+        });
+      }
+    });
+
+    if (packageDatas.length === 0) {
+      return null;
+    }
     return (
-      <div className="package-container">
-        {
-          this.state.packages?.map((item) => {
-            const {
-              name, show, intlKeyName,
-            } = item;
-            const packageGroup = packages[name];
-            const packageData = packageGroup && packageGroup[currency];
+      <div className="sell-crypto-package">
+        <span className="package-label">{messages.buy_coin.label.common_packages}</span>
+        <div className="package-container">
+          {
+            packageDatas?.map(({ intlKeyName, name, packageData }) => {
+              if (!packageData) return null;
 
-            if (!packageData) return null;
-
-            return show && packageData && (
-              <div key={name} className={`package-item ${name}`}>
-                <span className="name">{messages.buy_coin.label[intlKeyName]}</span>
-                <div className="price-amount-group">
-                  <span className={`fiat-amount ${packageData.show?.fiatCurrency === FIAT_CURRENCY.USD ? 'usd' : ''}`}>{formatMoney(packageData.show?.fiatAmount)} {packageData.show?.fiatCurrency}</span>
-                  <span className="amount">{packageData?.amount || '---'} {packageData?.currency}</span>
+              return packageData && (
+                <div key={name} className={`package-item ${name}`}>
+                  <span className="name">{messages.buy_coin.label[intlKeyName]}</span>
+                  <div className="price-amount-group">
+                    <span className={`fiat-amount ${packageData.show?.fiatCurrency === FIAT_CURRENCY.USD ? 'usd' : ''}`}>{formatMoney(packageData.show?.fiatAmount)} {packageData.show?.fiatCurrency}</span>
+                    <span className="amount">{packageData?.amount || '---'} {packageData?.currency}</span>
+                  </div>
+                  <ConfirmButton
+                    validate={
+                      () => this.checkUserVerified({
+                        fiatAmountOverLimit: packageData.fiatAmountOverLimit,
+                        fiatLimit: packageData.limit,
+                        fiatCurrency: packageData.fiatLocalCurrency,
+                      })
+                    }
+                    disabled={!this.state.walletAddress}
+                    label={<FormattedMessage id="cc.btn.buyNow" />}
+                    confirmText={<FormattedMessage id="buy_coin_confirm_popup.confirm_text" />}
+                    cancelText={<FormattedMessage id="buy_coin_confirm_popup.cancel_text" />}
+                    buttonClassName="btn package-buy-now"
+                    containerClassName="buy-btn-container"
+                    message={
+                      <FormattedMessage
+                        id="buy_coin_confirm_popup.msg"
+                        values={{
+                          amount: packageData?.amount,
+                          currency: packageData?.currency,
+                          fiatAmount: formatMoney(packageData.show.fiatAmount),
+                          fiatCurrency: packageData.show.fiatCurrency,
+                        }}
+                      />
+                    }
+                    onConfirm={() => this.handleBuyPackage(packageData)}
+                    onFirstClick={this.noticeBuyPackageWithoutWalletAddress}
+                  />
                 </div>
-                <ConfirmButton
-                  validate={
-                    () => this.checkUserVerified({
-                      fiatAmountOverLimit: packageData.fiatAmountOverLimit,
-                      fiatLimit: packageData.limit,
-                      fiatCurrency: packageData.fiatLocalCurrency,
-                    })
-                  }
-                  disabled={!this.state.walletAddress}
-                  label={<FormattedMessage id="cc.btn.buyNow" />}
-                  confirmText={<FormattedMessage id="buy_coin_confirm_popup.confirm_text" />}
-                  cancelText={<FormattedMessage id="buy_coin_confirm_popup.cancel_text" />}
-                  buttonClassName="btn package-buy-now"
-                  containerClassName="buy-btn-container"
-                  message={
-                    <FormattedMessage
-                      id="buy_coin_confirm_popup.msg"
-                      values={{
-                        amount: packageData?.amount,
-                        currency: packageData?.currency,
-                        fiatAmount: formatMoney(packageData.show.fiatAmount),
-                        fiatCurrency: packageData.show.fiatCurrency,
-                      }}
-                    />
-                  }
-                  onConfirm={() => this.handleBuyPackage(packageData)}
-                  onFirstClick={this.noticeBuyPackageWithoutWalletAddress}
-                />
-              </div>
-            );
-          })
-        }
+              );
+            })
+          }
+        </div>
       </div>
     );
   }
@@ -847,7 +862,6 @@ BuyCryptoCoin.propTypes = {
   phone: PropTypes.string,
   wallet: PropTypes.object,
   fiatAmountOverLimit: PropTypes.bool.isRequired,
-  dispatch: PropTypes.func.isRequired,
   buyCryptoGetPackage: PropTypes.func.isRequired,
   idVerificationLevel: PropTypes.number.isRequired,
   fiatLimit: PropTypes.number.isRequired,
