@@ -1532,7 +1532,7 @@ export default {
       setting: {
         title: 'Settings',
         error: 'Invalid wallets',
-        header: 'Setting wallets',
+        header: 'Wallet Settings',
         success: {
           restore: 'Your Wallet restore success',
           save_alternative_currency: 'Save currency selected!',
@@ -1550,6 +1550,7 @@ export default {
           push_notifications: 'Push Notifications',
           community: 'Community',
           wallet_account: 'Wallet Account',
+          support: 'Support'
         },
         button: {
           restore: 'Restore now',

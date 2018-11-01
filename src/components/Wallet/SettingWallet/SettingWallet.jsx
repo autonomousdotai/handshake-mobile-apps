@@ -26,6 +26,8 @@ import iconVk from '@/assets/images/wallet/icons/icon-vk.svg';
 import iconTelegram from '@/assets/images/wallet/icons/icon-telegram.svg';
 import iconBackupWallet from '@/assets/images/wallet/icons/icon-backup.svg';
 import iconRestoreWallet from '@/assets/images/wallet/icons/icon-restore.svg';
+import iconSupport from '@/assets/images/wallet/icons/icon-support.svg';
+
 
 import Modal from '@/components/core/controls/Modal';
 
@@ -220,6 +222,10 @@ class SettingWallet extends React.Component {
   openTwitter=()=>{
     window.open('https://twitter.com/ninja_org?ref=ninja-wallet', '_blank');
   }
+  openSupport=()=>{
+    $zopim.livechat.window.show();
+  }
+
 
   render() {
     const { messages } = this.props.intl;
@@ -264,6 +270,16 @@ class SettingWallet extends React.Component {
                 </div>
                 <div className="value">
                   <span className="text">{settings.wallet.alternateCurrency}</span>
+                </div>
+            </div>
+            
+            <div className="item" onClick={this.openSupport}>
+                <img className="icon" src={iconSupport} />
+                <div className="name">
+                    <label>{messages.wallet.action.setting.label.support}</label>
+                </div>
+                <div className="value">
+
                 </div>
             </div>
 
