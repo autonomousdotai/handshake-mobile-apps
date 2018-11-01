@@ -26,7 +26,7 @@ class Contact extends PureComponent {
         </div>
         <div className={scopedCss('item')}>
           <img src={questionIcon} alt="" />
-          <a href="tel:0902425186"><span>{this.getLocalStr().phone_cs}</span></a>
+          <a href={`tel:${this.getLocalStr().phone_cs.replace(/\D/g, '')}`}><span>{this.getLocalStr().phone_cs}</span></a>
         </div>
       </div>
     );
