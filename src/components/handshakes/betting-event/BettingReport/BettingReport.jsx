@@ -122,7 +122,6 @@ class BettingReport extends React.Component {
       //const newOutcome = resolved ? updatedMatch[0].outcomes.filter((item) => this.isDisputeOutcome(item.result)) : updatedMatch[0].outcomes;
       const newOutcome = updatedMatch[0].outcomes;
 
-      //console.log(TAG, 'newOutcome:', newOutcome);
       this.setState({
         outcomes: newOutcome,
         activeMatchData: updatedMatch[0],
@@ -161,7 +160,6 @@ class BettingReport extends React.Component {
 
 
   disablePage() {
-    console.log('Disable Page');
     localStorage.setItem('disable', true);
     setTimeout(() => {
       localStorage.setItem('disable', false);
