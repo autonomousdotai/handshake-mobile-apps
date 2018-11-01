@@ -2027,7 +2027,7 @@ export default {
     contact: {
       faq: 'FAQs',
       chat_with_us: 'Chat with us Online Support',
-      phone_cs: '0902 425 186',
+      phone_cs: '097 550 4082',
     },
   },
   'coin_tabs.sell': 'SELL COIN',
