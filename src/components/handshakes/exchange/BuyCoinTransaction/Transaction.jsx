@@ -37,6 +37,19 @@ class Transaction extends React.Component {
   componentDidMount() {
     const { country } = this.props;
     this.getTransactionNinjaCoin();
+    this.intervalCountdown = setInterval(() => {
+      this.reload();
+    }, 3 * 60 * 1000);
+  }
+
+  reload = () => {
+    window?.location?.reload && window?.location?.reload();
+  }
+
+  componentWillUnmount() {
+    if (this.intervalCountdown) {
+      clearInterval(this.intervalCountdown);
+    }
   }
 
   getTransactionNinjaCoin = () => {
