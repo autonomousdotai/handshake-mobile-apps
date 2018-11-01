@@ -235,7 +235,7 @@ class BettingCreate extends React.Component {
         className="form-control-custom input"
         name={key}
         style={style}
-        type="text"
+        type="number"
         placeholder={placeholder}
         autoComplete="off"
         value={values[key] || ''}
