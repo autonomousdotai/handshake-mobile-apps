@@ -13,7 +13,6 @@
     "serve-heroku": "node ./serve.js",
     "ngrok": "ngrok http 8080 -host-header=localhost:8080"
   },
-  "devDependencies": {},
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-decorators": "^7.1.2",
@@ -136,7 +135,6 @@
     "style-loader": "^0.21.0",
     "styled-components": "^3.3.0",
     "tls": "^0.0.1",
-    "truffle-privatekey-provider": "^0.1.0",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0",
     "uglifyjs-webpack-plugin": "^1.2.5",
@@ -151,6 +149,6 @@
     "webpack-pwa-manifest": "^3.6.2"
   },
   "engines": {
-    "node": "8.11.2"
+    "node": ">=8.10.0 <11.0.0"
   }
 }
