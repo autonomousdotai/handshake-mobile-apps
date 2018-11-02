@@ -39,6 +39,7 @@ const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/C
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
 const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+const RouterRepu = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
