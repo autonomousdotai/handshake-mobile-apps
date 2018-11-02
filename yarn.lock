@@ -267,7 +267,6 @@
 "@babel/plugin-proposal-decorators@^7.1.2":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.1.2.tgz#79829bd75fced6581ec6c7ab1930e8d738e892e7"
-  integrity sha512-YooynBO6PmBgHvAd0fl5e5Tq/a0pEC6RqF62ouafme8FzdIVH41Mz/u1dn8fFVm4jzEJ+g/MsOxouwybJPuP8Q==
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/helper-replace-supers" "^7.1.0"
@@ -1594,7 +1593,6 @@ babel-plugin-transform-decorators-legacy@^1.3.4:
 babel-plugin-transform-decorators@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-decorators/-/babel-plugin-transform-decorators-6.24.1.tgz#788013d8f8c6b5222bdf7b344390dfd77569e24d"
-  integrity sha1-eIAT2PjGtSIr33s0Q5Df13Vp4k0=
   dependencies:
     babel-helper-explode-class "^6.24.1"
     babel-plugin-syntax-decorators "^6.13.0"
@@ -4938,8 +4936,8 @@ handlebars@^4.0.11:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1541074875"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/4acc356af92428496874090da43e69e8eba75d9d"
+  version "0.0.1541132652"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/ed18145e307e6f03df8f467a0094990d686ff934"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"
