@@ -564,6 +564,7 @@ export const URL = {
 
   HANDSHAKE_PREDICTION: '/prediction',
   HANDSHAKE_GURU: '/guru',
+  HANDSHAKE_REPUTATION: '/reputation',
   HANDSHAKE_PEX: '/pex',
   PEX_EXTENSION: '/pex-extension',
   HANDSHAKE_PEX_CREATOR: '/create-pex',

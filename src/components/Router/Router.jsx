@@ -39,7 +39,7 @@ const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/C
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
 const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
-const RouterRepu = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -70,6 +70,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.HANDSHAKE_PEX, component: RouterExchange },
   { path: URL.HANDSHAKE_PEX_UPDATER, component: CreateOwnMarket },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },
+  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
 
   { path: URL.HANDSHAKE_ME, component: RouterMe },
   { path: URL.HANDSHAKE_CASH, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },

@@ -1,0 +1,55 @@
+@import "./src/styles/style";
+.wrapperReputation {
+  font-family: $font-family-base;
+  background-color: #f5f7fa;
+  padding: 20px 20px;
+  .wrapperProfile {
+    background-color: white;
+    border-radius: rem-calc(5px);
+    display: flex;
+    justify-content: center;
+    padding: 20px 20px;
+  }
+  .wrapperContent {
+    margin-left: rem-calc(10px);
+
+  }
+  .wrapperStarRating {
+    display: flex;
+  }
+  .wrapperGroupNumber {
+    display: flex;
+    justify-content: space-between;
+    margin-top: rem-calc(10px);
+    .wrapperGroupBlock {
+      background-color: white;
+      border-radius: rem-calc(5px);
+      width: 31%;
+      padding: 20px 20px;
+      text-align: center;
+      justify-content: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .wrapperMarketList {
+    background-color: white;
+    border-radius: rem-calc(5px);
+    padding: 20px 20px;
+    margin-top: rem-calc(10px);
+
+  }
+  .mediumText {
+    font-size: rem-calc(18px);
+  }
+  .boldText {
+    font-weight: 400;
+  }
+  .normalText {
+    font-size: rem-calc(14px);
+  }
+  .disableText {
+    color: #748599;
+  }
+}
