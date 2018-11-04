@@ -17,7 +17,6 @@ import authReducer from '@/reducers/auth';
 import reducers from '@/reducers';
 import rootSaga from '@/stores/root-saga';
 import defaultStore from '@/stores/default-store';
-import guruReducer from '@/guru/stores/reducer';
 
 firebase.initializeApp(process.env.firebase);
 
@@ -49,7 +48,7 @@ const createStoreWithFirebase = compose(
   composeWithDevTools(applyMiddleware(routerMiddleware(history), thunk, sagaMiddleware)),
 )(createStore);
 
-const rootReducer = reduceReducers(AppReducers, dataReducer, guruReducer);
+const rootReducer = reduceReducers(AppReducers, dataReducer);
 const store = createStoreWithFirebase(connectRouter(history)(rootReducer), defaultStore);
 
 sagaMiddleware.run(rootSaga);

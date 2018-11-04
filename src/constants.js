@@ -562,9 +562,12 @@ export const URL = {
   HANDSHAKE_DISCOVER_INDEX: '/discover',
   HANDSHAKE_DISCOVER_DETAIL: '/discover/:slug',
 
-  HANDSHAKE_PREDICTION: '/prediction',
+  // Guru
   HANDSHAKE_GURU: '/guru',
+  GURU_CREATE_EVENT: '/create-event',
   HANDSHAKE_REPUTATION: '/reputation',
+
+  HANDSHAKE_PREDICTION: '/prediction',
   HANDSHAKE_PEX: '/pex',
   PEX_EXTENSION: '/pex-extension',
   HANDSHAKE_PEX_CREATOR: '/create-pex',

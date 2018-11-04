@@ -38,8 +38,11 @@ const RouterExchange = createDynamicImport(() => import('@/components/Router/Exc
 const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/CreateMarket'), Loading);
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
-const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
 const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
+
+// Guru's Routes
+const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -65,12 +68,15 @@ const InternalAdminDashboard = createDynamicImport(() => import('@/pages/Interna
 
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
-  { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
+  // Guru
+  { path: URL.GURU_CREATE_EVENT, component: GuruCreateEvent },
   { path: URL.HANDSHAKE_GURU, component: RouterGuru },
+  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
+
+  { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
   { path: URL.HANDSHAKE_PEX, component: RouterExchange },
   { path: URL.HANDSHAKE_PEX_UPDATER, component: CreateOwnMarket },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },
-  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
 
   { path: URL.HANDSHAKE_ME, component: RouterMe },
   { path: URL.HANDSHAKE_CASH, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },

@@ -64,6 +64,7 @@
     "file-loader": "^1.1.11",
     "firebase": "^5.0.4",
     "flag-icon-css": "^3.0.0",
+    "formik": "^1.3.1",
     "handlebars": "^4.0.11",
     "handlebars-loader": "^1.7.0",
     "handshake-i18n": "github:ninjadotorg/handshake-i18n",
