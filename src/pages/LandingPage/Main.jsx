@@ -184,8 +184,8 @@ class Main extends React.PureComponent {
                       if (to === '/constant') {
                         return (
                           <div className="col-12 col-sm-6 product" key={index}>
-                            <a href="http://constant.money">
-                              <div><img src={img} className="img-fluid" /></div>
+                            <a href="https://constant.money">
+                              <div><img src={img} className="img-fluid" alt="" /></div>
                               <div className="landing-title my-1">{title}</div>
                               <div className="landing-sub-title">{subTitle}</div>
                             </a>
