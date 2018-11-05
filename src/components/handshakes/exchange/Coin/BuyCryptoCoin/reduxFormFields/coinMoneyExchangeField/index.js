@@ -1,14 +1,13 @@
 /* eslint react/prop-types:0 */
 
 import React from 'react';
-import CoinMoneyExchange from '../../../components/CoinMoneyExchange';
+import CoinMoneyExchange from '@/components/handshakes/exchange/components/CoinMoneyExchange';
 import './styles.scss';
 
 const coinMoneyExchangeField = ({ input, currency, paymentMethod, meta }) => {
   const { onChange, onBlur, onFocus } = input;
   const { error, touched } = meta;
   const shouldShowError = !!(touched && error);
-
   return (
     <div className="coin-money-exchange-field">
       <CoinMoneyExchange

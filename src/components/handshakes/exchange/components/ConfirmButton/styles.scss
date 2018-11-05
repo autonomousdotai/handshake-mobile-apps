@@ -1,4 +1,9 @@
 .confirm-btn-container {
+  // override modal style
+  .modal-backdrop {
+    max-width: initial;
+  }
+
   .confirm-btn {
     padding: 2px 10px;
     font-size: 12px;

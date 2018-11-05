@@ -1,6 +1,6 @@
 .buy-crypto-coin-container {
   padding-bottom: 60px;
-  background-color: white;
+  background-color: transparent;
   min-height: 100vh;
   input, textarea {
     &::placeholder {
@@ -11,76 +11,88 @@
       letter-spacing: 0;
     }
   }
-  .package-container {
-    margin-top: 20px;
+  .sell-crypto-package {
     display: flex;
-    padding: 10px;
-    justify-content: space-between;
-    .package-item {
-      box-shadow: 0px 0px 15px 5px #F2F2F2;
-      width: 48%;
-      height: 197px;
-      background: #FFFFFF;
-      border-radius: 8px 8px 8px 8px;
+    flex-direction: column;
+    padding: 30px 0px;
+    .package-label {
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #0A2240;
+      font-size: 18px;
       text-align: center;
+      padding: 10px;
+    }
+    .package-container {
       display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      padding: 20px;
-      .price-amount-group {
+      padding: 10px;
+      justify-content: space-around;
+      .package-item {
+        box-shadow: 0px 0px 15px 5px #F2F2F2;
+        width: 48%;
+        background: #FFFFFF;
+        border-radius: 8px 8px 8px 8px;
+        text-align: center;
+        max-height: 210px;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        .fiat-amount {
-          color: #0A2240;
-          font-size: 18px;
-          font-weight: 500;
+        justify-content: space-evenly;
+        padding: 20px;
+        .price-amount-group {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .fiat-amount {
+            color: #0A2240;
+            font-size: 18px;
+            font-weight: 500;
+            text-align: left;
+            letter-spacing: 0;
+            text-align: center;
+            &.usd::before {
+              content: '$';
+            }
+          }
+          .amount {
+            color: #889EB5;
+            font-size: 16px;
+            font-weight: normal;
+            text-align: center;
+            letter-spacing: 0;
+          }
+        }
+        &.basic {
+          .name {
+            color: #34CF81;
+          }
+          .package-buy-now  {
+            background: #34CF81;
+          }
+        }
+        &.pro {
+          .name {
+            color: #FFBA48;
+          }
+          .package-buy-now  {
+            background: #FFBA48;
+          }
+        }
+        .name {
+          font-size: 20px;
+          font-weight: bold;
           text-align: left;
           letter-spacing: 0;
           text-align: center;
-          &.usd::before {
-            content: '$';
-          }
         }
-        .amount {
-          color: #889EB5;
-          font-size: 16px;
-          font-weight: normal;
-          text-align: left;
+        .package-buy-now {
+          height: 36px;
+          color: #FFFFFF;
+          font-size: 14px;
+          font-weight: 500;
+          text-align: center;
           letter-spacing: 0;
+          width: 100%;
         }
-      }
-      &.basic {
-        .name {
-          color: #34CF81;
-        }
-        .package-buy-now  {
-          background: #34CF81;
-        }
-      }
-      &.pro {
-        .name {
-          color: #FFBA48;
-        }
-        .package-buy-now  {
-          background: #FFBA48;
-        }
-      }
-      .name {
-        font-size: 20px;
-        font-weight: bold;
-        text-align: left;
-        letter-spacing: 0;
-        text-align: center;
-      }
-      .package-buy-now {
-        height: 36px;
-        color: #FFFFFF;
-        font-size: 14px;
-        font-weight: 500;
-        text-align: center;
-        letter-spacing: 0;
-        width: 100%;
       }
     }
   }
@@ -101,8 +113,7 @@
     width: 100%;
   }
   .buy-crypto-coin-specific-amount {
-    padding: 25px 10px;
-    background: white;
+    background: transparent;
   }
   .label-1 {
     height: 32px;
@@ -275,42 +286,6 @@
         text-align: left;
         letter-spacing: 0;
       }
-    }
-  }
-
-  #PexCreateBtn {
-    font-size: 16px;
-    font-weight: 400;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 2;
-    color: white;
-    letter-spacing: 0;
-    background: #F75454;
-
-    .Idea {
-      padding: 7px;
-      .verify-link {
-        color: white;
-        font-weight: bold;
-      }
-    }
-
-    .IconIdea {
-      padding-right: rem-calc(5px);
-      max-width: 30px;
-    }
-
-    button {
-      color: #000000;
-      background-color: #FDEE4B;
-      width: 115px;
-      height: 35px;
-      font-size: 15px;
-      font-weight: 400;
-      border-radius: rem-calc(20px);
-      box-shadow: 0 6px 0 0 #D9CB34;
     }
   }
 }

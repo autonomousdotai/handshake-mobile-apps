@@ -7,11 +7,11 @@ import Loading from '@/components/core/presentation/Loading';
 import { URL } from '@/constants';
 import { clearHeaderLeft, clearHeaderRight, hideHeader, setHeaderTitle } from '@/reducers/app/action';
 
-const BuyCoin = props => (<DynamicImport loading={Loading} load={() => import('@/components/handshakes/exchange/Feed/BuyCryptoCoin')}>{Component => <Component {...props} />}</DynamicImport>);
+const BuyCoin = props => (<DynamicImport loading={Loading} load={() => import('@/components/handshakes/exchange/Coin')}>{Component => <Component {...props} />}</DynamicImport>);
 const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() => import('@/pages/Error/Page404')}>{Component => <Component {...props} />}</DynamicImport>);
 
 const routerMap = [
-  { path: URL.BUY_COIN_URL, component: BuyCoin },
+  { path: URL.CRYPTO_COIN_URL, component: BuyCoin },
 ];
 
 class BuyCCRouter extends React.Component {
@@ -25,7 +25,7 @@ class BuyCCRouter extends React.Component {
   constructor(props) {
     super(props);
 
-    this.props.setHeaderTitle('Buy by Credit Card');
+    this.props.setHeaderTitle('Buy/Sell Crypto Coin');
     this.props.clearHeaderRight();
     this.props.clearHeaderLeft();
     // this.props.hideHeader();

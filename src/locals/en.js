@@ -2004,7 +2004,15 @@ export default {
         receiving: 'Receiving',
         selling: 'Selling',
         address: 'Address',
-        notes: ['Note 1', 'Note 2'],
+        notes: {
+          main_note: 'NOTE: YOU HAVE TO CLICK "FINISH" TO COMPLETE THE TRANSACTION',
+          sub_note: '(Transaction may be lost if you forget to complete this step)',
+          list: [
+            'Please transfer the exact number to the above address',
+            'The price of the crypto fluctuates constantly; therefore, we only keep this price for 5 minutes',
+            'We will transfer the fiat to you as soon as there is 1 confirmation on the network.',
+          ],
+        },
       },
       btn: {
         close_summary: 'Finish',
@@ -2020,7 +2028,7 @@ export default {
     contact: {
       faq: 'FAQs',
       chat_with_us: 'Chat with us Online Support',
-      phone_cs: '0902 425 186',
+      phone_cs: '097 550 4082',
     },
   },
   'coin_tabs.sell': 'SELL COIN',

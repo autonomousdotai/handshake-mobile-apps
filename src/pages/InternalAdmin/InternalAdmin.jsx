@@ -301,7 +301,14 @@ class InternalAdmin extends Component {
     });
   }
 
-  finish(order = {}) {
+  processSellCoin(order = {}) {
+    this.props.sendCashOrder({
+      PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}/pick`,
+      METHOD: 'PUT',
+    });
+  }
+
+  finishSellCoin(order = {}) {
     this.props.sendCashOrder({
       PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}`,
       METHOD: 'POST',
@@ -377,12 +384,20 @@ class InternalAdmin extends Component {
 
         }
       }
-    } else if (order.status === SELL_STATUS.fiat_transferring.id) {
-      result = (
-        <button onClick={() => this.finish(order)} className="btn btn-primary">
-          Finish
-        </button>
-      );
+    } else if (action === EXCHANGE_ACTION.SELL) {
+      if (order.status === SELL_STATUS.fiat_transferring.id) {
+        result = (
+          <button onClick={() => this.processSellCoin(order)} className="btn btn-primary">
+            Process
+          </button>
+        );
+      } else if (order.status === SELL_STATUS.processing.id) {
+        result = (
+          <button onClick={() => this.finishSellCoin(order)} className="btn btn-primary">
+            Finish
+          </button>
+        );
+      }
     }
 
     return result;

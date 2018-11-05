@@ -7,10 +7,15 @@ import './styles.scss';
 class ExtraInfo extends Component {
   constructor() {
     super();
-    this.state = { show: false };
+    this.state = { show: false, canRenderTooltip: false };
 
     this.toggle = :: this.toggle;
     this.icon = React.createRef();
+  }
+
+  componentDidMount() {
+    /* eslint-disable-next-line */
+    this.setState({ canRenderTooltip: true });
   }
 
   toggle(show) {
@@ -18,19 +23,21 @@ class ExtraInfo extends Component {
   }
 
   render() {
-    const { show } = this.state;
+    const { show, canRenderTooltip } = this.state;
     const { info, className } = this.props;
     return (
       <span className={`extra-info-container ${className}`}>
         <img src={IconInfo} alt="" width="12" className="extra-info-icon" ref={this.icon} />
-        <Tooltip
-          placement="bottom"
-          isOpen={show}
-          target={this.icon?.current || '.extra-info-icon'}
-          toggle={() => this.toggle()}
-        >
-          {info}
-        </Tooltip>
+        {canRenderTooltip && (
+          <Tooltip
+            placement="bottom"
+            isOpen={show}
+            target={this.icon?.current}
+            toggle={() => this.toggle()}
+          >
+            {info}
+          </Tooltip>
+        )}
       </span>
     );
   }

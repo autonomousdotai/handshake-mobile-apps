@@ -1,7 +1,7 @@
 /* eslint react/prop-types:0 */
 import React from 'react';
 import ExtraInfo from '@/components/handshakes/exchange/components/ExtraInfo';
-import { PAYMENT_METHODS } from '../../BuyCryptoCoin';
+import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
 import './styles.scss';
 
 const paymentMethodCheckbox = ({ input, name, titles, items, extraInfo, disabled = false }) => {

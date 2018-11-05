@@ -1,7 +1,7 @@
 /* eslint react/prop-types:0 */
 
 import React, { Component } from 'react';
-import WalletSelector from '../../../components/WalletSelector';
+import WalletSelector from '@/components/handshakes/exchange/components/WalletSelector';
 import './styles.scss';
 
 class WalletSelectorField extends Component {
