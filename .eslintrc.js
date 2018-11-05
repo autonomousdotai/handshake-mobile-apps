@@ -33,6 +33,7 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     "arrow-body-style": 0,
     "arrow-parens": 0,
+    "comma-dangle": ["error", "never"],
     "no-underscore-dangle": 0,
     "no-unused-expressions": 0,
     "function-paren-newline": 0,

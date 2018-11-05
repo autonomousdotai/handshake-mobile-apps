@@ -3,15 +3,15 @@ import $http from '@/services/api';
 import { BASE_API } from '@/constants';
 
 const apiActionRequest = ({ type }) => ({
-  type: `${type}_REQUEST`,
+  type: `${type}_REQUEST`
 });
 
 const apiActionSuccess = ({ type }) => ({
-  type: `${type}_SUCCESS`,
+  type: `${type}_SUCCESS`
 });
 
 const apiActionFailed = ({ type }) => ({
-  type: `${type}_FAILURE`,
+  type: `${type}_FAILURE`
 });
 
 /**
@@ -22,14 +22,20 @@ const apiActionFailed = ({ type }) => ({
  * @param headers custom configs of header
  * @param BASE_URL The base url of website
  * @param PATH_URL API endpoint
- * @returns {*}
+ * @returns {*} status = 0 => error, else => data
  */
-function* callApi({ method, type, data, headers, BASE_URL = BASE_API.BASE_URL, PATH_URL }) {
+function* callApi({
+  method,
+  type,
+  data,
+  headers,
+  BASE_URL = BASE_API.BASE_URL,
+  PATH_URL
+}) {
   if (!PATH_URL) throw new Error('URL is required');
   if (!type) throw new Error('Action type is required');
 
   const url = `${BASE_URL}/${PATH_URL}`;
-
   yield put(apiActionRequest({ type }));
 
   try {
@@ -37,14 +43,14 @@ function* callApi({ method, type, data, headers, BASE_URL = BASE_API.BASE_URL, P
     // TODO: wrong api doesn't return data = []
     // TODO: status = 0 doesn't return msg
     if (response.status === 200) {
-      yield put(apiActionSuccess);
+      yield put(apiActionSuccess({ type }));
       return response.data;
     }
     console.error('callAPI (status): ', response);
     return { status: 0, message: response.statusText };
   } catch (e) {
     console.error('failed to callAPI: ', e);
-    yield put(apiActionFailed);
+    yield put(apiActionFailed({ type }));
     return { status: 0, message: 'Network Error' };
   }
 }
@@ -54,10 +60,13 @@ function* apiGet(actions) {
     ...actions,
     method: 'GET',
     // TODO: chrome-extension
-    headers: (window.self !== window.top) ? {
-      ...actions.headers,
-      'Request-From': 'extension',
-    } : { ...actions.headers },
+    headers:
+      window.self !== window.top
+        ? {
+          ...actions.headers,
+          'Request-From': 'extension'
+        }
+        : { ...actions.headers }
   });
 }
 
@@ -69,7 +78,7 @@ function* apiPostForm(actions) {
   return yield callApi({
     ...actions,
     method: 'POST',
-    headers: { 'Content-Type': 'multipart/form-data' },
+    headers: { 'Content-Type': 'multipart/form-data' }
   });
 }
 

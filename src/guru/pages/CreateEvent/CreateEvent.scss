@@ -49,6 +49,30 @@
     transform: translateX(26px);
   }
 
+  /* On/Off */
+  .on {
+    display: none;
+  }
+
+  .on,
+  .off {
+    color: white;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    font-size: 10px;
+    font-family: Verdana, sans-serif;
+  }
+
+  input:checked + .slider .on {
+    display: block;
+  }
+
+  input:checked + .slider .off {
+    display: none;
+  }
+
   /* Rounded sliders */
   .slider.round {
     border-radius: 34px;
