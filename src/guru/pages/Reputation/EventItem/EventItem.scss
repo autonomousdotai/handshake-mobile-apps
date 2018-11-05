@@ -1,0 +1,21 @@
+@import "./src/styles/style";
+
+.wrapperEventItem {
+  font-family: $font-family-base;
+  display: flex;
+
+  .wrapperEventDetail {
+    display: flex;
+    justify-content: space-between;
+
+    .eventDetailBlock {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+    }
+    .eventDetailText {
+      margin-left: 5px;
+      margin-top: 3px;
+    }
+  }
+}
