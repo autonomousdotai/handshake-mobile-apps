@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList } from '@/reducers/sellCoin/action';
+import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList, getBankList } from '@/reducers/sellCoin/action';
 import { API_URL, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
@@ -166,10 +166,14 @@ class SellCryptoCoin extends Component {
   }
 
   sellCryptoGetBankList = () => {
-    const { country } = this.props;
-    this.props.sellCryptoGetBankList({
-      PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GET_BANK_LIST}/${country}`,
-    });
+    console.log('going to get banklist')
+    this.props.getBankList();
+    // const { country } = this.props;
+    // this.props.sellCryptoGetBankList({
+    //   BASE_URL: 'https://my.timo.vn',
+    //   PATH_URL: `contentManagement/bankList`,
+    //   headers: null,
+    // });
   }
 
   updateCurrency = (currencyData) => {
@@ -181,17 +185,18 @@ class SellCryptoCoin extends Component {
 
   renderUserInfoInput = () => {
     const { bankList } = this.props;
+    console.log('bank list is', bankList);
     const fields = {
       bankName: {
         placeholder: this.getLocalStr().order?.inputs?.bank_name,
         component: bankNameInputField,
-        listData: bankList.map(bank => bank.name),
-      },
-      bankOwner: {
-        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
+        listData: bankList.map(bank => bank.bankName),
       },
       bankNumber: {
         placeholder: this.getLocalStr().order?.inputs?.bank_number,
+      },
+      bankOwner: {
+        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
       },
       phoneNumber: {
         placeholder: this.getLocalStr().order?.inputs?.phone,
@@ -298,6 +303,7 @@ const mapDispatchToProps = {
   sellCryptoGenerateAddress,
   sellCryptoFinishOrder,
   sellCryptoGetBankList,
+  getBankList
 };
 
 SellCryptoCoin.defaultProps = {

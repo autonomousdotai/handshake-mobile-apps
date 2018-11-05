@@ -69,6 +69,12 @@ const sellCoinReducter = (state = initialState, action) => {
         };
       }
       break;
+    case SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST:
+      console.log('updateloasldfkjasldkfj', action);
+      return {
+        ...state,
+        bankList: action.payload
+      }
     default:
       return state;
   }
