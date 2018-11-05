@@ -162,7 +162,7 @@ function exchangeReducter(state = {
 
       return {
         ...state,
-        buyCoinTransaction: list.filter(handshake => handshake.offerFeedType === 'coin'),
+        buyCoinTransaction: list.filter(handshake => (handshake.offerFeedType === 'coin' || handshake.offerFeedType === 'coin_selling')),
       };
     }
     case `${EXCHANGE_ACTIONS.BUY_CRYPTO_COD}_SUCCESS`: {
