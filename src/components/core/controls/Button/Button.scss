@@ -6,7 +6,7 @@ $secondary : #b7b7b7;
   padding: rem-calc(9px 0);
   font-weight: $normal;
   font-size: rem-calc(20px);
-  color: $white;
+  color: $white !important;
   letter-spacing: 0;
   text-align: center;
   span {
@@ -41,11 +41,11 @@ $secondary : #b7b7b7;
 }
 
 .btn-anonymous {
-  background-color: $titan-black;
-  border-color: $titan-black;
+  background-color: $titan-black !important;
+  border-color: $titan-black !important;
   &:hover {
-    background-color: $titan-black;
-    border-color: $titan-black;
-    opacity: 0.8;
+    background-color: $titan-black !important;
+    border-color: $titan-black !important;
+    opacity: 0.8 !important;
   }
 }
