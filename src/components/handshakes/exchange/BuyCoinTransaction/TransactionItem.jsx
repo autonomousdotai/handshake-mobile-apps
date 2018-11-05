@@ -59,8 +59,10 @@ class TransactionItem extends React.Component {
 
   onCancelOrder = () => {
     const { transaction } = this.state;
+    const { offerFeedType } = this.props;
+    const endPoint = offerFeedType === 'coin' ? API_URL.EXCHANGE.BUY_CRYPTO_SAVE_RECEIPT : API_URL.EXCHANGE.SELL_COIN_ORDER;
     this.props.cancelNinjaCoinTransaction({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_SAVE_RECEIPT}/${transaction.id}`,
+      PATH_URL: `${endPoint}/${transaction.id}`,
       METHOD: 'DELETE',
       successFn: (res) => {
         const { data } = res;
