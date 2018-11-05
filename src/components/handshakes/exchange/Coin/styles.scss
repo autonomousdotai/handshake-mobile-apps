@@ -1,0 +1,11 @@
+.crypto-coin-desktop {
+  @media screen and (max-width: 768px){
+    display: none;
+  }
+}
+
+.crypto-coin-mobile {
+  @media screen and (min-width: 768px){
+    display: none;
+  }
+}

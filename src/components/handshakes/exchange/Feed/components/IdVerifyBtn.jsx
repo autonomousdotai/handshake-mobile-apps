@@ -60,7 +60,7 @@ class IdVerifyBtn extends React.PureComponent {
     const { dispatch } = this.props;
     const { title, action, className } = this.checkUserVerified();
     return (
-      <div id="PexCreateBtn" className={className} >
+      <div className={`PexCreateBtn ${className}`} >
         <div className="Idea">
           <span>{title}</span>
           &nbsp;<Link

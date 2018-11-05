@@ -1,16 +1,15 @@
+/* eslint-disable no-param-reassign */
 import produce from 'immer';
 
 const initialState = {
-  events: {},
+  events: [],
 };
 
 const guruReducer = (state = initialState, action) => {
   return produce(state, draft => {
     switch (action.type) {
       case 'GURU:UPDATE_EVENTS':
-        if (draft.guru) {
-          draft.guru.events = action.events;
-        }
+        draft.events = action.events;
         break;
       default:
         break;

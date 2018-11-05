@@ -11,6 +11,8 @@ import { createDynamicImport } from '@/services/app';
 import Loading from '@/components/core/presentation/Loading';
 import ScrollToTop from '@/components/App/ScrollToTop';
 import Layout from '@/components/Layout/Main';
+import ExternalRedirect from '@/components/App/Redirect';
+
 import { SEOPrediction, SEODad, SEOWallet, SEOPayForDevs, SEOPayForStores, SEOBecomeAtm } from '@/components/SEO';
 
 import imgDadContent from '@/assets/images/landing/dad/fake-content.jpg';
@@ -38,8 +40,11 @@ const RouterExchange = createDynamicImport(() => import('@/components/Router/Exc
 const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/CreateMarket'), Loading);
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
-const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
 const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
+
+// Guru's Routes
+const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -53,24 +58,29 @@ const ContentForWallet = createDynamicImport(() => import('@/pages/LandingPage/C
 const ContentForPrediction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPrediction'), Loading);
 const ContentForPexInstruction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPexInstruction'), Loading);
 const LuckyDrawMechanic = createDynamicImport(() => import('@/pages/LuckyDrawMechanic/LuckyDrawMechanic'), Loading);
-const RouterBuyCryptoCoin = createDynamicImport(() => import('@/components/Router/BuyCryptoCoin'), Loading);
+const Discover = createDynamicImport(() => import('@/pages/Discover/Discover'), Loading);
+const RouterCCConfirm = createDynamicImport(() => import('@/components/Router/CCConfirm'), Loading);
+const RouterBuyCC = createDynamicImport(() => import('@/components/Router/Credit'), Loading);
+const RouterCryptoCoin = createDynamicImport(() => import('@/components/Router/CryptoCoin'), Loading);
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
 const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
 const RouterInternalAdmin = createDynamicImport(() => import('@/components/Router/InternalAdmin'), Loading);
 const RouterCreateCashStore = createDynamicImport(() => import('@/components/handshakes/exchange/Create/CreateStoreATM'), Loading);
 const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
 const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
-const LandingConstant = createDynamicImport(() => import('@/pages/LandingPage/Constant/Constant'), Loading);
 const InternalAdminDashboard = createDynamicImport(() => import('@/pages/InternalAdminDashboard'), Loading);
 
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
-  { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
+  // Guru
+  { path: URL.GURU_CREATE_EVENT, component: GuruCreateEvent },
   { path: URL.HANDSHAKE_GURU, component: RouterGuru },
+  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
+
+  { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
   { path: URL.HANDSHAKE_PEX, component: RouterExchange },
   { path: URL.HANDSHAKE_PEX_UPDATER, component: CreateOwnMarket },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },
-  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
 
   { path: URL.HANDSHAKE_ME, component: RouterMe },
   { path: URL.HANDSHAKE_CASH, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
@@ -84,8 +94,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.REPORT, component: RouterReport },
   // { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
   // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
-  { path: URL.BUY_COIN_URL, component: RouterBuyCryptoCoin },
-
+  { path: URL.CRYPTO_COIN_URL, component: RouterCryptoCoin },
   { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
   {
     path: URL.PRODUCT_DAD_URL,
@@ -101,7 +110,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
   { path: URL.INVEST_URL, component: RouterInvest },
 
-  { path: URL.LANDING_PAGE_CONSTANT, render: () => <LandingConstant /> },
+  { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
   { path: URL.LANDING_PAGE_SHURIKEN, render: () => <Redirect to={URL.LANDING_PAGE_CONSTANT} /> },
   { path: URL.PEX_EXTENSION, component: PexExtension },
   { path: URL.WALLET_EXTENSION, component: TopUp },
@@ -141,6 +150,7 @@ if (BrowserDetect.isDesktop) {
     { path: URL.ADMIN_ID_VERIFICATION, component: RouterAdminIDVerification },
     { path: URL.PEX_LUCKY_DRAW_MECHANIC_URL, component: LuckyDrawMechanic },
     { path: URL.INTERNAL_ADMIN_DASHBOARD_URL, component: InternalAdminDashboard },
+    { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
   ];
 
   routesUsingDesktopLayout = configRoutesUsingDesktopLayout.map(route => (
@@ -184,10 +194,6 @@ class Router extends React.Component {
   }
 
   render() {
-    if (window.location.hostname === 'constant.money') {
-      document.title = 'Constant - Untraceable, stable, digital cash';
-      return <Route path="/" render={() => <LandingConstant />} />;
-    }
     return (
       <Switch>
         {
