@@ -3,6 +3,7 @@ import Image from '@/components/core/presentation/Image';
 import StarRatings from 'react-star-ratings';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import './Reputation.scss';
+import EventItem from './EventItem';
 
 class Reputation extends React.Component {
 
@@ -72,7 +73,7 @@ class Reputation extends React.Component {
   renderMarketList() {
     return (
       <div className="wrapperMarketList">
-        <div>Created market</div>
+        <EventItem />
       </div>
     );
   }
