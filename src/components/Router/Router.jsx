@@ -11,6 +11,8 @@ import { createDynamicImport } from '@/services/app';
 import Loading from '@/components/core/presentation/Loading';
 import ScrollToTop from '@/components/App/ScrollToTop';
 import Layout from '@/components/Layout/Main';
+import ExternalRedirect from '@/components/App/Redirect';
+
 import { SEOPrediction, SEODad, SEOWallet, SEOPayForDevs, SEOPayForStores, SEOBecomeAtm } from '@/components/SEO';
 
 import imgDadContent from '@/assets/images/landing/dad/fake-content.jpg';
@@ -60,7 +62,6 @@ const RouterInternalAdmin = createDynamicImport(() => import('@/components/Route
 const RouterCreateCashStore = createDynamicImport(() => import('@/components/handshakes/exchange/Create/CreateStoreATM'), Loading);
 const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
 const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
-const LandingConstant = createDynamicImport(() => import('@/pages/LandingPage/Constant/Constant'), Loading);
 const InternalAdminDashboard = createDynamicImport(() => import('@/pages/InternalAdminDashboard'), Loading);
 
 /* ======================== FOR MOBILE ======================== */
@@ -98,7 +99,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
   { path: URL.INVEST_URL, component: RouterInvest },
 
-  { path: URL.LANDING_PAGE_CONSTANT, render: () => <LandingConstant /> },
+  { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
   { path: URL.LANDING_PAGE_SHURIKEN, render: () => <Redirect to={URL.LANDING_PAGE_CONSTANT} /> },
   { path: URL.PEX_EXTENSION, component: PexExtension },
   { path: URL.WALLET_EXTENSION, component: TopUp },
@@ -138,6 +139,7 @@ if (BrowserDetect.isDesktop) {
     { path: URL.ADMIN_ID_VERIFICATION, component: RouterAdminIDVerification },
     { path: URL.PEX_LUCKY_DRAW_MECHANIC_URL, component: LuckyDrawMechanic },
     { path: URL.INTERNAL_ADMIN_DASHBOARD_URL, component: InternalAdminDashboard },
+    { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
   ];
 
   routesUsingDesktopLayout = configRoutesUsingDesktopLayout.map(route => (
@@ -181,10 +183,6 @@ class Router extends React.Component {
   }
 
   render() {
-    if (window.location.hostname === 'constant.money') {
-      document.title = 'Constant - Untraceable, stable, digital cash';
-      return <Route path="/" render={() => <LandingConstant />} />;
-    }
     return (
       <Switch>
         {
