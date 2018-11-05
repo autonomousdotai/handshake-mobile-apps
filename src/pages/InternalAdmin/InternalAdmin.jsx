@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
+import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
 import { loadCashOrderList, sendCashOrder, reset } from '@/reducers/internalAdmin/action';
 import './InternalAdmin.scss';
 import { FormattedDate } from 'react-intl';
@@ -324,27 +325,43 @@ class InternalAdmin extends Component {
         case 'bank': {
           if (order.status === STATUS.fiat_transferring.id) {
             result = (
-              <button onClick={() => this.process(order)} className="btn btn-primary">
-                Process
-              </button>
+              <ConfirmButton
+                buttonClassName="btn internal-admin-btn positive"
+                onConfirm={() => this.process(order)}
+                label="Process"
+                cancelText="Cancel"
+                confirmText="Yes"
+              />
             );
           } else if (order.status === STATUS.processing.id) {
             result = (
               <div>
-                <button onClick={() => this.send(order)} className="btn btn-primary">
-                  Send
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn positive"
+                  onConfirm={() => this.send(order)}
+                  label="Send"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
                 &nbsp;&nbsp;&nbsp;
-                <button onClick={() => this.reject(order)} className="btn btn-primary">
-                  Reject
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn negative"
+                  onConfirm={() => this.reject(order)}
+                  label="Reject"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
               </div>
             );
           } else if (order.status === STATUS.transfer_failed.id) {
             result = (
-              <button onClick={() => this.send(order)} className="btn btn-primary">
-                ReSend
-              </button>
+              <ConfirmButton
+                buttonClassName="btn btn-primary"
+                onConfirm={() => this.send(order)}
+                label="Send"
+                cancelText="Cancel"
+                confirmText="Yes"
+              />
             );
           }
           break;
@@ -352,28 +369,44 @@ class InternalAdmin extends Component {
         case 'cod': {
           if (order.status === STATUS.pending.id) {
             result = (
-              <button onClick={() => this.process(order)} className="btn btn-primary">
-                Process
-              </button>
+              <ConfirmButton
+                buttonClassName="btn internal-admin-btn positive"
+                onConfirm={() => this.process(order)}
+                label="Process"
+                cancelText="Cancel"
+                confirmText="Yes"
+              />
             );
           } else if (order.status === STATUS.processing.id) {
             result = (
               <div>
-                <button onClick={() => this.send(order)} className="btn btn-primary">
-                  Send
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn positive"
+                  onConfirm={() => this.send(order)}
+                  label="Send"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
                 &nbsp;&nbsp;&nbsp;
-                <button onClick={() => this.reject(order)} className="btn btn-primary">
-                  Reject
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn negative"
+                  onConfirm={() => this.reject(order)}
+                  label="Reject"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
               </div>
             );
           } else if (order.status === STATUS.transfer_failed.id) {
             result = (
               <div>
-                <button onClick={() => this.send(order)} className="btn btn-primary">
-                  ReSend
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn positive"
+                  onConfirm={() => this.send(order)}
+                  label="ReSend"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
               </div>
             );
           }
@@ -387,15 +420,23 @@ class InternalAdmin extends Component {
     } else if (action === EXCHANGE_ACTION.SELL) {
       if (order.status === SELL_STATUS.fiat_transferring.id) {
         result = (
-          <button onClick={() => this.processSellCoin(order)} className="btn btn-primary">
-            Process
-          </button>
+          <ConfirmButton
+            buttonClassName="btn internal-admin-btn positive"
+            onConfirm={() => this.processSellCoin(order)}
+            label="Process"
+            cancelText="Cancel"
+            confirmText="Yes"
+          />
         );
       } else if (order.status === SELL_STATUS.processing.id) {
         result = (
-          <button onClick={() => this.finishSellCoin(order)} className="btn btn-primary">
-            Finish
-          </button>
+          <ConfirmButton
+            buttonClassName="btn internal-admin-btn positive"
+            onConfirm={() => this.finishSellCoin(order)}
+            label="Finish"
+            cancelText="Cancel"
+            confirmText="Yes"
+          />
         );
       }
     }
