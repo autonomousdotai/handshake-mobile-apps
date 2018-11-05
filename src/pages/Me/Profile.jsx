@@ -760,7 +760,7 @@ class Profile extends React.Component {
                       </div>
                     </Row>
                   </div>
-                ) : (idVerificationLevel < 2 &&
+                ) : ((idVerified === 0 || idVerified === -1 || (idVerified === 1 && idVerificationLevel < 2)) &&
                 <IDVerificationForm onSubmit={this.onSubmitIDVerification}>
                   <div>
                     <Row>

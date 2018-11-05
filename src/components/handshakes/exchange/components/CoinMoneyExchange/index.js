@@ -9,7 +9,7 @@ import debounce from '@/utils/debounce';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import Cleave from 'cleave.js/react';
 import { showAlert } from '@/reducers/app/action';
-import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Feed/BuyCryptoCoin';
+import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
 import { isOverLimit } from '@/reducers/buyCoin/index';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
@@ -131,8 +131,6 @@ class CoinMoneyExchange extends Component {
     if (amount === null) {
       this.getQuoteReverse();
     }
-
-    this.onChangeCallbackHandler();
   }
 
   showLoading(isShow = true) {
@@ -168,9 +166,9 @@ class CoinMoneyExchange extends Component {
     const { onChange, coinInfo } = this.props;
     const _data = {
       amount: Number.parseFloat(this.state.amount) || 0,
-      fiatAmount: Number.parseFloat(this.state.fiatAmount),
+      fiatAmount: Number.parseFloat(this.state.fiatAmount) || 0,
       fiatCurrency: this.state.fiatCurrency,
-      fiatAmountInUsd: Number.parseFloat(this.state.fiatAmountInUsd),
+      fiatAmountInUsd: Number.parseFloat(this.state.fiatAmountInUsd) || 0,
       isOverLimit: isOverLimit({ amount: this.state.fiatAmount || 0, limit: coinInfo?.limit || 0 }),
       ...data,
     };
@@ -214,7 +212,7 @@ class CoinMoneyExchange extends Component {
       this.props.buyCryptoQuoteReverse({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_QUOTE_REVERSE}?fiat_amount=${_fiatAmount}&currency=${currency}&fiat_currency=${_fiatCurrency}&type=${paymentMethod}&level=${level}`,
         errorFn: this.ongetQuoteReverseError,
-        successFn: () => { this.showLoading(false); },
+        successFn: () => { this.showLoading(false); this.onChangeCallbackHandler(); },
       });
     }
   }
@@ -234,7 +232,7 @@ class CoinMoneyExchange extends Component {
       this.props.buyCryptoGetCoinInfo({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=${parsedAmount}&currency=${currency}&fiat_currency=${_fiatCurrency}&level=${level}`,
         errorFn: this.onGetCoinInfoError,
-        successFn: () => { this.showLoading(false); },
+        successFn: () => { this.showLoading(false); this.onChangeCallbackHandler(); },
       });
     }
   }

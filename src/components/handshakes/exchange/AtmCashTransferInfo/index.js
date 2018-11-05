@@ -15,7 +15,7 @@ import iconCopy from '@/assets/images/icon/icon-copy-white.svg';
 import iconUpload from '@/assets/images/icon/icon-upload-white.svg';
 import { formatMoneyByLocale } from '@/services/offer-util';
 import ExtraInfo from '@/components/handshakes/exchange/components/ExtraInfo';
-import ClockCount from './components/ClockCount';
+import ClockCount from '@/components/handshakes/exchange/components/ClockCount';
 import './styles.scss';
 
 

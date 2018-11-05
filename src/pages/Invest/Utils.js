@@ -1,4 +1,3 @@
-import ethereumAPI from './ethereumAPI'
 import axios from 'axios'
 
 export default {

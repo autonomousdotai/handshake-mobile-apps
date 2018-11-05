@@ -1,0 +1,33 @@
+.crypto-coin-header-container {
+  padding: 15px 0px;
+  .landing-nav-link {
+    font-size: 16px;
+    color: #484848;
+    margin-left: 30px;
+    font-weight: 500;
+    &:hover {
+      text-decoration: none;
+    }
+    &.active {
+      border-bottom: 2px solid #484848;
+    }
+  }
+  .btn-primary-landing {
+    font-family: azo-sans-web, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: #000000;
+    letter-spacing: 0;
+    border: 2px solid #F5D516;
+    border-bottom: 5px solid #F5D516;
+    background: #FFF988;
+    border-radius: 4px;
+    height: 48px;
+    padding: 8px 14px;
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+    }
+    margin-bottom: 10px;
+  }
+}
