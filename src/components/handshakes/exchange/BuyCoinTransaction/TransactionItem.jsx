@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 // action, mock
-import { API_URL, CRYPTO_CURRENCY, FIAT_CURRENCY } from '@/constants';
+import { API_URL, CRYPTO_CURRENCY } from '@/constants';
 import { FormattedDate, injectIntl } from 'react-intl';
 // components
 // style
@@ -15,8 +15,6 @@ import iconUsd from '@/assets/images/icon/coin/icons8-us_dollar.svg';
 import { cancelNinjaCoinTransaction } from '@/reducers/exchange/action';
 import './TransactionItem.scss';
 import cx from 'classnames';
-
-import icWarning from '@/assets/images/cash/ic-transaction-warning.svg';
 import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
 import NinjaCoinTransaction from '@/models/NinjaCoinTransaction';
 import { formatMoneyByLocale } from '@/services/offer-util';
@@ -114,6 +112,17 @@ class TransactionItem extends React.Component {
         <div className="transaction-detail">
           {
             <div>
+              <div className="d-table w-100">
+                <div className="d-table-cell font-weight-bold">
+                  <img src={CRYPTO_ICONS[currency]} width={19} />
+                  <span className="type-order ml-2">
+                    {
+                      offerFeedType === 'coin' ? messages.me.credit.transaction.instant.title : messages.me.credit.transaction.transaction.title
+                    }
+                  </span>
+                </div>
+              </div>
+
               {offerFeedType === 'coin' && type === 'bank' && status === COIN_ORDER_STATUS.PENDING && (
                 <div className="text-normal mt-2">
                   <span className="transfer-title">{messages.create.atm.transactions.messageTransfer}</span>
@@ -121,6 +130,8 @@ class TransactionItem extends React.Component {
                 </div>
               )
               }
+
+              <hr />
             </div>
           }
 
