@@ -4,17 +4,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
+import { API_URL, CRYPTO_CURRENCY, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
 import { loadCashOrderList, sendCashOrder, reset } from '@/reducers/internalAdmin/action';
+import { loadCashOrderList, reset, sendCashOrder } from '@/reducers/internalAdmin/action';
 import './InternalAdmin.scss';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, injectIntl } from 'react-intl';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import Helper from '@/services/helper';
 import { formatMoneyByLocale } from '@/services/offer-util';
 import { withRouter } from 'react-router-dom';
+import { Ethereum } from '@/services/Wallets/Ethereum';
+import { Bitcoin } from '@/services/Wallets/Bitcoin';
+import { BitcoinCash } from '@/services/Wallets/BitcoinCash';
 
 const STATUS = {
   pending: {
@@ -96,6 +100,12 @@ const SELL_STATUS = {
 
 const backupScroll = window.onscroll;
 const DEFAULT_TYPE = Object.values(STATUS)[0].id;
+
+const WALLET_LIST = {
+  [CRYPTO_CURRENCY.ETH]: new Ethereum(),
+  [CRYPTO_CURRENCY.BTC]: new Bitcoin(),
+  BCH: new BitcoinCash(),
+};
 
 class InternalAdmin extends Component {
   constructor() {
@@ -212,6 +222,35 @@ class InternalAdmin extends Component {
   getStatus(order = {}) {
     const { statusList } = this.state;
     return statusList[order.status]?.name || '---';
+  }
+
+  getTransaction(order = {}) {
+    const { messages } = this.props.intl;
+    const { currency, tx_hash } = order;
+    let url = '';
+    let wallet = {};
+
+    if (tx_hash) {
+      switch (currency) {
+        case CRYPTO_CURRENCY.ETH: {
+          wallet = WALLET_LIST[currency];
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_etherscan}</a></div>;
+          break;
+        }
+        case CRYPTO_CURRENCY.BTC: {
+          wallet = WALLET_LIST[currency];
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_blockchaininfo}</a></div>;
+          break;
+        }
+        case 'BCH': {
+          wallet = WALLET_LIST[currency];
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_blockchaininfo}</a></div>;
+          break;
+        }
+      }
+    }
+
+    return url;
   }
 
   isLastType() {
@@ -526,6 +565,12 @@ class InternalAdmin extends Component {
         console.log('action order', row, order);
         return this.renderActionBtn(row);
       },
+    }, {
+      dataField: 'tx_hash',
+      text: 'Transaction',
+      formatter: (cell, row, rowIndex, formatExtraData) => {
+        return this.getTransaction(row);
+      },
     },
     ];
 
@@ -625,4 +670,4 @@ const mapState = (state) => {
   };
 };
 
-export default connect(mapState, { loadCashOrderList, sendCashOrder, reset })(withRouter(InternalAdmin));
+export default injectIntl(connect(mapState, { loadCashOrderList, sendCashOrder, reset })(withRouter(InternalAdmin)));
