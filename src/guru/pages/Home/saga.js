@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
-import { loadMatches, updateEvents } from './action';
+import { loadMatches, updateEvents, loadUserEvents, updateUserEvents } from './action';
 
 export function* handleLoadMatches({ isDetail, source }) {
   try {
@@ -31,7 +31,22 @@ export function* handleLoadMatches({ isDetail, source }) {
     console.error('handleLoadMachesSaga', e);
   }
 }
+export function* handleLoadUserEvents({ userId }) {
+  try {
+    const PATH_URL = API_URL.CRYPTOSIGN.GET_EVENTS_USER.replace('{{userId}}', userId);
+    const { data } = yield call(apiGet, {
+      PATH_URL,
+      type: 'LOAD_USER_EVENTS',
+    });
+    if (data) {
+      yield put(updateUserEvents(data));
+    }
+  } catch (e) {
+    console.error('handleLoadUserEvents', e);
+  }
+}
 
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
+  yield takeLatest(loadUserEvents().type, handleLoadUserEvents);
 }

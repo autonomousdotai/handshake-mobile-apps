@@ -22,3 +22,7 @@ export const isSharePage = (state) => {
   const urlParams = qs.parse(queryString.slice(1));
   return urlParams.match || false;
 };
+
+export const userEventsSelector = (state) => {
+  return state.guru.userEvents;
+};

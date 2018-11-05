@@ -3,6 +3,7 @@
 .wrapperEventItem {
   font-family: $font-family-base;
   display: flex;
+  padding: 20px 0;
 
   .wrapperEventDetail {
     display: flex;
@@ -17,5 +18,11 @@
       margin-left: 5px;
       margin-top: 3px;
     }
+  }
+  .wrapperEventContent {
+    width: 80%;
+  }
+  .wrapperEventImage {
+    width: 20%;
   }
 }

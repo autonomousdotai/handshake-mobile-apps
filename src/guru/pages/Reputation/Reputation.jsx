@@ -1,12 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import local from '@/services/localStore';
 import Image from '@/components/core/presentation/Image';
 import StarRatings from 'react-star-ratings';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
+import { loadUserEvents } from '@/guru/pages/Home/action';
+import { userEventsSelector } from '@/guru/pages/Home/selector';
+import { APP } from '@/constants';
+
 import './Reputation.scss';
 import EventItem from './EventItem';
 
 class Reputation extends React.Component {
+  static propTypes = {
+    eventList: PropTypes.array,
+  };
 
+  static defaultProps = {
+    eventList: [],
+  };
+  componentDidMount() {
+    this.getData(this.props);
+  }
+  getData = (props) => {
+    const profile = local.get(APP.AUTH_PROFILE);
+    const userId = profile.id;
+    props.dispatch(loadUserEvents({ userId }));
+  }
   renderStar() {
     return (
       <div className="wrapperStarRating">
@@ -70,10 +92,18 @@ class Reputation extends React.Component {
       </div>
     );
   }
-  renderMarketList() {
+  renderMarketList(props) {
     return (
       <div className="wrapperMarketList">
-        <EventItem />
+        <div className="mediumText boldText">Created Market</div>
+        {props.eventList.map((event) => {
+          return (
+            <EventItem
+              key={event.id}
+              event={event}
+            />
+          );
+        })}
       </div>
     );
   }
@@ -82,9 +112,15 @@ class Reputation extends React.Component {
       <div className="wrapperReputation">
         {this.renderProfile()}
         {this.renderGroupNumber()}
-        {this.renderMarketList()}
+        {this.renderMarketList(this.props)}
       </div>
     );
   }
 }
-export default Reputation;
+export default injectIntl(connect(
+  (state) => {
+    return {
+      eventList: userEventsSelector(state),
+    };
+  },
+)(Reputation));

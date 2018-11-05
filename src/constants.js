@@ -227,7 +227,8 @@ export const API_URL = {
     PREDICTION_STATISTICS: 'cryptosign/outcome/ninja-predict',
     SUBCRIBE_EMAIL_PREDICTION: 'cryptosign/subscribe',
     SUBSCRIBE_EMAIL_EXTENSION: 'user/subscribe',
-
+    GET_EVENTS_USER: 'cryptosign/reputation/user/{{userId}}/match',
+    GET_REPUTATION_USER: '/cryptosign/reputation/user/',
   },
   DISCOVER: {
     INDEX: 'handshake/discover',

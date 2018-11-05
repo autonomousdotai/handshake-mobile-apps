@@ -51,9 +51,10 @@ class EventItem extends React.Component {
   }
 
   renderEventContent(event) {
+    const { name } = event;
     return (
       <div className="wrapperEventContent">
-        <div>Liverpool will win against Chelsea</div>
+        <div>{name}</div>
         {this.renderDetail(event)}
       </div>
     );
