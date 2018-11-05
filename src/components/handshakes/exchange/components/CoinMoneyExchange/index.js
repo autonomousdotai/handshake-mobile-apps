@@ -262,7 +262,7 @@ class CoinMoneyExchange extends Component {
           value={amount || ''}
           options={{
             numeral: true,
-            numeralDecimalScale: 4,
+            numeralDecimalScale: 7,
             numeralThousandsGroupStyle: 'thousand',
             numeralIntegerScale: 9,
           }}
