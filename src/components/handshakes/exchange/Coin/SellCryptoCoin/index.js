@@ -41,6 +41,7 @@ class SellCryptoCoin extends Component {
     this.state = {
       userInfo: null,
       isGettingCoinInfo: false,
+      generatedAddress: '',
     };
 
     this.getCoinInfo = debounce(::this.getCoinInfo, 1000);
@@ -118,13 +119,21 @@ class SellCryptoCoin extends Component {
       this.props.sellCryptoGenerateAddress({
         PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GENERATE_ADDRESS}?currency=${currency?.currency}`,
         method: 'POST',
+        successFn: this.handleGenerateCryptoAddressSuccess,
       });
     }
   }
 
+  handleGenerateCryptoAddressSuccess = (res) => {
+    console.log('handleGenerateCryptoAddressSuccess', res);
+    if (res.data) {
+      this.setState({ generatedAddress: res.data });
+    }
+  }
+
   onSubmit = () => {
-    const { idVerificationLevel, coinInfo, generatedAddress } = this.props;
-    const { currency, userInfo } = this.state;
+    const { idVerificationLevel, coinInfo } = this.props;
+    const { currency, userInfo, generatedAddress } = this.state;
     const data = {
       type: 'bank',
       amount: String(currency?.amount),
@@ -210,8 +219,8 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { generatedAddress, coinInfo, fiatCurrencyByCountry, className, formError } = this.props;
-    const { isGettingCoinInfo, currency } = this.state;
+    const { coinInfo, fiatCurrencyByCountry, className, formError } = this.props;
+    const { isGettingCoinInfo, currency, generatedAddress } = this.state;
     const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
     const fiatAmount = currency?.amount ?
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
@@ -284,7 +293,6 @@ const mapStateToProps = (state) => ({
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
   currency: formSellCoinSelector(state, 'currency'),
   formError: !!state.form[sellCoinFormName]?.syncErrors,
-  generatedAddress: state.sellCoin?.generatedAddress,
   country: state.app.ipInfo?.country,
 });
 
@@ -303,7 +311,6 @@ const mapDispatchToProps = {
 SellCryptoCoin.defaultProps = {
   className: '',
   currency: null,
-  generatedAddress: null,
 };
 
 SellCryptoCoin.propTypes = {
@@ -327,7 +334,6 @@ SellCryptoCoin.propTypes = {
   sellCryptoGenerateAddress: PropTypes.func.isRequired,
   sellCryptoGetBankList: PropTypes.func.isRequired,
   formError: PropTypes.bool.isRequired,
-  generatedAddress: PropTypes.string,
   history: PropTypes.object.isRequired,
 };
 
