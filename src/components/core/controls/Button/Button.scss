@@ -41,12 +41,11 @@ $secondary : #b7b7b7;
 }
 
 .btn-anonymous {
-  color: $white !important;
-  background-color: $titan-black !important;
-  border-color: $titan-black !important;
+  background-color: $titan-black;
+  border-color: $titan-black;
   &:hover {
-    background-color: $titan-black !important;
-    border-color: $titan-black !important;
-    opacity: 0.8 !important;
+    background-color: $titan-black;
+    border-color: $titan-black;
+    opacity: 0.8;
   }
 }
