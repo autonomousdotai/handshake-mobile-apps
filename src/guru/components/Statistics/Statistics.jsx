@@ -41,11 +41,11 @@ function Statistics(props) {
 }
 
 Statistics.propTypes = {
-  listItems: PropTypes.arrayOf(Object).isRequired,
+  listItems: PropTypes.arrayOf(Object).isRequired
 };
 
 Statistics.defaultProps = {
-  listItems: [],
+  listItems: []
 };
 
 export default Statistics;

@@ -4,16 +4,21 @@ import Countdown from '@/components/Countdown/Countdown';
 import CopyLink from '@/assets/images/share/link.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import Statistics from '@/guru/components/Statistics/Statistics';
+import Creator from '@/guru/components/Creator/Creator';
 import { URL } from '@/constants';
 import Image from '@/components/core/presentation/Image';
+import Icon from '@/guru/components/Icon/Icon';
 import { randomArrayItem } from '@/utils/array';
 import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
 import TimeSVG from '@/assets/images/pex/time.svg';
 import CoinSVG from '@/assets/images/pex/coin.svg';
+import MeIcon from '@/assets/images/navigation/ic_ninja_logo.svg';
 
 import { formatAmount, calcPercent } from '@/utils/number';
+import { shortAddress } from '@/utils/string';
 import OutcomeList from './OutcomeList';
 import { socialSharedMsg } from './constants';
+import Outcome from '../../models/Outcome';
 
 function renderEventSource({ event }) {
   const { source } = event;
@@ -48,22 +53,11 @@ function renderEventImage({ event }) {
 }
 
 function renderEventNumberOfPlayers({ event }) {
-  let msg = '';
-  switch (event.total_users) {
-    case 0:
-      msg = 'Be the first ninja to play';
-      break;
-    case 1:
-      msg = `${event.total_users} ninja is playing`;
-      break;
-    default:
-      msg = `${event.total_users} ninjas are playing`;
-      break;
-  }
+  if (!event.total_users) return null;
   return (
     <div className="EventNumberOfPlayer">
-      <span><Image src={NumberPlayersSVG} alt="NumberPlayersSVG" /></span>
-      <span className="NumberOfPlayerTitle">{msg}</span>
+      <span><Icon path={NumberPlayersSVG} /></span>
+      <span className="NumberOfPlayerTitle">{event.total_users}</span>
     </div>
   );
 }
@@ -71,7 +65,7 @@ function renderEventNumberOfPlayers({ event }) {
 function renderEvenTimeLeft({ event, onCountdownComplete }) {
   return (
     <div className="EventTimeLeft">
-      <span><Image src={TimeSVG} alt="TimeSVG" /></span>
+      <span><Icon path={TimeSVG} /></span>
       <span className="EventTimeLeftValue">
         <Countdown endTime={event.date} onComplete={onCountdownComplete} />
       </span>
@@ -80,13 +74,26 @@ function renderEvenTimeLeft({ event, onCountdownComplete }) {
 }
 
 function renderEventTotalBets({ event }) {
-  const totalBets = !event.total_bets ? 0 : formatAmount(event.total_bets);
+  const totalBets = (!event.total_bets && formatAmount(event.total_bets)) || 0;
   return (
     <div className="EventTotalBet">
-      <span><Image src={CoinSVG} alt="CoinSVG" /></span>
+      <span><Icon path={CoinSVG} /></span>
       <span className="EventTotalBetValue">{`${totalBets} ETH`}</span>
     </div>
   );
+}
+
+function renderCreator({ event }) {
+  const alias = event.creator_wallet_address || '0x1605219905D96BD6c5b1b07A59a3bFB233043f27';
+  try {
+    return (
+      <Creator alias={shortAddress(alias, '...')}>
+        <Icon path={MeIcon} />
+      </Creator>
+    );
+  } catch (e) {
+    return (<Creator />);
+  }
 }
 
 function renderStatistics({ event }) {
@@ -98,11 +105,34 @@ function renderStatistics({ event }) {
   const listItems = Object.keys(statistics).sort((a, b) => (b > a))
     .map(key => ({
       name: key === 'support' ? 'Yes' : 'No',
-      percent: (statistics[key] && Math.round(calcPercent(statistics[key], totalPredict))) || 0,
+      percent: (statistics[key] && Math.round(calcPercent(statistics[key], totalPredict))) || 0
     }));
   return (
     <Statistics listItems={listItems} />
   );
+}
+
+function renderBetOptions(props) {
+  const opts = [{
+    side: 1,
+    label: 'yes'
+  },
+  {
+    side: 0,
+    label: 'no'
+  }];
+  return opts.map(o => {
+    const styleBtn = o.side ? 'btn-primary' : 'btn-secondary';
+    return (
+      <button
+        key={o.side}
+        className={`btn ${styleBtn}`}
+        onClick={() => props.onClickOutcome({ ...props, side: o.side }, props.event.outcomes[0])}
+      >
+        {o.label}
+      </button>
+    );
+  });
 }
 
 function renderOutcomeList({ event, onClickOutcome }) {
@@ -139,6 +169,7 @@ function EventItem(props) {
         {renderEventName(props)}
         {renderEventImage(props)}
       </div>
+      {renderCreator(props)}
       <div className="EventDetails">
         <div className="EvenFirstGroup">
           {renderEvenTimeLeft(props)}
@@ -148,7 +179,8 @@ function EventItem(props) {
         </div>
         {renderStatistics(props)}
       </div>
-      {renderOutcomeList(props)}
+      {renderBetOptions(props)}
+      {/* {renderOutcomeList(props)} */}
     </div>
   );
 }

@@ -1,33 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function Name(props) {
-  const { name } = props;
+function Alias(props) {
+  const { alias } = props;
   return (
-    <span className="CreatorName">{name}</span>
+    <span className="CreatorAlias">{alias}</span>
   );
 }
 
 function Creator(props) {
-  const { className, children } = props;
+  const { children } = props;
   return (
-    <div className={className}>
+    <div className="CreatorComponent">
       { children }
-      {Name(props)}
+      { Alias(props) }
     </div>
   );
 }
 
 Creator.propTypes = {
-  className: PropTypes.string,
   children: PropTypes.node,
-  name: PropTypes.string,
+  alias: PropTypes.string
 };
 
 Creator.defaultProps = {
-  className: null,
   children: null,
-  name: null,
+  alias: 'admin'
 };
 
 export default Creator;

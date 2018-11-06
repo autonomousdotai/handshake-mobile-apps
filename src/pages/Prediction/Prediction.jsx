@@ -208,6 +208,7 @@ class Prediction extends React.Component {
 
 
   handleClickEventItem = (itemProps, itemData) => {
+    console.log('CLICKEVENT', itemProps, itemData);
     const { event } = itemProps;
     const { shareEvent } = this.props;
     if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
