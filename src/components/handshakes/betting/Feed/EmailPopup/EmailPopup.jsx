@@ -18,6 +18,7 @@ import './EmailPopup.scss';
 
 class EmailPopup extends React.Component {
   static propTypes = {
+    matchId: PropTypes.string.isRequired,
     onButtonClick: PropTypes.func,
     submitEmailSubcribe: PropTypes.func,
   }
@@ -53,6 +54,7 @@ class EmailPopup extends React.Component {
 
     const params = {
       email,
+      match_id: this.props.matchId,
     };
     this.props.submitEmailSubcribe({
       PATH_URL: API_URL.CRYPTOSIGN.SUBCRIBE_EMAIL_PREDICTION,
@@ -72,6 +74,7 @@ class EmailPopup extends React.Component {
           });
         }
       }),
+
     });
   }
 

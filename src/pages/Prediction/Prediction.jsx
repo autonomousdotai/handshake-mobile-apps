@@ -419,15 +419,21 @@ class Prediction extends React.Component {
       />
     </ModalDialog>
   )
-  renderEmailPopup = () => (
-    <ModalDialog className="modal" onRef={(modal) => { this.modalEmailPopupRef = modal; return null; }}>
-      <EmailPopup onButtonClick={() => {
-          this.modalEmailPopupRef.close();
-          this.props.dispatch(checkExistSubcribeEmail());
-        }}
-      />
-    </ModalDialog>
-  )
+  renderEmailPopup = () => {
+    const { selectedMatch } = this.state;
+    const matchId = selectedMatch ? selectedMatch.id : null;
+    return (
+      <ModalDialog className="modal" onRef={(modal) => { this.modalEmailPopupRef = modal; return null; }}>
+        <EmailPopup
+          matchId={matchId}
+          onButtonClick={() => {
+            this.modalEmailPopupRef.close();
+            this.props.dispatch(checkExistSubcribeEmail());
+          }}
+        />
+      </ModalDialog>
+    );
+  }
 
   renderOuttaMoney = () => {
     return (
