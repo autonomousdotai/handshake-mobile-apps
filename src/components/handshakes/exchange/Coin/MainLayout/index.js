@@ -59,6 +59,7 @@ class Coin extends Component {
   render() {
     const showState = [-1, 0, 2, 1];
     const { authProfile: { idVerified } } = this.props;
+    const { currentTabId } = this.state;
     return (
       <div className={scopedCss('container')}>
         <div className={scopedCss('tabs')}>
@@ -66,7 +67,7 @@ class Coin extends Component {
         </div>
         <div className={scopedCss('tab-body')}>
           {
-            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} />
+            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} coinTab={currentTabId} />
           }
           {this.renderTabComponent()}
         </div>
