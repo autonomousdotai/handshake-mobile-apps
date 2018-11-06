@@ -1,13 +1,20 @@
 export const loadReports = (payload = {}) => {
   return {
-    type: 'GURU:GET_REPORTS',
+    type: 'PEX:GET_REPORTS',
     payload
   };
 };
 
 export const updateReports = (payload = {}) => {
   return {
-    type: 'GURU:UPDATE_REPORTS',
+    type: 'PEX:UPDATE_REPORTS',
     payload
   };
 }
+
+export const createEvent = (payload = {}) => {
+  return {
+    type: 'PEX:CREATE_EVENT',
+    ...payload
+  };
+};

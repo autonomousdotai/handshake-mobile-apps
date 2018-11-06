@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import CustomField from '@/guru/components/Form/CustomField';
 import { Field } from 'formik';
 import { loadReports } from './action';
+import { reportSelector } from './selector';
 
 class ReportSource extends React.Component {
   static displayName = 'ReportSource';
@@ -12,19 +13,15 @@ class ReportSource extends React.Component {
     classNames: PropTypes.string,
     loadReports: PropTypes.func,
     disabled: PropTypes.bool,
-    reports: PropTypes.array.isRequired
+    reports: PropTypes.array
   };
 
   static defaultProps = {
     classNames: '',
     disabled: false,
+    reports: [],
     loadReports: undefined
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
 
   componentDidMount() {
     this.props.loadReports();
@@ -38,12 +35,12 @@ class ReportSource extends React.Component {
     return (
       <div className={cls}>
         <Field
-          name="reportSource"
-          component={CustomField}
           type="reselect"
-          data={reports}
-          disabled={disabled}
+          name="source"
           placeholder="Result URL e.g. livescore.com"
+          disabled={disabled}
+          options={reports}
+          component={CustomField}
         />
       </div>
     );
@@ -52,7 +49,7 @@ class ReportSource extends React.Component {
 
 export default connect(
   state => ({
-    reports: state.guru.reports
+    reports: reportSelector(state)
   }),
   { loadReports }
 )(ReportSource);

@@ -2,21 +2,28 @@
 import React from 'react';
 import cx from 'classnames';
 import CreatableSelect from 'react-select/lib/Creatable';
+import RangeSlider from '@/guru/components/Form/RangeSlider';
 
 function renderReselect(props) {
-  const { name, value, onChange } = props.field;
   return (
     <CreatableSelect
       classNamePrefix="react-select"
-      name={name}
-      value={value}
-      onChange={onChange}
+      {...props.field}
+      onChange={option => props.form.setFieldValue(props.field.name, option)}
       isClearable
       placeholder={props.placeholder}
-      options={props.data}
+      options={props.options}
       isDisabled={props.disabled}
-      getOptionLabel={props.getOptionLabel}
-      getOptionValue={props.getOptionValue}
+    />
+  );
+}
+
+function rangeSlider(props) {
+  return (
+    <RangeSlider
+      options={props.options}
+      {...props.field}
+      form={props.form}
     />
   );
 }
@@ -25,6 +32,8 @@ function fieldByType(props) {
   switch (props.type) {
     case 'reselect':
       return renderReselect(props);
+    case 'rangeSlider':
+      return rangeSlider(props);
     default:
       throw Error('type is required');
   }
@@ -32,24 +41,19 @@ function fieldByType(props) {
 
 export default function CustomField(props) {
   const {
-    label,
     className,
     field, // { name, value, onChange, onBlur }
     form: { touched, errors } // values, setXX, handleXX, dirty, isValid, status, etc.
   } = props;
 
   const cls = cx(className, {
-    'form-error': touched && errors,
-    // 'form-warning': touched && warning,
-    // 'async-validating': asyncValidating
+    'form-error': touched && errors
   });
 
   return (
     <div className={cls}>
-      {label && <label>{label}</label>}
       {fieldByType(props)}
-      {touched[field.name] &&
-        errors[field.name] && <div className="error">{errors[field.name]}</div>}
+      {touched[field.name] && errors[field.name] && <div className="error">{errors[field.name]}</div>}
     </div>
   );
 }

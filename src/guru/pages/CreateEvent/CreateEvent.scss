@@ -1,3 +1,13 @@
+.react-select__menu {
+  z-index: 5;
+}
+.react-select__control {
+  background-color: #ffffff;
+}
+.react-select__control--is-disabled {
+  background-color: #e9ecef;
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;

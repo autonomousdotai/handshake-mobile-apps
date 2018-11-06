@@ -1,7 +1,7 @@
-import { takeLatest, call, put, select, all } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import { API_URL } from '@/constants';
 import { apiGet } from '@/guru/stores/api';
-import { loadReports, updateReports } from './action';
+import { loadReports, updateReports, createEvent } from './action';
 
 function* handleLoadReports() {
   try {
@@ -17,6 +17,62 @@ function* handleLoadReports() {
   }
 }
 
+function* handleCreateEven({ values }) {
+  try {
+    const { source } = values;
+    const reportSource = source.id ? { source_id: source.id }
+      : {
+        source: {
+          name: source.value,
+          url: source.value
+        }
+      };
+    const newEventData = {
+      homeTeamName: values.homeTeamName || '',
+      awayTeamName: values.awayTeamName || '',
+      homeTeamCode: values.homeTeamCode || '',
+      awayTeamCode: values.awayTeamCode || '',
+      homeTeamFlag: values.homeTeamFlag || '',
+      awayTeamFlag: values.awayTeamFlag || '',
+      name: values.eventName.label,
+      public: values.private ? 0 : 1,
+      date: values.closingTime,
+      reportTime: values.reportingTime,
+      disputeTime: values.disputeTime,
+      market_fee: values.creatorFee,
+      outcomes: values.outcomes,
+      category_id: 7, // values.category.id, hard-code for now
+      ...reportSource,
+    };
+    console.log('newEventData', newEventData);
+    // const { data } = yield call(handleCreateNewEventSaga, { newEventData });
+    // if (data && data.length) {
+    //   const eventData = data[0];
+    //   const { contract } = eventData;
+    //   console.log('Contract:', contract);
+    //   const inputData = eventData.outcomes.map(o => {
+    //     return {
+    //       fee: eventData.market_fee,
+    //       source: eventData.source_name,
+    //       closingTime: eventData.date,
+    //       reportTime: eventData.reportTime,
+    //       disputeTime: eventData.disputeTime,
+    //       offchain: o.id,
+    //       contractAddress: contract.contract_address,
+    //       contractName: contract.json_name,
+    //     };
+    //   });
+    //   const matchId = eventData.id;
+    //   const eventName = eventData.name;
+    //   yield saveGenerateShareLinkToStore({ matchId, eventName });
+    //   betHandshakeHandler.createNewEvent(inputData);
+    // }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export default function* createEventSaga() {
   yield takeLatest(loadReports().type, handleLoadReports);
+  yield takeLatest(createEvent().type, handleCreateEven);
 }
