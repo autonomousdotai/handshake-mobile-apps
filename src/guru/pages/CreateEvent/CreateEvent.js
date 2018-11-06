@@ -3,7 +3,8 @@ import cx from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
-import CustomField from '@/guru/components/Form/CustomField';
+import * as Yup from 'yup';
+import { CustomField, ErrMsg } from '@/guru/components/Form';
 
 import { createEvent } from './action';
 import ReportSource from './ReportSource';
@@ -34,6 +35,11 @@ class CreateEvent extends React.Component {
     return <p className="BlockTitle">{title}</p>;
   };
 
+  buildErrorCls = (errors, touched) => {
+    const errFields = Object.keys(touched).filter(i => errors[i]);
+    return errFields.length ? errFields.join(' ') : '';
+  }
+
   renderHostFee = () => {
     const optionSlider = { min: 0, max: 5, tooltip: false, orientation: 'horizontal' };
 
@@ -58,6 +64,7 @@ class CreateEvent extends React.Component {
           name="outcomeName"
           placeholder="Manchester United beat Juventus"
         />
+        <ErrMsg name="outcomeName" />
         <label htmlFor="eventName">in</label>
         <Field name="eventName" placeholder="Champions League table stage" />
         <label className="switch">
@@ -75,15 +82,31 @@ class CreateEvent extends React.Component {
     const cls = cx(CreateEvent.displayName, {
       [this.props.classNames]: this.props.classNames
     });
-    const initialValues = { outcomeName: '', eventName: '', public: true, creatorFee: 0 };
+
+    const initialValues = {
+      outcomeName: '',
+      eventName: '',
+      public: true,
+      creatorFee: 0
+    };
+
+    const eventSchema = Yup.object().shape({
+      outcomeName: Yup.string().required('Required'),
+      eventName: Yup.string().required('Required'),
+      // source: Yup.string().required('Required')
+    });
 
     return (
       <div className={cls}>
-        <Formik initialValues={initialValues} onSubmit={this.handleOnSubmit}>
+        <Formik
+          initialValues={initialValues}
+          onSubmit={this.handleOnSubmit}
+          validationSchema={eventSchema}
+        >
           {formProps => {
-            const { isSubmitting } = formProps;
+            const { isSubmitting, errors, touched } = formProps;
             return (
-              <Form>
+              <Form className={this.buildErrorCls(errors, touched)}>
                 {this.renderEventTitle(formProps)}
                 <ReportSource />
                 {this.renderHostFee()}

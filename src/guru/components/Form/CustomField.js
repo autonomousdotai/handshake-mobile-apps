@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import cx from 'classnames';
 import CreatableSelect from 'react-select/lib/Creatable';
-import RangeSlider from '@/guru/components/Form/RangeSlider';
+import { RangeSlider } from '@/guru/components/Form';
 
 function renderReselect(props) {
   return (
@@ -28,7 +27,7 @@ function rangeSlider(props) {
   );
 }
 
-function fieldByType(props) {
+export default function CustomField(props) {
   switch (props.type) {
     case 'reselect':
       return renderReselect(props);
@@ -37,23 +36,4 @@ function fieldByType(props) {
     default:
       throw Error('type is required');
   }
-}
-
-export default function CustomField(props) {
-  const {
-    className,
-    field, // { name, value, onChange, onBlur }
-    form: { touched, errors } // values, setXX, handleXX, dirty, isValid, status, etc.
-  } = props;
-
-  const cls = cx(className, {
-    'form-error': touched && errors
-  });
-
-  return (
-    <div className={cls}>
-      {fieldByType(props)}
-      {touched[field.name] && errors[field.name] && <div className="error">{errors[field.name]}</div>}
-    </div>
-  );
 }
