@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { API_URL, CRYPTO_CURRENCY, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
-import { loadCashOrderList, sendCashOrder, reset } from '@/reducers/internalAdmin/action';
 import { loadCashOrderList, reset, sendCashOrder } from '@/reducers/internalAdmin/action';
 import './InternalAdmin.scss';
 import { FormattedDate, injectIntl } from 'react-intl';
