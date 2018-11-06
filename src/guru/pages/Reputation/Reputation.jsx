@@ -6,8 +6,8 @@ import local from '@/services/localStore';
 import Image from '@/components/core/presentation/Image';
 import StarRatings from 'react-star-ratings';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
-import { loadUserEvents } from '@/guru/pages/Home/action';
-import { userEventsSelector } from '@/guru/pages/Home/selector';
+import { loadUserEvents, loadUserReputation } from '@/guru/pages/Home/action';
+import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { APP } from '@/constants';
 
 import './Reputation.scss';
@@ -16,10 +16,12 @@ import EventItem from './EventItem';
 class Reputation extends React.Component {
   static propTypes = {
     eventList: PropTypes.array,
+    reputation: PropTypes.object,
   };
 
   static defaultProps = {
     eventList: [],
+    reputation: {},
   };
   componentDidMount() {
     this.getData(this.props);
@@ -28,24 +30,9 @@ class Reputation extends React.Component {
     const profile = local.get(APP.AUTH_PROFILE);
     const userId = profile.id;
     props.dispatch(loadUserEvents({ userId }));
+    props.dispatch(loadUserReputation({ userId }));
   }
-  renderStar() {
-    return (
-      <div className="wrapperStarRating">
-        <StarRatings
-          className="starRating"
-          rating={4.5}
-          isSelectable={false}
-          starDimension="12px"
-          starRatedColor="#2b8bff"
-          starSpacing="3px"
-          numberOfStars={5}
-          name="rating"
-        />
-        <div className="starNumber">(10)</div>
-      </div>
-    );
-  }
+
   renderProfile() {
     return (
       <div className="wrapperProfile">
@@ -54,41 +41,44 @@ class Reputation extends React.Component {
         </div>
         <div className="wrapperContent">
           <div className="mediumText boldText">Grootsland</div>
-          {this.renderStar()}
         </div>
       </div>
     );
   }
-  renderMarketNumber() {
+  renderMarketNumber(reputation) {
+    const { total_events: totalEvents } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">4</div>
+        <div className="mediumText boldText">{totalEvents}</div>
         <div className="disableText normalText">Market</div>
       </div>
     );
   }
-  renderETHNumber() {
+  renderETHNumber(reputation) {
+    const { total_amount: totalAmount } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">12,301</div>
+        <div className="mediumText boldText">{totalAmount}</div>
         <div className="disableText normalText">ETH played</div>
       </div>
     );
   }
-  renderDisputeNumber() {
+  renderDisputeNumber(reputation) {
+    const { total_disputed_events: totalDisputedEvent } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">20</div>
+        <div className="mediumText boldText">{totalDisputedEvent}</div>
         <div className="disableText normalText">Disputation</div>
       </div>
     );
   }
-  renderGroupNumber() {
+  renderGroupNumber(props) {
+    const { reputation } = props;
     return (
       <div className="wrapperGroupNumber">
-        {this.renderMarketNumber()}
-        {this.renderETHNumber()}
-        {this.renderDisputeNumber()}
+        {this.renderMarketNumber(reputation)}
+        {this.renderETHNumber(reputation)}
+        {this.renderDisputeNumber(reputation)}
       </div>
     );
   }
@@ -111,7 +101,7 @@ class Reputation extends React.Component {
     return (
       <div className="wrapperReputation">
         {this.renderProfile()}
-        {this.renderGroupNumber()}
+        {this.renderGroupNumber(this.props)}
         {this.renderMarketList(this.props)}
       </div>
     );
@@ -121,6 +111,7 @@ export default injectIntl(connect(
   (state) => {
     return {
       eventList: userEventsSelector(state),
+      reputation: userReputationSelector(state),
     };
   },
 )(Reputation));

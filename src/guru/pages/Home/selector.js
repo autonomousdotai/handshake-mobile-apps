@@ -26,3 +26,6 @@ export const isSharePage = (state) => {
 export const userEventsSelector = (state) => {
   return state.guru.userEvents;
 };
+export const userReputationSelector = (state) => {
+  return state.guru.reputation;
+};

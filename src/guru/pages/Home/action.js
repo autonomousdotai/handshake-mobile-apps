@@ -23,3 +23,17 @@ export const updateUserEvents = (events) => {
     userEvents: events,
   };
 };
+
+export const loadUserReputation = (payload = {}) => {
+  return {
+    type: 'GURU:LOAD_USER_REPUTATION',
+    ...payload,
+  };
+};
+
+export const updateUserReputation = (reputation) => {
+  return {
+    type: 'GURU:UPDATE_USER_REPUTATION',
+    reputation,
+  };
+};

@@ -4,6 +4,7 @@ import produce from 'immer';
 const initialState = {
   events: [],
   userEvents: [],
+  reputation: {},
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -13,8 +14,10 @@ const guruReducer = (state = initialState, action) => {
         draft.events = action.events;
         break;
       case 'GURU:UPDATE_USER_EVENTS':
-        console.log('GURU:UPDATE_USER_EVENTS:', action);
         draft.userEvents = action.userEvents;
+        break;
+      case 'GURU:UPDATE_USER_REPUTATION':
+        draft.reputation = action.reputation;
         break;
       default:
         break;

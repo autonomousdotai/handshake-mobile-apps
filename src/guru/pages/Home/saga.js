@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
-import { loadMatches, updateEvents, loadUserEvents, updateUserEvents } from './action';
+import { loadMatches, updateEvents, loadUserEvents, updateUserEvents, loadUserReputation, updateUserReputation } from './action';
 
 export function* handleLoadMatches({ isDetail, source }) {
   try {
@@ -46,7 +46,23 @@ export function* handleLoadUserEvents({ userId }) {
   }
 }
 
+export function* handleLoadReputation({ userId }) {
+  try {
+    const PATH_URL = `${API_URL.CRYPTOSIGN.GET_REPUTATION_USER}/${userId}`;
+    const { data } = yield call(apiGet, {
+      PATH_URL,
+      type: 'LOAD_USER_REPUTATION',
+    });
+    if (data) {
+      yield put(updateUserReputation(data));
+    }
+  } catch (e) {
+    console.error('handleLoadReputation', e);
+  }
+}
+
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
   yield takeLatest(loadUserEvents().type, handleLoadUserEvents);
+  yield takeLatest(loadUserReputation().type, handleLoadReputation);
 }
