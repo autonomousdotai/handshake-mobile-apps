@@ -233,6 +233,7 @@ export default {
   'ex.error.326': 'We don’t have enough coin for your request! Please try with smaller amount.',
   'ex.error.327': 'Credit item status is invalid',
   'ex.error.331': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.331.sell': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': `WELCOME TO OUR <br/> EARLY BIRD PROGRAM!`,

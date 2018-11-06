@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList } from '@/reducers/sellCoin/action';
-import { API_URL, URL } from '@/constants';
+import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import { Field, formValueSelector, change } from 'redux-form';
@@ -79,7 +79,7 @@ class SellCryptoCoin extends Component {
     this.setState({ isGettingCoinInfo: false });
     this.updateCurrency({ amount: 0 });
     this.props.showAlert({
-      message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
+      message: <div className="text-center">{getErrorMessageFromCode(e, { exchangeAction: EXCHANGE_ACTION.SELL })}</div>,
       timeOut: 3000,
       type: 'danger',
     });
