@@ -399,7 +399,7 @@ class BetingShakeFree extends React.Component {
         {/* <p className="titleForm text-center">BET FREE ON THE OUTCOME</p> */}
         {<Toggle ref={(component) => { this.toggleRef = component; }} onChange={this.onToggleChange} />}
         {/* this.renderInputField(amountField) */}
-        <div className="freeAmount">You have <b>{amount} ETH</b> FREE to bet!</div>
+        {/*<div className="freeAmount">You have <b>{amount} ETH</b> FREE to bet!</div>*/}
         {this.renderRedeemCode(this.props, this.state)}
         {isShowOdds && this.renderInputField(oddsField)}
         <div className="rowWrapper">
