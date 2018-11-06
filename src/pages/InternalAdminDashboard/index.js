@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 // import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 import AdminIDVerification, { STATUS } from '@/pages/Admin/AdminIDVerification';
+import Users from '@/pages/Admin/Users';
 import { EXCHANGE_ACTION, URL } from '@/constants';
 import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 import queryString from 'query-string';
-import Login from '@/components/handshakes/betting-event/Login';
+import Login from '@/pages/Admin/Login';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
@@ -44,12 +45,17 @@ const menus = {
     components: InternalAdmin,
     params: { type: 'bank', action: EXCHANGE_ACTION.SELL },
   },
+  manageUser: {
+    name: 'Admin - Manage Users',
+    components: Users,    
+  },
 };
 
 class InternalAdminDashboard extends Component {
   constructor() {
     super();
     this.token = this.getAdminHash() || '';
+    this.adminID = this.getAminID() || '';
     this.state = {
       selectedMenuId: 'idVerificationProcessing',
       queryParams: {},
@@ -66,6 +72,9 @@ class InternalAdminDashboard extends Component {
   getAdminHash() {
     return sessionStorage.getItem('admin_hash');
   }
+  getAminID() {
+    return sessionStorage.getItem('user_id');
+  }
 
   onMenuSelect = (idMenu) => {
     if (menus[idMenu]) {
@@ -75,7 +84,7 @@ class InternalAdminDashboard extends Component {
 
   checkAuth = () => {
     console.log(this.token);
-    if (this.token.length > 0) {
+    if (this.token.length > 0 && this.adminID.length) {
       return true;
     }
     return false;
