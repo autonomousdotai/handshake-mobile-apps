@@ -247,8 +247,8 @@ class WalletSelector extends Component {
     return (
       <ul className={`${scopedCss('list-user-wallet')} ${shouldShowUserWallet ? 'show' : ''}`}>
         <li>{messages.wallet_selector.your_wallet}:</li>
-        {userWallets.map(wallet => (
-          wallet && <li key={wallet?.address} onClick={() => this.onUserWalletSelected(wallet)}>{`${wallet?.name} - ${this.shortIt(wallet?.address)}`}</li>
+        {userWallets.map((wallet, i) => (
+          wallet && <li key={wallet?.address + i} onClick={() => this.onUserWalletSelected(wallet)}>{`${wallet?.name} - ${this.shortIt(wallet?.address)}`}</li>
         ))}
       </ul>
     );
