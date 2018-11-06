@@ -9,6 +9,8 @@ import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserEvents, loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { APP } from '@/constants';
+import { formatAmount } from '@/components/handshakes/betting/utils';
+
 
 import './Reputation.scss';
 import EventItem from './EventItem';
@@ -46,29 +48,29 @@ class Reputation extends React.Component {
     );
   }
   renderMarketNumber(reputation) {
-    const { total_events: totalEvents } = reputation;
+    const { total_events: totalEvents = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
         <div className="mediumText boldText">{totalEvents}</div>
-        <div className="disableText normalText">Market</div>
+        <div className="disableText normalText">Debates</div>
       </div>
     );
   }
   renderETHNumber(reputation) {
-    const { total_amount: totalAmount } = reputation;
+    const { total_amount: totalAmount = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">{totalAmount}</div>
+        <div className="mediumText boldText">{formatAmount(totalAmount)}</div>
         <div className="disableText normalText">ETH played</div>
       </div>
     );
   }
   renderDisputeNumber(reputation) {
-    const { total_disputed_events: totalDisputedEvent } = reputation;
+    const { total_disputed_events: totalDisputedEvent = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
         <div className="mediumText boldText">{totalDisputedEvent}</div>
-        <div className="disableText normalText">Disputation</div>
+        <div className="disableText normalText">Disputes</div>
       </div>
     );
   }
@@ -85,7 +87,7 @@ class Reputation extends React.Component {
   renderMarketList(props) {
     return (
       <div className="wrapperMarketList">
-        <div className="mediumText boldText">Created Market</div>
+        <div className="mediumText boldText">Hosted Debates</div>
         {props.eventList.map((event) => {
           return (
             <EventItem
