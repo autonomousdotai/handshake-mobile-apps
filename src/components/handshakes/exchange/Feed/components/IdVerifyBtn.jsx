@@ -17,6 +17,8 @@ class IdVerifyBtn extends React.PureComponent {
     let action = '';
     let className = '';
 
+    console.log('coinTab',coinTab);
+
     switch (idVerified) {
       case 0: {
         timeShow = 24 * 60 * 60 * 1000;
