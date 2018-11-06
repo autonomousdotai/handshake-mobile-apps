@@ -91,12 +91,12 @@ class SellCryptoCoin extends Component {
 
   onMakeOrderSuccess = () => {
     this.props.hideLoading();
-    this.props.sellCryptoFinishOrder();
     this.props.showAlert({
       message: <div className="text-center">Successful</div>,
       timeOut: 3000,
       type: 'success',
       callBack: () => {
+        this.props.sellCryptoFinishOrder();
         this.props.history?.push(URL.HANDSHAKE_ME);
       },
     });
@@ -276,9 +276,9 @@ class SellCryptoCoin extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  coinInfo: state.sellCoin.coinInfo,
+  coinInfo: state.sellCoin.coinInfo || {},
   orderInfo: state.sellCoin.orderInfo,
-  bankList: state.sellCoin.bankList,
+  bankList: state.sellCoin.bankList || [],
   fiatCurrencyByCountry: state.app.inInfo?.currency || 'VND',
   idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
