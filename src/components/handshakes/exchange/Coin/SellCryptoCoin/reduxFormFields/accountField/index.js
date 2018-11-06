@@ -10,15 +10,16 @@ class AccountNameComponent extends React.Component {
   render() {
     const { accountId, accountName } = this.props;
     if (accountId && !accountName) {
+        console.log('===============',this.props);
         this.props.getBankInfo(accountId).then(r => {
             console.log('update change from too', r);
             this.props.change('SellCoinForm', 'bankOwner', r)
         });
-        return <div>Loading....</div>
+        return (<div className="fiat-amount-container">
+            <div className={'loading'} />
+        </div>)
     }
-    return (
-        <input type='text' placeholder='Ten Tai Khoan' disabled={!accountName} value={accountName} />
-    );
+    return null;
   }
 }
 const mapState = (state) => ({
@@ -26,7 +27,7 @@ const mapState = (state) => ({
   accountId: state.sellCoin && state.sellCoin.selectBank && state.sellCoin.selectBank.accountId ? state.sellCoin.selectBank.accountId : ''
 })
 const mapDispatch = { getBankInfo, change }
-const AccountName = connect(mapState, mapDispatch)(AccountNameComponent);
+const LoadAccountName = connect(mapState, mapDispatch)(AccountNameComponent);
 
 const renderField = (field) => {
   const { input, meta, placeholder, listData } = field;
@@ -34,7 +35,7 @@ const renderField = (field) => {
   const { error, touched } = meta;
   const shouldShowError = !!(touched && error);
   const handleOnChange = (text) => {
-    if (text.length === 12) {
+    if (text.length === 13) {
         selectAccountId(text);
     }
     onChange(text);
@@ -54,7 +55,7 @@ const renderField = (field) => {
         shouldShowError &&
         <span className="error">{meta.error}</span>
       }
-      <AccountName />
+      <LoadAccountName />
     </div>
   );
 };
