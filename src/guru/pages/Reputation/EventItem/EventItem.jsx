@@ -6,6 +6,7 @@ import Countdown from '@/components/Countdown/Countdown';
 import DefaultLogo from '@/assets/images/icon/logo.svg';
 import TimeSVG from '@/assets/images/pex/time.svg';
 import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
+import { isExpiredDate } from '@/components/handshakes/betting/validation';
 
 import './EventItem.scss';
 
@@ -16,6 +17,18 @@ class EventItem extends React.Component {
   static defaultProps = {
     event: {},
   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isExpired: false,
+    };
+  }
+  componentDidMount() {
+    const { event } = this.props;
+    this.setState({
+      isExpired: isExpiredDate(event.date)
+    });
+  }
   renderEventImage() {
     return (
       <div className="wrapperEventImage">
@@ -24,20 +37,23 @@ class EventItem extends React.Component {
     );
   }
   renderEventTimeLeft(event) {
+    const { isExpired } = this.state;
     return (
       <div className="eventDetailBlock">
         <span><Image src={TimeSVG} alt="TimeSVG" /></span>
         <span className="eventDetailText normalText disableText">
-          <Countdown endTime={event.date} />
+          {isExpired ? 'Expired' : <Countdown endTime={event.date} />}
         </span>
       </div>
     );
   }
   renderNumberPlayers(event) {
+    const { total_users: totalUsers = 0, image_url: imageUrl } = event;
+    const src = imageUrl || NumberPlayersSVG;
     return (
       <div className="eventDetailBlock">
-        <span><Image src={NumberPlayersSVG} alt="NumberPlayersSVG" /></span>
-        <span className="eventDetailText normalText disableText">12345</span>
+        <span><Image src={src} alt="NumberPlayersSVG" /></span>
+        <span className="eventDetailText normalText disableText">{totalUsers}</span>
       </div>
     );
   }
@@ -52,9 +68,12 @@ class EventItem extends React.Component {
 
   renderEventContent(event) {
     const { name } = event;
+    const { isExpired } = this.state;
+    let classEventName = "mediumText boldText";
+    classEventName = isExpired ? `${classEventName} disableText` : classEventName;
     return (
       <div className="wrapperEventContent">
-        <div>{name}</div>
+        <div className={classEventName}>{name}</div>
         {this.renderDetail(event)}
       </div>
     );

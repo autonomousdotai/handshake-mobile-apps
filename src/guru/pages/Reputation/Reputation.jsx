@@ -9,7 +9,7 @@ import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserEvents, loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { APP } from '@/constants';
-import { formatAmount } from '@/components/handshakes/betting/utils';
+import { formatAmount, getAddress } from '@/components/handshakes/betting/utils';
 
 
 import './Reputation.scss';
@@ -35,14 +35,19 @@ class Reputation extends React.Component {
     props.dispatch(loadUserReputation({ userId }));
   }
 
-  renderProfile() {
+  renderProfile(props) {
+    const firstEvent = props.eventList > 0 ? props.eventList[0] : null;
+    let creatorAddress = firstEvent ? firstEvent.creator_wallet_address : null;
+    creatorAddress = creatorAddress || getAddress();
+    const addressLength = creatorAddress.length;
+    creatorAddress = `${creatorAddress.substring(0, 6)}...${creatorAddress.substring(addressLength - 6, addressLength - 1)}`;
     return (
       <div className="wrapperProfile">
         <div className="wrapperAvatar">
           <Image src={DefaultAvatar} alt="Avatar" width="50" />
         </div>
         <div className="wrapperContent">
-          <div className="mediumText boldText">Grootsland</div>
+          <div className="mediumText boldText">{creatorAddress}</div>
         </div>
       </div>
     );
@@ -102,7 +107,7 @@ class Reputation extends React.Component {
   render() {
     return (
       <div className="wrapperReputation">
-        {this.renderProfile()}
+        {this.renderProfile(this.props)}
         {this.renderGroupNumber(this.props)}
         {this.renderMarketList(this.props)}
       </div>
