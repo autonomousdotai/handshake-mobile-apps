@@ -18,6 +18,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import OrderInfo from './components/OrderInfo';
 import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
 import bankNameInputField from './reduxFormFields/bankNameField';
+import accountInputField from './reduxFormFields/accountField';
 import './SellCryptoCoin.scss';
 
 const sellCoinFormName = 'SellCoinForm';
@@ -194,6 +195,8 @@ class SellCryptoCoin extends Component {
       },
       bankNumber: {
         placeholder: this.getLocalStr().order?.inputs?.bank_number,
+        component: accountInputField,
+        listData: ['033100422510']
       },
       bankOwner: {
         placeholder: this.getLocalStr().order?.inputs?.bank_owner,

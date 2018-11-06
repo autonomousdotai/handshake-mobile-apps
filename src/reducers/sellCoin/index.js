@@ -18,6 +18,12 @@ const initialState = {
   orderInfo: {},
   generatedAddress: null,
   bankList: [],
+  selectBank: {
+    bankName: '',
+    bankId: '',
+    accountId: '',
+    accountName: '',
+  }
 };
 
 const sellCoinReducter = (state = initialState, action) => {
@@ -70,11 +76,40 @@ const sellCoinReducter = (state = initialState, action) => {
       }
       break;
     case SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST:
-      console.log('updateloasldfkjasldkfj', action);
       return {
         ...state,
         bankList: action.payload
       }
+    case SELL_COIN_ACTIONS.SELL_COIN_SELECT_BANK_NAME: {
+      const selectedBank = state.bankList.find(e => e.bankName === action.payload) || {};
+      const { bankId, bankName } = selectedBank;
+      return {
+        ...state,
+        selectBank: {
+          ...state.selectBank,
+          bankName,
+          bankId
+        }
+      }
+    }
+    case SELL_COIN_ACTIONS.SELL_COIN_SELECT_ACCOUNT_ID: {
+      return {
+        ...state,
+        selectBank: {
+          ...state.selectBank,
+          accountId: action.payload
+        }
+      }
+    }
+    case SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME: {
+      return {
+        ...state,
+        selectBank: {
+          ...state.selectBank,
+          accountName: action.payload
+        }
+      }
+    }
     default:
       return state;
   }
