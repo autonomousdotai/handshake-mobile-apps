@@ -1,5 +1,6 @@
 .crypto-coin-main-layout-container {
   background-color: #F5F8FC;
+  position: relative;
   .crypto-coin-main-layout-tabs {
     justify-content: center;
     display: flex;
@@ -17,6 +18,7 @@
       letter-spacing: 0;
       line-height: 32px;
       text-transform: uppercase;
+      cursor: pointer;
       &.selected {
         color: #FFFFFF;
         font-weight: bold;

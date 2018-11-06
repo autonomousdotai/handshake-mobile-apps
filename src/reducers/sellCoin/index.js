@@ -50,9 +50,7 @@ const sellCoinReducter = (state = initialState, action) => {
         orderInfo: {},
       };
     case SELL_COIN_ACTIONS.SELL_COIN_FINISH_ORDER:
-      return {
-        initialState,
-      };
+      return initialState;
     case `${SELL_COIN_ACTIONS.SELL_COIN_GENERATE_ADDRESS}_SUCCESS`:
       if (action?.payload?.data) {
         return {
@@ -65,7 +63,7 @@ const sellCoinReducter = (state = initialState, action) => {
       if (action?.payload?.data) {
         return {
           ...state,
-          bankList: action?.payload?.data,
+          bankList: action?.payload?.data || [],
         };
       }
       break;

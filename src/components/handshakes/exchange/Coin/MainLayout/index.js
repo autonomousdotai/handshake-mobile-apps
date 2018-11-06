@@ -5,6 +5,7 @@ import BuyCryptoCoin from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
 import SellCryptoCoin from '@/components/handshakes/exchange/Coin/SellCryptoCoin';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import IdVerifyBtn from '@/components/handshakes/exchange/Feed/components/IdVerifyBtn';
+import ChangeLanguage from '@/components/handshakes/exchange/components/ChangeLanguage';
 import './styles.scss';
 
 const TABS = {
@@ -62,6 +63,7 @@ class Coin extends Component {
     const { currentTabId } = this.state;
     return (
       <div className={scopedCss('container')}>
+        <ChangeLanguage />
         <div className={scopedCss('tabs')}>
           {this.renderTabs()}
         </div>
