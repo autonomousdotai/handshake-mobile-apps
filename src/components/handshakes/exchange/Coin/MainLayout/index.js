@@ -5,6 +5,7 @@ import BuyCryptoCoin from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
 import SellCryptoCoin from '@/components/handshakes/exchange/Coin/SellCryptoCoin';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import IdVerifyBtn from '@/components/handshakes/exchange/Feed/components/IdVerifyBtn';
+import ChangeLanguage from '@/components/handshakes/exchange/components/ChangeLanguage';
 import './styles.scss';
 
 const TABS = {
@@ -59,14 +60,16 @@ class Coin extends Component {
   render() {
     const showState = [-1, 0, 2, 1];
     const { authProfile: { idVerified } } = this.props;
+    const { currentTabId } = this.state;
     return (
       <div className={scopedCss('container')}>
+        <ChangeLanguage />
         <div className={scopedCss('tabs')}>
           {this.renderTabs()}
         </div>
         <div className={scopedCss('tab-body')}>
           {
-            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} />
+            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} coinTab={currentTabId} />
           }
           {this.renderTabComponent()}
         </div>

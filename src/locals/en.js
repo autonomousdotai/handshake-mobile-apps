@@ -233,6 +233,7 @@ export default {
   'ex.error.326': 'We don’t have enough coin for your request! Please try with smaller amount.',
   'ex.error.327': 'Credit item status is invalid',
   'ex.error.331': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.331.sell': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': `WELCOME TO OUR <br/> EARLY BIRD PROGRAM!`,
@@ -1982,7 +1983,36 @@ export default {
     },
   },
   sell_coin: {
-    label: 'Sell coin',
+    label: {
+      header: {
+        title: 'Sell coin',
+      },
+      verify: {
+        notYet: {
+          title: 'To start trading, please take a few minutes to verify your account.',
+          action: 'Verify now',
+        },
+        rejected: {
+          title: 'Your verification is rejected. Please try again.',
+          action: 'Verify now',
+        },
+        processing: {
+          title: 'Verifying your account. We will send you an email once we are done.',
+          action: 'Please wait',
+        },
+        verified: {
+          level_1: {
+            title: `You're ready to trade! Your max daily limit is now 500 USD. Want more?`,
+            action: 'Provide additional verification',
+          },
+          level_2: {
+            title: `You're fully verified. Your limit has now been increased to the max of 5000 USD!`,
+            action: '',
+          },
+          need_selfie_verifiy: 'You are buying more than 500 usd. Please provide additional verification to increase your limit',
+        },
+      },
+    },
     order: {
       inputs: {
         currency: {
