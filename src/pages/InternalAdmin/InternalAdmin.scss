@@ -64,3 +64,21 @@ tr.show-more-btn {
     color: blue;
   }
 }
+
+.internal-admin-container {
+  button.internal-admin-btn {
+    padding: 5px 10px;
+    color: white;
+    font-size: 17px;
+    border: none;
+    &.positive {
+      background-color: blue;
+    }
+    &.negative {
+      background: transparent;
+      border: 1px solid #7a7a7a;
+      color: #333;
+    }
+  }
+}
+

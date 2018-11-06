@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList } from '@/reducers/sellCoin/action';
-import { API_URL, URL } from '@/constants';
+import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
 import { Field, formValueSelector, change } from 'redux-form';
@@ -41,6 +41,7 @@ class SellCryptoCoin extends Component {
     this.state = {
       userInfo: null,
       isGettingCoinInfo: false,
+      generatedAddress: '',
     };
 
     this.getCoinInfo = debounce(::this.getCoinInfo, 1000);
@@ -79,7 +80,7 @@ class SellCryptoCoin extends Component {
     this.setState({ isGettingCoinInfo: false });
     this.updateCurrency({ amount: 0 });
     this.props.showAlert({
-      message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
+      message: <div className="text-center">{getErrorMessageFromCode(e, { exchangeAction: EXCHANGE_ACTION.SELL })}</div>,
       timeOut: 3000,
       type: 'danger',
     });
@@ -91,12 +92,12 @@ class SellCryptoCoin extends Component {
 
   onMakeOrderSuccess = () => {
     this.props.hideLoading();
-    this.props.sellCryptoFinishOrder();
     this.props.showAlert({
       message: <div className="text-center">Successful</div>,
       timeOut: 3000,
       type: 'success',
       callBack: () => {
+        this.props.sellCryptoFinishOrder();
         this.props.history?.push(URL.HANDSHAKE_ME);
       },
     });
@@ -118,13 +119,21 @@ class SellCryptoCoin extends Component {
       this.props.sellCryptoGenerateAddress({
         PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GENERATE_ADDRESS}?currency=${currency?.currency}`,
         method: 'POST',
+        successFn: this.handleGenerateCryptoAddressSuccess,
       });
     }
   }
 
+  handleGenerateCryptoAddressSuccess = (res) => {
+    console.log('handleGenerateCryptoAddressSuccess', res);
+    if (res.data) {
+      this.setState({ generatedAddress: res.data });
+    }
+  }
+
   onSubmit = () => {
-    const { idVerificationLevel, coinInfo, generatedAddress } = this.props;
-    const { currency, userInfo } = this.state;
+    const { idVerificationLevel, coinInfo } = this.props;
+    const { currency, userInfo, generatedAddress } = this.state;
     const data = {
       type: 'bank',
       amount: String(currency?.amount),
@@ -210,8 +219,8 @@ class SellCryptoCoin extends Component {
   }
 
   render() {
-    const { generatedAddress, coinInfo, fiatCurrencyByCountry, className, formError } = this.props;
-    const { isGettingCoinInfo, currency } = this.state;
+    const { coinInfo, fiatCurrencyByCountry, className, formError } = this.props;
+    const { isGettingCoinInfo, currency, generatedAddress } = this.state;
     const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
     const fiatAmount = currency?.amount ?
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
@@ -276,15 +285,14 @@ class SellCryptoCoin extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  coinInfo: state.sellCoin.coinInfo,
+  coinInfo: state.sellCoin.coinInfo || {},
   orderInfo: state.sellCoin.orderInfo,
-  bankList: state.sellCoin.bankList,
+  bankList: state.sellCoin.bankList || [],
   fiatCurrencyByCountry: state.app.inInfo?.currency || 'VND',
   idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
   currency: formSellCoinSelector(state, 'currency'),
   formError: !!state.form[sellCoinFormName]?.syncErrors,
-  generatedAddress: state.sellCoin?.generatedAddress,
   country: state.app.ipInfo?.country,
 });
 
@@ -303,7 +311,6 @@ const mapDispatchToProps = {
 SellCryptoCoin.defaultProps = {
   className: '',
   currency: null,
-  generatedAddress: null,
 };
 
 SellCryptoCoin.propTypes = {
@@ -327,7 +334,6 @@ SellCryptoCoin.propTypes = {
   sellCryptoGenerateAddress: PropTypes.func.isRequired,
   sellCryptoGetBankList: PropTypes.func.isRequired,
   formError: PropTypes.bool.isRequired,
-  generatedAddress: PropTypes.string,
   history: PropTypes.object.isRequired,
 };
 
