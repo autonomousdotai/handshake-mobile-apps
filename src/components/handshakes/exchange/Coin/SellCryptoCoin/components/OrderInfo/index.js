@@ -68,6 +68,13 @@ class OrderInfo extends Component {
       {
         name: this.getLocalStr().info?.receiving,
         value: `${formatMoneyByLocale(fiatLocalAmount) || ''} ${fiatLocalCurrency || ''}`,
+        extra: <ClockCount
+          internalClockdown
+          loop
+          duration={300}
+          className={scopedCss('countdown')}
+          onExpired={this.onCountdownExpired}
+        />,
       },
       {
         name: this.getLocalStr().info?.selling,
@@ -76,10 +83,11 @@ class OrderInfo extends Component {
     ];
     return (
       <div className={scopedCss('summary-info')}>
-        {infos.map(({ name, value }) => (
+        {infos.map(({ name, value, extra }) => (
           <div key={name} className={scopedCss('info-item')}>
             <span>{name}</span>
             <span>{value}</span>
+            <span>{extra && extra}</span>
           </div>
         ))}
       </div>
@@ -109,13 +117,6 @@ class OrderInfo extends Component {
     return (
       <div className={`${scopedCss('container')} ${className}`}>
         <span className={scopedCss('summary-txt')}>{this.getLocalStr().label}</span>
-        <ClockCount
-          internalClockdown
-          loop
-          duration={300}
-          className={scopedCss('countdown')}
-          onExpired={this.onCountdownExpired}
-        />
         {this.renderInfo()}
         <div className={scopedCss('qr-container')}>
           { generatedAddress && this.renderAddressWallet(generatedAddress) }
