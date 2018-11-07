@@ -1,91 +1,91 @@
 import React, { Component } from 'react';
-import cx from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { renderField } from '@/pages/CreateMarket/form';
-import { codeValidator, emailValidator, required } from '@/pages/CreateMarket/validate';
-import { Field, formValueSelector } from 'redux-form';
-import { sendEmailCode, verifyEmail } from '@/pages/CreateMarket/action';
-import { createEventFormName } from '@/pages/CreateMarket/constants';
-import { hasEmail, isValidEmailCode, isEmailVerified } from './selector';
+import { Field } from 'formik';
+import { ErrMsg } from '@/guru/components/Form';
+import { sendEmailCode, verifyEmailCode } from './action';
 
-class EmailVerification extends Component {
-  static displayName = 'EmailVerification';
+// import { renderField } from '@/pages/CreateMarket/form';
+// import { codeValidator, emailValidator, required } from '@/pages/CreateMarket/validate';
+// import { createEventFormName } from '@/pages/CreateMarket/constants';
+// import { hasEmail, isValidEmailCode, isEmailVerified } from './selector';
+
+class Notification extends Component {
+  static displayName = 'Notification';
   static propTypes = {
-    className: PropTypes.string,
-    email: PropTypes.string,
-    emailCode: PropTypes.string,
-    hasEmail: PropTypes.any,
-    dispatch: PropTypes.func.isRequired,
-    isValidEmailCode: PropTypes.bool,
+    formProps: PropTypes.any.isRequired,
+    sendEmailCode: PropTypes.func.isRequired,
+    verifyEmailCode: PropTypes.func.isRequired,
+    isCodeValid: PropTypes.bool
   };
 
-  static defaultProps = {
-    className: '',
-    email: undefined,
-    emailCode: undefined,
-    hasEmail: undefined,
-    isValidEmailCode: undefined,
-  };
+  static defaultProps = {};
 
   constructor(props) {
     super(props);
     this.state = {
       isEmailSent: false,
       sentCode: null,
+      isCodeValid: true
     };
   }
 
-  sendEmail = () => {
-    this.props.dispatch(sendEmailCode({
-      email: this.props.email,
-    }));
-    this.setState({
-      isEmailSent: true,
-    });
-  }
+  sendEmail = email => {
+    this.props.sendEmailCode({ email });
+    this.setState({ isEmailSent: true });
+  };
 
-  sendCode = () => {
-    this.props.dispatch(verifyEmail({
-      email: this.props.email,
-      code: this.props.emailCode,
-    }));
-    this.setState({
-      sentCode: this.props.emailCode,
-    });
-  }
+  isValidCodeRegex = code => /^[0-9]{4}/g.exec(code);
+
+  verifyCode = (email, code) => {
+    if (this.isValidCodeRegex(code)) {
+      const { setFieldError } = this.props.formProps;
+      this.props.verifyEmailCode({
+        METHOD: 'POST',
+        headers: { 'Content-Type': 'multipart/form-data' },
+        PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
+        successFn: (res) => {
+          console.log('res', res);
+          setFieldError('emailCode', '');
+        },
+        errorFn: () => {
+          setFieldError('emailCode', 'incorrect Code');
+        }
+      });
+      // this.props.verifyEmailCode({ email, code });
+      // this.setState({ sentCode: code });
+    }
+  };
 
   renderEmailBox = (props, state) => {
+    const { errors, touched, values } = props.formProps;
+    const disabled =
+      touched.email === undefined ||
+      (errors.email && touched.email) ||
+      state.isEmailSent;
     return (
       <div className="FlexRow">
         <Field
           name="email"
-          type="text"
-          fieldClass="form-control"
           placeholder="e.g. ninja@gmail.com"
-          component={renderField}
-          validate={[required, emailValidator]}
-          className="EmailCodeField"
           disabled={state.isEmailSent}
         />
         <button
           type="button"
-          className="btn btn-primary EmailBtn"
-          onClick={this.sendEmail}
-          disabled={emailValidator(props.email || '') || state.isEmailSent}
+          disabled={disabled}
+          className="btn btn-primary"
+          onClick={() => this.sendEmail(values.email)}
         >
           Get code
         </button>
+        <ErrMsg name="email" />
       </div>
     );
-  }
+  };
 
   renderCodeBox = (props, state) => {
     if (!state.isEmailSent) return null;
-    let validate = [required];
-    if (props.isValidEmailCode === false && props.emailCode === state.sentCode) {
-      validate = [required, codeValidator];
-    }
+    const { values } = props.formProps;
     return (
       <React.Fragment>
         <span>Enter the secret code</span>
@@ -93,26 +93,23 @@ class EmailVerification extends Component {
           <Field
             name="emailCode"
             type="text"
-            fieldClass="form-control"
             placeholder="e.g. 0312"
-            component={renderField}
-            validate={validate}
-            className="EmailCodeField"
           />
           <button
             type="button"
-            className="btn btn-primary EmailBtn"
-            onClick={this.sendCode}
-            disabled={required(props.emailCode) || props.isValidEmailCode}
+            className="btn btn-primary"
+            onClick={() => this.verifyCode(values.email, values.emailCode)}
+            disabled={!this.isValidCodeRegex(values.emailCode)}
           >
             Verify
           </button>
+          <ErrMsg name="emailCode" />
         </div>
       </React.Fragment>
     );
-  }
+  };
 
-  renderHasEmail = (props) => {
+  renderHasEmail = props => {
     return (
       <React.Fragment>
         <span>Ninja will send you notifications via</span>
@@ -125,7 +122,7 @@ class EmailVerification extends Component {
         />
       </React.Fragment>
     );
-  }
+  };
 
   renderComponent = (props, state) => {
     if (props.hasEmail && props.isEmailVerified) {
@@ -141,11 +138,8 @@ class EmailVerification extends Component {
   };
 
   render() {
-    const cls = cx(EmailVerification.displayName, {
-      [this.props.className]: !!this.props.className,
-    });
     return (
-      <div className={cls}>
+      <div className={Notification.displayName}>
         <div className="CreateEventFormGroupTitle">Notification</div>
         {this.renderComponent(this.props, this.state)}
       </div>
@@ -153,15 +147,15 @@ class EmailVerification extends Component {
   }
 }
 
-const formSelector = formValueSelector(createEventFormName);
 export default connect(
   (state) => {
     return {
-      hasEmail: hasEmail(state),
-      isEmailVerified: isEmailVerified(state),
-      isValidEmailCode: isValidEmailCode(state),
-      email: formSelector(state, 'email'),
-      emailCode: formSelector(state, 'emailCode'),
+      // isCodeValid: state.guru.ui.isEmailCodeValid,
+      // hasEmail: hasEmail(state),
+      // isEmailVerified: isEmailVerified(state),
+      // isValidEmailCode: isValidEmailCode(state),
+      // email: formSelector(state, 'email'),
+      // emailCode: formSelector(state, 'emailCode'),
     };
-  },
-)(EmailVerification);
+  }, { sendEmailCode, verifyEmailCode }
+)(Notification);

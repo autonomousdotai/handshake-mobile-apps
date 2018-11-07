@@ -1,11 +1,15 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
-import { updateReports } from '@/guru/pages/CreateEvent/action';
+import {
+  updateReports,
+  isEmailCodeValid
+} from '@/guru/pages/CreateEvent/action';
 
 const initialState = {
   events: [],
   userEvents: [],
   reputation: {},
+  ui: {}
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -23,6 +27,9 @@ const guruReducer = (state = initialState, action) => {
       case updateReports().type:
         draft.reports = action.payload.data;
         break;
+      case isEmailCodeValid().type:
+        draft.ui.isEmailCodeValid = action.payload.status;
+        break;
       default:
         break;
     }
@@ -30,4 +37,3 @@ const guruReducer = (state = initialState, action) => {
 };
 
 export default guruReducer;
-

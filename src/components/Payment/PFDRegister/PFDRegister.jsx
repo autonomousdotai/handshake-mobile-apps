@@ -259,7 +259,7 @@ console.log(inputEmail);
       }
 
       if (emailStart !== inputEmail) {
-        this.props.verifyEmail({
+        this.props.verifyEmailCode({
           PATH_URL: `user/verification/email/start?email=${inputEmail}`,
           headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',

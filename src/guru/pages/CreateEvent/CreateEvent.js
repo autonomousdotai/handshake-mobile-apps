@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
@@ -8,6 +7,7 @@ import { CustomField, ErrMsg } from '@/guru/components/Form';
 
 import { createEvent } from './action';
 import ReportSource from './ReportSource';
+import Notification from './Notification';
 import Debug from './Debug';
 import './CreateEvent.scss';
 
@@ -15,17 +15,7 @@ class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
     createEvent: PropTypes.func.isRequired,
-    classNames: PropTypes.string
   };
-
-  static defaultProps = {
-    classNames: ''
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
 
   handleOnSubmit = (values/* , actions */) => {
     this.props.createEvent({ values });
@@ -79,25 +69,25 @@ class CreateEvent extends React.Component {
   };
 
   render() {
-    const cls = cx(CreateEvent.displayName, {
-      [this.props.classNames]: this.props.classNames
-    });
-
     const initialValues = {
       outcomeName: '',
       eventName: '',
       public: true,
-      creatorFee: 0
+      creatorFee: 0,
+      email: '',
+      emailCode: ''
     };
 
     const eventSchema = Yup.object().shape({
       outcomeName: Yup.string().required('Required'),
       eventName: Yup.string().required('Required'),
       // source: Yup.string().required('Required')
+      email: Yup.string().required('Required').email('invalid email address'),
+      emailCode: Yup.string().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
     });
 
     return (
-      <div className={cls}>
+      <div className={CreateEvent.displayName}>
         <Formik
           initialValues={initialValues}
           onSubmit={this.handleOnSubmit}
@@ -109,6 +99,7 @@ class CreateEvent extends React.Component {
               <Form className={this.buildErrorCls(errors, touched)}>
                 {this.renderEventTitle(formProps)}
                 <ReportSource />
+                <Notification formProps={formProps} />
                 {this.renderHostFee()}
                 <button type="submit" disabled={isSubmitting}>Submit</button>
                 <Debug props={formProps} />
