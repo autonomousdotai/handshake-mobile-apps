@@ -1,6 +1,23 @@
 @import './src/styles/style';
 
 .Prediction {
+  background-color: #F5F8FC;
+  .AppBarComponent {
+    min-height: 46px;
+    margin-bottom: 10px;
+    .Account {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      color: #748599;
+      font-size: 1.2rem;
+    }
+    .Title {
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+  }
   .Sticky {
     position: fixed;
     top: 0;
@@ -204,15 +221,24 @@
   }
 
   .EventItem {
-    padding: rem-calc(20px 10px);
+    background-color: #ffffff;
+    padding: rem-calc(20px);
     font-family: $font-family-base;
     margin-bottom: rem-calc(10px);
-    box-shadow: rem-calc(0 2px 10px 0) rgba(203, 203, 203, 0.50);
+    // box-shadow: rem-calc(0 2px 10px 0) rgba(203, 203, 203, 0.50);
 
     .EventHeading {
       display: flex;
       flex-direction: row;
       justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .CreatorComponent {
+      margin-bottom: 10px;
+      .CreatorAlias {
+        margin-left: 10px;
+      }
     }
 
     .EventName {
@@ -249,9 +275,62 @@
     }
 
     .EventDetails {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: flex-end;
+      margin-bottom: 30px;
+      .EventIcon {
+        display: inline-block;
+        min-width: 31px;
+        text-align: center;
+      }
+      > .ComponentStatistics {
+        position: absolute;
+        top: -60px;
+        right: 0;
+        padding: 20px 0 0;
+      }
+      &.Full {
+        .EvenFirstGroup {
+          flex-direction: column;
+        }
+      }
+      .EvenFirstGroup {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        > div {
+          margin-right: 15px;
+          min-width: 110px;
+        }
+      }
+    }
+
+    .BetButtons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      button {
+        text-transform: capitalize;
+        font-weight: 700;
+        min-width: 48%;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+    }
+
+    .EventEnding {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid #D8D8D8;
+      .Comment > i {
+        margin-right: 5px;
+      }
     }
 
     .EventMessage {
@@ -305,7 +384,7 @@
     }
   }
   .share-social  {
-    margin-top: 8px;
+    margin-right: -5px;
     img {
       width: 32px;
       margin-right: 8px;

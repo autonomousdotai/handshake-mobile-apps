@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { push } from 'connected-react-router';
+import AppBar from '@/guru/components/AppBar/AppBar';
 import BetMode from '@/components/handshakes/betting/Feed/OrderPlace/BetMode';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Loading from '@/components/Loading';
@@ -208,7 +209,6 @@ class Prediction extends React.Component {
 
 
   handleClickEventItem = (itemProps, itemData) => {
-    console.log('CLICKEVENT', itemProps, itemData);
     const { event } = itemProps;
     const { shareEvent } = this.props;
     if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
@@ -461,12 +461,24 @@ class Prediction extends React.Component {
     return (<ReportPopup />);
   }
 
+  renderAppBar = (props) => {
+    return (
+      <AppBar>
+        <span className="Account">
+          <i className="fal fa-user"></i>
+        </span>
+        <span className="Title">Prediction</span>
+      </AppBar>
+    );
+  }
+
   renderComponent = (props, state) => {
     return (
       <div className={Prediction.displayName}>
         <Loading isLoading={props.isLoading} />
         {/*<Banner />*/}
-        <PexCreateBtn dispatch={props.dispatch} />
+        {/* <PexCreateBtn dispatch={props.dispatch} /> */}
+        {this.renderAppBar(props)}
         {this.renderReport(props)}
         {this.renderEventList(props)}
         {this.renderRelevantEventList(props)}

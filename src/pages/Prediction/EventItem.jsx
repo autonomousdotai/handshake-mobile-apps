@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Countdown from '@/components/Countdown/Countdown';
 import CopyLink from '@/assets/images/share/link.svg';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
@@ -56,7 +57,7 @@ function renderEventNumberOfPlayers({ event }) {
   if (!event.total_users) return null;
   return (
     <div className="EventNumberOfPlayer">
-      <span><Icon path={NumberPlayersSVG} /></span>
+      <span className="EventIcon"><Icon path={NumberPlayersSVG} /></span>
       <span className="NumberOfPlayerTitle">{event.total_users}</span>
     </div>
   );
@@ -65,7 +66,7 @@ function renderEventNumberOfPlayers({ event }) {
 function renderEvenTimeLeft({ event, onCountdownComplete }) {
   return (
     <div className="EventTimeLeft">
-      <span><Icon path={TimeSVG} /></span>
+      <span className="EventIcon"><Icon path={TimeSVG} /></span>
       <span className="EventTimeLeftValue">
         <Countdown endTime={event.date} onComplete={onCountdownComplete} />
       </span>
@@ -77,7 +78,7 @@ function renderEventTotalBets({ event }) {
   const totalBets = (!event.total_bets && formatAmount(event.total_bets)) || 0;
   return (
     <div className="EventTotalBet">
-      <span><Icon path={CoinSVG} /></span>
+      <span className="EventIcon"><Icon path={CoinSVG} /></span>
       <span className="EventTotalBetValue">{`${totalBets} ETH`}</span>
     </div>
   );
@@ -121,18 +122,24 @@ function renderBetOptions(props) {
     side: 0,
     label: 'no'
   }];
-  return opts.map(o => {
-    const styleBtn = o.side ? 'btn-primary' : 'btn-secondary';
-    return (
-      <button
-        key={o.side}
-        className={`btn ${styleBtn}`}
-        onClick={() => props.onClickOutcome({ ...props, side: o.side }, props.event.outcomes[0])}
-      >
-        {o.label}
-      </button>
-    );
-  });
+  return (
+    <div className="BetButtons">
+      {
+        opts.map(o => {
+          const styleBtn = o.side ? 'btn-primary' : 'btn-secondary';
+          return (
+            <button
+              key={o.side}
+              className={`btn ${styleBtn}`}
+              onClick={() => props.onClickOutcome({ ...props, side: o.side }, props.event.outcomes[0])}
+            >
+              {o.label}
+            </button>
+          );
+        })
+      }
+    </div>
+  );
 }
 
 function renderOutcomeList({ event, onClickOutcome }) {
@@ -161,25 +168,40 @@ function renderShareSocial(props) {
   return (<ShareSocial title={title} shareUrl={shareURL} socialList={socialList} />);
 }
 
+function renderComment(props) {
+  return (
+    <div className="Comment">
+      <i className="far fa-comment"></i>
+      <span>Write a comment</span>
+    </div>
+  );
+}
+
 function EventItem(props) {
+  const eventDetailCls = classNames('EventDetails', {
+    Full: props.event.total_bets > 0
+  });
   return (
     <div className="EventItem">
-      {renderEventSource(props)}
+      {/* {renderEventSource(props)} */}
       <div className="EventHeading">
         {renderEventName(props)}
         {renderEventImage(props)}
       </div>
       {renderCreator(props)}
-      <div className="EventDetails">
+      <div className={eventDetailCls}>
         <div className="EvenFirstGroup">
           {renderEvenTimeLeft(props)}
           {renderEventTotalBets(props)}
           {renderEventNumberOfPlayers(props)}
-          {renderShareSocial(props)}
         </div>
         {renderStatistics(props)}
       </div>
       {renderBetOptions(props)}
+      <div className="EventEnding">
+        {renderComment(props)}
+        {renderShareSocial(props)}
+      </div>
       {/* {renderOutcomeList(props)} */}
     </div>
   );
