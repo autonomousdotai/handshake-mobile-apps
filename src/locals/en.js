@@ -2044,6 +2044,7 @@ export default {
             'We will transfer the fiat to you as soon as there is 1 confirmation on the network.',
           ],
         },
+        confirm_leave: 'You are about to leave this page. Your order will be lost',
       },
       btn: {
         close_summary: 'Finish',

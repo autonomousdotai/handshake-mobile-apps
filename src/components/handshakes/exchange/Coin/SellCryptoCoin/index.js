@@ -19,6 +19,7 @@ import OrderInfo from './components/OrderInfo';
 import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
 import bankNameInputField from './reduxFormFields/bankNameField';
 import './SellCryptoCoin.scss';
+import { Prompt } from 'react-router';
 
 const sellCoinFormName = 'SellCoinForm';
 const FormSellCoin = createForm({
@@ -225,20 +226,29 @@ class SellCryptoCoin extends Component {
     const fiatAmount = currency?.amount ?
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
       `0 ${fiatCurrency}`;
+    const { intl: { messages } } = this.props;
     if (generatedAddress) {
       return (
-        <OrderInfo
-          className={className}
-          generatedAddress={generatedAddress}
-          onFinish={this.onSubmit}
-          getCoinInfo={this.getCoinInfo}
-          orderInfo={{
-            fiatLocalAmount: coinInfo?.fiatLocalAmount || 0,
-            fiatLocalCurrency: fiatCurrency,
-            amount: currency?.amount || 0,
-            currency: currency?.currency,
-          }}
-        />
+        <div>
+          <OrderInfo
+            className={className}
+            generatedAddress={generatedAddress}
+            onFinish={this.onSubmit}
+            getCoinInfo={this.getCoinInfo}
+            orderInfo={{
+              fiatLocalAmount: coinInfo?.fiatLocalAmount || 0,
+              fiatLocalCurrency: fiatCurrency,
+              amount: currency?.amount || 0,
+              currency: currency?.currency,
+            }}
+          />
+          <Prompt
+            when={generatedAddress && generatedAddress.length > 0}
+            message={location =>
+              `${messages.sell_coin.summary.info.confirm_leave}`
+            }
+          />
+        </div>
       );
     }
 
