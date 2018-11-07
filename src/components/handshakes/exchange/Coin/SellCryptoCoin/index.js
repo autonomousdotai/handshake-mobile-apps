@@ -277,9 +277,9 @@ class SellCryptoCoin extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  coinInfo: state.sellCoin.coinInfo,
-  orderInfo: state.sellCoin.orderInfo,
-  bankList: state.sellCoin.bankList,
+  coinInfo: state.sellCoin && state.sellCoin.coinInfo ? state.sellCoin.coinInfo : {},
+  orderInfo: state.sellCoin && state.sellCoin.orderInfo ? state.sellCoin.orderInfo : {},
+  bankList: state.sellCoin && state.sellCoin.bankList ? state.sellCoin.bankList : [],
   fiatCurrencyByCountry: state.app.inInfo?.currency || 'VND',
   idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
