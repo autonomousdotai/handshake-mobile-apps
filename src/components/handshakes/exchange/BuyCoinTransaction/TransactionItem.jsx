@@ -73,9 +73,11 @@ class TransactionItem extends React.Component {
   getTransaction = (extraData, initAt) => {
     try {
       if (extraData && initAt) {
+        const { offerFeedType } = this.props;
         let transaction = {};
         transaction = NinjaCoinTransaction.transaction(JSON.parse(extraData));
         transaction.createdAt = new Date(initAt * 1000).toISOString();
+        transaction.offerFeedType = offerFeedType;
         this.setState({ transaction });
       }
     } catch (e) {
@@ -123,7 +125,7 @@ class TransactionItem extends React.Component {
                 </div>
               </div>
 
-              {offerFeedType === 'coin' && type === 'bank' && status === COIN_ORDER_STATUS.PENDING && (
+              {type === 'bank' && status === COIN_ORDER_STATUS.PENDING && (
                 <div className="text-normal mt-2">
                   <span className="transfer-title">{messages.create.atm.transactions.messageTransfer}</span>
                   <span className="transfer-now" onClick={() => this.props.onShowTransferInfo(this.state.transaction)}>{messages.create.atm.transactions.transferNow}</span>

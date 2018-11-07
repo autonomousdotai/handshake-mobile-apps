@@ -105,7 +105,7 @@ class OrderInfo extends Component {
   }
 
   render() {
-    const { className, generatedAddress } = this.props;
+    const { className, generatedAddress, onFinish } = this.props;
     return (
       <div className={`${scopedCss('container')} ${className}`}>
         <span className={scopedCss('summary-txt')}>{this.getLocalStr().label}</span>
@@ -122,7 +122,7 @@ class OrderInfo extends Component {
           { generatedAddress && <QrCode value={generatedAddress} />}
           {this.renderNotes()}
         </div>
-        <button disabled={!this.isValidToSubmit()} onClick={this.onFinish} className={scopedCss('btn')}>{this.getLocalStr().btn?.close_summary}</button>
+        {onFinish && <button disabled={!this.isValidToSubmit()} onClick={this.onFinish} className={scopedCss('btn')}>{this.getLocalStr().btn?.close_summary}</button>}
       </div>
     );
   }
@@ -135,6 +135,7 @@ const mapDispatchToProps = {
 OrderInfo.defaultProps = {
   className: '',
   onFinish: null,
+  getCoinInfo: null,
 };
 
 OrderInfo.propTypes = {
@@ -144,7 +145,7 @@ OrderInfo.propTypes = {
   className: PropTypes.string,
   generatedAddress: PropTypes.string.isRequired,
   onFinish: PropTypes.func,
-  getCoinInfo: PropTypes.func.isRequired,
+  getCoinInfo: PropTypes.func,
 };
 
 export default injectIntl(connect(null, mapDispatchToProps)(OrderInfo));
