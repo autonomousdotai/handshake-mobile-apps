@@ -2,7 +2,6 @@
 import produce from 'immer';
 import {
   updateReports,
-  isEmailCodeValid
 } from '@/guru/pages/CreateEvent/action';
 
 const initialState = {
@@ -26,9 +25,6 @@ const guruReducer = (state = initialState, action) => {
         break;
       case updateReports().type:
         draft.reports = action.payload.data;
-        break;
-      case isEmailCodeValid().type:
-        draft.ui.isEmailCodeValid = action.payload.status;
         break;
       default:
         break;

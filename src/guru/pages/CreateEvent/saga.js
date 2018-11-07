@@ -1,14 +1,13 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { API_URL } from '@/constants';
-import { apiGet, apiPost } from '@/guru/stores/api';
+import { apiGet, apiPost, apiPostForm } from '@/guru/stores/api';
 import {
   loadReports,
   updateReports,
   createEvent,
   sendEmailCode,
-  verifyEmailCode,
-  isEmailCodeValid,
-  updateProfile
+  updateProfile,
+  updateEmailProfile
 } from './action';
 
 function* handleLoadReports() {
@@ -94,15 +93,14 @@ function* handleSendEmailCode({ payload }) {
   }
 }
 
-function* handleUpdateEmail({ email }) {
+function* handleUpdateEmail({ payload }) {
   try {
     const userProfile = new FormData();
-    userProfile.set('email', email);
-    const responded = yield call(apiPost, {
+    userProfile.set('email', payload.email);
+    const responded = yield call(apiPostForm, {
       PATH_URL: API_URL.USER.PROFILE,
       type: 'UPDATE_EMAIL_FETCH',
       data: userProfile,
-      headers: { 'Content-Type': 'multipart/form-data' }
     });
     if (responded.status) {
       yield put(updateProfile(responded));
@@ -112,29 +110,9 @@ function* handleUpdateEmail({ email }) {
   }
 }
 
-export function* handleVerifyCode({ payload }) {
-  try {
-    const { email, code } = payload;
-    const res = yield call(apiPost, {
-      PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
-      type: 'VERIFY_EMAIL',
-      headers: { 'Content-Type': 'multipart/form-data' }
-    });
-    console.log('res', res);
-    yield put(isEmailCodeValid({ status: !!res.status }));
-    if (res.status) {
-      yield handleUpdateEmail({ email });
-    }
-    return res;
-  } catch (e) {
-    console.error(e);
-    return e;
-  }
-}
-
 export default function* createEventSaga() {
   yield takeLatest(loadReports().type, handleLoadReports);
   yield takeLatest(createEvent().type, handleCreateEven);
   yield takeLatest(sendEmailCode().type, handleSendEmailCode);
-  // yield takeLatest(verifyEmailCode().type, handleVerifyCode);
+  yield takeLatest(updateEmailProfile().type, handleUpdateEmail);
 }

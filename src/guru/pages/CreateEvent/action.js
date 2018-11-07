@@ -31,23 +31,16 @@ export const sendEmailCode = (payload = {}) => {
   };
 };
 
-// export const verifyEmailCode = (payload = {}) => {
-//   return {
-//     type: 'PEX:VERIFY_EMAIL_CODE',
-//     payload
-//   };
-// };
-
-export const isEmailCodeValid = (payload = {}) => {
-  return {
-    type: 'PEX:IS_EMAIL_CODE_VALID',
-    payload
-  };
-};
-
 export const updateProfile = (payload) => {
   return {
     type: `${ACTIONS.AUTH_FETCH}_SUCCESS`,
     payload
   };
-}
+};
+
+export const updateEmailProfile = (payload) => {
+  return {
+    type: 'PEX:UPDATE_EMAIL_PROFILE',
+    payload
+  };
+};

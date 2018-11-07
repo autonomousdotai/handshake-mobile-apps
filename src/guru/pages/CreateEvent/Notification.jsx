@@ -3,12 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import { ErrMsg } from '@/guru/components/Form';
-import { sendEmailCode, verifyEmailCode } from './action';
-
-// import { renderField } from '@/pages/CreateMarket/form';
-// import { codeValidator, emailValidator, required } from '@/pages/CreateMarket/validate';
-// import { createEventFormName } from '@/pages/CreateMarket/constants';
-// import { hasEmail, isValidEmailCode, isEmailVerified } from './selector';
+import { sendEmailCode, verifyEmailCode, updateEmailProfile } from './action';
 
 class Notification extends Component {
   static displayName = 'Notification';
@@ -16,17 +11,15 @@ class Notification extends Component {
     formProps: PropTypes.any.isRequired,
     sendEmailCode: PropTypes.func.isRequired,
     verifyEmailCode: PropTypes.func.isRequired,
-    isCodeValid: PropTypes.bool
+    updateEmailProfile: PropTypes.func.isRequired,
+    email: PropTypes.string.isRequired,
+    isEmailVerified: PropTypes.bool.isRequired,
   };
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);
     this.state = {
       isEmailSent: false,
-      sentCode: null,
-      isCodeValid: true
     };
   }
 
@@ -44,16 +37,13 @@ class Notification extends Component {
         METHOD: 'POST',
         headers: { 'Content-Type': 'multipart/form-data' },
         PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
-        successFn: (res) => {
-          console.log('res', res);
-          setFieldError('emailCode', '');
+        successFn: () => {
+          this.props.updateEmailProfile({ email });
         },
         errorFn: () => {
           setFieldError('emailCode', 'incorrect Code');
         }
       });
-      // this.props.verifyEmailCode({ email, code });
-      // this.setState({ sentCode: code });
     }
   };
 
@@ -114,18 +104,17 @@ class Notification extends Component {
       <React.Fragment>
         <span>Ninja will send you notifications via</span>
         <input
-          className="form-control"
           name="email"
           type="text"
           disabled
-          value={props.hasEmail}
+          value={props.email}
         />
       </React.Fragment>
     );
   };
 
   renderComponent = (props, state) => {
-    if (props.hasEmail && props.isEmailVerified) {
+    if (props.email && props.isEmailVerified) {
       return this.renderHasEmail(props, state);
     }
     return (
@@ -150,12 +139,8 @@ class Notification extends Component {
 export default connect(
   (state) => {
     return {
-      // isCodeValid: state.guru.ui.isEmailCodeValid,
-      // hasEmail: hasEmail(state),
-      // isEmailVerified: isEmailVerified(state),
-      // isValidEmailCode: isValidEmailCode(state),
-      // email: formSelector(state, 'email'),
-      // emailCode: formSelector(state, 'emailCode'),
+      email: state.auth.profile.email,
+      isEmailVerified: !!state.auth.profile.verified
     };
-  }, { sendEmailCode, verifyEmailCode }
+  }, { sendEmailCode, verifyEmailCode, updateEmailProfile }
 )(Notification);
