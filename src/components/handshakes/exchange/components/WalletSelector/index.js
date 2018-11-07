@@ -23,7 +23,7 @@ import * as gtag from "@/services/ga-utils";
 const scopedCss = (className) => `wallet-selector-${className}`;
 
 const CRYPTO_CURRENCY_SUPPORT = {
-  ...CRYPTO_CURRENCY, BCH: 'BCH',
+  ...CRYPTO_CURRENCY,
 };
 
 const listCurrencyDefault = Object.values(CRYPTO_CURRENCY_SUPPORT).map((item) => {
