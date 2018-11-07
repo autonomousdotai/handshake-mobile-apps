@@ -12,7 +12,9 @@
   }
   .wrapperContent {
     margin-left: rem-calc(10px);
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   .wrapperStarRating {
     display: flex;
