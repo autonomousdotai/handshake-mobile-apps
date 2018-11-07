@@ -8,7 +8,6 @@ import './styles.scss';
 
 const CRYPTO_CURRENCY_SUPPORT = {
   ...CRYPTO_CURRENCY,
-  BCH: 'BCH',
 };
 
 const DEFAULT_CURRENCY = CRYPTO_CURRENCY_SUPPORT.ETH;

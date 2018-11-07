@@ -234,6 +234,7 @@ export default {
   'ex.error.327': 'Credit item status is invalid',
   'ex.error.331': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
   'ex.error.331.sell': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.332': 'You haven’t transfered coin yet! Please check',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': `WELCOME TO OUR <br/> EARLY BIRD PROGRAM!`,
@@ -2043,6 +2044,7 @@ export default {
             'We will transfer the fiat to you as soon as there is 1 confirmation on the network.',
           ],
         },
+        confirm_leave: 'You are about to leave this page. Your order will be lost',
       },
       btn: {
         close_summary: 'Finish',
