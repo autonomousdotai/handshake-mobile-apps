@@ -186,7 +186,7 @@ class SellCryptoCoin extends Component {
 
   renderUserInfoInput = () => {
     const { bankList } = this.props;
-    console.log('bank list is', bankList);
+    // console.log('bank list is', bankList);
     const fields = {
       bankName: {
         placeholder: this.getLocalStr().order?.inputs?.bank_name,
@@ -196,7 +196,7 @@ class SellCryptoCoin extends Component {
       bankNumber: {
         placeholder: this.getLocalStr().order?.inputs?.bank_number,
         component: accountInputField,
-        listData: ['033100422510']
+        listData: ['0331000422510']
       },
       bankOwner: {
         placeholder: this.getLocalStr().order?.inputs?.bank_owner,
