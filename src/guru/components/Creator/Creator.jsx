@@ -13,12 +13,12 @@ function Alias(props) {
 function Creator(props) {
   const { children } = props;
   return (
-    <Link to={URL.HANDSHAKE_REPUTATION} >
-      <div className="CreatorComponent">
+    <div className="CreatorComponent">
+      <Link to={URL.HANDSHAKE_REPUTATION} >
         { children }
         { Alias(props) }
-      </div>
-    </Link>
+      </Link>
+    </div>
   );
 }
 
