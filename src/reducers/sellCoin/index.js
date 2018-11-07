@@ -11,12 +11,18 @@ export const isOverLimit = (data = {}) => {
   }
   return amountInUsd > limit;
 };
-
+const initialSelectBank = {
+    bankName: '',
+    bankId: '',
+    accountId: '',
+    accountName: '',
+}
 const initialState = {
   coinInfo: {},
   fiatAmountOverLimit: false,
   orderInfo: {},
   bankList: [],
+  selectBank: initialSelectBank
 };
 
 const sellCoinReducter = (state = initialState, action) => {
@@ -58,6 +64,48 @@ const sellCoinReducter = (state = initialState, action) => {
         };
       }
       break;
+    case SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST:
+      return {
+        ...state,
+        bankList: action.payload
+      }
+    case SELL_COIN_ACTIONS.SELL_COIN_SELECT_BANK_NAME: {
+      if (!action.payload) {
+        return {
+          ...state,
+          selectBank: initialSelectBank
+        }
+      }
+      const selectedBank = state.bankList.find(e => e.bankName === action.payload) || {};
+      const { bankId, bankName } = selectedBank;
+      return {
+        ...state,
+        selectBank: {
+          ...state.selectBank,
+          bankName,
+          bankId
+        }
+      }
+    }
+    case SELL_COIN_ACTIONS.SELL_COIN_SELECT_ACCOUNT_ID: {
+      return {
+        ...state,
+        selectBank: {
+          ...state.selectBank,
+          accountId: action.payload.accountId,
+          accountName: action.payload.accountName
+        }
+      }
+    }
+    case SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME: {
+      return {
+        ...state,
+        selectBank: {
+          ...state.selectBank,
+          accountName: action.payload
+        }
+      }
+    }
     default:
       return state;
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList } from '@/reducers/sellCoin/action';
+import { sellCryptoGetCoinInfo, sellCryptoOrder, sellCryptoGenerateAddress, sellCryptoFinishOrder, sellCryptoGetBankList, getBankList } from '@/reducers/sellCoin/action';
 import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
 import { showAlert, showLoading, hideLoading } from '@/reducers/app/action';
@@ -18,6 +18,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import OrderInfo from './components/OrderInfo';
 import currencyInputField, { currencyValidator } from './reduxFormFields/currencyField';
 import bankNameInputField from './reduxFormFields/bankNameField';
+import accountInputField from './reduxFormFields/accountField';
 import './SellCryptoCoin.scss';
 import { Prompt } from 'react-router';
 
@@ -176,10 +177,7 @@ class SellCryptoCoin extends Component {
   }
 
   sellCryptoGetBankList = () => {
-    const { country } = this.props;
-    this.props.sellCryptoGetBankList({
-      PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GET_BANK_LIST}/${country}`,
-    });
+    this.props.getBankList().catch(err => console.log('getBankList', err));
   }
 
   updateCurrency = (currencyData) => {
@@ -191,17 +189,20 @@ class SellCryptoCoin extends Component {
 
   renderUserInfoInput = () => {
     const { bankList } = this.props;
+    // console.log('bank list is', bankList);
     const fields = {
       bankName: {
         placeholder: this.getLocalStr().order?.inputs?.bank_name,
         component: bankNameInputField,
-        listData: bankList.map(bank => bank.name),
-      },
-      bankOwner: {
-        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
+        listData: bankList.map(bank => bank.bankName),
       },
       bankNumber: {
         placeholder: this.getLocalStr().order?.inputs?.bank_number,
+        component: accountInputField,
+        listData: ['0331000422510']
+      },
+      bankOwner: {
+        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
       },
       phoneNumber: {
         placeholder: this.getLocalStr().order?.inputs?.phone,
@@ -316,6 +317,7 @@ const mapDispatchToProps = {
   sellCryptoGenerateAddress,
   sellCryptoFinishOrder,
   sellCryptoGetBankList,
+  getBankList
 };
 
 SellCryptoCoin.defaultProps = {
