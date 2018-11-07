@@ -276,7 +276,7 @@ class Users extends React.Component {
   
 
   render() {
-    let popupTitle = this.state.newUser.id ? "Update User" : "Add new user";    
+    let popupTitle = this.state.newUser.id ? "Update User" : "Add new admin";    
     let passwordRequire = this.state.newUser.id ? [] : [required];
     const { users, login } = this.state;
     return !login ?
@@ -333,6 +333,7 @@ class Users extends React.Component {
                 validate={passwordRequire}                
               />
 
+              <div style={{"display": "none"}}>
               { this.userType == 1 &&
               <Field
                 key="5"
@@ -347,6 +348,7 @@ class Users extends React.Component {
                 validate={[required]}                
               />
               }
+              </div>
 
               <Button bsStyle="info" type="submit">Submit</Button>
 
