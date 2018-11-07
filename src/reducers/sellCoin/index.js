@@ -11,19 +11,19 @@ export const isOverLimit = (data = {}) => {
   }
   return amountInUsd > limit;
 };
-
+const initialSelectBank = {
+    bankName: '',
+    bankId: '',
+    accountId: '',
+    accountName: '',
+}
 const initialState = {
   coinInfo: {},
   fiatAmountOverLimit: false,
   orderInfo: {},
   generatedAddress: null,
   bankList: [],
-  selectBank: {
-    bankName: '',
-    bankId: '',
-    accountId: '',
-    accountName: '',
-  }
+  selectBank: initialSelectBank
 };
 
 const sellCoinReducter = (state = initialState, action) => {
@@ -81,6 +81,12 @@ const sellCoinReducter = (state = initialState, action) => {
         bankList: action.payload
       }
     case SELL_COIN_ACTIONS.SELL_COIN_SELECT_BANK_NAME: {
+      if (!action.payload) {
+        return {
+          ...state,
+          selectBank: initialSelectBank
+        }
+      }
       const selectedBank = state.bankList.find(e => e.bankName === action.payload) || {};
       const { bankId, bankName } = selectedBank;
       return {
@@ -97,7 +103,8 @@ const sellCoinReducter = (state = initialState, action) => {
         ...state,
         selectBank: {
           ...state.selectBank,
-          accountId: action.payload
+          accountId: action.payload.accountId,
+          accountName: action.payload.accountName
         }
       }
     }

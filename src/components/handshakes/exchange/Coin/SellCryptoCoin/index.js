@@ -167,14 +167,7 @@ class SellCryptoCoin extends Component {
   }
 
   sellCryptoGetBankList = () => {
-    console.log('going to get banklist')
-    this.props.getBankList();
-    // const { country } = this.props;
-    // this.props.sellCryptoGetBankList({
-    //   BASE_URL: 'https://my.timo.vn',
-    //   PATH_URL: `contentManagement/bankList`,
-    //   headers: null,
-    // });
+    this.props.getBankList().catch(err => console.log('getBankList', err));
   }
 
   updateCurrency = (currencyData) => {

@@ -21,11 +21,8 @@ export const sellCryptoOrder = createAPI(SELL_COIN_ACTIONS.SELL_COIN_ORDER);
 export const sellCryptoGetCoinInfo = createAPI(SELL_COIN_ACTIONS.SELL_COIN_GET_COIN_INFO);
 
 export const getBankList = () => dispatch => new Promise((resolve, reject) => {
-  // console.log('getbank list');
-  // axios.get('http://localhost:2203/timo/bankList').then(r => console.log(r)).catch(err => console.log(err));
-  axios.get('http://localhost:2203/timo/bankList')
+  axios.get('http://35.198.235.226:2203/timo/bankList')
   .then(({ status, data: { bankList: payload } }) => {
-    // console.log('payload is', payload);
     if (status === 200) {
       dispatch({ type: 'SELL_COIN_GET_BANK_LIST', payload })
       resolve(payload)
@@ -39,14 +36,20 @@ export const selectBankName = payload => {
   store.dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_SELECT_BANK_NAME, payload });
 }
 
-export const selectAccountId = payload => {
+export const selectAccountId = accountId => {
+  const payload = {
+    accountId: '',
+    accountName: ''
+  };
+  // length of cardnumber (visa/master/...)
+  if ([13,14,15, 16, 19].indexOf(accountId.length) >=  0) {
+    payload.accountId = accountId;
+  }
   store.dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_SELECT_ACCOUNT_ID, payload });
 }
 
-export const getBankInfo = (targetInfo) => dispatch => new Promise((resolve, reject) => {
-  // console.log('getbank list', targetInfo);
-  // axios.get('http://localhost:2203/timo/bankList').then(r => console.log(r)).catch(err => console.log(err));
-  axios.get(`http://localhost:2203/timo/getBankInfo?bankId=11&targetInfo=${targetInfo}&bankAccount=153560102`)
+export const getBankInfo = (bankId, targetInfo) => dispatch => new Promise((resolve, reject) => {
+  axios.get(`http://35.198.235.226:2203/timo/getBankInfo?bankId=${bankId}&targetInfo=${targetInfo}&bankAccount=153560102`)
   .then(({ status, data }) => {
     console.log('payload is', data);
     const payload = data.data.account.cardName;

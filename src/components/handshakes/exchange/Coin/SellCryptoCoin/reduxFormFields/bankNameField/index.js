@@ -13,7 +13,7 @@ const renderField = (field) => {
     if (listData.find(e => e === text)) {
       console.log('selected', text);
       selectBankName(text);
-    }
+    } else selectBankName('')
     onChange(text);
   }
   return (
