@@ -165,7 +165,7 @@ class Prediction extends React.Component {
 
   didPlaceOrder = (isFree) => {
     this.closeOrderPlace();
-    if (!this.props.isExistEmail && isFree) {
+    if (!this.props.isExistEmail) {
       this.modalEmailPopupRef.open();
     }
     // else {
