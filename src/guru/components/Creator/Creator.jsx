@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { URL } from '@/constants';
 
 function Alias(props) {
   const { alias } = props;
@@ -11,10 +13,12 @@ function Alias(props) {
 function Creator(props) {
   const { children } = props;
   return (
-    <div className="CreatorComponent">
-      { children }
-      { Alias(props) }
-    </div>
+    <Link to={URL.HANDSHAKE_REPUTATION} >
+      <div className="CreatorComponent">
+        { children }
+        { Alias(props) }
+      </div>
+    </Link>
   );
 }
 
