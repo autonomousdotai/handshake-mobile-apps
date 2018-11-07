@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { URL } from '@/constants';
+import { EXCHANGE_ACTION, URL } from '@/constants';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import './styles.scss';
@@ -10,43 +10,77 @@ import './styles.scss';
 class IdVerifyBtn extends React.PureComponent {
   checkUserVerified = () => {
     const { messages } = this.props.intl;
-    const { authProfile: { idVerified, idVerificationLevel } } = this.props;
+    const { authProfile: { idVerified, idVerificationLevel }, coinTab } = this.props;
 
     let timeShow = 0;
     let title = '';
     let action = '';
     let className = '';
 
+    console.log('coinTab',coinTab);
+
     switch (idVerified) {
       case 0: {
         timeShow = 24 * 60 * 60 * 1000;
-        title = messages.buy_coin.label.verify.notYet.title;
-        action = messages.buy_coin.label.verify.notYet.action;
+
+        if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.BUY) >= 0) {
+          title = messages.buy_coin.label.verify.notYet.title;
+          action = messages.buy_coin.label.verify.notYet.action;
+        } else if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
+          title = messages.sell_coin.label.verify.notYet.title;
+          action = messages.sell_coin.label.verify.notYet.action;
+        }
+
         break;
       }
       case -1: {
         timeShow = 24 * 60 * 60 * 1000;
-        title = messages.buy_coin.label.verify.rejected.title;
-        action = messages.buy_coin.label.verify.rejected.action;
+
+        if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.BUY) >= 0) {
+          title = messages.buy_coin.label.verify.rejected.title;
+          action = messages.buy_coin.label.verify.rejected.action;
+        } else if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
+          title = messages.sell_coin.label.verify.rejected.title;
+          action = messages.sell_coin.label.verify.rejected.action;
+        }
+
         break;
       }
       case 1: {
         timeShow = 24 * 60 * 60 * 1000;
         if (idVerificationLevel === 1) {
-          title = messages.buy_coin.label.verify.verified.level_1.title;
-          action = messages.buy_coin.label.verify.verified.level_1.action;
+          if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.BUY) >= 0) {
+            title = messages.buy_coin.label.verify.verified.level_1.title;
+            action = messages.buy_coin.label.verify.verified.level_1.action;
+          } else if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
+            title = messages.sell_coin.label.verify.verified.level_1.title;
+            action = messages.sell_coin.label.verify.verified.level_1.action;
+          }
+
           className = 'info';
         } else if (idVerificationLevel === 2) {
-          title = messages.buy_coin.label.verify.verified.level_2.title;
-          action = messages.buy_coin.label.verify.verified.level_2.action;
+          if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.BUY) >= 0) {
+            title = messages.buy_coin.label.verify.verified.level_2.title;
+            action = messages.buy_coin.label.verify.verified.level_2.action;
+          } else if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
+            title = messages.sell_coin.label.verify.verified.level_2.title;
+            action = messages.sell_coin.label.verify.verified.level_2.action;
+          }
+
           className = 'info';
         }
         break;
       }
       case 2: {
         timeShow = 24 * 60 * 60 * 1000;
-        title = messages.buy_coin.label.verify.processing.title;
-        action = messages.buy_coin.label.verify.processing.action;
+        if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.BUY) >= 0) {
+          title = messages.buy_coin.label.verify.processing.title;
+          action = messages.buy_coin.label.verify.processing.action;
+        } else if (coinTab.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
+          title = messages.sell_coin.label.verify.processing.title;
+          action = messages.sell_coin.label.verify.processing.action;
+        }
+
         break;
       }
       default: {

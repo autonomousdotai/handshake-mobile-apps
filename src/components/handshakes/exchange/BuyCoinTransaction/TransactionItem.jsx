@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 // action, mock
-import { API_URL, CRYPTO_CURRENCY, FIAT_CURRENCY } from '@/constants';
+import { API_URL, CRYPTO_CURRENCY } from '@/constants';
 import { FormattedDate, injectIntl } from 'react-intl';
 // components
 // style
@@ -15,8 +15,6 @@ import iconUsd from '@/assets/images/icon/coin/icons8-us_dollar.svg';
 import { cancelNinjaCoinTransaction } from '@/reducers/exchange/action';
 import './TransactionItem.scss';
 import cx from 'classnames';
-
-import icWarning from '@/assets/images/cash/ic-transaction-warning.svg';
 import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
 import NinjaCoinTransaction from '@/models/NinjaCoinTransaction';
 import { formatMoneyByLocale } from '@/services/offer-util';
@@ -59,8 +57,10 @@ class TransactionItem extends React.Component {
 
   onCancelOrder = () => {
     const { transaction } = this.state;
+    const { offerFeedType } = this.props;
+    const endPoint = offerFeedType === 'coin' ? API_URL.EXCHANGE.BUY_CRYPTO_SAVE_RECEIPT : API_URL.EXCHANGE.SELL_COIN_ORDER;
     this.props.cancelNinjaCoinTransaction({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_SAVE_RECEIPT}/${transaction.id}`,
+      PATH_URL: `${endPoint}/${transaction.id}`,
       METHOD: 'DELETE',
       successFn: (res) => {
         const { data } = res;
@@ -73,9 +73,11 @@ class TransactionItem extends React.Component {
   getTransaction = (extraData, initAt) => {
     try {
       if (extraData && initAt) {
+        const { offerFeedType } = this.props;
         let transaction = {};
         transaction = NinjaCoinTransaction.transaction(JSON.parse(extraData));
         transaction.createdAt = new Date(initAt * 1000).toISOString();
+        transaction.offerFeedType = offerFeedType;
         this.setState({ transaction });
       }
     } catch (e) {
@@ -112,6 +114,17 @@ class TransactionItem extends React.Component {
         <div className="transaction-detail">
           {
             <div>
+              <div className="d-table w-100">
+                <div className="d-table-cell font-weight-bold">
+                  <img src={CRYPTO_ICONS[currency]} width={19} />
+                  <span className="type-order ml-2">
+                    {
+                      offerFeedType === 'coin' ? messages.me.credit.transaction.instant.title : messages.me.credit.transaction.transaction.title
+                    }
+                  </span>
+                </div>
+              </div>
+
               {offerFeedType === 'coin' && type === 'bank' && status === COIN_ORDER_STATUS.PENDING && (
                 <div className="text-normal mt-2">
                   <span className="transfer-title">{messages.create.atm.transactions.messageTransfer}</span>
@@ -119,6 +132,8 @@ class TransactionItem extends React.Component {
                 </div>
               )
               }
+
+              <hr />
             </div>
           }
 

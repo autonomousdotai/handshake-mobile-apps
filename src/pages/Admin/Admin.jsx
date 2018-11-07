@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { loadMatches } from '@/reducers/betting/action';
 import BettingReport from '@/components/handshakes/betting-event/BettingReport';
 import { API_URL } from '@/constants';
-import Login from '@/components/handshakes/betting-event/Login';
+import Login from './Login';
 
 import './Admin.scss';
 
