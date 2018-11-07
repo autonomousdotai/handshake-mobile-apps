@@ -32,7 +32,7 @@ class EventItem extends React.Component {
   renderEventImage() {
     return (
       <div className="wrapperEventImage">
-        <Image src={DefaultLogo} alt="DefaultLogo" width="100" />
+        <Image className="eventLogo" src={DefaultLogo} alt="DefaultLogo" width="100" />
       </div>
     );
   }

@@ -21,8 +21,17 @@
   }
   .wrapperEventContent {
     width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
   .wrapperEventImage {
     width: 20%;
+    .eventLogo {
+      border-radius: rem-calc(5px);
+      background-color: gray;
+
+    }
   }
+
 }
