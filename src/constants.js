@@ -571,7 +571,7 @@ export const URL = {
   HANDSHAKE_GURU: '/guru',
   GURU_CREATE_EVENT: '/create-event',
   HANDSHAKE_REPUTATION: '/reputation',
-
+  HANDSHAKE_COINBASE_WALLET: '/wallet-coin',
   HANDSHAKE_PREDICTION: '/prediction',
   HANDSHAKE_PEX: '/pex',
   PEX_EXTENSION: '/pex-extension',
