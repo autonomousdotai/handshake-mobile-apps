@@ -343,6 +343,7 @@ class BetingShakeFree extends React.Component {
               value={id === 'odds' ? oddValue : amountValue}
               autoComplete="off"
               {...newProps}
+              noValidate
               onChange={(evt) => {
                 if (id === 'odds') {
                   console.log('Change Odds');
@@ -356,7 +357,7 @@ class BetingShakeFree extends React.Component {
                   }, () => this.updateTotal());
                 }
               }}
-              onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
+              //onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
             />
           ) : (<div className={cn('value', className)}>{value}</div>)
         }
