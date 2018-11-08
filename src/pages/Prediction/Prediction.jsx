@@ -207,6 +207,12 @@ class Prediction extends React.Component {
     }, 2 * 1000);
   }
 
+  handleClickCreator = (event) => {
+    console.log('Props:', this.props.history);
+      //this.props.history.push(`${URL.HANDSHAKE_REPUTATION}?id=${HANDSHAKE_ID.EXCHANGE}&tab=dashboard`);
+
+    this.props.history.push(URL.HANDSHAKE_REPUTATION);
+  }
 
   handleClickEventItem = (itemProps, itemData) => {
     const { event } = itemProps;
@@ -308,6 +314,7 @@ class Prediction extends React.Component {
             <EventItem
               key={event.id}
               event={event}
+              onClickCreator={this.handleClickCreator}
               onClickOutcome={this.handleClickEventItem}
               onCountdownComplete={() => this.onCountdownComplete(event.id)}
             />

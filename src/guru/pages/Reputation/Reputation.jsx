@@ -27,7 +27,6 @@ class Reputation extends React.Component {
     this.getData(this.props);
   }
   getData = (props) => {
-    console.log('Location:', props.location);
     const userId = props.location.id;
     console.log('UserId :', props.location.id);
 
@@ -36,8 +35,9 @@ class Reputation extends React.Component {
   }
 
   renderProfile(props) {
-    let creatorAddress = props.location.address || '';
-    if (creatorAddress.length > 0) {
+    const firstEvent = props.eventList[0] || undefined;
+    let creatorAddress = firstEvent ? firstEvent.creator_wallet_address : '';
+    if (creatorAddress && creatorAddress.length > 0) {
       creatorAddress = shortAddress(creatorAddress, '...');
     }
     return (

@@ -86,20 +86,21 @@ function renderEventTotalBets({ event }) {
   );
 }
 
-function renderCreator({ event }) {
+function renderCreator({ event, onClickCreator }) {
   const alias = event.creator_wallet_address || '0x1605219905D96BD6c5b1b07A59a3bFB233043f27';
   try {
     const linkReputation = {
       pathname: `${URL.HANDSHAKE_REPUTATION}/${event.id}`,
-      id: event.created_user_id,
-      address: event.creator_wallet_address
+      id: event.created_user_id
     };
     return (
-      <Link to={linkReputation}>
+      <div className="wrapperCreator"
+        onClick={() => onClickCreator(event) }
+      >
         <Creator alias={shortAddress(alias, '...')}>
           <Icon path={MeIcon} />
         </Creator>
-      </Link>
+      </div>
     );
   } catch (e) {
     return (<Creator />);
@@ -220,11 +221,13 @@ EventItem.propTypes = {
   event: PropTypes.object.isRequired,
   onClickOutcome: PropTypes.func,
   onCountdownComplete: PropTypes.func,
+  onClickCreator: PropTypes.func,
 };
 
 EventItem.defaultProps = {
   onClickOutcome: undefined,
   onCountdownComplete: undefined,
+  onClickCreator: undefined,
 };
 
 export default EventItem;
