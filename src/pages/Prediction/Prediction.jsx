@@ -208,10 +208,7 @@ class Prediction extends React.Component {
   }
 
   handleClickCreator = (event) => {
-    console.log('Props:', this.props.history);
-      //this.props.history.push(`${URL.HANDSHAKE_REPUTATION}?id=${HANDSHAKE_ID.EXCHANGE}&tab=dashboard`);
-
-    this.props.history.push(URL.HANDSHAKE_REPUTATION);
+    this.props.history.push(`${URL.HANDSHAKE_REPUTATION}?id=${event.created_user_id}`);
   }
 
   handleClickEventItem = (itemProps, itemData) => {

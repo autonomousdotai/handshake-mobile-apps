@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
+import qs from 'querystring';
 import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
@@ -27,9 +28,11 @@ class Reputation extends React.Component {
     this.getData(this.props);
   }
   getData = (props) => {
+    const querystring = window.location.search.replace('?', '');
+    const querystringParsed = qs.parse(querystring);
     const userId = props.location.id;
     console.log('UserId :', props.location.id);
-
+    console.log('Querry Parse:', querystringParsed);
     props.dispatch(loadUserEvents({ userId }));
     props.dispatch(loadUserReputation({ userId }));
   }
