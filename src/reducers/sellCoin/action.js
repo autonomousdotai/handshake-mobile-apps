@@ -21,19 +21,24 @@ export const sellCryptoOrder = createAPI(SELL_COIN_ACTIONS.SELL_COIN_ORDER);
 export const sellCryptoGetCoinInfo = createAPI(SELL_COIN_ACTIONS.SELL_COIN_GET_COIN_INFO);
 
 export const getBankList = () => dispatch => new Promise((resolve, reject) => {
-  axios.get('http://35.198.235.226:2203/timo/bankList')
-  .then(({ status, data: { bankList: payload } }) => {
-    if (status === 200) {
-      dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload })
-      resolve(payload)
-    }
+  try {
+    axios.get('http://35.198.235.226:2203/timo/bankList')
+    .then(({ status, data: { bankList: payload } }) => {
+      if (status === 200) {
+        dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload })
+        resolve(payload)
+      }
+      dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload: [] })
+      reject(`Response return status is not success ${status}`);
+    })
+    .catch(err => {
+      dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload: [] })
+      reject(err)
+    });
+  } catch (err) {
     dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload: [] })
-    reject(`Response return status is not success ${status}`);
-  })
-  .catch(err => {
-    dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload: [] })
-    reject(err)
-  });
+    console.log('getBankList Action', err);
+  }
 })
 
 export const selectBankName = payload => {
@@ -53,19 +58,24 @@ export const selectAccountId = accountId => {
 }
 
 export const getBankInfo = (bankId, targetInfo) => dispatch => new Promise((resolve, reject) => {
-  axios.get(`http://35.198.235.226:2203/timo/getBankInfo?bankId=${bankId}&targetInfo=${targetInfo}&bankAccount=153560102`)
-  .then(({ status, data }) => {
-    console.log('payload is', data);
-    const payload = data.data.account.cardName;
-    if (status === 200) {
-      dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME, payload })
-      resolve(payload)
-    }
+  try {
+    axios.get(`http://35.198.235.226:2203/timo/getBankInfo?bankId=${bankId}&targetInfo=${targetInfo}&bankAccount=153560102`)
+    .then(({ status, data }) => {
+      console.log('payload is', data);
+      const payload = data.data.account.cardName;
+      if (status === 200) {
+        dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME, payload })
+        resolve(payload)
+      }
+      dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME, payload: '' })
+      reject(`Response return status is not success ${status}`);
+    })
+    .catch(err => {
+      dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME, payload: '' })
+      reject(err);
+    });
+  } catch (err) {
     dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME, payload: '' })
-    reject(`Response return status is not success ${status}`);
-  })
-  .catch(err => {
-    dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_LOAD_ACCOUNT_NAME, payload: '' })
-    reject(err);
-  });
+    console.log('getBankInfo Action ', error);
+  }
 })
