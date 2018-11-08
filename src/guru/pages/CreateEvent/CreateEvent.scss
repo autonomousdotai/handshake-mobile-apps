@@ -33,6 +33,9 @@
     .BlockLeft {
       flex: 50%;
       margin-right: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
     }
 
     .BlockRight {
@@ -168,12 +171,6 @@
     margin-top: 20px;
     display: flex;
     justify-content: center;
-
-    .BlockLeft {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-    }
 
     .BlockRight {
       width: 80px;
