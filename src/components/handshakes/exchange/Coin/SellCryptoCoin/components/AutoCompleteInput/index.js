@@ -66,7 +66,7 @@ class AutoCompleteInput extends Component {
     const { filteredData } = this.state;
     return (
       <ul>
-        {filteredData?.map(data => (<li role="presentation" onClick={() => this.onSelect(data)} key={data}>{data}</li>))}
+        {filteredData?.map((data, i) => (<li role="presentation" onClick={() => this.onSelect(data)} key={data + i }>{data}</li>))}
       </ul>
     );
   }

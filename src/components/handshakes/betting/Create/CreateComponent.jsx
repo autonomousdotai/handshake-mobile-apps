@@ -240,10 +240,11 @@ class BettingCreate extends React.Component {
         autoComplete="off"
         value={values[key] || ''}
         validate={[required]}
+        noValidate
         onChange={(evt) => {
           this.changeText(key, evt.target.value);
         }}
-        onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
+        //onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
       />
     );
   }

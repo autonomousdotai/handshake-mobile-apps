@@ -13,10 +13,10 @@ const TABS = {
     name: 'coin_tabs.buy',
     component: BuyCryptoCoin,
   },
-  SELLCOIN: {
-    name: 'coin_tabs.sell',
-    component: SellCryptoCoin,
-  },
+  // SELLCOIN: {
+  //   name: 'coin_tabs.sell',
+  //   component: SellCryptoCoin,
+  // },
 };
 
 const scopedCss = (className) => `crypto-coin-main-layout-${className}`;
@@ -26,7 +26,12 @@ class Coin extends Component {
     super();
     this.state = {
       currentTabId: Object.keys(TABS)[0],
+      showInfo: true,
     };
+  }
+
+  updateShowVerifyInfo = (isShow) => {
+    this.setState({ showInfo: isShow});
   }
 
   onChangeTab = (tabId) => {
@@ -50,7 +55,7 @@ class Coin extends Component {
         {
           Object.entries(TABS).map(([key, data]) => {
             const Com = data?.component;
-            return <Com key={key} className={key === currentTabId ? 'fadeIn' : 'hidden'} />;
+            return <Com key={key} className={key === currentTabId ? 'fadeIn' : 'hidden'} updateShowVerifyInfo={this.updateShowVerifyInfo}/>;
           })
         }
       </React.Fragment>
