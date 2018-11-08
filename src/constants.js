@@ -323,8 +323,11 @@ export const API_URL = {
     USER:{
       LIST: 'admin/user/list',
       UPDATE: 'admin/user/update',
-    }
-    
+    },
+    ACTIVITY_LOG:{
+      LIST: 'admin/acivity-log/list',
+      UPDATE: 'admin/acivity-log/add',
+    }    
   }
   
 };

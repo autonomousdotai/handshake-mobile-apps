@@ -7,6 +7,7 @@ import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
 import queryString from 'query-string';
 import Login from '@/pages/Admin/Login';
 import Logout from '@/pages/Admin/Logout';
+import AcvitvityLog from '@/pages/Admin/AcvitvityLog';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
@@ -50,10 +51,15 @@ const menus = {
     name: 'Admin - Manage Users',
     components: Users,    
   },
+  acvitvityLog: {
+    name: 'Admin - Acvitvity Logs',
+    components: AcvitvityLog,    
+  },
   logout: {
     components: Logout,
     name: 'Logout',    
   },
+  
 };
 
 class InternalAdminDashboard extends Component {
