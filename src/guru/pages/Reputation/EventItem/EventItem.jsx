@@ -69,7 +69,7 @@ class EventItem extends React.Component {
   renderEventContent(event) {
     const { name } = event;
     const { isExpired } = this.state;
-    let classEventName = "mediumText boldText";
+    let classEventName = 'mediumText boldText';
     classEventName = isExpired ? `${classEventName} disableText` : classEventName;
     return (
       <div className="wrapperEventContent">

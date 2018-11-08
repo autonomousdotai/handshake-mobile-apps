@@ -5,7 +5,7 @@ import qs from 'querystring';
 import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
-import { loadUserEvents, loadUserReputation } from '@/guru/pages/Home/action';
+import { loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { formatAmount } from '@/components/handshakes/betting/utils';
 import { shortAddress } from '@/utils/string';
@@ -27,18 +27,23 @@ class Reputation extends React.Component {
   componentDidMount() {
     this.getData(this.props);
   }
-  getData = (props) => {
+  getQueryString=()=> {
     const querystring = window.location.search.replace('?', '');
     const querystringParsed = qs.parse(querystring);
-    const userId = querystringParsed.id;
+    return querystringParsed;
+  }
+  getData = (props) => {
+    const query = this.getQueryString();
+    const userId = query.id;
     console.log('UserId :', userId);
-    //props.dispatch(loadUserEvents({ userId }));
     props.dispatch(loadUserReputation({ userId }));
   }
 
   renderProfile(props) {
-    const firstEvent = props.eventList[0] || undefined;
-    let creatorAddress = firstEvent ? firstEvent.creator_wallet_address : '';
+    const query = this.getQueryString();
+
+    let creatorAddress = query.address;
+    console.log('Creator Address:', creatorAddress);
     if (creatorAddress && creatorAddress.length > 0) {
       creatorAddress = shortAddress(creatorAddress, '...');
     }
