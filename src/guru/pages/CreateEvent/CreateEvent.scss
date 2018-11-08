@@ -2,104 +2,113 @@
   color: red;
 }
 
-//.react-select__menu {
-//  z-index: 5;
-//}
-//.react-select__control {
-//  background-color: #ffffff;
-//}
-//.react-select__control--is-disabled {
-//  background-color: #e9ecef;
-//}
+.CreateEvent {
+  background-color: #EBF1F7;
+  padding-bottom: 60px;
+  margin-top: -15px;
+  padding-top: 15px;
 
-/* The switch - the box around the slider */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 52px;
-  height: 25px;
+  .FormBlock {
+    background-color: #FFFFFF;
+    margin: 15px 20px;
+    padding: 20px;
+    border-radius: 5px;
 
-  /* Hide default HTML checkbox */
-  input {
-    display: none;
+    .BlankLine {
+      background-color: #EBF1F7;
+      height: 2px;
+      width: 100%;
+    }
   }
 
-  /* The slider */
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+  .SubmitBtn {
+    position: fixed;
+    width: 100%;
+    bottom: 60px;
+    height: 50px;
+    font-size: 18px;
   }
 
-  .slider:before {
-    position: absolute;
-    content: '';
-    height: 18px;
-    width: 18px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
+  /* FIELDS */
+  .EventTitle {
+    label {
+      color: #2989FF;
+    }
   }
 
-  input:checked + .slider {
-    background-color: #2196f3;
+  .PublicSwitcher {
+    display: flex;
+    font-size: 16px;
+    color: #748599;
+    justify-content: space-between;
+    padding-top: 10px;
+    margin-bottom: -10px;
+
+    label {
+      margin-bottom: 0;
+    }
   }
 
-  input:focus + .slider {
-    box-shadow: 0 0 1px #2196f3;
+  .switch {
+    width: 110px;
+
+    .on, .off {
+      font-size: 15px;
+      font-weight: 400;
+    }
+
+    .slider {
+      background-color: #14447F;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(83px);
+      -ms-transform: translateX(83px);
+      transform: translateX(83px);
+    }
   }
 
-  input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-  }
+  .HostFee {
+    position: relative;
 
-  /* On/Off */
-  .on {
-    display: none;
-  }
+    .rangeLimit {
+      display: none;
+    }
 
-  .on,
-  .off {
-    color: white;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    font-size: 10px;
-    font-family: Verdana, sans-serif;
-  }
+    .RangeValue {
+      position: absolute;
+      top: 0;
+      right: 0;
 
-  input:checked + .slider .on {
-    display: block;
-  }
+      input {
+        width: 17px;
+      }
+    }
 
-  input:checked + .slider .off {
-    display: none;
-  }
+    .rangeslider-horizontal {
+      height: 5px;
+    }
 
-  /* Rounded sliders */
-  .slider.round {
-    border-radius: 34px;
-  }
+    .rangeslider, .rangeslider .rangeslider__fill {
+      box-shadow: none;
+    }
 
-  .slider.round:before {
-    border-radius: 50%;
-  }
+    .rangeslider-horizontal .rangeslider__handle {
+      width: 20px;
+      height: 20px;
+      border-radius: 20px;
+    }
 
-  .text {
-    position: absolute;
-    right: -60px;
-    bottom: -1px;
-    font-weight: bold;
+    .rangeslider-horizontal .rangeslider__fill {
+      background-color: #2989FF;
+    }
+
+    .rangeslider-horizontal .rangeslider__handle:after {
+      width: 14px;
+      height: 14px;
+      top: 2px;
+      left: 2px;
+      background-color: #2989FF;
+    }
   }
 }

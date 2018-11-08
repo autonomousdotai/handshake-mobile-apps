@@ -271,7 +271,7 @@ class CreateEventForm extends Component {
           {...onEvents}
           startDate={startDate}
           endDate={endDate}
-          popupTriggerRenderer={this.buildPicker}
+          renderTrigger={this.buildPicker}
         />
         {(touched || dirty) && ((error && <span className="ErrorMsg">{error}</span>) || (warning && <span className="WarningMsg">{warning}</span>))}
       </div>
