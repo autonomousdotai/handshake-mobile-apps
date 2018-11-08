@@ -19,12 +19,12 @@ class CoinDesktop extends Component {
 
   getReviewCoin = () => {
     const qs = {};
-    this.props.getReviewBuyCoin({
-      PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
-      qs,
-      METHOD: 'GET',
-      // errorFn: this.handleReviewOfferFailed,
-    });
+    // this.props.getReviewBuyCoin({
+    //   PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
+    //   qs,
+    //   METHOD: 'GET',
+    //   // errorFn: this.handleReviewOfferFailed,
+    // });
   }
 
   render() {
