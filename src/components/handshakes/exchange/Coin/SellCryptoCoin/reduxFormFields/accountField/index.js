@@ -25,9 +25,9 @@ class AccountNameComponent extends React.Component {
   }
 }
 const mapState = (state) => ({
-  accountName: state.sellCoin && state.sellCoin.selectBank && state.sellCoin.selectBank.accountName ? state.sellCoin.selectBank.accountName : '',
-  accountId: state.sellCoin && state.sellCoin.selectBank && state.sellCoin.selectBank.accountId ? state.sellCoin.selectBank.accountId : '',
-  bankId: state.sellCoin && state.sellCoin.selectBank && state.sellCoin.selectBank.bankId ? state.sellCoin.selectBank.bankId : '',
+  accountName: state.sellCoin.selectBank?.accountName || '',
+  accountId: state.sellCoin.selectBank?.accountId || '',
+  bankId: state.sellCoin.selectBank?.bankId || '',
 })
 const mapDispatch = { getBankInfo, change }
 const LoadAccountName = connect(mapState, mapDispatch)(AccountNameComponent);
