@@ -34,6 +34,7 @@ class QRCodeScan extends React.Component {
       data: '',
       legacyMode: false,
       onFinish: null,
+      isLoaded: false,
     }
   }
 
@@ -83,7 +84,7 @@ handleError(err) {
 }
 
 oncloseQrCode=() => {
-  this.setState({ isShow: false, onFinish: null }, () => {
+  this.setState({ isShow: false, onFinish: null, isLoaded: false }, () => {
     this.props.hideScanQRCode();
   });
 
@@ -106,21 +107,24 @@ openImageDialog = () => {
 render() {
 
   const { messages } = this.props.intl;
+  const { isLoaded } = this.state;
 
   {/* QR code dialog */}
   return (
         <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeMainRef = modal} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={{color: "#fff", background: "#546FF7"}} modalBodyStyle={{"padding": 0}} >
-          {this.state.isShow || this.state.legacyMode ?
-            <QrReader
-              ref="qrReaderScan"
-              delay={this.state.delay}
-              onScan={(data) => { this.handleScan(data); }}
-              onError={this.handleError}
-              style={{ width: '100%', height: '100%' }}
-              legacyMode={this.state.legacyMode}
-              showViewFinder={false}
-            />
-            : ''}
+            {!isLoaded && <div style={{ textAlign: 'center', marginTop: '10px' }}>{messages.wallet.action.transfer.label.init_scanner}</div>}
+            {this.state.isShow || this.state.legacyMode ?
+              <QrReader
+                ref="qrReaderScan"
+                delay={this.state.delay}
+                onScan={(data) => { this.handleScan(data); }}
+                onError={this.handleError}
+                style={{ width: '100%', height: '100%' }}
+                legacyMode={this.state.legacyMode}
+                showViewFinder={false}
+                onLoad={() => this.setState({isLoaded: true})}
+              />
+              : ''}
         </Modal>
     )
   }

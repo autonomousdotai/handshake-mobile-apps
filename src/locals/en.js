@@ -1481,6 +1481,7 @@ export default {
           usd: 'USD',
           wallet_balance: 'Wallet balance',
           scan_qrcode: 'Scan QR code',
+          init_scanner: 'Initiating Camera. Please wait',
           gas_limit: 'Gas Limit',
           data: 'Data',
           feel_level: 'Fee:',
