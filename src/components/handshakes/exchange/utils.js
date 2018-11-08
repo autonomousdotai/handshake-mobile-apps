@@ -4,6 +4,7 @@ import { Ethereum } from '@/services/Wallets/Ethereum.js';
 import { Bitcoin } from '@/services/Wallets/Bitcoin';
 import { BitcoinCash } from '@/services/Wallets/BitcoinCash';
 import axios from 'axios';
+import { EXCHANGE_ACTION } from '@/constants';
 
 // for reusable
 const sampleCrypto = {
@@ -41,7 +42,7 @@ export const getDistanceFromLatLonInKm = (_lat1, _lon1, _lat2, _lon2) => {
   return d;
 };
 
-export const getErrorMessageFromCode = (error) => {
+export const getErrorMessageFromCode = (error, extraData) => {
   let result = '';
   const messageFromApi = error.response?.data?.message;
   const code = error.response?.data?.code;
@@ -109,7 +110,13 @@ export const getErrorMessageFromCode = (error) => {
       result = <FormattedMessage id="ex.error.327" />;
       break;
     case -331:
-      result = <FormattedMessage id="ex.error.331" />;
+      const { exchangeAction } = extraData;
+      if (exchangeAction && exchangeAction.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
+        result = <FormattedMessage id="ex.error.331.sell" />;
+      } else {
+        result = <FormattedMessage id="ex.error.331" />;
+      }
+
       break;
     default:
       result = messageFromApi || <FormattedMessage id="ex.error.default" />;

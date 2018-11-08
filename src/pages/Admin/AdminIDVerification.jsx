@@ -5,7 +5,7 @@ import { showAlert } from '@/reducers/app/action';
 import { loadIDVerificationDocuments, updateIDVerificationDocument } from '@/reducers/admin/action';
 import Image from '@/components/core/presentation/Image';
 import { API_URL, URL } from '@/constants';
-import Login from '@/components/handshakes/betting-event/Login';
+import Login from './Login';
 import moment from 'moment';
 import { Table, Button } from 'react-bootstrap';
 

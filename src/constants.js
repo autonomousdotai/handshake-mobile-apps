@@ -268,6 +268,10 @@ export const API_URL = {
     BUY_CRYPTO_GET_BANK_INFO: 'exchange/coin/center', // GET /coin/center/XX
     BUY_CRYPTO_SAVE_RECEIPT: 'exchange/coin/order', // POST /coin/{id}
     BUY_CRYPTO_QUOTE_REVERSE: 'exchange/coin/quote-reverse', // GET /coin/quote-reverse?fiat_amount=20000000&currency=ETH&fiat_currency=VND&type=cod
+    SELL_COIN_GET_COIN_INFO: 'exchange/coin/quote', // GET /coin/quote?amount=0.1&currency=ETH&fiat_currency=VND&direction=sell
+    SELL_COIN_ORDER: 'exchange/coin/selling-order', // POST /coin/selling-order
+    SELL_COIN_GENERATE_ADDRESS: 'exchange/coin/generate-address', // POST /coin/generate-address?currency=BTC
+    SELL_COIN_GET_BANK_LIST: 'exchange/coin/bank', // GET /coin/bank/{country}
   },
   SEED: {
     BASE: 'seed',
@@ -296,7 +300,10 @@ export const API_URL = {
   USER: {
     PROFILE: 'user/profile',
     CHECK_EXIST_EMAIL: 'user/check-email-exist',
-    ID_VERIFICATION: 'user/id_verification',
+    ID_VERIFICATION: 'user/id_verification',    
+    LOGIN: 'user/login',
+    SIGNUP: 'user/sign-up'
+    
   },
   INTERNAL: {
     GET_WITHDRAW_LIST: 'exchange/internal/credit/withdraw',
@@ -311,6 +318,15 @@ export const API_URL = {
     UPDATE_STATUS: 'id_verification/update',
     GET_DOCUMENT: 'id_verification/get',
   },
+
+  ADMIN_MANAGER:{
+    USER:{
+      LIST: 'admin/user/list',
+      UPDATE: 'admin/user/update',
+    }
+    
+  }
+  
 };
 
 export const HANDSHAKE_STATUS = {
@@ -641,7 +657,9 @@ export const URL = {
   CC_PAYMENT_URL: '/cc-payment',
   BUY_BY_CC_URL: '/buy-by-credit-card',
   BUY_COIN_URL: '/coin',
+  CRYPTO_COIN_URL: '/coin',
   BUY_COIN_FAQ_URL: '/coin/faq',
+  SELL_COIN_URL: '/sell-coin',
 
   ESCROW_WITHDRAW_SUCCESS: '/escrow/withdraw/success',
 

@@ -4,16 +4,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap';
 import { buyCryptoGetCoinInfo, buyCryptoQuoteReverse } from '@/reducers/buyCoin/action';
-import { API_URL, FIAT_CURRENCY, COUNTRY_LIST } from '@/constants';
+import { API_URL, FIAT_CURRENCY, COUNTRY_LIST, CRYPTO_CURRENCY } from '@/constants';
 import debounce from '@/utils/debounce';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import Cleave from 'cleave.js/react';
 import { showAlert } from '@/reducers/app/action';
-import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Feed/BuyCryptoCoin';
+import { PAYMENT_METHODS } from '@/components/handshakes/exchange/Coin/BuyCryptoCoin';
 import { isOverLimit } from '@/reducers/buyCoin/index';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
 import './styles.scss';
+
+import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
+import iconEthereum from '@/assets/images/icon/coin/eth.svg';
+import iconBitcoinCash from '@/assets/images/icon/coin/bch.svg';
 
 const formatMoney = (money = 0, currency = FIAT_CURRENCY.USD) => {
   if (currency === FIAT_CURRENCY.VND) {
@@ -38,6 +42,12 @@ const FIAT_CURRENCY_SUPPORTED_LIST = {
   default: {
     USD: FIAT_CURRENCY.USD,
   },
+};
+
+export const CRYPTO_ICONS = {
+  [CRYPTO_CURRENCY.ETH]: iconEthereum,
+  [CRYPTO_CURRENCY.BTC]: iconBitcoin,
+  BCH: iconBitcoinCash,
 };
 
 const scopedCss = (className) => `coin-money-exchange-${className}`;
@@ -131,8 +141,6 @@ class CoinMoneyExchange extends Component {
     if (amount === null) {
       this.getQuoteReverse();
     }
-
-    this.onChangeCallbackHandler();
   }
 
   showLoading(isShow = true) {
@@ -168,9 +176,9 @@ class CoinMoneyExchange extends Component {
     const { onChange, coinInfo } = this.props;
     const _data = {
       amount: Number.parseFloat(this.state.amount) || 0,
-      fiatAmount: Number.parseFloat(this.state.fiatAmount),
+      fiatAmount: Number.parseFloat(this.state.fiatAmount) || 0,
       fiatCurrency: this.state.fiatCurrency,
-      fiatAmountInUsd: Number.parseFloat(this.state.fiatAmountInUsd),
+      fiatAmountInUsd: Number.parseFloat(this.state.fiatAmountInUsd) || 0,
       isOverLimit: isOverLimit({ amount: this.state.fiatAmount || 0, limit: coinInfo?.limit || 0 }),
       ...data,
     };
@@ -214,7 +222,7 @@ class CoinMoneyExchange extends Component {
       this.props.buyCryptoQuoteReverse({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_QUOTE_REVERSE}?fiat_amount=${_fiatAmount}&currency=${currency}&fiat_currency=${_fiatCurrency}&type=${paymentMethod}&level=${level}`,
         errorFn: this.ongetQuoteReverseError,
-        successFn: () => { this.showLoading(false); },
+        successFn: () => { this.showLoading(false); this.onChangeCallbackHandler(); },
       });
     }
   }
@@ -234,7 +242,7 @@ class CoinMoneyExchange extends Component {
       this.props.buyCryptoGetCoinInfo({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=${parsedAmount}&currency=${currency}&fiat_currency=${_fiatCurrency}&level=${level}`,
         errorFn: this.onGetCoinInfoError,
-        successFn: () => { this.showLoading(false); },
+        successFn: () => { this.showLoading(false); this.onChangeCallbackHandler(); },
       });
     }
   }
@@ -255,7 +263,7 @@ class CoinMoneyExchange extends Component {
 
   render() {
     console.log('=== STATE', this.state);
-    const { amount, fiatAmount, fiatCurrency, isExchanging } = this.state;
+    const { amount, fiatAmount, fiatCurrency, isExchanging, currency } = this.state;
     const { onFocus, onBlur, markRequired } = this.props;
     return (
       <div className={`${scopedCss('container')} ${markRequired ? 'error' : ''}`} onFocus={() => onFocus()} onBlur={() => onBlur()}>
@@ -264,13 +272,16 @@ class CoinMoneyExchange extends Component {
           value={amount || ''}
           options={{
             numeral: true,
-            numeralDecimalScale: 4,
+            numeralDecimalScale: 7,
             numeralThousandsGroupStyle: 'thousand',
             numeralIntegerScale: 9,
           }}
           placeholder="0.0"
           onChange={this.onAmountChange}
         />
+
+        <img src={CRYPTO_ICONS[currency]} width={24} className={`${scopedCss('crypto-icon')}`} />
+
         <Cleave
           className={`form-control ${scopedCss('fiat-amount-input')}`}
           value={fiatAmount || ''}

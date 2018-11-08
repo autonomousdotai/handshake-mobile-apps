@@ -1,3 +1,38 @@
-.buy-crypto-coin-container #PexCreateBtn.info {
-  background: green;
+.PexCreateBtn {
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 2;
+  color: white;
+  letter-spacing: 0;
+  background: #F75454;
+
+  &.info {
+    background: green;
+  }
+  .Idea {
+    padding: 7px;
+    .verify-link {
+      color: white;
+      font-weight: bold;
+    }
+  }
+
+  .IconIdea {
+    padding-right: rem-calc(5px);
+    max-width: 30px;
+  }
+
+  button {
+    color: #000000;
+    background-color: #FDEE4B;
+    width: 115px;
+    height: 35px;
+    font-size: 15px;
+    font-weight: 400;
+    border-radius: rem-calc(20px);
+    box-shadow: 0 6px 0 0 #D9CB34;
+  }
 }

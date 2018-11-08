@@ -51,4 +51,9 @@ export const axiosInstance = axios.create({
   timeout: 5000
 })
 
+export const timoAPI = axios.create({
+  baseURL: 'https://my.timo.vn',
+  timeout: 5000
+})
+
 export default { createAPI };

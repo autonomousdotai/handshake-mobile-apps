@@ -23,10 +23,10 @@ import * as gtag from "@/services/ga-utils";
 const scopedCss = (className) => `wallet-selector-${className}`;
 
 const CRYPTO_CURRENCY_SUPPORT = {
-  ...CRYPTO_CURRENCY, BCH: 'BCH',
+  ...CRYPTO_CURRENCY,
 };
 
-const listCurrency = Object.values(CRYPTO_CURRENCY_SUPPORT).map((item) => {
+const listCurrencyDefault = Object.values(CRYPTO_CURRENCY_SUPPORT).map((item) => {
   return { id: item, text: <span>{CRYPTO_CURRENCY_NAME[item]}</span> };
 });
 
@@ -35,9 +35,10 @@ class WalletSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      listCurrency: listCurrencyDefault,
       walletAddress: '',
       walletAddressError: undefined,
-      currency: listCurrency[0],
+      currency: listCurrencyDefault[0],
       userWallets: [],
       shouldShowUserWallet: false,
     };
@@ -148,11 +149,16 @@ class WalletSelector extends Component {
   }
 
   detectCryptoCurrency(walletAddressFromInput) {
-    const { walletAddress } = this.state;
+    const { walletAddress, listCurrency } = this.state;
     const crypto = getCryptoFromAddress(walletAddressFromInput || walletAddress);
 
     const currency = listCurrency?.find(item => item?.id === crypto);
     currency && this.updateCurrency(currency);
+    if (currency?.id === CRYPTO_CURRENCY_SUPPORT.BTC || currency?.id === CRYPTO_CURRENCY_SUPPORT.BCH) {
+      this.setState({ listCurrency: listCurrencyDefault.filter(l => l.id === CRYPTO_CURRENCY_SUPPORT.BCH || l.id === CRYPTO_CURRENCY_SUPPORT.BTC) });
+    } else {
+      this.setState({ listCurrency: listCurrencyDefault });
+    }
   }
 
   showUserWallet(isShow) {
@@ -164,7 +170,6 @@ class WalletSelector extends Component {
     this.props.showScanQRCode({
       onFinish: (data) => {
         if (data) {
-          console.log('openQrScanner',);
           gtag.event({
             category: taggingConfig.coin.category,
             action: taggingConfig.coin.action.scanQrCodeAddress,
@@ -199,7 +204,7 @@ class WalletSelector extends Component {
       onChange({
         currency: this.state.currency?.id,
         walletAddress: this.state.walletAddress,
-        hasError: validate && this.getUnsafeIntlMsg(validate),
+        hasError: validate,
       });
     }
   }
@@ -209,6 +214,7 @@ class WalletSelector extends Component {
   }
 
   renderCurrencyList() {
+    const { listCurrency } = this.state;
     return listCurrency?.map(currency => (
       <DropdownItem key={currency.id} value={currency} onClick={() => this.onCurrencyChange(currency)}>
         {currency.text}
@@ -228,6 +234,7 @@ class WalletSelector extends Component {
   }
 
   onUserWalletSelected(wallet) {
+    const { listCurrency } = this.state;
     gtag.event({
       category: taggingConfig.coin.category,
       action: taggingConfig.coin.action.selectAddress,
@@ -247,8 +254,8 @@ class WalletSelector extends Component {
     return (
       <ul className={`${scopedCss('list-user-wallet')} ${shouldShowUserWallet ? 'show' : ''}`}>
         <li>{messages.wallet_selector.your_wallet}:</li>
-        {userWallets.map(wallet => (
-          wallet && <li key={wallet?.address} onClick={() => this.onUserWalletSelected(wallet)}>{`${wallet?.name} - ${this.shortIt(wallet?.address)}`}</li>
+        {userWallets.map((wallet, i) => (
+          wallet && <li key={wallet?.address + i} onClick={() => this.onUserWalletSelected(wallet)}>{`${wallet?.name} - ${this.shortIt(wallet?.address)}`}</li>
         ))}
       </ul>
     );

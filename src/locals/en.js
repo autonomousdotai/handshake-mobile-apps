@@ -233,6 +233,8 @@ export default {
   'ex.error.326': 'We don’t have enough coin for your request! Please try with smaller amount.',
   'ex.error.327': 'Credit item status is invalid',
   'ex.error.331': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.331.sell': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.332': 'You haven’t transfered coin yet! Please check',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': `WELCOME TO OUR <br/> EARLY BIRD PROGRAM!`,
@@ -1479,6 +1481,7 @@ export default {
           usd: 'USD',
           wallet_balance: 'Wallet balance',
           scan_qrcode: 'Scan QR code',
+          init_scanner: 'Initiating Camera. Please wait',
           gas_limit: 'Gas Limit',
           data: 'Data',
           feel_level: 'Fee:',
@@ -1532,7 +1535,7 @@ export default {
       setting: {
         title: 'Settings',
         error: 'Invalid wallets',
-        header: 'Setting wallets',
+        header: 'Wallet Settings',
         success: {
           restore: 'Your Wallet restore success',
           save_alternative_currency: 'Save currency selected!',
@@ -1550,6 +1553,7 @@ export default {
           push_notifications: 'Push Notifications',
           community: 'Community',
           wallet_account: 'Wallet Account',
+          support: 'Support'
         },
         button: {
           restore: 'Restore now',
@@ -1981,7 +1985,36 @@ export default {
     },
   },
   sell_coin: {
-    label: 'Sell coin',
+    label: {
+      header: {
+        title: 'Sell coin',
+      },
+      verify: {
+        notYet: {
+          title: 'To start trading, please take a few minutes to verify your account.',
+          action: 'Verify now',
+        },
+        rejected: {
+          title: 'Your verification is rejected. Please try again.',
+          action: 'Verify now',
+        },
+        processing: {
+          title: 'Verifying your account. We will send you an email once we are done.',
+          action: 'Please wait',
+        },
+        verified: {
+          level_1: {
+            title: `You're ready to trade! Your max daily limit is now 500 USD. Want more?`,
+            action: 'Provide additional verification',
+          },
+          level_2: {
+            title: `You're fully verified. Your limit has now been increased to the max of 5000 USD!`,
+            action: '',
+          },
+          need_selfie_verifiy: 'You are buying more than 500 usd. Please provide additional verification to increase your limit',
+        },
+      },
+    },
     order: {
       inputs: {
         currency: {
@@ -2003,7 +2036,16 @@ export default {
         receiving: 'Receiving',
         selling: 'Selling',
         address: 'Address',
-        notes: ['Note 1', 'Note 2'],
+        notes: {
+          main_note: 'NOTE: YOU HAVE TO CLICK "FINISH" TO COMPLETE THE TRANSACTION',
+          sub_note: '(Transaction may be lost if you forget to complete this step)',
+          list: [
+            'Please transfer the exact number to the above address',
+            'The price of the crypto fluctuates constantly; therefore, we only keep this price for 5 minutes',
+            'We will transfer the fiat to you as soon as there is 1 confirmation on the network.',
+          ],
+        },
+        confirm_leave: 'You are about to leave this page. Your order will be lost',
       },
       btn: {
         close_summary: 'Finish',
@@ -2019,7 +2061,7 @@ export default {
     contact: {
       faq: 'FAQs',
       chat_with_us: 'Chat with us Online Support',
-      phone_cs: '0902 425 186',
+      phone_cs: '097 550 4082',
     },
   },
   'coin_tabs.sell': 'SELL COIN',

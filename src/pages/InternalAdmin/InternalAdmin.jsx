@@ -4,16 +4,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { API_URL, EXCHANGE_ACTION, URL } from '@/constants';
+import { API_URL, CRYPTO_CURRENCY, EXCHANGE_ACTION, URL } from '@/constants';
 import debounce from '@/utils/debounce';
-import { loadCashOrderList, sendCashOrder, reset } from '@/reducers/internalAdmin/action';
+import ConfirmButton from '@/components/handshakes/exchange/components/ConfirmButton';
+import { loadCashOrderList, reset, sendCashOrder } from '@/reducers/internalAdmin/action';
 import './InternalAdmin.scss';
-import { FormattedDate } from 'react-intl';
+import { FormattedDate, injectIntl } from 'react-intl';
 import BootstrapTable from 'react-bootstrap-table-next';
 import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
 import Helper from '@/services/helper';
 import { formatMoneyByLocale } from '@/services/offer-util';
 import { withRouter } from 'react-router-dom';
+import { Ethereum } from '@/services/Wallets/Ethereum';
+import { Bitcoin } from '@/services/Wallets/Bitcoin';
+import { BitcoinCash } from '@/services/Wallets/BitcoinCash';
 
 const STATUS = {
   pending: {
@@ -95,6 +99,12 @@ const SELL_STATUS = {
 
 const backupScroll = window.onscroll;
 const DEFAULT_TYPE = Object.values(STATUS)[0].id;
+
+const WALLET_LIST = {
+  [CRYPTO_CURRENCY.ETH]: new Ethereum(),
+  [CRYPTO_CURRENCY.BTC]: new Bitcoin(),
+  BCH: new BitcoinCash(),
+};
 
 class InternalAdmin extends Component {
   constructor() {
@@ -213,6 +223,35 @@ class InternalAdmin extends Component {
     return statusList[order.status]?.name || '---';
   }
 
+  getTransaction(order = {}) {
+    const { messages } = this.props.intl;
+    const { currency, tx_hash } = order;
+    let url = '';
+    let wallet = {};
+
+    if (tx_hash) {
+      switch (currency) {
+        case CRYPTO_CURRENCY.ETH: {
+          wallet = WALLET_LIST[currency];
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_etherscan}</a></div>;
+          break;
+        }
+        case CRYPTO_CURRENCY.BTC: {
+          wallet = WALLET_LIST[currency];
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_blockchaininfo}</a></div>;
+          break;
+        }
+        case 'BCH': {
+          wallet = WALLET_LIST[currency];
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_blockchaininfo}</a></div>;
+          break;
+        }
+      }
+    }
+
+    return url;
+  }
+
   isLastType() {
     const { statusList } = this.state;
     const len = Object.keys(statusList).length;
@@ -301,7 +340,14 @@ class InternalAdmin extends Component {
     });
   }
 
-  finish(order = {}) {
+  processSellCoin(order = {}) {
+    this.props.sendCashOrder({
+      PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}/pick`,
+      METHOD: 'PUT',
+    });
+  }
+
+  finishSellCoin(order = {}) {
     this.props.sendCashOrder({
       PATH_URL: `${API_URL.INTERNAL.GET_SELLING_COIN_ORDER}/${order.id}`,
       METHOD: 'POST',
@@ -317,27 +363,43 @@ class InternalAdmin extends Component {
         case 'bank': {
           if (order.status === STATUS.fiat_transferring.id) {
             result = (
-              <button onClick={() => this.process(order)} className="btn btn-primary">
-                Process
-              </button>
+              <ConfirmButton
+                buttonClassName="btn internal-admin-btn positive"
+                onConfirm={() => this.process(order)}
+                label="Process"
+                cancelText="Cancel"
+                confirmText="Yes"
+              />
             );
           } else if (order.status === STATUS.processing.id) {
             result = (
               <div>
-                <button onClick={() => this.send(order)} className="btn btn-primary">
-                  Send
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn positive"
+                  onConfirm={() => this.send(order)}
+                  label="Send"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
                 &nbsp;&nbsp;&nbsp;
-                <button onClick={() => this.reject(order)} className="btn btn-primary">
-                  Reject
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn negative"
+                  onConfirm={() => this.reject(order)}
+                  label="Reject"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
               </div>
             );
           } else if (order.status === STATUS.transfer_failed.id) {
             result = (
-              <button onClick={() => this.send(order)} className="btn btn-primary">
-                ReSend
-              </button>
+              <ConfirmButton
+                buttonClassName="btn btn-primary"
+                onConfirm={() => this.send(order)}
+                label="Send"
+                cancelText="Cancel"
+                confirmText="Yes"
+              />
             );
           }
           break;
@@ -345,28 +407,44 @@ class InternalAdmin extends Component {
         case 'cod': {
           if (order.status === STATUS.pending.id) {
             result = (
-              <button onClick={() => this.process(order)} className="btn btn-primary">
-                Process
-              </button>
+              <ConfirmButton
+                buttonClassName="btn internal-admin-btn positive"
+                onConfirm={() => this.process(order)}
+                label="Process"
+                cancelText="Cancel"
+                confirmText="Yes"
+              />
             );
           } else if (order.status === STATUS.processing.id) {
             result = (
               <div>
-                <button onClick={() => this.send(order)} className="btn btn-primary">
-                  Send
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn positive"
+                  onConfirm={() => this.send(order)}
+                  label="Send"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
                 &nbsp;&nbsp;&nbsp;
-                <button onClick={() => this.reject(order)} className="btn btn-primary">
-                  Reject
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn negative"
+                  onConfirm={() => this.reject(order)}
+                  label="Reject"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
               </div>
             );
           } else if (order.status === STATUS.transfer_failed.id) {
             result = (
               <div>
-                <button onClick={() => this.send(order)} className="btn btn-primary">
-                  ReSend
-                </button>
+                <ConfirmButton
+                  buttonClassName="btn internal-admin-btn positive"
+                  onConfirm={() => this.send(order)}
+                  label="ReSend"
+                  cancelText="Cancel"
+                  confirmText="Yes"
+                />
               </div>
             );
           }
@@ -377,12 +455,28 @@ class InternalAdmin extends Component {
 
         }
       }
-    } else if (order.status === SELL_STATUS.fiat_transferring.id) {
-      result = (
-        <button onClick={() => this.finish(order)} className="btn btn-primary">
-          Finish
-        </button>
-      );
+    } else if (action === EXCHANGE_ACTION.SELL) {
+      if (order.status === SELL_STATUS.fiat_transferring.id) {
+        result = (
+          <ConfirmButton
+            buttonClassName="btn internal-admin-btn positive"
+            onConfirm={() => this.processSellCoin(order)}
+            label="Process"
+            cancelText="Cancel"
+            confirmText="Yes"
+          />
+        );
+      } else if (order.status === SELL_STATUS.processing.id) {
+        result = (
+          <ConfirmButton
+            buttonClassName="btn internal-admin-btn positive"
+            onConfirm={() => this.finishSellCoin(order)}
+            label="Finish"
+            cancelText="Cancel"
+            confirmText="Yes"
+          />
+        );
+      }
     }
 
     return result;
@@ -469,6 +563,12 @@ class InternalAdmin extends Component {
         const order = orderList[rowIndex];
         console.log('action order', row, order);
         return this.renderActionBtn(row);
+      },
+    }, {
+      dataField: 'tx_hash',
+      text: 'Transaction',
+      formatter: (cell, row, rowIndex, formatExtraData) => {
+        return this.getTransaction(row);
       },
     },
     ];
@@ -569,4 +669,4 @@ const mapState = (state) => {
   };
 };
 
-export default connect(mapState, { loadCashOrderList, sendCashOrder, reset })(withRouter(InternalAdmin));
+export default injectIntl(connect(mapState, { loadCashOrderList, sendCashOrder, reset })(withRouter(InternalAdmin)));
