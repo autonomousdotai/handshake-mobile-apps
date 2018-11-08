@@ -63,7 +63,7 @@ class SellCryptoCoin extends Component {
 
   componentDidMount() {
     // get bank list for autocomplete bank name
-    // this.sellCryptoGetBankList();
+    this.sellCryptoGetBankList();
   }
 
   shouldComponentUpdate(nextProps) {
