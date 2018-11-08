@@ -1,7 +1,14 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { API_URL } from '@/constants';
-import { apiGet } from '@/guru/stores/api';
-import { loadReports, updateReports, createEvent } from './action';
+import { apiGet, apiPost, apiPostForm } from '@/guru/stores/api';
+import {
+  loadReports,
+  updateReports,
+  createEvent,
+  sendEmailCode,
+  updateProfile,
+  updateEmailProfile
+} from './action';
 
 function* handleLoadReports() {
   try {
@@ -72,7 +79,40 @@ function* handleCreateEven({ values }) {
   }
 }
 
+function* handleSendEmailCode({ payload }) {
+  try {
+    const res = yield call(apiPost, {
+      PATH_URL: `user/verification/email/start?email=${payload.email}`,
+      type: 'API:SEND_EMAIL_CODE'
+    });
+    if (res.error) {
+      console.error('Failed to submit email: ', res.error);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function* handleUpdateEmail({ payload }) {
+  try {
+    const userProfile = new FormData();
+    userProfile.set('email', payload.email);
+    const responded = yield call(apiPostForm, {
+      PATH_URL: API_URL.USER.PROFILE,
+      type: 'UPDATE_EMAIL_FETCH',
+      data: userProfile,
+    });
+    if (responded.status) {
+      yield put(updateProfile(responded));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export default function* createEventSaga() {
   yield takeLatest(loadReports().type, handleLoadReports);
   yield takeLatest(createEvent().type, handleCreateEven);
+  yield takeLatest(sendEmailCode().type, handleSendEmailCode);
+  yield takeLatest(updateEmailProfile().type, handleUpdateEmail);
 }

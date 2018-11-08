@@ -1,11 +1,14 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
-import { updateReports } from '@/guru/pages/CreateEvent/action';
+import {
+  updateReports,
+} from '@/guru/pages/CreateEvent/action';
 
 const initialState = {
   events: [],
   userEvents: [],
   reputation: {},
+  ui: {}
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -30,4 +33,3 @@ const guruReducer = (state = initialState, action) => {
 };
 
 export default guruReducer;
-
