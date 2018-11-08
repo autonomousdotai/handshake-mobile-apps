@@ -22,7 +22,7 @@ export const sellCryptoGetCoinInfo = createAPI(SELL_COIN_ACTIONS.SELL_COIN_GET_C
 
 export const getBankList = () => dispatch => new Promise((resolve, reject) => {
   try {
-    axios.get('http://35.198.235.226:2203/timo/bankList')
+    axios.get('https://35.198.235.226:2203/timo/bankList')
     .then(({ status, data: { bankList: payload } }) => {
       if (status === 200) {
         dispatch({ type: SELL_COIN_ACTIONS.SELL_COIN_GET_BANK_LIST, payload })
@@ -59,7 +59,7 @@ export const selectAccountId = accountId => {
 
 export const getBankInfo = (bankId, targetInfo) => dispatch => new Promise((resolve, reject) => {
   try {
-    axios.get(`http://35.198.235.226:2203/timo/getBankInfo?bankId=${bankId}&targetInfo=${targetInfo}&bankAccount=153560102`)
+    axios.get(`https://35.198.235.226:2203/timo/getBankInfo?bankId=${bankId}&targetInfo=${targetInfo}&bankAccount=153560102`)
     .then(({ status, data }) => {
       console.log('payload is', data);
       const payload = data.data.account.cardName;
