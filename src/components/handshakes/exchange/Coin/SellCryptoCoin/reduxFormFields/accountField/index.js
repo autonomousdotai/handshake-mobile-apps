@@ -56,7 +56,7 @@ const renderField = (field) => {
         shouldShowError &&
         <span className="error">{meta.error}</span>
       }
-      <LoadAccountName />
+      {/*<LoadAccountName />*/}
     </div>
   );
 };
