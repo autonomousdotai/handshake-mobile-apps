@@ -1553,7 +1553,18 @@ export default {
           push_notifications: 'Push Notifications',
           community: 'Community',
           wallet_account: 'Wallet Account',
-          support: 'Support'
+          support: 'Support',
+          address_book: 'Address Book',
+          contact_name: 'Name',
+          contact_email: 'Email',
+          contact_address: 'Address',
+          contact_send_money: 'Send Money',
+          contact_remove: 'Remove',
+          contact_empty_title: "No contacts yet",
+          contact_empty_desc: "Get started by adding your first one.",
+          contact_empty_button: "Add contact",
+          contact_add_contact_search_box: "Search a contact ...",
+
         },
         button: {
           restore: 'Restore now',

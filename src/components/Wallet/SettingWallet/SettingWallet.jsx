@@ -27,9 +27,17 @@ import iconTelegram from '@/assets/images/wallet/icons/icon-telegram.svg';
 import iconBackupWallet from '@/assets/images/wallet/icons/icon-backup.svg';
 import iconRestoreWallet from '@/assets/images/wallet/icons/icon-restore.svg';
 import iconSupport from '@/assets/images/wallet/icons/icon-support.svg';
-
+import iconContact from '@/assets/images/wallet/icons/icon-address-book.svg';
+import iconAddContact from '@/assets/images/wallet/icons/icon-add-user.svg';
+import iconAvatar from '@/assets/images/icon/avatar.svg';
 
 import Modal from '@/components/core/controls/Modal';
+
+import { MasterWallet } from '@/services/Wallets/MasterWallet';
+
+import Input from '../Input';
+
+import iconSearch from '@/assets/images/icon/ic_search.svg';
 
 class SettingWallet extends React.Component {
   constructor(props) {
@@ -43,6 +51,11 @@ class SettingWallet extends React.Component {
       settings: this.defaultSettings,
       switchContent: '',
       listCurrenciesContent: '',
+      listAddressBook: [],
+      contactSelected: false,   
+      
+      // add new contact:
+      newContract: {name: "", email: "", address: ''}
     }
   }
 
@@ -226,6 +239,80 @@ class SettingWallet extends React.Component {
     $zopim.livechat.window.show();
   }
 
+  openAddressBook=()=>{
+    let listAddressBook = MasterWallet.readContacts();
+    this.setState({listAddressBook}, ()=>{
+      this.modalAddressBookRef.open();
+    })
+    
+  }
+
+  openContact=(item)=>{
+    this.setState({contactSelected: item}, ()=>{
+      this.modalAddressBookDetailRef.open();
+    })
+  }
+
+  openAddNewContact=()=>{
+    this.setState({newContract: {"name": '', email: '', address: ''}}, ()=>{
+      this.modaAddNewContactRef.open();
+    });    
+  }
+  onContactNameChange=(value)=>{
+    let newContract = this.state.newContract;
+    newContract.name = value;
+    this.setState({newContract});
+  }
+  onContactEmailChange=(value)=>{
+    let newContract = this.state.newContract;
+    newContract.email = value;
+    this.setState({newContract});
+    
+  }
+  onContactAddressChange=(value)=>{
+    let newContract = this.state.newContract;
+    newContract.address = value;
+    this.setState({newContract});
+  }
+  onAddNewContactClick=()=>{
+    if (this.state.newContract.name && this.state.newContract.address){
+      let result = MasterWallet.addContact(this.state.newContract);
+      if (result != true){
+        this.showError(result);
+      }      
+      else{
+        let listAddressBook = MasterWallet.readContacts();
+        this.setState({listAddressBook}, ()=>{
+          this.modaAddNewContactRef.close();          
+        })
+      }
+    }
+  }
+
+  onRemoveContactClick=()=>{
+    if (this.state.contactSelected){
+      MasterWallet.removeContact(this.state.contactSelected);
+      let listAddressBook = MasterWallet.readContacts();
+        this.setState({listAddressBook}, ()=>{
+          this.modaAddNewContactRef.close();          
+        })
+    }
+    else{
+      console.log("no sellect item");
+    }
+  }
+
+  showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
+    this.props.showAlert({
+      message: <div className="textCenter">{icon}{msg}</div>,
+      timeOut,
+      type,
+      callBack: () => {},
+    });
+  }
+  showError(mst) {
+    this.showAlert(mst, 'danger', 3000);
+  }
 
   render() {
     const { messages } = this.props.intl;
@@ -240,6 +327,107 @@ class SettingWallet extends React.Component {
               <div className="list-currency">
                   {this.state.listCurrenciesContent}
               </div>
+            </Modal>
+             
+
+            <Modal title={messages.wallet.action.setting.label.address_book} onRef={modal => this.modalAddressBookRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle} modalBodyStyle={this.props.modalBodyStyle} customRightIcon={iconAddContact} customRightIconClick={()=>{this.openAddNewContact()}}>
+              <div className="list-address-book">
+              {this.state.listAddressBook.length == 0 ?
+              <div className="list-address-emtpy">
+                <img src={iconAvatar} />
+                <div className="address-emtpy-title">{messages.wallet.action.setting.label.contact_empty_title}</div>
+                <div className="address-emtpy-desc">{messages.wallet.action.setting.label.contact_empty_desc}</div>
+                <button onClick={()=>{this.openAddNewContact();}} className="address-emtpy-btn btn button btn-primary button">{messages.wallet.action.setting.label.contact_empty_button}</button>
+              </div>
+              :
+              <div className="list-contact-search-box">
+                <img src={iconSearch} />
+                <input placeholder={messages.wallet.action.setting.label.contact_add_contact_search_box} type="text" class="form-control-custom form-control-custom-ex w-100" value="" />
+              </div>
+              }
+              {this.state.listAddressBook.map((item, i) => {  
+                return (             
+                  <div key={item.email} className="item" onClick={()=> {this.openContact(item)}}>
+                      <img className="image" src={iconAvatar} />
+                      <div className="name">
+                          <label>{item.name}</label>
+                          <span className="desc">{item.address}</span>
+                      </div>                    
+                  </div>
+                 );
+                })}
+              </div>
+            </Modal>
+
+            <Modal title={messages.wallet.action.setting.label.address_book} onRef={modal => this.modaAddNewContactRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle}>
+              <div className="add-new-contact">
+                  <div>                    
+                    <Input placeholder={messages.wallet.action.setting.label.contact_name} maxLength="40" value={this.state.newContract.name} onChange={(value) => {this.onContactNameChange(value)}} />
+                  </div>
+                  <div>                  
+                    <Input placeholder={messages.wallet.action.setting.label.contact_email} maxLength="40" value={this.state.newContract.email} onChange={(value) => {this.onContactEmailChange(value)}} />
+                  </div>
+                  <div>                  
+                    <Input placeholder={messages.wallet.action.setting.label.contact_address} maxLength="100" value={this.state.newContract.address} onChange={(value) => {this.onContactAddressChange(value)}} />
+                  </div>
+
+                  <button type="button" onClick={()=> {this.onAddNewContactClick();}} disabled={!this.state.newContract.name || !this.state.newContract.address} className="btn button btn-primary button btn-add-new-address">{messages.wallet.action.setting.label.contact_empty_button}</button>
+              </div>
+            </Modal>
+
+            <Modal title={this.state.contactSelected ? this.state.contactSelected.name : "Detail"} onRef={modal => this.modalAddressBookDetailRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle} modalBodyStyle={this.props.modalBodyStyle}>
+                  {this.state.contactSelected &&
+                    <div className="contact-detail">
+
+                        <div className="header-box-contact-detail">
+                            <img className="avatar-b" src={iconAvatar} />
+                        </div>
+
+                        <div className="item header"></div>
+
+                        <div className="item">                        
+                            <div className="name">
+                              <label>{messages.wallet.action.setting.label.contact_name}</label>                            
+                            </div>                
+                            <div className="value">
+                              <span className="text">{this.state.contactSelected.name}</span>
+                            </div>
+                          </div>
+                          
+                          <div className="item">  
+                            <div className="name">
+                                <label>{messages.wallet.action.setting.label.contact_email}</label>                            
+                            </div>                
+                            <div className="value">
+                                <span className="text">{this.state.contactSelected.email}</span>
+                            </div>
+                          </div>                         
+
+                          <div className="item">  
+                            <div className="name">
+                                <label>{messages.wallet.action.setting.label.contact_address}</label>                            
+                                <span className="desc desc-long">{this.state.contactSelected.address}</span>
+                            </div>                                              
+                          </div>
+
+                           <div className="item header header-empty"></div>
+  
+                            <div className="item">  
+                              <div className="name">
+                                  <label className="green">{messages.wallet.action.setting.label.contact_send_money}</label>                            
+                              </div>                
+                            </div>
+                            <div className="item header header-empty"></div>
+
+                            <div className="item" >  
+                              <div className="name" onClick={()=>{this.onRemoveContactClick();}}>
+                                  <label className="red">{messages.wallet.action.setting.label.contact_remove}</label>                            
+                              </div>                
+                            </div>
+
+                        </div>
+                    }
+                                  
             </Modal>
 
 
@@ -270,6 +458,16 @@ class SettingWallet extends React.Component {
                 </div>
                 <div className="value">
                   <span className="text">{settings.wallet.alternateCurrency}</span>
+                </div>
+            </div>
+
+             <div className="item" onClick={this.openAddressBook}>
+                <img className="icon" src={iconContact} />
+                <div className="name">
+                    <label>{messages.wallet.action.setting.label.address_book}</label>
+                </div>
+                <div className="value">
+
                 </div>
             </div>
             

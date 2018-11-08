@@ -870,6 +870,50 @@ export class MasterWallet {
       return result;
     }
 
+    static readContacts(){
+      let listContact = localStore.get("contacts");            
+      if (listContact == false) return [];
+      return listContact;
+    }
+    static removeContact(contact){
+      let listContact = localStore.get("contacts"); 
+      let listTemp = [];           
+      if (listContact.length > 0){
+        listContact.forEach((cont) => {          
+          if (cont.address != contact.address){
+            listTemp.push(cont);
+          }
+        });
+      }
+      return listContact;
+    }
+    static addContact(contact){
+      console.log("contact need add", contact);
+      let flag = false;
+      let listContact = MasterWallet.readContacts();
+      if (listContact.length > 0){
+        for (var i = 0; i < listContact.length; i ++){
+          let cont = listContact[i];
+          console.log("cont.address", cont.address,"contact.address",contact.address, "cont.address == contact.address", cont.address == contact.address);
+          if (cont.email == contact.email || cont.address == contact.address){
+            flag = true;
+            break;            
+          }
+        };
+      }
+      else{
+        listContact = [];
+      }
+      if (flag){
+        return "Entry already exist";            
+      }
+      
+      listContact.push(contact);
+
+      localStore.save("contacts", listContact);
+      return true;
+    }
+
 }
 
 export default { MasterWallet };
