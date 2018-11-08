@@ -30,10 +30,9 @@ class Reputation extends React.Component {
   getData = (props) => {
     const querystring = window.location.search.replace('?', '');
     const querystringParsed = qs.parse(querystring);
-    const userId = props.location.id;
-    console.log('UserId :', props.location.id);
-    console.log('Querry Parse:', querystringParsed);
-    props.dispatch(loadUserEvents({ userId }));
+    const userId = querystringParsed.id;
+    console.log('UserId :', userId);
+    //props.dispatch(loadUserEvents({ userId }));
     props.dispatch(loadUserReputation({ userId }));
   }
 

@@ -53,7 +53,10 @@ export function* handleLoadReputation({ userId }) {
       PATH_URL,
       type: 'LOAD_USER_REPUTATION',
     });
+
     if (data) {
+      const { matches } = data;
+      yield put(updateUserEvents(matches));
       yield put(updateUserReputation(data));
     }
   } catch (e) {
