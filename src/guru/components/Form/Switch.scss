@@ -12,8 +12,6 @@
 
   /* The slider */
   .slider {
-    display: flex;
-    align-items: center;
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -64,6 +62,7 @@
     top: 50%;
     left: 50%;
     font-size: 13px;
+    padding-top: 1px;
   }
 
   input:checked + .slider .on {

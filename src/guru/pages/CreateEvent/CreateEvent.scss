@@ -18,6 +18,30 @@
       background-color: #EBF1F7;
       height: 2px;
       width: 100%;
+      margin: 20px 0;
+    }
+
+    .GroupTitle {
+      color: #0A2240;
+    }
+
+    .GroupNote {
+      color: #889EB5;
+      font-size: 13px;
+    }
+
+    .BlockLeft {
+      flex: 50%;
+      margin-right: 10px;
+    }
+
+    .BlockRight {
+      margin-left: 10px;
+      position: relative;
+    }
+
+    label {
+      margin-bottom: 0;
     }
   }
 
@@ -34,6 +58,10 @@
     label {
       color: #2989FF;
     }
+
+    .BlankLine {
+      margin-bottom: 0;
+    }
   }
 
   .PublicSwitcher {
@@ -41,30 +69,31 @@
     font-size: 16px;
     color: #748599;
     justify-content: space-between;
-    padding-top: 10px;
-    margin-bottom: -10px;
+    margin: -10px 0;
+    align-items: center;
 
-    label {
-      margin-bottom: 0;
-    }
-  }
+    .switch {
+      width: 110px;
+      height: 28px;
 
-  .switch {
-    width: 110px;
+      .on, .off {
+        font-size: 15px;
+        font-weight: 400;
+      }
 
-    .on, .off {
-      font-size: 15px;
-      font-weight: 400;
-    }
+      .slider {
+        background-color: #14447F;
+      }
 
-    .slider {
-      background-color: #14447F;
-    }
+      input:checked + .slider {
+        background-color: #2989FF;
+      }
 
-    input:checked + .slider:before {
-      -webkit-transform: translateX(83px);
-      -ms-transform: translateX(83px);
-      transform: translateX(83px);
+      input:checked + .slider:before {
+        -webkit-transform: translateX(83px);
+        -ms-transform: translateX(83px);
+        transform: translateX(83px);
+      }
     }
   }
 
@@ -79,9 +108,15 @@
       position: absolute;
       top: 0;
       right: 0;
+      color: #2989FF;
 
       input {
-        width: 17px;
+        width: 16px;
+        color: #2989FF;
+      }
+
+      .unit {
+        background-color: transparent;
       }
     }
 
@@ -94,9 +129,12 @@
     }
 
     .rangeslider-horizontal .rangeslider__handle {
-      width: 20px;
-      height: 20px;
-      border-radius: 20px;
+      width: 25px;
+      height: 25px;
+      border-radius: 25px;
+      background: #2989FF;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 4px 0 rgba(181,181,181,0.50);
     }
 
     .rangeslider-horizontal .rangeslider__fill {
@@ -104,11 +142,65 @@
     }
 
     .rangeslider-horizontal .rangeslider__handle:after {
-      width: 14px;
-      height: 14px;
-      top: 2px;
-      left: 2px;
-      background-color: #2989FF;
+      display: none;
+    }
+  }
+
+  .ImageUpload {
+    display: flex;
+    justify-content: space-between;
+
+    .AddBtn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  .ReportSource {
+    .GroupNote {
+      padding: 5px 0 10px;
+    }
+  }
+
+  .DateTime {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+
+    .BlockLeft {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    .BlockRight {
+      width: 80px;
+      background-color: #F5F8FC;
+      border-radius: 5px;
+
+      .ClosingTime {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        padding: 10px;
+
+        .Day {
+          font-size: 25px;
+          font-weight: 400;
+        }
+
+        .Month, .Year {
+          color: #748599;
+        }
+      }
+    }
+  }
+
+  .Notification {
+    input {
+      width: 100%;
     }
   }
 }

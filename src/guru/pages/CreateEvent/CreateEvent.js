@@ -5,6 +5,8 @@ import { Formik, Form, Field } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
 import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
+import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
+import AddButton from '@/assets/images/pex/create/add-btn.svg';
 
 import { createEvent } from './action';
 import ReportSource from './ReportSource';
@@ -22,10 +24,6 @@ class CreateEvent extends React.Component {
     this.props.createEvent({ values });
   };
 
-  buildBlockTitle = title => {
-    return <p className="BlockTitle">{title}</p>;
-  };
-
   buildErrorCls = (errors, touched) => {
     const errFields = Object.keys(touched).filter(i => errors[i]);
     return errFields.length ? errFields.join(' ') : '';
@@ -34,7 +32,7 @@ class CreateEvent extends React.Component {
   renderEventTitle = formProps => {
     return (
       <div className="EventTitle">
-        {this.buildBlockTitle('Gurus will predict YES or NO')}
+        <p className="GroupTitle">Gurus will predict YES or NO</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
@@ -72,7 +70,7 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="HostFee">
-        <label htmlFor="creatorFee">Host fee</label>
+        <label htmlFor="creatorFee" className="GroupTitle">Host fee</label>
         <Field
           name="creatorFee"
           type="rangeSlider"
@@ -81,13 +79,42 @@ class CreateEvent extends React.Component {
           options={optionSlider}
           component={CustomField}
         />
-        <div className="CreateEventFormGroupNote">
+        <div className="GroupNote">
           As a host creator, you will receive this percentage of the total bets.
           Friendly advice: no one wants to play with a greedy guts!
         </div>
       </div>
     );
   };
+
+  renderImageUpload = () => {
+    return (
+      <div className="ImageUpload">
+        <div className="BlockLeft">
+          <label htmlFor="image" className="GroupTitle">Image</label>
+          <div className="GroupNote">
+            Upload an image for your debates (optional)
+          </div>
+        </div>
+        <div className="BlockRight">
+          <img src={DefaultEvent} alt="defaultEvent" />
+          <img src={AddButton} alt="addButton" className="AddBtn" />
+        </div>
+      </div>
+    );
+  }
+
+  renderReportSource = () => {
+    return (
+      <div className="ReportSource">
+        <label htmlFor="source" className="GroupTitle">Report</label>
+        <div className="GroupNote">
+          You must report the result to close the bet and get your fee.
+        </div>
+        <ReportSource />
+      </div>
+    );
+  }
 
   renderPicker = (props, startDate) => {
     const val = moment.unix(props.value || startDate);
@@ -105,15 +132,31 @@ class CreateEvent extends React.Component {
       .add(60, 'm')
       .unix();
     return (
-      <Field
-        name="closingTime"
-        type="datetime"
-        component={CustomField}
-        title="Event closing time"
-        placeholder="Event closing time"
-        startDate={startDate}
-        renderTrigger={props => this.renderPicker(props, startDate)}
-      />
+      <div className="DateTime">
+        <div className="BlockLeft">
+          <label
+            htmlFor="source"
+            className="GroupTitle"
+          >
+            Add a report deadline
+          </label>
+          <div className="GroupNote">
+            As the host, you will be the reporter of the result.
+            The quicker the better!
+          </div>
+        </div>
+        <div className="BlockRight">
+          <Field
+            name="closingTime"
+            type="datetime"
+            component={CustomField}
+            title="Event closing time"
+            placeholder="Event closing time"
+            startDate={startDate}
+            renderTrigger={props => this.renderPicker(props, startDate)}
+          />
+        </div>
+      </div>
     );
   };
 
@@ -157,10 +200,14 @@ class CreateEvent extends React.Component {
                 </div>
                 <div className="FormBlock">
                   {this.renderHostFee()}
-                  <ReportSource />
+                  <div className="BlankLine" />
+                  {this.renderImageUpload()}
                 </div>
                 <div className="FormBlock">
+                  {this.renderReportSource()}
                   {this.renderDateTime()}
+                </div>
+                <div className="FormBlock">
                   <Notification formProps={formProps} />
                 </div>
                 <button
