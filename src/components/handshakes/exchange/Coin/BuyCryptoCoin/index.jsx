@@ -8,11 +8,11 @@ import { change, Field, formValueSelector, touch } from 'redux-form';
 import { connect } from 'react-redux';
 import {
   API_URL, CRYPTO_CURRENCY, CRYPTO_CURRENCY_NAME, FIAT_CURRENCY, FIAT_CURRENCY_NAME, HANDSHAKE_ID,
-  URL, COUNTRY_LIST,
+  URL, COUNTRY_LIST, MIN_AMOUNT, EXCHANGE_ACTION,
 } from '@/constants';
 import createForm from '@/components/core/form/createForm';
 import { fieldInput } from '@/components/core/form/customField';
-import { required } from '@/components/core/form/validation';
+import { minValue, required } from '@/components/core/form/validation';
 import {
   buyCryptoGetBankInfo,
   buyCryptoGetCoinInfo,
@@ -92,6 +92,9 @@ const FormBuyCrypto = createForm({
 const selectorFormSpecificAmount = formValueSelector(nameBuyCryptoForm);
 
 const scopedCss = (className) => `buy-crypto-coin-${className}`;
+
+export const minValueETH = minValue(MIN_AMOUNT[CRYPTO_CURRENCY.ETH]);
+export const minValueBTC = minValue(MIN_AMOUNT[CRYPTO_CURRENCY.BTC]);
 
 class BuyCryptoCoin extends React.Component {
   constructor(props) {
@@ -290,7 +293,7 @@ class BuyCryptoCoin extends React.Component {
 
   onGetCoinInfoError = (e) => {
     this.props.showAlert({
-      message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
+      message: <div className="text-center">{getErrorMessageFromCode(e, { exchangeAction: EXCHANGE_ACTION.BUY })}</div>,
       timeOut: 3000,
       type: 'danger',
     });
@@ -538,6 +541,15 @@ class BuyCryptoCoin extends React.Component {
       if (paymentMethod === PAYMENT_METHODS.COD && (!address || !noteAndTime || !phone)) {
         this.setState({ isValidToSubmit: false });
         return;
+      }
+
+      const errors = {};
+      const validateMin = currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH;
+      errors.coinMoneyExchange = amount === 0 ? required('') : validateMin(amount);
+
+      if (errors.coinMoneyExchange) {
+        this.setState({ isValidToSubmit: false });
+        return errors;
       }
       this.setState({ isValidToSubmit: true });
     } else {
