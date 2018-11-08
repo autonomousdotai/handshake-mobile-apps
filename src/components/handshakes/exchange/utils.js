@@ -110,7 +110,7 @@ export const getErrorMessageFromCode = (error, extraData) => {
       result = <FormattedMessage id="ex.error.327" />;
       break;
     case -331:
-      const { exchangeAction } = extraData;
+      const exchangeAction = extraData?.exchangeAction;
       if (exchangeAction && exchangeAction.toLowerCase().indexOf(EXCHANGE_ACTION.SELL) >= 0) {
         result = <FormattedMessage id="ex.error.331.sell" />;
       } else {
