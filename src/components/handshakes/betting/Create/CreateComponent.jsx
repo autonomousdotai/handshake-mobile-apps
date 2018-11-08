@@ -235,12 +235,12 @@ class BettingCreate extends React.Component {
         className="form-control-custom input"
         name={key}
         style={style}
-        type="number"
+        type="text"
         placeholder={placeholder}
         autoComplete="off"
         value={values[key] || ''}
-        validate={[required]}
-        noValidate
+        //validate={[required]}
+        //noValidate
         onChange={(evt) => {
           this.changeText(key, evt.target.value);
         }}
