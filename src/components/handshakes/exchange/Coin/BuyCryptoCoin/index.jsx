@@ -543,17 +543,18 @@ class BuyCryptoCoin extends React.Component {
         return;
       }
 
-      const errors = {};
-      const validateMin = currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH;
-      errors.coinMoneyExchange = amount === 0 ? required('') : validateMin(amount);
-
-      if (errors.coinMoneyExchange) {
-        this.setState({ isValidToSubmit: false });
-        return errors;
-      }
       this.setState({ isValidToSubmit: true });
     } else {
       this.setState({ isValidToSubmit: false });
+    }
+
+    const errors = {};
+    const validateMin = currency === CRYPTO_CURRENCY.BTC ? minValueBTC : minValueETH;
+    errors.coinMoneyExchange = amount === 0 ? required('') : validateMin(amount);
+
+    if (errors.coinMoneyExchange) {
+      this.setState({ isValidToSubmit: false });
+      return errors;
     }
   }
 
