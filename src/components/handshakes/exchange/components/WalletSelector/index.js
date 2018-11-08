@@ -23,7 +23,7 @@ import * as gtag from "@/services/ga-utils";
 const scopedCss = (className) => `wallet-selector-${className}`;
 
 const CRYPTO_CURRENCY_SUPPORT = {
-  ...CRYPTO_CURRENCY, BCH: 'BCH',
+  ...CRYPTO_CURRENCY,
 };
 
 const listCurrencyDefault = Object.values(CRYPTO_CURRENCY_SUPPORT).map((item) => {
@@ -254,8 +254,8 @@ class WalletSelector extends Component {
     return (
       <ul className={`${scopedCss('list-user-wallet')} ${shouldShowUserWallet ? 'show' : ''}`}>
         <li>{messages.wallet_selector.your_wallet}:</li>
-        {userWallets.map(wallet => (
-          wallet && <li key={wallet?.address} onClick={() => this.onUserWalletSelected(wallet)}>{`${wallet?.name} - ${this.shortIt(wallet?.address)}`}</li>
+        {userWallets.map((wallet, i) => (
+          wallet && <li key={wallet?.address + i} onClick={() => this.onUserWalletSelected(wallet)}>{`${wallet?.name} - ${this.shortIt(wallet?.address)}`}</li>
         ))}
       </ul>
     );

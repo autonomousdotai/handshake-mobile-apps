@@ -18,11 +18,6 @@ const CRYPTOS = [
     name: 'Ethereum',
     logo: ethIcon,
   },
-  {
-    id: 'BCH',
-    name: 'Bitcoin Cash',
-    logo: bchIcon,
-  },
 ];
 
 const scopedCss = (className) => `crypto-coin-price-panel-${className}`;

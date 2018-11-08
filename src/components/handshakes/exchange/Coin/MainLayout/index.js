@@ -26,7 +26,13 @@ class Coin extends Component {
     super();
     this.state = {
       currentTabId: Object.keys(TABS)[0],
+      showInfo: true,
     };
+  }
+
+  updateShowVerifyInfo = (isShow) => {
+    console.log('updateShowVerifyInfo', isShow);
+    this.setState({ showInfo: isShow});
   }
 
   onChangeTab = (tabId) => {
@@ -50,7 +56,7 @@ class Coin extends Component {
         {
           Object.entries(TABS).map(([key, data]) => {
             const Com = data?.component;
-            return <Com key={key} className={key === currentTabId ? 'fadeIn' : 'hidden'} />;
+            return <Com key={key} className={key === currentTabId ? 'fadeIn' : 'hidden'} updateShowVerifyInfo={this.updateShowVerifyInfo}/>;
           })
         }
       </React.Fragment>
@@ -60,7 +66,7 @@ class Coin extends Component {
   render() {
     const showState = [-1, 0, 2, 1];
     const { authProfile: { idVerified } } = this.props;
-    const { currentTabId } = this.state;
+    const { currentTabId, showInfo } = this.state;
     return (
       <div className={scopedCss('container')}>
         <ChangeLanguage />
@@ -69,7 +75,7 @@ class Coin extends Component {
         </div>
         <div className={scopedCss('tab-body')}>
           {
-            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} coinTab={currentTabId} />
+            showInfo && showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} coinTab={currentTabId} />
           }
           {this.renderTabComponent()}
         </div>

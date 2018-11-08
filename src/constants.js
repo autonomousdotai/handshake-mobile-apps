@@ -301,7 +301,10 @@ export const API_URL = {
   USER: {
     PROFILE: 'user/profile',
     CHECK_EXIST_EMAIL: 'user/check-email-exist',
-    ID_VERIFICATION: 'user/id_verification',
+    ID_VERIFICATION: 'user/id_verification',    
+    LOGIN: 'user/login',
+    SIGNUP: 'user/sign-up'
+    
   },
   INTERNAL: {
     GET_WITHDRAW_LIST: 'exchange/internal/credit/withdraw',
@@ -316,6 +319,15 @@ export const API_URL = {
     UPDATE_STATUS: 'id_verification/update',
     GET_DOCUMENT: 'id_verification/get',
   },
+
+  ADMIN_MANAGER:{
+    USER:{
+      LIST: 'admin/user/list',
+      UPDATE: 'admin/user/update',
+    }
+    
+  }
+  
 };
 
 export const HANDSHAKE_STATUS = {

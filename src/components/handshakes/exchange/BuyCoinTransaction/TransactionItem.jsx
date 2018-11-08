@@ -125,7 +125,7 @@ class TransactionItem extends React.Component {
                 </div>
               </div>
 
-              {type === 'bank' && status === COIN_ORDER_STATUS.PENDING && (
+              {offerFeedType === 'coin' && type === 'bank' && status === COIN_ORDER_STATUS.PENDING && (
                 <div className="text-normal mt-2">
                   <span className="transfer-title">{messages.create.atm.transactions.messageTransfer}</span>
                   <span className="transfer-now" onClick={() => this.props.onShowTransferInfo(this.state.transaction)}>{messages.create.atm.transactions.transferNow}</span>
