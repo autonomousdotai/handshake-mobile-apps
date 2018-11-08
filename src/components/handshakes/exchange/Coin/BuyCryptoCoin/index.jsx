@@ -53,15 +53,15 @@ export const CRYPTO_ICONS = {
 const listPackages = {
   [COUNTRY_LIST.VN]: [
     { name: 'basic', intlKeyName: 'basic_package_name', fiatAmount: 20000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
-    { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 60000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
+    // { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 60000000, fiatCurrency: FIAT_CURRENCY.VND, show: true },
   ],
   [COUNTRY_LIST.HK]: [
     { name: 'basic', intlKeyName: 'basic_package_name', fiatAmount: 5000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
-    { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 10000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
+    // { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 10000, fiatCurrency: FIAT_CURRENCY.HKD, show: true },
   ],
   default: [
     { name: 'basic', intlKeyName: 'basic_package_name', fiatAmount: 600, fiatCurrency: FIAT_CURRENCY.USD, show: true },
-    { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 1000, fiatCurrency: FIAT_CURRENCY.USD, show: true },
+    // { name: 'pro', intlKeyName: 'pro_package_name', fiatAmount: 1000, fiatCurrency: FIAT_CURRENCY.USD, show: true },
   ],
 };
 
