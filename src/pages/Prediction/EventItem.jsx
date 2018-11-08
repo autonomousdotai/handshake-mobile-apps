@@ -7,6 +7,8 @@ import ShareSocial from '@/components/core/presentation/ShareSocial';
 import Statistics from '@/guru/components/Statistics/Statistics';
 import Creator from '@/guru/components/Creator/Creator';
 import { URL } from '@/constants';
+import { Link } from 'react-router-dom';
+
 import Image from '@/components/core/presentation/Image';
 import Icon from '@/guru/components/Icon/Icon';
 import { randomArrayItem } from '@/utils/array';
@@ -87,10 +89,17 @@ function renderEventTotalBets({ event }) {
 function renderCreator({ event }) {
   const alias = event.creator_wallet_address || '0x1605219905D96BD6c5b1b07A59a3bFB233043f27';
   try {
+    const linkReputation = {
+      pathname: `${URL.HANDSHAKE_REPUTATION}/${event.id}`,
+      id: event.created_user_id,
+      address: event.creator_wallet_address
+    };
     return (
-      <Creator alias={shortAddress(alias, '...')}>
-        <Icon path={MeIcon} />
-      </Creator>
+      <Link to={linkReputation}>
+        <Creator alias={shortAddress(alias, '...')}>
+          <Icon path={MeIcon} />
+        </Creator>
+      </Link>
     );
   } catch (e) {
     return (<Creator />);

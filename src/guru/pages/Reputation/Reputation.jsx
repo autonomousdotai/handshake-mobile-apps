@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import local from '@/services/localStore';
 import Image from '@/components/core/presentation/Image';
-import StarRatings from 'react-star-ratings';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserEvents, loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
-import { APP } from '@/constants';
-import { formatAmount, getAddress } from '@/components/handshakes/betting/utils';
+import { formatAmount } from '@/components/handshakes/betting/utils';
+import { shortAddress } from '@/utils/string';
 
 
 import './Reputation.scss';
@@ -29,18 +27,19 @@ class Reputation extends React.Component {
     this.getData(this.props);
   }
   getData = (props) => {
-    const profile = local.get(APP.AUTH_PROFILE);
-    const userId = profile.id;
+    console.log('Location:', props.location);
+    const userId = props.location.id;
+    console.log('UserId :', props.location.id);
+
     props.dispatch(loadUserEvents({ userId }));
     props.dispatch(loadUserReputation({ userId }));
   }
 
   renderProfile(props) {
-    const firstEvent = props.eventList > 0 ? props.eventList[0] : null;
-    let creatorAddress = firstEvent ? firstEvent.creator_wallet_address : null;
-    creatorAddress = creatorAddress || getAddress();
-    const addressLength = creatorAddress.length;
-    creatorAddress = `${creatorAddress.substring(0, 6)}...${creatorAddress.substring(addressLength - 6, addressLength - 1)}`;
+    let creatorAddress = props.location.address || '';
+    if (creatorAddress.length > 0) {
+      creatorAddress = shortAddress(creatorAddress, '...');
+    }
     return (
       <div className="wrapperProfile">
         <div className="wrapperAvatar">
