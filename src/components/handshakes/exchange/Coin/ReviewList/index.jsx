@@ -12,6 +12,7 @@ import { getReviewBuyCoin } from '@/reducers/exchange/action';
 import { Grid, Row } from 'react-bootstrap';
 import Image from '@/components/core/presentation/Image/Image';
 import loadingSVG from '@/assets/images/icon/user_icon.svg';
+import debounce from "@/utils/debounce";
 
 
 class ReviewList extends React.Component {
@@ -22,6 +23,8 @@ class ReviewList extends React.Component {
       isFinished: false,
       page: null,
     };
+
+    this.autoLoadMore = debounce(:: this.autoLoadMore, 1000);
   }
 
   componentDidCatch(e) {
@@ -46,13 +49,13 @@ class ReviewList extends React.Component {
       qs.page = page;
     }
 
-    // this.props.getReviewBuyCoin({
-    //   PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
-    //   qs,
-    //   METHOD: 'GET',
-    //   successFn: this.onSuccess,
-    //   // errorFn: this.handleReviewOfferFailed,
-    // });
+    this.props.getReviewBuyCoin({
+      PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
+      qs,
+      METHOD: 'GET',
+      successFn: this.onSuccess,
+      // errorFn: this.handleReviewOfferFailed,
+    });
   }
 
   onSuccess = (res) => {
