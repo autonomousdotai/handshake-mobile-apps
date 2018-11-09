@@ -4,6 +4,7 @@ import { API_URL, URL } from '@/constants';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { handleLoadMatches, handleLoadMatchDetail } from '@/pages/Prediction/saga';
 import { isBalanceInvalid } from '@/stores/common-saga';
+import { getAddress } from '@/components/handshakes/betting/utils.js';
 import { showAlert } from '@/stores/common-action';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { reportSelector } from './selector';
@@ -102,92 +103,60 @@ function* saveGenerateShareLinkToStore({ matchId, eventName }) {
   }));
 }
 
-function* handleCreateEventSaga({ values, isNew }) {
+function* handleCreateEventSaga({ values, isNew, selectedSource, grantPermission }) {
   try {
     yield put(updateCreateEventLoading(true));
-    const balanceInvalid = yield call(isBalanceInvalid);
-    if (balanceInvalid) {
-      yield put(showAlert({
-        message: MESSAGE.NOT_ENOUGH_GAS.replace('{{value}}', balanceInvalid),
-      }));
+
+    if (!isNew) {
+      // Add new outcomes
+      const newOutcomeList = values.outcomes.filter(o => !o.id).map(i => Object.assign({}, i, { public: 1 }));
+      const { eventId } = values;
+      const addOutcomeResult = yield call(handleAddOutcomesSaga, {
+        eventId,
+        newOutcomeList,
+      });
+      if (!addOutcomeResult.error) {
+        const matchId = addOutcomeResult.data[0].match_id;
+        const eventName = addOutcomeResult.data[0].name;
+        yield saveGenerateShareLinkToStore({ matchId, eventName });
+      }
     } else {
-      const betHandshakeHandler = BetHandshakeHandler.getShareManager();
-      if (!isNew) {
-        // Add new outcomes
-        const newOutcomeList = values.outcomes.filter(o => !o.id).map(i => Object.assign({}, i, { public: 1 }));
-        const { eventId } = values;
-        const addOutcomeResult = yield call(handleAddOutcomesSaga, {
-          eventId,
-          newOutcomeList,
-        });
-        console.log('Add New outcomes', addOutcomeResult);
-        if (!addOutcomeResult.error) {
-          const inputData = addOutcomeResult.data.map(o => {
-            return {
-              fee: values.creatorFee,
-              source: `${values.reports || '-'}`,
-              closingTime: values.closingTime,
-              reportTime: values.reportingTime,
-              disputeTime: values.disputeTime,
-              offchain: o.id,
-              contractAddress: o.contract.contract_address,
-              contractName: o.contract.json_name,
-            };
-          });
-          const matchId = addOutcomeResult.data[0].match_id;
-          const eventName = addOutcomeResult.data[0].name;
-          yield saveGenerateShareLinkToStore({ matchId, eventName });
-          betHandshakeHandler.createNewEvent(inputData);
-        }
-      } else {
-        // Create new event
-        const { reports } = values;
-        const reportSource = reports.id ? { source_id: reports.id } : {
-          source: {
-            name: reports.value,
-            url: reports.value,
-          },
-        };
-        const newEventData = {
-          homeTeamName: values.homeTeamName || '',
-          awayTeamName: values.awayTeamName || '',
-          homeTeamCode: values.homeTeamCode || '',
-          awayTeamCode: values.awayTeamCode || '',
-          homeTeamFlag: values.homeTeamFlag || '',
-          awayTeamFlag: values.awayTeamFlag || '',
-          name: values.eventName.label,
-          public: values.private ? 0 : 1,
-          date: values.closingTime,
-          reportTime: values.reportingTime,
-          disputeTime: values.disputeTime,
-          market_fee: values.creatorFee,
-          outcomes: values.outcomes,
-          category_id: 7, // values.category.id, hard-code for now
-          ...reportSource,
-        };
-        console.log('newEventData', newEventData);
-        const { data } = yield call(handleCreateNewEventSaga, { newEventData });
-        if (data && data.length) {
-          const eventData = data[0];
-          const { contract } = eventData;
-          console.log('Contract:', contract);
-          const inputData = eventData.outcomes.map(o => {
-            return {
-              fee: eventData.market_fee,
-              source: eventData.source_name,
-              closingTime: eventData.date,
-              reportTime: eventData.reportTime,
-              disputeTime: eventData.disputeTime,
-              offchain: o.id,
-              contractAddress: contract.contract_address,
-              contractName: contract.json_name,
-            };
-          });
-          const matchId = eventData.id;
-          const eventName = eventData.name;
-          yield saveGenerateShareLinkToStore({ matchId, eventName });
-          betHandshakeHandler.createNewEvent(inputData);
-        }
+      // Create new event
+      const { reports } = values;
+      const reportSource = reports.id ? { source_id: reports.id } : {
+        source: {
+          name: reports.value,
+          url: reports.value,
+        },
+      };
+
+      Object.keys(reportSource).forEach((k) => !reportSource[k] && delete reportSource[k]);
+      const newEventData = {
+        homeTeamName: values.homeTeamName || '',
+        awayTeamName: values.awayTeamName || '',
+        homeTeamCode: values.homeTeamCode || '',
+        awayTeamCode: values.awayTeamCode || '',
+        homeTeamFlag: values.homeTeamFlag || '',
+        awayTeamFlag: values.awayTeamFlag || '',
+        name: values.eventName.label,
+        public: values.private ? 0 : 1,
+        date: values.closingTime,
+        reportTime: values.reportingTime,
+        disputeTime: values.disputeTime,
+        market_fee: values.creatorFee,
+        outcomes: values.outcomes,
+        grant_permission: grantPermission,
+        creator_wallet_address: getAddress(),
+        category_id: 7, // values.category.id, hard-code for now
+        ...reportSource,
+      };
+      const { data } = yield call(handleCreateNewEventSaga, { newEventData });
+      if (data && data.length) {
+        const eventData = data[0];
+
+        const matchId = eventData.id;
+        const eventName = eventData.name;
+        yield saveGenerateShareLinkToStore({ matchId, eventName });
       }
     }
   } catch (e) {

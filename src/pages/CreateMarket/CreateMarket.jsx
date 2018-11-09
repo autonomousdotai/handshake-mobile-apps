@@ -93,6 +93,7 @@ class CreateMarket extends React.Component {
       closingTime: selectedEvent.date,
       reportingTime: selectedEvent.reportTime,
       disputeTime: selectedEvent.disputeTime,
+      grantPermission: selectedEvent.grant_permission,
     };
     return (
       <CreateEventForm
@@ -115,7 +116,7 @@ class CreateMarket extends React.Component {
   renderComponent = (props, state) => {
     return (
       <React.Fragment>
-        <GasAlert insufficientGas={props.insufficientGas} />
+        {/*<GasAlert insufficientGas={props.insufficientGas} />*/}
         <div className={CreateMarket.displayName}>
           <Loading isLoading={props.isLoading} />
           {this.renderCreateEventForm(props, state)}
