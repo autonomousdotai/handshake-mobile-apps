@@ -1,6 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { API_URL } from '@/constants';
 import { apiGet, apiPost, apiPostForm } from '@/guru/stores/api';
+import { getAddress } from '@/components/handshakes/betting/utils';
 import {
   loadReports,
   updateReports,
@@ -24,6 +25,7 @@ function* handleLoadReports() {
 
 function* handleCreateEven({ values }) {
   try {
+    const creator_wallet_address = getAddress();
     const { id, value } = values.source;
     const reportSource = id ? { source_id: id } : {
       source: { name: value, url: value }
@@ -31,6 +33,7 @@ function* handleCreateEven({ values }) {
     const newEventData = {
       outcome_name: values.outcomeName,
       event_name: values.eventName,
+      name: `Will ${values.outcomeName} in ${values.eventName}`,
       public: values.public,
       date: values.closingTime,
       reportTime: values.closingTime + 86400, // (24 * 60 * 60) - 24h
@@ -38,13 +41,16 @@ function* handleCreateEven({ values }) {
       market_fee: values.marketFee,
       grant_permission: true,
       category_id: 7, // values.category.id, hard-code for now
+      creator_wallet_address,
       ...reportSource
     };
     console.log('newEventData', newEventData);
+    const eventFormData = new FormData();
+    eventFormData.set('data', JSON.stringify(newEventData));
     const res = yield call(apiPostForm, {
       PATH_URL: `${API_URL.CRYPTOSIGN.ADD_MATCH}`,
       type: 'ADD_EVENT_API',
-      data: [newEventData]
+      data: eventFormData
     });
     console.log('res', res);
   } catch (e) {
