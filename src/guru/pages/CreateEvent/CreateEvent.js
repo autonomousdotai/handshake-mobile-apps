@@ -217,7 +217,7 @@ class CreateEvent extends React.Component {
                 >
                   Create
                 </button>
-                <Debug props={formProps} />
+                <Debug props={formProps} hide />
               </Form>
             );
           }}

@@ -114,8 +114,15 @@
       color: #2989FF;
 
       input {
-        width: 16px;
+        text-align: right;
+        padding: 0;
+        margin: 0;
+        border: none;
         color: #2989FF;
+        background-color: transparent;
+        -webkit-appearance: none;
+        -webkit-user-select: none;
+        -webkit-user-modify: none;
       }
 
       .unit {
@@ -198,6 +205,15 @@
   .Notification {
     input {
       width: 100%;
+      height: 38px;
+      border-radius: 5px;
+      padding: 5px 10px;
+      border: none;
+      margin-top: 10px;
+
+      &:disabled {
+        background-color: #F5F8FC;
+      }
     }
   }
 }
