@@ -68,7 +68,7 @@ const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'),
 const RouterInternalAdmin = createDynamicImport(() => import('@/components/Router/InternalAdmin'), Loading);
 const RouterCreateCashStore = createDynamicImport(() => import('@/components/handshakes/exchange/Create/CreateStoreATM'), Loading);
 const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
-const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
+// const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
 const InternalAdminDashboard = createDynamicImport(() => import('@/pages/InternalAdminDashboard'), Loading);
 
 /* ======================== FOR MOBILE ======================== */
@@ -109,7 +109,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.CASH_STORE_URL, component: RouterCreateCashStore },
 
   { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
-  { path: URL.INVEST_URL, component: RouterInvest },
+  // { path: URL.INVEST_URL, component: RouterInvest },
 
   { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
   { path: URL.LANDING_PAGE_SHURIKEN, render: () => <Redirect to={URL.LANDING_PAGE_CONSTANT} /> },
