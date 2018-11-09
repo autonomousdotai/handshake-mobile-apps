@@ -84,6 +84,7 @@ const configRoutesUsingMobileLayout = [
   // { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
   // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
   { path: URL.CRYPTO_COIN_URL, component: RouterCryptoCoin },
+  { path: URL.INDEX, component: RouterCryptoCoin },
   { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
   {
     path: URL.PRODUCT_DAD_URL,
@@ -186,7 +187,7 @@ class Router extends React.Component {
     return (
       <Switch>
         {
-          BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterLandingPageMain} />
+          BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterCryptoCoin} />
         }
 
         <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
@@ -211,10 +212,10 @@ class Router extends React.Component {
                     : (
                       <ScrollToTop>
                         <Switch>
-                          <Route exact path={URL.INDEX} render={() => {
+                          {/*<Route exact path={URL.INDEX} render={() => {
                             return <Redirect to={{ pathname: URL.PRODUCT_PREDICTION_URL }} />
                           }}
-                          />
+                          />*/}
                           {/*<Route*/}
                           {/*exact*/}
                           {/*path={URL.INDEX}*/}

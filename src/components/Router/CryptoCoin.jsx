@@ -12,6 +12,7 @@ const Page404 = props => (<DynamicImport isNotFound loading={Loading} load={() =
 
 const routerMap = [
   { path: URL.CRYPTO_COIN_URL, component: BuyCoin },
+  { path: URL.INDEX, component: BuyCoin },
 ];
 
 class BuyCCRouter extends React.Component {
