@@ -27,6 +27,6 @@ deploy:
     branch: develop
 - provider: script
   skip_cleanup: true
-  script: bash ./deploy2.sh
+  script: bash ./deploy_coinbowl.sh
   on:
     branch: develop_coinbowl
