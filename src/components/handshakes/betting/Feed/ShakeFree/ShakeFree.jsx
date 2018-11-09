@@ -319,7 +319,7 @@ class BetingShakeFree extends React.Component {
       id,
       infoText = 'ETH',
       isShowInfoText = true,
-      type = 'text',
+      type = 'number',
       value,
       defaultValue,
       isInput = true,
@@ -343,6 +343,7 @@ class BetingShakeFree extends React.Component {
               value={id === 'odds' ? oddValue : amountValue}
               autoComplete="off"
               {...newProps}
+              noValidate
               onChange={(evt) => {
                 if (id === 'odds') {
                   console.log('Change Odds');
@@ -356,7 +357,7 @@ class BetingShakeFree extends React.Component {
                   }, () => this.updateTotal());
                 }
               }}
-              onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
+              //onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
             />
           ) : (<div className={cn('value', className)}>{value}</div>)
         }
@@ -385,7 +386,7 @@ class BetingShakeFree extends React.Component {
       defaultValue: marketOdds,
       infoText: isChangeOdds ? 'Your Odds' : 'Market Odds',
       isShowInfoText: true,
-      type: 'text',
+      type: 'number',
       tooltip: MESSAGE.ODDS_TOOLTIP,
 
     };
@@ -399,7 +400,7 @@ class BetingShakeFree extends React.Component {
         {/* <p className="titleForm text-center">BET FREE ON THE OUTCOME</p> */}
         {<Toggle ref={(component) => { this.toggleRef = component; }} onChange={this.onToggleChange} />}
         {/* this.renderInputField(amountField) */}
-        <div className="freeAmount">You have <b>{amount} ETH</b> FREE to bet!</div>
+        {/*<div className="freeAmount">You have <b>{amount} ETH</b> FREE to bet!</div>*/}
         {this.renderRedeemCode(this.props, this.state)}
         {isShowOdds && this.renderInputField(oddsField)}
         <div className="rowWrapper">

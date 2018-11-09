@@ -24,8 +24,8 @@ import qs from 'querystring';
 
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
-import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkFreeBetSelector, checkExistSubcribeEmailSelector, totalBetsSelector, relevantEventSelector } from './selector';
-import { loadMatches, getReportCount, removeExpiredEvent, checkFreeBet, checkExistSubcribeEmail, loadRelevantEvents } from './action';
+import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkRedeemCodeSelector, checkExistSubcribeEmailSelector, totalBetsSelector, relevantEventSelector } from './selector';
+import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, checkExistSubcribeEmail, loadRelevantEvents } from './action';
 import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
 
@@ -46,7 +46,7 @@ class Prediction extends React.Component {
     showedLuckyPool: PropTypes.bool,
     isSharePage: PropTypes.any,
     countReport: PropTypes.number,
-    freeBet: PropTypes.object,
+    isRedeemAvailable: PropTypes.number,
     isExistEmail: PropTypes.any,
     totalBets: PropTypes.number,
   };
@@ -73,18 +73,60 @@ class Prediction extends React.Component {
   componentDidMount() {
     this.receiverMessage(this.props); // @TODO: Extensions
     this.props.dispatch(getReportCount());
-    this.props.dispatch(checkFreeBet());
+    this.props.dispatch(checkRedeemCode());
     this.props.dispatch(checkExistSubcribeEmail());
     window.addEventListener('scroll', this.handleScroll);
     const eventId = this.getEventId(this.props);
     if (eventId) {
       this.props.dispatch(loadRelevantEvents({eventId}));
     }
-    // $zopim.livechat.button.hide();
+    setTimeout(() => {
+      /*eslint-disable */
+      window?.$zopim?.livechat?.window?.onShow(() => {
+        this.isShow = true;
+        console.log('onShow', this.isShow);
+      });
+      window?.$zopim?.livechat?.window?.onHide(() => {
+        this.isShow = false;
+        console.log('onHide', this.isShow);
+      });
+      this.scrollListener();
+      /* eslint-enable */
+    }, 6000);
+    this.attachScrollListener();
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
+    this.detachScrollListener();
+  }
+
+  scrollListener = async () => {
+    /*eslint-disable */
+    if (!this.isShow) {
+      window?.$zopim && window?.$zopim(() => {
+        window?.$zopim?.livechat.button.hide();
+        window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
+        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+        window?.$zopim?.livechat.button.show();
+      });
+    }
+    /* eslint-enable */
+  }
+
+  attachScrollListener() {
+    window.addEventListener('scroll', this.scrollListener);
+    window.addEventListener('resize', this.scrollListener);
+    this.scrollListener();
+  }
+
+  detachScrollListener() {
+    this.isShow = true;
+    /*eslint-disable */
+    window?.$zopim?.livechat.button.hide();
+    window.removeEventListener('scroll', this.scrollListener);
+    window.removeEventListener('resize', this.scrollListener);
+    /* eslint-enable */
   }
 
   onCountdownComplete = (eventId) => {
@@ -131,15 +173,9 @@ class Prediction extends React.Component {
     // }
   }
 
-  checkFreeAvailabe = (props) => {
-    const { freeBet = {} } = props;
-    const { free_bet_available: freeAvailable = 0, can_freebet: canFreeBet = false } = freeBet;
-    let isFreeAvailable = false;
-
-    if (canFreeBet && freeAvailable > 0) {
-      isFreeAvailable = true;
-    }
-    return isFreeAvailable;
+  checkRedeemAvailabe = (props) => {
+    const { isRedeemAvailable = 0 } = props;
+    return isRedeemAvailable;
   }
 
   openOrderPlace = (selectedOutcome) => {
@@ -170,33 +206,6 @@ class Prediction extends React.Component {
     }, 2 * 1000);
   }
 
-  checkShowFreeBetPopup = (props) => {
-    const isFreeAvailable = this.checkFreeAvailabe(props);
-    const { freeBet } = props;
-    const { free_bet_available: freeAvailable = 0 } = freeBet;
-
-    const key = `showedFreebet${freeAvailable}`;
-    const isShowed = localStorage.getItem(key);
-
-    if (isFreeAvailable && !isShowed) {
-      const { isOrderOpening, shouldShowFreePopup } = this.state;
-      const { is_win: isWin } = freeBet;
-      if (!isOrderOpening && shouldShowFreePopup) {
-        if (isWin !== null) {
-          if (!isWin && this.modalFreeBetLoseRef) {
-            this.modalFreeBetLoseRef.open();
-          } else if (isWin && this.modalFreeBetWinRef) {
-            this.modalFreeBetWinRef.open();
-          }
-          localStorage.setItem(key, true);
-
-          this.setState({
-            shouldShowFreePopup: false,
-          });
-        }
-      }
-    }
-  }
 
   handleClickEventItem = (itemProps, itemData) => {
     const { event } = itemProps;
@@ -222,7 +231,7 @@ class Prediction extends React.Component {
         reportTime: event.reportTime,
         value: event.name,
       };
-      this.props.dispatch(checkFreeBet());
+      this.props.dispatch(checkRedeemCode());
       this.openOrderPlace(selectedOutcome);
       this.modalOrderPlace.open();
       this.setState({
@@ -333,7 +342,7 @@ class Prediction extends React.Component {
 
 
   renderBetMode = (props, state) => {
-    const isFreeAvailable = this.checkFreeAvailabe(props);
+    const isRedeemAvailable = this.checkRedeemAvailabe(props);
     return (
       <ModalDialog className="BetSlipContainer" close onRef={(modal) => { this.modalOrderPlace = modal; }}>
         <BetMode
@@ -342,7 +351,7 @@ class Prediction extends React.Component {
           openPopup={(click) => { this.openOrderPlace = click; }}
           onCancelClick={this.closeOrderPlace}
           handleBetFail={this.handleBetFail}
-          freeAvailable={isFreeAvailable}
+          freeAvailable={isRedeemAvailable}
           onSubmitClick={(isFree) => {
             this.didPlaceOrder(isFree);
           }}
@@ -452,7 +461,6 @@ class Prediction extends React.Component {
   }
 
   renderComponent = (props, state) => {
-    this.checkShowFreeBetPopup(props);
     return (
       <div className={Prediction.displayName}>
         <Loading isLoading={props.isLoading} />
@@ -464,11 +472,7 @@ class Prediction extends React.Component {
         {this.renderViewAllEvent(props, state)}
         {!props.isLoading && this.renderDislaimer()}
         {this.renderBetMode(props, state)}
-        {/*{this.renderLuckyReal()}*/}
-        {/*{this.renderLuckyFree()}*/}
         {this.renderLuckyLanding()}
-        {this.renderFreeBetLose()}
-        {this.renderFreeBetWin()}
         {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
         {this.renderCreditCard()}
@@ -490,7 +494,7 @@ export default injectIntl(connect(
       isSharePage: isSharePage(state),
       isLoading: isLoading(state),
       showedLuckyPool: showedLuckyPoolSelector(state),
-      freeBet: checkFreeBetSelector(state),
+      isRedeemAvailable: checkRedeemCodeSelector(state),
       isExistEmail: checkExistSubcribeEmailSelector(state),
       shareEvent: shareEventSelector(state),
       totalBets: totalBetsSelector(state),

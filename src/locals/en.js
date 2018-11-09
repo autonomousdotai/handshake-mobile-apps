@@ -16,6 +16,7 @@ export default {
       credit: 'CC',
       shop: 'Shop',
       ninjaCoin: 'Coin',
+      invest: 'Invest'
     },
   },
   buy: 'Buy',
@@ -232,6 +233,8 @@ export default {
   'ex.error.326': 'We don’t have enough coin for your request! Please try with smaller amount.',
   'ex.error.327': 'Credit item status is invalid',
   'ex.error.331': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.331.sell': 'That exceeds your 5000 USD daily limit. Please enter a smaller amount or come back tomorrow.',
+  'ex.error.332': 'You haven’t transfered coin yet! Please check',
   'ex.error.default': 'Oops! Something went wrong.',
 
   'ex.earlyBird.label.1': `WELCOME TO OUR <br/> EARLY BIRD PROGRAM!`,
@@ -326,7 +329,7 @@ export default {
   'escrow.label.yourSellingPrice': 'Your selling price',
   'escrow.label.sellingPriceCaption': '= Market price + your percentage',
   'escrow.btn.depositNow': 'Deposit now',
-  'escrow.btn.depositSuccessMessage': 'Succesful!',
+  'escrow.btn.depositSuccessMessage': 'Successful!',
   'escrow.label.wallet.setDefaultWallet': 'You must set default wallet {currency}',
 
   'dashboard.heading': 'Dashboard',
@@ -386,8 +389,8 @@ export default {
         {
           title: 'Place a bet:',
           content: 'Pick the market you want to bet (i.e. Brazil - Spain), the outcomes (i.e. Brazil wins) and the site (i.e. support or bet against the outcome)\n' +
-            'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
-            'The PEX Matching Engine will then find another order that bets against the odds you set.',
+          'Enter the stake you want to bet (i.e. 1 ETH) and the odds (i.e. 1/ 2.25)\n' +
+          'The PEX Matching Engine will then find another order that bets against the odds you set.',
         },
         {
           title: 'Wait for the report:',
@@ -499,7 +502,7 @@ export default {
   'landing_page.researches.uncommons.title': 'Uncommons',
   'landing_page.researches.uncommons.subTitle': 'The people\'s blockchain.',
 
-  'landing_page.researches.internetCash.title': 'Internet Cash',
+  'landing_page.researches.internetCash.title': 'Constant',
   'landing_page.researches.internetCash.subTitle': 'The Internet deserves to have its own native currency.',
 
   'landing_page.label.footer': `Building blockchain powered apps, tools and solutions for the new wild west world web.<br />Join the dojo: <a href="https://t.me/ninja_org" class="landing-link">t.me/ninja_org</a><br />Contact us: <a href="mailto:support@ninja.org" class="landing-link" target="_top">support@ninja.org</a>`,
@@ -573,7 +576,7 @@ export default {
   'landing_page.pay-for-devs.subHeading': 'Millions of people are looking to spend their cryptocurrency in a secure, convenient way. Bring the currency of the future into your online store today and stop relying on the sluggish banking industry. No wait times, no bank charges, no card fees.',
   'landing_page.pay-for-devs.textEmail': 'Be the first to hear when we launch',
 
-  'landing_page.internet-cash.breadcrumb': 'Internet Cash',
+  'landing_page.internet-cash.breadcrumb': 'Constant',
   'landing_page.internet-cash.heading': 'The Internet deserves to have its own native currency.',
   'landing_page.internet-cash.subHeading': 'While Bitcoin emerges as a powerful currency, it fails to be the everyday currency.  Bitcoin will never be the currency that you can use to pay for coffee or buy a t-shirt.  This project aims to build a new kind of cryptocurrency that behaves like cash in everyday life.',
   'landing_page.internet-cash.textEmail': 'Be the first to know when we launch',
@@ -962,7 +965,7 @@ export default {
     },
     {
       question: 'What payment method can I use?',
-      answer:`<table class="landing-table">
+      answer: `<table class="landing-table">
          <thead>
             <tr>
               <th>Buying method</th>
@@ -1448,13 +1451,14 @@ export default {
       redeem: {
         title: 'Redeem to coin',
         your_code: 'Reedem code',
-        giftcard: 'Gift card',
+        giftcard: 'Gift Amount',
         value: 'Value',
         agree_text: 'By clicking REDEEM, you agree to Gift Card & Promotional code {0} as applicable',
         button_redeem: 'Redeem now',
         button_check: 'Check redeem code',
         swipe_button_redeem: 'Swipe to redeem',
         find_code: 'How do find claim code?',
+        invalid_code: "Invalid redeem code"
       },
       remove: {
         title: 'Remove',
@@ -1477,6 +1481,7 @@ export default {
           usd: 'USD',
           wallet_balance: 'Wallet balance',
           scan_qrcode: 'Scan QR code',
+          init_scanner: 'Initiating Camera. Please wait',
           gas_limit: 'Gas Limit',
           data: 'Data',
           feel_level: 'Fee:',
@@ -1530,7 +1535,7 @@ export default {
       setting: {
         title: 'Settings',
         error: 'Invalid wallets',
-        header: 'Setting wallets',
+        header: 'Wallet Settings',
         success: {
           restore: 'Your Wallet restore success',
           save_alternative_currency: 'Save currency selected!',
@@ -1548,6 +1553,7 @@ export default {
           push_notifications: 'Push Notifications',
           community: 'Community',
           wallet_account: 'Wallet Account',
+          support: 'Support'
         },
         button: {
           restore: 'Restore now',
@@ -1931,7 +1937,7 @@ export default {
           need_selfie_verifiy: 'You are buying more than 500 usd. Please provide additional verification to increase your limit',
         },
       },
-      success: 'Succesful!',
+      success: 'Successful!',
     },
     buy_package_without_wallet_address_notice: 'Please choose your wallet first.',
   },
@@ -1966,11 +1972,98 @@ export default {
   'buy_coin_confirm_popup.cancel_text': 'Cancel',
   'buy_coin.verify.need_selfie_verifiy': 'You are buying more than {fiatAmount} {fiatCurrency}. Please verify your account to increase the limit',
   'buy_coin.verify.need_selfie_verifiy_action': 'Verify now',
+  'sell_coin_confirm_popup.msg': 'Sell {amount} {currency} for {fiatAmount}?',
+  'sell_coin_confirm_popup.confirm_text': 'Confirm',
+  'sell_coin_confirm_popup.cancel_text': 'Cancel',
   review: {
     title: 'Review',
     label: {
       description: 'How is your experience with Ninja Coin?',
       submitButtonTitle: 'Submit',
+      loadMore: 'Load more',
+      comments: 'comments',
     },
   },
+  sell_coin: {
+    label: {
+      header: {
+        title: 'Sell coin',
+      },
+      verify: {
+        notYet: {
+          title: 'To start trading, please take a few minutes to verify your account.',
+          action: 'Verify now',
+        },
+        rejected: {
+          title: 'Your verification is rejected. Please try again.',
+          action: 'Verify now',
+        },
+        processing: {
+          title: 'Verifying your account. We will send you an email once we are done.',
+          action: 'Please wait',
+        },
+        verified: {
+          level_1: {
+            title: `You're ready to trade! Your max daily limit is now 500 USD. Want more?`,
+            action: 'Provide additional verification',
+          },
+          level_2: {
+            title: `You're fully verified. Your limit has now been increased to the max of 5000 USD!`,
+            action: '',
+          },
+          need_selfie_verifiy: 'You are buying more than 500 usd. Please provide additional verification to increase your limit',
+        },
+      },
+    },
+    order: {
+      inputs: {
+        currency: {
+          amount: 'Amount',
+        },
+        bank_owner: 'Account Name',
+        bank_name: 'Bank Name',
+        bank_number: 'Account Number',
+        phone: 'Phone Number',
+      },
+      btn: {
+        submit_order: 'Next',
+      },
+    },
+    summary: {
+      label: 'Your Selling Order',
+      info: {
+        code: 'Code',
+        receiving: 'Receiving',
+        selling: 'Selling',
+        address: 'Address',
+        notes: {
+          main_note: 'NOTE: YOU HAVE TO CLICK "FINISH" TO COMPLETE THE TRANSACTION',
+          sub_note: '(Transaction may be lost if you forget to complete this step)',
+          list: [
+            'Please transfer the exact number to the above address',
+            'The price of the crypto fluctuates constantly; therefore, we only keep this price for 5 minutes',
+            'We will transfer the fiat to you as soon as there is 1 confirmation on the network.',
+          ],
+        },
+        confirm_leave: 'You are about to leave this page. Your order will be lost',
+      },
+      btn: {
+        close_summary: 'Finish',
+      },
+    },
+  },
+  coin_crypto: {
+    price_panel: {
+      price: 'Price',
+      sell: 'Sell',
+      buy: 'Buy',
+    },
+    contact: {
+      faq: 'FAQs',
+      chat_with_us: 'Chat with us Online Support',
+      phone_cs: '097 550 4082',
+    },
+  },
+  'coin_tabs.sell': 'SELL COIN',
+  'coin_tabs.buy': 'BUY COIN',
 };

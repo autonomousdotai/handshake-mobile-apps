@@ -12,6 +12,8 @@ import Deposit from '@/models/Deposit';
 import Handshake from '@/models/Handshake';
 import CashStore from "@/models/CashStore";
 import CashAtmPrice from "@/models/CashAtmPrice";
+import {ACTIONS} from "@/reducers/internalAdmin/action";
+import {uniqBy} from "@/utils/array";
 
 const initListOfferPrice = [];
 initListOfferPrice.updatedAt = Date.now();
@@ -32,6 +34,8 @@ function exchangeReducter(state = {
   isChooseFreeStart: false,
   depositInfo: initDepositInfo,
   listOfferPriceCashAtm: initListOfferPrice,
+  reviewList: [],
+  numReview: 0,
 }, action) {
   // console.log('exchangeReducter', JSON.stringify(action));
   switch (action.type) {
@@ -158,7 +162,7 @@ function exchangeReducter(state = {
 
       return {
         ...state,
-        buyCoinTransaction: list.filter(handshake => handshake.offerFeedType === 'coin'),
+        buyCoinTransaction: list.filter(handshake => (handshake.offerFeedType === 'coin' || handshake.offerFeedType === 'coin_selling')),
       };
     }
     case `${EXCHANGE_ACTIONS.BUY_CRYPTO_COD}_SUCCESS`: {
@@ -166,6 +170,18 @@ function exchangeReducter(state = {
       return {
         ...state,
       };
+    }
+    case `${EXCHANGE_ACTIONS.GET_REVIEW_BUY_COIN}_SUCCESS`: {
+      if (action?.payload?.data) {
+        let newList = [...state?.reviewList, ...action?.payload?.data];
+        newList = uniqBy(newList, item => item.id);
+        return {
+          ...state,
+          reviewList: newList,
+          numReview: action?.payload?.count,
+        };
+      }
+      return state;
     }
     default:
       return state;

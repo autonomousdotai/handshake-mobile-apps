@@ -262,7 +262,7 @@ class BetingShake extends React.Component {
       defaultValue: marketOdds,
       infoText: isChangeOdds ? 'Your Odds' : 'Market Odds',
       isShowInfoText: true,
-      type: 'text',
+      type: 'number',
       tooltip: MESSAGE.ODDS_TOOLTIP,
     };
 
@@ -278,7 +278,6 @@ class BetingShake extends React.Component {
     );
   }
   renderToolTip = (tooltip, openTooltip) => {
-    console.log('Open tooltip:', openTooltip);
     if (tooltip.length === 0) return null;
     return (
       <span className="wrapperTooltipShake">
@@ -307,7 +306,7 @@ class BetingShake extends React.Component {
       id,
       infoText = 'ETH',
       isShowInfoText = true,
-      type = 'text',
+      type = 'number',
       value,
       defaultValue,
       isInput = true,
@@ -332,6 +331,7 @@ class BetingShake extends React.Component {
               value={id === "odds" ? oddValue : amountValue}
               autoComplete="off"
               {...newProps}
+              noValidate
               onChange={(evt) => {
                 if (id === 'odds') {
                   console.log('Change Odds');
@@ -345,7 +345,7 @@ class BetingShake extends React.Component {
                   }, () => this.updateTotal());
                 }
               }}
-              onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
+              //onClick={(event) => { event.target.setSelectionRange(0, event.target.value.length); }}
             />
           ) : (<div className={cn('value', className)}>{value}</div>)
         }

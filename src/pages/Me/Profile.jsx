@@ -688,7 +688,6 @@ class Profile extends React.Component {
                       }}
                       >
                         <Button
-                          cssType="anonymous"
                           className="submit-btn"
                           style={{
                             height: '53px',
@@ -719,7 +718,7 @@ class Profile extends React.Component {
                       }}
                       value={code}
                     />
-                    <Button cssType="anonymous" className="submit-btn">{messages.me.profile.text.email.button.submit}</Button>
+                    <Button className="submit-btn">{messages.me.profile.text.email.button.submit}</Button>
                   </div>
                 </EmailForm>
               </div>
@@ -760,7 +759,7 @@ class Profile extends React.Component {
                       </div>
                     </Row>
                   </div>
-                ) : (idVerificationLevel < 2 &&
+                ) : ((idVerified === 0 || idVerified === -1 || (idVerified === 1 && idVerificationLevel < 2)) &&
                 <IDVerificationForm onSubmit={this.onSubmitIDVerification}>
                   <div>
                     <Row>
@@ -966,7 +965,6 @@ class Profile extends React.Component {
                     <Row>
                       <div className="col-12">
                         <Button
-                          cssType="anonymous"
                           className="submit-btn"
                         >{messages.me.profile.text.id_verification.button.submit}
                         </Button>

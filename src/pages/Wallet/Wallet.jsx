@@ -71,6 +71,8 @@ import { ICON } from '@/styles/images';
 
 const QRCode = require('qrcode.react');
 
+import { Ethereum } from '@/services/Wallets/Ethereum.js';
+
 window.Clipboard = (function (window, document, navigator) {
   let textArea,
     copy; function isOS() { return navigator.userAgent.match(/ipad|iphone/i); } function createTextArea(text) { textArea = document.createElement('textArea'); textArea.value = text; document.body.appendChild(textArea); } function selectText() {
@@ -249,26 +251,16 @@ class Wallet extends React.Component {
     }
   }
 
-  attachScrollListener() {
-    // window.addEventListener('scroll', this.listener);
-    // window.addEventListener('resize', this.listener);
-    // this.listener();
-  }
-
-  detachScrollListener() {
-    // window.removeEventListener('scroll', this.listener);
-    // window.removeEventListener('resize', this.listener);
-  }
-
   componentWillUnmount() {
     try{document.querySelector(".app").style.backgroundColor = '#ffffff';} catch (e){};
-    this.detachScrollListener();
+    // this.detachScrollListener();
   }
 
   async componentDidMount() {
+
     try{document.querySelector(".app").style.backgroundColor = '#f4f4fb';} catch (e){};
     this.getSetting();
-    this.attachScrollListener();
+    // this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
 
     if (listWallet == false) {
@@ -279,8 +271,49 @@ class Wallet extends React.Component {
       await this.getListBalace(listWallet);
     }
 
-    // $zopim.livechat.button.hide();
+  //   setTimeout(() => {
+  //     /*eslint-disable */
+  //     window?.$zopim?.livechat?.window?.onShow(() => {
+  //       this.isShow = true;
+  //       console.log('onShow', this.isShow);
+  //     });
+  //     window?.$zopim?.livechat?.window?.onHide(() => {
+  //       this.isShow = false;
+  //       console.log('onHide', this.isShow);
+  //     });
+  //     this.scrollListener();
+  //     /* eslint-enable */
+  //   }, 6000);
+  //   this.attachScrollListener();
   }
+
+  // scrollListener = async () => {
+  //   /*eslint-disable */
+  //   if (!this.isShow) {
+  //     window?.$zopim && window?.$zopim(() => {
+  //       window?.$zopim?.livechat.button.hide();
+  //       window?.$zopim?.livechat.button.setOffsetVerticalMobile(120);
+  //       window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
+  //       window?.$zopim?.livechat.button.show();
+  //     });
+  //   }
+  //   /* eslint-enable */
+  // }
+
+  // attachScrollListener() {
+  //   window.addEventListener('scroll', this.scrollListener);
+  //   window.addEventListener('resize', this.scrollListener);
+  //   this.scrollListener();
+  // }
+
+  // detachScrollListener() {
+  //   this.isShow = true;
+  //   /*eslint-disable */
+  //   window?.$zopim?.livechat.button.hide();
+  //   window.removeEventListener('scroll', this.scrollListener);
+  //   window.removeEventListener('resize', this.scrollListener);
+  //   /* eslint-enable */
+  // }
 
   async getSetting(){
     let setting = local.get(APP.SETTING), alternateCurrency = "USD";
@@ -891,7 +924,7 @@ class Wallet extends React.Component {
 
   getETHFree=()=> {
     window.open('https://www.rinkeby.io/#faucet', '_blank');
-    // let data="ninja-redeem:NINJA101F8DC?value=234";
+    // let data="ninja-redeem:NINJA-1C1QN0r5SItfzGqp06graZPLZR2?value=234";
     // let result = MasterWallet.getQRCodeDetail(data);
     // this.props.showQRCodeContent({
     //   data: result
@@ -914,6 +947,7 @@ class Wallet extends React.Component {
             data={data}
             onFinish={(result) => {
               this.modalRedeemRef.close();
+              this.setState({redeemContent: ''});
              }}
           />
         ),

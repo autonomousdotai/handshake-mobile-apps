@@ -1,0 +1,113 @@
+.sell-crypto-coin-summary-container {
+  height: 100%;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  min-height: calc(100vh - 90px);
+  .sell-crypto-coin-summary-summary-txt {
+    text-transform: uppercase;
+    color: #0A2240;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: 0;
+    line-height: 32px;
+    padding: 20px 0px;
+    display: block;
+  }
+  .sell-crypto-coin-summary-summary-info {
+    margin: 10px 0px;
+    display: flex;
+    flex-direction: column;
+    .sell-crypto-coin-summary-info-item {
+      border-bottom: 1px solid #EBF1F7;
+      padding: 5px 0px;
+      //&:last-child {
+      //  border-bottom: none;
+      //}
+      :nth-child(1) {
+        height: 19px;
+        color: #889EB5;
+        font-size: 16px;
+        font-weight: normal;
+        text-align: left;
+        letter-spacing: 0;
+        width: 100px;
+        display: inline-block;
+      }
+      :nth-child(2) {
+        width: 124px;
+        height: 21px;
+        color: #0A2240;
+        font-size: 16px;
+        font-weight: normal;
+        text-align: left;
+        letter-spacing: 0;
+      }
+      .sell-crypto-coin-summary-countdown {
+        //display: block;
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        color: green;
+      }
+    }
+  }
+  .sell-crypto-coin-summary-qr-container {
+    background: #F5F8FC;
+    text-align: center;
+    padding: 20px;
+    margin: 40px 0px;
+    .address-wallet {
+      margin: 15px 5px;
+      padding: 5px;
+      font-weight: 400;
+      border: dotted 1px;
+      word-break: break-all;
+      border-radius: 3px;
+      .copy-icon {
+        display: inline-block;
+        margin: 0px 10px;
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+  .sell-crypto-coin-summary-note-txt {
+    color: #0A2240;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: left;
+    letter-spacing: 0;
+    padding: 0px;
+    margin: 15px 10px;
+    line-height: 21px;
+    > div {
+      text-align: center;
+      :first-child {
+        display: block;
+        font-weight: bold;
+        color: red;
+        font-size: 17px;
+      }
+      :last-child {
+        color: #889EB5;
+      }
+    }
+    > ul {
+      padding: 0px;
+      margin: 15px 10px;
+    }
+  }
+  .sell-crypto-coin-summary-btn {
+    height: 53px;
+    background: #2989FF;
+    border: 0 solid #EDF0FA;
+    width: 100%;
+    border-radius: 3px;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+}

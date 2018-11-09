@@ -1,65 +1,128 @@
 import React, { Component } from 'react';
-import DynamicImport from '@/components/App/DynamicImport';
-import Loading from '@/components/core/presentation/Loading';
 // import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
-import { STATUS } from '@/pages/Admin/AdminIDVerification';
+import AdminIDVerification, { STATUS } from '@/pages/Admin/AdminIDVerification';
+import Users from '@/pages/Admin/Users';
+import { EXCHANGE_ACTION, URL } from '@/constants';
+import InternalAdmin from '@/pages/InternalAdmin/InternalAdmin';
+import queryString from 'query-string';
+import Login from '@/pages/Admin/Login';
+import Logout from '@/pages/Admin/Logout';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import './styles.scss';
-import { EXCHANGE_ACTION } from '@/constants';
 
-const AdminIDVerification = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Admin/AdminIDVerification')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
-const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
+// const AdminIDVerification = props => (<DynamicImport loading={Loading} load={() => import('@/pages/Admin/AdminIDVerification')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
+// const InternalAdmin = props => (<DynamicImport loading={Loading} load={() => import('@/pages/InternalAdmin/InternalAdmin')}>{ ComponentLoaded => <ComponentLoaded {...props} />}</DynamicImport>);
 
 const scopeCss = (className) => `internal-admin-${className}`;
 
 const menus = {
   idVerificationProcessing: {
     name: 'Admin - Processing',
-    components: <AdminIDVerification />,
+    components: AdminIDVerification,
   },
   idVerificationVerified: {
     name: 'Admin - Verified',
-    components: <AdminIDVerification status={STATUS.VERIFIED} />,
+    components: AdminIDVerification,
+    params: { status: STATUS.VERIFIED },
   },
   idVerificationRejected: {
     name: 'Admin - Rejected',
-    components: <AdminIDVerification status={STATUS.REJECTED} />,
+    components: AdminIDVerification,
+    params: { status: STATUS.REJECTED },
   },
   buyCoinBank: {
     name: 'Buy Coin - BANK',
-    components: <InternalAdmin type="bank" />,
+    components: InternalAdmin,
+    params: { type: 'bank', action: EXCHANGE_ACTION.BUY },
   },
   buyCoinCod: {
     name: 'Buy Coin - COD',
-    components: <InternalAdmin type="cod" />,
+    components: InternalAdmin,
+    params: { type: 'cod', action: EXCHANGE_ACTION.BUY },
   },
   sellCoinBank: {
     name: 'Sell Coin - BANK',
-    components: <InternalAdmin type="bank" action={EXCHANGE_ACTION.SELL} />,
+    components: InternalAdmin,
+    params: { type: 'bank', action: EXCHANGE_ACTION.SELL },
+  },
+  manageUser: {
+    name: 'Admin - Manage Users',
+    components: Users,    
+  },
+  logout: {
+    components: Logout,
+    name: 'Logout',    
   },
 };
 
 class InternalAdminDashboard extends Component {
   constructor() {
     super();
+    this.token = this.getAdminHash() || '';
+    this.adminID = this.getAminID() || '';
     this.state = {
       selectedMenuId: 'idVerificationProcessing',
+      queryParams: {},
+      queryTab: null,
     };
   }
 
+  componentDidMount() {
+    if (this.checkAuth()) {
+      this.queryHandler();
+    }
+  }
+
+  getAdminHash() {
+    return sessionStorage.getItem('admin_hash');
+  }
+  getAminID() {
+    return sessionStorage.getItem('user_id');
+  }
+
   onMenuSelect = (idMenu) => {
-    this.setState({ selectedMenuId: idMenu });
+    if (menus[idMenu]) {
+      this.setState({ selectedMenuId: idMenu });
+    }
+  }
+
+  checkAuth = () => {
+    console.log(this.token);
+    if (this.token.length > 0 && this.adminID.length) {
+      return true;
+    }
+    return false;
+  }
+
+  queryHandler = () => {
+    const { tab, ...queryParams } = this.parseQuery();
+    if (tab) {
+      this.onMenuSelect(tab);
+      this.setState({ queryTab: tab, queryParams });
+    }
+  }
+
+  parseQuery = () => {
+    return queryString.parse(window?.location?.search) || {};
+  }
+
+  reload = () => {
+    window?.location?.reload && window?.location?.reload();
   }
 
   renderBody = () => {
-    const { selectedMenuId } = this.state;
+    const { selectedMenuId, queryTab, queryParams } = this.state;
     const menuData = menus[selectedMenuId];
     if (!menuData) return null;
-    return menuData?.components || null;
+    const { components: MyComponent, params } = menuData;
+    return <MyComponent {...params} {... queryTab === selectedMenuId ? queryParams : {}} />;
   }
 
   render() {
+    if (!this.checkAuth()) {
+      return <Login onLoggedIn={this.reload} />;
+    }
     return (
       <main>
         <Header title={menus[this.state.selectedMenuId]?.name} />

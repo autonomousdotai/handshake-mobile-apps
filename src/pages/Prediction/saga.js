@@ -4,7 +4,7 @@ import { REMOVE_DATA } from '@/stores/data-action';
 import { API_URL } from '@/constants';
 import {
   loadMatches, getReportCount, removeExpiredEvent,
-  checkFreeBet, updateFreeBet, checkExistSubcribeEmail,
+  checkRedeemCode, updateFreeBet, checkExistSubcribeEmail,
   updateCountReport, updateExistEmail,
   loadRelevantEvents, updateRelevantEvents, updateEvents,
 } from './action';
@@ -97,15 +97,15 @@ export function* handleCountReport() {
   }
 }
 
-export function* handleFreeBet() {
+export function* handleCheckRedeem() {
   try {
     const response = yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.CHECK_FREE_AVAILABLE,
-      type: 'CHECK_FREE_AVAILABLE',
+      PATH_URL: API_URL.CRYPTOSIGN.CHECK_REDEEM_CODE,
+      type: 'CHECK_REDEEM_CODE',
     });
-    yield put(updateFreeBet(response.data));
+    yield put(updateFreeBet(response.status));
   } catch (e) {
-    console.error('handleFreeBet', e);
+    console.error('handleCheckRedeem', e);
   }
 }
 
@@ -131,6 +131,6 @@ export default function* predictionSaga() {
   yield takeLatest(loadRelevantEvents().type, handleLoadRelevantEvents);
   yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
-  yield takeLatest(checkFreeBet().type, handleFreeBet);
+  yield takeLatest(checkRedeemCode().type, handleCheckRedeem);
   yield takeLatest(checkExistSubcribeEmail().type, handleCheckExistEmail);
 }

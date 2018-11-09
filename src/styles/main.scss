@@ -1,9 +1,10 @@
-@import "../../node_modules/bootstrap/dist/css/bootstrap.css";
-@import "./../assets/css/flags/sass/flag-icon.scss";
+@import "../../node_modules/bootstrap-nojs/bootstrap.css";
+@import "../assets/css/flags/sass/flag-icon.scss";
 
 @import "var";
 @import "responsive";
 @import "functions";
+@import "mixin";
 @import "animate";
 
 body {
@@ -27,3 +28,5 @@ button {
 @import "app/splash";
 @import "app";
 @import "forms/dropdown-input";
+
+@import "pages/recruiting";

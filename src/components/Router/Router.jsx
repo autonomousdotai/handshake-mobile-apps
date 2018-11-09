@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Switch, BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 // constants
 import { URL, LANDING_PAGE_TYPE } from '@/constants';
 // services
@@ -11,31 +11,23 @@ import { createDynamicImport } from '@/services/app';
 import Loading from '@/components/core/presentation/Loading';
 import ScrollToTop from '@/components/App/ScrollToTop';
 import Layout from '@/components/Layout/Main';
-import { SEOHome, SEOCash, SEOPrediction, SEODad, SEOWallet, SEOWhisper, SEOPayForDevs, SEOPayForStores, SEOBecomeAtm } from '@/components/SEO';
+import ExternalRedirect from '@/components/App/Redirect';
 
-import imgCash from '@/assets/images/landing/home/cash.jpg';
-import imgCashContent from '@/assets/images/landing/cash/fake-content.svg';
+import { SEOPrediction, SEODad, SEOWallet, SEOPayForDevs, SEOPayForStores, SEOBecomeAtm } from '@/components/SEO';
+
 import imgDadContent from '@/assets/images/landing/dad/fake-content.jpg';
-// import imgPredictionContent from '@/assets/images/landing/prediction/fake-content.svg';
-// import imgBlockchainPrivacy from '@/assets/images/landing/home/blockchain-privacy.jpg';
 import imgDad from '@/assets/images/landing/home/dad.jpg';
-// import imgDao from '@/assets/images/landing/home/dao.jpg';
 import imgInternetCash from '@/assets/images/landing/home/internet-cash.jpg';
 import imgPrediction from '@/assets/images/landing/home/prediction.jpg';
 import imgWallet from '@/assets/images/landing/home/wallet.jpg';
-import imgWhisper from '@/assets/images/landing/home/whisper.jpg';
 import imgUncommons from '@/assets/images/landing/home/uncommons.jpg';
-import imgHivepayOnline from '@/assets/images/landing/home/hivepay-online.jpg';
 import imgHivepayOffline from '@/assets/images/landing/home/hivepay-offline.jpg';
 
-// import NetworkError from '@/components/Router/NetworkError';
 import Maintain from '@/components/Router/Maintain';
 import PexExtension from '@/pages/PexExtension/PexExtension';
 import TopUp from '@/pages/TopUp/TopUp';
 
 const RouterMe = createDynamicImport(() => import('@/components/Router/Me'), Loading);
-const RouterDiscover = createDynamicImport(() => import('@/components/Router/Discover'), Loading);
-const RouterCreate = createDynamicImport(() => import('@/components/Router/Create'), Loading);
 const RouterWallet = createDynamicImport(() => import('@/components/Router/Wallet'), Loading);
 const RouterPaymentTransfer = createDynamicImport(() => import('@/components/Router/PaymentTransfer'), Loading);
 const RouterPayment = createDynamicImport(() => import('@/components/Router/Payment'), Loading);
@@ -54,8 +46,6 @@ const LandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Ma
 const ProjectDetail = createDynamicImport(() => import('@/components/ProjectDetail'), Loading);
 const Recruiting = createDynamicImport(() => import('@/pages/Recruiting'), Loading);
 const JobDetail = createDynamicImport(() => import('@/pages/Recruiting/JobDetail'), Loading);
-const ContentForCashBusiness = createDynamicImport(() => import('@/pages/LandingPage/ContentForCashBusiness'), Loading);
-const ContentForAtm = createDynamicImport(() => import('@/pages/LandingPage/ContentForAtm'), Loading);
 const ContentForPayForDevs = createDynamicImport(() => import('@/pages/LandingPage/ContentForPayForDevs'), Loading);
 const ContentForPayForDevsGetStarted = createDynamicImport(() => import('@/pages/LandingPage/ContentForPayForDevsGetStarted'), Loading);
 const ContentForWallet = createDynamicImport(() => import('@/pages/LandingPage/ContentForWallet'), Loading);
@@ -65,13 +55,13 @@ const LuckyDrawMechanic = createDynamicImport(() => import('@/pages/LuckyDrawMec
 const Discover = createDynamicImport(() => import('@/pages/Discover/Discover'), Loading);
 const RouterCCConfirm = createDynamicImport(() => import('@/components/Router/CCConfirm'), Loading);
 const RouterBuyCC = createDynamicImport(() => import('@/components/Router/Credit'), Loading);
-const RouterBuyCryptoCoin = createDynamicImport(() => import('@/components/Router/BuyCryptoCoin'), Loading);
+const RouterCryptoCoin = createDynamicImport(() => import('@/components/Router/CryptoCoin'), Loading);
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
 const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
-const RouterInternalWithdraw = createDynamicImport(() => import('@/components/Router/InternalWithdraw'), Loading);
 const RouterInternalAdmin = createDynamicImport(() => import('@/components/Router/InternalAdmin'), Loading);
 const RouterCreateCashStore = createDynamicImport(() => import('@/components/handshakes/exchange/Create/CreateStoreATM'), Loading);
 const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
+const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
 const InternalAdminDashboard = createDynamicImport(() => import('@/pages/InternalAdminDashboard'), Loading);
 
 /* ======================== FOR MOBILE ======================== */
@@ -93,8 +83,7 @@ const configRoutesUsingMobileLayout = [
   { path: URL.REPORT, component: RouterReport },
   // { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
   // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
-  { path: URL.BUY_COIN_URL, component: RouterBuyCryptoCoin },
-
+  { path: URL.CRYPTO_COIN_URL, component: RouterCryptoCoin },
   { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
   {
     path: URL.PRODUCT_DAD_URL,
@@ -108,6 +97,10 @@ const configRoutesUsingMobileLayout = [
   { path: URL.CASH_STORE_URL, component: RouterCreateCashStore },
 
   { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
+  { path: URL.INVEST_URL, component: RouterInvest },
+
+  { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
+  { path: URL.LANDING_PAGE_SHURIKEN, render: () => <Redirect to={URL.LANDING_PAGE_CONSTANT} /> },
   { path: URL.PEX_EXTENSION, component: PexExtension },
   { path: URL.WALLET_EXTENSION, component: TopUp },
 ];
@@ -146,6 +139,7 @@ if (BrowserDetect.isDesktop) {
     { path: URL.ADMIN_ID_VERIFICATION, component: RouterAdminIDVerification },
     { path: URL.PEX_LUCKY_DRAW_MECHANIC_URL, component: LuckyDrawMechanic },
     { path: URL.INTERNAL_ADMIN_DASHBOARD_URL, component: InternalAdminDashboard },
+    { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
   ];
 
   routesUsingDesktopLayout = configRoutesUsingDesktopLayout.map(route => (
@@ -195,14 +189,14 @@ class Router extends React.Component {
           BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterLandingPageMain} />
         }
 
-          <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
-          <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
-          <Route exact path={URL.RECRUITING} component={Recruiting} />
-          <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
-          <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
-          <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
-          <Route path={URL.BUY_COIN_FAQ_URL} render={() => <ProjectDetail type="product" name="coin" />} />
-          {routesUsingDesktopLayout}
+        <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
+        <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
+        <Route exact path={URL.RECRUITING} component={Recruiting} />
+        <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
+        <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
+        <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
+        <Route path={URL.BUY_COIN_FAQ_URL} render={() => <ProjectDetail type="product" name="coin" />} />
+        {routesUsingDesktopLayout}
 
         {/* Cash on mobile uses a completely different layout! */}
         {/* <Route path={URL.HANDSHAKE_CASH} component={Discover} /> */}
@@ -238,7 +232,7 @@ class Router extends React.Component {
                     )
                 }
               </Layout>
-            )
+            );
           }}
         />
       </Switch>

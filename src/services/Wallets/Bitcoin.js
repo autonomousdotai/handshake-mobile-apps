@@ -83,7 +83,7 @@ export class Bitcoin extends Wallet {
   }
 
 
-  async transfer(toAddress, amountToSend, opt) {
+  async transfer(toAddress, amountToSend, opt={}) {
     try {
       if (!bitcore.Address.isValid(toAddress)) {
         return { status: 0, message: 'messages.bitcoin.error.invalid_address2' };

@@ -38,6 +38,7 @@ module.exports = {
     "function-paren-newline": 0,
     "jsx-a11y/label-has-for": 0,
     "object-curly-newline": 0,
+    "camelcase": 0,
     "import/no-unresolved": "off", // TODO[1]:
     "import/extensions": "off" // TODO[1]:
   },

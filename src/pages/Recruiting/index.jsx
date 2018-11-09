@@ -1,31 +1,57 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import LandingWrapper from '@/components/LandingWrapper';
-import axios from 'axios';
-// import PropTypes from 'prop-types';
-import './styles.scss';
 import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl';
+import queryString from 'query-string';
+import { isEmpty } from 'lodash';
+
+import { URL } from '@/constants';
+import LandingWrapper from '@/components/LandingWrapper';
+// import PropTypes from 'prop-types';
 import { updateModal } from '@/reducers/app/action';
 import CategoryItem from './Components/CategoryItem';
 import Job from './Components/Job';
 import FBChat from './Components/FBChat';
 import ContentApplyNow from './Components/ContentApplyNow';
 import ButtonApplyNow from './Components/ButtonApplyNow';
-import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl';
 
-import { Link } from 'react-router-dom';
-import { URL } from '@/constants';
 const idAllCategories = 0;
 
 class Recruiting extends React.Component {
-  state = {
-    selectedCategoryId: idAllCategories,
-    categories: [],
-    jobs: [],
-    showFilters: false,
-  };
+  constructor(props) {
+    super(props);
+
+    const values = queryString.parse(this.props.location.search);
+
+    this.state = {
+      selectedCategoryId: values.categoryId || idAllCategories,
+      categories: [],
+      jobs: [],
+      showFilters: false,
+      searchKey: values.project || '',
+    };
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const values = queryString.parse(nextProps.location.search);
+    const result = {};
+    if (values.categoryId && values.categoryId !== prevState.selectedCategoryId) {
+      result.selectedCategoryId = values.categoryId;
+    }
+    if (values.project && values.project !== prevState.searchKey) {
+      result.searchKey = values.project;
+    }
+    if (isEmpty(result)) {
+      return null;
+    }
+    return result;
+  }
+
+
   componentDidMount() {
-    const { selectedCategoryId } = this.state;
+    const { selectedCategoryId, searchKey } = this.state;
     axios
       .get('https://www.autonomous.ai/api-v2/job-api/categories')
       .then(res => {
@@ -33,13 +59,25 @@ class Recruiting extends React.Component {
       })
       .catch(err => console.log('err get categories', err));
 
-    this.getJobs(selectedCategoryId);
+    this.getJobs(selectedCategoryId, searchKey);
   }
-  getJobs = id => {
+
+  getJobs = (id, projectName = '') => {
     let qs = '?group_id=1';
     if (id !== idAllCategories) {
       qs += `&category_id=${id}`;
     }
+    qs += `&project=${projectName}`;
+
+    const search = {};
+    if (projectName) search.project = projectName;
+    if (id && id !== 0) search.categoryId = id;
+
+    this.props.history.push({
+      pathname: '/recruiting',
+      search: `?${queryString.stringify(search)}`,
+    });
+
     axios
       .get(`https://www.autonomous.ai/api-v2/job-api/jobs${qs}`)
       .then(res => {
@@ -47,9 +85,11 @@ class Recruiting extends React.Component {
       })
       .catch(err => console.log('err get jobs', err));
   };
+
   handleClickCategoryItem = id => {
+    const { searchKey } = this.state;
     this.setState({ selectedCategoryId: id, showFilters: false });
-    this.getJobs(id);
+    this.getJobs(id, searchKey);
   };
 
   handleClickApplyNow = (name) => {
@@ -58,16 +98,30 @@ class Recruiting extends React.Component {
       title: (
         <div><FormattedMessage id="landing_page.recruiting.applyNow.title" /></div>
       ),
-      body: <ContentApplyNow jobName={name} />
-    })
+      body: <ContentApplyNow jobName={name} />,
+    });
   }
 
   handleToggleFilter = () => {
-    this.setState({ showFilters: !this.state.showFilters })
+    this.setState({ showFilters: !this.state.showFilters });
+  }
+
+  searchByProjectName = (e, projectName) => {
+    const { selectedCategoryId, searchKey: stateSearchKey } = this.state;
+    let searchKey = stateSearchKey;
+    if (e) {
+      searchKey = this.searchProjectInput.value || '';
+      this.setState({ searchKey });
+      this.getJobs(selectedCategoryId, searchKey);
+    } else {
+      searchKey = projectName === 'All' ? '' : projectName;
+      this.setState({ searchKey });
+      this.getJobs(selectedCategoryId, searchKey);
+    }
   }
 
   render() {
-    const { categories, selectedCategoryId, jobs, showFilters } = this.state;
+    const { categories, selectedCategoryId, jobs, showFilters, searchKey } = this.state;
 
     const allCategories = (
       <div>
@@ -79,7 +133,7 @@ class Recruiting extends React.Component {
         />
         {categories.map(category => {
           const {
-            id, name, seo_url, priority,
+            id, name,
           } = category;
           return (
             <CategoryItem
@@ -91,7 +145,33 @@ class Recruiting extends React.Component {
           );
         })}
       </div>
-    )
+    );
+
+    const projectLists = [
+      'All',
+      'Ninja',
+      'Constant',
+    ];
+
+    const projectFilter = (
+      <div className="recruiting-filter-by-project">
+        <div className="recruiting-filter-by-project-title">Projects:</div>
+        <div className="recruiting-filter-by-project-list">
+          <ul>
+            {projectLists.map(projectName => (
+              <li key={projectName} className={projectName === searchKey || (projectName === 'All' && searchKey === '') ? 'active' : ''}>
+                <span onClick={() => this.searchByProjectName(null, projectName)}>{projectName}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="recruiting-filter-by-project-search">
+          Or
+          <input className="form-control" type="text" name="recruiting-filter-by-project-search-input" id="recruiting-filter-by-project-search-input" placeholder="Search project name" onChange={this.searchByProjectName} ref={div => { this.searchProjectInput = div; return null; }} />
+        </div>
+      </div>
+    );
+
     return (
       <LandingWrapper
         btnToggleLeftMenu={(
@@ -136,6 +216,7 @@ class Recruiting extends React.Component {
           {/* ============================= */}
 
           <div className="col-12 col-md-8">
+            {projectFilter}
             {
               jobs && jobs.length > 0 ?
                 jobs.map(job => {
@@ -143,7 +224,7 @@ class Recruiting extends React.Component {
                     <Link key={job.id} to={`${URL.RECRUITING}/${job.seo_url}`}>
                       <Job {...job} onClickApplyNow={this.handleClickApplyNow} />
                     </Link>
-                  )
+                  );
                 }) : (
                   <div>
                     <FormattedMessage id="landing_page.recruiting.label.noJobs" />
@@ -158,11 +239,9 @@ class Recruiting extends React.Component {
   }
 }
 
-const mapState = state => ({});
-
 const mapDispatch = dispatch => ({
   // rfChange: bindActionCreators(change, dispatch),
   updateModal: bindActionCreators(updateModal, dispatch),
 });
 
-export default injectIntl(connect(mapState, mapDispatch)(Recruiting));
+export default injectIntl(connect(null, mapDispatch)(Recruiting));

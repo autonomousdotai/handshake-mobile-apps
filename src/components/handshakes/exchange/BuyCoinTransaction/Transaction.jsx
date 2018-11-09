@@ -15,6 +15,7 @@ import Modal from '@/components/core/controls/Modal/Modal';
 import { getTransactionNinjaCoin, reviewBuyCoin } from '@/reducers/exchange/action';
 import { buyCryptoGetBankInfo, buyCryptoSaveRecipt } from '@/reducers/buyCoin/action';
 import Review from '@/components/core/controls/Review/Review';
+import OrderInfo from '@/components/handshakes/exchange/Coin/SellCryptoCoin/components/OrderInfo';
 
 const nameFormTransaction = 'formTransaction';
 const FormTransaction = createForm({
@@ -37,6 +38,19 @@ class Transaction extends React.Component {
   componentDidMount() {
     const { country } = this.props;
     this.getTransactionNinjaCoin();
+    this.intervalCountdown = setInterval(() => {
+      this.reload();
+    }, 3 * 60 * 1000);
+  }
+
+  reload = () => {
+    window?.location?.reload && window?.location?.reload();
+  }
+
+  componentWillUnmount() {
+    if (this.intervalCountdown) {
+      clearInterval(this.intervalCountdown);
+    }
   }
 
   getTransactionNinjaCoin = () => {
@@ -64,47 +78,69 @@ class Transaction extends React.Component {
 
       const { messages } = this.props.intl;
 
-      this.props.buyCryptoGetBankInfo({
-        PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_BANK_INFO}/${center}`,
-        successFn: (res) => {
-          const bankInfo = res.data[0].information;
+      const { offerFeedType } = transaction;
 
-          // let bankData = {};
-          const receipt = {
-            createdAt: transaction.createdAt,
-            amount: transaction.fiatAmount || 0,
-            // customerAmount: +transaction.fiatAmount,
-            // amount: (+transaction.fiatAmount - +transaction.storeFee) || 0,
-            fiatCurrency: transaction.fiatCurrency,
-            referenceCode: transaction.refCode,
-            status: transaction.status,
-            id: transaction.id,
-          };
+      if (offerFeedType === 'coin') {
+        this.props.buyCryptoGetBankInfo({
+          PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_BANK_INFO}/${center}`,
+          successFn: (res) => {
+            const bankInfo = res.data[0].information;
 
-          const bankData = bankInfo;
-          // if fiatAmount over limit => use global bank, else local bank
-          // if (this.isOverLimit(receipt.amount)) {
+            // let bankData = {};
+            const receipt = {
+              createdAt: transaction.createdAt,
+              amount: transaction.fiatAmount || 0,
+              // customerAmount: +transaction.fiatAmount,
+              // amount: (+transaction.fiatAmount - +transaction.storeFee) || 0,
+              fiatCurrency: transaction.fiatCurrency,
+              referenceCode: transaction.refCode,
+              status: transaction.status,
+              id: transaction.id,
+            };
+
+            const bankData = bankInfo;
+            // if fiatAmount over limit => use global bank, else local bank
+            // if (this.isOverLimit(receipt.amount)) {
             // bankData = bankInfo.XX; // global bank
-          // } else {
+            // } else {
             // bankData = bankInfo[country] || bankInfo.XX;
             receipt.amount = transaction.fiatLocalAmount;
             receipt.fiatCurrency = transaction.fiatLocalCurrency;
-          // }
-          this.setState({
-            modalTitle: messages.atm_cash_transfer_info.title,
-            modalContent: (
-              <AtmCashTransferInfo
-                receipt={receipt}
-                bankInfo={bankData}
-                saveReceiptHandle={this.saveReceiptHandle}
-                onDone={this.onReceiptSaved}
-              />
-            ),
-          }, () => {
-            this.modalRef.open();
-          });
-        },
-      });
+            // }
+            this.setState({
+              modalTitle: messages.atm_cash_transfer_info.title,
+              modalContent: (
+                <AtmCashTransferInfo
+                  receipt={receipt}
+                  bankInfo={bankData}
+                  saveReceiptHandle={this.saveReceiptHandle}
+                  onDone={this.onReceiptSaved}
+                />
+              ),
+            }, () => {
+              this.modalRef.open();
+            });
+          },
+        });
+      } else if (offerFeedType === 'coin_selling') {
+        const { address, fiatLocalAmount, fiatLocalCurrency, amount, currency } = transaction;
+        this.setState({
+          modalTitle: messages.sell_coin.summary.label,
+          modalContent: (
+            <OrderInfo
+              generatedAddress={address}
+              orderInfo={{
+                fiatLocalAmount: fiatLocalAmount || 0,
+                fiatLocalCurrency: fiatLocalCurrency,
+                amount: amount || 0,
+                currency: currency,
+              }}
+            />
+          ),
+        }, () => {
+          this.modalRef.open();
+        });
+      }
     });
   }
 

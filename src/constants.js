@@ -23,7 +23,7 @@ export const APP = {
   SETTING: 'setting',
   OFFLINE_STATUS: 'offline_status',
   ALLOW_LOCATION_ACCESS: 'allow_location_access',
-  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es'],
+  isSupportedLanguages: ['en', 'zh', 'fr', 'de', 'ja', 'ko', 'ru', 'es', 'vi'],
   CC_SOURCE: 'cc_source',
   CC_PRICE: 'cc_price',
   CC_ADDRESS: 'cc_address',
@@ -210,7 +210,7 @@ export const API_URL = {
     LOAD_HANDSHAKES: 'cryptosign/handshake',
     LOAD_REPORTS: 'cryptosign/source',
     LOAD_CATEGORIES: 'cryptosign/category',
-    CHECK_FREE_AVAILABLE: 'cryptosign/handshake/check_free_bet',
+    CHECK_REDEEM_CODE: 'cryptosign/handshake/check_redeem_code',
     UNINIT_HANDSHAKE: 'cryptosign/handshake/uninit',
     UNINIT_HANDSHAKE_FREE: 'cryptosign/handshake/uninit_free_bet',
     COLLECT: 'cryptosign/handshake/collect',
@@ -268,6 +268,10 @@ export const API_URL = {
     BUY_CRYPTO_GET_BANK_INFO: 'exchange/coin/center', // GET /coin/center/XX
     BUY_CRYPTO_SAVE_RECEIPT: 'exchange/coin/order', // POST /coin/{id}
     BUY_CRYPTO_QUOTE_REVERSE: 'exchange/coin/quote-reverse', // GET /coin/quote-reverse?fiat_amount=20000000&currency=ETH&fiat_currency=VND&type=cod
+    SELL_COIN_GET_COIN_INFO: 'exchange/coin/quote', // GET /coin/quote?amount=0.1&currency=ETH&fiat_currency=VND&direction=sell
+    SELL_COIN_ORDER: 'exchange/coin/selling-order', // POST /coin/selling-order
+    SELL_COIN_GENERATE_ADDRESS: 'exchange/coin/generate-address', // POST /coin/generate-address?currency=BTC
+    SELL_COIN_GET_BANK_LIST: 'exchange/coin/bank', // GET /coin/bank/{country}
   },
   SEED: {
     BASE: 'seed',
@@ -296,7 +300,10 @@ export const API_URL = {
   USER: {
     PROFILE: 'user/profile',
     CHECK_EXIST_EMAIL: 'user/check-email-exist',
-    ID_VERIFICATION: 'user/id_verification',
+    ID_VERIFICATION: 'user/id_verification',    
+    LOGIN: 'user/login',
+    SIGNUP: 'user/sign-up'
+    
   },
   INTERNAL: {
     GET_WITHDRAW_LIST: 'exchange/internal/credit/withdraw',
@@ -311,6 +318,15 @@ export const API_URL = {
     UPDATE_STATUS: 'id_verification/update',
     GET_DOCUMENT: 'id_verification/get',
   },
+
+  ADMIN_MANAGER:{
+    USER:{
+      LIST: 'admin/user/list',
+      UPDATE: 'admin/user/update',
+    }
+    
+  }
+  
 };
 
 export const HANDSHAKE_STATUS = {
@@ -605,6 +621,7 @@ export const URL = {
   COMMENTS_BY_SHAKE: '/comments',
   COMMENTS_BY_SHAKE_INDEX: '/comments',
 
+  LANDING_PAGE_CONSTANT: '/constant',
   LANDING_PAGE_SHURIKEN: '/shuriken',
   LANDING_PAGE_SHURIKEN_INDEX: '/shuriken',
 
@@ -640,7 +657,9 @@ export const URL = {
   CC_PAYMENT_URL: '/cc-payment',
   BUY_BY_CC_URL: '/buy-by-credit-card',
   BUY_COIN_URL: '/coin',
+  CRYPTO_COIN_URL: '/coin',
   BUY_COIN_FAQ_URL: '/coin/faq',
+  SELL_COIN_URL: '/sell-coin',
 
   ESCROW_WITHDRAW_SUCCESS: '/escrow/withdraw/success',
 
@@ -653,6 +672,15 @@ export const URL = {
   INTERNAL_ADMIN_URL: '/admin/coin/:type',
   CASH_STORE_URL: '/cash_store',
   LANDING_BECOME_ATM: '/become-atm',
+
+  INVEST_PROJECT_LIST: '/invest/project',
+  INVEST_TRADER_LIST: '/invest/trader',
+  INVEST_PROJECT_INFO: '/invest/project/:projectID',
+  INVEST_TRADER_INFO: '/invest/trader/:traderID',
+  INVEST_URL: '/invest',
+  INVEST_INVESTING_LIST: '/invest/investing',
+
+
   INTERNAL_ADMIN_DASHBOARD_URL: '/internal-admin-dashboard',
 };
 

@@ -56,3 +56,8 @@
 @function rem-calc($values, $base-value: $font-size-base) {
   @return units-calc($values, rem, $base-value);
 }
+
+@function get-breakpoint($name) {
+  $point: map-get($points, $name);
+  @return $point;
+}
