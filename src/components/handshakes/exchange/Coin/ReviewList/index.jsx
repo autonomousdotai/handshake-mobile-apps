@@ -68,7 +68,7 @@ class ReviewList extends React.Component {
   }
 
   autoLoadMore = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     this.getReviewCoin();
   }
 
