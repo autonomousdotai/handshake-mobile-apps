@@ -23,7 +23,7 @@ deploy:
   skip_cleanup: true
   script: bash ./deploy.sh
   on:
-    branch: develop:
+    branch: develop
 - provider: script
   skip_cleanup: true
   script: bash ./deploy2.sh
