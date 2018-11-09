@@ -39,7 +39,7 @@ class RangeSlider extends Component {
       value: parseInt(props.value || 0, 10),
       onChange: this.handleOnChange
     };
-    const unit = props.unit && <span className="unit">{props.unit}</span>;
+    const unit = optionSlider.unit && <span className="unit">{optionSlider.unit}</span>;
     return (
       <div className={htmlClassName}>
         <div className="RangeValue">

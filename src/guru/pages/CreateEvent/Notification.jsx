@@ -78,7 +78,7 @@ class Notification extends Component {
     const { values } = props.formProps;
     return (
       <React.Fragment>
-        <span>Enter the secret code</span>
+        <span className="GroupNote">Enter the secret code</span>
         <div className="FlexRow">
           <Field
             name="emailCode"
@@ -102,7 +102,7 @@ class Notification extends Component {
   renderHasEmail = props => {
     return (
       <React.Fragment>
-        <span>Ninja will send you notifications via</span>
+        <span className="GroupNote">Ninja will send you notifications via</span>
         <input
           name="email"
           type="text"
@@ -129,7 +129,7 @@ class Notification extends Component {
   render() {
     return (
       <div className={Notification.displayName}>
-        <div className="CreateEventFormGroupTitle">Notification</div>
+        <div className="GroupTitle">Notification</div>
         {this.renderComponent(this.props, this.state)}
       </div>
     );

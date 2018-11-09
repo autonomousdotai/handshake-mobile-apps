@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { DropdownItem, DropdownMenu, DropdownToggle, UncontrolledButtonDropdown } from 'reactstrap';
 import { buyCryptoGetCoinInfo, buyCryptoQuoteReverse } from '@/reducers/buyCoin/action';
-import { API_URL, FIAT_CURRENCY, COUNTRY_LIST } from '@/constants';
+import { API_URL, FIAT_CURRENCY, COUNTRY_LIST, CRYPTO_CURRENCY } from '@/constants';
 import debounce from '@/utils/debounce';
 import { getErrorMessageFromCode } from '@/components/handshakes/exchange/utils';
 import Cleave from 'cleave.js/react';
@@ -14,6 +14,10 @@ import { isOverLimit } from '@/reducers/buyCoin/index';
 import * as gtag from '@/services/ga-utils';
 import taggingConfig from '@/services/tagging-config';
 import './styles.scss';
+
+import iconBitcoin from '@/assets/images/icon/coin/btc.svg';
+import iconEthereum from '@/assets/images/icon/coin/eth.svg';
+import iconBitcoinCash from '@/assets/images/icon/coin/bch.svg';
 
 const formatMoney = (money = 0, currency = FIAT_CURRENCY.USD) => {
   if (currency === FIAT_CURRENCY.VND) {
@@ -38,6 +42,12 @@ const FIAT_CURRENCY_SUPPORTED_LIST = {
   default: {
     USD: FIAT_CURRENCY.USD,
   },
+};
+
+export const CRYPTO_ICONS = {
+  [CRYPTO_CURRENCY.ETH]: iconEthereum,
+  [CRYPTO_CURRENCY.BTC]: iconBitcoin,
+  BCH: iconBitcoinCash,
 };
 
 const scopedCss = (className) => `coin-money-exchange-${className}`;
@@ -253,7 +263,7 @@ class CoinMoneyExchange extends Component {
 
   render() {
     console.log('=== STATE', this.state);
-    const { amount, fiatAmount, fiatCurrency, isExchanging } = this.state;
+    const { amount, fiatAmount, fiatCurrency, isExchanging, currency } = this.state;
     const { onFocus, onBlur, markRequired } = this.props;
     return (
       <div className={`${scopedCss('container')} ${markRequired ? 'error' : ''}`} onFocus={() => onFocus()} onBlur={() => onBlur()}>
@@ -269,6 +279,9 @@ class CoinMoneyExchange extends Component {
           placeholder="0.0"
           onChange={this.onAmountChange}
         />
+
+        <img src={CRYPTO_ICONS[currency]} width={24} className={`${scopedCss('crypto-icon')}`} />
+
         <Cleave
           className={`form-control ${scopedCss('fiat-amount-input')}`}
           value={fiatAmount || ''}

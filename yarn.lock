@@ -1650,7 +1650,7 @@ autoprefixer@^6.3.1:
     postcss "^5.2.16"
     postcss-value-parser "^3.2.3"
 
-autoprefixer@^9.1.5:
+autoprefixer@^9.3.1:
   version "9.3.1"
   resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-9.3.1.tgz#71b622174de2b783d5fd99f9ad617b7a3c78443e"
   integrity sha512-DY9gOh8z3tnCbJ13JIWaeQsoYncTGdsrgCceBaQSIL4nvdrLxgbRSBPevg2XbX7u4QCSfLheSJEEIUUSlkbx6Q==
@@ -5867,8 +5867,8 @@ handlebars@^4.0.11:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1541604121"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/d7bc8becbff7dd0ca7751eafb156f762fb55a01e"
+  version "0.0.1541672519"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/65a8d374ff125620bb9ffd14c55f54e340012749"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"

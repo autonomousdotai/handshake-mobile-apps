@@ -46,13 +46,13 @@ class ReviewList extends React.Component {
       qs.page = page;
     }
 
-    this.props.getReviewBuyCoin({
-      PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
-      qs,
-      METHOD: 'GET',
-      successFn: this.onSuccess,
-      // errorFn: this.handleReviewOfferFailed,
-    });
+    // this.props.getReviewBuyCoin({
+    //   PATH_URL: `${API_URL.INTERNAL.REVIEW_COIN_ORDER}`,
+    //   qs,
+    //   METHOD: 'GET',
+    //   successFn: this.onSuccess,
+    //   // errorFn: this.handleReviewOfferFailed,
+    // });
   }
 
   onSuccess = (res) => {
