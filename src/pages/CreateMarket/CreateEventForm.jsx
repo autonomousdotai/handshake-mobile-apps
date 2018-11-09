@@ -261,6 +261,7 @@ class CreateEventForm extends Component {
       'form-error': (touched || dirty) && error,
       'form-warning': (touched || dirty) && warning,
     });
+    console.log('onEvents', onEvents);
     return (
       <div className={cls}>
         <DateTimePicker

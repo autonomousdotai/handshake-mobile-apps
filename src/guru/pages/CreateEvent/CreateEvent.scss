@@ -2,7 +2,7 @@
   color: red;
   font-size: 13px;
   padding: 5px 0;
-  font-weight: normal;
+  font-weight: unset;
 }
 
 .CreateEvent {
@@ -78,7 +78,8 @@
       border: none;
 
       &::placeholder {
-        color: #0A2240;
+        //color: #0A2240;
+        //opacity: 50%;
       }
     }
 
@@ -216,7 +217,13 @@
   .DateTime {
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+
+    .ErrMsg {
+      text-align: right;
+      display: block;
+      width: 100%;
+    }
 
     .BlockRight {
       width: 80px;

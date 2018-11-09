@@ -17,10 +17,15 @@ import './CreateEvent.scss';
 class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
-    createEvent: PropTypes.func.isRequired
+    createEvent: PropTypes.func.isRequired,
+    email: PropTypes.string
   };
 
-  handleOnSubmit = (values /* , actions */) => {
+  static defaultProps = {
+    email: ''
+  }
+
+  handleOnSubmit = (values) => { // values, actions
     this.props.createEvent({ values });
   };
 
@@ -67,9 +72,9 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="HostFee">
-        <label htmlFor="creatorFee" className="GroupTitle">Host fee</label>
+        <label htmlFor="marketFee" className="GroupTitle">Host fee</label>
         <Field
-          name="creatorFee"
+          name="marketFee"
           type="rangeSlider"
           unit="%"
           className="input-value"
@@ -117,6 +122,7 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
+        {/*<input type="text" name="closingTime" defaultValue={val} />*/}
         <span className="Month">{val.format('MMM')}</span>
         <span className="Day">{val.format('DD')}</span>
         <span className="Year">{val.format('YYYY')}</span>
@@ -125,10 +131,7 @@ class CreateEvent extends React.Component {
     );
   };
 
-  renderDateTime = () => {
-    const startDate = moment()
-      .add(60, 'm')
-      .unix();
+  renderDateTime = (startDate) => {
     return (
       <div className="DateTime">
         <div className="BlockLeft">
@@ -154,30 +157,34 @@ class CreateEvent extends React.Component {
             renderTrigger={props => this.renderPicker(props, startDate)}
           />
         </div>
+        <ErrMsg name="closingTime" />
       </div>
     );
   };
 
   render() {
+    const { email } = this.props;
+    const initialClosingTime = moment().add(60, 'm').unix();
+
     const initialValues = {
       outcomeName: '',
       eventName: '',
       public: true,
-      creatorFee: 0,
-      email: '',
-      emailCode: ''
+      marketFee: 0,
+      email,
+      closingTime: initialClosingTime
+    };
+
+    const validateEmail = email ? {} : {
+      email: Yup.string().required('Required').email('invalid email address'),
+      emailCode: Yup.string().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
     };
 
     const eventSchema = Yup.object().shape({
       outcomeName: Yup.string().required('Required'),
       eventName: Yup.string().required('Required'),
-      // source: Yup.string().required('Required')
-      email: Yup.string()
-        .required('Required')
-        .email('invalid email address'),
-      emailCode: Yup.string()
-        .required('Required')
-        .matches(/^[0-9]{4}/, 'invalid Code')
+      closingTime: Yup.string().required('Required'),
+      ...validateEmail
     });
 
     return (
@@ -204,7 +211,7 @@ class CreateEvent extends React.Component {
                 <div className="FormBlock">
                   {this.renderReportSource()}
                   <div className="BlankLine" />
-                  {this.renderDateTime()}
+                  {this.renderDateTime(initialClosingTime)}
                 </div>
                 <div className="FormBlock">
                   <Notification formProps={formProps} />
@@ -216,7 +223,7 @@ class CreateEvent extends React.Component {
                 >
                   Create
                 </button>
-                <Debug props={formProps} hide />
+                <Debug props={formProps} />
               </Form>
             );
           }}
@@ -226,4 +233,8 @@ class CreateEvent extends React.Component {
   }
 }
 
-export default connect(null, { createEvent })(CreateEvent);
+export default connect((state) => {
+  return {
+    email: state.auth.profile.email
+  };
+}, { createEvent })(CreateEvent);
