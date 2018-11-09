@@ -2,6 +2,7 @@
   color: red;
   font-size: 13px;
   padding: 5px 0;
+  font-weight: normal;
 }
 
 .CreateEvent {
@@ -67,10 +68,41 @@
   .EventTitle {
     label {
       color: #2989FF;
+      width: 60px;
+      margin-top: 3px;
+    }
+
+    textarea {
+      width: 100%;
+      color: #0A2240;
+      border: none;
+
+      &::placeholder {
+        color: #0A2240;
+      }
+    }
+
+    .ErrMsg {
+      font-weight: unset;
+      text-align: right;
+      padding-top: 0;
     }
 
     .BlankLine {
       margin-bottom: 0;
+    }
+
+    .OutcomeName {
+      font-weight: bold;
+      textarea {
+        font-weight: bold;
+      }
+    }
+
+    .OutcomeName, .EventName {
+      display: flex;
+      align-items: flex-start;
+      font-size: 25px;
     }
   }
 
@@ -198,12 +230,17 @@
         padding: 10px;
 
         .Day {
-          font-size: 25px;
+          font-size: 17px;
           font-weight: 400;
         }
 
         .Month, .Year {
           color: #748599;
+          font-size: 13px;
+        }
+
+        .Hour {
+          font-size: 13px;
         }
       }
     }

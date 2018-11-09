@@ -29,23 +29,20 @@ class CreateEvent extends React.Component {
     return errFields.length ? errFields.join(' ') : '';
   };
 
-  renderEventTitle = formProps => {
+  renderEventTitle = () => {
     return (
       <div className="EventTitle">
         <p className="GroupTitle">Gurus will predict YES or NO</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
-          <Field
-            name="outcomeName"
-            placeholder="Manchester United beat Juventus"
-          />
-          <ErrMsg name="outcomeName" />
+          <Field name="outcomeName" component="textarea" placeholder="Manchester United beat Juventus" />
         </div>
+        <ErrMsg name="outcomeName" />
         <div className="EventName">
           <label htmlFor="eventName">in</label>
-          <Field name="eventName" placeholder="Champions League table stage" />
-          <ErrMsg name="eventName" />
+          <Field name="eventName" component="textarea" placeholder="Champions League table stage" />
         </div>
+        <ErrMsg name="eventName" />
       </div>
     );
   };
@@ -123,6 +120,7 @@ class CreateEvent extends React.Component {
         <span className="Month">{val.format('MMM')}</span>
         <span className="Day">{val.format('DD')}</span>
         <span className="Year">{val.format('YYYY')}</span>
+        <span className="Hour">{val.format('HH:mm')}</span>
       </div>
     );
   };
@@ -190,7 +188,7 @@ class CreateEvent extends React.Component {
           validationSchema={eventSchema}
         >
           {formProps => {
-            const { isSubmitting, errors, touched, values } = formProps;
+            const { isSubmitting, errors, touched } = formProps;
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
                 <div className="FormBlock">

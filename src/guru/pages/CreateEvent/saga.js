@@ -1,13 +1,11 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { API_URL } from '@/constants';
-import { apiGet, apiPost, apiPostForm } from '@/guru/stores/api';
+import { apiGet, apiPost } from '@/guru/stores/api';
 import {
   loadReports,
   updateReports,
   createEvent,
   sendEmailCode,
-  updateProfile,
-  updateEmailProfile
 } from './action';
 
 function* handleLoadReports() {
