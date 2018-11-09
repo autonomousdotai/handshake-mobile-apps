@@ -1018,6 +1018,7 @@ export const PAYMENT_REMIND = 'payment_remind';
 export const CUSTOMER_ADDRESS_INFO = 'CUSTOMER_ADDRESS_INFO';
 export const AUTONOMOUS_END_POINT = {
   BASE: 'https://www.autonomous.ai/api-v2',
+  // BASE: 'https://dev.autonomous.ai/api-v2', // for dev
   PRODUCT_INFO: '/product-api/product-info',
   PRODUCT_SPEC: '/product-api/product-spec',
   PRODUCT_QUESTIONS: '/product-api/product-questions',
@@ -1027,6 +1028,7 @@ export const AUTONOMOUS_END_POINT = {
   PRODUCT: '/product-api/product',
   CURRENT_COUNTRY: '/common-api/current-country',
   CHANGE_COUNTRY: '/common-api/change-country',
+  VERIFY_CHARGE_BY_ETH: '/order-api/order/eth/charges',
 };
 export const COUNTRY_LIST = {
   "AD": "AD - Andorra",
