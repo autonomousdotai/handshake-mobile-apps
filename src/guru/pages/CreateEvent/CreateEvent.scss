@@ -1,5 +1,8 @@
 .ErrMsg {
   color: red;
+  font-size: 13px;
+  padding: 5px 0;
+  font-weight: unset;
 }
 
 .CreateEvent {
@@ -28,6 +31,11 @@
     .GroupNote {
       color: #889EB5;
       font-size: 13px;
+    }
+
+    .GroupRow {
+      display: flex;
+      align-items: center;
     }
 
     .BlockLeft {
@@ -60,10 +68,42 @@
   .EventTitle {
     label {
       color: #2989FF;
+      width: 60px;
+      margin-top: 3px;
+    }
+
+    textarea {
+      width: 100%;
+      color: #0A2240;
+      border: none;
+
+      &::placeholder {
+        //color: #0A2240;
+        //opacity: 50%;
+      }
+    }
+
+    .ErrMsg {
+      font-weight: unset;
+      text-align: right;
+      padding-top: 0;
     }
 
     .BlankLine {
       margin-bottom: 0;
+    }
+
+    .OutcomeName {
+      font-weight: bold;
+      textarea {
+        font-weight: bold;
+      }
+    }
+
+    .OutcomeName, .EventName {
+      display: flex;
+      align-items: flex-start;
+      font-size: 25px;
     }
   }
 
@@ -93,9 +133,9 @@
       }
 
       input:checked + .slider:before {
-        -webkit-transform: translateX(83px);
-        -ms-transform: translateX(83px);
-        transform: translateX(83px);
+        -webkit-transform: translateX(80px);
+        -ms-transform: translateX(80px);
+        transform: translateX(80px);
       }
     }
   }
@@ -114,8 +154,15 @@
       color: #2989FF;
 
       input {
-        width: 16px;
+        text-align: right;
+        padding: 0;
+        margin: 0;
+        border: none;
         color: #2989FF;
+        background-color: transparent;
+        -webkit-appearance: none;
+        -webkit-user-select: none;
+        -webkit-user-modify: none;
       }
 
       .unit {
@@ -170,7 +217,13 @@
   .DateTime {
     margin-top: 20px;
     display: flex;
-    justify-content: center;
+    flex-wrap: wrap;
+
+    .ErrMsg {
+      text-align: right;
+      display: block;
+      width: 100%;
+    }
 
     .BlockRight {
       width: 80px;
@@ -184,12 +237,17 @@
         padding: 10px;
 
         .Day {
-          font-size: 25px;
+          font-size: 17px;
           font-weight: 400;
         }
 
         .Month, .Year {
           color: #748599;
+          font-size: 13px;
+        }
+
+        .Hour {
+          font-size: 13px;
         }
       }
     }
@@ -198,6 +256,28 @@
   .Notification {
     input {
       width: 100%;
+      height: 38px;
+      border-radius: 5px;
+      padding: 5px 10px;
+      border: 1px solid hsl(0,0%,80%);
+      font-size: 15px;
+
+      &:disabled {
+        background-color: #F5F8FC;
+      }
+    }
+
+    .btn {
+      flex-basis: 50%;
+      font-size: 13px;
+      height: 38px;
+      padding: 0;
+    }
+
+    .UnVerified {
+      input {
+        margin-right: 10px;
+      }
     }
   }
 }

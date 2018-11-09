@@ -1,4 +1,4 @@
-import { ACTIONS } from '@/reducers/auth/action';
+// import { ACTIONS } from '@/reducers/auth/action';
 import { createAPI } from '@/reducers/action';
 
 export const verifyEmailCode = createAPI('API:VERIFY_EMAIL_CODE');
@@ -27,20 +27,6 @@ export const createEvent = (payload = {}) => {
 export const sendEmailCode = (payload = {}) => {
   return {
     type: 'PEX:SEND_EMAIL_CODE',
-    payload
-  };
-};
-
-export const updateProfile = (payload) => {
-  return {
-    type: `${ACTIONS.AUTH_FETCH}_SUCCESS`,
-    payload
-  };
-};
-
-export const updateEmailProfile = (payload) => {
-  return {
-    type: 'PEX:UPDATE_EMAIL_PROFILE',
     payload
   };
 };

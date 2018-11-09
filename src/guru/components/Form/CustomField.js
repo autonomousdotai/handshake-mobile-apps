@@ -32,8 +32,8 @@ function dateTimePicker(props) {
   return (
     <DateTimePicker
       value={props.field.value}
+      field={props.field}
       onDateChange={(date) => {
-        console.log('date', date);
         props.form.setFieldValue(props.field.name, date);
       }}
       title={props.title}
