@@ -353,7 +353,7 @@ export default {
   'dashboard.label.deposit.description2': 'Fraud-proof. 100% secured. Safety guaranteed.',
 
   'askLocationPermission.label.1': 'We would like to access your location to find nearest ATMs around you!',
-  'askLocationPermission.label.2': `<span>Please click <strong>"Allow"</strong> to start trading now!</span>`,
+  'askLocationPermission.label.2': `<span>Please click <strong>"Allow"</strong> to start trading now! </span>`,
   'askLocationPermission.btn.dontAllow': `Don't Allow`,
   'askLocationPermission.btn.allow': 'Allow',
 
