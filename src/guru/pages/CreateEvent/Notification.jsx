@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import { ErrMsg } from '@/guru/components/Form';
-import { sendEmailCode, verifyEmailCode, updateEmailProfile } from './action';
+import { fetchProfile } from '@/reducers/auth/action';
+import { API_URL } from '@/constants';
+import { sendEmailCode, verifyEmailCode } from './action';
 
 class Notification extends Component {
   static displayName = 'Notification';
@@ -11,7 +13,7 @@ class Notification extends Component {
     formProps: PropTypes.any.isRequired,
     sendEmailCode: PropTypes.func.isRequired,
     verifyEmailCode: PropTypes.func.isRequired,
-    updateEmailProfile: PropTypes.func.isRequired,
+    fetchProfile: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
     isEmailVerified: PropTypes.bool.isRequired,
   };
@@ -38,9 +40,12 @@ class Notification extends Component {
         headers: { 'Content-Type': 'multipart/form-data' },
         PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
         successFn: () => {
-          this.props.updateEmailProfile({ email });
+          this.props.fetchProfile({
+            PATH_URL: API_URL.USER.PROFILE,
+          });
         },
-        errorFn: () => {
+        errorFn: (e) => {
+          console.error(e);
           setFieldError('emailCode', 'incorrect Code');
         }
       });
@@ -54,22 +59,24 @@ class Notification extends Component {
       (errors.email && touched.email) ||
       state.isEmailSent;
     return (
-      <div className="FlexRow">
-        <Field
-          name="email"
-          placeholder="e.g. ninja@gmail.com"
-          disabled={state.isEmailSent}
-        />
-        <button
-          type="button"
-          disabled={disabled}
-          className="btn btn-primary"
-          onClick={() => this.sendEmail(values.email)}
-        >
-          Get code
-        </button>
+      <React.Fragment>
+        <div className="GroupRow">
+          <Field
+            name="email"
+            placeholder="e.g. ninja@gmail.com"
+            disabled={state.isEmailSent}
+          />
+          <button
+            type="button"
+            disabled={disabled}
+            className="btn btn-primary"
+            onClick={() => this.sendEmail(values.email)}
+          >
+            Get code
+          </button>
+        </div>
         <ErrMsg name="email" />
-      </div>
+      </React.Fragment>
     );
   };
 
@@ -79,7 +86,7 @@ class Notification extends Component {
     return (
       <React.Fragment>
         <span className="GroupNote">Enter the secret code</span>
-        <div className="FlexRow">
+        <div className="GroupRow">
           <Field
             name="emailCode"
             type="text"
@@ -93,8 +100,8 @@ class Notification extends Component {
           >
             Verify
           </button>
-          <ErrMsg name="emailCode" />
         </div>
+        <ErrMsg name="emailCode" />
       </React.Fragment>
     );
   };
@@ -118,11 +125,11 @@ class Notification extends Component {
       return this.renderHasEmail(props, state);
     }
     return (
-      <React.Fragment>
-        <span>Get creator updates on your bet.</span>
+      <div className="UnVerified">
+        <span className="GroupNote">Get creator updates on your bet.</span>
         {this.renderEmailBox(props, state)}
         {this.renderCodeBox(props, state)}
-      </React.Fragment>
+      </div>
     );
   };
 
@@ -142,5 +149,5 @@ export default connect(
       email: state.auth.profile.email,
       isEmailVerified: !!state.auth.profile.verified
     };
-  }, { sendEmailCode, verifyEmailCode, updateEmailProfile }
+  }, { sendEmailCode, verifyEmailCode, fetchProfile }
 )(Notification);

@@ -1,5 +1,7 @@
 .ErrMsg {
   color: red;
+  font-size: 13px;
+  padding: 5px 0;
 }
 
 .CreateEvent {
@@ -28,6 +30,11 @@
     .GroupNote {
       color: #889EB5;
       font-size: 13px;
+    }
+
+    .GroupRow {
+      display: flex;
+      align-items: center;
     }
 
     .BlockLeft {
@@ -208,11 +215,24 @@
       height: 38px;
       border-radius: 5px;
       padding: 5px 10px;
-      border: none;
-      margin-top: 10px;
+      border: 1px solid hsl(0,0%,80%);
+      font-size: 15px;
 
       &:disabled {
         background-color: #F5F8FC;
+      }
+    }
+
+    .btn {
+      flex-basis: 50%;
+      font-size: 13px;
+      height: 38px;
+      padding: 0;
+    }
+
+    .UnVerified {
+      input {
+        margin-right: 10px;
       }
     }
   }

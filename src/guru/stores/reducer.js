@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 import {
-  updateReports,
+  updateReports
 } from '@/guru/pages/CreateEvent/action';
 
 const initialState = {

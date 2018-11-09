@@ -205,6 +205,7 @@ class CreateEvent extends React.Component {
                 </div>
                 <div className="FormBlock">
                   {this.renderReportSource()}
+                  <div className="BlankLine" />
                   {this.renderDateTime()}
                 </div>
                 <div className="FormBlock">
