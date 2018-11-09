@@ -54,7 +54,7 @@ class Navigation extends React.Component {
       <footer className="footer">
         <ul>
           <li className={cn(this.checkSelected([URL.BUY_COIN_URL, URL.INDEX]))}>
-            <Link to={URL.BUY_COIN_URL} onClick={this.props.clearHeaderBack}>
+            <Link to={URL.INDEX} onClick={this.props.clearHeaderBack}>
               <div dangerouslySetInnerHTML={{ __html: creditIcon }} />
               <span>{this.props.intl.messages.app.navigation.ninjaCoin.toUpperCase()}</span>
             </Link>
