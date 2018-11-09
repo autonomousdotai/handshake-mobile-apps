@@ -32,3 +32,10 @@ export const updateUserReputation = (reputation) => {
     reputation,
   };
 };
+
+export const loginCoinbase = (payload = {}) => {
+  return {
+    type: 'GURU:LOGIN_COIN_BASE',
+    ...payload,
+  };
+};

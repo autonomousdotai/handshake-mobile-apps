@@ -301,10 +301,10 @@ export const API_URL = {
   USER: {
     PROFILE: 'user/profile',
     CHECK_EXIST_EMAIL: 'user/check-email-exist',
-    ID_VERIFICATION: 'user/id_verification',    
+    ID_VERIFICATION: 'user/id_verification',
     LOGIN: 'user/login',
     SIGNUP: 'user/sign-up'
-    
+
   },
   INTERNAL: {
     GET_WITHDRAW_LIST: 'exchange/internal/credit/withdraw',
@@ -325,9 +325,9 @@ export const API_URL = {
       LIST: 'admin/user/list',
       UPDATE: 'admin/user/update',
     }
-    
+
   }
-  
+
 };
 
 export const HANDSHAKE_STATUS = {
@@ -584,6 +584,8 @@ export const URL = {
   GURU_CREATE_EVENT: '/create-event',
   HANDSHAKE_REPUTATION: '/reputation',
   HANDSHAKE_COINBASE_WALLET: '/wallet-coin',
+  HANDSHAKE_COINBASE_AUTH: '/auth/callback',
+
   HANDSHAKE_PREDICTION: '/prediction',
   HANDSHAKE_PEX: '/pex',
   PEX_EXTENSION: '/pex-extension',

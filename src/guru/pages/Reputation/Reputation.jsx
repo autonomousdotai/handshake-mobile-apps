@@ -35,7 +35,6 @@ class Reputation extends React.Component {
   getData = (props) => {
     const query = this.getQueryString();
     const userId = query.id;
-    console.log('UserId :', userId);
     props.dispatch(loadUserReputation({ userId }));
   }
 

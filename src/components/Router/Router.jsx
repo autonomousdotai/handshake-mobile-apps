@@ -41,7 +41,8 @@ const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/C
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
 const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
-//const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
+const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
+const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/WalletCoin/AuthCallback'), Loading);
 
 // Guru's Routes
 const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
@@ -77,6 +78,8 @@ const configRoutesUsingMobileLayout = [
   { path: URL.GURU_CREATE_EVENT, component: GuruCreateEvent },
   { path: URL.HANDSHAKE_GURU, component: RouterGuru },
   { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
+  { path: URL.HANDSHAKE_COINBASE_WALLET, component: RouterWalletCoin },
+  { path: URL.HANDSHAKE_COINBASE_AUTH, component: RouterAuthCallback },
 
   { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
   { path: URL.HANDSHAKE_PEX, component: RouterExchange },
