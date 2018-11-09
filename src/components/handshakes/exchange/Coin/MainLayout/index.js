@@ -13,10 +13,10 @@ const TABS = {
     name: 'coin_tabs.buy',
     component: BuyCryptoCoin,
   },
-  // SELLCOIN: {
-  //   name: 'coin_tabs.sell',
-  //   component: SellCryptoCoin,
-  // },
+  SELLCOIN: {
+    name: 'coin_tabs.sell',
+    component: SellCryptoCoin,
+  },
 };
 
 const scopedCss = (className) => `crypto-coin-main-layout-${className}`;
@@ -31,6 +31,7 @@ class Coin extends Component {
   }
 
   updateShowVerifyInfo = (isShow) => {
+    console.log('updateShowVerifyInfo', isShow);
     this.setState({ showInfo: isShow});
   }
 
@@ -65,7 +66,7 @@ class Coin extends Component {
   render() {
     const showState = [-1, 0, 2, 1];
     const { authProfile: { idVerified } } = this.props;
-    const { currentTabId } = this.state;
+    const { currentTabId, showInfo } = this.state;
     return (
       <div className={scopedCss('container')}>
         <ChangeLanguage />
@@ -74,7 +75,7 @@ class Coin extends Component {
         </div>
         <div className={scopedCss('tab-body')}>
           {
-            showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} coinTab={currentTabId} />
+            showInfo && showState.indexOf(idVerified) >= 0 && <IdVerifyBtn dispatch={this.props.dispatch} idVerified={idVerified} coinTab={currentTabId} />
           }
           {this.renderTabComponent()}
         </div>

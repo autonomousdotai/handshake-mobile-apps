@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 export const required = value =>
-  (value && value.trim().length > 0 ? undefined : <FormattedMessage id="error.required" />);
+  (value && value.toString().trim().length > 0 ? undefined : <FormattedMessage id="error.required" />);
 
 export const requiredPhone = value => {
   if (value) {

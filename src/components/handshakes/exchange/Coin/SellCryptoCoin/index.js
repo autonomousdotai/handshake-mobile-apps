@@ -130,6 +130,7 @@ class SellCryptoCoin extends Component {
     console.log('handleGenerateCryptoAddressSuccess', res);
     if (res.data) {
       this.setState({ generatedAddress: res.data });
+      this.props.updateShowVerifyInfo(false);
     }
   }
 
