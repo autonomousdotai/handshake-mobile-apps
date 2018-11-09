@@ -31,6 +31,7 @@ class HedgeFundAPI extends NetworkAPI {
     this.version = version
     self.contractInfo = 0
     this.useMetamask = useMetamask
+    // eliminate http
     this.contractUrl = '';
     // this.contractUrl = `http://35.198.235.226/json/hedgefund_latest.json`
     try {
