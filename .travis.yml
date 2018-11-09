@@ -5,6 +5,7 @@ node_js:
 branches:
   only:
     - develop
+    - develop_coinbowl
 cache:
   yarn: true
   directories:
