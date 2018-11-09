@@ -208,7 +208,7 @@ class Prediction extends React.Component {
   }
 
   handleClickCreator = (event) => {
-    const userId = event.created_user_id || -1;
+    const userId = event.created_user_id || 0;
     const address = event.creator_wallet_address || '';
     this.props.history.push(`${URL.HANDSHAKE_REPUTATION}?id=${userId}&address=${address}`);
   }

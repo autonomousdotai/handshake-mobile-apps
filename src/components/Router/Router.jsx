@@ -41,6 +41,7 @@ const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/C
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
 const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
+//const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
 
 // Guru's Routes
 const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
