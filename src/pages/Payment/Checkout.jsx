@@ -175,7 +175,7 @@ class Checkout extends React.Component {
 
     let result = true;
     if(wallet && toAddress && amountCrypto) {
-      if(amountCrypto <= wallet.balance) {
+      if(Number(amountCrypto) <= Number(wallet.balance)) {
         result = false;
       }
     }
@@ -188,7 +188,7 @@ class Checkout extends React.Component {
 
     const {walletSelected:wallet} = this.state;
     if(wallet && toAddress && amountCrypto) {
-      if(amountCrypto > wallet.balance) {
+      if(Number(amountCrypto) > Number(wallet.balance)) {
         this.showError(messages.wallet.action.payment.error.insufficient);
         return;
       }
@@ -252,7 +252,7 @@ class Checkout extends React.Component {
 
     this.setState({isRestoreLoading: true});
 
-    wallet.transfer(toAddress, amountCrypto).then(success => {
+    wallet.transfer(toAddress, Number(amountCrypto)).then(success => {
       this.setState({isRestoreLoading: false});
       if (success.hasOwnProperty('status')){
         if (success.status == 1){
