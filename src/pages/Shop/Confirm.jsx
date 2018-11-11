@@ -15,41 +15,56 @@ class Confirm extends React.Component {
     this.state = {
       status: -1 // pending
     };
+    // variable for checking order
     this.orderNum = '';
+    this.email = '';
+    this.resultOfOrder = -1;
   }
 
   get resultView() {
     const { status } = this.state;
     if (status === 1) {
       // success
-      return <div>Thank you for your order. Order number is {this.orderNum}</div>
+      return (<div>
+        Thank you for your order.
+        <p>Order number: <strong>{this.orderNum}</strong></p>
+        <p>Email: <strong>{this.email}</strong></p>
+        {
+          this.resultOfOrder === 15 && (
+            <p>Your order is pending. It's waiting network.</p>
+          )
+        }     
+        <a href="https://www.autonomous.ai/track-your-order" target="_blank" title="track your order">
+          Track your order
+        </a>
+      </div>);
     } else if (status === 2 || status === 0) {
       // fail
       return <div>Sorry! something happened wrong.</div>
     } else {
       // loading
-      return <div>loading...</div>;
+      return <div>We're checking...</div>;
     }
   }
   
-  componentDidMount() {
+  async componentDidMount() {
     // get status
     const queryObject = qs.parse(location.search.slice(1));
     if (queryObject.status === '1') {
       // call to confirm hash
       const { email, orderNum } = getJSON(CUSTOMER_ADDRESS_INFO);
       this.orderNum = orderNum;
-      const url = `${AUTONOMOUS_END_POINT.BASE}/order-api/order/eth/charges?order_id=${queryObject.order_id}&email=${email}&hash=${queryObject.hash}`;
-      const confirmOrder = $http({ url, method: 'POST' });
-      confirmOrder.then(result => {
-        if (result.data.status < 1) {
-          // fail
-          this.setState({ status: 0 });
-        } else {
-          // success
-          this.setState({ status: 1 });
-        }
-      });
+      this.email = email;
+      const url = `${AUTONOMOUS_END_POINT.BASE}${AUTONOMOUS_END_POINT.VERIFY_CHARGE_BY_ETH}?order_id=${queryObject.order_id}&email=${email}&hash=${queryObject.transaction}`;
+      const { data } = await $http({ url, method: 'POST' });
+      if (data.status < 1) {
+        // fail
+        this.setState({ status: 0 });
+      } else {
+        // success
+        this.resultOfOrder = data.data.status;
+        this.setState({ status: 1 });
+      }
     } else {
       this.setState({ status: 0 });
     }

@@ -31,8 +31,9 @@ class HedgeFundAPI extends NetworkAPI {
     this.version = version
     self.contractInfo = 0
     this.useMetamask = useMetamask
-
-    this.contractUrl = `http://35.198.235.226/json/hedgefund_latest.json`
+    // eliminate http
+    this.contractUrl = '';
+    // this.contractUrl = `http://35.198.235.226/json/hedgefund_latest.json`
     try {
       new Promise(async (resolve)=>{
         this.contractInfo = (await axios.get(this.contractUrl)).data
