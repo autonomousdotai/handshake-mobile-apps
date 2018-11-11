@@ -41,7 +41,8 @@ class Redeem extends React.Component {
     this.modalBodyStyle = {padding: 0};
   }
 
-  handleNameChange =(value)=>{
+  handleNameChange =(evt)=>{
+    let value = evt.target.value;
     this.setState({redeemCode: value, error: ''});
   }
 
@@ -103,7 +104,7 @@ class Redeem extends React.Component {
           </div>
           <div className="body">
               <div className="redeem-code">
-                <Input required placeholder={messages.wallet.action.redeem.your_code} maxLength="40" value={this.state.redeemCode} onChange={this.handleNameChange} /> 
+                <Input required placeholder={messages.wallet.action.redeem.your_code} maxLength="40" value={this.state.redeemCode} onChange={(evt)=>this.handleNameChange(evt)} /> 
                 {this.state.error && <div className="error">{this.state.error}</div>}
               </div>                     
               <div className="buttonRedeem">              

@@ -25,7 +25,8 @@ class WalletPreferences extends React.Component {
   }
 
 
-  handleWalletNameChange=(value) => {
+  handleWalletNameChange=(evt) => {
+    let value = evt.target.value;
     this.setState({walletName: value}, ()=>{
       this.renderModalName();
     });
@@ -45,7 +46,7 @@ class WalletPreferences extends React.Component {
     this.setState({walletNameContent: (
         <div className="update-name">
           <label>{this.messages.wallet.action.preferecens.update_name.label}</label>
-          <Input required placeholder={this.messages.wallet.action.preferecens.update_name.title} maxLength="40" value={this.state.walletName} onChange={(value) => {this.handleWalletNameChange(value)}} />
+          <Input required placeholder={this.messages.wallet.action.preferecens.update_name.title} maxLength="40" value={this.state.walletName} onChange={(evt) => {this.handleWalletNameChange(evt)}} />
           <button type="button" onClick={()=> {this.handleUpdateNameOnClick();}} disabled={!this.state.walletName} className="button wallet-new-button">{this.messages.wallet.action.preferecens.update_name.button.save}</button>
         </div>
       )

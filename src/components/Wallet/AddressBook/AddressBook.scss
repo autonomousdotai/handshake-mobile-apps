@@ -1,0 +1,82 @@
+.list-address-book{
+    padding: 0;
+    width: 100%;
+    
+    .qrcode-box{
+        position: relative;
+        .icon-qr-code-black{
+            position: absolute;
+            right: 0;
+            right: 0;
+            top: 15px;
+            z-index: 2;
+            background: #fff;
+            padding: 3px;
+        }
+    }
+    .header-box-contact-detail{
+        background-color: rgb(84, 111, 247);
+        height: 70px;
+        text-align: center;    
+    }
+    .avatar-b{
+        width: 75px;
+        background-color: #cecece;
+        padding: 10px;
+        border-radius: 10px;
+        margin-top: 20px;    
+    }
+    .contact-detail{
+        position: relative;
+    }
+    .list-address-emtpy{
+        text-align: center;
+        img{
+            margin-top: 80px;
+        }
+        .address-emtpy-title{
+            font-size: 22px;
+            margin-top: 10px;
+        }
+        .address-emtpy-desc{
+            font-size: 14px;        
+        }
+        .address-emtpy-btn{
+            margin-top: 60px;
+            border-radius: 0;
+            height: 40px;
+            font-size: 14px;
+            width: 250px;
+        }
+    }
+    .add-new-contact{
+        padding: 20px;
+        .btn-add-new-address{
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 0;
+            height: 40px;
+            font-size: 14px;
+        }
+    }
+    .list-contact-search-box{
+        position: relative;
+        margin-top: 10px;
+        padding: 10px;
+        margin-left: 10px;
+        margin-right: 10px;
+        img{
+            position: absolute;
+            width: 25px;
+            left: 25px;
+            top: 20px;
+        }
+        input{
+            border: 1px solid #c8c7cc;
+            padding: 20px;
+            padding-left: 50px;
+            box-shadow: 2px 2px 13px 0 rgba(1, 1, 0, 0.1);
+        }
+    }
+}
+

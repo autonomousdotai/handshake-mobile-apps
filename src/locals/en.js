@@ -1485,7 +1485,8 @@ export default {
           gas_limit: 'Gas Limit',
           data: 'Data',
           feel_level: 'Fee:',
-          max_amount: 'Max amount'
+          max_amount: 'Max amount',
+          from_contact: 'From contacts',
         },
         placeholder: {
           to_address: 'Wallet address...',
@@ -1564,6 +1565,8 @@ export default {
           contact_empty_desc: "Get started by adding your first one.",
           contact_empty_button: "Add contact",
           contact_add_contact_search_box: "Search a contact ...",
+          select_a_contact: "Select a contact",
+          
 
         },
         button: {

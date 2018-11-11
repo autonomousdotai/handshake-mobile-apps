@@ -885,7 +885,8 @@ export class MasterWallet {
           }
         });
       }
-      return listContact;
+      localStore.save("contacts", listTemp);
+      return listTemp;
     }
     static addContact(contact){
       console.log("contact need add", contact);
@@ -893,8 +894,7 @@ export class MasterWallet {
       let listContact = MasterWallet.readContacts();
       if (listContact.length > 0){
         for (var i = 0; i < listContact.length; i ++){
-          let cont = listContact[i];
-          console.log("cont.address", cont.address,"contact.address",contact.address, "cont.address == contact.address", cont.address == contact.address);
+          let cont = listContact[i];          
           if (cont.email == contact.email || cont.address == contact.address){
             flag = true;
             break;            

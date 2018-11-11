@@ -22,7 +22,7 @@ class Input extends React.PureComponent {
     if (checkError && meta.error) {
       errorClass = 'input-error';
     }
-
+    
     return (
       <input
         {...props}

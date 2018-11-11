@@ -6,6 +6,17 @@ import PropTypes from 'prop-types';
 import './Input.scss';
 
 class Input extends React.PureComponent {
+
+  static propTypes = {
+    name: PropTypes.string,
+    value: PropTypes.any,
+    type: PropTypes.string,
+    onRef: PropTypes.func,
+    placeholder: PropTypes.string,
+    className: PropTypes.string,
+    meta: PropTypes.object,
+    checkError: PropTypes.bool,
+  }
     
   constructor(props) {
     super(props);    
@@ -29,18 +40,25 @@ class Input extends React.PureComponent {
   }
 
   render() {      
-    const { type, name, meta, placeholder, className, ...props } = this.props;        
+    const { type, name, meta, placeholder, onRef, className, checkError, ...props } = this.props;
+
+    let inRef = onRef || ((div) => this.inputRef = div);
+
+    let errorClass = '';
+    if (checkError && meta.error) {
+      errorClass = 'input-error';
+    }
+     
     return (
         
         <div className="form-input">
             <label> 
                 <input
                 {...props}
-                onChange={this.handleChange.bind(this)}                
-                value={this.state.value}
-                className={`${className || ''}`}
+                className={`form-control ${errorClass} ${className || ''}`}
                 type={type || 'text'}
-                name={name|| ""}
+                name={name}
+                ref={inRef}
                 />
                 <span className="placeholder">{placeholder|| ''}</span>
             </label>
@@ -48,11 +66,5 @@ class Input extends React.PureComponent {
     );
   }
 }
-
-Input.propTypes = {
-  value: PropTypes.string,  
-  placeholder: PropTypes.string,  
-  onChange: PropTypes.func,  
-};
 
 export default Input;
