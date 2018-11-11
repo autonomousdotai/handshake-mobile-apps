@@ -525,7 +525,7 @@ calcMaxAmount = () => {
 }
 
 onChooseFromContact =()=>{
-  this.setState({addressBookContent: <AddressBook needChoice={true} onSelected = {(item)=> {this.onSelectAddressBook(item);}} onRef={ref => (this.child = ref)}  modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} customBackIcon={this.customBackIcon} />}, ()=>{
+  this.setState({addressBookContent: <AddressBook needChoice={true} onSelected = {(item)=> {this.onSelectAddressBook(item);}} onRef={ref => (this.child = ref)}  modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} customBackIcon={customBackIcon} />}, ()=>{
     this.modalAddressBookRef.open();        
   })    
   
@@ -543,9 +543,9 @@ openAddNewContact=()=>{
 onSelectAddressBook=(address)=>{
   console.log(address);
   this.setState({
-    inputAddressAmountValue: address.address
+    inputAddressAmountValue: address.address.address
   });  
-  this.props.rfChange(nameFormSendWallet, 'to_address', address.address);
+  this.props.rfChange(nameFormSendWallet, 'to_address', address.address.address);
   this.modalAddressBookRef.close();
 }
 

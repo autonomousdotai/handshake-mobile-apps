@@ -880,7 +880,7 @@ export class MasterWallet {
       let listTemp = [];           
       if (listContact.length > 0){
         listContact.forEach((cont) => {          
-          if (cont.address != contact.address){
+          if (cont.address.address != contact.address.address){
             listTemp.push(cont);
           }
         });
@@ -895,7 +895,7 @@ export class MasterWallet {
       if (listContact.length > 0){
         for (var i = 0; i < listContact.length; i ++){
           let cont = listContact[i];          
-          if (cont.email == contact.email || cont.address == contact.address){
+          if (cont.email == contact.email || cont.address.address == contact.address.address){
             flag = true;
             break;            
           }

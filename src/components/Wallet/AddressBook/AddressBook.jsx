@@ -90,8 +90,7 @@ class AddressBook extends React.Component {
     let newContract = this.state.newContract;    
 
     if (value.toString().length > 30){
-      let qrCodeResult = MasterWallet.getQRCodeDetail(value);    
-      console.log("qrCodeResult", qrCodeResult);
+      let qrCodeResult = MasterWallet.getQRCodeDetail(value);          
       if (qrCodeResult && Object.keys(qrCodeResult.data).length !== 0 ){
         
         if (qrCodeResult['type'] == MasterWallet.QRCODE_TYPE.TRANSFER || qrCodeResult['type'] == MasterWallet.QRCODE_TYPE.CRYPTO_ADDRESS){                      
@@ -192,15 +191,14 @@ class AddressBook extends React.Component {
   
 
   render() {
-    const { messages } = this.props.intl; 
-    console.log("newContract", this.state.newContract.address);
+    const { messages } = this.props.intl;     
     let invalid = !this.state.newContract.name || !this.state.newContract.address.symbol || !(this.state.newContract.email == "" || validateEmail(this.state.newContract.email));
     
     return (
 
         <div className="box-setting">                         
           <div className="list-address-book">
-            <Modal title={messages.wallet.action.setting.label.address_book} onRef={modal => this.modaAddNewContactRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle}>
+            <Modal title={messages.wallet.action.setting.label.contact_empty_button} onRef={modal => this.modaAddNewContactRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle}>
               <div className="add-new-contact">
                   <div>                    
                     <Input placeholder={messages.wallet.action.setting.label.contact_name} maxLength="40" value={this.state.newContract.name} onChange={(evt) => {this.onContactNameChange(evt)}} />
