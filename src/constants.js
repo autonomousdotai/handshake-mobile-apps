@@ -582,6 +582,7 @@ export const URL = {
   // Guru
   HANDSHAKE_GURU: '/guru',
   GURU_CREATE_EVENT: '/create-event',
+  GURU_PLACE_BET: '/place-bet',
   HANDSHAKE_REPUTATION: '/reputation',
   HANDSHAKE_COINBASE_WALLET: '/wallet-coin',
   HANDSHAKE_COINBASE_AUTH: '/auth/callback',

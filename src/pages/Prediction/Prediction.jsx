@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import BetMode from '@/components/handshakes/betting/Feed/OrderPlace/BetMode';
@@ -35,6 +36,7 @@ import PexCreateBtn from './PexCreateBtn';
 import Disclaimer from './Disclaimer';
 
 import './Prediction.scss';
+import LinkWallet from '../Invest/LinkWallet';
 
 class Prediction extends React.Component {
   static displayName = 'Prediction';
@@ -214,6 +216,7 @@ class Prediction extends React.Component {
   }
 
   handleClickEventItem = (itemProps, itemData) => {
+    // this.props.history.push(`${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&side=${itemProps.side}`);
     const { event } = itemProps;
     const { shareEvent } = this.props;
     if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
@@ -478,6 +481,14 @@ class Prediction extends React.Component {
     );
   }
 
+  renderPlusButton = () => {
+    return (
+      <Link to={URL.GURU_CREATE_EVENT} className="CreateEventButton">
+        <i className="fal fa-plus" />
+      </Link>
+    );
+  }
+
   renderComponent = (props, state) => {
     return (
       <div className={Prediction.displayName}>
@@ -495,6 +506,7 @@ class Prediction extends React.Component {
         {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
         {this.renderCreditCard()}
+        {!props.isLoading && this.renderPlusButton()}
       </div>
     );
   };

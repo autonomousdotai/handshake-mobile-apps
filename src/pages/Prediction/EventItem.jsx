@@ -123,27 +123,26 @@ function renderStatistics({ event }) {
 function renderBetOptions(props) {
   const opts = [{
     side: 1,
-    label: 'yes'
+    label: 'yes',
+    className: 'btn-primary'
   },
   {
-    side: 0,
-    label: 'no'
+    side: 2,
+    label: 'no',
+    className: 'btn-secondary'
   }];
   return (
     <div className="BetButtons">
       {
-        opts.map(o => {
-          const styleBtn = o.side ? 'btn-primary' : 'btn-secondary';
-          return (
-            <button
-              key={o.side}
-              className={`btn ${styleBtn}`}
-              onClick={() => props.onClickOutcome({ ...props, side: o.side }, props.event.outcomes[0])}
-            >
-              {o.label}
-            </button>
-          );
-        })
+        opts.map(o => (
+          <button
+            key={o.side}
+            className={`btn ${o.className}`}
+            onClick={() => props.onClickOutcome({ ...props, side: o.side }, props.event.outcomes[0])}
+          >
+            {o.label}
+          </button>
+        ))
       }
     </div>
   );

@@ -47,6 +47,7 @@ const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/Wallet
 // Guru's Routes
 const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
 const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
+const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -76,6 +77,7 @@ const InternalAdminDashboard = createDynamicImport(() => import('@/pages/Interna
 const configRoutesUsingMobileLayout = [
   // Guru
   { path: URL.GURU_CREATE_EVENT, component: GuruCreateEvent },
+  { path: URL.GURU_PLACE_BET, component: GuruPlaceBet },
   { path: URL.HANDSHAKE_GURU, component: RouterGuru },
   { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
   { path: URL.HANDSHAKE_COINBASE_WALLET, component: RouterWalletCoin },

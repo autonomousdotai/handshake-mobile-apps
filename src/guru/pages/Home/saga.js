@@ -1,7 +1,9 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
+import { apiGet } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
 import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase } from './action';
-import { apiPost, apiGet } from '@/stores/api-saga';
+import { apiPost } from '@/stores/api-saga';
+
 
 export function* handleLoadMatches({ isDetail, source }) {
   try {
