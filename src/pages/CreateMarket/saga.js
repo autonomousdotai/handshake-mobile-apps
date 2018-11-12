@@ -95,7 +95,7 @@ function* handleGenerateShareLinkSaga({ matchId, ...payload }) {
   }
 }
 
-function* saveGenerateShareLinkToStore({ matchId, eventName }) {
+export function* saveGenerateShareLinkToStore({ matchId, eventName }) {
   const generateLink = yield call(handleGenerateShareLinkSaga, { matchId });
   return yield put(shareEvent({
     url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${generateLink.data.slug}`,

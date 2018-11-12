@@ -2,11 +2,12 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { API_URL } from '@/constants';
 import { apiGet, apiPost, apiPostForm } from '@/guru/stores/api';
 import { getAddress } from '@/components/handshakes/betting/utils';
+import { saveGenerateShareLinkToStore } from '@/pages/CreateMarket/saga';
 import {
   loadReports,
   updateReports,
   createEvent,
-  sendEmailCode,
+  sendEmailCode
 } from './action';
 
 function* handleLoadReports() {
@@ -48,12 +49,21 @@ function* handleCreateEven({ values }) {
     const eventFormData = new FormData();
     eventFormData.set('data', JSON.stringify(newEventData));
     eventFormData.set('image', values.image);
-    const res = yield call(apiPostForm, {
+    const { data, status, code, message } = yield call(apiPostForm, {
       PATH_URL: `${API_URL.CRYPTOSIGN.ADD_MATCH}`,
       type: 'ADD_EVENT_API',
       data: eventFormData
     });
-    console.log('res', res);
+    console.log('create result', data);
+    if (status) {
+      const eventData = (data[0] || {});
+      yield saveGenerateShareLinkToStore({
+        matchId: eventData.id,
+        eventName: eventData.name
+      });
+    } else {
+      console.error('Failed to create event', code, message);
+    }
   } catch (e) {
     console.error(e);
   }
