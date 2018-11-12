@@ -96,7 +96,6 @@ class ReviewList extends React.Component {
             reviewList && reviewList.map(item => {
               return (
                 <Row key={item?.id} className="review">
-                  <div><Image src={loadingSVG} alt="loading" width="30" /></div>
                   <div className="review-content">
                     <div className="name">{item?.name}</div>
                     <div className="content">{item?.review}</div>
