@@ -186,9 +186,9 @@ class Router extends React.Component {
   render() {
     return (
       <Switch>
-        {
+        {/*{
           BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterCryptoCoin} />
-        }
+        }*/}
 
         <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
         <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
