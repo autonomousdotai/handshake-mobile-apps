@@ -76,7 +76,7 @@ class Reputation extends React.Component {
     return (
       <div className="wrapperGroupBlock">
         <div className="mediumText boldText">{formatAmount(totalAmount)}</div>
-        <div className="disableText normalText">ETH played</div>
+        <div className="disableText normalText">ETH</div>
       </div>
     );
   }
