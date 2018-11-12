@@ -20,3 +20,7 @@ export const eventSelector = (state) => {
 export const matchDetailSelector = (state) => {
   return state.guru.matchDetail;
 };
+
+export const gasPriceSelector = (state) => {
+  return parseFloat(state.guru.gasPrice);
+};

@@ -216,7 +216,9 @@ class Prediction extends React.Component {
   }
 
   handleClickEventItem = (itemProps, itemData) => {
-    // this.props.history.push(`${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&side=${itemProps.side}`);
+    this.props.history.push(`${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&side=${itemProps.side}`);
+
+    // TODO: remove later
     const { event } = itemProps;
     const { shareEvent } = this.props;
     if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
@@ -473,8 +475,8 @@ class Prediction extends React.Component {
   renderAppBar = (props) => {
     return (
       <AppBar>
-        <span className="Account">
-          <i className="fal fa-user"></i>
+        <span className="IconLeft Account">
+          <i className="fal fa-user" />
         </span>
         <span className="Title">Prediction</span>
       </AppBar>

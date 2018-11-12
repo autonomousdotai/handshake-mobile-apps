@@ -1,15 +1,16 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 import { updateReports } from '@/guru/pages/CreateEvent/action';
-import { putMatchDetail } from '@/guru/pages/PlaceBet/action';
 
 const initialState = {
   events: [],
   matchDetail: {},
+  gasPrice: '',
   userEvents: [],
   reputation: {},
   ui: {},
   authCoinBase: {},
+  isFetching: false
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -19,8 +20,10 @@ const guruReducer = (state = initialState, action) => {
         draft.events = action.events;
         break;
       case 'GURU:PUT_MATCH_DETAIL':
-        console.log('MATCHDETAIL', draft.matchDetail, action.data);
         draft.matchDetail = action.data;
+        break;
+      case 'GURU:PUT_GAS_PRICE':
+        draft.gasPrice = action.payload;
         break;
       case 'GURU:UPDATE_USER_EVENTS':
         draft.userEvents = action.userEvents;
@@ -33,6 +36,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case updateReports().type:
         draft.reports = action.payload.data;
+        break;
+      case 'GURU:UPDATE_LOADING':
+        draft.isFetching = action.isFetching;
         break;
       default:
         break;
