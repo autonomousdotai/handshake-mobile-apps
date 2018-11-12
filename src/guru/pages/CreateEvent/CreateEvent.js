@@ -6,7 +6,7 @@ import moment from 'moment';
 import * as Yup from 'yup';
 import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
 import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
-import AddButton from '@/assets/images/pex/create/add-btn.svg';
+import { isURL } from '@/utils/string';
 
 import { createEvent } from './action';
 import ReportSource from './ReportSource';
@@ -23,7 +23,7 @@ class CreateEvent extends React.Component {
 
   static defaultProps = {
     email: ''
-  }
+  };
 
   handleOnSubmit = (values) => { // values, actions
     this.props.createEvent({ values });
@@ -89,7 +89,7 @@ class CreateEvent extends React.Component {
     );
   };
 
-  renderImageUpload = ({ setFieldValue, values }) => {
+  renderImageUpload = ({ values, setFieldValue }) => {
     return (
       <div className="ImageUpload">
         <div className="BlockLeft">
@@ -104,8 +104,6 @@ class CreateEvent extends React.Component {
             type="file"
             className="FileInput"
             onChange={(e) => {
-              console.log('e.currentTarget.files[0]: ', e.currentTarget.files[0]);
-              console.log('values.image: ', values.image);
               setFieldValue('image', e.currentTarget.files[0]);
             }}
           />
@@ -194,10 +192,14 @@ class CreateEvent extends React.Component {
 
     const eventSchema = Yup.object().shape({
       eventName: Yup.string().required('Required'),
-      outcomeName: Yup.string().required('Required'),
+      outcomeName: Yup.string().required('Required'), // should not = eventName
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
-      // image: Yup.mixed().required('Required'),
-      source: Yup.mixed().required('Required'),
+      image: Yup.mixed().test('image', 'invalid file type', (f) => {
+        return !f ? true : (/(gif|jpe?g|png)$/i).test(f.type);
+      }),
+      source: Yup.mixed().required('Required').test('source', 'invalid URL', (s) => {
+        return !s ? true : isURL((s || {}).label); // validate create first time
+      }),
       ...validateEmail
     });
 
@@ -237,7 +239,7 @@ class CreateEvent extends React.Component {
                 >
                   Create
                 </button>
-                <Debug props={formProps} />
+                <Debug props={formProps} hide />
               </Form>
             );
           }}

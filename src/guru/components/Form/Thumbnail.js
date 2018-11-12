@@ -4,18 +4,18 @@ import PropTypes from 'prop-types';
 export default class Thumbnail extends React.Component {
   static propTypes = {
     file: PropTypes.any,
-    defaultImage: PropTypes.string,
-  }
+    defaultImage: PropTypes.string
+  };
 
   static defaultProps = {
     file: undefined,
     defaultImage: undefined
-  }
+  };
 
   state = {
     thumb: undefined
   };
-
+  // TODO: change
   componentWillReceiveProps(nextProps) {
     if (!nextProps.file) { return; }
 

@@ -39,3 +39,8 @@ export function shortAddress(str, padChars) {
   const endChars = str.slice(-4);
   return beginChars.concat(padChars || '...', endChars);
 }
+
+export function isURL(url) {
+// eslint-disable-next-line no-useless-escape
+  return (/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i).test(url);
+}

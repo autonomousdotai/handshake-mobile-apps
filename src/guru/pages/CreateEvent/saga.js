@@ -47,6 +47,7 @@ function* handleCreateEven({ values }) {
     console.log('newEventData', newEventData);
     const eventFormData = new FormData();
     eventFormData.set('data', JSON.stringify(newEventData));
+    eventFormData.set('image', values.image);
     const res = yield call(apiPostForm, {
       PATH_URL: `${API_URL.CRYPTOSIGN.ADD_MATCH}`,
       type: 'ADD_EVENT_API',

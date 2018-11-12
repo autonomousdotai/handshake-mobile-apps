@@ -10,6 +10,7 @@ function renderReselect(props) {
       classNamePrefix="react-select"
       {...props.field}
       onChange={option => props.form.setFieldValue(props.field.name, option)}
+      onBlur={() => props.form.setFieldTouched(props.field.name)}
       isClearable
       placeholder={props.placeholder}
       options={props.options}
@@ -35,6 +36,7 @@ function dateTimePicker(props) {
       field={props.field}
       onDateChange={(date) => {
         props.form.setFieldValue(props.field.name, date);
+        props.form.setFieldTouched(props.field.name);
       }}
       title={props.title}
       startDate={props.startDate}
