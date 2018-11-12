@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import CustomField from '@/guru/components/Form/CustomField';
 import { Field } from 'formik';
+import { ErrMsg } from '@/guru/components/Form';
 import { loadReports } from './action';
 import { reportSelector } from './selector';
 
@@ -42,6 +43,7 @@ class ReportSource extends React.Component {
           options={reports}
           component={CustomField}
         />
+        <ErrMsg name="source" />
       </div>
     );
   }

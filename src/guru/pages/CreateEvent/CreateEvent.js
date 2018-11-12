@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
-import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
+import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
 import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
 import AddButton from '@/assets/images/pex/create/add-btn.svg';
 
@@ -89,7 +89,7 @@ class CreateEvent extends React.Component {
     );
   };
 
-  renderImageUpload = () => {
+  renderImageUpload = ({ setFieldValue, values }) => {
     return (
       <div className="ImageUpload">
         <div className="BlockLeft">
@@ -99,9 +99,19 @@ class CreateEvent extends React.Component {
           </div>
         </div>
         <div className="BlockRight">
-          <img src={DefaultEvent} alt="defaultEvent" />
-          <img src={AddButton} alt="addButton" className="AddBtn" />
+          <input
+            name="image"
+            type="file"
+            className="FileInput"
+            onChange={(e) => {
+              console.log('e.currentTarget.files[0]: ', e.currentTarget.files[0]);
+              console.log('values.image: ', values.image);
+              setFieldValue('image', e.currentTarget.files[0]);
+            }}
+          />
+          <Thumbnail file={values.image} defaultImage={DefaultEvent} />
         </div>
+        <ErrMsg name="image" />
       </div>
     );
   }
@@ -122,7 +132,7 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        {/*<input type="text" name="closingTime" defaultValue={val} {...props.field} />*/}
+        {/* <input type="text" name="closingTime" defaultValue={val} {...props.field} /> */}
         <span className="Month">{val.format('MMM')}</span>
         <span className="Day">{val.format('DD')}</span>
         <span className="Year">{val.format('YYYY')}</span>
@@ -172,7 +182,9 @@ class CreateEvent extends React.Component {
       public: true,
       marketFee: 0,
       email,
-      closingTime: initialClosingTime
+      closingTime: initialClosingTime, // TODO: Set to current
+      image: '',
+      source: ''
     };
 
     const validateEmail = email ? {} : {
@@ -181,9 +193,11 @@ class CreateEvent extends React.Component {
     };
 
     const eventSchema = Yup.object().shape({
-      outcomeName: Yup.string().required('Required'),
       eventName: Yup.string().required('Required'),
-      closingTime: Yup.string().required('Required'),
+      outcomeName: Yup.string().required('Required'),
+      closingTime: Yup.string().required('Required'), // validate at least 24 hours
+      // image: Yup.mixed().required('Required'),
+      source: Yup.mixed().required('Required'),
       ...validateEmail
     });
 
@@ -206,7 +220,7 @@ class CreateEvent extends React.Component {
                 <div className="FormBlock">
                   {this.renderHostFee()}
                   <div className="BlankLine" />
-                  {this.renderImageUpload()}
+                  {this.renderImageUpload(formProps)}
                 </div>
                 <div className="FormBlock">
                   {this.renderReportSource()}
