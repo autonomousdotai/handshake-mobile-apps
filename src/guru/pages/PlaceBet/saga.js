@@ -1,7 +1,8 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
-import { getMatchDetail, putMatchDetail } from './action';
+import { getEstimateGas } from '@/components/handshakes/betting/utils.js';
+import { getMatchDetail, putMatchDetail, getGasPrice, putGasPrice } from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
   try {
@@ -17,6 +18,16 @@ export function* handleGetMatchDetail({ eventId }) {
   }
 }
 
+export function* handleGetGasPrice() {
+  try {
+    const gasPrice = yield getEstimateGas();
+    if (gasPrice) yield put(putGasPrice(gasPrice));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export default function* placeBetSaga() {
   yield takeLatest(getMatchDetail().type, handleGetMatchDetail);
+  yield takeLatest(getGasPrice().type, handleGetGasPrice);
 }
