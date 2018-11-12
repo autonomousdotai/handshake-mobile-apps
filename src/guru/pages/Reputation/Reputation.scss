@@ -43,7 +43,8 @@
 
   }
   .mediumText {
-    font-size: rem-calc(18px);
+    //font-size: rem-calc(18px);
+    font-size: calc(2vw + 1vh + .5vmin);
   }
   .boldText {
     font-weight: 400;
