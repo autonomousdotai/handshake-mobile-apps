@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Image from '@/components/core/presentation/Image';
 import Countdown from '@/components/Countdown/Countdown';
-import DefaultLogo from '@/assets/images/icon/logo.svg';
+import DefaultLogo from '@/assets/images/pex/create/default-event.svg';
 import TimeSVG from '@/assets/images/pex/time.svg';
 import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
 import { isExpiredDate } from '@/components/handshakes/betting/validation';
@@ -32,7 +32,7 @@ class EventItem extends React.Component {
   renderEventImage() {
     return (
       <div className="wrapperEventImage">
-        <Image className="eventLogo" src={DefaultLogo} alt="DefaultLogo" width="100" />
+        <Image className="eventLogo" src={DefaultLogo} alt="DefaultLogo" />
       </div>
     );
   }
