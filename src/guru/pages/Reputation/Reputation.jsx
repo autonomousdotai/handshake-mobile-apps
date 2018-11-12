@@ -40,6 +40,10 @@ class Reputation extends React.Component {
     props.dispatch(loadUserReputation({ userId }));
   }
 
+  backAction = () => {
+    this.props.history.go(-1);
+  }
+
   renderProfile(props) {
     const query = this.getQueryString();
 
@@ -113,6 +117,13 @@ class Reputation extends React.Component {
   renderAppBar = (props) => {
     return (
       <AppBar>
+        <span className="IconLeft"
+          onClick={() => {
+          this.backAction();
+          }}
+        >
+          <i className="far fa-angle-left" />
+        </span>
         <span className="Title">Guru Profile</span>
       </AppBar>
     );
