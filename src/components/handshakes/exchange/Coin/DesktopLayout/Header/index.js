@@ -23,8 +23,8 @@ const Header = () => {
       </div>
       <div className="col-10">
         <div className="text-right">
-          <span className="mr-4">{navLinks}</span>
-          {btnJoin}
+          {/*<span className="mr-4">{navLinks}</span>*/}
+          {/*{btnJoin}*/}
         </div>
       </div>
     </div>
