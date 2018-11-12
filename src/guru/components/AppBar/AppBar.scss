@@ -7,4 +7,18 @@
   justify-content: center;
   background-color: #ffffff;
   padding: 10px;
+  min-height: 46px;
+  margin-bottom: 10px;
+  .IconLeft {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #748599;
+    font-size: 1.2rem;
+  }
+  .Title {
+    text-transform: uppercase;
+    font-weight: 700;
+  }
 }
