@@ -4,9 +4,10 @@ import { injectIntl } from 'react-intl';
 import qs from 'querystring';
 import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
+import Loading from '@/components/Loading';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
-import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
+import { userEventsSelector, userReputationSelector, isLoading } from '@/guru/pages/Home/selector';
 import { formatAmount } from '@/components/handshakes/betting/utils';
 import { shortAddress } from '@/utils/string';
 
@@ -42,7 +43,6 @@ class Reputation extends React.Component {
     const query = this.getQueryString();
 
     let creatorAddress = query.address;
-    console.log('Creator Address:', creatorAddress);
     if (creatorAddress && creatorAddress.length > 0) {
       creatorAddress = shortAddress(creatorAddress, '...');
     }
@@ -112,6 +112,7 @@ class Reputation extends React.Component {
   render() {
     return (
       <div className="wrapperReputation">
+        <Loading isLoading={this.props.isLoading} />
         {this.renderProfile(this.props)}
         {this.renderGroupNumber(this.props)}
         {this.renderMarketList(this.props)}
@@ -124,6 +125,7 @@ export default injectIntl(connect(
     return {
       eventList: userEventsSelector(state),
       reputation: userReputationSelector(state),
+      isLoading: isLoading(state)
     };
   },
 )(Reputation));

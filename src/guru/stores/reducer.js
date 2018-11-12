@@ -10,6 +10,7 @@ const initialState = {
   reputation: {},
   ui: {},
   authCoinBase: {},
+  isFetching: false
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -33,6 +34,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case updateReports().type:
         draft.reports = action.payload.data;
+        break;
+      case 'GURU:UPDATE_LOADING':
+        draft.isFetching = action.isFetching;
         break;
       default:
         break;

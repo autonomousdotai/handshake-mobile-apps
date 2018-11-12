@@ -33,3 +33,7 @@ export const userReputationSelector = (state) => {
 export const authCoinbaseSelector = (state) => {
   return state.guru.authCoinBase;
 };
+export const isLoading = (state) => {
+  if (!state.guru) return false;
+  return state.guru.isFetching;
+};

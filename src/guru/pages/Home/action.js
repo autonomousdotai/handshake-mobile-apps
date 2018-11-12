@@ -32,6 +32,12 @@ export const updateUserReputation = (reputation) => {
     reputation,
   };
 };
+export const updateLoading = (loading) => {
+  return {
+    type: 'GURU:UPDATE_LOADING',
+    isFetching: loading
+  };
+};
 
 export const loginCoinbase = (payload = {}) => {
   return {

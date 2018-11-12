@@ -1,7 +1,8 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
-import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase } from './action';
+import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, updateLoading } from './action';
+import { updateCreateEventLoading } from '@/pages/CreateMarket/action';
 
 
 export function* handleLoadMatches({ isDetail, source }) {
@@ -35,6 +36,8 @@ export function* handleLoadMatches({ isDetail, source }) {
 
 export function* handleLoadReputation({ userId }) {
   try {
+    yield put(updateLoading(true));
+
     const PATH_URL = `${API_URL.CRYPTOSIGN.GET_REPUTATION_USER}/${userId}`;
     const { data } = yield call(apiGet, {
       PATH_URL,
@@ -46,6 +49,7 @@ export function* handleLoadReputation({ userId }) {
       yield put(updateUserEvents(matches));
       yield put(updateUserReputation(data));
     }
+    yield put(updateLoading(false));
   } catch (e) {
     console.error('handleLoadReputation', e);
   }
