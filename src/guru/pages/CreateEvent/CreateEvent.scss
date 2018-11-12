@@ -206,11 +206,35 @@
       left: 50%;
       transform: translate(-50%, -50%);
     }
+
+    img {
+      max-width: 100%;
+      height: 100px;
+    }
+
+    .FileInput {
+      background-image: url('../../../assets/images/pex/create/add-btn.svg');
+      background-repeat: no-repeat;
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      &::-webkit-file-upload-button {
+        visibility: hidden;
+      }
+    }
   }
 
   .ReportSource {
     .GroupNote {
       padding: 5px 0 10px;
+    }
+
+    .ErrMsg {
+      text-align: right;
     }
   }
 
