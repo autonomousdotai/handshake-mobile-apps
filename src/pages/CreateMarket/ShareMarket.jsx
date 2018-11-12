@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { randomArrayItem } from '@/utils/array';
 import { Link } from 'react-router-dom';
@@ -20,6 +21,10 @@ class ShareMarket extends React.Component {
   static defaultProps = {
     shareEvent: null,
   };
+
+  componentWillUnmount() {
+    // TODO: remove data in store
+  }
 
   renderCheckmark = () => (
     <span className="checkmark">
@@ -94,4 +99,4 @@ class ShareMarket extends React.Component {
   }
 }
 
-export default ShareMarket;
+export default connect()(ShareMarket);

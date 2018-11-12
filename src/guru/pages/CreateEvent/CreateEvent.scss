@@ -319,3 +319,89 @@
     }
   }
 }
+
+// Share Market
+.ShareMarketContainer {
+  padding: 40px 10px;
+  text-align: center;
+
+  .checkmark {
+    display:inline-block;
+    width: 48px;
+    height: 48px;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+    margin-bottom: 20px;
+  }
+
+  .checkmark_circle {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background-color: #E0FFE1;
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+    border: 2px solid #C1F9C7;
+  }
+
+  .checkmark_stem {
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background-color: #4CDB52;
+    left: 26px;
+    top: 8px;
+  }
+
+  .checkmark_kick {
+    position: absolute;
+    width: 12px;
+    height: 3px;
+    background-color: #4CDB52;
+    left: 15px;
+    top: 29px;
+  }
+
+  .ShareEventMessage {
+    position: relative;
+    padding-bottom: 60px;
+    font-size: 15px;
+    &:after {
+      content: '';
+      display: inline-block;
+      height: 1px;
+      background-color: #E4E4E4;
+      width: 100px;
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      margin-left: -50px;
+    }
+
+  }
+
+  .ViewSharedEvent {
+    color: #007bff !important;
+  }
+
+  .ShareEventToBuddies {
+    .ShareEventToBuddiesTitle {
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+    .share-social {
+      display: flex;
+      justify-content: space-around;
+      img {
+        width: auto;
+        margin-right: 0;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+}

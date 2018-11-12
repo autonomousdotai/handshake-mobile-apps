@@ -6,6 +6,7 @@ import moment from 'moment';
 import * as Yup from 'yup';
 import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
 import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
+import ShareMarket from '@/pages/CreateMarket/ShareMarket';
 import { isURL } from '@/utils/string';
 
 import { createEvent } from './action';
@@ -171,7 +172,11 @@ class CreateEvent extends React.Component {
   };
 
   render() {
-    const { email } = this.props;
+    const { email, shareEvent } = this.props;
+    if (shareEvent) {
+      return (<ShareMarket shareEvent={shareEvent} />);
+    }
+
     const initialClosingTime = moment().add(60, 'm').unix();
 
     const initialValues = {
@@ -251,6 +256,7 @@ class CreateEvent extends React.Component {
 
 export default connect((state) => {
   return {
-    email: state.auth.profile.email
+    email: state.auth.profile.email,
+    shareEvent: state.ui.shareEvent
   };
 }, { createEvent })(CreateEvent);
