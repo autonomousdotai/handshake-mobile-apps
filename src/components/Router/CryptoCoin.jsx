@@ -26,7 +26,7 @@ class BuyCCRouter extends React.Component {
   constructor(props) {
     super(props);
 
-    this.props.setHeaderTitle('Buy/Sell Crypto Coin');
+    this.props.setHeaderTitle('Buy/Sell Crypto Coin ');
     this.props.clearHeaderRight();
     this.props.clearHeaderLeft();
     // this.props.hideHeader();

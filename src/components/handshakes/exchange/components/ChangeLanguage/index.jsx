@@ -12,11 +12,11 @@ import './ChangeLanguage.scss';
 const LANGUAGES = {
   EN: {
     code: 'en',
-    name: 'English',
+    name: '🇺🇸 English',
   },
   VN: {
     code: 'vi',
-    name: 'Tiếng Việt',
+    name: '🇻🇳 Tiếng Việt',
   },
 };
 
