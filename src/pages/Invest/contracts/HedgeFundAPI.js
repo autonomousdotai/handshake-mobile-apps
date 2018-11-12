@@ -33,6 +33,7 @@ class HedgeFundAPI extends NetworkAPI {
     this.useMetamask = useMetamask
     // eliminate http
     this.contractUrl = '';
+    this.contractInfo = -1;
     // this.contractUrl = `http://35.198.235.226/json/hedgefund_latest.json`
     // try {
     //   new Promise(async (resolve)=>{
