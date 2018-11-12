@@ -13,6 +13,23 @@
             background: #fff;
             padding: 3px;
         }
+        .add-new-address-label{
+            text-align: right;
+            margin-top: -15px;
+            color: #007bff;
+        }
+        .add-new-address-many{
+            margin-bottom: -20px;
+        }
+        .remove-address-label{
+            text-align: right;
+            margin-top: -15px;
+            color: #F44336;
+            margin-bottom: -20px;
+        }
+        .remove-last-child{
+            margin-bottom: 0;
+        }
     }
     .header-box-contact-detail{
         background-color: rgb(84, 111, 247);

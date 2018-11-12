@@ -543,9 +543,9 @@ openAddNewContact=()=>{
 onSelectAddressBook=(address)=>{
   console.log(address);
   this.setState({
-    inputAddressAmountValue: address.address.address
+    inputAddressAmountValue: address
   });  
-  this.props.rfChange(nameFormSendWallet, 'to_address', address.address.address);
+  this.props.rfChange(nameFormSendWallet, 'to_address', address);
   this.modalAddressBookRef.close();
 }
 

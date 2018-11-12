@@ -880,7 +880,7 @@ export class MasterWallet {
       let listTemp = [];           
       if (listContact.length > 0){
         listContact.forEach((cont) => {          
-          if (cont.address.address != contact.address.address){
+          if (cont.name != contact.name){
             listTemp.push(cont);
           }
         });
@@ -895,11 +895,20 @@ export class MasterWallet {
       if (listContact.length > 0){
         for (var i = 0; i < listContact.length; i ++){
           let cont = listContact[i];          
-          if (cont.email == contact.email || cont.address.address == contact.address.address){
+          if ((contact.email !== "" && cont.email === contact.email) || cont.name === contact.name){            
             flag = true;
             break;            
           }
-        };
+          else {
+            for (var j = 0; j < listContact[i].addresses.length; j ++){
+              if (contact.addresses.filter(item => item.address === listContact[i].addresses[j].address).length > 0){
+                flag = true;                
+                break;
+                break;
+              }
+            }
+          };
+        }
       }
       else{
         listContact = [];
@@ -907,10 +916,28 @@ export class MasterWallet {
       if (flag){
         return "Entry already exist";            
       }
-      
+            
       listContact.push(contact);
 
       localStore.save("contacts", listContact);
+      return true;
+    }
+
+    static updateContact(contact, oldName){
+      console.log("contact need update", contact, "oldName", oldName);
+      let flag = false;
+      let listContact = MasterWallet.readContacts();
+      let listContactTmp = [];
+      
+      for (var i = 0; i < listContact.length; i ++){
+        let cont = listContact[i];
+        if (listContact[i].name === oldName ){
+          cont = contact
+        }
+        listContactTmp.push(cont);
+      }
+
+      localStore.save("contacts", listContactTmp);
       return true;
     }
 

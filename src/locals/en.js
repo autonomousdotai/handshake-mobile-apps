@@ -1566,6 +1566,11 @@ export default {
           contact_empty_button: "Add contact",
           contact_add_contact_search_box: "Search a contact ...",
           select_a_contact: "Select a contact",
+          add_new_address: "+ add new",
+          remove_new_address: "remove",
+          update_button_text: "Update",
+          update_title_text: "Update contact",
+          select_an_address: "Select an address",
           
 
         },
