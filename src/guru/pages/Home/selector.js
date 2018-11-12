@@ -29,3 +29,7 @@ export const userEventsSelector = (state) => {
 export const userReputationSelector = (state) => {
   return state.guru.reputation;
 };
+
+export const authCoinbaseSelector = (state) => {
+  return state.guru.authCoinBase;
+};

@@ -39,3 +39,10 @@ export const loginCoinbase = (payload = {}) => {
     ...payload,
   };
 };
+
+export const updateAuthCoinbase = (authCoinBase) => {
+  return {
+    type: 'GURU:UPDATE_AUTH_COINBASE',
+    authCoinBase
+  };
+};

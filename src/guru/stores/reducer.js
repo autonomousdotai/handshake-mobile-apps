@@ -8,7 +8,8 @@ const initialState = {
   events: [],
   userEvents: [],
   reputation: {},
-  ui: {}
+  ui: {},
+  authCoinBase: {},
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -22,6 +23,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case 'GURU:UPDATE_USER_REPUTATION':
         draft.reputation = action.reputation;
+        break;
+      case 'GURU:UPDATE_AUTH_COINBASE':
+        draft.authCoinBase = action.authCoinBase;
         break;
       case updateReports().type:
         draft.reports = action.payload.data;
