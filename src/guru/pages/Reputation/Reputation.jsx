@@ -5,6 +5,7 @@ import qs from 'querystring';
 import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
 import Loading from '@/components/Loading';
+import AppBar from '@/guru/components/AppBar/AppBar';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector, isLoading } from '@/guru/pages/Home/selector';
@@ -43,7 +44,7 @@ class Reputation extends React.Component {
     const query = this.getQueryString();
 
     let creatorAddress = query.address;
-    if (creatorAddress && creatorAddress.length > 0) {
+    if (creatorAddress && creatorAddress.length > 11) {
       creatorAddress = shortAddress(creatorAddress, '...');
     }
     return (
@@ -109,13 +110,23 @@ class Reputation extends React.Component {
       </div>
     );
   }
+  renderAppBar = (props) => {
+    return (
+      <AppBar>
+        <span className="Title">Guru Profile</span>
+      </AppBar>
+    );
+  }
   render() {
     return (
-      <div className="wrapperReputation">
-        <Loading isLoading={this.props.isLoading} />
-        {this.renderProfile(this.props)}
-        {this.renderGroupNumber(this.props)}
-        {this.renderMarketList(this.props)}
+      <div className="reputation">
+        {this.renderAppBar(this.props)}
+        <div className="wrapperReputation">
+          <Loading isLoading={this.props.isLoading} />
+          {this.renderProfile(this.props)}
+          {this.renderGroupNumber(this.props)}
+          {this.renderMarketList(this.props)}
+        </div>
       </div>
     );
   }
