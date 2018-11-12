@@ -10,6 +10,9 @@
   padding-bottom: 60px;
   margin-top: -15px;
   padding-top: 15px;
+  textarea:focus, input:focus{
+    outline: none;
+  }
 
   .FormBlock {
     background-color: #FFFFFF;
@@ -39,11 +42,9 @@
     }
 
     .BlockLeft {
-      flex: 50%;
       margin-right: 10px;
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
     }
 
     .BlockRight {
@@ -76,11 +77,6 @@
       width: 100%;
       color: #0A2240;
       border: none;
-
-      &::placeholder {
-        //color: #0A2240;
-        //opacity: 50%;
-      }
     }
 
     .ErrMsg {
@@ -199,6 +195,20 @@
   .ImageUpload {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+
+    .BlockLeft {
+      flex-basis: 40%;
+    }
+
+    .BlockRight {
+      flex-basis: 50%;
+    }
+
+    .ErrMsg {
+      text-align: right;
+      width: 100%;
+    }
 
     .AddBtn {
       position: absolute;
@@ -247,6 +257,10 @@
       text-align: right;
       display: block;
       width: 100%;
+    }
+
+    .BlockLeft {
+      flex: 1;
     }
 
     .BlockRight {
