@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 
 import { URL } from '@/constants';
-import ShareLink from '@/assets/images/icon/icon_share.svg';
+import CopyLink from '@/assets/images/share/link.svg';
 import FacebookSVG from '@/assets/images/icon/icon_facebook.svg';
 import TwitterSVG from '@/assets/images/icon/icon_twitter.svg';
 import { socialSharedMsg } from '@/pages/Prediction/constants';
@@ -70,7 +70,7 @@ class ShareMarket extends React.Component {
         title: 'TWITTER',
       },
       {
-        img: ShareLink,
+        img: CopyLink,
         title: 'COPY',
       },
     ];
