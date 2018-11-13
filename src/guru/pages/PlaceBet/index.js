@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { injectIntl } from 'react-intl';
 import classNames from 'classnames';
 import qs from 'querystring';
+import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import { formatAmount } from '@/utils/number';
+import { possibleWinning } from '@/utils/calculate';
 import AppBar from '@/guru/components/AppBar/AppBar';
-import BetInput from './BetInput';
-import BetParams from './BetParams';
-import { getMatchDetail, getGasPrice } from './action';
+import View from './View';
+import { getMatchDetail, getGasPrice, getMatchOdd } from './action';
 import { queryStringSelector, matchDetailSelector, gasPriceSelector } from './selector';
+
+import './styles.scss';
 
 class PlaceBet extends Component {
   static propTypes = {
@@ -27,15 +29,37 @@ class PlaceBet extends Component {
   }
 
   componentDidMount() {
-    const { queryStringURL } = this.props;
-    const params = qs.parse(queryStringURL.slice(1));
-    this.props.dispatch(getMatchDetail({ eventId: params.event_id }));
-    this.props.dispatch(getGasPrice());
+    const { props, getParams } = this;
+    const { dispatch } = props;
+    dispatch(getMatchDetail({ eventId: getParams(props).event_id }));
+    dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
+    dispatch(getGasPrice());
   }
+
+  getParams = ({ queryStringURL }) => (qs.parse(queryStringURL.slice(1)))
 
   backAction = () => {
     this.props.history.go(-1);
   }
+  
+  handleBet = (value) => {
+    console.log('handleBet', value);
+  }
+
+  betInputProps = (props) => {
+    const { handleBet, getParams } = this;
+    return {
+      handleBet,
+      side: parseInt(getParams(props).side, 10)
+    };
+  }
+
+  betParamsProps = ({ matchDetail, gasPrice }) => ({
+    possibleWinning: 0.006, // `${formatAmount(possibleWinning(betAmount, betOdd))}`
+    gasPrice: `${formatAmount(gasPrice)} ETH`,
+    marketFee: `${matchDetail.market_fee}%`,
+    className: classNames('BetParamsComponent')
+  });
 
   renderAppBar = (props) => {
     return (
@@ -48,33 +72,14 @@ class PlaceBet extends Component {
     );
   }
 
-  renderBetInput = () => {
-    return (
-      <BetInput />
-    );
-  }
-
-  renderBetParams = (props) => {
-    const { matchDetail, gasPrice } = props;
-    if (!matchDetail) return null;
-    const classNameProp = classNames('BetParamsComponent');
-    const paramProps = {
-      possibleWinning: 0.006,
-      gasPrice: `${formatAmount(gasPrice)} ETH`,
-      marketFee: `${matchDetail.market_fee}%`,
-      className: classNameProp
-    };
-    return (
-      <BetParams {...paramProps} />
-    );
-  }
-
   renderComponent = (props) => {
     return (
       <div className="PlaceBetContainer">
         {this.renderAppBar(props)}
-        {this.renderBetInput(props)}
-        {this.renderBetParams(props)}
+        <View
+          BetInputProps={this.betInputProps(props)}
+          BetParamsProps={this.betParamsProps(props)}
+        />
       </div>
     );
   }

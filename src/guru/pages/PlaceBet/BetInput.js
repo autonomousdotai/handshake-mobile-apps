@@ -1,25 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Formik, Form, Field } from 'formik';
+import classNames from 'classnames';
+import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { ErrMsg } from '@/guru/components/Form';
 
+import Debug from '../CreateEvent/Debug';
 class BetInput extends React.Component {
   static propTypes = {
     handleBet: PropTypes.func.isRequired
   };
 
-  static defaultProps = {};
-
   handleOnSubmit = (values) => {
     this.props.handleBet({ values });
   };
 
-  renderComponent = () => {
+  renderComponent = (props) => {
+    const buttonClasses = classNames('btn btn-block', {
+      'btn-primary': props.side === 1,
+      'btn-secondary': props.side === 2
+    });
     const initialValues = { amount: '' };
     const validationSchema = Yup.object().shape({
       amount: Yup.number().required('Required')
     });
-
     return (
       <div className="BetInputComponent">
         <Formik
@@ -27,63 +31,45 @@ class BetInput extends React.Component {
           onSubmit={this.handleOnSubmit}
           validationSchema={validationSchema}
         >
-          {props => {
+          {formProps => {
             const {
               values,
               touched,
               errors,
-              dirty,
               isSubmitting,
               handleChange,
               handleBlur,
-              handleSubmit,
-              handleReset
-            } = props;
+              handleSubmit
+            } = formProps;
             return (
               <Form onSubmit={handleSubmit}>
-                <label htmlFor="email" style={{ display: 'block' }}>
-                  Email
-                </label>
                 <input
-                  id="email"
-                  placeholder="Enter your email"
+                  ref={this.amountInput}
+                  name="amount"
+                  placeholder="0.00 ETH"
                   type="text"
-                  value={values.email}
+                  value={values.amount}
                   onChange={handleChange}
                   onBlur={handleBlur}
                   className={
-                    errors.email && touched.email
-                      ? 'text-input error'
-                      : 'text-input'
+                    errors.amount && touched.amount
+                      ? 'TextInput Error'
+                      : 'TextInput'
                   }
                 />
-                {errors.email && touched.email && (
-                  <div className="input-feedback">{errors.email}</div>
-                )}
-
-                <button
-                  type="button"
-                  className="outline"
-                  onClick={handleReset}
-                  disabled={!dirty || isSubmitting}
-                >
-                  Reset
-                </button>
-                <button type="submit" disabled={isSubmitting}>
-                  Submit
-                </button>
-
-                <DisplayFormikState {...props} />
+                <ErrMsg name="amount" />
+                <button type="submit" disabled={isSubmitting} className={buttonClasses}>Bet</button>
+                {/* <Debug {...formProps} /> */}
               </Form>
             );
           }}
         </Formik>
       </div>
     );
-  };
+  }
 
   render() {
-    return this.renderComponent(this.props, this.state);
+    return this.renderComponent(this.props);
   }
 }
 

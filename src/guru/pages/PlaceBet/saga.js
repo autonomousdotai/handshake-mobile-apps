@@ -1,8 +1,15 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { apiGet } from '@/guru/stores/api';
+import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
 import { getEstimateGas } from '@/components/handshakes/betting/utils.js';
-import { getMatchDetail, putMatchDetail, getGasPrice, putGasPrice } from './action';
+import {
+  getMatchDetail,
+  putMatchDetail,
+  getMatchOdd,
+  putMatchOdd,
+  getGasPrice,
+  putGasPrice
+} from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
   try {
@@ -13,6 +20,21 @@ export function* handleGetMatchDetail({ eventId }) {
       _key: 'matchDetail'
     });
     if (data) yield put(putMatchDetail(data));
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function* handleGetMatchOdd({ outcomeId }) {
+  try {
+    const { data } = yield call(apiPost, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.MATCH_ODD}`,
+      type: 'GET_MATCH_ODD',
+      data: {
+        outcome_id: outcomeId
+      }
+    });
+    if (data) yield put(putMatchOdd(data));
   } catch (e) {
     console.error(e);
   }
@@ -30,4 +52,5 @@ export function* handleGetGasPrice() {
 export default function* placeBetSaga() {
   yield takeLatest(getMatchDetail().type, handleGetMatchDetail);
   yield takeLatest(getGasPrice().type, handleGetGasPrice);
+  yield takeLatest(getMatchOdd().type, handleGetMatchOdd);
 }

@@ -24,7 +24,16 @@ const guruReducer = (state = initialState, action) => {
         draft.events = action.events;
         break;
       case 'GURU:PUT_MATCH_DETAIL':
-        draft.matchDetail = action.data;
+        draft.matchDetail = {
+          ...draft.matchDetail,
+          ...action.data
+        };
+        break;
+      case 'GURU:PUT_MATCH_ODD':
+        draft.matchDetail = {
+          ...draft.matchDetail,
+          odd: action.payload
+        };
         break;
       case 'GURU:PUT_GAS_PRICE':
         draft.gasPrice = action.payload;

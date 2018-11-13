@@ -216,7 +216,9 @@ class Prediction extends React.Component {
   }
 
   handleClickEventItem = (itemProps, itemData) => {
-    this.props.history.push(`${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&side=${itemProps.side}`);
+    this.props.history.push(
+      `${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&outcome_id=${itemData.id}&side=${itemProps.side}`
+    );
 
     // TODO: remove later
     const { event } = itemProps;

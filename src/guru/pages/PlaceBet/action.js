@@ -12,6 +12,20 @@ export const putMatchDetail = (payload = {}) => {
   };
 };
 
+export const getMatchOdd = (payload = {}) => {
+  return {
+    type: 'GURU:GET_MATCH_ODD',
+    ...payload
+  };
+};
+
+export const putMatchOdd = (payload = {}) => {
+  return {
+    type: 'GURU:PUT_MATCH_ODD',
+    payload
+  };
+};
+
 export const getGasPrice = () => {
   return {
     type: 'GURU:GET_GAS_PRICE'

@@ -5,7 +5,7 @@ const BetParams = ({ possibleWinning, gasPrice, marketFee, ...restProps }) => {
   return (
     <div {...restProps}>
       <div className="Item">
-        <span className="Label">Potential winning</span>
+        <span className="Label">Possible winning</span>
         <span className="value">{possibleWinning}</span>
       </div>
       <div className="Item">
@@ -20,10 +20,10 @@ const BetParams = ({ possibleWinning, gasPrice, marketFee, ...restProps }) => {
   );
 };
 
-// BetParams.propTypes = {
-//   possibleWinning: PropTypes.number.isRequired,
-//   gasPrice: PropTypes.number.isRequired,
-//   marketFee: PropTypes.number.isRequired
-// };
+BetParams.propTypes = {
+  possibleWinning: PropTypes.number.isRequired,
+  gasPrice: PropTypes.string.isRequired,
+  marketFee: PropTypes.string.isRequired
+};
 
 export default BetParams;
