@@ -210,17 +210,17 @@ class CreateEvent extends React.Component {
     const validateEmail = email
       ? {}
       : {
-          email: Yup.string()
-            .required('Required')
-            .email('invalid email address'),
-          emailCode: Yup.string()
-            .required('Required')
-            .matches(/^[0-9]{4}/, 'invalid Code')
-        };
+        email: Yup.string()
+          .required('Required')
+          .email('invalid email address'),
+        emailCode: Yup.string()
+          .required('Required')
+          .matches(/^[0-9]{4}/, 'invalid Code')
+      };
 
     const eventSchema = Yup.object().shape({
-      eventName: Yup.string().required('Required'),
-      outcomeName: Yup.string().required('Required'), // should not = eventName
+      eventName: Yup.string().trim().required('Required'),
+      outcomeName: Yup.string().trim().required('Required'), // should not = eventName
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
       image: Yup.mixed().test('image', 'invalid file type', f => {
         return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
@@ -242,7 +242,6 @@ class CreateEvent extends React.Component {
         >
           {formProps => {
             const { isSubmitting, errors, touched, dirty } = formProps;
-            console.log(formProps);
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
                 <Loading isLoading={isSubmitting} />
