@@ -242,7 +242,7 @@ class WalletSelector extends Component {
     this.updateWalletAddress(wallet?.address, { detector: false });
     const currency = listCurrency.find(c => c.id === wallet.name);
     currency && this.updateCurrency(currency);
-    this.showUserWallet(false);
+    // this.showUserWallet(false);
   }
 
   renderUserListWallet() {
@@ -262,12 +262,12 @@ class WalletSelector extends Component {
   }
 
   onBlur() {
-    this.showUserWallet(false);
+    // this.showUserWallet(false);
     this.props.onBlur();
   }
 
   onFocus() {
-    this.showUserWallet(true);
+    // this.showUserWallet(true);
     this.props.onFocus();
   }
 
