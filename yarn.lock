@@ -1108,7 +1108,7 @@ adjust-sourcemap-loader@^1.1.0:
     object-path "^0.9.2"
     regex-parser "^2.2.9"
 
-"adyen-cse-js@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22":
+"adyen-cse-js@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22", "adyen-cse-web@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22":
   version "0.1.22"
   resolved "git+https://github.com/Adyen/adyen-cse-web.git#2ef93d77955602ab767f1cd4b6ea422551d4a4d9"
 
@@ -5056,8 +5056,8 @@ handlebars@^4.0.11:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1542093951"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/e3dfdae25b5e663d2662a5162c28096280eb7321"
+  version "0.0.1542100964"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/fc2149db3c783b81bc795dff5ce103e9d4d85e14"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"
@@ -9504,7 +9504,6 @@ ripple-binary-codec@^0.1.0, ripple-binary-codec@^0.1.13:
 
 ripple-hashes@^0.3.1, "ripple-hashes@github:0xngoubou/ripple-hashes":
   version "0.3.1"
-  uid d9157617b39e78890dd58bba6111443350bbc318
   resolved "https://codeload.github.com/0xngoubou/ripple-hashes/tar.gz/d9157617b39e78890dd58bba6111443350bbc318"
   dependencies:
     bignumber.js-4.1.0 "github:0xngoubou/bignumber.js-4.1.0"
