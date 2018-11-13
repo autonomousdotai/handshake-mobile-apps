@@ -138,7 +138,7 @@ class CreateEvent extends React.Component {
           Report
         </label>
         <div className="GroupNote">
-          You must report the result to close the bet and get your fee.
+          You must provide the reference link to the report
         </div>
         <ReportSource />
       </div>
@@ -166,7 +166,7 @@ class CreateEvent extends React.Component {
             Add a report deadline
           </label>
           <div className="GroupNote">
-            As the host, you will be the reporter of the result. The quicker the
+            As the host, you will submit the closing time. The quicker the
             better!
           </div>
         </div>
@@ -270,7 +270,7 @@ class CreateEvent extends React.Component {
                 >
                   Create
                 </button>
-                <Debug props={formProps} hide />
+                <Debug props={formProps} />
               </Form>
             );
           }}

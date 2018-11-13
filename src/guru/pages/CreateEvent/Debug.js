@@ -5,7 +5,7 @@ import React from 'react';
  * @return {null}
  */
 export default function Debug(props) {
-  return props.hide ? null : (
+  return (props.hide || process.env.NODE_ENV === 'production') ? null : (
     <pre
       style={{
         background: '#f6f8fa',
