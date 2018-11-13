@@ -21,7 +21,7 @@ class CreateEvent extends React.Component {
   static propTypes = {
     createEvent: PropTypes.func.isRequired,
     email: PropTypes.string,
-    shareEvent: PropTypes.object,
+    shareEvent: PropTypes.object
   };
 
   static defaultProps = {
@@ -29,7 +29,8 @@ class CreateEvent extends React.Component {
     shareEvent: undefined
   };
 
-  handleOnSubmit = (values) => { // values, actions
+  handleOnSubmit = values => {
+    // values, actions
     this.props.createEvent({ values });
   };
 
@@ -44,12 +45,20 @@ class CreateEvent extends React.Component {
         <p className="GroupTitle">Gurus will predict YES or NO</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
-          <Field name="outcomeName" component="textarea" placeholder="Manchester United beat Juventus" />
+          <Field
+            name="outcomeName"
+            component="textarea"
+            placeholder="[Outcome] Manchester United beat Juventus"
+          />
         </div>
         <ErrMsg name="outcomeName" />
         <div className="EventName">
           <label htmlFor="eventName">in</label>
-          <Field name="eventName" component="textarea" placeholder="Champions League table stage" />
+          <Field
+            name="eventName"
+            component="textarea"
+            placeholder="[Event] Champions League table stage"
+          />
         </div>
         <ErrMsg name="eventName" />
       </div>
@@ -76,7 +85,9 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="HostFee">
-        <label htmlFor="marketFee" className="GroupTitle">Host fee</label>
+        <label htmlFor="marketFee" className="GroupTitle">
+          Host fee
+        </label>
         <Field
           name="marketFee"
           type="rangeSlider"
@@ -97,7 +108,9 @@ class CreateEvent extends React.Component {
     return (
       <div className="ImageUpload">
         <div className="BlockLeft">
-          <label htmlFor="image" className="GroupTitle">Image</label>
+          <label htmlFor="image" className="GroupTitle">
+            Image
+          </label>
           <div className="GroupNote">
             Upload an image for your debates (optional)
           </div>
@@ -107,7 +120,7 @@ class CreateEvent extends React.Component {
             name="image"
             type="file"
             className="FileInput"
-            onChange={(e) => {
+            onChange={e => {
               setFieldValue('image', e.currentTarget.files[0]);
             }}
           />
@@ -116,19 +129,21 @@ class CreateEvent extends React.Component {
         <ErrMsg name="image" />
       </div>
     );
-  }
+  };
 
   renderReportSource = () => {
     return (
       <div className="ReportSource">
-        <label htmlFor="source" className="GroupTitle">Report</label>
+        <label htmlFor="source" className="GroupTitle">
+          Report
+        </label>
         <div className="GroupNote">
           You must report the result to close the bet and get your fee.
         </div>
         <ReportSource />
       </div>
     );
-  }
+  };
 
   renderPicker = (props, startDate) => {
     const val = moment.unix(props.value || startDate);
@@ -143,19 +158,16 @@ class CreateEvent extends React.Component {
     );
   };
 
-  renderDateTime = (startDate) => {
+  renderDateTime = startDate => {
     return (
       <div className="DateTime">
         <div className="BlockLeft">
-          <label
-            htmlFor="source"
-            className="GroupTitle"
-          >
+          <label htmlFor="source" className="GroupTitle">
             Add a report deadline
           </label>
           <div className="GroupNote">
-            As the host, you will be the reporter of the result.
-            The quicker the better!
+            As the host, you will be the reporter of the result. The quicker the
+            better!
           </div>
         </div>
         <div className="BlockRight">
@@ -177,10 +189,12 @@ class CreateEvent extends React.Component {
   render() {
     const { email, shareEvent } = this.props;
     if (shareEvent) {
-      return (<ShareMarket shareEvent={shareEvent} />);
+      return <ShareMarket shareEvent={shareEvent} />;
     }
 
-    const initialClosingTime = moment().add(60, 'm').unix();
+    const initialClosingTime = moment()
+      .add(60, 'm')
+      .unix();
 
     const initialValues = {
       outcomeName: '',
@@ -193,21 +207,29 @@ class CreateEvent extends React.Component {
       source: ''
     };
 
-    const validateEmail = email ? {} : {
-      email: Yup.string().required('Required').email('invalid email address'),
-      emailCode: Yup.string().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
-    };
+    const validateEmail = email
+      ? {}
+      : {
+          email: Yup.string()
+            .required('Required')
+            .email('invalid email address'),
+          emailCode: Yup.string()
+            .required('Required')
+            .matches(/^[0-9]{4}/, 'invalid Code')
+        };
 
     const eventSchema = Yup.object().shape({
       eventName: Yup.string().required('Required'),
       outcomeName: Yup.string().required('Required'), // should not = eventName
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
-      image: Yup.mixed().test('image', 'invalid file type', (f) => {
-        return !f ? true : (/(gif|jpe?g|png)$/i).test(f.type);
+      image: Yup.mixed().test('image', 'invalid file type', f => {
+        return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
       }),
-      source: Yup.mixed().required('Required').test('source', 'invalid URL', (s) => {
-        return !s ? true : isURL((s || {}).label); // validate create first time
-      }),
+      source: Yup.mixed()
+        .required('Required')
+        .test('source', 'invalid URL', s => {
+          return !s ? true : isURL((s || {}).label); // validate create first time
+        }),
       ...validateEmail
     });
 
@@ -245,7 +267,9 @@ class CreateEvent extends React.Component {
                 <button
                   className="SubmitBtn btn-primary"
                   type="submit"
-                  disabled={isSubmitting || !dirty || !Object.keys(errors).length}
+                  disabled={
+                    isSubmitting || !dirty || !Object.keys(errors).length
+                  }
                 >
                   Create
                 </button>
