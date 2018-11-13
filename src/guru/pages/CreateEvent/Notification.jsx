@@ -53,11 +53,8 @@ class Notification extends Component {
   };
 
   renderEmailBox = (props, state) => {
-    const { errors, touched, values } = props.formProps;
-    const disabled =
-      touched.email === undefined ||
-      (errors.email && touched.email) ||
-      state.isEmailSent;
+    const { errors, values } = props.formProps;
+    const disabled = !values.email || errors.email || state.isEmailSent;
     return (
       <React.Fragment>
         <div className="GroupRow">
