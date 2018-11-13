@@ -10,7 +10,7 @@ import { LANDING_PAGE_TYPE, URL } from '@/constants';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 // style
-import imgNinja from '@/assets/images/ninja/ninja-header-black.svg';
+import imgNinja from '@/assets/images/logo.png';
 import imgLogo from '@/assets/images/logo.png';
 import { SEOHome } from '@/components/SEO';
 import './styles.scss';

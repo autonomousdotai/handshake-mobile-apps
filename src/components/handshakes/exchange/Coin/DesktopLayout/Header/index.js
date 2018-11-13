@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { LANDING_PAGE_TYPE, URL } from '@/constants';
-import imgNinja from '@/assets/images/ninja/ninja-header-black.svg';
+import imgNinja from '@/assets/images/logo.png';
 import { FormattedMessage } from 'react-intl';
 import './styles.scss';
 
