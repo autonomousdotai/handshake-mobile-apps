@@ -5,6 +5,12 @@
   flex-wrap: wrap;
   width: 100%;
   padding-bottom: 60px;
+  .red{
+    color: #F44336;
+  }
+  .green{
+    color: #009688;
+  }
   .item
   {
       border-bottom: 1px #f4f4f4 solid;
@@ -12,9 +18,37 @@
       width: 100%;
       padding: 20px;
       padding-bottom: 10px;
+      overflow: hidden;
       .name{
           float: left;
           font-size: 16px;
+          .desc{
+            display: block;
+            font-size: 12px;
+            font-weight: 300;
+            margin-top: -10px;
+            opacity: .6;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;            
+            @media (max-width: 375px){            
+              width: 260px;
+            }
+            @media (max-width: 325px){            
+              width: 220px;
+            }
+            
+          }
+          .desc-long{
+            font-size: 14px;
+            @media (max-width: 375px){            
+              width: 350px;
+            }  
+            @media (max-width: 325px){            
+              width: 290px;
+            }
+                      
+          }
       }
       .value{
           float: right;
@@ -30,6 +64,14 @@
           height: 30px;
           border-radius: 5px;
           margin-top: -3px;
+      }
+      .image{
+        width: 40px;
+        margin-right: 15px;
+        float: left;
+        height: 40px;
+        border-radius: 5px;
+        margin-top: -3px;
       }
   }
 
@@ -56,6 +98,12 @@
       padding: 13px;
       padding-left: 20px;
       height: 50px;
+      background-color: rgba(248, 248, 248, 0.82);
+      position: unset;
+      transform: none;
+  }
+  .item.header-empty{
+    height: 35px;
   }
 }
 .update-name{

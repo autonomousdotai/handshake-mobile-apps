@@ -60,10 +60,11 @@ $wrapper-margin: 20px 0;
     height:$input-height; 
   }
 
-  input:focus,
-  input:valid,
-  textarea:focus,
-  textarea:valid {
+  
+  input[value]:not([value=""]),
+  input:focus,  
+  textarea:valid,
+  textarea:focus {
     & + .placeholder {
       top:0;
       cursor:inherit;
@@ -72,6 +73,7 @@ $wrapper-margin: 20px 0;
     }
 
     border-bottom:1px solid $highlight-color;
+    box-shadow: none;
   }
 
   input:invalid,  

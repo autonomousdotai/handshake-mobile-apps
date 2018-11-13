@@ -22,6 +22,16 @@ export class BitcoinCashTestnet extends BitcoinCash {
     this.className = 'BitcoinCashTestnet';
   }
 
+  getAPIUrlTransaction(transaction_no) {    
+    let url = `https://test-bch-insight.bitpay.com/#/tx/${transaction_no}`;
+    return url;
+  }
+
+  getAPIUrlAddress() {    
+    let url = `test-bch-insight.bitpay.com/address/${this.address}`;
+    return url;
+  }
+
  
 
   setDefaultNetwork() {

@@ -21,6 +21,15 @@
     margin: 10px 0;
     font-weight:400;
   }
+  .fromContact{
+    color:#007bff;    
+    font-weight:400;
+    float: right;
+  }
+  .block-hidden{
+    display: block;
+    overflow: hidden;
+  }
 
   ul.rangeslider__labels .rangeslider__label-item:first-child {
     padding-right: 20px;
