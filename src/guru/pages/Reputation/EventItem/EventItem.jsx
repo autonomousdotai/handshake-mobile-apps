@@ -53,7 +53,8 @@ class EventItem extends React.Component {
     const src = imageUrl || NumberPlayersSVG;
     return (
       <div className="eventDetailBlock">
-        <span><Image src={src} alt="NumberPlayersSVG" /></span>
+        {/*<span><Image src={src} alt="NumberPlayersSVG" /></span>*/}
+        <span><i className="fal fa-user-friends" style={{ color: '#889db3' }} /></span>
         <span className="eventDetailText normalText disableText">{totalUsers}</span>
       </div>
     );
