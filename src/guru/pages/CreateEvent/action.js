@@ -1,4 +1,3 @@
-// import { ACTIONS } from '@/reducers/auth/action';
 import { createAPI } from '@/reducers/action';
 
 export const verifyEmailCode = createAPI('API:VERIFY_EMAIL_CODE');
@@ -27,6 +26,20 @@ export const createEvent = (payload = {}) => {
 export const sendEmailCode = (payload = {}) => {
   return {
     type: 'PEX:SEND_EMAIL_CODE',
+    payload
+  };
+};
+
+export const shareEvent = (payload = {}) => {
+  return {
+    type: 'PEX:SHARE_EVENT',
+    payload
+  };
+};
+
+export const resetShareEvent = (payload = {}) => {
+  return {
+    type: 'PEX:RESET_SHARE_EVENT',
     payload
   };
 };

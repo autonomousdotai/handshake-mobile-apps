@@ -6,10 +6,11 @@ import moment from 'moment';
 import * as Yup from 'yup';
 import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
 import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
-import ShareMarket from '@/pages/CreateMarket/ShareMarket';
 import { isURL } from '@/utils/string';
+import Loading from '@/components/Loading';
 
 import { createEvent } from './action';
+import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
 import Debug from './Debug';
@@ -19,11 +20,13 @@ class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
     createEvent: PropTypes.func.isRequired,
-    email: PropTypes.string
+    email: PropTypes.string,
+    shareEvent: PropTypes.object,
   };
 
   static defaultProps = {
-    email: ''
+    email: '',
+    shareEvent: undefined
   };
 
   handleOnSubmit = (values) => { // values, actions
@@ -219,6 +222,7 @@ class CreateEvent extends React.Component {
             const { isSubmitting, errors, touched } = formProps;
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
+                <Loading isLoading={isSubmitting} />
                 <div className="FormBlock">
                   {this.renderEventTitle(formProps)}
                   <div className="BlankLine" />
@@ -257,6 +261,6 @@ class CreateEvent extends React.Component {
 export default connect((state) => {
   return {
     email: state.auth.profile.email,
-    shareEvent: state.ui.shareEvent
+    shareEvent: state.guru.ui.shareEvent
   };
 }, { createEvent })(CreateEvent);

@@ -1,13 +1,13 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { API_URL } from '@/constants';
+import { API_URL, URL } from '@/constants';
 import { apiGet, apiPost, apiPostForm } from '@/guru/stores/api';
 import { getAddress } from '@/components/handshakes/betting/utils';
-import { saveGenerateShareLinkToStore } from '@/pages/CreateMarket/saga';
 import {
   loadReports,
   updateReports,
   createEvent,
-  sendEmailCode
+  sendEmailCode,
+  shareEvent
 } from './action';
 
 function* handleLoadReports() {
@@ -19,6 +19,24 @@ function* handleLoadReports() {
     if (response.status) {
       yield put(updateReports({ data: response.data }));
     }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+function* handleGenerateShareLink({ matchId, eventName }) {
+  try {
+    const link = yield call(apiPost, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.GENERATE_LINK}`,
+      type: 'GENERATE_SHARE_LINK',
+      data: {
+        match_id: matchId
+      }
+    });
+    yield put(shareEvent({
+      url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${link.data.slug}`,
+      name: eventName,
+    }));
   } catch (e) {
     console.error(e);
   }
@@ -57,7 +75,7 @@ function* handleCreateEven({ values }) {
     console.log('create result', data);
     if (status) {
       const eventData = (data[0] || {});
-      yield saveGenerateShareLinkToStore({
+      yield handleGenerateShareLink({
         matchId: eventData.id,
         eventName: eventData.name
       });
