@@ -13,6 +13,7 @@ import './EventItem.scss';
 class EventItem extends React.Component {
   static propTypes = {
     event: PropTypes.object,
+    onClickEvent: PropTypes.func,
   }
   static defaultProps = {
     event: {},
@@ -80,8 +81,16 @@ class EventItem extends React.Component {
   }
   render() {
     const { event } = this.props;
+    const { isExpired } = this.state;
+
     return (
-      <div className="wrapperEventItem">
+      <div className="wrapperEventItem"
+        onClick={() => {
+          if (!isExpired) {
+            this.props.onClickEvent(event);
+          }
+        }}
+      >
         {this.renderEventContent(event)}
         {this.renderEventImage()}
       </div>
