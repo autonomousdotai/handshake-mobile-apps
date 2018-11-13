@@ -343,9 +343,9 @@ class BettingReport extends React.Component {
         final: finalCopy,
       });
     }
-
   }
   renderCheckNotHappend = () => {
+    if (!this.state.outcomes || this.state.outcomes.length === 0) return null;
     return (
       <div className="wrapperCheckNotHappend">
         <Checkbox
