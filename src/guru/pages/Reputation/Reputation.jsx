@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import qs from 'querystring';
+import { push } from 'connected-react-router';
+import { URL } from '@/constants';
 import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
 import Loading from '@/components/Loading';
@@ -42,6 +44,11 @@ class Reputation extends React.Component {
 
   backAction = () => {
     this.props.history.go(-1);
+  }
+
+  handleClickEvent = (event)=> {
+    const url = `${URL.HANDSHAKE_PEX}?match=${event.id}`;
+    this.props.history.push(url);
   }
 
   renderProfile(props) {
@@ -108,6 +115,7 @@ class Reputation extends React.Component {
             <EventItem
               key={event.id}
               event={event}
+              onClickEvent={this.handleClickEvent}
             />
           );
         })}
@@ -130,9 +138,9 @@ class Reputation extends React.Component {
   }
   render() {
     return (
-      <div className="reputation">
+      <div className="wrapperReputation">
         {this.renderAppBar(this.props)}
-        <div className="wrapperReputation">
+        <div className="wrapperContentReputation">
           <Loading isLoading={this.props.isLoading} />
           {this.renderProfile(this.props)}
           {this.renderGroupNumber(this.props)}
