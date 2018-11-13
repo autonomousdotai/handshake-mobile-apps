@@ -67,7 +67,7 @@ const InternalAdminDashboard = createDynamicImport(() => import('@/pages/Interna
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
   { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
-  { path: URL.HANDSHAKE_PEX, component: RouterExchange },
+  { path: URL.HANDSHAKE_PEX, render: () => <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} /> },
   { path: URL.HANDSHAKE_PEX_UPDATER, component: CreateOwnMarket },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },
 
