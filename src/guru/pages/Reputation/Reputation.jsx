@@ -73,7 +73,7 @@ class Reputation extends React.Component {
     const { total_events: totalEvents = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">{totalEvents}</div>
+        <div className="boldText">{totalEvents}</div>
         <div className="disableText normalText">Debates</div>
       </div>
     );
@@ -82,7 +82,7 @@ class Reputation extends React.Component {
     const { total_amount: totalAmount = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">{formatAmount(totalAmount)}</div>
+        <div className="boldText">{formatAmount(totalAmount)}</div>
         <div className="disableText normalText">ETH</div>
       </div>
     );
@@ -91,7 +91,7 @@ class Reputation extends React.Component {
     const { total_disputed_events: totalDisputedEvent = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="mediumText boldText">{totalDisputedEvent}</div>
+        <div className="boldText">{totalDisputedEvent}</div>
         <div className="disableText normalText">Disputes</div>
       </div>
     );

@@ -27,6 +27,7 @@
     justify-content: space-between;
     margin-top: rem-calc(10px);
     .wrapperGroupBlock {
+      font-size: calc(2vw + 1vh + .5vmin);
       background-color: white;
       border-radius: rem-calc(5px);
       width: 31%;
@@ -45,9 +46,9 @@
     margin-top: rem-calc(10px);
 
   }
+
   .mediumText {
-    //font-size: rem-calc(18px);
-    font-size: calc(2vw + 1vh + .5vmin);
+    font-size: rem-calc(16px);
   }
   .boldText {
     font-weight: 400;
