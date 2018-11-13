@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 
 export const SEOHome = (
   <Helmet>
-    <title>Ninja: Decentralized products & exchanges for the new internet</title>
+    <title>The Coinbowl: Buy and Sell Large Amount Of Bitcoin</title>
     <meta
       name="description"
       content="Blockchain powered tools & protocols for the new internet. Decentralized AI solutions. Anonymous P2P exchanges for cryptocurrency, cash & predictions."
