@@ -261,7 +261,7 @@ class BettingReport extends React.Component {
         this.state.outcomes.forEach(item => {
           const newItem = Object.assign({}, item);
           newItem.side = BETTING_RESULT.DRAW;
-
+          newItem.outcome_id = item.id;
           finalCopy.push(newItem);
         });
         result = finalCopy;
