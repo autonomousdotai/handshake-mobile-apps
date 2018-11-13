@@ -386,13 +386,13 @@ class BettingReport extends React.Component {
             <FormGroup check>
               <Label check>
                 <Input type="radio" disabled={disabled} name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.SUPPORT_WIN); }} value="1" />{' '}
-              Support
+              Yes
               </Label>
             </FormGroup>
             <FormGroup check>
               <Label check>
                 <Input type="radio" disabled={disabled} name={`selectedOption-${item.id}`} onChange={() => { this.onChangeFinal(item, BETTING_RESULT.AGAINST_WIN); }} value="2" />{' '}
-              Oppose
+              No
               </Label>
             </FormGroup>
           </div>
