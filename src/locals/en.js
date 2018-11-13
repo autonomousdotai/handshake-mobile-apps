@@ -633,7 +633,7 @@ export default {
   ],
 
   //
-  'landing_page.coin.breadcrumb': 'Ninja Coin',
+  'landing_page.coin.breadcrumb': 'CoinBowl',
   'landing_page.coin.heading': 'Frequently asked questions',
   'landing_page.coin.subHeading': ' ',
 
