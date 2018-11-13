@@ -42,7 +42,7 @@ class CreateEvent extends React.Component {
   renderEventTitle = () => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Gurus will predict YES or NO</p>
+        <p className="GroupTitle">Gurus will predict YES or NO?</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
@@ -266,9 +266,7 @@ class CreateEvent extends React.Component {
                 <button
                   className="SubmitBtn btn-primary"
                   type="submit"
-                  disabled={
-                    isSubmitting || !dirty || !Object.keys(errors).length
-                  }
+                  disabled={isSubmitting || !dirty}
                 >
                   Create
                 </button>
