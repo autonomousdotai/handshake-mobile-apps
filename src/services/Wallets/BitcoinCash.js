@@ -24,13 +24,13 @@ export class BitcoinCash extends Bitcoin {
     bitcore.Networks.defaultNetwork = bitcore.Networks.livenet;
   }
 
-  getAPIUrlTransaction(transaction_no) {
-    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}bch-insight.bitpay.com/#/tx/${transaction_no}`;
+  getAPIUrlTransaction(transaction_no) {    
+    let url = `https://bch-insight.bitpay.com/#/tx/${transaction_no}`;
     return url;
   }
 
-  getAPIUrlAddress() {
-    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}bch-insight.bitpay.com/address/${this.address}`;
+  getAPIUrlAddress() {    
+    let url = `bch-insight.bitpay.com/address/${this.address}`;
     return url;
   }
 
