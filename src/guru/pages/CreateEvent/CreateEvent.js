@@ -219,7 +219,8 @@ class CreateEvent extends React.Component {
           validationSchema={eventSchema}
         >
           {formProps => {
-            const { isSubmitting, errors, touched } = formProps;
+            const { isSubmitting, errors, touched, dirty } = formProps;
+            console.log(formProps);
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
                 <Loading isLoading={isSubmitting} />
@@ -244,7 +245,7 @@ class CreateEvent extends React.Component {
                 <button
                   className="SubmitBtn btn-primary"
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !dirty || !Object.keys(errors).length}
                 >
                   Create
                 </button>
