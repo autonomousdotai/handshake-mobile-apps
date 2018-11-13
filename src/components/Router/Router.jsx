@@ -196,7 +196,7 @@ class Router extends React.Component {
         <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
         <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
         <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
-        <Route path={URL.BUY_COIN_FAQ_URL} render={() => <ProjectDetail type="product" name="coin" />} />
+        <Route path={URL.BUY_COIN_FAQ_URL} render={() => <ProjectDetail type="landing" name="coin" />} />
         {routesUsingDesktopLayout}
 
         {/* Cash on mobile uses a completely different layout! */}
