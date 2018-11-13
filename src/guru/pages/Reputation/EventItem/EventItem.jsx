@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import Image from '@/components/core/presentation/Image';
 import Countdown from '@/components/Countdown/Countdown';
 import DefaultLogo from '@/assets/images/pex/create/default-event.svg';
-import TimeSVG from '@/assets/images/pex/time.svg';
-import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
 import { isExpiredDate } from '@/components/handshakes/betting/validation';
 
 import './EventItem.scss';
@@ -41,7 +39,7 @@ class EventItem extends React.Component {
     const { isExpired } = this.state;
     return (
       <div className="eventDetailBlock">
-        <span><Image src={TimeSVG} alt="TimeSVG" /></span>
+        <span><i className="fal fa-clock" style={{ color: '#889db3', fontSize: '16px' }} /></span>
         <span className="eventDetailText normalText disableText">
           {isExpired ? 'Expired' : <Countdown endTime={event.date} />}
         </span>
@@ -49,12 +47,10 @@ class EventItem extends React.Component {
     );
   }
   renderNumberPlayers(event) {
-    const { total_users: totalUsers = 0, image_url: imageUrl } = event;
-    const src = imageUrl || NumberPlayersSVG;
+    const { total_users: totalUsers = 0 } = event;
     return (
       <div className="eventDetailBlock">
-        {/*<span><Image src={src} alt="NumberPlayersSVG" /></span>*/}
-        <span><i className="fal fa-user-friends" style={{ color: '#889db3' }} /></span>
+        <span><i className="fal fa-user-friends" style={{ color: '#889db3', fontSize: '16px' }} /></span>
         <span className="eventDetailText normalText disableText">{totalUsers}</span>
       </div>
     );
