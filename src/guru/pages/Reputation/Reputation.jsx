@@ -138,9 +138,9 @@ class Reputation extends React.Component {
   }
   render() {
     return (
-      <div className="reputation">
+      <div className="wrapperReputation">
         {this.renderAppBar(this.props)}
-        <div className="wrapperReputation">
+        <div className="wrapperContentReputation">
           <Loading isLoading={this.props.isLoading} />
           {this.renderProfile(this.props)}
           {this.renderGroupNumber(this.props)}

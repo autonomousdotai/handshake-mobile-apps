@@ -1,8 +1,11 @@
 @import "./src/styles/style";
+
 .wrapperReputation {
-  font-family: $font-family-base;
   background-color: #f5f7fa;
-  padding: 10px 10px;
+}
+.wrapperContentReputation {
+  font-family: $font-family-base;
+  padding: (0px 10px 10px 10px);
   .wrapperProfile {
     background-color: white;
     border-radius: rem-calc(5px);
