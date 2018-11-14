@@ -39,38 +39,27 @@ class Login extends React.Component {
     */
     this.authenticateUser(email, password);
   }
-  authenticateUser(email, password) {    
-
-    const userData = new FormData();
-    userData.set('email', email);
-    userData.set('password', password);
+  authenticateUser(email, password) {
+    const params = {
+      email,
+      password,
+    };
 
     this.props.userAuthenticate({
-      PATH_URL: `${API_URL.USER.LOGIN}`,
+      PATH_URL: `${API_URL.CRYPTOSIGN.ADMIN_AUTH}`,
       METHOD: 'POST',
-      data: userData,
-      headers: { 'Content-Type': 'multipart/form-data' },
+      data: params,
       successFn: ((response) => {
-        const token = response.data.password;
-        const userType = response.data.type;
-        if (userType == 0){
-          alert("Not admin!!!");
-          return;
-        }
-        localStorage.setItem('Token', token);        
+        const token = response.data.access_token;
+        localStorage.setItem('Token', token);
         localStorage.setItem('TokenInit', new Date());
-        sessionStorage.setItem('admin_hash', token);
-        sessionStorage.setItem('user_type', response.data.type);
-        sessionStorage.setItem('user_id', response.data.id);
+        sessionStorage.setItem('admin_hash', md5(`${email}/${password}`));
 
         // callback called if login successfully
         if (typeof this.props?.onLoggedIn === 'function') {
           this.props.onLoggedIn();
         }
       }),
-      errorFn: (e)=>{
-        alert(e.message);
-      }
     });
   }
 
