@@ -98,7 +98,7 @@ class CreateEvent extends React.Component {
           component={CustomField}
         />
         <div className="GroupNote">
-          As a host creator, you will receive this percentage of the total bets.
+          As a host creator, you will receive this percentage of the total matched bets.
           Friendly advice: no one wants to play with a greedy guts!
         </div>
       </div>
@@ -164,7 +164,7 @@ class CreateEvent extends React.Component {
       <div className="DateTime">
         <div className="BlockLeft">
           <label htmlFor="source" className="GroupTitle">
-            Add a report deadline
+            Add a closing time
           </label>
           <div className="GroupNote">
             As the host, you will submit the closing time. The quicker the
@@ -219,6 +219,7 @@ class CreateEvent extends React.Component {
       public: true,
       marketFee: 0,
       email,
+      emailCode: '',
       closingTime: initialClosingTime, // TODO: Set to current
       image: '',
       source: ''
