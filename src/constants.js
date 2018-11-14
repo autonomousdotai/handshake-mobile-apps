@@ -230,6 +230,7 @@ export const API_URL = {
     SUBSCRIBE_EMAIL_EXTENSION: 'user/subscribe',
     GET_EVENTS_USER: 'cryptosign/reputation/user/{{userId}}/match',
     GET_REPUTATION_USER: 'cryptosign/reputation',
+    SUBSCRIBE_NOTIFICATION: 'cryptosign/subscribe-notification'
   },
   DISCOVER: {
     INDEX: 'handshake/discover',

@@ -90,8 +90,11 @@ function* handleCreateEven({ values }) {
 function* handleSendEmailCode({ payload }) {
   try {
     const res = yield call(apiPost, {
-      PATH_URL: `user/verification/email/start?email=${payload.email}`,
-      type: 'API:SEND_EMAIL_CODE'
+      PATH_URL: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION,
+      type: 'API:SEND_EMAIL_CODE',
+      data: {
+        email: payload.email
+      }
     });
     if (res.error) {
       console.error('Failed to submit email: ', res.error);
