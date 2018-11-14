@@ -132,7 +132,7 @@ class Reputation extends React.Component {
         >
           <i className="far fa-angle-left" />
         </span>
-        <span className="Title">Guru Profile</span>
+        <span className="Title">Ninja Profile</span>
       </AppBar>
     );
   }
