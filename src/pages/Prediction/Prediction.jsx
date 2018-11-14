@@ -339,7 +339,7 @@ class Prediction extends React.Component {
     if (!props.relevantEvents || !props.relevantEvents.length) return null;
     return (
       <div className="RelevantEventList">
-        <div className="relevantTitle">Related events</div>
+        <div className="relevantTitle">Events related to this event:</div>
         {props.relevantEvents.map((event) => {
           return (
             <EventItem
