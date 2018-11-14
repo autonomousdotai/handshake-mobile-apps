@@ -20,18 +20,29 @@ class EventItem extends React.Component {
     super(props);
     this.state = {
       isExpired: false,
+      eventLogo: null
     };
   }
   componentDidMount() {
     const { event } = this.props;
+    const { image_url: imageUrl } = event;
+
     this.setState({
-      isExpired: isExpiredDate(event.date)
+      isExpired: isExpiredDate(event.date),
+      eventLogo: imageUrl || DefaultLogo
     });
   }
-  renderEventImage() {
+  renderEventImage(event) {
+    const { eventLogo } = this.state;
     return (
       <div className="wrapperEventImage">
-        <Image className="eventLogo" src={DefaultLogo} alt="DefaultLogo" />
+        <Image className="eventLogo"
+          src={eventLogo}
+          alt="eventLogo"
+          onError={() => this.setState({
+            eventLogo: DefaultLogo
+          })}
+        />
       </div>
     );
   }
@@ -50,7 +61,7 @@ class EventItem extends React.Component {
     const { total_users: totalUsers = 0 } = event;
     return (
       <div className="eventDetailBlock">
-        <span><i className="fal fa-user-friends" style={{ color: '#889db3', fontSize: '16px' }} /></span>
+        <span className="eventImagePlayers"><i className="fal fa-user-friends" style={{ color: '#889db3', fontSize: '16px' }} /></span>
         <span className="eventDetailText normalText disableText">{totalUsers}</span>
       </div>
     );
