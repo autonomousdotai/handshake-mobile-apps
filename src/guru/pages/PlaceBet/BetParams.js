@@ -21,7 +21,7 @@ const BetParams = ({ possibleWinning, gasPrice, marketFee, ...restProps }) => {
 };
 
 BetParams.propTypes = {
-  possibleWinning: PropTypes.number.isRequired,
+  possibleWinning: PropTypes.string.isRequired,
   gasPrice: PropTypes.string.isRequired,
   marketFee: PropTypes.string.isRequired
 };
