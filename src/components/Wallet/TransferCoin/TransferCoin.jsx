@@ -24,6 +24,10 @@ import BrowserDetect from '@/services/browser-detect';
 import WalletSelected from '@/components/Wallet/WalletSelected';
 import Slider from 'react-rangeslider'
 
+import AddressBook from "../AddressBook";
+import iconAddContact from '@/assets/images/wallet/icons/icon-add-user.svg';
+import customBackIcon from '@/assets/images/icon/back-chevron-white.svg';
+
 
 const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 
@@ -63,8 +67,13 @@ class Transfer extends React.Component {
       legacyMode: false,
       walletNotFound: '',
       volume: 0,
-      listFeeObject: false
-    }
+      listFeeObject: false,
+
+      addressBookContent: ""
+    },
+    this.modalHeaderStyle = {color: "#fff", background: "#546FF7"};
+    this.modalBodyStyle = {padding: 0};
+
   }
 
   showAlert(msg, type = 'success', timeOut = 3000, icon = '') {
@@ -515,6 +524,31 @@ calcMaxAmount = () => {
   });
 }
 
+onChooseFromContact =()=>{
+  this.setState({addressBookContent: <AddressBook needChoice={true} onSelected = {(item)=> {this.onSelectAddressBook(item);}} onRef={ref => (this.child = ref)}  modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} customBackIcon={customBackIcon} />}, ()=>{
+    this.modalAddressBookRef.open();        
+  })    
+  
+}
+
+onCloseAddressBook=()=>{
+this.setState({addressBookContent: ""});        
+}
+
+openAddNewContact=()=>{
+  console.log('this._child', this._childAddressBook);
+  this.child.openAddNewContact();
+}
+
+onSelectAddressBook=(address)=>{
+  console.log(address);
+  this.setState({
+    inputAddressAmountValue: address
+  });  
+  this.props.rfChange(nameFormSendWallet, 'to_address', address);
+  this.modalAddressBookRef.close();
+}
+
 render() {
   let { currency } = this.props;
   if(!currency) currency = "USD";
@@ -538,7 +572,7 @@ render() {
         </ModalDialog>
 
         {/* QR code dialog */}
-        <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeRef = modal}>
+        <Modal onClose={() => this.oncloseQrCode()} title={messages.wallet.action.transfer.label.scan_qrcode} onRef={modal => this.modalScanQrCodeRef = modal} customBackIcon={customBackIcon} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle}>
           {this.state.qrCodeOpen || this.state.legacyMode ?
             <QrReader
               ref="qrReader1"
@@ -552,11 +586,18 @@ render() {
             : ''}
         </Modal>
 
+        <Modal onClose={()=>{this.onCloseAddressBook();}} title={messages.wallet.action.setting.label.select_a_contact} onRef={modal => this.modalAddressBookRef = modal} customBackIcon={customBackIcon} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} customRightIcon={iconAddContact} customRightIconClick={()=>{this.openAddNewContact()}}>
+              {this.state.addressBookContent}
+        </Modal>
+
         <SendWalletForm className={walletNotFound ? "d-none" : "sendwallet-wrapper"} onSubmit={this.sendCoin} validate={this.invalidateTransferCoins}>
 
         {/* Box: */}
         <div className="bgBox">
-          <p className="labelText">{messages.wallet.action.transfer.label.to_address}</p>
+          <p className="labelText block-hidden">{messages.wallet.action.transfer.label.to_address}
+            <span onClick={()=> {this.onChooseFromContact();}} className="fromContact">{messages.wallet.action.transfer.label.from_contact}</span>
+          </p>
+          
           <div className="div-address-qr-code">
             <Field
               name="to_address"
