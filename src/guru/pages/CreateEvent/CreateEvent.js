@@ -8,6 +8,7 @@ import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
 import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
 import { isURL } from '@/utils/string';
 import Loading from '@/components/Loading';
+import AppBar from '@/guru/components/AppBar/AppBar';
 
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
@@ -42,7 +43,7 @@ class CreateEvent extends React.Component {
   renderEventTitle = () => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Gurus will predict YES or NO?</p>
+        <p className="GroupTitle">Ninjas will predict YES or NO?</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
@@ -186,6 +187,22 @@ class CreateEvent extends React.Component {
     );
   };
 
+  renderAppBar = (props) => {
+    return (
+      <AppBar>
+        <span
+          className="IconLeft BackAction"
+          onClick={() => {
+            props.history.go(-1);
+          }}
+        >
+          <i className="far fa-angle-left" />
+        </span>
+        <span className="Title">Host a debate</span>
+      </AppBar>
+    );
+  };
+
   render() {
     const { email, shareEvent } = this.props;
     if (shareEvent) {
@@ -244,6 +261,7 @@ class CreateEvent extends React.Component {
             const { isSubmitting, errors, touched, dirty } = formProps;
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
+                {this.renderAppBar(this.props)}
                 <Loading isLoading={isSubmitting} />
                 <div className="FormBlock">
                   {this.renderEventTitle(formProps)}

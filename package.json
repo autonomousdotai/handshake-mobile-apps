@@ -24,7 +24,7 @@
     "@babel/preset-react": "^7.0.0-beta.51",
     "@babel/runtime": "^7.0.0-beta.51",
     "@firebase/app-types": "^0.3.2",
-    "@sindresorhus/class-names": "^0.1.0",    
+    "@sindresorhus/class-names": "^0.1.0",
     "adyen-cse-web": "git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22",
     "autoprefixer": "^9.3.1",
     "axios": "^0.18.0",

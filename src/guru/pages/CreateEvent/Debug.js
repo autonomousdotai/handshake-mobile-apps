@@ -9,10 +9,10 @@ export default function Debug(props) {
     <pre
       style={{
         background: '#f6f8fa',
-        fontSize: '.65rem',
+        fontSize: '9px',
         padding: '.5rem',
         fontFamily: 'monospace',
-        margin: '20px 50px'
+        margin: '20px'
       }}
     >
       {JSON.stringify(props, null, 2)}
