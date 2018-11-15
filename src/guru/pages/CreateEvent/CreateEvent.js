@@ -124,7 +124,6 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        {/* <input type="text" name="closingTime" defaultValue={val} {...props.field} /> */}
         <span className="Month">{val.format('MMM')}</span>
         <span className="Day">{val.format('DD')}</span>
         <span className="Year">{val.format('YYYY')}</span>
@@ -179,7 +178,7 @@ class CreateEvent extends React.Component {
 
   render() {
     const { email, shareEvent } = this.props;
-    if (shareEvent) {
+    if (shareEvent || 1) {
       return <ShareMarket shareEvent={shareEvent} />;
     }
 

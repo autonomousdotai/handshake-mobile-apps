@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class Thumbnail extends React.Component {
+export default class Thumbnail extends React.PureComponent {
   static propTypes = {
     file: PropTypes.any,
     defaultImage: PropTypes.string,
@@ -25,7 +25,6 @@ export default class Thumbnail extends React.Component {
 
     reader.onloadend = () => {
       this.setState({ thumb: reader.result });
-      nextProps.onLoaded && nextProps.onLoaded();
     };
 
     reader.readAsDataURL(nextProps.file);

@@ -17,12 +17,6 @@ class ImageUpload extends Component {
     };
   }
 
-  handleThumbLoaded = () => {
-    this.setState({
-      loaded: true
-    });
-  }
-
   renderComponent = (props, state) => {
     const { values, setFieldValue, setFieldTouched } = props.form;
     return (
@@ -48,7 +42,6 @@ class ImageUpload extends Component {
           <Thumbnail
             file={values.image}
             defaultImage={DefaultEvent}
-            onLoaded={this.handleThumbLoaded}
           />
         </div>
         <ErrMsg name="image" />
