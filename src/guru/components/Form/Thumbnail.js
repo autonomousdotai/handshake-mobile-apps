@@ -5,13 +5,11 @@ export default class Thumbnail extends React.PureComponent {
   static propTypes = {
     file: PropTypes.any,
     defaultImage: PropTypes.string,
-    onLoaded: PropTypes.func,
   };
 
   static defaultProps = {
     file: undefined,
     defaultImage: undefined,
-    onLoaded: undefined,
   };
 
   state = {
