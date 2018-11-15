@@ -40,7 +40,7 @@ export class Ripple extends Wallet {
           this.privateKey = privateKey;
           this.publicKey = publicKey;
           this.secret = secret;
-          
+
           const t1 = performance.now();
           console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
         } catch (e) {
