@@ -1571,7 +1571,7 @@ export default {
           update_button_text: "Update",
           update_title_text: "Update contact",
           select_an_address: "Select an address",
-          
+
 
         },
         button: {
@@ -1929,7 +1929,7 @@ export default {
       payment_methods: {
         bank: 'Bank Transfer',
         cod: 'COD',
-        cod_info: 'State your time and place for meeting up and we will exchange in person.',
+        cod_info: 'State your time and place for meeting up and we will exchange in person',
       },
       verify: {
         notYet: {
