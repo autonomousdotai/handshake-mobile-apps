@@ -1108,7 +1108,7 @@ adjust-sourcemap-loader@^1.1.0:
     object-path "^0.9.2"
     regex-parser "^2.2.9"
 
-"adyen-cse-js@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22", "adyen-cse-web@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22":
+"adyen-cse-web@git+https://github.com/Adyen/adyen-cse-web.git#v0.1.22":
   version "0.1.22"
   resolved "git+https://github.com/Adyen/adyen-cse-web.git#2ef93d77955602ab767f1cd4b6ea422551d4a4d9"
 
@@ -1744,13 +1744,19 @@ big.js@^3.1.3:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-3.2.0.tgz#a5fc298b81b9e0dca2e458824784b65c52ba588e"
 
-"bignumber.js-4.1.0@github:0xngoubou/bignumber.js-4.1.0", bignumber.js@^4.1.0, "bignumber.js@github:0xngoubou/bignumber.js-4.1.0":
+"bignumber.js-4.1.0@github:0xngoubou/bignumber.js-4.1.0", bignumber.js@^4.1.0:
+  name bignumber.js-4.1.0
   version "4.1.0"
   resolved "https://codeload.github.com/0xngoubou/bignumber.js-4.1.0/tar.gz/5380bd0a25617479212bfdbe612f00034c87f30e"
 
 bignumber.js@^2.1.0:
   version "2.4.0"
   resolved "http://registry.npmjs.org/bignumber.js/-/bignumber.js-2.4.0.tgz#838a992da9f9d737e0f4b2db0be62bb09dd0c5e8"
+
+bignumber.js@^7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
+  integrity sha512-S4XzBk5sMB+Rcb/LNcpzXr57VRTxgAvaAEDAl1AwRx27j00hT84O6OkteE7u8UB3NuaaygCRrEpqox4uDOrbdQ==
 
 bin-build@^2.2.0:
   version "2.2.0"
@@ -5056,8 +5062,8 @@ handlebars@^4.0.11:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1542100964"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/fc2149db3c783b81bc795dff5ce103e9d4d85e14"
+  version "0.0.1542277428"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/2a055642f040e8884a2d694a249a443d21532e76"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"
