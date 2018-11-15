@@ -52,3 +52,17 @@ export const updateAuthCoinbase = (authCoinBase) => {
     authCoinBase
   };
 };
+
+export const loginMetaMask = (payload = {}) => {
+  return {
+    type: 'GURU:LOGIN_META_MASK',
+    ...payload,
+  };
+};
+
+export const updateAuthMetaMask = (authMetaMask) => {
+  return {
+    type: 'GURU:UPDATE_AUTH_META_MASK',
+    authMetaMask
+  };
+};

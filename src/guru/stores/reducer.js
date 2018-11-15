@@ -14,6 +14,7 @@ const initialState = {
   reputation: {},
   ui: {},
   authCoinBase: {},
+  authMetaMask: [],
   isFetching: false
 };
 
@@ -46,6 +47,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case 'GURU:UPDATE_AUTH_COINBASE':
         draft.authCoinBase = action.authCoinBase;
+        break;
+      case 'GURU:UPDATE_AUTH_COINBASE':
+        draft.authMetaMask = action.authMetaMask;
         break;
       case 'GURU:UPDATE_LOADING':
         draft.isFetching = action.isFetching;

@@ -1,7 +1,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
-import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, updateLoading } from './action';
+import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, updateLoading, loginMetaMask, updateAuthMetaMask } from './action';
 import { updateCreateEventLoading } from '@/pages/CreateMarket/action';
 
 
@@ -82,10 +82,21 @@ export function* handleAuthorizeCoinbase({ code }) {
   }
 }
 
+export function* handleAuthorizeMetaMask({ web3Provider }) {
+
+  try {
+    const accounts = yield web3Provider.eth.getAccounts();
+    yield put(updateAuthMetaMask(accounts));
+    console.log('Account:', accounts);
+  } catch (e) {
+    console.error('handleAuthorizeMetaMask', e);
+  }
+}
+
 
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
   yield takeLatest(loadUserReputation().type, handleLoadReputation);
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);
-
+  yield takeLatest(loginMetaMask().type, handleAuthorizeMetaMask);
 }
