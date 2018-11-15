@@ -339,8 +339,14 @@
 
 // Share Market
 .ShareMarketContainer {
-  padding: 40px 10px;
   text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F5F8FC;
+  padding-top: 100px;
 
   .checkmark {
     display:inline-block;
