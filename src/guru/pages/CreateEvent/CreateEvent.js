@@ -14,6 +14,7 @@ import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
+import ImageUpload from './ImageUpload';
 import Debug from './Debug';
 import './CreateEvent.scss';
 
@@ -101,33 +102,6 @@ class CreateEvent extends React.Component {
           As a host creator, you will receive this percentage of the total matched bets.
           Friendly advice: no one wants to play with a greedy guts!
         </div>
-      </div>
-    );
-  };
-
-  renderImageUpload = ({ values, setFieldValue }) => {
-    return (
-      <div className="ImageUpload">
-        <div className="BlockLeft">
-          <label htmlFor="image" className="GroupTitle">
-            Image
-          </label>
-          <div className="GroupNote">
-            Upload an image for your debates (optional)
-          </div>
-        </div>
-        <div className="BlockRight">
-          <input
-            name="image"
-            type="file"
-            className="FileInput"
-            onChange={e => {
-              setFieldValue('image', e.currentTarget.files[0]);
-            }}
-          />
-          <Thumbnail file={values.image} defaultImage={DefaultEvent} />
-        </div>
-        <ErrMsg name="image" />
       </div>
     );
   };
@@ -272,7 +246,7 @@ class CreateEvent extends React.Component {
                 <div className="FormBlock">
                   {this.renderHostFee()}
                   <div className="BlankLine" />
-                  {this.renderImageUpload(formProps)}
+                  <ImageUpload form={formProps} />
                 </div>
                 <div className="FormBlock">
                   {this.renderReportSource()}
