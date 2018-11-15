@@ -178,7 +178,7 @@ class CreateEvent extends React.Component {
 
   render() {
     const { email, shareEvent } = this.props;
-    if (shareEvent || 1) {
+    if (shareEvent) {
       return <ShareMarket shareEvent={shareEvent} />;
     }
 
