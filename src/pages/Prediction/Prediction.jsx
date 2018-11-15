@@ -32,11 +32,9 @@ import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
 
 import EventItem from './EventItem';
-import PexCreateBtn from './PexCreateBtn';
 import Disclaimer from './Disclaimer';
 
 import './Prediction.scss';
-import LinkWallet from '../Invest/LinkWallet';
 
 class Prediction extends React.Component {
   static displayName = 'Prediction';

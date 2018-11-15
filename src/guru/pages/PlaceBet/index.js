@@ -6,10 +6,9 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { formatAmount } from '@/utils/number';
 import { possibleWinning } from '@/utils/calculate';
-import AppBar from '@/guru/components/AppBar/AppBar';
 import View from './View';
 import { getMatchDetail, getGasPrice, getMatchOdd } from './action';
-import { queryStringSelector, matchDetailSelector, gasPriceSelector } from './selector';
+import { queryStringSelector, matchDetailSelector, gasPriceSelector, matchOddsSelector } from './selector';
 
 import './styles.scss';
 
@@ -19,14 +18,20 @@ class PlaceBet extends Component {
     history: PropTypes.object.isRequired,
     queryStringURL: PropTypes.string,
     matchDetail: PropTypes.object,
-    gasPrice: PropTypes.number
-  }
+    gasPrice: PropTypes.number,
+    sideOdds: PropTypes.arrayOf(PropTypes.string)
+  };
 
   static defaultProps = {
     queryStringURL: undefined,
     matchDetail: {},
-    gasPrice: 0
-  }
+    gasPrice: 0,
+    sideOdds: ['support', 'against']
+  };
+
+  state = {
+    betAmount: 0
+  };
 
   componentDidMount() {
     const { props, getParams } = this;
@@ -38,47 +43,57 @@ class PlaceBet extends Component {
 
   getParams = ({ queryStringURL }) => (qs.parse(queryStringURL.slice(1)))
 
-  backAction = () => {
-    this.props.history.go(-1);
+  getSide = (props) => (parseInt(this.getParams(props).side, 10));
+
+  getOdds = () => {
+    const { props, getSide } = this;
+    const { matchOdds, sideOdds } = props;
+    return (matchOdds && matchOdds[sideOdds[`${getSide(props) - 1}`]][0].odds) || 0;
   }
-  
-  handleBet = (value) => {
-    console.log('handleBet', value);
+ 
+  handleBet = ({ values }) => {
+    console.log('handleBet', values);
   }
 
-  betInputProps = (props) => {
-    const { handleBet, getParams } = this;
+  handleChange = (value) => {
+    this.setState({ betAmount: value });
+  }
+
+  calculatePosWinning = () => {
+    const { state, getOdds } = this;
+    const { betAmount } = state;
+    const betOdds = getOdds();
+    return formatAmount(possibleWinning(betAmount, betOdds));
+  }
+
+  betFormProps = (props) => {
+    const { handleBet, handleChange, getSide } = this;
     return {
       handleBet,
-      side: parseInt(getParams(props).side, 10)
+      handleChange,
+      amount: '',
+      side: getSide(props),
+      buttonClasses: classNames('btn btn-block', {
+        'btn-primary': getSide(props) === 1,
+        'btn-secondary': getSide(props) === 2
+      })
     };
   }
 
   betParamsProps = ({ matchDetail, gasPrice }) => ({
-    possibleWinning: 0.006, // `${formatAmount(possibleWinning(betAmount, betOdd))}`
+    possibleWinning: `${this.calculatePosWinning()}`,
     gasPrice: `${formatAmount(gasPrice)} ETH`,
     marketFee: `${matchDetail.market_fee}%`,
     className: classNames('BetParamsComponent')
   });
 
-  renderAppBar = (props) => {
-    return (
-      <AppBar>
-        <span className="IconLeft BackAction" onClick={this.backAction} >
-          <i className="far fa-angle-left" />
-        </span>
-        <span className="Title">Place a bet</span>
-      </AppBar>
-    );
-  }
-
   renderComponent = (props) => {
     return (
       <div className="PlaceBetContainer">
-        {this.renderAppBar(props)}
         <View
-          BetInputProps={this.betInputProps(props)}
-          BetParamsProps={this.betParamsProps(props)}
+          history={props.history}
+          betFormProps={this.betFormProps(props)}
+          betParamsProps={this.betParamsProps(props)}
         />
       </div>
     );
@@ -94,7 +109,8 @@ export default injectIntl(connect(
     return {
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),
-      gasPrice: gasPriceSelector(state)
+      gasPrice: gasPriceSelector(state),
+      matchOdds: matchOddsSelector(state)
     };
   }
 )(PlaceBet));

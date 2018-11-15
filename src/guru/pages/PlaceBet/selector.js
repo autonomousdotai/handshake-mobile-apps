@@ -24,3 +24,8 @@ export const matchDetailSelector = (state) => {
 export const gasPriceSelector = (state) => {
   return parseFloat(state.guru.gasPrice);
 };
+
+export const matchOddsSelector = (state) => {
+  return state.guru.matchDetail.odds;
+};
+

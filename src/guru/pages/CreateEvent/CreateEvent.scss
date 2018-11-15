@@ -228,18 +228,25 @@
 
     img {
       max-width: 100%;
-      height: 100px;
+      max-height: 90px;
+      overflow: hidden;
     }
 
     .FileInput {
       background-image: url('../../../assets/images/pex/create/add-btn.svg');
       background-repeat: no-repeat;
-      width: 40px;
-      height: 40px;
+      background-position: center;
+      width: 160px;
+      height: 90px;
       position: absolute;
       top: 50%;
       left: 50%;
+      font-size: 0;
       transform: translate(-50%, -50%);
+
+      &.Loaded {
+        background-image: none !important;
+      }
 
       &::-webkit-file-upload-button {
         visibility: hidden;
@@ -308,6 +315,7 @@
       padding: 5px 10px;
       border: 1px solid hsl(0,0%,80%);
       font-size: 15px;
+      color: #626467;
 
       &:disabled {
         background-color: #F5F8FC;
@@ -331,8 +339,14 @@
 
 // Share Market
 .ShareMarketContainer {
-  padding: 40px 10px;
   text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F5F8FC;
+  padding-top: 100px;
 
   .checkmark {
     display:inline-block;

@@ -8,11 +8,13 @@ import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
 import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
 import { isURL } from '@/utils/string';
 import Loading from '@/components/Loading';
+import AppBar from '@/guru/components/AppBar/AppBar';
 
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
+import ImageUpload from './ImageUpload';
 import Debug from './Debug';
 import './CreateEvent.scss';
 
@@ -42,7 +44,7 @@ class CreateEvent extends React.Component {
   renderEventTitle = () => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Gurus will predict YES or NO?</p>
+        <p className="GroupTitle">Ninjas will predict YES or NO?</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
@@ -97,36 +99,9 @@ class CreateEvent extends React.Component {
           component={CustomField}
         />
         <div className="GroupNote">
-          As a host creator, you will receive this percentage of the total bets.
+          As a host creator, you will receive this percentage of the total matched bets.
           Friendly advice: no one wants to play with a greedy guts!
         </div>
-      </div>
-    );
-  };
-
-  renderImageUpload = ({ values, setFieldValue }) => {
-    return (
-      <div className="ImageUpload">
-        <div className="BlockLeft">
-          <label htmlFor="image" className="GroupTitle">
-            Image
-          </label>
-          <div className="GroupNote">
-            Upload an image for your debates (optional)
-          </div>
-        </div>
-        <div className="BlockRight">
-          <input
-            name="image"
-            type="file"
-            className="FileInput"
-            onChange={e => {
-              setFieldValue('image', e.currentTarget.files[0]);
-            }}
-          />
-          <Thumbnail file={values.image} defaultImage={DefaultEvent} />
-        </div>
-        <ErrMsg name="image" />
       </div>
     );
   };
@@ -149,7 +124,6 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        {/* <input type="text" name="closingTime" defaultValue={val} {...props.field} /> */}
         <span className="Month">{val.format('MMM')}</span>
         <span className="Day">{val.format('DD')}</span>
         <span className="Year">{val.format('YYYY')}</span>
@@ -163,7 +137,7 @@ class CreateEvent extends React.Component {
       <div className="DateTime">
         <div className="BlockLeft">
           <label htmlFor="source" className="GroupTitle">
-            Add a report deadline
+            Add a closing time
           </label>
           <div className="GroupNote">
             As the host, you will submit the closing time. The quicker the
@@ -186,6 +160,22 @@ class CreateEvent extends React.Component {
     );
   };
 
+  renderAppBar = (props) => {
+    return (
+      <AppBar>
+        <span
+          className="IconLeft BackAction"
+          onClick={() => {
+            props.history.go(-1);
+          }}
+        >
+          <i className="far fa-angle-left" />
+        </span>
+        <span className="Title">Host a debate</span>
+      </AppBar>
+    );
+  };
+
   render() {
     const { email, shareEvent } = this.props;
     if (shareEvent) {
@@ -202,6 +192,7 @@ class CreateEvent extends React.Component {
       public: true,
       marketFee: 0,
       email,
+      emailCode: '',
       closingTime: initialClosingTime, // TODO: Set to current
       image: '',
       source: ''
@@ -244,6 +235,7 @@ class CreateEvent extends React.Component {
             const { isSubmitting, errors, touched, dirty } = formProps;
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
+                {this.renderAppBar(this.props)}
                 <Loading isLoading={isSubmitting} />
                 <div className="FormBlock">
                   {this.renderEventTitle(formProps)}
@@ -253,7 +245,7 @@ class CreateEvent extends React.Component {
                 <div className="FormBlock">
                   {this.renderHostFee()}
                   <div className="BlankLine" />
-                  {this.renderImageUpload(formProps)}
+                  <ImageUpload form={formProps} />
                 </div>
                 <div className="FormBlock">
                   {this.renderReportSource()}
