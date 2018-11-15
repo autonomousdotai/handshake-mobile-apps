@@ -425,11 +425,11 @@ const continueAfterInitApp = (language, ref, dispatch, data) => {
   if (process.env.isProduction) {
     // should use country code: .country ISO 3166-1 alpha-2
     // https://ipapi.co/api/#complete-location
-    if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+    if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country) !== -1) {
       ipInfoRes.bannedPrediction = true;
       dispatch(setBannedPrediction());
     }
-    if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country_name) !== -1) {
+    if (COUNTRIES_BLACKLIST_CASH.indexOf(data.country) !== -1) {
       ipInfoRes.bannedCash = true;
       dispatch(setBannedCash());
     }

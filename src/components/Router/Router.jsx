@@ -184,8 +184,12 @@ class Router extends React.Component {
   }
 
   render() {
+    const { isBannedCash } = this.props;
     return (
       <Switch>
+        {
+          isBannedCash && <Route component={Page404} />
+        }
         {/*{
           BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={RouterCryptoCoin} />
         }*/}
@@ -244,4 +248,5 @@ class Router extends React.Component {
 export default connect(state => ({
   firebaseApp: state.firebase.data,
   router: state.router,
+  isBannedCash: state.app.isBannedCash,
 }))(Router);
