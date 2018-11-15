@@ -25,10 +25,10 @@ class Comment extends React.PureComponent {
   componentDidMount() {
     const { location, loadCommentList } = this.props;
     const queryObject = qs.parse(location.search.slice(1));
-    if(queryObject.objectId) {
+    if (queryObject.objectId) {
       loadCommentList({
         PATH_URL: API_URL.COMMENT.LIST,
-        qs: { object_id: Helper.getObjectIdOfComment({ id: queryObject.objectId }) },
+        qs: { object_id: Helper.getObjectIdOfComment({ id: queryObject.objectId }) }
       });
     }
     this.scrollToBottom();
@@ -39,16 +39,16 @@ class Comment extends React.PureComponent {
   }
 
   scrollToBottom() {
-    if(this.commentsRef && typeof window !== 'undefined') {
+    if (this.commentsRef && typeof window !== 'undefined') {
       window.scrollTo({
         top: this.commentsRef.scrollHeight,
-        behavior: 'smooth',
+        behavior: 'smooth'
       });
     }
   }
 
   render() {
-    const { list,  isFetching } = this.props.comment;
+    const { list, isFetching } = this.props.comment;
     const queryObject = qs.parse(this.props.location.search.slice(1));
     return (
       <Grid>
@@ -79,16 +79,16 @@ class Comment extends React.PureComponent {
 Comment.propTypes = {
   comment: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  loadCommentList: PropTypes.func.isRequired,
+  loadCommentList: PropTypes.func.isRequired
 };
 
 const mapState = state => ({
   comment: state.comment,
-  router: state.router,
+  router: state.router
 });
 
 const mapDispatch = ({
-  loadCommentList,
+  loadCommentList
 });
 
 export default connect(mapState, mapDispatch)(Comment);

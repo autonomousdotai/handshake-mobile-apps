@@ -3,6 +3,7 @@
 .comments {
   display: flex;
   flex-direction: column;
+  padding-bottom: 40px;
   .lastCommentItem {
     height: rem-calc(60px);
     width: 100%;

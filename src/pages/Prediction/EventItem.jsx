@@ -174,11 +174,12 @@ function renderShareSocial(props) {
   return (<ShareSocial title={title} shareUrl={shareURL} socialList={socialList} />);
 }
 
-function renderComment(props) {
+function renderComment({ event }) {
+  const commentLink = `${URL.COMMENTS_BY_SHAKE_INDEX}?objectId=${event.id}`;
   return (
     <div className="Comment">
-      <i className="far fa-comment"></i>
-      <span>Write a comment</span>
+      <i className="far fa-comment" />
+      <Link to={commentLink}>Write a comment</Link>
     </div>
   );
 }
