@@ -1,3 +1,5 @@
+@import './src/styles/style';
+
 .PlaceBetContainer {
   height: 100%;
 }
@@ -57,5 +59,54 @@
     color: #748599;
     font-size: 0.875rem;
     line-height: 2em;
+  }
+}
+
+// Modals
+.modal {
+  background-color: #1F2B34;
+  .modal-dialog-content {
+    position: relative;
+    border-radius: 0;
+  }
+  .modal-custom-body {
+    padding: 0;
+    background-color: #ffffff;
+  }
+  .close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 20;
+    opacity: 1;
+    font-size: 25px;
+    font-weight: 100;
+    border: 1px solid #fff;
+    background-color: #fff;
+    color: #000;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+  }
+}
+
+// Modal outtaMoney
+.outtaMoneyContainer {
+  padding: rem-calc(30px);
+  text-align: center;
+  border-radius: 4px;
+  background-color: #ffffff;
+  .outtaMoneyTitle {
+    color: #000000;
+    font-size: rem-calc(22px);
+    font-weight: bold;
+    margin: rem-calc(20px) 0;
+  }
+  .outtaMoneyMsg {
+    color: #000000;
+    opacity: 0.6;
+    font-size: rem-calc(17px);
+    margin-bottom: rem-calc(30px);
   }
 }

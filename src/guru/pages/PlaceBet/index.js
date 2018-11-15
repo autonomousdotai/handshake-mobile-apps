@@ -4,11 +4,22 @@ import classNames from 'classnames';
 import qs from 'querystring';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
 import { formatAmount } from '@/utils/number';
 import { possibleWinning } from '@/utils/calculate';
-import View from './View';
-import { getMatchDetail, getGasPrice, getMatchOdd } from './action';
+
+// TODO: [Begin: Will be moving to another place]
+import { HANDSHAKE_ID } from '@/constants';
+import { showAlert } from '@/reducers/app/action';
+import OuttaMoney from '@/assets/images/modal/outtamoney.png';
+import ModalDialog from '@/components/core/controls/ModalDialog';
+// TODO: [End: Will be moving to another place]
+
+import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake } from './action';
 import { queryStringSelector, matchDetailSelector, gasPriceSelector, matchOddsSelector } from './selector';
+import { VALIDATE_CODE } from './constants';
+import { validationBet } from './validation';
+import View from './View';
 
 import './styles.scss';
 
@@ -50,9 +61,47 @@ class PlaceBet extends Component {
     const { matchOdds, sideOdds } = props;
     return (matchOdds && matchOdds[sideOdds[`${getSide(props) - 1}`]][0].odds) || 0;
   }
- 
-  handleBet = ({ values }) => {
-    console.log('handleBet', values);
+
+  validate = async ({ amount }) => {
+    const validate = await validationBet({ amount });
+    return validate;
+  }
+
+  alertBox = ({ message, type, timeOut = 3000, callBack = () => {} }) => {
+    const { dispatch } = this.props;
+    const alertProps = {
+      timeOut,
+      type,
+      callBack,
+      message: <div className="text-center">{message}</div>
+    };
+    dispatch(showAlert(alertProps));
+  }
+
+  handShakeData = ({ amount }) => {
+    const { getSide } = this;
+    const { matchDetail, queryStringURL } = this.props;
+    if (!matchDetail) return null;
+    return {
+      amount,
+      currency: 'ETH',
+      type: HANDSHAKE_ID.BETTING,
+      from_address: getAddress(),
+      side: getSide({ queryStringURL }),
+      chain_id: getChainIdDefaultWallet()
+    };
+  }
+
+  handleBet = async ({ values }) => {
+    const { validate, alertBox, modalOuttaMoney, handShakeData, props } = this;
+    const { status, message, code } = await validate(values);
+    if (status) {
+      return props.dispatch(initHandShake(handShakeData(values)));
+    }
+    if (message && code === VALIDATE_CODE.NOT_ENOUGH_BALANCE) {
+      return modalOuttaMoney.open();
+    }
+    return alertBox({ message, type: 'danger' });
   }
 
   handleChange = (value) => {
@@ -87,6 +136,20 @@ class PlaceBet extends Component {
     className: classNames('BetParamsComponent')
   });
 
+  renderOuttaMoney = () => {
+    return (
+      <ModalDialog onRef={(modal) => { this.modalOuttaMoney = modal; }} className="outtaMoneyModal" close>
+        <div className="outtaMoneyContainer">
+          <img src={OuttaMoney} alt="" />
+          <div className="outtaMoneyTitle">{'You\'re outta… money!'}</div>
+          <div className="outtaMoneyMsg">
+            To keep forecasting, you’ll need to top-up your wallet.
+          </div>
+        </div>
+      </ModalDialog>
+    );
+  };
+
   renderComponent = (props) => {
     return (
       <div className="PlaceBetContainer">
@@ -95,6 +158,7 @@ class PlaceBet extends Component {
           betFormProps={this.betFormProps(props)}
           betParamsProps={this.betParamsProps(props)}
         />
+        {this.renderOuttaMoney()}
       </div>
     );
   }
