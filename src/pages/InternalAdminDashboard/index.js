@@ -89,7 +89,7 @@ class InternalAdminDashboard extends Component {
 
   checkAuth = () => {
     console.log(this.token);
-    if (this.token.length > 0 && this.adminID.length) {
+    if (this.token.length > 0) {
       return true;
     }
     return false;
