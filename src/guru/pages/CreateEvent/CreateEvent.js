@@ -99,7 +99,7 @@ class CreateEvent extends React.Component {
           component={CustomField}
         />
         <div className="GroupNote">
-          As a host creator, you will receive this percentage of the total matched bets.
+          As a host of this debate, you'll receive this % of the all matched predictions.
           Friendly advice: no one wants to play with a greedy guts!
         </div>
       </div>
