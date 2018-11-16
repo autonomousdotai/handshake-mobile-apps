@@ -8,8 +8,5 @@ export const socialSharedMsg = [
   'Sending you a free go for this crypto prediction platform. Choose a cool event and give it a shot!',
   'Just tried out Ninja Predicts. Seems pretty cool. You get a free first prediction - nothing to lose. Could win crypto!',
   'I’ve just put some crypto on this. Wanna play against me? Your first prediction is free!',
-  'Waiting to cash out on Ninja Predicts. Have a go, you might win some crypto. Your first try is free!',
-  'Holly sh!t, it\'s so easy to predict in this game',
-  'Muahaha can\'t believe I can easily create a prediction in the crypto world',
-  'Do you dare to predict this event with me? Don\'t think u can win me.',
+  'Waiting to cash out on Ninja Predicts. Have a go, you might win some crypto. Your first try is free!'
 ];
