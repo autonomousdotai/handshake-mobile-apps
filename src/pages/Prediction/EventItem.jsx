@@ -77,7 +77,7 @@ function renderEvenTimeLeft({ event, onCountdownComplete }) {
 }
 
 function renderEventTotalBets({ event }) {
-  const totalBets = (!event.total_bets && formatAmount(event.total_bets)) || 0;
+  const totalBets = !event.total_bets ? 0 : formatAmount(event.total_bets);
   return (
     <div className="EventTotalBet">
       <span className="EventIcon"><Icon path={CoinSVG} /></span>
@@ -87,7 +87,7 @@ function renderEventTotalBets({ event }) {
 }
 
 function renderCreator({ event, onClickCreator }) {
-  const alias = event.creator_wallet_address || '0x1605219905D96BD6c5b1b07A59a3bFB233043f27';
+  const alias = event.creator_wallet_address || '0x3d00536dc2869cc7ee11c45f2fcc86c0336bffed';
   try {
     return (
       <div
