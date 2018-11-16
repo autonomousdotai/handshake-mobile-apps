@@ -29,11 +29,13 @@
 
     .GroupTitle {
       color: #0A2240;
+      font-weight: 400;
     }
 
     .GroupNote {
       color: #889EB5;
       font-size: 13px;
+      font-weight: 400;
     }
 
     .GroupRow {
@@ -115,6 +117,7 @@
   .PublicSwitcher {
     display: flex;
     font-size: 16px;
+    font-weight: 300;
     color: #748599;
     justify-content: space-between;
     margin: -10px 0;
@@ -257,6 +260,7 @@
   .ReportSource {
     .GroupNote {
       padding: 5px 0 10px;
+      font-weight: 400;
     }
 
     .ErrMsg {
@@ -315,7 +319,7 @@
       padding: 5px 10px;
       border: 1px solid hsl(0,0%,80%);
       font-size: 15px;
-      color: #626467;
+      //color: #626467;
 
       &:disabled {
         background-color: #F5F8FC;
