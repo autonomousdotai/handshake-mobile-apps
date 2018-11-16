@@ -379,7 +379,7 @@ class BettingReport extends React.Component {
     const disabled = this.state.reportChecked ? true : false;
     return (
       <div className="wrapperOutcomes">
-        <Label for="outcomeSelect">Outcomes</Label><br />
+        <Label for="outcomeSelect">The result is:</Label><br />
         {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>{item.name}<br />
           {/* side: 1 (support), 2 (against), 3 (draw) */}
           <div className="result">
