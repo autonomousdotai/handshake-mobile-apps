@@ -9,8 +9,8 @@ import './Statistics.scss';
 function buildItem(itemProps) {
   const { name, percent } = itemProps;
   return (
-    <div key={name} className="Item">
-      <span className={`Percent ${name}`}>{`${percent}%`}</span>
+    <div key={name} className={`Item ${name}`}>
+      <span className="Percent">{`${percent}%`}</span>
       <span className="Name">{name}</span>
     </div>
   );
