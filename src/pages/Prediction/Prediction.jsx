@@ -81,8 +81,9 @@ class Prediction extends React.Component {
     if (eventId) {
       this.props.dispatch(loadRelevantEvents({eventId}));
     }
+
+    /*
     setTimeout(() => {
-      /*eslint-disable */
       window?.$zopim?.livechat?.window?.onShow(() => {
         this.isShow = true;
         console.log('onShow', this.isShow);
@@ -92,9 +93,8 @@ class Prediction extends React.Component {
         console.log('onHide', this.isShow);
       });
       this.scrollListener();
-      /* eslint-enable */
-    }, 6000);
-    this.attachScrollListener();
+    }, 6000);*/
+    //this.attachScrollListener();
   }
 
   componentWillUnmount() {

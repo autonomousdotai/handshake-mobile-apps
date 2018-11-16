@@ -1571,7 +1571,7 @@ export default {
           update_button_text: "Update",
           update_title_text: "Update contact",
           select_an_address: "Select an address",
-          
+
 
         },
         button: {

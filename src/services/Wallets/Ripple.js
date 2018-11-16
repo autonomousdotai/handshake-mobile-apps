@@ -24,10 +24,17 @@ export class Ripple extends Wallet {
     createAddressPrivatekey() {
         try {
           const t0 = performance.now();
+<<<<<<< HEAD
 
           const seed = bip39.mnemonicToSeed(this.mnemonic); // creates seed buffer
 
           console.log('mnemonic: ' + this.mnemonic);
+=======
+          const seed = bip39.mnemonicToSeed(this.mnemonic); // creates seed buffer
+
+          console.log('mnemonic: ' + this.mnemonic);
+
+>>>>>>> feature/remove_message_chat
           var entropy = new Buffer(seed, 'hex');
           console.log("entropy", entropy);
           var secret = keypairs.generateSeed({entropy: entropy});
@@ -40,10 +47,18 @@ export class Ripple extends Wallet {
           this.privateKey = privateKey;
           this.publicKey = publicKey;
           this.secret = secret;
+<<<<<<< HEAD
           const t1 = performance.now();
           console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
         } catch (e) {
           console.error('createAddressPrivatekey', e);
+=======
+
+          const t1 = performance.now();
+          console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
+        } catch (e) {
+          console.error(e);
+>>>>>>> feature/remove_message_chat
         }
     }
 
