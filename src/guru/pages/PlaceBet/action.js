@@ -45,3 +45,10 @@ export const initHandShake = (payload = {}) => {
     payload
   };
 };
+
+export const putHandShake = (payload) => {
+  return {
+    type: 'GURU:PUT_HANDSHAKE',
+    payload
+  };
+};

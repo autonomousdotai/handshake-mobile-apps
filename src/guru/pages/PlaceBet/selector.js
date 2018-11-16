@@ -1,9 +1,7 @@
 import qs from 'querystring';
 import { isEmpty } from '@/utils/is';
 
-export const queryStringSelector = (state) => {
-  return state.router.location.search;
-};
+export const queryStringSelector = (state) => (state.router.location.search);
 
 export const eventSelector = (state) => {
   const queryString = queryStringSelector(state);
@@ -17,15 +15,11 @@ export const eventSelector = (state) => {
   return events.filter(event => (event.id === parseInt(match, 10)));
 };
 
-export const matchDetailSelector = (state) => {
-  return state.guru.matchDetail;
-};
+export const matchDetailSelector = (state) => (state.guru.matchDetail);
 
-export const gasPriceSelector = (state) => {
-  return parseFloat(state.guru.gasPrice);
-};
+export const gasPriceSelector = (state) => (parseFloat(state.guru.gasPrice));
 
-export const matchOddsSelector = (state) => {
-  return state.guru.matchDetail.odds;
-};
+export const matchOddsSelector = (state) => (state.guru.matchDetail.odds);
+
+export const handShakesSelector = (state) => (state.guru.handShakes);
 

@@ -59,6 +59,12 @@
     color: #748599;
     font-size: 0.875rem;
     line-height: 2em;
+    &:first-child {
+      color: #000000;
+    }
+    svg {
+      margin-right: 5px;
+    }
   }
 }
 

@@ -9,7 +9,8 @@ import {
   putMatchOdd,
   getGasPrice,
   putGasPrice,
-  initHandShake
+  initHandShake,
+  putHandShake
 } from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
@@ -52,12 +53,12 @@ export function* handleGetGasPrice() {
 
 export function* handleInitHandShake({ payload }) {
   try {
-    const data = yield call(apiPost, {
+    const { data } = yield call(apiPost, {
       PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE}`,
       type: 'INIT_HANDSHAKE',
       data: payload
     });
-    console.log('INITHANDSHAKE', data);
+    if (data) yield put(putHandShake(data));
   } catch (e) {
     console.error(e);
   }

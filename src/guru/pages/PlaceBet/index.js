@@ -4,21 +4,31 @@ import classNames from 'classnames';
 import qs from 'querystring';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import { getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
+import { isEmpty } from '@/utils/is';
 import { formatAmount } from '@/utils/number';
 import { possibleWinning } from '@/utils/calculate';
+import { getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
+import IconCoin from '@/assets/images/icon/icon-coin.svg';
 
 // TODO: [Begin: Will be moving to another place]
-import { HANDSHAKE_ID } from '@/constants';
+import { URL, HANDSHAKE_ID } from '@/constants';
 import { showAlert } from '@/reducers/app/action';
 import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import ModalDialog from '@/components/core/controls/ModalDialog';
+import { MESSAGE } from '@/components/handshakes/betting/message';
+import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 // TODO: [End: Will be moving to another place]
 
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake } from './action';
-import { queryStringSelector, matchDetailSelector, gasPriceSelector, matchOddsSelector } from './selector';
+import {
+  queryStringSelector,
+  matchDetailSelector,
+  gasPriceSelector,
+  matchOddsSelector,
+  handShakesSelector
+} from './selector';
 import { VALIDATE_CODE } from './constants';
-import { validationBet } from './validation';
+import { validationBet, isExistMatchBet } from './validation';
 import View from './View';
 
 import './styles.scss';
@@ -28,21 +38,27 @@ class PlaceBet extends Component {
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     queryStringURL: PropTypes.string,
+    eventList: PropTypes.array,
     matchDetail: PropTypes.object,
-    gasPrice: PropTypes.number,
-    sideOdds: PropTypes.arrayOf(PropTypes.string)
+    sideOdds: PropTypes.arrayOf(PropTypes.string),
+    handShakes: PropTypes.object
   };
 
   static defaultProps = {
+    eventList: [],
     queryStringURL: undefined,
     matchDetail: {},
-    gasPrice: 0,
-    sideOdds: ['support', 'against']
+    sideOdds: ['support', 'against'],
+    handShakes: undefined
   };
 
   state = {
     betAmount: 0
   };
+
+  componentWillMount() {
+    this.redirectIndex();
+  }
 
   componentDidMount() {
     const { props, getParams } = this;
@@ -52,14 +68,31 @@ class PlaceBet extends Component {
     dispatch(getGasPrice());
   }
 
+  componentDidUpdate(prevProps) {
+    const { handShakes } = this.props;
+    if (handShakes && prevProps.handShakes !== handShakes) {
+      this.handShakeHandler(handShakes);
+    }
+  }
+
   getParams = ({ queryStringURL }) => (qs.parse(queryStringURL.slice(1)))
 
   getSide = (props) => (parseInt(this.getParams(props).side, 10));
 
   getOdds = () => {
     const { props, getSide } = this;
-    const { matchOdds, sideOdds } = props;
-    return (matchOdds && matchOdds[sideOdds[`${getSide(props) - 1}`]][0].odds) || 0;
+    const { matchOdds } = props;
+    return (
+      matchOdds && matchOdds[this.props.sideOdds[`${getSide(props) - 1}`]][0].odds
+    ) || 0;
+  }
+
+  redirectIndex = () => {
+    const { eventList } = this.props;
+    if (isEmpty(eventList)) {
+      const redirectURL = `${URL.HANDSHAKE_PREDICTION}`;
+      this.props.history.push(redirectURL);
+    }
   }
 
   validate = async ({ amount }) => {
@@ -91,6 +124,21 @@ class PlaceBet extends Component {
       side: getSide({ queryStringURL }),
       chain_id: getChainIdDefaultWallet()
     };
+  }
+
+  handShakeSuccess = (data) => {
+    const { handshakes } = data;
+    if (!handshakes) return null;
+    const message = isExistMatchBet(handshakes) ?
+      MESSAGE.CREATE_BET_MATCH : MESSAGE.CREATE_BET_NOT_MATCH;
+    return this.alertBox({ message, type: 'success' });
+  }
+
+  handShakeHandler = (data) => {
+    this.handShakeSuccess(data);
+    const handler = BetHandshakeHandler.getShareManager();
+    const { handshakes } = data;
+    handler.controlShake(handshakes);
   }
 
   handleBet = async ({ values }) => {
@@ -131,10 +179,12 @@ class PlaceBet extends Component {
   }
 
   betParamsProps = ({ matchDetail, gasPrice }) => ({
-    possibleWinning: `${this.calculatePosWinning()}`,
+    iconCoin: IconCoin,
+    possibleWinning: `${this.calculatePosWinning()} ETH`,
     gasPrice: `${formatAmount(gasPrice)} ETH`,
     marketFee: `${matchDetail.market_fee}%`,
     className: classNames('BetParamsComponent')
+    
   });
 
   renderOuttaMoney = () => {
@@ -155,7 +205,7 @@ class PlaceBet extends Component {
     return (
       <div className="PlaceBetContainer">
         <View
-          history={props.history}
+          history={this.props.history}
           betFormProps={this.betFormProps(props)}
           betParamsProps={this.betParamsProps(props)}
         />
@@ -172,10 +222,12 @@ class PlaceBet extends Component {
 export default injectIntl(connect(
   (state) => {
     return {
+      eventList: state.prediction.events,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),
       gasPrice: gasPriceSelector(state),
-      matchOdds: matchOddsSelector(state)
+      matchOdds: matchOddsSelector(state),
+      handShakes: handShakesSelector(state)
     };
   }
 )(PlaceBet));
