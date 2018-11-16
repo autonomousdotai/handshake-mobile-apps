@@ -6,7 +6,6 @@ import {
   loadReports,
   updateReports,
   createEvent,
-  sendEmailCode,
   shareEvent
 } from './action';
 
@@ -35,7 +34,7 @@ function* handleGenerateShareLink({ matchId, eventName }) {
     });
     yield put(shareEvent({
       url: `${window.location.origin}${URL.HANDSHAKE_PREDICTION}${link.data.slug}`,
-      name: eventName,
+      name: eventName
     }));
   } catch (e) {
     console.error(e);
@@ -87,25 +86,7 @@ function* handleCreateEven({ values }) {
   }
 }
 
-function* handleSendEmailCode({ payload }) {
-  try {
-    const res = yield call(apiPost, {
-      PATH_URL: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION,
-      type: 'API:SEND_EMAIL_CODE',
-      data: {
-        email: payload.email
-      }
-    });
-    if (res.error) {
-      console.error('Failed to submit email: ', res.error);
-    }
-  } catch (e) {
-    console.error(e);
-  }
-}
-
 export default function* createEventSaga() {
   yield takeLatest(loadReports().type, handleLoadReports);
   yield takeLatest(createEvent().type, handleCreateEven);
-  yield takeLatest(sendEmailCode().type, handleSendEmailCode);
 }

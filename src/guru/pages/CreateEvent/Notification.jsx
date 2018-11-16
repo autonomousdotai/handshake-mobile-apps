@@ -5,14 +5,14 @@ import { Field } from 'formik';
 import { ErrMsg } from '@/guru/components/Form';
 import { fetchProfile } from '@/reducers/auth/action';
 import { API_URL } from '@/constants';
-import { sendEmailCode, verifyEmailCode } from './action';
+import { verifyEmailCode, getEmailCode } from './action';
 
 class Notification extends Component {
   static displayName = 'Notification';
   static propTypes = {
     formProps: PropTypes.any.isRequired,
-    sendEmailCode: PropTypes.func.isRequired,
     verifyEmailCode: PropTypes.func.isRequired,
+    getEmailCode: PropTypes.func.isRequired,
     fetchProfile: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
     isEmailVerified: PropTypes.bool.isRequired,
@@ -21,13 +21,23 @@ class Notification extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEmailSent: false,
+      isEmailSent: false
     };
   }
 
-  sendEmail = email => {
-    this.props.sendEmailCode({ email });
-    this.setState({ isEmailSent: true });
+  sendEmail = (email, setFieldError) => {
+    this.props.getEmailCode({
+      METHOD: 'POST',
+      PATH_URL: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION,
+      data: { email },
+      successFn: () => {
+        this.setState({ isEmailSent: true });
+      },
+      errorFn: (e) => {
+        console.error(e);
+        setFieldError('email', e.message);
+      }
+    });
   };
 
   isValidCodeRegex = code => /^[0-9]{4}/g.exec(code);
@@ -53,7 +63,7 @@ class Notification extends Component {
   };
 
   renderEmailBox = (props, state) => {
-    const { errors, values } = props.formProps;
+    const { errors, values, setFieldError } = props.formProps;
     const disabled = !values.email || errors.email || state.isEmailSent;
     return (
       <React.Fragment>
@@ -67,7 +77,7 @@ class Notification extends Component {
             type="button"
             disabled={disabled}
             className="btn btn-primary"
-            onClick={() => this.sendEmail(values.email)}
+            onClick={() => this.sendEmail(values.email, setFieldError)}
           >
             Get code
           </button>
@@ -146,5 +156,5 @@ export default connect(
       email: state.auth.profile.email,
       isEmailVerified: !!state.auth.profile.verified
     };
-  }, { sendEmailCode, verifyEmailCode, fetchProfile }
+  }, { verifyEmailCode, getEmailCode, fetchProfile }
 )(Notification);

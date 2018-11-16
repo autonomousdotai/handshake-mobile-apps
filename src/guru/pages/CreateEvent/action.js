@@ -1,6 +1,7 @@
 import { createAPI } from '@/reducers/action';
 
 export const verifyEmailCode = createAPI('API:VERIFY_EMAIL_CODE');
+export const getEmailCode = createAPI('API:GET_EMAIL_CODE');
 
 export const loadReports = (payload = {}) => {
   return {
