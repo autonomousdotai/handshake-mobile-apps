@@ -1292,5 +1292,5 @@ export const COUNTRY_LIST = {
 
 export const EXT = {
   URL: 'https://chrome.google.com/webstore/detail/ninja-prediction/lmbfnjfjefcjgbddmaijlmkkpfipbjhb',
-  CLIP_SOURCE: 'https://www.youtube.com/embed/Cpswr7hGtiA?rel=0&amp;autoplay=1&amp;loop=1&playlist=Cpswr7hGtiA'
+  CLIP_SOURCE: 'https://www.youtube.com/embed/eZuN9414UOo?rel=0&amp;autoplay=1&amp;loop=1&playlist=eZuN9414UOo'
 }

@@ -205,6 +205,7 @@
   }
 
   .EventItem {
+    color: #0a2240;
     background-color: #ffffff;
     padding: rem-calc(20px);
     font-family: $font-family-base;
@@ -224,6 +225,10 @@
 
     .CreatorComponent {
       margin-bottom: 10px;
+      svg {
+        width: 28px;
+        height: 28px;
+      }
       .CreatorAlias {
         margin-left: 10px;
         color: #000;
@@ -291,7 +296,7 @@
         > div {
           margin-right: 15px;
           min-width: 110px;
-          padding-bottom: 10px;
+          // padding-bottom: 10px;
         }
       }
     }
