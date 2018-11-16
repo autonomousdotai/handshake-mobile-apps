@@ -12,13 +12,13 @@ export const validationSchema = Yup.object().shape({
     .required('Required')
 });
 
-export const isMainNet = () => {
+export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
   if (process.env.isProduction) {
     return (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet);
   }
-  return process.env.isStaging;
+  return true; // process.env.isStaging;
 };
 
 export const isSameAddress = (address) => (address !== getAddress());
@@ -49,7 +49,7 @@ export const validationBet = async ({
     balance
   };
 
-  if (!isMainNet()) {
+  if (!isRightNetwork()) {
     return {
       ...result,
       message: MESSAGE.RIGHT_NETWORK,
