@@ -132,10 +132,15 @@ $primary-color-orange-dark: #e08833;
 
     .Item {
       justify-content: center;
+      font-weight: bold;
     }
 
     .Name {
       text-transform: uppercase;
+    }
+
+    .No span {
+      color: #ccc;
     }
   }
 
