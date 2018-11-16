@@ -36,7 +36,7 @@ class LuckyLanding extends React.Component {
         <div className="luckyTopContent">
           <div className="luckyLandingTitle">Hey Ninja!</div>
           <div className="luckyTitleDesc">
-          We love seeing new masked faces!.
+          We love seeing new masked faces!
           {/*<br/>
           Here’s a guide and 3 free bets, all for you!*/}
           </div>
