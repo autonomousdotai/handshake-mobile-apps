@@ -1,7 +1,7 @@
 @import "./src/styles/style";
 
 .wrapperReputation {
-  background-color: #f5f7fa;
+  background-color: #EBF1F7;
 }
 .wrapperContentReputation {
   font-family: $font-family-base;
@@ -51,10 +51,11 @@
     font-size: rem-calc(16px);
   }
   .boldText {
-    font-weight: 400;
+    font-weight: 500;
   }
   .normalText {
     font-size: rem-calc(14px);
+    font-weight: 100;
   }
   .disableText {
     color: #748599;
