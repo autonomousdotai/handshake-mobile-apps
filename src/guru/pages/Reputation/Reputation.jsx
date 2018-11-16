@@ -109,7 +109,7 @@ class Reputation extends React.Component {
   renderMarketList(props) {
     return (
       <div className="wrapperMarketList">
-        <div className="mediumText boldText">Hosted Debates</div>
+        <div className="mediumText">Hosted Debates</div>
         {props.eventList.map((event) => {
           return (
             <EventItem
