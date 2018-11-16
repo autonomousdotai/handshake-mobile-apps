@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '@/guru/components/Icon/Icon';
 
-const BetParams = ({ possibleWinning, gasPrice, marketFee, ...restProps }) => {
+const BetParams = ({ possibleWinning, gasPrice, marketFee, iconCoin, ...restProps }) => {
   return (
     <div {...restProps}>
       <div className="Item">
-        <span className="Label">Possible winning</span>
-        <span className="value">{possibleWinning}</span>
+        <strong className="Label">Possible winning</strong>
+        <strong className="value">
+          <Icon path={iconCoin} />
+          {possibleWinning}
+        </strong>
       </div>
       <div className="Item">
         <span className="Label">Gas price</span>

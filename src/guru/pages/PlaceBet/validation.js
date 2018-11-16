@@ -2,7 +2,7 @@ import * as Yup from 'yup';
 import moment from 'moment';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
-import { VALIDATE_CODE } from '@/components/handshakes/betting/constants.js';
+import { BET_TYPE, VALIDATE_CODE } from '@/components/handshakes/betting/constants.js';
 import { getBalance, getEstimateGas, getAddress } from '@/utils/helpers';
 import { parseBigNumber } from '@/utils/number';
 
@@ -30,6 +30,8 @@ export const isExpiredDate = (reportTime) => {
   const todayUnit = today.utc();
   return (!todayUnit.isSameOrBefore(dayUnit, 'miliseconds') && today);
 };
+
+export const isExistMatchBet = (list) => (list.find(item => item.type === BET_TYPE.SHAKE));
 
 export const validationBet = async ({
   amount = 0,

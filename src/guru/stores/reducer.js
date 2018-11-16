@@ -1,6 +1,12 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 import {
+  putMatchDetail,
+  putMatchOdd,
+  putGasPrice,
+  putHandShake
+} from '@/guru/pages/PlaceBet/action';
+import {
   updateReports,
   shareEvent,
   resetShareEvent
@@ -24,20 +30,23 @@ const guruReducer = (state = initialState, action) => {
       case 'GURU:UPDATE_EVENTS':
         draft.events = action.events;
         break;
-      case 'GURU:PUT_MATCH_DETAIL':
+      case putMatchDetail().type:
         draft.matchDetail = {
           ...draft.matchDetail,
           ...action.data
         };
         break;
-      case 'GURU:PUT_MATCH_ODD':
+      case putMatchOdd().type:
         draft.matchDetail = {
           ...draft.matchDetail,
           odds: action.payload
         };
         break;
-      case 'GURU:PUT_GAS_PRICE':
+      case putGasPrice().type:
         draft.gasPrice = action.payload;
+        break;
+      case putHandShake().type:
+        draft.handShakes = action.payload;
         break;
       case 'GURU:UPDATE_USER_EVENTS':
         draft.userEvents = action.userEvents;
