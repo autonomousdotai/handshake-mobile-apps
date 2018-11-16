@@ -184,7 +184,6 @@ class PlaceBet extends Component {
     gasPrice: `${formatAmount(gasPrice)} ETH`,
     marketFee: `${matchDetail.market_fee}%`,
     className: classNames('BetParamsComponent')
-    
   });
 
   renderOuttaMoney = () => {
