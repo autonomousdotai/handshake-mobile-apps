@@ -19,7 +19,7 @@ const BetFormControls = ({
     customOnChange(e);
   };
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} noValidate>
       <input
         name="amount"
         placeholder="0.00 ETH"
