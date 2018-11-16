@@ -8,7 +8,8 @@ import {
   getMatchOdd,
   putMatchOdd,
   getGasPrice,
-  putGasPrice
+  putGasPrice,
+  initHandShake
 } from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
@@ -49,8 +50,22 @@ export function* handleGetGasPrice() {
   }
 }
 
+export function* handleInitHandShake({ payload }) {
+  try {
+    const data = yield call(apiPost, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE}`,
+      type: 'INIT_HANDSHAKE',
+      data: payload
+    });
+    console.log('INITHANDSHAKE', data);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export default function* placeBetSaga() {
   yield takeLatest(getMatchDetail().type, handleGetMatchDetail);
   yield takeLatest(getGasPrice().type, handleGetGasPrice);
   yield takeLatest(getMatchOdd().type, handleGetMatchOdd);
+  yield takeLatest(initHandShake().type, handleInitHandShake);
 }

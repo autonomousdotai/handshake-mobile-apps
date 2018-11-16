@@ -24,7 +24,7 @@ export const currencyFormat = new Intl.NumberFormat('en-US', { style: 'currency'
 
 /**
  * Convert a big number
- * @param {number} value
+ * @param {number | string} n
  */
 export const parseBigNumber = (n) => {
   return new BigNumber(n);

@@ -38,3 +38,10 @@ export const putGasPrice = (payload) => {
     payload
   };
 };
+
+export const initHandShake = (payload = {}) => {
+  return {
+    type: 'GURU:INIT_HANDSHAKE',
+    payload
+  };
+};

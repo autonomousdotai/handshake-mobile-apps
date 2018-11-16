@@ -23,7 +23,8 @@ const BetFormControls = ({
       <input
         name="amount"
         placeholder="0.00 ETH"
-        type="text"
+        type="number"
+        autoComplete="off"
         value={values.amount}
         onChange={handleOnChange}
         onBlur={handleBlur}
