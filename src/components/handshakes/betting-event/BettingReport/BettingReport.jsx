@@ -265,6 +265,10 @@ class BettingReport extends React.Component {
           finalCopy.push(newItem);
         });
         result = finalCopy;
+
+        this.setState({
+          final: finalCopy
+        });
       }
 
 
