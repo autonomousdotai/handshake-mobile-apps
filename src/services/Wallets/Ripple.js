@@ -1,14 +1,12 @@
-import axios from 'axios';
 import { Wallet } from '@/services/Wallets/Wallet.js';
-import configs from '@/configs';
-import { StringHelper } from '@/services/helper';
-const bip39 = require("bip39");
+
+const bip39 = require('bip39');
 const keypairs = require('ripple-keypairs');
-var RippleAPI = require('ripple-lib').RippleAPI;
+const RippleAPI = require('ripple-lib').RippleAPI;
 
 
 export class Ripple extends Wallet {
-    static Network = { Mainnet: 'wss://s1.ripple.com:443', Testnet: "wss://s.altnet.rippletest.net:51233" };
+    static Network = { Mainnet: 'wss://s1.ripple.com:443', Testnet: 'wss://s.altnet.rippletest.net:51233' };
 
     constructor() {
       super();
@@ -18,75 +16,56 @@ export class Ripple extends Wallet {
       this.className = 'Ripple';
     }
     getShortAddress() {
-        return this.address.replace(this.address.substr(4, 26), '...');
+      return this.address.replace(this.address.substr(4, 26), '...');
     }
 
     createAddressPrivatekey() {
-        try {
-          const t0 = performance.now();
-<<<<<<< HEAD
+      try {
+        const t0 = performance.now();
+        const seed = bip39.mnemonicToSeed(this.mnemonic); // creates seed buffer
 
-          const seed = bip39.mnemonicToSeed(this.mnemonic); // creates seed buffer
+        console.log(`mnemonic: ${this.mnemonic}`);
+        const entropy = new Buffer(seed, 'hex');
+        console.log('entropy', entropy);
+        const secret = keypairs.generateSeed({ entropy });
+        const keypair = keypairs.deriveKeypair(secret);
+        const publicKey = keypair.publicKey;
+        const address = keypairs.deriveAddress(publicKey);
+        const privateKey = keypair.privateKey;
 
-          console.log('mnemonic: ' + this.mnemonic);
-=======
-          const seed = bip39.mnemonicToSeed(this.mnemonic); // creates seed buffer
+        this.address = address;
+        this.privateKey = privateKey;
+        this.publicKey = publicKey;
+        this.secret = secret;
 
-          console.log('mnemonic: ' + this.mnemonic);
-
->>>>>>> feature/remove_message_chat
-          var entropy = new Buffer(seed, 'hex');
-          console.log("entropy", entropy);
-          var secret = keypairs.generateSeed({entropy: entropy});
-          var keypair = keypairs.deriveKeypair(secret);
-          var publicKey = keypair.publicKey;
-          var address = keypairs.deriveAddress(publicKey);
-          var privateKey = keypair.privateKey;
-
-          this.address = address;
-          this.privateKey = privateKey;
-          this.publicKey = publicKey;
-          this.secret = secret;
-<<<<<<< HEAD
-          const t1 = performance.now();
-          console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
-        } catch (e) {
-          console.error('createAddressPrivatekey', e);
-=======
-
-          const t1 = performance.now();
-          console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
-        } catch (e) {
-          console.error(e);
->>>>>>> feature/remove_message_chat
-        }
+        const t1 = performance.now();
+        console.log(`Call to createAddressPrivatekey for each Ripple (${address}) took ${t1 - t0} milliseconds.`);
+      } catch (e) {
+        console.error('createAddressPrivatekey', e);
+      }
     }
 
     async getBalance() {
-      try{
-        let data = await this.accountInfo();
+      try {
+        const data = await this.accountInfo();
         console.log('getAccountInfo.....', data);
-        if(data)
-          return data['xrpBalance'];
-        else{
-          return 0;
-        }
-      }
-      catch (e){
-        //console.log(e);
+        if (data) { return data.xrpBalance; }
+
+        return 0;
+      } catch (e) {
+        // console.log(e);
       }
       return 0;
-
     }
 
-    accountInfo(){
+    accountInfo() {
       return new Promise((resolve, reject) => {
         const api = new RippleAPI({
           server: this.network
         });
 
         api.on('error', (errorCode, errorMessage) => {
-          console.log(errorCode + ': ' + errorMessage);
+          console.log(`${errorCode}: ${errorMessage}`);
         });
         api.on('connected', () => {
           console.log('connected');
@@ -95,26 +74,23 @@ export class Ripple extends Wallet {
           console.log('disconnected, code:', code);
         });
         api.connect().then(() => {
-            api.getAccountInfo(this.address).then(data => {
-                api.disconnect();
-                resolve(data);
-            }).catch(err => reject(err));
+          api.getAccountInfo(this.address).then(data => {
+            api.disconnect();
+            resolve(data);
+          }).catch(err => reject(err));
         });
-    });
-
+      });
     }
 
     checkAddressValid(address) {
-        if (!/^r[1-9A-HJ-NP-Za-km-z]{25,34}$/i.test(address)) {
-          return 'messages.ripple.error.invalid_address';
-        } else {
-          return true;
-        }
+      if (!/^r[1-9A-HJ-NP-Za-km-z]{25,34}$/i.test(address)) {
+        return 'messages.ripple.error.invalid_address';
+      }
+      return true;
     }
 
-    async transfer(toAddress, amountToSend){
-
-      const instructions = {maxLedgerVersionOffset: 5};
+    async transfer(toAddress, amountToSend) {
+      const instructions = { maxLedgerVersionOffset: 5 };
 
       const payment = {
         source: {
@@ -139,7 +115,7 @@ export class Ripple extends Wallet {
         });
 
         api.on('error', (errorCode, errorMessage) => {
-          console.log(errorCode + ': ' + errorMessage);
+          console.log(`${errorCode}: ${errorMessage}`);
         });
         api.on('connected', () => {
           console.log('connected');
@@ -148,30 +124,29 @@ export class Ripple extends Wallet {
           console.log('disconnected, code:', code);
         });
         api.connect().then(() => {
-          console.log("payment", payment);
+          console.log('payment', payment);
           api.preparePayment(this.address, payment, instructions).then(prepared => {
             console.log('Payment transaction prepared...', prepared);
-            let secret = this.secret != "" ? this.secret : null;
-            const {signedTransaction, id} = api.sign(prepared.txJSON, secret , {}, {privateKey: this.privateKey, publicKey: this.publicKey});
+            const secret = this.secret != '' ? this.secret : null;
+            const { signedTransaction, id } = api.sign(prepared.txJSON, secret, {}, { privateKey: this.privateKey, publicKey: this.publicKey });
             console.log('Payment transaction signed...', signedTransaction);
             console.log('ID->', id);
             api.submit(signedTransaction).then(
               quick => {
-                console.log("quick", quick);
+                console.log('quick', quick);
                 api.disconnect();
-                if (quick.resultCode == "tesSUCCESS"){
-                  resolve ({ status: 1, message: quick.resultMessage, data: {hash: id}});
-                }
-                else{
+                if (quick.resultCode == 'tesSUCCESS') {
+                  resolve({ status: 1, message: quick.resultMessage, data: { hash: id } });
+                } else {
                   resolve({ status: 0, message: quick.resultMessage });
                 }
               },
               fail => {
-                console.log("fail", fail);
+                console.log('fail', fail);
                 api.disconnect();
                 resolve({ status: 0, message: fail.resultMessage });
               });
-          }).catch(err => reject(err));;
+          }).catch(err => reject(err));
         }).catch(err => reject(err));
       });
     }
