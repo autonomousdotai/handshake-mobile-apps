@@ -63,7 +63,7 @@ class Notification extends Component {
   };
 
   renderEmailBox = (props, state) => {
-    const { errors, values, setFieldError } = props.formProps;
+    const { errors, values, setFieldError, setFieldValue } = props.formProps;
     const disabled = !values.email || errors.email || state.isEmailSent;
     return (
       <React.Fragment>
@@ -71,6 +71,7 @@ class Notification extends Component {
           <Field
             name="email"
             placeholder="e.g. ninja@gmail.com"
+            onChange={(e) => setFieldValue('email', e.target.value.toLowerCase())}
             disabled={state.isEmailSent}
           />
           <button

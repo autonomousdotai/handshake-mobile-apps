@@ -4,9 +4,7 @@ import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
-import { CustomField, ErrMsg, Switch, Thumbnail } from '@/guru/components/Form';
-import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
-import { isURL } from '@/utils/string';
+import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 
@@ -198,29 +196,22 @@ class CreateEvent extends React.Component {
       source: ''
     };
 
-    const validateEmail = email
-      ? {}
+    const validateEmail = email ? {}
       : {
-        email: Yup.string()
-          .required('Required')
-          .email('invalid email address'),
-        emailCode: Yup.string()
-          .required('Required')
-          .matches(/^[0-9]{4}/, 'invalid Code')
+        email: Yup.string().required('Required').email('invalid email address'),
+        emailCode: Yup.number().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
       };
 
     const eventSchema = Yup.object().shape({
       eventName: Yup.string().trim().required('Required'),
-      outcomeName: Yup.string().trim().required('Required'), // should not = eventName
+      outcomeName: Yup.string().trim().required('Required'),
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
       image: Yup.mixed().test('image', 'invalid file type', f => {
         return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
       }),
-      source: Yup.mixed()
-        .required('Required')
-        .test('source', 'invalid URL', s => {
-          return !s ? true : isURL((s || {}).label); // validate create first time
-        }),
+      source: Yup.object({
+        label: Yup.string().trim().required('Required').url('invalid URL')
+      }),
       ...validateEmail
     });
 
