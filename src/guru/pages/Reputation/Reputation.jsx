@@ -10,7 +10,7 @@ import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
-import { userEventsSelector, userReputationSelector, isLoading } from '@/guru/pages/Home/selector';
+import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { formatAmount } from '@/components/handshakes/betting/utils';
 import { shortAddress } from '@/utils/string';
 
@@ -155,7 +155,7 @@ export default injectIntl(connect(
     return {
       eventList: userEventsSelector(state),
       reputation: userReputationSelector(state),
-      isLoading: isLoading(state)
+      isLoading: state.guru.ui.isLoading
     };
   },
 )(Reputation));

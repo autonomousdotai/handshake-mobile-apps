@@ -5,6 +5,9 @@ import classNames from 'classnames';
 import './AppBar.scss';
 
 function AppBar(props) {
+  // TODO: chrome-extension
+  if (window.self !== window.top) return null;
+
   const { children, classNameProp } = props;
   const classNameComponent = classNames(
     'AppBarComponent',
