@@ -1,8 +1,8 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
-import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, updateLoading, loginMetaMask, updateAuthMetaMask } from './action';
-import { updateCreateEventLoading } from '@/pages/CreateMarket/action';
+import { updateLoading } from '@/guru/stores/action';
+import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, loginMetaMask, updateAuthMetaMask } from './action';
 
 
 export function* handleLoadMatches({ isDetail, source }) {
