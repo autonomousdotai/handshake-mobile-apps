@@ -57,7 +57,7 @@ class PlaceBet extends Component {
   };
 
   componentWillMount() {
-    this.redirectIndex();
+    this.crossIndex();
   }
 
   componentDidMount() {
@@ -88,10 +88,14 @@ class PlaceBet extends Component {
   }
 
   redirectIndex = () => {
+    const redirectURL = `${URL.HANDSHAKE_PREDICTION}`;
+    this.props.history.push(redirectURL);
+  }
+
+  crossIndex = () => {
     const { eventList } = this.props;
     if (isEmpty(eventList)) {
-      const redirectURL = `${URL.HANDSHAKE_PREDICTION}`;
-      this.props.history.push(redirectURL);
+      this.redirectIndex();
     }
   }
 
@@ -131,7 +135,7 @@ class PlaceBet extends Component {
     if (!handshakes) return null;
     const message = isExistMatchBet(handshakes) ?
       MESSAGE.CREATE_BET_MATCH : MESSAGE.CREATE_BET_NOT_MATCH;
-    return this.alertBox({ message, type: 'success' });
+    return this.alertBox({ message, type: 'success', callBack: this.redirectIndex() });
   }
 
   handShakeHandler = (data) => {
