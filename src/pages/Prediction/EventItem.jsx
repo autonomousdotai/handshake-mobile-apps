@@ -59,7 +59,7 @@ function renderEventNumberOfPlayers({ event }) {
   if (!event.total_users) return null;
   return (
     <div className="EventNumberOfPlayer">
-      <span className="EventIcon"><Icon path={NumberPlayersSVG} /></span>
+      <span className="EventIcon"><Icon path={NumberPlayersSVG} className="NumberPlayer" /></span>
       <span className="NumberOfPlayerTitle">{event.total_users}</span>
     </div>
   );
