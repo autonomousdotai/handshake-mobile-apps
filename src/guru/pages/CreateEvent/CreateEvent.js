@@ -21,11 +21,13 @@ class CreateEvent extends React.Component {
   static propTypes = {
     createEvent: PropTypes.func.isRequired,
     email: PropTypes.string,
+    verified: PropTypes.number,
     shareEvent: PropTypes.object
   };
 
   static defaultProps = {
     email: '',
+    verified: 0,
     shareEvent: undefined
   };
 
@@ -175,7 +177,7 @@ class CreateEvent extends React.Component {
   };
 
   render() {
-    const { email, shareEvent } = this.props;
+    const { email, verified, shareEvent } = this.props;
     if (shareEvent) {
       return <ShareMarket shareEvent={shareEvent} />;
     }
@@ -189,17 +191,17 @@ class CreateEvent extends React.Component {
       eventName: '',
       public: true,
       marketFee: 0,
-      email,
+      email: verified ? email : '',
       emailCode: '',
       closingTime: initialClosingTime, // TODO: Set to current
       image: '',
       source: ''
     };
 
-    const validateEmail = email ? {}
+    const validateEmail = (email && verified) ? {}
       : {
         email: Yup.string().required('Required').email('invalid email address'),
-        emailCode: Yup.number().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
+        emailCode: Yup.string().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
       };
 
     const eventSchema = Yup.object().shape({
@@ -266,6 +268,7 @@ class CreateEvent extends React.Component {
 export default connect((state) => {
   return {
     email: state.auth.profile.email,
+    verified: state.auth.profile.verified,
     shareEvent: state.guru.ui.shareEvent
   };
 }, { createEvent })(CreateEvent);
