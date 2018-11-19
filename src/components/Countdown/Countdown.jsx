@@ -102,6 +102,7 @@ export default class Countdown extends Component {
     }
 
     return {
+      years: this.addLeadingZeros(Math.floor(seconds / (3600 * 24 * 365))),
       days: Number(this.addLeadingZeros(Math.floor(seconds / (3600 * 24)))),
       hours: this.addLeadingZeros(Math.floor((seconds / 3600) % 24)),
       minutes: this.addLeadingZeros(Math.floor((seconds / 60) % 60)),
@@ -110,6 +111,12 @@ export default class Countdown extends Component {
       completed: seconds === 0,
     };
   };
+
+  renderYears = (years) => {
+    if (years <= 0) return null;
+    const pl = (years > 1) ? 'years' : 'year';
+    return (<span className="CountdownItem Years">{`${years} ${pl}`}</span>);
+  }
 
   renderDays = (days) => {
     if (days <= 0) return null;
@@ -166,7 +173,8 @@ export default class Countdown extends Component {
 
     return (
       <div className={cls}>
-        {this.renderDays(state.days)}
+        {state.years > 1 ? this.renderYears(state.years) : this.renderDays(state.days)}
+        {/*this.renderDays(state.days)*/}
         {this.renderTime(props, state)}
       </div>
     );
