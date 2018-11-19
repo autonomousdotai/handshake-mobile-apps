@@ -208,9 +208,13 @@ class CreateEvent extends React.Component {
       eventName: Yup.string().trim().required('Required'),
       outcomeName: Yup.string().trim().required('Required'),
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
-      image: Yup.mixed().test('image', 'invalid file type', f => {
-        return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
-      }),
+      image: Yup.mixed()
+        .test('image', 'invalid file type', f => {
+          return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
+        })
+        .test('image', 'Exceeding maximum upload file size (5MB)', f => {
+          return !f ? true : (f.size < (5 * 1024 * 1024));
+        }),
       source: Yup.object({
         label: Yup.string().trim().required('Required').url('invalid URL')
       }),
