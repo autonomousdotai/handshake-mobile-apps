@@ -56,6 +56,20 @@ export const checkRedeemCode = (payload = {}) => {
   };
 };
 
+export const emailSubscriber = (payload = {}) => {
+  return {
+    type: 'PREDICTION:SUBCRIBE_EMAIL_PREDICTION',
+    ...payload
+  };
+};
+
+export const putStatusSubscriber = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:PUT_STATUS_SUBSCRIBER',
+    _path: 'ui.isSubscriber',
+    _value: value
+  });
+};
 
 export const updateShowedLuckyPool = () => {
   return SET_DATA({
