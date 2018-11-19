@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
-import { Wallet } from '@/services/Wallets/Wallet';
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 
 import './TopUp.scss';
@@ -11,23 +10,14 @@ class TopUp extends React.Component {
   static propTypes = {
     address: PropTypes.string,
     balance: PropTypes.number,
-    name: PropTypes.string,
+    name: PropTypes.string
   };
 
   static defaultProps = {
     address: null,
     balance: null,
-    name: null,
+    name: null
   };
-
-  state = {
-    wallets: [],
-  };
-
-  componentDidMount() {
-    const wallets = MasterWallet.getMasterWallet();
-    this.setState({ wallets });
-  }
 
   copyToClipboard = (str) => {
     const el = document.createElement('textarea');
@@ -44,7 +34,7 @@ class TopUp extends React.Component {
   };
 
   balance = (props) => {
-    const { balance, name } = props || { balance: 0, name: 'ETH'};
+    const { balance, name } = props || { balance: 0, name: 'ETH' };
     return (
       <div className="TopUpCard BalanceCard">
         <div className="Label">Your balance</div>
@@ -77,8 +67,8 @@ class TopUp extends React.Component {
   };
 
   render() {
-    const { wallets } = this.state;
-    const walletProps = wallets[0];
+    const wallets = MasterWallet.getMasterWallet();
+    const walletProps = wallets[1];
     return (
       <div className="TopUpContainer">
         { this.balance(walletProps) }

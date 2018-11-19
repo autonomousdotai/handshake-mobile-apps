@@ -11,6 +11,7 @@ import {
   shareEvent,
   resetShareEvent
 } from '@/guru/pages/CreateEvent/action';
+import { updateLoading } from './action';
 
 const initialState = {
   events: [],
@@ -27,6 +28,9 @@ const initialState = {
 const guruReducer = (state = initialState, action) => {
   return produce(state, draft => {
     switch (action.type) {
+      case updateLoading().type:
+        draft.ui.isLoading = action.payload;
+        break;
       case 'GURU:UPDATE_EVENTS':
         draft.events = action.events;
         break;
@@ -60,9 +64,9 @@ const guruReducer = (state = initialState, action) => {
       case 'GURU:UPDATE_AUTH_COINBASE':
         draft.authMetaMask = action.authMetaMask;
         break;
-      case 'GURU:UPDATE_LOADING':
-        draft.isFetching = action.isFetching;
-        break;
+      // case 'GURU:UPDATE_LOADING':
+      //   draft.isFetching = action.isFetching;
+      //   break;
       case updateReports().type:
         draft.reports = action.payload.data;
         break;

@@ -15,17 +15,8 @@ class HeaderBar extends React.Component {
 
   static defaultProps = {
     className: '',
-    titleBar: '',
+    titleBar: ''
   };
-
-  state = {
-    wallets: [],
-  };
-
-  componentDidMount() {
-    const wallets = MasterWallet.getMasterWallet();
-    this.setState({ wallets });
-  }
 
   me = () => {
     return (
@@ -74,12 +65,12 @@ class HeaderBar extends React.Component {
   };
 
   render() {
-    const { props, state } = this;
+    const { props } = this;
     const { className, titleBar } = props;
     const { pathname } = window.location;
 
-    const { wallets } = state;
-    const walletProps = wallets[0];
+    const wallets = MasterWallet.getMasterWallet();
+    const walletProps = wallets[1];
 
     return (
       <div className={className}>

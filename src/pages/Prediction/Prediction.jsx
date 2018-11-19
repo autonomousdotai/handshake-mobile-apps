@@ -475,9 +475,9 @@ class Prediction extends React.Component {
   renderAppBar = (props) => {
     return (
       <AppBar>
-        <span className="IconLeft Account">
+        {/* <span className="IconLeft Account">
           <i className="fal fa-user" />
-        </span>
+        </span> */}
         <span className="Title">Prediction</span>
       </AppBar>
     );

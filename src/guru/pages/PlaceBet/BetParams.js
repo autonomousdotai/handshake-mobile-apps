@@ -6,7 +6,7 @@ const BetParams = ({ possibleWinning, gasPrice, marketFee, iconCoin, ...restProp
   return (
     <div {...restProps}>
       <div className="Item">
-        <strong className="Label">Possible winning</strong>
+        <strong className="Label">Possible winnings</strong>
         <strong className="value">
           <Icon path={iconCoin} />
           {possibleWinning}

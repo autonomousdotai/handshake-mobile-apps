@@ -19,6 +19,7 @@ import { MESSAGE } from '@/components/handshakes/betting/message';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 // TODO: [End: Will be moving to another place]
 
+import { updateLoading } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake } from './action';
 import {
   queryStringSelector,
@@ -57,7 +58,7 @@ class PlaceBet extends Component {
   };
 
   componentWillMount() {
-    this.redirectIndex();
+    this.crossIndex();
   }
 
   componentDidMount() {
@@ -88,10 +89,14 @@ class PlaceBet extends Component {
   }
 
   redirectIndex = () => {
+    const redirectURL = `${URL.HANDSHAKE_PREDICTION}`;
+    this.props.history.push(redirectURL);
+  }
+
+  crossIndex = () => {
     const { eventList } = this.props;
     if (isEmpty(eventList)) {
-      const redirectURL = `${URL.HANDSHAKE_PREDICTION}`;
-      this.props.history.push(redirectURL);
+      this.redirectIndex();
     }
   }
 
@@ -131,7 +136,7 @@ class PlaceBet extends Component {
     if (!handshakes) return null;
     const message = isExistMatchBet(handshakes) ?
       MESSAGE.CREATE_BET_MATCH : MESSAGE.CREATE_BET_NOT_MATCH;
-    return this.alertBox({ message, type: 'success' });
+    return this.alertBox({ message, type: 'success', callBack: this.redirectIndex() });
   }
 
   handShakeHandler = (data) => {
@@ -143,6 +148,7 @@ class PlaceBet extends Component {
 
   handleBet = async ({ values }) => {
     const { validate, alertBox, modalOuttaMoney, handShakeData, props } = this;
+    props.dispatch(updateLoading(true));
     const { status, message, code } = await validate(values);
     if (status) {
       return props.dispatch(initHandShake(handShakeData(values)));
@@ -164,13 +170,15 @@ class PlaceBet extends Component {
     return formatAmount(possibleWinning(betAmount, betOdds));
   }
 
-  betFormProps = (props) => {
+  betFormProps = (props, state) => {
     const { handleBet, handleChange, getSide } = this;
     return {
       handleBet,
       handleChange,
       amount: '',
       side: getSide(props),
+      disabled: state.betAmount === 0,
+      isSubmitting: props.isLoading,
       buttonClasses: classNames('btn btn-block', {
         'btn-primary': getSide(props) === 1,
         'btn-secondary': getSide(props) === 2
@@ -200,12 +208,12 @@ class PlaceBet extends Component {
     );
   };
 
-  renderComponent = (props) => {
+  renderComponent = (props, state) => {
     return (
       <div className="PlaceBetContainer">
         <View
           history={this.props.history}
-          betFormProps={this.betFormProps(props)}
+          betFormProps={this.betFormProps(props, state)}
           betParamsProps={this.betParamsProps(props)}
         />
         {this.renderOuttaMoney()}
@@ -214,7 +222,7 @@ class PlaceBet extends Component {
   }
 
   render() {
-    return this.renderComponent(this.props);
+    return this.renderComponent(this.props, this.state);
   }
 }
 
@@ -222,6 +230,7 @@ export default injectIntl(connect(
   (state) => {
     return {
       eventList: state.prediction.events,
+      isLoading: state.guru.ui.isLoading,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),
       gasPrice: gasPriceSelector(state),

@@ -2,6 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
 import { getEstimateGas } from '@/components/handshakes/betting/utils.js';
+import { updateLoading } from '@/guru/stores/action';
 import {
   getMatchDetail,
   putMatchDetail,
@@ -58,7 +59,10 @@ export function* handleInitHandShake({ payload }) {
       type: 'INIT_HANDSHAKE',
       data: payload
     });
-    if (data) yield put(putHandShake(data));
+    if (data) {
+      yield put(putHandShake(data));
+      yield put(updateLoading(false));
+    }
   } catch (e) {
     console.error(e);
   }

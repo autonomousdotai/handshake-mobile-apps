@@ -9,7 +9,7 @@ import { parseBigNumber } from '@/utils/number';
 export const validationSchema = Yup.object().shape({
   amount: Yup.number()
     .positive(MESSAGE.AMOUNT_VALID)
-    .required('Required')
+    // .required('Required')
 });
 
 // export const isRightNetwork = () => {
