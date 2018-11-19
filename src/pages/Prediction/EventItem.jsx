@@ -170,7 +170,7 @@ function renderShareSocial(props) {
     },
   ];
   const title = randomArrayItem(socialSharedMsg);
-  const shareURL = `${window.location.origin}${URL.HANDSHAKE_PEX}?match=${id}`;
+  const shareURL = `${window.location.origin}${URL.HANDSHAKE_PREDICTION}?match=${id}`;
   return (<ShareSocial title={title} shareUrl={shareURL} socialList={socialList} />);
 }
 

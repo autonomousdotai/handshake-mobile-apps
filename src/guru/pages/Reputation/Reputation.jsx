@@ -46,7 +46,7 @@ class Reputation extends React.Component {
   }
 
   handleClickEvent = (event)=> {
-    const url = `${URL.HANDSHAKE_PEX}?match=${event.id}`;
+    const url = `${URL.HANDSHAKE_PREDICTION}?match=${event.id}`;
     this.props.history.push(url);
   }
 
