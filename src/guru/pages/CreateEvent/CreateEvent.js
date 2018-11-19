@@ -45,7 +45,7 @@ class CreateEvent extends React.Component {
   renderEventTitle = () => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Ninjas will predict YES or NO</p>
+        <div className="GroupTitle">Ninjas will predict YES or NO</div>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
@@ -88,9 +88,7 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="HostFee">
-        <label htmlFor="marketFee" className="GroupTitle">
-          Host fee
-        </label>
+        <div className="GroupTitle">Host fee</div>
         <Field
           name="marketFee"
           type="rangeSlider"
@@ -110,9 +108,7 @@ class CreateEvent extends React.Component {
   renderReportSource = () => {
     return (
       <div className="ReportSource">
-        <label htmlFor="source" className="GroupTitle">
-          Report
-        </label>
+        <div className="GroupTitle">Report</div>
         <div className="GroupNote">
           You must report the result using the link sent to your email within 24hrs of the closing time.
           Which website will you use to verify the result?
@@ -129,7 +125,8 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        <span className="DMY">{val.format('MMMM Do YYYY')}</span>
+        <span className="DMY">{val.format('MMMM Do, YYYY')}</span>
+        <span className="Separator" />
         <span className="HM">{val.format('HH:mm')}</span>
       </div>
     );
@@ -138,9 +135,7 @@ class CreateEvent extends React.Component {
   renderDateTime = startDate => {
     return (
       <div className="DateTime">
-        <label htmlFor="source" className="GroupTitle">
-          Add a closing time
-        </label>
+        <div className="GroupTitle">Add a closing time</div>
         <div className="GroupNote">
           When will the event close?
         </div>

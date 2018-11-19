@@ -30,6 +30,7 @@
     .GroupTitle {
       color: #0A2240;
       font-weight: 400;
+      padding-bottom: 5px;
     }
 
     .GroupNote {
@@ -76,7 +77,7 @@
   .EventTitle {
     label {
       color: #2989FF;
-      width: 60px;
+      width: 45px;
       margin-top: 3px;
     }
 
@@ -259,20 +260,19 @@
 
   .ReportSource {
     .GroupNote {
-      padding: 5px 0 10px;
       font-weight: 400;
     }
 
     .ErrMsg {
       text-align: right;
     }
+
+    .CreatableSelectSource {
+      padding: 10px 0;
+    }
   }
 
   .DateTime {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-
     .ErrMsg {
       text-align: right;
       display: block;
@@ -295,9 +295,9 @@
       width: 100%;
       margin-top: 10px;
 
-      .DMY {
-        border-right: 2px solid #fff;
-        padding-right: 20px;
+      .Separator {
+        width: 2px;
+        background-color: #d9dee4;
       }
 
       .HM {

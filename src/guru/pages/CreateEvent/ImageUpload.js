@@ -22,9 +22,7 @@ class ImageUpload extends Component {
     return (
       <div className="ImageUpload">
         <div className="BlockLeft">
-          <label htmlFor="image" className="GroupTitle">
-            Image
-          </label>
+          <div className="GroupTitle">Image</div>
           <div className="GroupNote">
             Upload an image for this debate (optional)
           </div>
