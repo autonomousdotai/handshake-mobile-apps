@@ -384,7 +384,7 @@ class BettingReport extends React.Component {
     return (
       <div className="wrapperOutcomes">
         <Label for="outcomeSelect">The result is:</Label><br />
-        {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>{item.name}<br />
+        {this.state.outcomes && this.state.outcomes.length > 0 && this.state.outcomes.map(item => (<Label check key={item.id} style={{}}>
           {/* side: 1 (support), 2 (against), 3 (draw) */}
           <div className="result">
             <FormGroup check>
