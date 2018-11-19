@@ -51,7 +51,7 @@ class EventItem extends React.Component {
     return (
       <div className="eventDetailBlock">
         <span><i className="fal fa-clock" style={{ color: '#889db3', fontSize: '16px' }} /></span>
-        <span className="eventDetailText normalText disableText">
+        <span className="eventDetailText disableText">
           {isExpired ? 'Expired' : <Countdown endTime={event.date} />}
         </span>
       </div>
@@ -62,7 +62,7 @@ class EventItem extends React.Component {
     return (
       <div className="eventDetailBlock">
         <span className="eventImagePlayers"><i className="fal fa-user-friends" style={{ color: '#889db3', fontSize: '16px' }} /></span>
-        <span className="eventDetailText normalText disableText">{totalUsers}</span>
+        <span className="eventDetailText disableText">{totalUsers}</span>
       </div>
     );
   }
