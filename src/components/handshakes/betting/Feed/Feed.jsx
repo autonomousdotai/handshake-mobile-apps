@@ -666,7 +666,7 @@ class FeedBetting extends React.Component {
 
           <div className="predictRow">
             <div className="predictTitle">
-              <div className={`sideLabel ${colorBySide}`}>{side === 1 ? `Support` : 'Oppose'}</div>
+              {/*<div className={`sideLabel ${colorBySide}`}>{side === 1 ? `Support` : 'Oppose'}</div>*/}
               <div className="predictName">{predictName}</div>
             </div>
             <div className="oddName"><span className="odds-text-feed">Odds</span> <span className={`odds-value-feed-${colorBySide}`}>{odds}</span></div>
