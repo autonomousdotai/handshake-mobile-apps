@@ -1,5 +1,5 @@
 import { takeLatest, call, select, put } from 'redux-saga/effects';
-import { apiGet } from '@/stores/api-saga';
+import { apiGet, apiPost } from '@/stores/api-saga';
 import { REMOVE_DATA } from '@/stores/data-action';
 import { API_URL } from '@/constants';
 import {
@@ -7,6 +7,7 @@ import {
   checkRedeemCode, updateFreeBet, checkExistSubcribeEmail,
   updateCountReport, updateExistEmail,
   loadRelevantEvents, updateRelevantEvents, updateEvents,
+  emailSubscriber, putStatusSubscriber
 } from './action';
 import { eventSelector, relevantEventSelector } from './selector';
 
@@ -104,6 +105,7 @@ export function* handleCheckRedeem() {
       type: 'CHECK_REDEEM_CODE',
     });
     yield put(updateFreeBet(response.status));
+    yield put(putStatusSubscriber(response.data.is_subscribe));
   } catch (e) {
     console.error('handleCheckRedeem', e);
   }
@@ -125,6 +127,21 @@ export function* handleCheckExistEmail() {
   }
 }
 
+export function* handleEmailSubscriber({ values }) {
+  try {
+    const response = yield call(apiPost, {
+      PATH_URL: API_URL.CRYPTOSIGN.SUBCRIBE_EMAIL_PREDICTION,
+      type: 'SUBCRIBE_EMAIL_PREDICTION',
+      data: values
+    });
+    if (response) {
+      yield put(putStatusSubscriber(response.status));
+    }
+  } catch (e) {
+    console.error('handleEmailSubscriber', e);
+  }
+}
+
 
 export default function* predictionSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
@@ -133,4 +150,5 @@ export default function* predictionSaga() {
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
   yield takeLatest(checkRedeemCode().type, handleCheckRedeem);
   yield takeLatest(checkExistSubcribeEmail().type, handleCheckExistEmail);
+  yield takeLatest(emailSubscriber().type, handleEmailSubscriber);
 }

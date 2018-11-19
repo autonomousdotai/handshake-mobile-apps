@@ -14,6 +14,7 @@ import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/Lucky
 import FreeBetLose from '@/components/handshakes/betting/LuckyPool/FreeBetLose';
 import FreeBetWin from '@/components/handshakes/betting/LuckyPool/FreeBetWin';
 import EmailPopup from '@/components/handshakes/betting/Feed/EmailPopup';
+import Subscriber from '@/guru/components/Subscriber';
 import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import Modal from '@/components/core/controls/Modal';
 import * as gtag from '@/services/ga-utils';
@@ -27,7 +28,7 @@ import qs from 'querystring';
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
 import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkRedeemCodeSelector, checkExistSubcribeEmailSelector, totalBetsSelector, relevantEventSelector } from './selector';
-import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, checkExistSubcribeEmail, loadRelevantEvents } from './action';
+import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, checkExistSubcribeEmail, loadRelevantEvents, emailSubscriber } from './action';
 import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
 
@@ -50,6 +51,7 @@ class Prediction extends React.Component {
     isRedeemAvailable: PropTypes.number,
     isExistEmail: PropTypes.any,
     totalBets: PropTypes.number,
+    isSubscriber: PropTypes.number
   };
 
   static defaultProps = {
@@ -57,6 +59,7 @@ class Prediction extends React.Component {
     relevantEvents: [],
     shareEvent: null,
     isExistEmail: 0,
+    isSubscriber: 0
   };
 
   constructor(props) {
@@ -95,6 +98,13 @@ class Prediction extends React.Component {
       this.scrollListener();
     }, 6000);*/
     //this.attachScrollListener();
+  }
+
+  componentDidUpdate() {
+    const { props, modalEmaiSubscriber } = this;
+    if (props.isRedeemAvailable) {
+      props.isSubscriber ? modalEmaiSubscriber.close() : modalEmaiSubscriber.open();
+    }
   }
 
   componentWillUnmount() {
@@ -491,6 +501,30 @@ class Prediction extends React.Component {
     );
   }
 
+  handleEmailSubscriber = (values) => {
+    this.props.dispatch(emailSubscriber(values));
+  }
+
+  renderEmailSubscriber = () => {
+    const subscriberProps = {
+      placeHolder: 'Your email address',
+      buttonText: 'Claim',
+      buttonClasses: 'btn-primary',
+      handleSubmit: this.handleEmailSubscriber
+    };
+    return (
+      <ModalDialog className="EmailSubscriberModal" close onRef={(modal) => { this.modalEmaiSubscriber = modal; return null; }}>
+        <div className="SubscriberTitle">
+          Claim your free bets
+        </div>
+        <div className="SubscriberDescription">
+          To claim 2x FREE 0.03ETH bets please enter your email address below:
+        </div>
+        <Subscriber {...subscriberProps} />
+      </ModalDialog>
+    );
+  }
+
   renderComponent = (props, state) => {
     return (
       <div className={Prediction.displayName}>
@@ -509,6 +543,7 @@ class Prediction extends React.Component {
         {this.renderOuttaMoney()}
         {this.renderCreditCard()}
         {!props.isLoading && this.renderPlusButton()}
+        {this.renderEmailSubscriber()}
       </div>
     );
   };
@@ -531,6 +566,7 @@ export default injectIntl(connect(
       isExistEmail: checkExistSubcribeEmailSelector(state),
       shareEvent: shareEventSelector(state),
       totalBets: totalBetsSelector(state),
+      isSubscriber: state.ui.isSubscriber
     };
   },
 )(Prediction));
