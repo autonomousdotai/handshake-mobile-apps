@@ -279,34 +279,29 @@
       width: 100%;
     }
 
-    .BlockLeft {
-      flex: 1;
+    > span {
+      display: block;
+      width: 100%;
     }
 
-    .BlockRight {
-      width: 80px;
-      background-color: #F5F8FC;
+    .ClosingTime {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      padding: 10px;
+      background-color: #EBF1F7;
       border-radius: 5px;
+      font-weight: 400;
+      width: 100%;
+      margin-top: 10px;
 
-      .ClosingTime {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        padding: 10px;
+      .DMY {
+        border-right: 2px solid #fff;
+        padding-right: 20px;
+      }
 
-        .Day {
-          font-size: 17px;
-          font-weight: 400;
-        }
-
-        .Month, .Year {
-          color: #748599;
-          font-size: 13px;
-        }
-
-        .Hour {
-          font-size: 13px;
-        }
+      .HM {
+        color: #2989FF;
       }
     }
   }

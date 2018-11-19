@@ -129,10 +129,8 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        <span className="Month">{val.format('MMM')}</span>
-        <span className="Day">{val.format('DD')}</span>
-        <span className="Year">{val.format('YYYY')}</span>
-        <span className="Hour">{val.format('HH:mm')}</span>
+        <span className="DMY">{val.format('MMMM Do YYYY')}</span>
+        <span className="HM">{val.format('HH:mm')}</span>
       </div>
     );
   };
@@ -140,25 +138,21 @@ class CreateEvent extends React.Component {
   renderDateTime = startDate => {
     return (
       <div className="DateTime">
-        <div className="BlockLeft">
-          <label htmlFor="source" className="GroupTitle">
-            Add a closing time
-          </label>
-          <div className="GroupNote">
-            When will the event close?
-          </div>
+        <label htmlFor="source" className="GroupTitle">
+          Add a closing time
+        </label>
+        <div className="GroupNote">
+          When will the event close?
         </div>
-        <div className="BlockRight">
-          <Field
-            name="closingTime"
-            type="datetime"
-            component={CustomField}
-            title="Event closing time"
-            placeholder="Event closing time"
-            startDate={startDate}
-            renderTrigger={props => this.renderPicker(props, startDate)}
-          />
-        </div>
+        <Field
+          name="closingTime"
+          type="datetime"
+          component={CustomField}
+          title="Event closing time"
+          placeholder="Event closing time"
+          startDate={startDate}
+          renderTrigger={props => this.renderPicker(props, startDate)}
+        />
         <ErrMsg name="closingTime" />
       </div>
     );
