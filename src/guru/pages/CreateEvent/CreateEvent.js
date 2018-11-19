@@ -44,7 +44,7 @@ class CreateEvent extends React.Component {
   renderEventTitle = () => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Ninjas will predict YES or NO?</p>
+        <p className="GroupTitle">Ninjas will predict YES or NO</p>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
