@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import qs from 'querystring';
-import { push } from 'connected-react-router';
 import { URL } from '@/constants';
 import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';

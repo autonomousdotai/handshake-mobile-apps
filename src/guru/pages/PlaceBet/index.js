@@ -125,6 +125,10 @@ class PlaceBet extends Component {
       currency: 'ETH',
       type: HANDSHAKE_ID.BETTING,
       match_id: matchDetail.id,
+      extra_data: JSON.stringify({
+        event_name: matchDetail.name,
+        event_predict: matchDetail.outcomes[0].name
+      }),
       from_address: getAddress(),
       side: getSide({ queryStringURL }),
       chain_id: getChainIdDefaultWallet()

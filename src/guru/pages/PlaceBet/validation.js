@@ -12,26 +12,12 @@ export const validationSchema = Yup.object().shape({
     // .required('Required')
 });
 
-// export const isRightNetwork = () => {
-//   const wallet = MasterWallet.getWalletDefault('ETH');
-//   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
-//   if (process.env.isProduction) {
-//     return (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet);
-//   }
-//   return true; // process.env.isStaging;
-// };
-
 export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
-  if (process.env.isStaging) {
-    return true;
-  }
+  if (process.env.isStaging) return true;
   if (process.env.isProduction) {
-    if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
-      return true;
-    }
-    return false;
+    return (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet);
   }
   return true;
 };
