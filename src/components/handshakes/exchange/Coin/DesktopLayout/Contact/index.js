@@ -4,6 +4,7 @@ import { injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import questionIcon from '@/assets/images/pages/coin/question_icon.png';
 import './styles.scss';
+import { URL } from '@/constants';
 
 const scopedCss = (className) => `crypto-coin-contact-${className}`;
 
@@ -18,16 +19,16 @@ class Contact extends PureComponent {
       <div className={scopedCss('container')}>
         <div className={scopedCss('item')}>
           <img src={questionIcon} alt="" />
-          <Link to="coin/faq"><span>{this.getLocalStr().faq}</span></Link>
+          <Link to={URL.BUY_COIN_FAQ_URL}><span>{this.getLocalStr().faq}</span></Link>
         </div>
         <div className={scopedCss('item')}>
           <img src={questionIcon} alt="" />
-          <Link to=""><span>{this.getLocalStr().chat_with_us}</span></Link>
+          <Link to={URL.ABOUT_NINJA_CASH}><span>{this.getLocalStr().chat_with_us}</span></Link>
         </div>
-        {/*<div className={scopedCss('item')}>
+        {/* <div className={scopedCss('item')}>
           <img src={questionIcon} alt="" />
           <a href={`tel:${this.getLocalStr().phone_cs.replace(/\D/g, '')}`}><span>{this.getLocalStr().phone_cs}</span></a>
-        </div>*/}
+        </div> */}
       </div>
     );
   }

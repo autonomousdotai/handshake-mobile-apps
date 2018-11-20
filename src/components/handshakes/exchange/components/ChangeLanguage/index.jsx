@@ -14,14 +14,14 @@ const LANGUAGES = {
     code: 'en',
     name: '🇺🇸 English',
   },
-  // VN: {
-  //   code: 'vi',
-  //   name: '🇻🇳 Tiếng Việt',
-  // },
-  HK: {
-    code: 'zh-HK',
-    name: '🇭🇰 Hong Kong',
+  VN: {
+    code: 'vi',
+    name: '🇻🇳 Tiếng Việt',
   },
+  // HK: {
+  //   code: 'zh-HK',
+  //   name: '🇭🇰 Hong Kong',
+  // },
 };
 
 const scopedCss = (className) => `change-language-${className}`;
@@ -35,10 +35,10 @@ class ChangeLanguage extends React.PureComponent {
 
   getOtherLang() {
     const { locale } = this.props;
-    if (locale === 'zh-HK') {
+    if (locale === 'vi') {
       return LANGUAGES.EN;
     }
-    return LANGUAGES.HK;
+    return LANGUAGES.VN;
   }
 
   changeCountry(locale) {
@@ -69,7 +69,7 @@ ChangeLanguage.defaultProps = {
 };
 
 const mapState = state => ({
-  locale: state?.app.locale || 'zh-HK',
+  locale: state?.app.locale || 'vi',
 });
 
 const mapDispatch = ({

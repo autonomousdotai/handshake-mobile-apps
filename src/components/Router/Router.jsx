@@ -61,6 +61,7 @@ const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'),
 const RouterInternalAdmin = createDynamicImport(() => import('@/components/Router/InternalAdmin'), Loading);
 const RouterCreateCashStore = createDynamicImport(() => import('@/components/handshakes/exchange/Create/CreateStoreATM'), Loading);
 const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
+const AboutNinjaCash = createDynamicImport(() => import('@/pages/LandingPage/AboutNinjaCash'), Loading);
 // const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
 const InternalAdminDashboard = createDynamicImport(() => import('@/pages/InternalAdminDashboard'), Loading);
 
@@ -201,6 +202,7 @@ class Router extends React.Component {
         <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
         <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
         <Route path={URL.BUY_COIN_FAQ_URL} render={() => <ProjectDetail type="landing" name="coin" />} />
+        <Route path={URL.ABOUT_NINJA_CASH} component={AboutNinjaCash} />
         {routesUsingDesktopLayout}
 
         {/* Cash on mobile uses a completely different layout! */}

@@ -4,7 +4,7 @@ import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl';
 
 // style
 import "./AboutNinjaCash.scss";
-import logo from '@/assets/images/ninja/ninja-header.svg';
+import logo from '@/assets/images/logo.png';
 
 class About extends React.Component {
   render() {
@@ -24,12 +24,12 @@ class About extends React.Component {
               <h4 className="mt-5"><FormattedMessage id="ex.about.label.connectWith" /></h4>
               <ul>
                 <li>
-                  <div><FormattedMessage id="ex.about.label.website" />:<a target="__blank" className="btn btn-link" href="https://ninja.org/cash">www.ninja.org/cash</a></div>
+                  <div><FormattedMessage id="ex.about.label.website" />: <FormattedMessage id="ex.about.label.website.value" /></div>
                 </li>
                 <li>
-                  <div><FormattedMessage id="ex.about.label.telegram" />:<a target="__blank" className="btn btn-link" href="https://t.me/ninjacash">t.me/ninjacash</a></div>
+                  <div><FormattedMessage id="ex.about.label.telegram" />: <FormattedMessage id="ex.about.label.telegram.value" /></div>
                 </li>
-                <li>
+                {/*<li>
                   <div><FormattedMessage id="ex.about.label.medium" />:<a target="__blank" className="btn btn-link" href="http://medium.com/@ninjadotorg">medium.com/@ninjadotorg</a></div>
                 </li>
                 <li>
@@ -37,7 +37,7 @@ class About extends React.Component {
                 </li>
                 <li>
                   <div><FormattedMessage id="ex.about.label.twitter" />:<a target="__blank" className="btn btn-link" href="http://twitter.com/@ninjadotorg">twitter.com/@ninjadotorg</a></div>
-                </li>
+                </li>*/}
               </ul>
             </div>
           </div>

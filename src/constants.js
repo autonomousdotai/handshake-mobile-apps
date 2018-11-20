@@ -300,10 +300,10 @@ export const API_URL = {
   USER: {
     PROFILE: 'user/profile',
     CHECK_EXIST_EMAIL: 'user/check-email-exist',
-    ID_VERIFICATION: 'user/id_verification',    
+    ID_VERIFICATION: 'user/id_verification',
     LOGIN: 'user/login',
     SIGNUP: 'user/sign-up'
-    
+
   },
   INTERNAL: {
     GET_WITHDRAW_LIST: 'exchange/internal/credit/withdraw',
@@ -324,9 +324,9 @@ export const API_URL = {
       LIST: 'admin/user/list',
       UPDATE: 'admin/user/update',
     }
-    
+
   }
-  
+
 };
 
 export const HANDSHAKE_STATUS = {
@@ -628,7 +628,7 @@ export const URL = {
   WHITE_PAPER: '/whitepaper',
   WHITE_PAPER_INDEX: '/whitepaper',
 
-  // ABOUT_NINJA_CASH: '/about-ninja-cash',
+  ABOUT_NINJA_CASH: '/about-us',
 
   // PRODUCT_URL: '/product',
   // RESEARCH_URL: '/research',
@@ -658,7 +658,7 @@ export const URL = {
   BUY_BY_CC_URL: '/buy-by-credit-card',
   BUY_COIN_URL: '/coin',
   CRYPTO_COIN_URL: '/coin',
-  BUY_COIN_FAQ_URL: '/coin/faq',
+  BUY_COIN_FAQ_URL: '/faqs',
   SELL_COIN_URL: '/sell-coin',
 
   ESCROW_WITHDRAW_SUCCESS: '/escrow/withdraw/success',
