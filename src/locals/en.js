@@ -1257,7 +1257,7 @@ export default {
     cod_form: {
       cod: 'Cash on Delivery',
       buy_btn: 'Buy',
-      your_address: 'Only available in Ho Chi Minh City for now',
+      your_address: 'Only available in Hongkong for now',
       your_phone: 'Phone number',
       time: 'Time to delivery & Note',
       default_time: 'As soon as possible',
