@@ -20,7 +20,8 @@ import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHan
 // TODO: [End: Will be moving to another place]
 
 import { updateLoading } from '@/guru/stores/action';
-import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake } from './action';
+import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
+  checkRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
 import {
   queryStringSelector,
   matchDetailSelector,
@@ -54,7 +55,8 @@ class PlaceBet extends Component {
   };
 
   state = {
-    betAmount: 0
+    betAmount: 0,
+    isUseRedeem: false
   };
 
   componentWillMount() {
@@ -72,8 +74,18 @@ class PlaceBet extends Component {
   componentDidUpdate(prevProps) {
     const { handShakes } = this.props;
     if (handShakes && prevProps.handShakes !== handShakes) {
-      this.handShakeHandler(handShakes);
+      const { match } = handShakes;
+      if (match !== undefined) {
+        const message = match ? MESSAGE.CREATE_BET_MATCH : MESSAGE.CREATE_BET_NOT_MATCH;
+        this.alertBox({ message, type: 'success', callBack: this.redirectIndex() });
+      } else {
+        this.handShakeHandler(handShakes);
+      }
     }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch(removeRedeemCode());
   }
 
   getParams = ({ queryStringURL }) => (qs.parse(queryStringURL.slice(1)))
@@ -116,11 +128,12 @@ class PlaceBet extends Component {
     dispatch(showAlert(alertProps));
   }
 
-  handShakeData = ({ amount }) => {
+  handShakeData = ({ amount, redeem }) => {
     const { getSide } = this;
     const { matchDetail, queryStringURL } = this.props;
     if (!matchDetail) return null;
     return {
+      redeem,
       amount,
       currency: 'ETH',
       type: HANDSHAKE_ID.BETTING,
@@ -147,12 +160,16 @@ class PlaceBet extends Component {
     this.handShakeSuccess(data);
     const handler = BetHandshakeHandler.getShareManager();
     const { handshakes } = data;
-    handler.controlShake(handshakes);
+    return handler.controlShake(handshakes);
   }
 
   handleBet = async ({ values }) => {
     const { validate, alertBox, modalOuttaMoney, handShakeData, props } = this;
+    const { redeem } = values;
     props.dispatch(updateLoading(true));
+    if (redeem) {
+      return props.dispatch(initHandShakeFree(handShakeData(values)));
+    }
     const { status, message, code } = await validate(values);
     if (status) {
       return props.dispatch(initHandShake(handShakeData(values)));
@@ -169,24 +186,48 @@ class PlaceBet extends Component {
 
   calculatePosWinning = () => {
     const { state, getOdds } = this;
-    const { betAmount } = state;
+    let amountNo = state.betAmount;
     const betOdds = getOdds();
-    return formatAmount(possibleWinning(betAmount, betOdds));
+    if (this.props.redeem) {
+      amountNo = this.props.redeem.amount;
+    }
+    return formatAmount(possibleWinning(amountNo, betOdds));
+  }
+
+  handleBlur = (value) => {
+    this.props.dispatch(checkRedeemCode({ redeem: value }));
+  }
+
+  redeemInput = () => {
+    this.setState({ isUseRedeem: true });
+  }
+
+  redeemNotice = () => {
+    return (
+      <div className="Redeem">
+        You have already redeemed a code for betting. <span className="UseRedeem" onClick={this.redeemInput}>Use it</span>
+      </div>
+    );
   }
 
   betFormProps = (props, state) => {
-    const { handleBet, handleChange, getSide } = this;
+    const { handleBet, handleChange, handleBlur, getSide } = this;
     return {
       handleBet,
       handleChange,
-      amount: '',
+      handleBlur,
+      amount: props.redeem ? props.redeem.amount : '',
+      redeem: props.redeem ? props.redeem.code : '',
       side: getSide(props),
       disabled: state.betAmount === 0,
       isSubmitting: props.isLoading,
       buttonClasses: classNames('btn btn-block', {
         'btn-primary': getSide(props) === 1,
         'btn-secondary': getSide(props) === 2
-      })
+      }),
+      isUseRedeem: state.isUseRedeem,
+      statusRedeem: props.redeem ? !!props.redeem.status : undefined,
+      redeemNotice: (!!props.isSubscriber && this.redeemNotice())
     };
   }
 
@@ -235,6 +276,8 @@ export default injectIntl(connect(
     return {
       eventList: state.prediction.events,
       isLoading: state.guru.ui.isLoading,
+      isSubscriber: state.ui.isSubscriber,
+      redeem: state.guru.ui.redeem,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),
       gasPrice: gasPriceSelector(state),

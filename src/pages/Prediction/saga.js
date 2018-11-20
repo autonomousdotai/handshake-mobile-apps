@@ -102,7 +102,7 @@ export function* handleCheckRedeem() {
   try {
     const response = yield call(apiGet, {
       PATH_URL: API_URL.CRYPTOSIGN.CHECK_REDEEM_CODE,
-      type: 'CHECK_REDEEM_CODE',
+      type: 'CHECK_REDEEM_CODE'
     });
     yield put(updateFreeBet(response.status));
     yield put(putStatusSubscriber(response.data.is_subscribe));

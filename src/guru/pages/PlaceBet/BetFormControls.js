@@ -1,7 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form } from 'formik';
+import { Form, Field } from 'formik';
 import { ErrMsg } from '@/guru/components/Form';
+
+const RedeemCodeInput = ({ values, touched, errors, status, handleChange, handleOnBlur }) => {
+  const validate = () => {
+    if (status) return null;
+    return 'Invalid Redeem code.';
+  };
+  return (
+    <React.Fragment>
+      <Field
+        name="redeem"
+        placeholder="Redeem code"
+        type="text"
+        autoComplete="off"
+        value={values.redeem}
+        onBlur={handleOnBlur}
+        onChange={handleChange}
+        validate={validate}
+        className={
+          errors.redeem && touched.redeem
+            ? 'TextInput Error'
+            : 'TextInput'
+        }
+      />
+      <ErrMsg name="redeem" />
+    </React.Fragment>
+  );
+};
 
 const BetFormControls = ({
   values,
@@ -13,19 +40,38 @@ const BetFormControls = ({
   touched,
   errors,
   buttonClasses,
-  customOnChange
+  customOnChange,
+  customOnBlur,
+  statusRedeem,
+  isUseRedeem
 }) => {
   const handleOnChange = (e) => {
     handleChange(e);
     customOnChange(e);
   };
+  const handleOnBlur = (e) => {
+    handleBlur(e);
+    customOnBlur(e);
+  };
   return (
     <Form onSubmit={handleSubmit} noValidate>
+      {
+        isUseRedeem &&
+        <RedeemCodeInput
+          values={values}
+          touched={touched}
+          errors={errors}
+          status={statusRedeem}
+          handleChange={handleChange}
+          handleOnBlur={handleOnBlur}
+        />
+      }
       <input
         name="amount"
         placeholder="0.00 ETH"
         type="number"
         autoComplete="off"
+        readOnly={isUseRedeem}
         value={values.amount}
         onChange={handleOnChange}
         onBlur={handleBlur}
@@ -51,7 +97,10 @@ BetFormControls.propTypes = {
   touched: PropTypes.object,
   errors: PropTypes.object,
   buttonClasses: PropTypes.string,
-  customOnChange: PropTypes.func
+  customOnChange: PropTypes.func,
+  customOnBlur: PropTypes.func,
+  statusRedeem: PropTypes.bool,
+  isUseRedeem: PropTypes.bool
 };
 
 BetFormControls.defaultProps = {
@@ -60,7 +109,10 @@ BetFormControls.defaultProps = {
   touched: {},
   errors: {},
   buttonClasses: undefined,
-  customOnChange: undefined
+  customOnChange: undefined,
+  customOnBlur: undefined,
+  statusRedeem: true,
+  isUseRedeem: false
 };
 
 export default BetFormControls;

@@ -46,9 +46,36 @@ export const initHandShake = (payload = {}) => {
   };
 };
 
+export const initHandShakeFree = (payload = {}) => {
+  return {
+    type: 'GURU:INIT_HANDSHAKE_FREE',
+    payload
+  };
+};
+
 export const putHandShake = (payload) => {
   return {
     type: 'GURU:PUT_HANDSHAKE',
     payload
+  };
+};
+
+export const checkRedeemCode = (payload = {}) => {
+  return {
+    type: 'GURU:CHECK_REDEEM_CODE',
+    payload
+  };
+};
+
+export const putRedeemCode = (payload) => {
+  return {
+    type: 'GURU:PUT_REDEEM_CODE',
+    payload
+  };
+};
+
+export const removeRedeemCode = () => {
+  return {
+    type: 'GURU:REMOVE_REDEEM_CODE'
   };
 };

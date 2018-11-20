@@ -11,7 +11,10 @@ import {
   getGasPrice,
   putGasPrice,
   initHandShake,
-  putHandShake
+  initHandShakeFree,
+  putHandShake,
+  checkRedeemCode,
+  putRedeemCode
 } from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
@@ -68,9 +71,44 @@ export function* handleInitHandShake({ payload }) {
   }
 }
 
+export function* handleInitHandShakeFree({ payload }) {
+  try {
+    const { data } = yield call(apiPost, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE_FREE}`,
+      type: 'INIT_HANDSHAKE_FREE',
+      data: payload
+    });
+    if (data) {
+      console.log(data);
+      yield put(putHandShake(data));
+      yield put(updateLoading(false));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export function* handleCheckRedeemCode({ payload }) {
+  try {
+    const response = yield call(apiPost, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.COMPARE_REDEEM_CODE}`,
+      type: 'CHECK_REDEEM_CODE',
+      data: payload
+    });
+    if (response) {
+      const { data, status } = response;
+      yield put(putRedeemCode({ ...data, status, code: payload.redeem }));
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 export default function* placeBetSaga() {
   yield takeLatest(getMatchDetail().type, handleGetMatchDetail);
   yield takeLatest(getGasPrice().type, handleGetGasPrice);
   yield takeLatest(getMatchOdd().type, handleGetMatchOdd);
   yield takeLatest(initHandShake().type, handleInitHandShake);
+  yield takeLatest(checkRedeemCode().type, handleCheckRedeemCode);
+  yield takeLatest(initHandShakeFree().type, handleInitHandShakeFree);
 }

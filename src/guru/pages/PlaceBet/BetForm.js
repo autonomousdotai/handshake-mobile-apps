@@ -13,22 +13,31 @@ class BetForm extends React.Component {
     this.props.handleChange(e.currentTarget.value);
   };
 
+  handleOnBlur = (e) => {
+    this.props.handleBlur(e.currentTarget.value);
+  };
+
   renderForm = (formProps) => {
-    const { props, handleOnChange } = this;
+    const { props, handleOnChange, handleOnBlur } = this;
     const betFormControlsProps = {
       ...formProps,
       buttonClasses: props.buttonClasses,
-      customOnChange: handleOnChange
+      customOnChange: handleOnChange,
+      customOnBlur: handleOnBlur,
+      isUseRedeem: props.isUseRedeem,
+      statusRedeem: props.statusRedeem
     };
     return (<BetFormControls {...betFormControlsProps} />);
   }
 
   render() {
-    const initialValues = { amount: this.props.amount };
+    const initialValues = { amount: this.props.amount, redeem: this.props.redeem };
     return (
       <div className="BetFormComponent">
+        {this.props.redeemNotice}
         <Formik
           initialValues={initialValues}
+          enableReinitialize
           onSubmit={this.handleOnSubmit}
           validationSchema={validationSchema}
           render={this.renderForm}

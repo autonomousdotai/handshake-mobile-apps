@@ -16,11 +16,24 @@
 }
 .BetFormComponent {
   display: flex;
+  flex-direction: column;
   flex: 1;
   width: 100%;
   padding: 30px 50px;
   align-self: center;  
   align-items: center;
+  justify-content: center;
+  .Redeem {
+    position: absolute;
+    top: 0;
+    padding: 15px 50px;
+    text-align: center;
+    font-size: 0.875rem;
+    .UseRedeem {
+      color: #003fff;
+      text-decoration: underline;
+    }
+  }
   form {
     display: flex;
     width: 100%;

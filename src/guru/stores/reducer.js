@@ -4,7 +4,9 @@ import {
   putMatchDetail,
   putMatchOdd,
   putGasPrice,
-  putHandShake
+  putHandShake,
+  putRedeemCode,
+  removeRedeemCode
 } from '@/guru/pages/PlaceBet/action';
 import {
   updateReports,
@@ -50,6 +52,12 @@ const guruReducer = (state = initialState, action) => {
         break;
       case putHandShake().type:
         draft.handShakes = action.payload;
+        break;
+      case putRedeemCode().type:
+        draft.ui.redeem = action.payload;
+        break;
+      case removeRedeemCode().type:
+        draft.ui.redeem = null;
         break;
       case 'GURU:UPDATE_USER_EVENTS':
         draft.userEvents = action.userEvents;
