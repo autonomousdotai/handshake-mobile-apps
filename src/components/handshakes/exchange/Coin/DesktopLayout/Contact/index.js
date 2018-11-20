@@ -24,10 +24,10 @@ class Contact extends PureComponent {
           <img src={questionIcon} alt="" />
           <Link to=""><span>{this.getLocalStr().chat_with_us}</span></Link>
         </div>
-        <div className={scopedCss('item')}>
+        {/*<div className={scopedCss('item')}>
           <img src={questionIcon} alt="" />
           <a href={`tel:${this.getLocalStr().phone_cs.replace(/\D/g, '')}`}><span>{this.getLocalStr().phone_cs}</span></a>
-        </div>
+        </div>*/}
       </div>
     );
   }
