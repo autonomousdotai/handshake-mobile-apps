@@ -7,7 +7,6 @@ export default {
     navigation: {
       me: 'Me',
       exchanges: 'Exchanges',
-
       whisper: 'Whisper',
       wallet: 'Wallet',
       setting: 'Me',

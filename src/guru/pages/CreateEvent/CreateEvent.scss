@@ -152,6 +152,10 @@
   .HostFee {
     position: relative;
 
+    .GroupTitle {
+      margin-bottom: -10px;
+    }
+
     .rangeLimit {
       display: none;
     }
@@ -269,6 +273,10 @@
 
     .CreatableSelectSource {
       padding: 10px 0;
+    }
+
+    .react-select__placeholder {
+      white-space: nowrap;
     }
   }
 
