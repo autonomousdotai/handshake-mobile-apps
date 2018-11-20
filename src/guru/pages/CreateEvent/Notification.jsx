@@ -118,12 +118,7 @@ class Notification extends Component {
     return (
       <React.Fragment>
         <span className="GroupNote">Ninja will send you notifications via</span>
-        <input
-          name="email"
-          type="text"
-          disabled
-          value={props.email}
-        />
+        <p>{props.email}</p>
       </React.Fragment>
     );
   };

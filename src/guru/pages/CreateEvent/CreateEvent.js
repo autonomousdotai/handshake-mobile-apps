@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
+import { isURL } from '@/utils/string';
 
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
@@ -44,13 +45,13 @@ class CreateEvent extends React.Component {
   renderEventTitle = () => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Ninjas will predict YES or NO</p>
+        <div className="GroupTitle">Ninjas will predict YES or NO</div>
         <div className="OutcomeName">
           <label htmlFor="outcomeName">Will</label>
           <Field
             name="outcomeName"
             component="textarea"
-            placeholder="[Outcome] Manchester United beat Juventus"
+            placeholder="[Outcome] eg. Manchester United beat Juventus"
           />
         </div>
         <ErrMsg name="outcomeName" />
@@ -59,7 +60,7 @@ class CreateEvent extends React.Component {
           <Field
             name="eventName"
             component="textarea"
-            placeholder="[Event] Champions League table stage"
+            placeholder="[Event] eg. Champions League table stage"
           />
         </div>
         <ErrMsg name="eventName" />
@@ -87,9 +88,7 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="HostFee">
-        <label htmlFor="marketFee" className="GroupTitle">
-          Host fee
-        </label>
+        <div className="GroupTitle">Host fee</div>
         <Field
           name="marketFee"
           type="rangeSlider"
@@ -109,13 +108,15 @@ class CreateEvent extends React.Component {
   renderReportSource = () => {
     return (
       <div className="ReportSource">
-        <label htmlFor="source" className="GroupTitle">
-          Report
-        </label>
+        <div className="GroupTitle">Report</div>
         <div className="GroupNote">
-          You must provide the reference link to the report
+          You must report the result using the link sent to your email within 24hrs of the closing time.
+          Which website will you use to verify the result?
         </div>
         <ReportSource />
+        <div className="GroupNote">
+          There will be a 1hr dispute window after the reporting time.
+        </div>
       </div>
     );
   };
@@ -124,10 +125,9 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        <span className="Month">{val.format('MMM')}</span>
-        <span className="Day">{val.format('DD')}</span>
-        <span className="Year">{val.format('YYYY')}</span>
-        <span className="Hour">{val.format('HH:mm')}</span>
+        <span className="DMY">{val.format('MMMM Do, YYYY')}</span>
+        <span className="Separator" />
+        <span className="HM">{val.format('HH:mm')}</span>
       </div>
     );
   };
@@ -135,26 +135,19 @@ class CreateEvent extends React.Component {
   renderDateTime = startDate => {
     return (
       <div className="DateTime">
-        <div className="BlockLeft">
-          <label htmlFor="source" className="GroupTitle">
-            Add a closing time
-          </label>
-          <div className="GroupNote">
-            As the host, you will submit the closing time. The quicker the
-            better!
-          </div>
+        <div className="GroupTitle">Add a closing time</div>
+        <div className="GroupNote">
+          When will the event close?
         </div>
-        <div className="BlockRight">
-          <Field
-            name="closingTime"
-            type="datetime"
-            component={CustomField}
-            title="Event closing time"
-            placeholder="Event closing time"
-            startDate={startDate}
-            renderTrigger={props => this.renderPicker(props, startDate)}
-          />
-        </div>
+        <Field
+          name="closingTime"
+          type="datetime"
+          component={CustomField}
+          title="Event closing time"
+          placeholder="Event closing time"
+          startDate={startDate}
+          renderTrigger={props => this.renderPicker(props, startDate)}
+        />
         <ErrMsg name="closingTime" />
       </div>
     );
@@ -216,7 +209,12 @@ class CreateEvent extends React.Component {
           return !f ? true : (f.size < (5 * 1024 * 1024));
         }),
       source: Yup.object({
-        label: Yup.string().trim().required('Required').url('invalid URL')
+        label: Yup.string()
+          .trim()
+          .required('Required')
+          .test('source', 'invalid URL', l => {
+            return !l ? true : isURL(l);
+          })
       }),
       ...validateEmail
     });
@@ -245,9 +243,9 @@ class CreateEvent extends React.Component {
                   <ImageUpload form={formProps} />
                 </div>
                 <div className="FormBlock">
-                  {this.renderReportSource()}
-                  <div className="BlankLine" />
                   {this.renderDateTime(initialClosingTime)}
+                  <div className="BlankLine" />
+                  {this.renderReportSource()}
                 </div>
                 <div className="FormBlock">
                   <Notification formProps={formProps} />

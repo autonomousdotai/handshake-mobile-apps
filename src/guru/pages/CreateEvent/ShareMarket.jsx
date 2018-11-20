@@ -36,11 +36,12 @@ class ShareMarket extends React.Component {
     </span>
   );
 
-  renderMessage = (props) => {
+  renderMessage = () => {
     return (
       <div className="ShareEventMessage">
         <p>Your event was created successfully!</p>
-        <p>The event will be approved in approx. 1 hour.</p>
+        <p>It usually takes around an hour to verify and publish new events.</p>
+        <p>You will receive an update by email along with a link to share your event with friends.</p>
       </div>
     );
   }
