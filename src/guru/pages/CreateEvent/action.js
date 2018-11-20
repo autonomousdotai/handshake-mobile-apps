@@ -15,7 +15,7 @@ export const updateReports = (payload = {}) => {
     type: 'PEX:UPDATE_REPORTS',
     payload
   };
-}
+};
 
 export const createEvent = (payload = {}) => {
   return {
