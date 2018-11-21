@@ -57,12 +57,13 @@ class TopUp extends React.Component {
   };
 
   connect = async () => {
-    const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545');
+    const web3Provider = new Web3.providers.HttpProvider('http://localhost:8080');
     const web3 = new Web3(web3Provider);
     //const accounts = web3.eth.accounts;
+    const accounts = await web3.eth.getAccounts();
 
     console.log('Web3:', web3);
-    console.log('Account:', web3.eth.getAccounts());
+    console.log('Account:', accounts);
     console.log("new web3");
   }
 
