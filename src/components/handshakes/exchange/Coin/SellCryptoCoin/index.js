@@ -28,10 +28,10 @@ const FormSellCoin = createForm({
     form: sellCoinFormName,
     initialValues: {
       currency: {
-        amount: 0,
-      },
-    },
-  },
+        amount: 0
+      }
+    }
+  }
 });
 const formSellCoinSelector = formValueSelector(sellCoinFormName);
 
@@ -44,6 +44,7 @@ class SellCryptoCoin extends Component {
       userInfo: null,
       isGettingCoinInfo: false,
       generatedAddress: '',
+      showPrompt: true
     };
 
     this.getCoinInfo = debounce(::this.getCoinInfo, 1000);
@@ -84,7 +85,7 @@ class SellCryptoCoin extends Component {
     this.props.showAlert({
       message: <div className="text-center">{getErrorMessageFromCode(e, { exchangeAction: EXCHANGE_ACTION.SELL })}</div>,
       timeOut: 3000,
-      type: 'danger',
+      type: 'danger'
     });
   }
 
@@ -93,15 +94,18 @@ class SellCryptoCoin extends Component {
   }
 
   onMakeOrderSuccess = () => {
-    this.props.hideLoading();
-    this.props.showAlert({
-      message: <div className="text-center">Successful</div>,
-      timeOut: 3000,
-      type: 'success',
-      callBack: () => {
-        this.props.sellCryptoFinishOrder();
-        this.props.history?.push(URL.HANDSHAKE_ME);
-      },
+    const { intl: { messages } } = this.props;
+    this.setState({ showPrompt: false }, () => {
+      this.props.hideLoading();
+      this.props.showAlert({
+        message: <div className="text-center">{messages.buy_coin.label.success}</div>,
+        timeOut: 3000,
+        type: 'success',
+        callBack: () => {
+          this.props.sellCryptoFinishOrder();
+          this.props.history?.push(URL.HANDSHAKE_ME);
+        }
+      });
     });
   }
 
@@ -111,7 +115,7 @@ class SellCryptoCoin extends Component {
     this.props.showAlert({
       message: <div className="text-center">{getErrorMessageFromCode(e)}</div>,
       timeOut: 3000,
-      type: 'danger',
+      type: 'danger'
     });
   }
 
@@ -121,7 +125,7 @@ class SellCryptoCoin extends Component {
       this.props.sellCryptoGenerateAddress({
         PATH_URL: `${API_URL.EXCHANGE.SELL_COIN_GENERATE_ADDRESS}?currency=${currency?.currency}`,
         method: 'POST',
-        successFn: this.handleGenerateCryptoAddressSuccess,
+        successFn: this.handleGenerateCryptoAddressSuccess
       });
     }
   }
@@ -147,14 +151,14 @@ class SellCryptoCoin extends Component {
       fiat_local_currency: coinInfo?.fiatLocalCurrency,
       level: String(idVerificationLevel),
       user_info: userInfo,
-      address: generatedAddress,
+      address: generatedAddress
     };
     this.props.sellCryptoOrder({
       PATH_URL: API_URL.EXCHANGE.SELL_COIN_ORDER,
       METHOD: 'POST',
       data,
       successFn: this.onMakeOrderSuccess,
-      errorFn: this.onMakeOrderFailed,
+      errorFn: this.onMakeOrderFailed
     });
     this.props.showLoading();
   }
@@ -172,7 +176,7 @@ class SellCryptoCoin extends Component {
       this.props.sellCryptoGetCoinInfo({
         PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=${Number.parseFloat(amount) || 0}&currency=${currency}&fiat_currency=${fiatCurrencyByCountry}&level=${level}`,
         errorFn: this.onGetCoinInfoError,
-        successFn: this.onGetCoinInfoSuccess,
+        successFn: this.onGetCoinInfoSuccess
       });
     }
   }
@@ -184,7 +188,7 @@ class SellCryptoCoin extends Component {
   updateCurrency = (currencyData) => {
     this.props.change(sellCoinFormName, 'currency', {
       ...this.props.currency,
-      ...currencyData,
+      ...currencyData
     });
   }
 
@@ -195,7 +199,7 @@ class SellCryptoCoin extends Component {
       bankName: {
         placeholder: this.getLocalStr().order?.inputs?.bank_name,
         component: bankNameInputField,
-        listData: bankList.map(bank => bank.bankName),
+        listData: bankList.map(bank => bank.bankName)
       },
       bankNumber: {
         placeholder: this.getLocalStr().order?.inputs?.bank_number,
@@ -203,11 +207,11 @@ class SellCryptoCoin extends Component {
         listData: ['0331000422510']
       },
       bankOwner: {
-        placeholder: this.getLocalStr().order?.inputs?.bank_owner,
+        placeholder: this.getLocalStr().order?.inputs?.bank_owner
       },
       phoneNumber: {
-        placeholder: this.getLocalStr().order?.inputs?.phone,
-      },
+        placeholder: this.getLocalStr().order?.inputs?.phone
+      }
     };
     return Object.entries(fields).map(([fieldName, { placeholder, component, ...rest }]) => (
       <Field
@@ -223,7 +227,7 @@ class SellCryptoCoin extends Component {
 
   render() {
     const { coinInfo, fiatCurrencyByCountry, className, formError } = this.props;
-    const { isGettingCoinInfo, currency, generatedAddress } = this.state;
+    const { isGettingCoinInfo, currency, generatedAddress, showPrompt } = this.state;
     const fiatCurrency = coinInfo?.fiatLocalCurrency || fiatCurrencyByCountry;
     const fiatAmount = currency?.amount ?
       `${formatMoneyByLocale(coinInfo?.fiatLocalAmount || '0.0')} ${fiatCurrency}` :
@@ -241,15 +245,16 @@ class SellCryptoCoin extends Component {
               fiatLocalAmount: coinInfo?.fiatLocalAmount || 0,
               fiatLocalCurrency: fiatCurrency,
               amount: currency?.amount || 0,
-              currency: currency?.currency,
+              currency: currency?.currency
             }}
           />
-          <Prompt
+          {showPrompt && (<Prompt
             when={generatedAddress && generatedAddress.length > 0}
             message={location =>
               `${messages.sell_coin.summary.info.confirm_leave}`
             }
-          />
+          />)
+          }
         </div>
       );
     }
@@ -282,7 +287,7 @@ class SellCryptoCoin extends Component {
               values={{
                 fiatAmount: fiatAmount || 0,
                 amount: currency?.amount || 0,
-                currency: currency?.currency || '',
+                currency: currency?.currency || ''
               }}
             />
           }
@@ -305,7 +310,7 @@ const mapStateToProps = (state) => ({
   userInfo: formSellCoinSelector(state, 'bankOwner', 'bankName', 'bankNumber', 'phoneNumber'),
   currency: formSellCoinSelector(state, 'currency'),
   formError: !!state.form[sellCoinFormName]?.syncErrors,
-  country: state.app.ipInfo?.country,
+  country: state.app.ipInfo?.country
 });
 
 const mapDispatchToProps = {
@@ -323,7 +328,7 @@ const mapDispatchToProps = {
 
 SellCryptoCoin.defaultProps = {
   className: '',
-  currency: null,
+  currency: null
 };
 
 SellCryptoCoin.propTypes = {
@@ -334,7 +339,7 @@ SellCryptoCoin.propTypes = {
   currency: PropTypes.object,
   idVerificationLevel: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.number,
+    PropTypes.number
   ]).isRequired,
   coinInfo: PropTypes.object.isRequired,
   bankList: PropTypes.array.isRequired,
@@ -347,7 +352,7 @@ SellCryptoCoin.propTypes = {
   sellCryptoGenerateAddress: PropTypes.func.isRequired,
   sellCryptoGetBankList: PropTypes.func.isRequired,
   formError: PropTypes.bool.isRequired,
-  history: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 export default withRouter(injectIntl(connect(mapStateToProps, mapDispatchToProps)(SellCryptoCoin)));
