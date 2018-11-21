@@ -225,6 +225,8 @@
     }
 
     .CreatorComponent {
+      display: flex;
+      align-items: center;
       margin-bottom: 10px;
       svg {
         width: 28px;
