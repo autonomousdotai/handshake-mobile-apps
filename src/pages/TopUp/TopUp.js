@@ -2,9 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
+import Button from '@/components/core/controls/Button';
+import Web3 from 'web3';
+
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 
+const ethUtil = require('ethereumjs-util');
+const sigUtil = require('eth-sig-util');
+
 import './TopUp.scss';
+
+
 
 class TopUp extends React.Component {
   static propTypes = {
@@ -19,6 +27,21 @@ class TopUp extends React.Component {
     name: null
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      installedMetaMask: false
+    };
+  }
+  componentDidMount() {
+    if (typeof window.ethereum !== 'undefined') {
+      this.setState({
+        installedMetaMask: true
+      });
+    }
+  }
+
   copyToClipboard = (str) => {
     const el = document.createElement('textarea');
     el.value = str;
@@ -32,6 +55,31 @@ class TopUp extends React.Component {
     document.execCommand('copy');
     document.body.removeChild(el);
   };
+
+  connect = async () => {
+    const web3Provider = new Web3.providers.HttpProvider('http://127.0.0.1:9545');
+    const web3 = new Web3(web3Provider);
+    //const accounts = web3.eth.accounts;
+
+    console.log('Web3:', web3);
+    console.log('Account:', web3.eth.getAccounts());
+    console.log("new web3");
+  }
+
+  metaMask = (props) => {
+    const { installedMetaMask } = this.state;
+    console.log('Install Meta Mask:', this.state.installedMetaMask);
+
+    //if (!installedMetaMask) return null;
+    return (
+      <Button
+        className="metaMaskButton"
+        onClick={() => this.connect()}
+      >
+        Connect MetaMask
+      </Button>
+    );
+  }
 
   balance = (props) => {
     const { balance, name } = props || { balance: 0, name: 'ETH' };
@@ -71,8 +119,10 @@ class TopUp extends React.Component {
     const walletProps = wallets[1];
     return (
       <div className="TopUpContainer">
+        { this.metaMask(walletProps) }
         { this.balance(walletProps) }
         { this.howTo(walletProps) }
+
       </div>
     );
   }

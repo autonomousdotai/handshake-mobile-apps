@@ -36,7 +36,7 @@ class WalletCoin extends React.Component {
     }
   }
   loginMetaMask = async (props) => {
-
+    this.connect();
     /*
     if (typeof window.web3 !== 'undefined') {
       const { currentProvider } = window.web3;
@@ -47,6 +47,7 @@ class WalletCoin extends React.Component {
       alert('Please install MetaMask extension');
     }
     */
+   /*
     const text = 'Sign Ninja';
     const msg = ethUtil.bufferToHex(text);
     // var msg = '0x1' // hexEncode(text)
@@ -85,6 +86,7 @@ class WalletCoin extends React.Component {
       }
 
     });
+    */
 
   }
 
