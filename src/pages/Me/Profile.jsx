@@ -427,7 +427,7 @@ class Profile extends React.Component {
                 this.showSuccess(messages.me.profile.verify.alert.success.email);
               },
               errorFn: () => {
-                this.showError(messages.me.profile.verify.alert.require.email);
+                this.showError(messages.me.profile.verify.alert.exist.email);
               },
             });
           },

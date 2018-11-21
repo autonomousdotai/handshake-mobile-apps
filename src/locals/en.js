@@ -1022,6 +1022,9 @@ export default {
             idVerification: 'Can\'t submit your documents, please try again',
             idVerification2: 'Can\'t submit your documents.',
           },
+          exist: {
+            email: 'Your email already exists.',
+          },
         },
       },
       text: {
