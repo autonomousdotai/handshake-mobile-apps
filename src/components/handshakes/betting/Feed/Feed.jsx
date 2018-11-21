@@ -112,10 +112,10 @@ class FeedBetting extends React.Component {
     const { title, isAction } = statusResult;
     const matchDone = status === BET_BLOCKCHAIN_STATUS.STATUS_DONE;
 
-    const {extraData} = props;
+    const { extraData } = props;
     const { event_name, event_predict } = parseJsonString(extraData);
     const eventName = event_name;
-    const predictName = side === ROLE.INITER ? 'Yes' : 'No';
+    const predictName = (event_predict.toUpperCase() === 'YES' || event_predict.toUpperCase() === 'NO') ? side === ROLE.INITER ? 'Yes' : 'No' : event_predict;
 
     this.setState({
       actionTitle: title,
@@ -640,6 +640,23 @@ class FeedBetting extends React.Component {
 
     );
   }
+  renderOutcome(predictName, colorBySide, side) {
+
+    if (predictName.toUpperCase() === 'YES' || predictName.toUpperCase() === 'NO') {
+      return (
+        <div className="predictTitle">
+          <div className={`sideLabel ${colorBySide}`}>{predictName}</div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="predictTitle">
+        {<div className={`sideLabel ${colorBySide}`}>{side === 1 ? `Support` : 'Oppose'}</div>}
+        <div className="predictName">{predictName}</div>
+      </div>
+    );
+  }
 
   render() {
     const {
@@ -647,8 +664,8 @@ class FeedBetting extends React.Component {
     } = this.state;
 
     const { side, odds, role } = itemInfo;
-
     const colorBySide = side === 1 ? `support` : 'oppose';
+
     const displayValues = role === ROLE.INITER ? this.calculateDisplayValueMaker() : this.calculateDisplayValueShaker(shakedItemList);
     const { displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue } = displayValues;
     return (
@@ -665,10 +682,7 @@ class FeedBetting extends React.Component {
           </div>
 
           <div className="predictRow">
-            <div className="predictTitle">
-              {/*<div className={`sideLabel ${colorBySide}`}>{side === 1 ? `Support` : 'Oppose'}</div>*/}
-              <div className={`sideLabel ${colorBySide}`}>{predictName}</div>
-            </div>
+            {this.renderOutcome(predictName, colorBySide, side)}
             <div className="oddName"><span className="odds-text-feed">Odds</span> <span className={`odds-value-feed-${colorBySide}`}>{odds}</span></div>
           </div>
           {this.renderItem(displayMatchedAmount, displayAmount, displayWinMatch, displayWinValue)}
