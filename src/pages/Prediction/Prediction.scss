@@ -1,6 +1,7 @@
 @import './src/styles/style';
 
 .Prediction {
+  background-color: #F5F8FC;
   .Sticky {
     position: fixed;
     top: 0;
@@ -204,10 +205,38 @@
   }
 
   .EventItem {
-    padding: rem-calc(20px 10px);
+    color: #0a2240;
+    background-color: #ffffff;
+    padding: rem-calc(20px);
     font-family: $font-family-base;
-    margin-bottom: rem-calc(10px);
-    box-shadow: rem-calc(0 2px 10px 0) rgba(203, 203, 203, 0.50);
+    font-weight: 400;
+    margin-top: rem-calc(10px);
+    // box-shadow: rem-calc(0 2px 10px 0) rgba(203, 203, 203, 0.50);
+
+    .CountdownTime {
+      color: #0a2240;
+    }
+
+    .EventHeading {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .CreatorComponent {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+      .CreatorAlias {
+        margin-left: 10px;
+        color: #000;
+      }
+    }
 
     .EventName {
       font-size: rem-calc(20px);
@@ -217,20 +246,95 @@
       font-weight: $medium;
       margin-bottom: rem-calc(2px);
       margin-top: rem-calc(10px);
+      flex-basis: 65%;
+    }
+
+    .EventImage {
+      position: relative;
+      overflow: hidden;
+      flex-basis: 35%;
+      img {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
     }
 
     .EventNumberOfPlayer {
-      font-size: rem-calc(14px);
       .NumberOfPlayerTitle {
-        color: #636363;
-
+        color: #0a2240;
+      }
+      .NumberPlayer g#Home-feed {
+        fill: #9caec2;
       }
     }
 
     .EventDetails {
+      position: relative;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+      margin-bottom: 20px;
+      .EventIcon {
+        display: inline-block;
+        min-width: 28px;
+        text-align: center;
+      }
+      > .ComponentStatistics {
+        margin-top: -40px;
+        padding: 0;
+      }
+      &.Full {
+        .EvenFirstGroup {
+          flex-direction: column;
+        }
+      }
+      .EvenFirstGroup {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        > div {
+          margin-right: 15px;
+          min-width: 110px;
+          // padding-bottom: 10px;
+        }
+      }
+    }
+
+    .BetButtons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      button {
+        text-transform: capitalize;
+        font-weight: 700;
+        min-width: 48%;
+        border-top-left-radius: 20px;
+        border-bottom-left-radius: 20px;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+      }
+      .btn-secondary {
+        background-color: #748599;
+      }
+    }
+
+    .EventEnding {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      margin-bottom: -6px;
+      border-top: 1px solid #EFEFEF;
+      .Comment > i {
+        margin-right: 5px;
+      }
+
+      .Comment a {
+        color: #748599;
+      }
     }
 
     .EventMessage {
@@ -250,11 +354,8 @@
     }
 
     .EventTotalBetValue {
-      color: #D0021B;
+      color: #0a2240;
       font-weight: 400;
-    }
-    .EventTimeLeftValue {
-      font-weight: 300;
     }
 
     .EventTimeLeftText, .EventTotalBetText {
@@ -278,13 +379,9 @@
       display: flex;
       align-items: center;
     }
-
-    .EventTotalBetValue {
-      color: #D0021B;
-    }
   }
   .share-social  {
-    margin-top: 25px;
+    margin-right: -5px;
     img {
       width: 32px;
       margin-right: 8px;
@@ -317,23 +414,23 @@
 
   .relevantTitle {
     margin-left: 10px;
-    margin-top: 30px;
+    margin-bottom: 10px;
     font-weight: 400;
-    font-size: 20px;
+    //font-size: 20px;
     opacity: 0.8;
-    text-align: center;
+    text-align: left;
   }
 }
 
 .Disclaimer {
   font-size: 11px;
-  padding: 2px 10px;
+  padding: rem-calc(10px);
 
   span {
     font-weight: bold;
     font-size: 12px;
     padding-bottom: 5px;
-    display: inline-block;
+    display: block;
   }
 }
 .SourceLogo {
@@ -343,5 +440,66 @@
     color: #8A8A8F;
     font-size: rem-calc(14px);
     margin-left: 7px;
+  }
+}
+
+.CreateEventButton {
+  position: fixed;
+  bottom: 70px;
+  right: 10px;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  border-radius: 50%;
+  background-color: #2989FF;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+}
+
+.modal.EmailSubscriberModal {
+  .modal-custom-body {
+    padding: 30px 15px;
+  }
+  .close {
+    border: 1px solid #dcdcdc;
+    font-size: 20px;
+    width: 25px;
+    height: 25px;
+  }
+  .SubscriberTitle {
+    text-align: center;
+    font-size: rem-calc(18px);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .SubscriberDescription {
+    font-size: rem-calc(14px);
+    margin-bottom: 15px;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    input {
+      color: #000;
+      border: 1px solid #dcdcdc;
+      font-size: rem-calc(14px);
+      padding: 12px 10px;
+      margin-bottom: 10px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    button {
+      height: 49px;
+    }
+    .ErrMsg {
+      font-size: rem-calc(14px);
+      margin-bottom: 10px;
+      color: #ff0000;
+    }
   }
 }

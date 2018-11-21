@@ -1,3 +1,5 @@
+import { BigNumber } from 'bignumber.js';
+
 export const formatAmount = (amount, ROUND = 10000) => {
   return Math.floor(amount * ROUND) / ROUND;
 };
@@ -19,3 +21,11 @@ export const calcPercent = (n, t) => {
 };
 
 export const currencyFormat = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
+
+/**
+ * Convert a big number
+ * @param {number | string} n
+ */
+export const parseBigNumber = (n) => {
+  return new BigNumber(n);
+};

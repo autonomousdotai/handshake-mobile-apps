@@ -1,0 +1,131 @@
+@import './src/styles/style';
+
+.PlaceBetContainer {
+  height: 100%;
+}
+.PlaceBetComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  position: absolute;
+  top: 49px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  background-color: #EBF1F7;
+}
+.BetFormComponent {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  padding: 30px 50px;
+  align-self: center;  
+  align-items: center;
+  justify-content: center;
+  .Redeem {
+    position: absolute;
+    top: 0;
+    padding: 15px 50px;
+    text-align: center;
+    font-size: 0.875rem;
+    .UseRedeem {
+      color: #003fff;
+      text-decoration: underline;
+    }
+  }
+  form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+  }
+  .ErrMsg {
+    font-size: 0.75rem;
+    padding: 5px 0;
+  }
+  input {
+    color: #0A2240;
+    font-size: 1rem;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid rgba(151,151,151, 0.5);
+    background-color: #ffffff;
+    min-height: 46px;
+    padding: 5px;
+    margin-bottom: 5px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  button {
+    min-height: 46px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+.BetParamsComponent {
+  padding: 30px 50px;
+  .Item {
+    display: flex;
+    justify-content: space-between;
+    color: #748599;
+    font-size: 0.875rem;
+    line-height: 2em;
+    &:first-child {
+      color: #000000;
+    }
+    svg {
+      margin-right: 5px;
+    }
+  }
+}
+
+// Modals
+.modal {
+  background-color: #1F2B34;
+  .modal-dialog-content {
+    position: relative;
+    border-radius: 0;
+  }
+  .modal-custom-body {
+    padding: 0;
+    background-color: #ffffff;
+  }
+  .close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 20;
+    opacity: 1;
+    font-size: 25px;
+    font-weight: 100;
+    border: 1px solid #fff;
+    background-color: #fff;
+    color: #000;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+  }
+}
+
+// Modal outtaMoney
+.outtaMoneyContainer {
+  padding: rem-calc(30px);
+  text-align: center;
+  border-radius: 4px;
+  background-color: #ffffff;
+  .outtaMoneyTitle {
+    color: #000000;
+    font-size: rem-calc(22px);
+    font-weight: bold;
+    margin: rem-calc(20px) 0;
+  }
+  .outtaMoneyMsg {
+    color: #000000;
+    opacity: 0.6;
+    font-size: rem-calc(17px);
+    margin-bottom: rem-calc(30px);
+  }
+}

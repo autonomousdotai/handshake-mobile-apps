@@ -37,8 +37,8 @@ function creatableSelect(props) {
       placeholder={props.placeholder}
       options={props.dataSource}
       isDisabled={props.disabled}
-      getOptionLabel={props.getOptionLabel}
-      getOptionValue={props.getOptionValue}
+      // getOptionLabel={props.getOptionLabel}
+      // getOptionValue={props.getOptionValue}
     />
   );
 }

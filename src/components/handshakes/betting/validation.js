@@ -24,16 +24,12 @@ export const isRightNetwork = () => {
 };
 
 export const isExpiredDate = (reportTime) => {
-  console.log('Report Time:', reportTime);
   const newClosingDate = moment.unix(reportTime);
   const dayUnit = newClosingDate.utc();
   const today = moment();
   const todayUnit = today.utc();
   // console.log('Closing Unix:', closingDateUnit.format());
-  console.log('New Date Unix:', dayUnit.format());
-  console.log('Today Unix:', todayUnit.format());
   if (!todayUnit.isSameOrBefore(dayUnit, 'miliseconds') && today) {
-    console.log('Expired Date');
     return true;
   }
   return false;

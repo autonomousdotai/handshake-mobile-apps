@@ -24,3 +24,23 @@ export function toCamelCase(str) {
     return index === 0 ? letter.toLowerCase() : letter.toUpperCase();
   }).replace(/\s+/g, '');
 }
+
+/**
+ * Convert an address into short address
+ * @param {address} str
+ * @param {*} padChars
+ */
+export function shortAddress(str, padChars) {
+  if (typeof str !== 'string' || !/^(0x|0X)?[a-fA-F0-9]+$/.test(str)) {
+    const errorMsg = 'Address is not valid';
+    throw errorMsg;
+  }
+  const beginChars = str.slice(0, 4);
+  const endChars = str.slice(-4);
+  return beginChars.concat(padChars || '...', endChars);
+}
+
+export function isURL(url) {
+// eslint-disable-next-line no-useless-escape
+  return (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/i).test(url);
+}

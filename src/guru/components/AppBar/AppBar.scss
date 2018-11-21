@@ -1,0 +1,27 @@
+@import './src/styles/style';
+
+.AppBarComponent {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 12px 10px;
+  border-bottom: 1px solid #EBF1F7;
+  .IconLeft {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    color: #748599;
+    font-size: 1.2rem;
+  }
+  .Title {
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+}
