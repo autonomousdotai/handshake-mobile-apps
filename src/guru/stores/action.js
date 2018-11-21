@@ -5,3 +5,5 @@ export const updateLoading = (payload = {}) => {
     payload
   };
 };
+
+

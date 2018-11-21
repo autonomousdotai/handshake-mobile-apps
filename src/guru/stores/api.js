@@ -6,12 +6,15 @@ const apiActionRequest = ({ type }) => ({
   type: `${type}_REQUEST`
 });
 
-const apiActionSuccess = ({ type }) => ({
-  type: `${type}_SUCCESS`
+const apiActionSuccess = ({ type, payload = {} }) => ({
+  type: `${type}_SUCCESS`,
+  payload
 });
 
-const apiActionFailed = ({ type }) => ({
-  type: `${type}_FAILURE`
+const apiActionFailed = ({ type, payload = {} }) => ({
+  type: `${type}_FAILURE`,
+  payload,
+  error: true
 });
 
 /**
@@ -83,3 +86,22 @@ function* apiPostForm(actions) {
 }
 
 export { apiGet, apiPost, apiPostForm, callApi };
+
+const aActionCreator = ({
+  method = 'GET',
+  type,
+  data,
+  headers,
+  BASE_URL = BASE_API.BASE_URL,
+  PATH_URL
+}) => (dispatch) => {
+  if (!PATH_URL) throw new Error('URL is required');
+  if (!type) throw new Error('Action type is required');
+  const url = `${BASE_URL}/${PATH_URL}`;
+  dispatch(apiActionRequest({ type }));
+  return $http({ url, data, method, headers }).then((res) => {
+
+  }).catch(error => {
+    dispatch(apiActionFailed({ type, payload: error }));
+  });
+};
