@@ -45,13 +45,14 @@ class CryptoPrice extends Component {
 
   getPrice = () => {
     const { crypto } = this.state;
+    const { currencyByLocal } = this.props;
     if (!crypto?.id) return;
     this.props.coinGetBuyPrice({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=1&currency=${crypto?.id}&fiat_currency=${'VND'}&type=bank&level=${1}&user_check=1&check=1`,
+      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?amount=1&currency=${crypto?.id}&fiat_currency=${currencyByLocal}&type=bank&level=${1}&user_check=1&check=1`,
       more: { name: crypto?.id },
     });
     this.props.coinGetSellPrice({
-      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=1&currency=${crypto?.id}&fiat_currency=VND&type=bank&level=${1}&user_check=1&check=1`,
+      PATH_URL: `${API_URL.EXCHANGE.BUY_CRYPTO_GET_COIN_INFO}?direction=sell&amount=1&currency=${crypto?.id}&fiat_currency=${currencyByLocal}&type=bank&level=${1}&user_check=1&check=1`,
       more: { name: crypto?.id },
     });
   }
@@ -94,7 +95,8 @@ const mapDispatch = {
 
 const mapState = (state, props) => {
   return {
-    country: state.app.ipInfo.country,
+    currencyByLocal: state.app.ipInfo.currency || 'HKD',
+    country: state.app.ipInfo.country || 'HK',
     sellPrice: state.coin?.sellPrice[props?.crypto?.id],
     buyPrice: state.coin?.buyPrice[props?.crypto?.id],
   };

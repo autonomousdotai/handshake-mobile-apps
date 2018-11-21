@@ -32,9 +32,9 @@ const EXCHANGE_TYPE = {
 };
 
 const FIAT_CURRENCY_SUPPORTED_LIST = {
-  [COUNTRY_LIST.VN]: {
-    VND: FIAT_CURRENCY.VND,
-  },
+  // [COUNTRY_LIST.VN]: {
+  //   VND: FIAT_CURRENCY.VND,
+  // },
   [COUNTRY_LIST.HK]: {
     USD: FIAT_CURRENCY.USD,
     HKD: FIAT_CURRENCY.HKD,
@@ -329,8 +329,8 @@ CoinMoneyExchange.propTypes = {
 
 const mapState = (state) => {
   return {
-    country: state.app.ipInfo.country || 'VN',
-    currencyByLocal: state.app.ipInfo.currency || FIAT_CURRENCY.VND,
+    country: state.app.ipInfo.country || 'HK',
+    currencyByLocal: state.app.ipInfo.currency || FIAT_CURRENCY.HKD,
     coinInfo: state.buyCoin?.coinInfo || {},
     quoteReverse: state.buyCoin?.quoteReverse || {},
     idVerificationLevel: state.auth.profile.idVerificationLevel || 0,
