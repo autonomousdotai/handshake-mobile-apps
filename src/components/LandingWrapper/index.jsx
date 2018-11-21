@@ -96,7 +96,7 @@ class Index extends React.PureComponent {
               )
             }
 
-            <div className="container">
+            {/*<div className="container">
               <hr className="landing-hr" />
 
               <div className="row landing-footer no-gutters">
@@ -131,7 +131,7 @@ class Index extends React.PureComponent {
                   )
                 }
               </div>
-            </div>
+            </div>*/}
 
 
           </div>

@@ -412,6 +412,7 @@ const continueAfterInitApp = (language, ref, dispatch, data) => {
 
   if (!languageSaved) {
     ipInfoRes.language = data.languages?.[0] || 'en';
+    // ipInfoRes.language = 'en';
   } else {
     ipInfoRes.language = languageSaved;
   }

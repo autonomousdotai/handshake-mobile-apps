@@ -115,7 +115,7 @@ class Index extends React.PureComponent {
       <LandingWrapper name={name} fullWidthContent={fullWidthContent}>
         {reactHelmetElement}
         <div className="project-detail">
-          {
+          {/*{
             messages[`landing_page.${name}.breadcrumb`] && (
               <div className="row mt-5">
                 <div className="col">
@@ -137,8 +137,8 @@ class Index extends React.PureComponent {
                 </div>
               </div>
             )
-          }
-          {
+          }*/}
+          {/*{
             entireContentComponent || (
               <React.Fragment>
                 <div className="row mt-4">
@@ -176,7 +176,7 @@ class Index extends React.PureComponent {
                                 type="submit"
                                 className="btnEmail"
                               >
-                                {/*btnSubmitEmail*/}
+                                btnSubmitEmail
                                 <img src={iconSubmitEmail} alt="iconSubmitEmail" />
                               </button>
                           </div>
@@ -255,7 +255,7 @@ class Index extends React.PureComponent {
                 {contentComponent}
               </React.Fragment>
             )
-          }
+          }*/}
           {
             faq && (
               <div className="row mt-5" id="faq" ref="faq" >
