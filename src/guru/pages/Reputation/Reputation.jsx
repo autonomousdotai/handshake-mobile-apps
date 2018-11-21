@@ -10,7 +10,6 @@ import AppBar from '@/guru/components/AppBar/AppBar';
 import DefaultAvatar from '@/assets/images/icon/logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
-import { formatAmount } from '@/components/handshakes/betting/utils';
 import { shortAddress } from '@/utils/string';
 
 
@@ -50,6 +49,10 @@ class Reputation extends React.Component {
     this.props.history.push(url);
   }
 
+  formatAmount = (amount) => {
+    return Math.floor(amount * 10000) / 10000;
+  };
+
   renderProfile(props) {
     const query = this.getQueryString();
 
@@ -81,7 +84,7 @@ class Reputation extends React.Component {
     const { total_amount: totalAmount = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="boldText">{formatAmount(totalAmount)}</div>
+        <div className="boldText">{this.formatAmount(totalAmount)}</div>
         <div className="disableText mediumText">ETH</div>
       </div>
     );
