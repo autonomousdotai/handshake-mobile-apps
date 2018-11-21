@@ -54,7 +54,7 @@ function* callApi({
   } catch (e) {
     console.error('failed to callAPI: ', e);
     yield put(apiActionFailed({ type }));
-    return { status: 0, message: 'Network Error' };
+    return { status: 0, message: e };
   }
 }
 
@@ -87,21 +87,54 @@ function* apiPostForm(actions) {
 
 export { apiGet, apiPost, apiPostForm, callApi };
 
-const aActionCreator = ({
-  method = 'GET',
+const APICreator = ({
+  method,
   type,
   data,
   headers,
   BASE_URL = BASE_API.BASE_URL,
   PATH_URL
 }) => (dispatch) => {
-  if (!PATH_URL) throw new Error('URL is required');
-  if (!type) throw new Error('Action type is required');
-  const url = `${BASE_URL}/${PATH_URL}`;
-  dispatch(apiActionRequest({ type }));
-  return $http({ url, data, method, headers }).then((res) => {
+  return new Promise((resolve, reject) => {
+    if (!PATH_URL || !type) reject(new Error('URL and type are required'));
+    const url = `${BASE_URL}/${PATH_URL}`;
+    dispatch(apiActionRequest({ type }));
 
-  }).catch(error => {
-    dispatch(apiActionFailed({ type, payload: error }));
+    return $http({ url, data, method, headers })
+      .then((res) => {
+        if (res.status === 200 || res.data.status === 1) {
+          dispatch(apiActionSuccess({ type, payload: res.data }));
+          resolve(res);
+        } else {
+          dispatch(apiActionFailed({ type, payload: res.data }));
+          reject(res.data);
+        }
+      })
+      .catch(error => {
+        dispatch(apiActionFailed({ type, payload: error }));
+        reject(error);
+      });
   });
 };
+
+export function APIGetCreator(params) {
+  return APICreator({
+    ...params,
+    method: 'GET'
+  });
+}
+
+export function APIPostCreator(params) {
+  return APICreator({
+    ...params,
+    method: 'POST'
+  });
+}
+
+export function APIFormCreator(params) {
+  return APICreator({
+    ...params,
+    method: 'POST',
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+}
