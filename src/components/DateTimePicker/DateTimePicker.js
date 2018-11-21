@@ -21,7 +21,7 @@ class DateTimePicker extends Component {
     outputType: PropTypes.oneOf(outputTypeConst),
     onChange: PropTypes.func,
     onDateChange: PropTypes.func,
-    popupTriggerRenderer: PropTypes.func,
+    renderTrigger: PropTypes.func,
     use12Hours: PropTypes.bool,
     shortName: PropTypes.bool,
     minuteStep: PropTypes.number,
@@ -46,7 +46,7 @@ class DateTimePicker extends Component {
     defaultDate: new Date(),
     onChange: undefined,
     onDateChange: undefined,
-    popupTriggerRenderer: undefined,
+    renderTrigger: undefined,
   };
 
   onDismiss = (props) => {
@@ -108,7 +108,7 @@ class DateTimePicker extends Component {
   };
 
   renderPopupTrigger = (props) => {
-    return props.popupTriggerRenderer ? props.popupTriggerRenderer(props) : (
+    return props.renderTrigger ? props.renderTrigger(props) : (
       <div className="rmc-picker-date-time">
         <input
           {...props.inputProps}

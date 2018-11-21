@@ -27,9 +27,11 @@ import iconTelegram from '@/assets/images/wallet/icons/icon-telegram.svg';
 import iconBackupWallet from '@/assets/images/wallet/icons/icon-backup.svg';
 import iconRestoreWallet from '@/assets/images/wallet/icons/icon-restore.svg';
 import iconSupport from '@/assets/images/wallet/icons/icon-support.svg';
-
+import iconContact from '@/assets/images/wallet/icons/icon-address-book.svg';
 
 import Modal from '@/components/core/controls/Modal';
+import AddressBook from "../AddressBook";
+import iconAddContact from '@/assets/images/wallet/icons/icon-add-user.svg';
 
 class SettingWallet extends React.Component {
   constructor(props) {
@@ -43,6 +45,7 @@ class SettingWallet extends React.Component {
       settings: this.defaultSettings,
       switchContent: '',
       listCurrenciesContent: '',
+      addressBookContent: ""
     }
   }
 
@@ -226,6 +229,20 @@ class SettingWallet extends React.Component {
     $zopim.livechat.window.show();
   }
 
+  openAddressBook=()=>{    
+      this.setState({addressBookContent: <AddressBook onRef={ref => (this.child = ref)}  modalHeaderStyle={this.props.modalHeaderStyle} modalBodyStyle={this.props.modalBodyStyle} customBackIcon={this.props.customBackIcon} />}, ()=>{
+        this.modalAddressBookRef.open();        
+      })    
+      
+  }  
+  onCloseAddressBook=()=>{
+    this.setState({addressBookContent: ""});        
+  }
+
+  openAddNewContact=()=>{
+    console.log('this._child', this._childAddressBook);
+    this.child.openAddNewContact();
+  }
 
   render() {
     const { messages } = this.props.intl;
@@ -241,7 +258,11 @@ class SettingWallet extends React.Component {
                   {this.state.listCurrenciesContent}
               </div>
             </Modal>
+             
 
+            <Modal onClose={()=>{this.onCloseAddressBook();}} title={messages.wallet.action.setting.label.address_book} onRef={modal => this.modalAddressBookRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle} modalBodyStyle={this.props.modalBodyStyle} customRightIcon={iconAddContact} customRightIconClick={()=>{this.openAddNewContact()}}>
+              {this.state.addressBookContent}
+            </Modal>                        
 
             <div className="item">
                 <img className="icon" src={iconLock} />
@@ -270,6 +291,16 @@ class SettingWallet extends React.Component {
                 </div>
                 <div className="value">
                   <span className="text">{settings.wallet.alternateCurrency}</span>
+                </div>
+            </div>
+
+             <div className="item" onClick={this.openAddressBook}>
+                <img className="icon" src={iconContact} />
+                <div className="name">
+                    <label>{messages.wallet.action.setting.label.address_book}</label>
+                </div>
+                <div className="value">
+
                 </div>
             </div>
             
@@ -339,7 +370,7 @@ class SettingWallet extends React.Component {
 
                 </div>
             </div>
-            <div className="item" onClick={()=> {this.openVk();}}>
+            {/* <div className="item" onClick={()=> {this.openVk();}}>
                 <img className="icon" src={iconVk} />
                 <div className="name">
                     <label>Vkontakte</label>
@@ -347,7 +378,7 @@ class SettingWallet extends React.Component {
                 <div className="value">
 
                 </div>
-            </div>
+            </div> */}
 
 
         </div>

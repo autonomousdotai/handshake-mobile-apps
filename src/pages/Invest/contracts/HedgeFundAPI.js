@@ -31,18 +31,20 @@ class HedgeFundAPI extends NetworkAPI {
     this.version = version
     self.contractInfo = 0
     this.useMetamask = useMetamask
-
-    this.contractUrl = `http://35.198.235.226/json/hedgefund_latest.json`
-    try {
-      new Promise(async (resolve)=>{
-        this.contractInfo = (await axios.get(this.contractUrl)).data
-        resolve()
-      })
-    } catch(err){
-      this.contractInfo = -1
-    }
+    // eliminate http
+    this.contractUrl = '';
+    this.contractInfo = -1;
+    // this.contractUrl = `http://35.198.235.226/json/hedgefund_latest.json`
+    // try {
+    //   new Promise(async (resolve)=>{
+    //     this.contractInfo = (await axios.get(this.contractUrl)).data
+    //     resolve()
+    //   })
+    // } catch(err){
+    //   this.contractInfo = -1
+    // }
   }
-  
+
   async _init () {
     return new Promise((resolve, reject) => {
       var checkContractInfo = () => {
@@ -239,11 +241,11 @@ class HedgeFundAPI extends NetworkAPI {
   getFundAmount (pid = '', address = '') {
     return this._call('getFundAmount', hexEncode(pid), address)
   }
-  
+
   getWithdrawAmount (pid = '') {
     return this._call('getWithdrawAmount', hexEncode(pid))
   }
-  
+
   getNumberOfFunder (pid = '') {
     return this._call('getNumberOfFunder', hexEncode(pid))
   }

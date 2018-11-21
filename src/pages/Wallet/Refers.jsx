@@ -232,7 +232,7 @@ class Refers extends React.Component {
     }
     else{
       let email = this.state.step3_value;
-      this.props.verifyEmail({
+      this.props.verifyEmailCode({
         PATH_URL: `user/verification/email/start?email=${email}`,
         METHOD: 'POST',
         successFn: (data) => {
@@ -522,7 +522,7 @@ const mapDispatchToProps = (dispatch) => ({
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
   clearFields: bindActionCreators(clearFields, dispatch),
-  verifyEmail: bindActionCreators(verifyEmail, dispatch),
+  verifyEmailCode: bindActionCreators(verifyEmail, dispatch),
   submitEmail: bindActionCreators(submitEmail, dispatch),
   checkJoinTelegram: bindActionCreators(checkJoinTelegram, dispatch),
   checkFollowTwitter: bindActionCreators(checkFollowTwitter, dispatch),

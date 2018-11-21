@@ -106,7 +106,7 @@ class FeedBetting extends React.Component {
   handleStatus(props) {
 
     const itemInfo = findUserBet(props);
-    const { status } = itemInfo;
+    const { status, side } = itemInfo;
 
     const statusResult = getStatusLabel(itemInfo);
     const { title, isAction } = statusResult;
@@ -115,7 +115,7 @@ class FeedBetting extends React.Component {
     const {extraData} = props;
     const { event_name, event_predict } = parseJsonString(extraData);
     const eventName = event_name;
-    const predictName = event_predict;
+    const predictName = side === ROLE.INITER ? 'Yes' : 'No';
 
     this.setState({
       actionTitle: title,
@@ -666,8 +666,8 @@ class FeedBetting extends React.Component {
 
           <div className="predictRow">
             <div className="predictTitle">
-              <div className={`sideLabel ${colorBySide}`}>{side === 1 ? `Support` : 'Oppose'}</div>
-              <div className="predictName">{predictName}</div>
+              {/*<div className={`sideLabel ${colorBySide}`}>{side === 1 ? `Support` : 'Oppose'}</div>*/}
+              <div className={`sideLabel ${colorBySide}`}>{predictName}</div>
             </div>
             <div className="oddName"><span className="odds-text-feed">Odds</span> <span className={`odds-value-feed-${colorBySide}`}>{odds}</span></div>
           </div>

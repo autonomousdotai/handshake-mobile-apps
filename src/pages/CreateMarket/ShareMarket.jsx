@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import ShareSocial from '@/components/core/presentation/ShareSocial';
 import { randomArrayItem } from '@/utils/array';
 import { Link } from 'react-router-dom';
@@ -21,6 +22,10 @@ class ShareMarket extends React.Component {
     shareEvent: null,
   };
 
+  componentWillUnmount() {
+    // TODO: remove data in store
+  }
+
   renderCheckmark = () => (
     <span className="checkmark">
       <div className="checkmark_circle" />
@@ -33,13 +38,13 @@ class ShareMarket extends React.Component {
     const type = props.isNew ? 'event' : 'outcome';
     const { url } = props.shareEvent;
     const toUrl = {
-      pathname: URL.HANDSHAKE_PEX,
+      pathname: URL.HANDSHAKE_PREDICTION,
       search: url.substring(url.indexOf('?')),
     };
     return (
       <React.Fragment>
         <div className="ShareEventMessage">
-          Your {type} was successfully created!
+        Your {type} was created successfully! <br/> The event will be approved in approx. 1 hour.
         </div>
         <Link
           className="ViewSharedEvent"
@@ -94,4 +99,4 @@ class ShareMarket extends React.Component {
   }
 }
 
-export default ShareMarket;
+export default connect()(ShareMarket);

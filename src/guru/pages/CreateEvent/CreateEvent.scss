@@ -1,0 +1,444 @@
+.ErrMsg {
+  color: red;
+  font-size: 13px;
+  padding: 5px 0;
+  font-weight: unset;
+}
+
+.CreateEvent {
+  background-color: #EBF1F7;
+  padding-bottom: 60px;
+  margin-top: -15px;
+  padding-top: 15px;
+  textarea:focus, input:focus{
+    outline: none;
+  }
+
+  .FormBlock {
+    background-color: #FFFFFF;
+    margin: 15px 20px;
+    padding: 20px;
+    border-radius: 5px;
+
+    .BlankLine {
+      background-color: #EBF1F7;
+      height: 2px;
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .GroupTitle {
+      color: #0A2240;
+      font-weight: 400;
+      padding-bottom: 5px;
+    }
+
+    .GroupNote {
+      color: #889EB5;
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    .GroupRow {
+      display: flex;
+      align-items: center;
+    }
+
+    .BlockLeft {
+      margin-right: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .BlockRight {
+      margin-left: 10px;
+      position: relative;
+    }
+
+    label {
+      margin-bottom: 0;
+    }
+  }
+
+  .SubmitBtn {
+    position: fixed;
+    width: 100%;
+    bottom: 60px;
+    height: 50px;
+    font-size: 18px;
+
+    &:disabled {
+      background-color: #A5BED4;
+      border-color: #A5BED4;
+    }
+  }
+
+  /* FIELDS */
+  .EventTitle {
+    label {
+      color: #2989FF;
+      width: 45px;
+      margin-top: 3px;
+    }
+
+    textarea {
+      width: 100%;
+      color: #0A2240;
+      border: none;
+
+      &::placeholder {
+        color: #C5D8E8;
+      }
+    }
+
+    .ErrMsg {
+      font-weight: unset;
+      text-align: right;
+      padding-top: 0;
+    }
+
+    .BlankLine {
+      margin-bottom: 0;
+    }
+
+    .OutcomeName, .EventName {
+      font-weight: bold;
+      textarea {
+        font-weight: bold;
+      }
+    }
+
+    .OutcomeName, .EventName {
+      display: flex;
+      align-items: flex-start;
+      font-size: 18px;
+    }
+  }
+
+  .PublicSwitcher {
+    display: flex;
+    font-size: 16px;
+    font-weight: 300;
+    color: #748599;
+    justify-content: space-between;
+    margin: -10px 0;
+    align-items: center;
+
+    .switch {
+      width: 110px;
+      height: 28px;
+
+      .on, .off {
+        font-size: 15px;
+        font-weight: 400;
+      }
+
+      .slider {
+        background-color: #14447F;
+      }
+
+      input:checked + .slider {
+        background-color: #2989FF;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(80px);
+        -ms-transform: translateX(80px);
+        transform: translateX(80px);
+      }
+    }
+  }
+
+  .HostFee {
+    position: relative;
+
+    .GroupTitle {
+      margin-bottom: -10px;
+    }
+
+    .rangeLimit {
+      display: none;
+    }
+
+    .RangeValue {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: #2989FF;
+
+      input {
+        text-align: right;
+        padding: 0;
+        margin: 0;
+        border: none;
+        color: #2989FF;
+        background-color: transparent;
+        -webkit-appearance: none;
+        -webkit-user-select: none;
+        -webkit-user-modify: none;
+      }
+
+      .unit {
+        background-color: transparent;
+      }
+    }
+
+    .rangeslider-horizontal {
+      height: 5px;
+    }
+
+    .rangeslider, .rangeslider .rangeslider__fill {
+      box-shadow: none;
+    }
+
+    .rangeslider-horizontal .rangeslider__handle {
+      width: 25px;
+      height: 25px;
+      border-radius: 25px;
+      background: #2989FF;
+      border: 2px solid #FFFFFF;
+      box-shadow: 0 2px 4px 0 rgba(181,181,181,0.50);
+    }
+
+    .rangeslider-horizontal .rangeslider__fill {
+      background-color: #2989FF;
+    }
+
+    .rangeslider-horizontal .rangeslider__handle:after {
+      display: none;
+    }
+  }
+
+  .ImageUpload {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .BlockLeft {
+      flex-basis: 40%;
+    }
+
+    .BlockRight {
+      flex-basis: 50%;
+    }
+
+    .ErrMsg {
+      text-align: right;
+      width: 100%;
+    }
+
+    .AddBtn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    img {
+      max-width: 100%;
+      max-height: 90px;
+      overflow: hidden;
+    }
+
+    .FileInput {
+      background-image: url('../../../assets/images/pex/create/add-btn.svg');
+      background-repeat: no-repeat;
+      background-position: center;
+      width: 160px;
+      height: 90px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      font-size: 0;
+      transform: translate(-50%, -50%);
+
+      &.Loaded {
+        background-image: none !important;
+      }
+
+      &::-webkit-file-upload-button {
+        visibility: hidden;
+      }
+    }
+  }
+
+  .ReportSource {
+    .GroupNote {
+      font-weight: 400;
+    }
+
+    .ErrMsg {
+      text-align: right;
+    }
+
+    .CreatableSelectSource {
+      padding: 10px 0;
+    }
+
+    .react-select__placeholder {
+      white-space: nowrap;
+    }
+  }
+
+  .DateTime {
+    .ErrMsg {
+      text-align: right;
+      display: block;
+      width: 100%;
+    }
+
+    > span {
+      display: block;
+      width: 100%;
+    }
+
+    .ClosingTime {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      padding: 10px;
+      background-color: #EBF1F7;
+      border-radius: 5px;
+      font-weight: 400;
+      width: 100%;
+      margin-top: 10px;
+
+      .Separator {
+        width: 2px;
+        background-color: #d9dee4;
+      }
+
+      .HM {
+        color: #2989FF;
+      }
+    }
+  }
+
+  .Notification {
+    input {
+      width: 100%;
+      height: 38px;
+      border-radius: 5px;
+      padding: 5px 10px;
+      border: 1px solid hsl(0,0%,80%);
+      font-size: 15px;
+      outline: none;
+      color: #889EB5 !important;
+
+      &:disabled {
+        background-color: #F5F8FC;
+      }
+    }
+
+    p {
+      color: #2989FF;
+      padding: 5px 0 0;
+      margin-bottom: 0;
+    }
+
+    .btn {
+      flex-basis: 50%;
+      font-size: 13px;
+      height: 38px;
+      padding: 0;
+    }
+
+    .UnVerified {
+      input {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+// Share Market
+.ShareMarketContainer {
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #F5F8FC;
+  padding-top: 100px;
+
+  .checkmark {
+    display:inline-block;
+    width: 48px;
+    height: 48px;
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+    transform: rotate(45deg);
+    margin-bottom: 20px;
+  }
+
+  .checkmark_circle {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    background-color: #E0FFE1;
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+    border: 2px solid #C1F9C7;
+  }
+
+  .checkmark_stem {
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background-color: #4CDB52;
+    left: 26px;
+    top: 8px;
+  }
+
+  .checkmark_kick {
+    position: absolute;
+    width: 12px;
+    height: 3px;
+    background-color: #4CDB52;
+    left: 15px;
+    top: 29px;
+  }
+
+  .ShareEventMessage {
+    position: relative;
+    padding-bottom: 60px;
+    font-size: 15px;
+    &:after {
+      content: '';
+      display: inline-block;
+      height: 1px;
+      background-color: #E4E4E4;
+      width: 100px;
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      margin-left: -50px;
+    }
+
+  }
+
+  .ViewSharedEvent {
+    color: #007bff !important;
+  }
+
+  .ShareEventToBuddies {
+    .ShareEventToBuddiesTitle {
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+    .share-social {
+      display: flex;
+      justify-content: space-around;
+      img {
+        width: auto;
+        margin-right: 0;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+
+}

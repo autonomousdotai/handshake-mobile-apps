@@ -175,7 +175,13 @@ const tokenHandle = ({
           // wallet
           const listWallet = MasterWallet.getMasterWallet();
           if (listWallet === false) {
-            MasterWallet.createMasterWallets();
+
+            try{
+              MasterWallet.createMasterWallets();
+            }
+            catch (e){
+              alert(e.message);              
+            }
             console.log('create wallet success');
           } else {
             // const shuriWallet = MasterWallet.getShuriWallet();

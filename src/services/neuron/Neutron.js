@@ -16,7 +16,6 @@ class Neuron {
 
   getWeb3 = () => {
     if (!this.web3) {
-      //console.log(this.chainId);
       this.web3 = new Web3(new Web3.providers.HttpProvider(configs.network[this.chainId].blockchainNetwork));
     }
     return this.web3;
@@ -90,17 +89,8 @@ class Neuron {
     gasPrice = new BN(gasPrice
       ? Web3.utils.toWei(String(gasPrice), 'gwei')
       : await this.web3.eth.getGasPrice());
-    // console.log('caculateEstimatGasWithEthUnit gasPrice = ', String(gasPrice));
     const estimateGas = await this.getEstimateGas(payloadData, toAddress);
-    // console.log(
-    //   'caculateEstimatGasWithEthUnit estiGas = ',
-    //   String(estimateGas),
-    // );
 
-    // console.log(
-    //   'caculateEstimatGasWithEthUnit estimatedGas = ',
-    //   String(estimatedGas),
-    // );
     return Web3.utils.fromWei(String(estimateGas * gasPrice));
   };
   /**

@@ -3,7 +3,7 @@ import { isFunction, isObject, isUndefined } from '@/utils/is';
 
 /**
  * Flux Standard Action utilities for Redux.
- * @param type
+ * @param _type
  * @param payloadCreator
  * @param metaCreator
  * @returns {function(...[*])}

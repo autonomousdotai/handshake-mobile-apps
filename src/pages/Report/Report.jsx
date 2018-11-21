@@ -45,6 +45,7 @@ class Report extends React.Component {
 
   async callContractReport(outcomes) {
     await getGasPrice();
+    console.log('Outcomes:', outcomes);
     if (outcomes.length > 0) {
       betHandshakeHandler.reportOutcomes(outcomes);
     }

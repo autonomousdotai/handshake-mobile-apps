@@ -37,9 +37,17 @@ const RouterAdminIDVerification = createDynamicImport(() => import('@/components
 const RouterReport = createDynamicImport(() => import('@/components/Router/Report'), Loading);
 const RouterLuckyPool = createDynamicImport(() => import('@/pages/LuckyLanding/LuckyLanding'), Loading);
 const RouterExchange = createDynamicImport(() => import('@/components/Router/Exchange'), Loading);
-const CreateOwnMarket = createDynamicImport(() => import('@/pages/CreateMarket/CreateMarket'), Loading);
 // const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
+const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
+const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
+const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/WalletCoin/AuthCallback'), Loading);
+
+// Guru's Routes
+const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
+const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
+
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
 const LandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -52,9 +60,6 @@ const ContentForWallet = createDynamicImport(() => import('@/pages/LandingPage/C
 const ContentForPrediction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPrediction'), Loading);
 const ContentForPexInstruction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPexInstruction'), Loading);
 const LuckyDrawMechanic = createDynamicImport(() => import('@/pages/LuckyDrawMechanic/LuckyDrawMechanic'), Loading);
-const Discover = createDynamicImport(() => import('@/pages/Discover/Discover'), Loading);
-const RouterCCConfirm = createDynamicImport(() => import('@/components/Router/CCConfirm'), Loading);
-const RouterBuyCC = createDynamicImport(() => import('@/components/Router/Credit'), Loading);
 const RouterCryptoCoin = createDynamicImport(() => import('@/components/Router/CryptoCoin'), Loading);
 const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
 const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
@@ -67,14 +72,21 @@ const InternalAdminDashboard = createDynamicImport(() => import('@/pages/Interna
 
 /* ======================== FOR MOBILE ======================== */
 const configRoutesUsingMobileLayout = [
+  // Guru
+  { path: URL.GURU_CREATE_EVENT, component: GuruCreateEvent },
+  { path: URL.GURU_PLACE_BET, component: GuruPlaceBet },
+  { path: URL.HANDSHAKE_GURU, component: RouterGuru },
+  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
+  { path: URL.HANDSHAKE_COINBASE_WALLET, component: RouterWalletCoin },
+  { path: URL.HANDSHAKE_COINBASE_AUTH, component: RouterAuthCallback },
+
   { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
-  { path: URL.HANDSHAKE_PEX, component: RouterExchange },
-  { path: URL.HANDSHAKE_PEX_UPDATER, component: CreateOwnMarket },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },
 
   { path: URL.HANDSHAKE_ME, component: RouterMe },
   { path: URL.HANDSHAKE_CASH, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
   { path: URL.HANDSHAKE_ATM, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
+  { path: URL.HANDSHAKE_PEX, render: () => <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} /> },
   { path: URL.HANDSHAKE_WALLET, component: RouterWallet },
   { path: URL.HANDSHAKE_PAYMENT_TRANSFER, component: RouterPaymentTransfer },
   { path: URL.HANDSHAKE_PAYMENT, component: RouterPayment },
@@ -125,10 +137,8 @@ if (BrowserDetect.isDesktop) {
     { path: URL.PRODUCT_ATM_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
     // { path: URL.BUY_BY_CC_URL, render: () => <ProjectDetail type="product" name="cash" img={imgCash} imgContent={imgCashContent} reactHelmetElement={SEOCash} /> },
     { path: URL.PRODUCT_PREDICTION_URL, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
-    { path: URL.HANDSHAKE_PEX, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
     { path: URL.PRODUCT_WALLET_URL, render: () => <ProjectDetail type="product" name="wallet" img={imgWallet} reactHelmetElement={SEOWallet} entireContentComponent={<ContentForWallet />} /> },
     { path: URL.PEX_EXTENSION, render: () => <PexExtension reactHelmetElement={SEOPrediction} /> },
-    { path: URL.HANDSHAKE_PEX_CREATOR, render: () => <ProjectDetail type="product" name="wallet" img={imgWallet} reactHelmetElement={SEOWallet} entireContentComponent={<PageMobileOnly />} /> },
     { path: URL.HANDSHAKE_EXCHANGE, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
     { path: URL.PRODUCT_PAYFORSTORES_URL, render: () => <ProjectDetail type="product" name="pay-for-stores" img={imgHivepayOffline} reactHelmetElement={SEOPayForStores} /> },
     { path: URL.PRODUCT_PAYFORDEVS_URL, render: () => <ProjectDetail type="product" name="pay-for-devs" reactHelmetElement={SEOPayForDevs} entireContentComponent={<ContentForPayForDevs />} /> },
@@ -136,7 +146,6 @@ if (BrowserDetect.isDesktop) {
     { path: URL.RESEARCH_INTERNET_CASH_URL, render: () => <ProjectDetail type="research" name="internet-cash" img={imgInternetCash} /> },
     { path: URL.PRODUCT_DAD_URL, render: () => <ProjectDetail type="product" name="dad" img={imgDad} imgContent={imgDadContent} reactHelmetElement={SEODad} /> },
     { path: URL.RESEARCH_UNCOMMONS_URL, render: () => <ProjectDetail type="research" name="uncommons" img={imgUncommons} /> },
-    // { path: URL.INTERNAL_WITHDRAW_URL, component: RouterInternalWithdraw },
     { path: URL.INTERNAL_ADMIN_URL, component: RouterInternalAdmin },
     { path: URL.ADMIN_ID_VERIFICATION, component: RouterAdminIDVerification },
     { path: URL.PEX_LUCKY_DRAW_MECHANIC_URL, component: LuckyDrawMechanic },

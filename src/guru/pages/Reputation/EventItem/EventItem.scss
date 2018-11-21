@@ -1,0 +1,40 @@
+@import "./src/styles/style";
+
+.wrapperEventItem {
+  font-family: $font-family-base;
+  display: flex;
+  padding: 20px 0;
+
+  .wrapperEventDetail {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    .eventDetailBlock {
+      width: 50%;
+      display: flex;
+      flex-direction: row;
+    }
+    .eventDetailText {
+      margin-left: 4px;
+      margin-top: 1px;
+      font-size: calc(2vw + 1vh + .5vmin);
+    }
+  }
+  .wrapperEventContent {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-right: 10px;
+  }
+  .wrapperEventImage {
+    width: 35%;
+    .eventLogo {
+      border-radius: rem-calc(5px);
+    }
+  }
+  .eventImagePlayers {
+    margin-left: 10px;
+  }
+
+}

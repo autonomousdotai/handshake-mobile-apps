@@ -7,7 +7,6 @@ export default {
     navigation: {
       me: 'Me',
       exchanges: 'Exchanges',
-
       whisper: 'Whisper',
       wallet: 'Wallet',
       setting: 'Me',
@@ -1413,7 +1412,8 @@ export default {
           gas_limit: 'Gas Limit',
           data: 'Data',
           feel_level: 'Fee:',
-          max_amount: 'Max amount'
+          max_amount: 'Max amount',
+          from_contact: 'From contacts',
         },
         placeholder: {
           to_address: 'Wallet address...',
@@ -1481,7 +1481,25 @@ export default {
           push_notifications: 'Push Notifications',
           community: 'Community',
           wallet_account: 'Wallet Account',
-          support: 'Support'
+          support: 'Support',
+          address_book: 'Address Book',
+          contact_name: 'Name',
+          contact_email: 'Email',
+          contact_address: 'Address',
+          contact_send_money: 'Send Money',
+          contact_remove: 'Remove',
+          contact_empty_title: "No contacts yet",
+          contact_empty_desc: "Get started by adding your first one.",
+          contact_empty_button: "Add contact",
+          contact_add_contact_search_box: "Search a contact ...",
+          select_a_contact: "Select a contact",
+          add_new_address: "+ add new",
+          remove_new_address: "remove",
+          update_button_text: "Update",
+          update_title_text: "Update contact",
+          select_an_address: "Select an address",
+
+
         },
         button: {
           restore: 'Restore now',

@@ -1,6 +1,6 @@
 
 .app {
-  padding: 0 0 60px 0;
+  padding: 56px 0 60px 0;
   margin: 0 auto;
   min-height: 100vh;
   max-width: $app-width;
@@ -55,6 +55,11 @@
     font-size: 24px;
     color: $text-black;
   }
+}
+
+.content {
+  padding-top: 49px;
+  background-color: #EBF1F7;
 }
 
 

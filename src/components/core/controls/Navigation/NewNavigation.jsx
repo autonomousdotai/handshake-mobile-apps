@@ -67,8 +67,8 @@ class Navigation extends React.Component {
           {/*</li>*/}
           {/*<li className={cn(this.checkSelected(URL.PRODUCT_PREDICTION_URL))}>
             <Link to={URL.PRODUCT_PREDICTION_URL} onClick={this.props.clearHeaderBack}>
-              <div className="chat-icon" dangerouslySetInnerHTML={{ __html: chatIcon }} />
-              <span>{this.props.intl.messages.app.navigation.bet.toUpperCase()}</span>
+              <div className="chat-icon 123" dangerouslySetInnerHTML={{ __html: chatIcon }} />
+              <span>PREDICT</span>
             </Link>
           </li>*/}
           {/*<li className={cn(this.checkSelected(URL.HANDSHAKE_WALLET_INDEX))}>

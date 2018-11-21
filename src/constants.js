@@ -196,10 +196,11 @@ export const SELL_PRICE_TYPE_DEFAULT = 'fix';
 // path
 export const API_URL = {
   CRYPTOSIGN: {
-    ADMIN_AUTH: '/cryptosign/auth',
+    ADMIN_AUTH: 'cryptosign/auth',
     INIT_HANDSHAKE: 'cryptosign/handshake/init',
     INIT_HANDSHAKE_FREE: 'cryptosign/handshake/create_free_bet',
     SHAKE: 'cryptosign/handshake/shake',
+    MATCH_ODD: 'cryptosign/handshake',
     LOAD_MATCHES: 'cryptosign/match',
     LOAD_MATCHES_DETAIL: 'cryptosign/match',
     RELEVANT_EVENTS: 'cryptosign/match/relevant-event',
@@ -227,7 +228,10 @@ export const API_URL = {
     PREDICTION_STATISTICS: 'cryptosign/outcome/ninja-predict',
     SUBCRIBE_EMAIL_PREDICTION: 'cryptosign/subscribe',
     SUBSCRIBE_EMAIL_EXTENSION: 'user/subscribe',
-
+    GET_EVENTS_USER: 'cryptosign/reputation/user/{{userId}}/match',
+    GET_REPUTATION_USER: 'cryptosign/reputation',
+    SUBSCRIBE_NOTIFICATION: 'cryptosign/subscribe-notification',
+    COMPARE_REDEEM_CODE: 'cryptosign/redeem/check'
   },
   DISCOVER: {
     INDEX: 'handshake/discover',
@@ -577,6 +581,14 @@ export const URL = {
   HANDSHAKE_DISCOVER: '/discover',
   HANDSHAKE_DISCOVER_INDEX: '/discover',
   HANDSHAKE_DISCOVER_DETAIL: '/discover/:slug',
+
+  // Guru
+  HANDSHAKE_GURU: '/guru',
+  GURU_CREATE_EVENT: '/create-event',
+  GURU_PLACE_BET: '/place-bet',
+  HANDSHAKE_REPUTATION: '/reputation',
+  HANDSHAKE_COINBASE_WALLET: '/wallet-coin',
+  HANDSHAKE_COINBASE_AUTH: '/auth/callback',
 
   HANDSHAKE_PREDICTION: '/prediction',
   HANDSHAKE_PEX: '/pex',
@@ -1281,5 +1293,5 @@ export const COUNTRY_LIST = {
 
 export const EXT = {
   URL: 'https://chrome.google.com/webstore/detail/ninja-prediction/lmbfnjfjefcjgbddmaijlmkkpfipbjhb',
-  CLIP_SOURCE: 'https://www.youtube.com/embed/Cpswr7hGtiA?rel=0&amp;autoplay=1&amp;loop=1&playlist=Cpswr7hGtiA'
+  CLIP_SOURCE: 'https://www.youtube.com/embed/eZuN9414UOo?rel=0&amp;autoplay=1&amp;loop=1&playlist=eZuN9414UOo'
 }

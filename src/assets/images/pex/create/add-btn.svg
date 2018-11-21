@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="38px" height="38px" viewBox="0 0 38 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.1 (67048) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="15" cy="15" r="15"></circle>
+        <filter x="-23.3%" y="-16.7%" width="146.7%" height="146.7%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Host-a-debate-(scroll-down)" transform="translate(-282.000000, -498.000000)">
+            <g id="Group" transform="translate(286.000000, 500.000000)">
+                <g id="Oval">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                </g>
+                <path d="M19.1696252,13.8794568 C19.3606592,13.8794568 19.5259769,13.9492578 19.6655785,14.0888593 C19.8051801,14.2284609 19.874981,14.3937786 19.874981,14.5848126 L19.874981,15.2901684 C19.874981,15.4812024 19.8051801,15.6465201 19.6655785,15.7861217 C19.5259769,15.9257232 19.3606592,15.9955242 19.1696252,15.9955242 L15.9955242,15.9955242 L15.9955242,19.1696252 C15.9955242,19.3606592 15.9257232,19.5259769 15.7861217,19.6655785 C15.6465201,19.8051801 15.4812024,19.874981 15.2901684,19.874981 L14.5848126,19.874981 C14.3937786,19.874981 14.2284609,19.8051801 14.0888593,19.6655785 C13.9492578,19.5259769 13.8794568,19.3606592 13.8794568,19.1696252 L13.8794568,15.9955242 L10.7053558,15.9955242 C10.5143218,15.9955242 10.3490041,15.9257232 10.2094025,15.7861217 C10.0698009,15.6465201 10,15.4812024 10,15.2901684 L10,14.5848126 C10,14.3937786 10.0698009,14.2284609 10.2094025,14.0888593 C10.3490041,13.9492578 10.5143218,13.8794568 10.7053558,13.8794568 L13.8794568,13.8794568 L13.8794568,10.7053558 C13.8794568,10.5143218 13.9492578,10.3490041 14.0888593,10.2094025 C14.2284609,10.0698009 14.3937786,10 14.5848126,10 L15.2901684,10 C15.4812024,10 15.6465201,10.0698009 15.7861217,10.2094025 C15.9257232,10.3490041 15.9955242,10.5143218 15.9955242,10.7053558 L15.9955242,13.8794568 L19.1696252,13.8794568 Z" id="" fill="#0A2240"></path>
+            </g>
+        </g>
+    </g>
+</svg>

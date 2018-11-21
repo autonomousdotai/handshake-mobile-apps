@@ -1,0 +1,63 @@
+@import "./src/styles/style";
+
+.wrapperReputation {
+  background-color: #EBF1F7;
+}
+.wrapperContentReputation {
+  font-family: $font-family-base;
+  padding: 10px;
+  .wrapperProfile {
+    background-color: white;
+    border-radius: rem-calc(5px);
+    display: flex;
+    justify-content: center;
+    padding: 20px 20px;
+  }
+  .wrapperContent {
+    margin-left: rem-calc(10px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .wrapperStarRating {
+    display: flex;
+  }
+  .wrapperGroupNumber {
+    display: flex;
+    justify-content: space-between;
+    margin-top: rem-calc(10px);
+    .wrapperGroupBlock {
+      font-size: calc(2vw + 1vh + .5vmin);
+      background-color: white;
+      border-radius: rem-calc(5px);
+      width: 31%;
+      padding: 20px 20px;
+      text-align: center;
+      justify-content: center;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  .wrapperMarketList {
+    background-color: white;
+    border-radius: rem-calc(5px);
+    padding: 20px 20px;
+    margin-top: rem-calc(10px);
+
+  }
+
+  .mediumText {
+    font-size: rem-calc(16px);
+  }
+  .boldText {
+    font-weight: 500;
+  }
+  .normalText {
+    font-size: rem-calc(13px);
+    font-weight: 100;
+  }
+  .disableText {
+    color: #748599;
+  }
+}
