@@ -52,9 +52,15 @@ class Index extends React.PureComponent {
     )
     const btnJoin = <span></span>;//<Link className="btn btn-primary-landing" to={URL.RECRUITING}><FormattedMessage id="landing_page.btn.joinOurTeam" /></Link>
 
+    const data = {
+      title: messages.app.fullname,
+      description: messages.app.description,
+      keywords: messages.app.keywords,
+    };
+
     return (
       <div className={"landing-page ct-" + name}>
-        {SEOHome}
+        <SEOHome data={data} />
         <div className="landing-background">
           <div>
             {/* mobile */}

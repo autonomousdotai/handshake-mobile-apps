@@ -1,16 +1,16 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-export const SEOHome = (
+export const SEOHome = ({ data }) => (
   <Helmet>
-    <title>Coinbowl: Buy and Sell Large Amount Of Bitcoin</title>
+    <title>{data?.title}</title>
     <meta
       name="description"
-      content="Blockchain powered tools & protocols for the new internet. Decentralized AI solutions. Anonymous P2P exchanges for cryptocurrency, cash & predictions."
+      content={data?.description}
     />
     <meta
       name="keywords"
-      content="Blockchain, Ethereum, Bitcoin, Cryptocurrency, Crypto, Prediction, Prediction Exchange, Wallet, Whisper, Decentralized, Decentralised, AI, Artificial Intelligence, Trading"
+      content={data?.keywords}
     />
   </Helmet>
 );
