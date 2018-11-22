@@ -55,7 +55,7 @@ class PlaceBet extends Component {
   };
 
   state = {
-    betAmount: 0,
+    betAmount: '',
     isUseRedeem: false
   };
 
@@ -180,8 +180,11 @@ class PlaceBet extends Component {
     return alertBox({ message, type: 'danger' });
   }
 
-  handleChange = (value) => {
-    this.setState({ betAmount: value });
+  handleChange = ({ value, name }) => {
+    if (name === 'amount') {
+      return this.setState({ betAmount: value });
+    }
+    return this.props.dispatch(checkRedeemCode({ redeem: value }));
   }
 
   calculatePosWinning = () => {
@@ -194,40 +197,39 @@ class PlaceBet extends Component {
     return formatAmount(possibleWinning(amountNo, betOdds));
   }
 
-  handleBlur = (value) => {
-    this.props.dispatch(checkRedeemCode({ redeem: value }));
-  }
-
   redeemInput = () => {
     this.setState({ isUseRedeem: true });
   }
 
-  redeemNotice = () => {
+  redeemNotice = (props, state) => {
+    const { isRedeem } = props;
+    const { isUseRedeem } = state;
+    if (!isRedeem || isUseRedeem) return null;
     return (
       <div className="Redeem">
-        You have already redeemed a code for betting. <span className="UseRedeem" onClick={this.redeemInput}>Use it</span>
+        {`You've already requested a redeem code. `}
+        <span className="UseRedeem" onClick={this.redeemInput}>Use it</span>
       </div>
     );
   }
 
   betFormProps = (props, state) => {
-    const { handleBet, handleChange, handleBlur, getSide } = this;
+    const { handleBet, handleChange, getSide } = this;
     return {
       handleBet,
       handleChange,
-      handleBlur,
-      amount: props.redeem ? props.redeem.amount : '',
-      redeem: props.redeem ? props.redeem.code : '',
+      amount: props.redeem ? props.redeem.amount || '' : '',
+      redeem: props.redeem ? props.redeem.code || '' : '',
       side: getSide(props),
-      disabled: state.betAmount === 0,
       isSubmitting: props.isLoading,
+      buttonText: props.isLoading ? 'Loading...' : 'Bet',
       buttonClasses: classNames('btn btn-block', {
         'btn-primary': getSide(props) === 1,
         'btn-secondary': getSide(props) === 2
       }),
       isUseRedeem: state.isUseRedeem,
       statusRedeem: props.redeem ? !!props.redeem.status : undefined,
-      redeemNotice: (!!props.isSubscriber && this.redeemNotice())
+      redeemNotice: this.redeemNotice(props, state)
     };
   }
 
@@ -276,7 +278,8 @@ export default injectIntl(connect(
     return {
       eventList: state.prediction.events,
       isLoading: state.guru.ui.isLoading,
-      isSubscriber: state.ui.isSubscriber,
+      isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),
+      isRedeem: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem),
       redeem: state.guru.ui.redeem,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),

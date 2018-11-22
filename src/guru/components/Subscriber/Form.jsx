@@ -33,7 +33,9 @@ const SubscriberForm = ({
         }
       />
       <ErrMsg name="email" />
-      <button type="submit" disabled={isSubmitting || disabled} className={buttonClasses}>{buttonText}</button>
+      <button type="submit" disabled={isSubmitting || disabled} className={buttonClasses}>
+        {isSubmitting ? 'Loading...' : buttonText}
+      </button>
     </Form>
   );
 };
