@@ -143,7 +143,7 @@ module.exports = function webpackConfig(env, argv = {}) {
       }),
       new PwaManifestPlugin({
         name: appEnvConfig.title,
-        short_name: 'The Coinbowl',
+        short_name: 'Coinbowl',
         description: '',
         background_color: '#1A1919',
         theme_color: '#1A1919',
