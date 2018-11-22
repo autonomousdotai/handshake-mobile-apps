@@ -15,7 +15,7 @@ class Notification extends Component {
     getEmailCode: PropTypes.func.isRequired,
     fetchProfile: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
-    isEmailVerified: PropTypes.bool.isRequired,
+    isEmailVerified: PropTypes.bool.isRequired
   };
 
   constructor(props) {
@@ -26,18 +26,13 @@ class Notification extends Component {
   }
 
   sendEmail = (email, setFieldError) => {
-    this.props.getEmailCode({
-      METHOD: 'POST',
-      PATH_URL: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION,
-      data: { email },
-      successFn: () => {
+    this.props.getEmailCode({ data: { email } })
+      .then(() => {
         this.setState({ isEmailSent: true });
-      },
-      errorFn: (e) => {
+      }).catch(e => {
         console.error(e);
         setFieldError('email', e.message);
-      }
-    });
+      });
   };
 
   isValidCodeRegex = code => /^[0-9]{4}/g.exec(code);
@@ -45,20 +40,15 @@ class Notification extends Component {
   verifyCode = (email, code) => {
     if (this.isValidCodeRegex(code)) {
       const { setFieldError } = this.props.formProps;
-      this.props.verifyEmailCode({
-        METHOD: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data' },
-        PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
-        successFn: () => {
+      this.props.verifyEmailCode({ url: `user/verification/email/check?email=${email}&code=${code}` })
+        .then(() => {
           this.props.fetchProfile({
-            PATH_URL: API_URL.USER.PROFILE,
+            PATH_URL: API_URL.USER.PROFILE
           });
-        },
-        errorFn: (e) => {
-          console.error(e);
+        })
+        .catch(() => {
           setFieldError('emailCode', 'incorrect Code');
-        }
-      });
+        });
     }
   };
 

@@ -93,48 +93,55 @@ const APICreator = ({
   data,
   headers,
   BASE_URL = BASE_API.BASE_URL,
-  PATH_URL
+  url
 }) => (dispatch) => {
   return new Promise((resolve, reject) => {
-    if (!PATH_URL || !type) reject(new Error('URL and type are required'));
-    const url = `${BASE_URL}/${PATH_URL}`;
+    if (!url || !type) reject(new Error('URL and type are required'));
+    const fullURL = `${BASE_URL}/${url}`;
     dispatch(apiActionRequest({ type }));
 
-    return $http({ url, data, method, headers })
+    return $http({ url: fullURL, data, method, headers })
       .then((res) => {
-        if (res.status === 200 || res.data.status === 1) {
+        if (res.status === 200 && res.data.status === 1) {
           dispatch(apiActionSuccess({ type, payload: res.data }));
-          resolve(res);
+          resolve(res.data);
         } else {
           dispatch(apiActionFailed({ type, payload: res.data }));
           reject(res.data);
         }
       })
-      .catch(error => {
-        dispatch(apiActionFailed({ type, payload: error }));
-        reject(error);
+      .catch(e => {
+        console.error('API:', e);
+        dispatch(apiActionFailed({ type, payload: e }));
+        reject(e);
       });
   });
 };
 
-export function APIGetCreator(params) {
+export const APIGetCreator = ({ type, url }) => (data) => {
   return APICreator({
-    ...params,
+    type,
+    url,
+    data,
     method: 'GET'
   });
-}
+};
 
-export function APIPostCreator(params) {
+export const APIPostCreator = ({ type, url }) => (payload) => {
   return APICreator({
-    ...params,
+    type,
+    url,
+    ...payload,
     method: 'POST'
   });
-}
+};
 
-export function APIFormCreator(params) {
+export const APIFormCreator = ({ type, url }) => (data) => {
   return APICreator({
-    ...params,
+    type,
+    url,
+    data,
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' }
   });
-}
+};
