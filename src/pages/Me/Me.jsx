@@ -50,6 +50,7 @@ import Transaction from './Tabs/Transaction';
 import NoDataImage from '@/assets/images/pages/Prediction/nodata.svg';
 
 import NinjaCoinTransaction from '@/components/handshakes/exchange/BuyCoinTransaction/Transaction';
+import Header from "@/components/handshakes/exchange/Coin/DesktopLayout/Header";
 
 const TAG = 'Me';
 const maps = {
@@ -528,6 +529,7 @@ class Me extends React.Component {
           <Image src={loadingSVG} alt="loading" width="100" />
         </div>
         <Grid className="me">
+          <Header />
           {
             // @TODO: chrome-ext
             (window.self === window.top) &&

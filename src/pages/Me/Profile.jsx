@@ -37,6 +37,7 @@ import valid from '@/services/validate';
 import { ICON } from '@/styles/images';
 import './Profile.scss';
 import Feed from '@/components/core/presentation/Feed/Feed';
+import Header from "@/components/handshakes/exchange/Coin/DesktopLayout/Header";
 
 class Profile extends React.Component {
   static propTypes = {
@@ -538,6 +539,7 @@ class Profile extends React.Component {
 
     return (
       <Grid className="profile">
+        <Header />
         <Row>
           <div className="head_text">
             <span>{messages.me.profile.head_text}</span>
