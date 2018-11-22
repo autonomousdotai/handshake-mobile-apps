@@ -81,11 +81,11 @@ class CreateEvent extends React.Component {
           - Will Manchester United beat Crystal Palace in Premier League Nov 24 2018?
         </Tooltip>
         <div className="EventName">
-          <label htmlFor="EventName">Will</label>
+          <label htmlFor="eventName">Will</label>
           <Field
             rows={1}
             onKeyDown={this.onKeyDownEventName}
-            name="EventName"
+            name="eventName"
             component="textarea"
             // placeholder="A win B in C tomorrow"
           />
