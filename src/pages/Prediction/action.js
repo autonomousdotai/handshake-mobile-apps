@@ -63,10 +63,18 @@ export const emailSubscriber = (payload = {}) => {
   };
 };
 
-export const putStatusSubscriber = (value) => {
+export const putUserSubscribe = (value) => {
   return SET_DATA({
-    type: 'PREDICTION:PUT_STATUS_SUBSCRIBER',
-    _path: 'ui.isSubscriber',
+    type: 'PREDICTION:PUT_USER_SUBSCRIBE',
+    _path: 'guru.ui.userSubscribe',
+    _value: value
+  });
+};
+
+export const putStatusEmailSubscribe = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:PUT_STATUS_EMAIL_SUBSCRIBE',
+    _path: 'guru.ui.userSubscribe.status',
     _value: value
   });
 };
