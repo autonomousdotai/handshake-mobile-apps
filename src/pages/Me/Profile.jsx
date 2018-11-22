@@ -662,13 +662,13 @@ class Profile extends React.Component {
               <div className="head">
                 <p className="label">
                   {messages.me.profile.text.email.label}
+                  <span className="text">{messages.me.profile.text.email.desc2}</span>
                 </p>
                 <div className="extend">
                   <span className="badge badge-success">{this.props.auth.profile.email ? 'Verified' : ''}</span>
                 </div>
               </div>
               <div className="content">
-                <p className="text">{messages.me.profile.text.email.desc2}</p>
                 <EmailForm onSubmit={this.onSubmitVerifyEmail}>
                   <div>
                     <Row>
@@ -734,10 +734,10 @@ class Profile extends React.Component {
                 <p className="label">
                   {messages.me.profile.text.id_verification.label}
                   <span>{messages.me.profile.text.id_verification.desc1}</span>
-                  <strong>{idVerificationLevel === 0 ? (
+                  <h6>{idVerificationLevel === 0 ? (
                     messages.me.profile.text.id_verification.desc12
                   ) : idVerificationLevel === 1 ? messages.me.profile.text.id_verification.desc13 : ''}
-                  </strong>
+                  </h6>
                 </p>
                 <div className="extend">
                   <span className={`badge ${idVerificationStatusBadgeClass} ${idVerificationLevel > 0 ? 'has-level' : ''}`}>{idVerificationStatusText}</span>
@@ -769,7 +769,7 @@ class Profile extends React.Component {
                         <p className="text label">
                           {messages.me.profile.text.id_verification.desc2}
                         </p>
-                        {idVerificationLevel > 0 ? (<h6>{this.state.idVerifcationUserFullName}</h6>) : (
+                        {idVerificationLevel > 0 ? (<span>{this.state.idVerifcationUserFullName}</span>) : (
                           <Field
                             name="full_name"
                             type="text"
@@ -790,7 +790,7 @@ class Profile extends React.Component {
                         <p className="text label">
                           {messages.me.profile.text.id_verification.desc4}
                         </p>
-                        {idVerificationLevel > 0 ? (<h6>{this.idVerificationDocumentTypes[this.state.idVerificationDocumentType]}</h6>) : (
+                        {idVerificationLevel > 0 ? (<span>{this.idVerificationDocumentTypes[this.state.idVerificationDocumentType]}</span>) : (
                           <Dropdown
                             name="document_type"
                             className="w-100"
@@ -826,7 +826,7 @@ class Profile extends React.Component {
                         <p className=" text label">
                           {messages.me.profile.text.id_verification.desc3}
                         </p>
-                        {idVerificationLevel > 0 ? (<h6>{this.state.idVerificationIDNumber}</h6>) : (
+                        {idVerificationLevel > 0 ? (<span>{this.state.idVerificationIDNumber}</span>) : (
                           <Field
                             name="id_number"
                             type="text"
