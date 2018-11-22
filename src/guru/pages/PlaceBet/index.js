@@ -175,6 +175,7 @@ class PlaceBet extends Component {
       return props.dispatch(initHandShake(handShakeData(values)));
     }
     if (message && code === VALIDATE_CODE.NOT_ENOUGH_BALANCE) {
+      props.dispatch(updateLoading(false));
       return modalOuttaMoney.open();
     }
     return alertBox({ message, type: 'danger' });
