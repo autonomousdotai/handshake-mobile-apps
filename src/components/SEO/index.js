@@ -3,15 +3,23 @@ import { Helmet } from "react-helmet";
 
 export const SEOHome = ({ data }) => (
   <Helmet>
-    <title>{data?.title}</title>
-    <meta
+    {data?.title && <title>{data.title}</title>}
+    {data?.description && <meta
       name="description"
-      content={data?.description}
-    />
-    <meta
+      content={data.description}
+    />}
+    {data?.keywords && <meta
       name="keywords"
       content={data?.keywords}
-    />
+    />}
+    {data?.og_description && <meta
+      property="og:description"
+      content={data.description}
+    />}
+    {data?.og_site_name && <meta
+      property="og:site_name"
+      content={data?.keywords}
+    />}
   </Helmet>
 );
 

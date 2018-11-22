@@ -19,6 +19,12 @@ export default {
       invest: 'Invest'
     },
   },
+  coinbowl: {
+    name: 'Coinbowl',
+    fullname: 'Coinbowl: Buy and Sell Large Amount Of Bitcoin',
+    description: 'Buy and Sell Bitcoin and other cryptocurrency in large amount. Support bank transfer, cash and credit card. All transactions are insured',
+    keywords: 'Blockchain technology, Ethereum, Bitcoin, Cryptocurrency, Crypto, exchange platform, buy bitcoin with cash, buy large amount of bitcoin',
+  },
   buy: 'Buy',
   sell: 'Sell',
   amount: 'amount',
