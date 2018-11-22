@@ -4,10 +4,12 @@ import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
+import { Tooltip } from 'reactstrap';
 import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { isURL } from '@/utils/string';
+import IconInfo from '@/assets/images/pex/create/question-circle.svg';
 
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
@@ -32,38 +34,66 @@ class CreateEvent extends React.Component {
     shareEvent: undefined
   };
 
+  state = {
+    titleToolTip: false
+  }
+
+  onKeyDownEventName = (e) => {
+    /* eslint-disable no-param-reassign */
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    /* eslint-enable no-param-reassign */
+  };
+  setFieldToState = (fieldName, value) => {
+    this.setState({
+      [fieldName]: value,
+    });
+  };
+
   handleOnSubmit = values => {
     // values, actions
     this.props.createEvent({ values });
   };
+
 
   buildErrorCls = (errors, touched) => {
     const errFields = Object.keys(touched).filter(i => errors[i]);
     return errFields.length ? errFields.join(' ') : '';
   };
 
-  renderEventTitle = () => {
+  renderEventTitle = (state) => {
     return (
       <div className="EventTitle">
-        <div className="GroupTitle">Ninjas will predict YES or NO</div>
-        <div className="OutcomeName">
-          <label htmlFor="outcomeName">Will</label>
-          <Field
-            name="outcomeName"
-            component="textarea"
-            placeholder="[Outcome] eg. Manchester United beat Juventus"
-          />
+        <div className="GroupTitle">
+          Ninjas will predict YES or NO
+          <i className="far fa-question-circle" id="TitleTT" />
         </div>
-        <ErrMsg name="outcomeName" />
+        <Tooltip
+          isOpen={state.titleToolTip}
+          target="TitleTT"
+          toggle={() => this.setFieldToState('titleToolTip', !state.titleToolTip)}
+        >
+          Start the debate with a yes/no question.
+          Your question should clearly state the date and situation where the proposed outcome will happen.
+          <br />
+          Eg:<br />
+          - Will BTC price go above $6000 by the end of 2018?<br />
+          - Will Manchester United beat Crystal Palace in Premier League Nov 24 2018?
+        </Tooltip>
         <div className="EventName">
-          <label htmlFor="eventName">in</label>
+          <label htmlFor="eventName">Will</label>
           <Field
+            rows={1}
+            onKeyDown={this.onKeyDownEventName}
             name="eventName"
             component="textarea"
-            placeholder="[Event] eg. Champions League table stage"
+            // placeholder="A win B in C tomorrow"
           />
+          <ErrMsg name="outcomeName" />
         </div>
-        <ErrMsg name="eventName" />
+        <div className="GroupNote">
+          E.g. <b>Will</b> Manchester United beat Juventus <b>in</b> Champions League table stage?
+        </div>
       </div>
     );
   };
@@ -180,7 +210,7 @@ class CreateEvent extends React.Component {
       .unix();
 
     const initialValues = {
-      outcomeName: '',
+      // outcomeName: '',
       eventName: '',
       public: true,
       marketFee: 0,
@@ -199,7 +229,7 @@ class CreateEvent extends React.Component {
 
     const eventSchema = Yup.object().shape({
       eventName: Yup.string().trim().required('Required'),
-      outcomeName: Yup.string().trim().required('Required'),
+      // outcomeName: Yup.string().trim().required('Required'),
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
       image: Yup.mixed()
         .test('image', 'invalid file type', f => {
@@ -233,7 +263,7 @@ class CreateEvent extends React.Component {
                 {this.renderAppBar(this.props)}
                 <Loading isLoading={isSubmitting} />
                 <div className="FormBlock">
-                  {this.renderEventTitle(formProps)}
+                  {this.renderEventTitle(this.state)}
                   <div className="BlankLine" />
                   {this.renderPublicSwitcher(formProps)}
                 </div>

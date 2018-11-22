@@ -49,9 +49,9 @@ function* handleCreateEven({ values }) {
       source: { name: value, url: value }
     };
     const newEventData = {
-      outcome_name: values.outcomeName,
+      // outcome_name: values.outcomeName,
       event_name: values.eventName,
-      name: `Will ${values.outcomeName} in ${values.eventName}?`,
+      name: `Will ${values.eventName}?`,
       public: values.public,
       date: values.closingTime,
       reportTime: values.closingTime + 86400, // (24 * 60 * 60) - 24h

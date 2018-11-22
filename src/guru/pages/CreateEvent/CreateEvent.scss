@@ -85,6 +85,9 @@
       width: 100%;
       color: #0A2240;
       border: none;
+      resize: none;
+      font-weight: bold;
+      padding-right: 10px;
 
       &::placeholder {
         color: #C5D8E8;
@@ -101,17 +104,41 @@
       margin-bottom: 0;
     }
 
-    .OutcomeName, .EventName {
-      font-weight: bold;
-      textarea {
-        font-weight: bold;
-      }
+    .GroupNote {
+      padding-top: 20px;
+      font-style: italic;
     }
 
-    .OutcomeName, .EventName {
+    .EventName {
+      font-weight: bold;
       display: flex;
       align-items: flex-start;
       font-size: 18px;
+      position: relative;
+
+      &:before {
+        content: '';
+        height: 2px;
+        border: 1px dashed #C5D8E8;
+        position: absolute;
+        bottom: 2px;
+        left: 40px;
+        right: 20px;
+      }
+
+      &:after {
+        content: '?';
+        color: #2989FF;
+        bottom: 0;
+        right: 0;
+        position: absolute;
+      }
+    }
+
+    #TitleTT {
+      padding-left: 5px;
+      width: 20px;
+      color: #2989FF;
     }
   }
 
@@ -403,7 +430,7 @@
 
   .ShareEventMessage {
     position: relative;
-    padding-bottom: 60px;
+    padding: 40px 30px;
     font-size: 15px;
     &:after {
       content: '';
@@ -441,4 +468,15 @@
     }
   }
 
+}
+
+.tooltip {
+  .tooltip-inner {
+    text-align: left;
+    font-size: 12px;
+    background-color: #1b2025;
+    .arrow {
+      background-color: #1b2025;
+    }
+  }
 }

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
 // import MultiLanguage from '@/components/core/controls/MultiLanguage';
-import meIcon from '@/assets/images/navigation/ic_ninja_logo.svg.raw';
+import Icon from '@/guru/components/Icon/Icon';
+import meIcon from '@/assets/images/icon/extension_logo.svg';
 import Ether from '@/assets/images/navigation/ic_ether.svg';
 import { MasterWallet } from "@/services/Wallets/MasterWallet";
 
@@ -19,9 +20,11 @@ class HeaderBar extends React.Component {
   };
 
   me = () => {
+    const style = { width: '28px', height: '28px' };
     return (
       <Link to={URL.HANDSHAKE_ME_INDEX} className="me-icon">
-        <div dangerouslySetInnerHTML={{ __html: meIcon }} />
+        {/* <div dangerouslySetInnerHTML={{ __html: meIcon }} /> */}
+        <Icon path={meIcon} style={style} />
       </Link>
     );
   };
