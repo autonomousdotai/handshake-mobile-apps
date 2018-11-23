@@ -15,8 +15,10 @@
       flex-direction: row;
     }
     .eventDetailText {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       margin-left: 4px;
-      margin-top: 4px;
       font-size: calc(1.2vw + 1vh + .5vmin);
     }
   }
