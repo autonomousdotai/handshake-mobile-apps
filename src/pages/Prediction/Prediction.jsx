@@ -178,7 +178,7 @@ class Prediction extends React.Component {
     const showedLuckyPool = this.checkLuckyPool();
     if (showedLuckyPool) return;
     setTimeout(() => {
-      this.modalLuckyPoolRef.open();
+      // this.modalLuckyPoolRef.open();
       localStorage.setItem('showedLuckyPool', true);
     }, 2 * 1000);
   }
