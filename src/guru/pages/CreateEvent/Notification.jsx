@@ -23,7 +23,7 @@ class Notification extends Component {
     this.state = {
       isEmailSent: false,
       isLoadingEmail: false,
-      isLoadingCode: false,
+      isLoadingCode: false
     };
   }
 
@@ -33,7 +33,6 @@ class Notification extends Component {
       .then(() => {
         this.setState({ isEmailSent: true });
       }).catch(e => {
-        console.error(e);
         setFieldError('email', e.message);
       }).finally(() => {
         this.setState({ isLoadingEmail: false });

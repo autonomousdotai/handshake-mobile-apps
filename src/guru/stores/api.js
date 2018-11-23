@@ -106,8 +106,7 @@ const APICreator = ({
           dispatch(apiActionSuccess({ type, payload: res.data }));
           resolve(res.data);
         } else {
-          dispatch(apiActionFailed({ type, payload: res.data }));
-          reject(res.data);
+          throw res.data;
         }
       })
       .catch(e => {
@@ -118,11 +117,11 @@ const APICreator = ({
   });
 };
 
-export const APIGetCreator = ({ type, url }) => (data) => {
+export const APIGetCreator = ({ type, url }) => (payload) => {
   return APICreator({
     type,
     url,
-    data,
+    payload,
     method: 'GET'
   });
 };
@@ -136,11 +135,11 @@ export const APIPostCreator = ({ type, url }) => (payload) => {
   });
 };
 
-export const APIFormCreator = ({ type, url }) => (data) => {
+export const APIFormCreator = ({ type, url }) => (payload) => {
   return APICreator({
     type,
     url,
-    data,
+    payload,
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' }
   });
