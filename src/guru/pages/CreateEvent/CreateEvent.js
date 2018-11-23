@@ -36,7 +36,7 @@ class CreateEvent extends React.Component {
 
   state = {
     titleToolTip: false
-  }
+  };
 
   onKeyDownEventName = (e) => {
     /* eslint-disable no-param-reassign */
@@ -89,8 +89,8 @@ class CreateEvent extends React.Component {
             component="textarea"
             // placeholder="A win B in C tomorrow"
           />
-          <ErrMsg name="outcomeName" />
         </div>
+        <ErrMsg name="eventName" />
         <div className="GroupNote">
           E.g. <b>Will</b> Manchester United beat Juventus <b>in</b> Champions League table stage?
         </div>
