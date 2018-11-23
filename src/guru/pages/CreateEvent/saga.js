@@ -41,6 +41,11 @@ function* handleGenerateShareLink({ matchId, eventName }) {
   }
 }
 
+function removeQuestionMark(str) {
+  const l = str.length - 1;
+  return (str.charAt(l) === '?') ? str.substring(0, l - 1) : str;
+}
+
 function* handleCreateEven({ values }) {
   try {
     const creator_wallet_address = getAddress();
@@ -48,10 +53,11 @@ function* handleCreateEven({ values }) {
     const reportSource = id ? { source_id: id } : {
       source: { name: value, url: value }
     };
+    const event_name = values.eventName.trim();
     const newEventData = {
       // outcome_name: values.outcomeName,
-      event_name: values.eventName,
-      name: `Will ${values.eventName}?`,
+      event_name,
+      name: `Will ${removeQuestionMark(event_name)}?`,
       public: values.public,
       date: values.closingTime,
       reportTime: values.closingTime + 86400, // (24 * 60 * 60) - 24h

@@ -7,16 +7,14 @@
 
 .CreateEvent {
   background-color: #EBF1F7;
-  padding-bottom: 60px;
-  margin-top: -15px;
-  padding-top: 15px;
+  padding: 0 20px;
   textarea:focus, input:focus{
     outline: none;
   }
 
   .FormBlock {
     background-color: #FFFFFF;
-    margin: 15px 20px;
+    margin: 15px 0;
     padding: 20px;
     border-radius: 5px;
 
@@ -61,11 +59,10 @@
   }
 
   .SubmitBtn {
-    position: fixed;
     width: 100%;
-    bottom: 60px;
     height: 50px;
     font-size: 18px;
+    border-radius: 5px;
 
     &:disabled {
       background-color: #A5BED4;
