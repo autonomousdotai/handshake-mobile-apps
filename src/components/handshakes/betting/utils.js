@@ -72,7 +72,6 @@ export const getEstimateGas = async () => {
   chainId === 4 ? MasterWallet.neutronTestNet : MasterWallet.neutronMainNet;
   const gasPrice = getGasPrice();
   const estimateGas = await neuron.caculateLimitGasWithEthUnit(gasPrice);
-  console.log(TAG, 'Estimate Gas:', estimateGas);
   return estimateGas;
   // const bettinghandshake = new BettingHandshake(chainId);
   // const result = await bettinghandshake.getEstimateGas();
