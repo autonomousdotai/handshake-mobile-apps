@@ -17,7 +17,7 @@ export const dataActionConst = {
   SET_DATA: 'SET_DATA',
   GET_DATA: 'GET_DATA',
   REMOVE_DATA: 'REMOVE_DATA',
-  MERGE_DATA: 'MERGE_DATA',
+  MERGE_DATA: 'MERGE_DATA'
 };
 
 export const SET_DATA = createDataAction(dataActionConst.SET_DATA);

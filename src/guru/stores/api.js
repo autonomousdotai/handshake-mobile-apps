@@ -110,7 +110,7 @@ const APICreator = ({
         }
       })
       .catch(e => {
-        console.error('API:', e);
+        console.error('API:', url, e);
         dispatch(apiActionFailed({ type, payload: e }));
         reject(e);
       });
@@ -121,16 +121,17 @@ export const APIGetCreator = ({ type, url }) => (payload) => {
   return APICreator({
     type,
     url,
-    payload,
+    ...payload,
     method: 'GET'
   });
 };
 
-export const APIPostCreator = ({ type, url }) => (payload) => {
+export const APIPostCreator = ({ type, url, data }) => (payload) => {
   return APICreator({
     type,
     url,
     ...payload,
+    data: Object.assign({}, data, payload.data),
     method: 'POST'
   });
 };
@@ -139,8 +140,13 @@ export const APIFormCreator = ({ type, url }) => (payload) => {
   return APICreator({
     type,
     url,
-    payload,
+    ...payload,
     method: 'POST',
     headers: { 'Content-Type': 'multipart/form-data' }
   });
 };
+
+export function* apiSaga(action) {
+  const promise = yield put(action);
+  return yield promise;
+}

@@ -1,12 +1,9 @@
 import { takeLatest, call, put, select, all } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/stores/api-saga';
 import { API_URL, URL } from '@/constants';
-import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { handleLoadMatches, handleLoadMatchDetail } from '@/pages/Prediction/saga';
 import { isBalanceInvalid } from '@/stores/common-saga';
 import { getAddress } from '@/components/handshakes/betting/utils.js';
-import { showAlert } from '@/stores/common-action';
-import { MESSAGE } from '@/components/handshakes/betting/message.js';
 import { reportSelector } from './selector';
 import {
   loadCreateEventData,

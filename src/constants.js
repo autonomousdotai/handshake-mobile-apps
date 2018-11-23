@@ -231,7 +231,8 @@ export const API_URL = {
     GET_EVENTS_USER: 'cryptosign/reputation/user/{{userId}}/match',
     GET_REPUTATION_USER: 'cryptosign/reputation',
     SUBSCRIBE_NOTIFICATION: 'cryptosign/subscribe-notification',
-    COMPARE_REDEEM_CODE: 'cryptosign/redeem/check'
+    COMPARE_REDEEM_CODE: 'cryptosign/redeem/check',
+    USER_HABIT: 'cryptosign/user/habit'
   },
   DISCOVER: {
     INDEX: 'handshake/discover',

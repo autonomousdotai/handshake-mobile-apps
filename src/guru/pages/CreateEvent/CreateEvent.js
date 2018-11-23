@@ -10,8 +10,9 @@ import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { isURL } from '@/utils/string';
+import { getAddress } from '@/components/handshakes/betting/utils';
 
-import { createEvent } from './action';
+import { apiCreateEvent } from './action';
 import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
@@ -22,20 +23,19 @@ import './CreateEvent.scss';
 class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
-    createEvent: PropTypes.func.isRequired,
+    apiCreateEvent: PropTypes.func.isRequired,
     email: PropTypes.string,
-    verified: PropTypes.number,
-    shareEvent: PropTypes.object
+    verified: PropTypes.number
   };
 
   static defaultProps = {
     email: '',
-    verified: 0,
-    shareEvent: undefined
+    verified: 0
   };
 
   state = {
-    titleToolTip: false
+    titleToolTip: false,
+    createSuccess: false
   };
 
   onKeyDownEventName = (e) => {
@@ -44,15 +44,51 @@ class CreateEvent extends React.Component {
     e.target.style.height = `${e.target.scrollHeight}px`;
     /* eslint-enable no-param-reassign */
   };
+
   setFieldToState = (fieldName, value) => {
     this.setState({
-      [fieldName]: value,
+      [fieldName]: value
     });
   };
 
-  handleOnSubmit = values => {
-    // values, actions
-    this.props.createEvent({ values });
+  handleName = (str) => {
+    const l = str.length - 1;
+    return (str.charAt(l) === '?') ? str.substring(0, l - 1) : str;
+  }
+
+  handleOnSubmit = values => { // values, actions
+    const { id, value } = values.source;
+    const reportSource = id ? { source_id: id } : {
+      source: { name: value, url: value }
+    };
+    const event_name = values.eventName.trim();
+
+    const newEventData = {
+      // outcome_name: values.outcomeName,
+      event_name,
+      name: `Will ${this.handleName(event_name)}?`,
+      public: values.public,
+      date: values.closingTime,
+      reportTime: values.closingTime + 86400, // (24 * 60 * 60) - 24h
+      disputeTime: values.closingTime + 90000, // (24 * 60 * 60) + (60 * 60) - 25h
+      market_fee: values.marketFee,
+      grant_permission: true,
+      category_id: 7,
+      creator_wallet_address: getAddress(),
+      ...reportSource
+    };
+    console.log('newEventData', newEventData);
+    const formData = new FormData();
+    formData.set('data', JSON.stringify(newEventData));
+    formData.set('image', values.image);
+    this.props.apiCreateEvent({ data: formData })
+      .then(res => {
+        console.log('res', res);
+        this.setState({ createSuccess: true });
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
 
@@ -200,9 +236,9 @@ class CreateEvent extends React.Component {
   };
 
   render() {
-    const { email, verified, shareEvent } = this.props;
-    if (shareEvent) {
-      return <ShareMarket shareEvent={shareEvent} />;
+    const { email, verified } = this.props;
+    if (this.state.createSuccess) {
+      return <ShareMarket />;
     }
 
     const initialClosingTime = moment()
@@ -302,6 +338,5 @@ export default connect((state) => {
   return {
     email: state.auth.profile.email,
     verified: state.auth.profile.verified,
-    shareEvent: state.guru.ui.shareEvent
   };
-}, { createEvent })(CreateEvent);
+}, { apiCreateEvent })(CreateEvent);
