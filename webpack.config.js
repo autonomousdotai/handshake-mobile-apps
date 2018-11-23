@@ -159,7 +159,7 @@ module.exports = function webpackConfig(env, argv = {}) {
       }),
       new CopyWebpackPlugin([
         { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
-        { from: 'src/assets/images/template/og_image.png', to: 'images' },
+        { from: 'src/assets/images/template/og_image.jpg', to: 'images' },
         { from: 'src/robots.txt', to: '.' },
         // { from: 'src/google59d0f1640e2aac21.html', to: '.' },
         // { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },

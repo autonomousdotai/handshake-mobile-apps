@@ -71,12 +71,10 @@ class PlaceBet extends Component {
     dispatch(getMatchDetail({ eventId }));
     dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
     dispatch(getGasPrice());
-    dispatch(userHabit({
-      data: {
-        ids: [eventId],
-        view_type: UserHabit.DETAIL
-      }
-    }));
+    dispatch(userHabit({ data: {
+      ids: [eventId],
+      view_type: UserHabit.DETAIL
+    } }));
   }
 
   componentDidUpdate(prevProps) {
@@ -276,7 +274,7 @@ class PlaceBet extends Component {
       >
         <div className="outtaMoneyContainer">
           <img src={OuttaMoney} alt="" />
-          <div className="outtaMoneyTitle">{"You're outta… money!"}</div>
+          <div className="outtaMoneyTitle">You're outta… money!</div>
           <div className="outtaMoneyMsg">
             To keep forecasting, you’ll need to top-up your wallet.
           </div>

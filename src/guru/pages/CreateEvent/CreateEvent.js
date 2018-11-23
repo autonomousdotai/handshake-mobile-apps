@@ -69,8 +69,8 @@ class CreateEvent extends React.Component {
       name: `Will ${this.handleName(event_name)}?`,
       public: values.public,
       date: values.closingTime,
-      reportTime: values.closingTime + 86400, // (24 * 60 * 60) - 24h
-      disputeTime: values.closingTime + 90000, // (24 * 60 * 60) + (60 * 60) - 25h
+      reportTime: values.closingTime + 86400, // 24h
+      disputeTime: values.closingTime + 90000, // 25h
       market_fee: values.marketFee,
       grant_permission: true,
       category_id: 7,
@@ -83,7 +83,7 @@ class CreateEvent extends React.Component {
     formData.set('image', values.image);
     this.props.apiCreateEvent({ data: formData })
       .then(res => {
-        console.log('res', res);
+        console.log('created Event', res);
         this.setState({ createSuccess: true });
       })
       .catch(e => {
