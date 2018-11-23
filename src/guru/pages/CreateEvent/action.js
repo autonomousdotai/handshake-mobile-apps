@@ -1,7 +1,14 @@
-import { createAPI } from '@/reducers/action';
+import { APIPostCreator } from '@/guru/stores/api';
+import { API_URL } from '@/constants';
 
-export const verifyEmailCode = createAPI('API:VERIFY_EMAIL_CODE');
-export const getEmailCode = createAPI('API:GET_EMAIL_CODE');
+export const verifyEmailCode = APIPostCreator({
+  type: 'API:VERIFY_EMAIL_CODE'
+});
+
+export const getEmailCode = APIPostCreator({
+  type: 'API:GET_EMAIL_CODE',
+  url: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION
+});
 
 export const loadReports = (payload = {}) => {
   return {

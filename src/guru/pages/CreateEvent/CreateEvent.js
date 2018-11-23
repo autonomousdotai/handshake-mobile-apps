@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Prompt } from 'react-router';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import moment from 'moment';
@@ -9,7 +10,6 @@ import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { isURL } from '@/utils/string';
-import IconInfo from '@/assets/images/pex/create/question-circle.svg';
 
 import { createEvent } from './action';
 import ShareMarket from './ShareMarket';
@@ -268,14 +268,14 @@ class CreateEvent extends React.Component {
                   {this.renderPublicSwitcher(formProps)}
                 </div>
                 <div className="FormBlock">
-                  {this.renderHostFee()}
-                  <div className="BlankLine" />
-                  <ImageUpload form={formProps} />
-                </div>
-                <div className="FormBlock">
                   {this.renderDateTime(initialClosingTime)}
                   <div className="BlankLine" />
                   {this.renderReportSource()}
+                </div>
+                <div className="FormBlock">
+                  {this.renderHostFee()}
+                  <div className="BlankLine" />
+                  <ImageUpload form={formProps} />
                 </div>
                 <div className="FormBlock">
                   <Notification formProps={formProps} />
@@ -288,6 +288,7 @@ class CreateEvent extends React.Component {
                   Create
                 </button>
                 <Debug props={formProps} />
+                <Prompt when={dirty} message="Are you sure you want to leave?" />
               </Form>
             );
           }}

@@ -6,12 +6,15 @@ const apiActionRequest = ({ type }) => ({
   type: `${type}_REQUEST`
 });
 
-const apiActionSuccess = ({ type }) => ({
-  type: `${type}_SUCCESS`
+const apiActionSuccess = ({ type, payload = {} }) => ({
+  type: `${type}_SUCCESS`,
+  payload
 });
 
-const apiActionFailed = ({ type }) => ({
-  type: `${type}_FAILURE`
+const apiActionFailed = ({ type, payload = {} }) => ({
+  type: `${type}_FAILURE`,
+  payload,
+  error: true
 });
 
 /**
@@ -51,7 +54,7 @@ function* callApi({
   } catch (e) {
     console.error('failed to callAPI: ', e);
     yield put(apiActionFailed({ type }));
-    return { status: 0, message: 'Network Error' };
+    return { status: 0, message: e };
   }
 }
 
@@ -83,3 +86,61 @@ function* apiPostForm(actions) {
 }
 
 export { apiGet, apiPost, apiPostForm, callApi };
+
+const APICreator = ({
+  method,
+  type,
+  data,
+  headers,
+  BASE_URL = BASE_API.BASE_URL,
+  url
+}) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    if (!url || !type) reject(new Error('URL and type are required'));
+    const fullURL = `${BASE_URL}/${url}`;
+    dispatch(apiActionRequest({ type }));
+
+    return $http({ url: fullURL, data, method, headers })
+      .then((res) => {
+        if (res.status === 200 && res.data.status === 1) {
+          dispatch(apiActionSuccess({ type, payload: res.data }));
+          resolve(res.data);
+        } else {
+          throw res.data;
+        }
+      })
+      .catch(e => {
+        console.error('API:', e);
+        dispatch(apiActionFailed({ type, payload: e }));
+        reject(e);
+      });
+  });
+};
+
+export const APIGetCreator = ({ type, url }) => (payload) => {
+  return APICreator({
+    type,
+    url,
+    payload,
+    method: 'GET'
+  });
+};
+
+export const APIPostCreator = ({ type, url }) => (payload) => {
+  return APICreator({
+    type,
+    url,
+    ...payload,
+    method: 'POST'
+  });
+};
+
+export const APIFormCreator = ({ type, url }) => (payload) => {
+  return APICreator({
+    type,
+    url,
+    payload,
+    method: 'POST',
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+};
