@@ -31,7 +31,7 @@ export class Bitcoin extends Wallet {
   }
 
   getAPIUrlTransaction(transaction_no) {
-    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : 'test-'}insight.bitpay.com/tx/${transaction_no}`;
+    let url = `https://${bitcore.Networks.defaultNetwork == bitcore.Networks.livenet ? '' : ''}insight.bitpay.com/tx/${transaction_no}`;
     return url;
   }
 

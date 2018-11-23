@@ -79,12 +79,12 @@ export class Ethereum extends Wallet {
   async getBalancePending() {
     try {
       const web3 = this.getWeb3();
-      
-      const balance = await web3.eth.getBalance(this.address);  
-      
+
+      const balance = await web3.eth.getBalance(this.address);
+
       let totalBalance = Number (balance);
 
-      console.log("check pending ...");                   
+      console.log("check pending ...");
       let result = await this.getTransactionHistory(1, 5);
 
       if (result){
@@ -93,9 +93,9 @@ export class Ethereum extends Wallet {
           let item = result[0];
           // is pending
           if (item.isError == "0" && item.confirmations== "0")
-          {                        
+          {
             totalBalance = totalBalance - (Number(item.gasPrice) + Number(item.value));
-            console.log("totalBalance: ", totalBalance);      
+            console.log("totalBalance: ", totalBalance);
           }
         }
         if (totalBalance < 0){
@@ -105,9 +105,9 @@ export class Ethereum extends Wallet {
       }
       else{
         return Web3.utils.fromWei(balance.toString());
-      }                        
-    } catch (error) {     
-      console.log('error', error);       
+      }
+    } catch (error) {
+      console.log('error', error);
     }
     return this.balance;
   }
@@ -342,7 +342,7 @@ async transfer(toAddress, amountToSend, opt={}) {
   }
 
   getAPIUrlTransaction(hash) {
-    let url = this.network == Ethereum.Network.Mainnet ? "https://etherscan.io/tx/"+hash : "https://rinkeby.etherscan.io/tx/"+hash;
+    let url = "https://etherscan.io/tx/"+hash;
     return url;
   }
 
