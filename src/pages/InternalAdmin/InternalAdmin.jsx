@@ -18,6 +18,7 @@ import { withRouter } from 'react-router-dom';
 import { Ethereum } from '@/services/Wallets/Ethereum';
 import { Bitcoin } from '@/services/Wallets/Bitcoin';
 import { BitcoinCash } from '@/services/Wallets/BitcoinCash';
+import Image from "@/components/core/presentation/Image/Image";
 
 const STATUS = {
   pending: {
@@ -216,6 +217,10 @@ class InternalAdmin extends Component {
 
   getCoin(order = {}) {
     return `${order.amount} ${order.currency}`;
+  }
+
+  getReceptUrl(order = {}) {
+    return <a href={order.receipt_url} target="_blank" rel="noopener noreferrer">{order.receipt_url ? (<Image src={order.receipt_url} width="200" />) : ''}</a>;
   }
 
   getStatus(order = {}) {
@@ -549,6 +554,13 @@ class InternalAdmin extends Component {
       dataField: 'ref_code',
       text: 'Code',
       filter: textFilter(),
+    }, {
+      dataField: 'receipt_url',
+      text: 'Receipt',
+      formatter: (cell, row, rowIndex, formatExtraData) => {
+        return this.getReceptUrl(row);
+      },
+      hidden: type_order === typeShowInfo,
     }, {
       dataField: 'status',
       text: 'Status',
