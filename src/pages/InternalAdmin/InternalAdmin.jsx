@@ -238,7 +238,7 @@ class InternalAdmin extends Component {
       switch (currency) {
         case CRYPTO_CURRENCY.ETH: {
           wallet = WALLET_LIST[currency];
-          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash)}`}>{messages.wallet.action.history.label.detail_etherscan}</a></div>;
+          url = <div className="url"><a target="_blank" href={`${wallet.getAPIUrlTransaction(tx_hash.startsWith('0x') ? tx_hash : '0x' + tx_hash)}`}>{messages.wallet.action.history.label.detail_etherscan}</a></div>;
           break;
         }
         case CRYPTO_CURRENCY.BTC: {
