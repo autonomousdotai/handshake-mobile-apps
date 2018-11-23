@@ -108,7 +108,7 @@ class Prediction extends React.Component {
 
   onCountdownComplete = (eventId) => {
     this.props.dispatch(removeExpiredEvent({ eventId }));
-    this.closeOrderPlace();
+    // this.closeOrderPlace();
     this.props.dispatch(getReportCount());
   }
   getEventId = () => {
@@ -193,52 +193,52 @@ class Prediction extends React.Component {
     this.props.history.push(
       `${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&outcome_id=${itemData.id}&side=${itemProps.side}`
     );
-
+   
     // TODO: remove later
-    const { event } = itemProps;
-    const { shareEvent } = this.props;
-    if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
-      if (shareEvent) {
-        this.props.dispatch(removeShareEvent(['shareEvent']));
-      }
-      const redirectURL = `${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`;
-      this.props.dispatch(push(redirectURL));
-      this.props.history.push(redirectURL);
-    } else {
-      const selectedOutcome = {
-        hid: itemData.hid,
-        id: itemData.id,
-        marketOdds: itemData.market_odds,
-        value: itemData.name,
-      };
-      const selectedMatch = {
-        date: event.date,
-        id: event.id,
-        marketFee: event.market_fee,
-        reportTime: event.reportTime,
-        value: event.name,
-      };
-      this.props.dispatch(checkRedeemCode());
-      this.openOrderPlace(selectedOutcome);
-      this.modalOrderPlace.open();
-      this.setState({
-        selectedOutcome,
-        selectedMatch,
-        isOrderOpening: true,
-      });
+    // const { event } = itemProps;
+    // const { shareEvent } = this.props;
+    // if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
+    //   if (shareEvent) {
+    //     this.props.dispatch(removeShareEvent(['shareEvent']));
+    //   }
+    //   const redirectURL = `${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`;
+    //   this.props.dispatch(push(redirectURL));
+    //   this.props.history.push(redirectURL);
+    // } else {
+    //   const selectedOutcome = {
+    //     hid: itemData.hid,
+    //     id: itemData.id,
+    //     marketOdds: itemData.market_odds,
+    //     value: itemData.name,
+    //   };
+    //   const selectedMatch = {
+    //     date: event.date,
+    //     id: event.id,
+    //     marketFee: event.market_fee,
+    //     reportTime: event.reportTime,
+    //     value: event.name,
+    //   };
+    //   this.props.dispatch(checkRedeemCode());
+    //   this.openOrderPlace(selectedOutcome);
+    //   this.modalOrderPlace.open();
+    //   this.setState({
+    //     selectedOutcome,
+    //     selectedMatch,
+    //     isOrderOpening: true,
+    //   });
 
-      if (selectedOutcome) {
-        const outcomeId = { outcome_id: selectedOutcome.id };
-        this.props.dispatch(predictionStatistics({ outcomeId }));
-      }
+    //   if (selectedOutcome) {
+    //     const outcomeId = { outcome_id: selectedOutcome.id };
+    //     this.props.dispatch(predictionStatistics({ outcomeId }));
+    //   }
 
       // send event tracking
-      try {
-        GA.clickChooseAnOutcome(event.name, itemData.name);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    //   try {
+    //     GA.clickChooseAnOutcome(event.name, itemData.name);
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // }
   };
 
   handleBetFail = (value) => {
@@ -481,7 +481,7 @@ class Prediction extends React.Component {
       handleSubmit: this.handleEmailSubscriber
     };
     return (
-      <ModalDialog className="EmailSubscriberModal" close onRef={(modal) => { this.modalEmaiSubscriber = modal; return null; }}>
+      <ModalDialog className="EmailSubscriberModal" close onRef={(modal) => { this.modalEmaiSubscriber = modal; }}>
         <div className="SubscriberTitle">
           Claim your free bets
         </div>
@@ -505,11 +505,11 @@ class Prediction extends React.Component {
         {this.renderRelevantEventList(props)}
         {this.renderViewAllEvent(props, state)}
         {!props.isLoading && this.renderDislaimer()}
-        {this.renderBetMode(props, state)}
+        {/* {this.renderBetMode(props, state)}
         {this.renderLuckyLanding()}
         {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
-        {this.renderCreditCard()}
+        {this.renderCreditCard()} */}
         {!props.isLoading && this.renderPlusButton()}
         {this.renderEmailSubscriber()}
       </div>
