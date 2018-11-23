@@ -97,7 +97,8 @@ class Profile extends React.Component {
     this.onTextFieldChange = :: this.onTextFieldChange;
     this.addUsername = :: this.addUsername;
 
-    this.idVerificationDocumentTypes = ['Passport', 'Driver License', 'Government ID Card'];
+    const { messages } = this.props.intl;
+    this.idVerificationDocumentTypes = [messages.me.profile.text.id_verification.documents.passport, messages.me.profile.text.id_verification.documents.driverLicense, messages.me.profile.text.id_verification.documents.idCard];
     if (this.state.idVerificationLevel === 1) {
       this.getIDVerification();
     }

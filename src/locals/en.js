@@ -1090,6 +1090,11 @@ export default {
             finished: 'Finished',
             rejected: 'Rejected',
           },
+          documents: {
+            passport: 'Passport',
+            driverLicense: 'Driver License',
+            idCard: 'Government ID Card',
+          },
         },
       },
     },
