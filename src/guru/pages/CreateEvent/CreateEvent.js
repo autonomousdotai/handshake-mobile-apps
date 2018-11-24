@@ -38,7 +38,7 @@ class CreateEvent extends React.Component {
     createSuccess: false
   };
 
-  onKeyDownEventName = (e) => {
+  onKeyDownEventName = e => {
     /* eslint-disable no-param-reassign */
     e.target.style.height = 'inherit';
     e.target.style.height = `${e.target.scrollHeight}px`;
@@ -51,16 +51,19 @@ class CreateEvent extends React.Component {
     });
   };
 
-  handleName = (str) => {
+  handleName = str => {
     const l = str.length - 1;
-    return (str.charAt(l) === '?') ? str.substring(0, l - 1) : str;
-  }
+    return str.charAt(l) === '?' ? str.substring(0, l - 1) : str;
+  };
 
-  handleOnSubmit = values => { // values, actions
+  handleOnSubmit = values => {
+    // values, actions
     const { id, value } = values.source;
-    const reportSource = id ? { source_id: id } : {
-      source: { name: value, url: value }
-    };
+    const reportSource = id
+      ? { source_id: id }
+      : {
+        source: { name: value, url: value }
+      };
     const event_name = values.eventName.trim();
 
     const newEventData = {
@@ -81,7 +84,8 @@ class CreateEvent extends React.Component {
     const formData = new FormData();
     formData.set('data', JSON.stringify(newEventData));
     formData.set('image', values.image);
-    this.props.apiCreateEvent({ data: formData })
+    this.props
+      .apiCreateEvent({ data: formData })
       .then(res => {
         console.log('created Event', res);
         this.setState({ createSuccess: true });
@@ -91,13 +95,12 @@ class CreateEvent extends React.Component {
       });
   };
 
-
   buildErrorCls = (errors, touched) => {
     const errFields = Object.keys(touched).filter(i => errors[i]);
     return errFields.length ? errFields.join(' ') : '';
   };
 
-  renderEventTitle = (state) => {
+  renderEventTitle = state => {
     return (
       <div className="EventTitle">
         <div className="GroupTitle">
@@ -107,14 +110,18 @@ class CreateEvent extends React.Component {
         <Tooltip
           isOpen={state.titleToolTip}
           target="TitleTT"
-          toggle={() => this.setFieldToState('titleToolTip', !state.titleToolTip)}
+          toggle={() =>
+            this.setFieldToState('titleToolTip', !state.titleToolTip)
+          }
         >
-          Start the debate with a yes/no question.
-          Your question should clearly state the date and situation where the proposed outcome will happen.
+          Start the debate with a yes/no question. Your question should clearly
+          state the date and situation where the proposed outcome will happen.
           <br />
-          Eg:<br />
-          - Will BTC price go above $6000 by the end of 2018?<br />
-          - Will Manchester United beat Crystal Palace in Premier League Nov 24 2018?
+          Eg:
+          <br />
+          - Will BTC price go above $6000 by the end of 2018?
+          <br />- Will Manchester United beat Crystal Palace in Premier League
+          Nov 24 2018?
         </Tooltip>
         <div className="EventName">
           <label htmlFor="eventName">Will</label>
@@ -128,7 +135,8 @@ class CreateEvent extends React.Component {
         </div>
         <ErrMsg name="eventName" />
         <div className="GroupNote">
-          E.g. <b>Will</b> Manchester United beat Juventus <b>in</b> Champions League table stage?
+          E.g. <b>Will</b> Manchester United beat Juventus <b>in</b> Champions
+          League table stage?
         </div>
       </div>
     );
@@ -164,8 +172,9 @@ class CreateEvent extends React.Component {
           component={CustomField}
         />
         <div className="GroupNote">
-          As a host of this debate, you'll receive this % of the all matched predictions.
-          Friendly advice: no one wants to play with a greedy guts!
+          As a host of this debate, you&apos;ll receive this % of the all
+          matched predictions. Friendly advice: no one wants to play with a
+          greedy guts!
         </div>
       </div>
     );
@@ -176,8 +185,9 @@ class CreateEvent extends React.Component {
       <div className="ReportSource">
         <div className="GroupTitle">Report</div>
         <div className="GroupNote">
-          You must report the result using the link sent to your email within 24hrs of the closing time.
-          Which website will you use to verify the result?
+          You must report the result using the link sent to your email within
+          24hrs of the closing time. Which website will you use to verify the
+          result?
         </div>
         <ReportSource />
         <div className="GroupNote">
@@ -202,9 +212,7 @@ class CreateEvent extends React.Component {
     return (
       <div className="DateTime">
         <div className="GroupTitle">Add a closing time</div>
-        <div className="GroupNote">
-          When will the event close?
-        </div>
+        <div className="GroupNote">When will the event close?</div>
         <Field
           name="closingTime"
           type="datetime"
@@ -219,7 +227,7 @@ class CreateEvent extends React.Component {
     );
   };
 
-  renderAppBar = (props) => {
+  renderAppBar = props => {
     return (
       <AppBar>
         <span
@@ -257,14 +265,22 @@ class CreateEvent extends React.Component {
       source: ''
     };
 
-    const validateEmail = (email && verified) ? {}
-      : {
-        email: Yup.string().required('Required').email('invalid email address'),
-        emailCode: Yup.string().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
-      };
+    const validateEmail =
+      email && verified
+        ? {}
+        : {
+          email: Yup.string()
+            .required('Required')
+            .email('invalid email address'),
+          emailCode: Yup.string()
+            .required('Required')
+            .matches(/^[0-9]{4}/, 'invalid Code')
+        };
 
     const eventSchema = Yup.object().shape({
-      eventName: Yup.string().trim().required('Required'),
+      eventName: Yup.string()
+        .trim()
+        .required('Required'),
       // outcomeName: Yup.string().trim().required('Required'),
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
       image: Yup.mixed()
@@ -272,7 +288,7 @@ class CreateEvent extends React.Component {
           return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
         })
         .test('image', 'Exceeding maximum upload file size (5MB)', f => {
-          return !f ? true : (f.size < (5 * 1024 * 1024));
+          return !f ? true : f.size < 5 * 1024 * 1024;
         }),
       source: Yup.object({
         label: Yup.string()
@@ -324,7 +340,10 @@ class CreateEvent extends React.Component {
                   Create
                 </button>
                 <Debug props={formProps} />
-                <Prompt when={dirty} message="Are you sure you want to leave?" />
+                <Prompt
+                  when={dirty}
+                  message="Are you sure you want to leave?"
+                />
               </Form>
             );
           }}
@@ -334,9 +353,12 @@ class CreateEvent extends React.Component {
   }
 }
 
-export default connect((state) => {
-  return {
-    email: state.auth.profile.email,
-    verified: state.auth.profile.verified,
-  };
-}, { apiCreateEvent })(CreateEvent);
+export default connect(
+  state => {
+    return {
+      email: state.auth.profile.email,
+      verified: state.auth.profile.verified
+    };
+  },
+  { apiCreateEvent }
+)(CreateEvent);
