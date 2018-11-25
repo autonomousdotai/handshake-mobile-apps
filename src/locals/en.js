@@ -20,9 +20,9 @@ export default {
   },
   coinbowl: {
     name: 'Coinbowl',
-    fullname: 'Coinbowl: Buy and Sell Large Amount Of Bitcoin',
-    description: 'Buy and Sell Bitcoin and other cryptocurrency in large amount. Support bank transfer, cash and credit card. All transactions are insured',
-    keywords: 'Blockchain technology, Ethereum, Bitcoin, Cryptocurrency, Crypto, exchange platform, buy bitcoin with cash, buy large amount of bitcoin',
+    fullname: 'Coinbowl：购买和出售大量比特币',
+    description: '大量购买和出售比特币和其他加密货币。 支持银行转账，现金和信用卡。 所有交易都有保险',
+    keywords: '区块链技术，以太坊，比特币，加密货币，加密，交换平台，用现金购买比特币，购买大量比特币',
   },
   buy: 'Buy',
   sell: 'Sell',
