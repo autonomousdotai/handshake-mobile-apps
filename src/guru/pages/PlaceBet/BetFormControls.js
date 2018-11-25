@@ -39,6 +39,7 @@ const BetFormControls = ({
   handleBlur,
   handleSubmit,
   isSubmitting,
+  isValid,
   touched,
   errors,
   buttonText,
@@ -80,7 +81,7 @@ const BetFormControls = ({
         }
       />
       <ErrMsg name="amount" />
-      <button type="submit" disabled={isSubmitting || values.amount === ''} className={buttonClasses}>
+      <button type="submit" disabled={isSubmitting || !isValid} className={buttonClasses}>
         {buttonText}
       </button>
     </Form>
@@ -94,6 +95,7 @@ BetFormControls.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   buttonText: PropTypes.string.isRequired,
   isSubmitting: PropTypes.bool,
+  isValid: PropTypes.bool,
   touched: PropTypes.object,
   errors: PropTypes.object,
   buttonClasses: PropTypes.string,
@@ -104,6 +106,7 @@ BetFormControls.propTypes = {
 
 BetFormControls.defaultProps = {
   isSubmitting: false,
+  isValid: false,
   touched: {},
   errors: {},
   buttonClasses: undefined,
