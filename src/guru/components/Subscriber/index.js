@@ -4,11 +4,10 @@ import * as Yup from 'yup';
 import SubscriberForm from './Form';
 
 class Subscriber extends React.Component {
-  handleOnSubmit = (values, { resetForm, setStatus }) => {
+  handleOnSubmit = (values, { setErrors }) => {
     this.props.handleSubmit({ values });
-    resetForm({ email: '' });
     if (!this.props.statusSubscribe) {
-      setStatus({ msg: 'Your email is already registered' });
+      setErrors({ email: 'Your email is already registered' });
     }
   };
 
