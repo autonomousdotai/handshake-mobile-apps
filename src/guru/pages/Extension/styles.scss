@@ -1,0 +1,103 @@
+.ChromeExtension {
+  $primary-color: #fe8f25;
+  background-color: #fafafa;
+
+  .btn {
+    padding: 10px 60px;
+
+    i {
+      padding-right: 15px;
+    }
+  }
+
+  .TitleWrapper {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+
+    .NavTitle {
+      color: $primary-color;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .Title {
+      font-weight: bold;
+      font-size: 40px;
+    }
+  }
+
+  .Header {
+    display: flex;
+    position: relative;
+    padding: 120px 0 100px 100px;
+    background-color: #190e03;
+    color: #fff;
+
+    .LeftBlock {
+      flex-basis: 40%;
+    }
+
+    .Logo {
+      position: absolute;
+      top: 50px;
+      left: 100px;
+    }
+
+    .Macbook {
+      position: absolute;
+      right: 0;
+      top: 120px;
+    }
+
+    .SubHeadLine {
+      color: $primary-color;
+      font-weight: bold;
+    }
+
+    .DescHeadline {
+      padding-top: 30px;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: $primary-color;
+      border: 3px solid #ffa632;
+      font-weight: bold;
+    }
+
+    .OrOpen {
+      padding-top: 20px;
+      font-weight: bold;
+
+      a {
+        color: $primary-color;
+      }
+    }
+  }
+
+  .HowToPlay {
+    padding: 100px 0;
+
+    .BlockContent {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .Item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 20%;
+
+      .ItemImage {
+        height: 120px;
+      }
+
+      .ItemTitle {
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
+}
