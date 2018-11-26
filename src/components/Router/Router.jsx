@@ -37,7 +37,6 @@ const RouterAdminIDVerification = createDynamicImport(() => import('@/components
 const RouterReport = createDynamicImport(() => import('@/components/Router/Report'), Loading);
 const RouterLuckyPool = createDynamicImport(() => import('@/pages/LuckyLanding/LuckyLanding'), Loading);
 const RouterExchange = createDynamicImport(() => import('@/components/Router/Exchange'), Loading);
-// const RouterExchange = createDynamicImport(() => import('@/pages/Exchange/Exchange'), Loading);
 const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
 const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
 const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
@@ -47,6 +46,7 @@ const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/Wallet
 const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
 const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
 const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
+const Extension = createDynamicImport(() => import('@/guru/pages/Extension'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -131,6 +131,8 @@ let routesUsingDesktopLayout = null;
 if (BrowserDetect.isDesktop) {
   const configRoutesUsingDesktopLayout = [
     { path: URL.LUCKY_POOL, component: RouterLuckyPool },
+    { path: URL.CHROME_EXTENSION, component: Extension },
+    { path: URL.GURU_CREATE_EVENT, component: PageMobileOnly },
     { path: URL.PRODUCT_CASH_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} />, exact: true },
     { path: URL.PRODUCT_ATM_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
     // { path: URL.BUY_BY_CC_URL, render: () => <ProjectDetail type="product" name="cash" img={imgCash} imgContent={imgCashContent} reactHelmetElement={SEOCash} /> },
