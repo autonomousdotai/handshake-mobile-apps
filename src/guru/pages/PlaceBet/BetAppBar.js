@@ -10,7 +10,7 @@ const BetAppBar = ({ history }) => {
       <span className="IconLeft BackAction" onClick={() => backAction(history)} >
         <i className="far fa-angle-left" />
       </span>
-      <span className="Title">Place a bet</span>
+      <span className="Title">Make a prediction</span>
     </AppBar>
   );
 };

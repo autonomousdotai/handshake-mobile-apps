@@ -244,15 +244,15 @@
       letter-spacing: 0;
       line-height: rem-calc(24px);
       font-weight: $medium;
-      margin-bottom: rem-calc(2px);
-      margin-top: rem-calc(10px);
-      flex-basis: 65%;
+      margin: 0 0 rem-calc(2px) rem-calc(5px);
     }
 
     .EventImage {
       position: relative;
       overflow: hidden;
+      min-width: 35%;
       flex-basis: 35%;
+      border-radius: 4px;
       img {
         position: relative;
         top: 0;
@@ -458,7 +458,12 @@
   color: #ffffff;
   border-radius: 50%;
   background-color: #2989FF;
+  text-decoration: none;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  &:hover, &:active {
+    color: #ffffff;
+    text-decoration: none;
+  }
 }
 
 .modal.EmailSubscriberModal {

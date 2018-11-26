@@ -9,9 +9,10 @@ const SubscriberForm = ({
   handleBlur,
   handleSubmit,
   isSubmitting,
-  disabled,
+  isValid,
   touched,
   errors,
+  status,
   placeHolder,
   buttonText,
   buttonClasses
@@ -32,8 +33,9 @@ const SubscriberForm = ({
             : 'TextInput'
         }
       />
+      {status && status.msg && <div className="ErrMsg">{status.msg}</div>}
       <ErrMsg name="email" />
-      <button type="submit" disabled={isSubmitting || disabled} className={buttonClasses}>
+      <button type="submit" disabled={isSubmitting || !isValid} className={buttonClasses}>
         {isSubmitting ? 'Loading...' : buttonText}
       </button>
     </Form>
@@ -48,7 +50,8 @@ SubscriberForm.propTypes = {
   placeHolder: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
   isSubmitting: PropTypes.bool,
-  disabled: PropTypes.bool,
+  isValid: PropTypes.bool,
+  status: PropTypes.object,
   touched: PropTypes.object,
   errors: PropTypes.object,
   buttonClasses: PropTypes.string
@@ -56,7 +59,8 @@ SubscriberForm.propTypes = {
 
 SubscriberForm.defaultProps = {
   isSubmitting: false,
-  disabled: false,
+  isValid: false,
+  status: {},
   touched: {},
   errors: {},
   buttonClasses: undefined

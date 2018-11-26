@@ -4,9 +4,8 @@ import { validationSchema } from './validation';
 import BetFormControls from './BetFormControls';
 
 class BetForm extends React.Component {
-  handleOnSubmit = (values, { resetForm }) => {
+  handleOnSubmit = (values) => {
     this.props.handleBet({ values });
-    resetForm({ amount: '', redeem: '' });
   };
 
   handleOnChange = (e) => {

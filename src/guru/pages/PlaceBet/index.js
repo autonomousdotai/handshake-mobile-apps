@@ -244,7 +244,7 @@ class PlaceBet extends Component {
       redeem: props.redeem ? props.redeem.code || '' : '',
       side: getSide(props),
       isSubmitting: props.isLoading,
-      buttonText: props.isLoading ? 'Loading...' : 'Bet',
+      buttonText: props.isLoading ? 'Loading...' : 'Predict',
       buttonClasses: classNames('btn btn-block', {
         'btn-primary': getSide(props) === 1,
         'btn-secondary': getSide(props) === 2

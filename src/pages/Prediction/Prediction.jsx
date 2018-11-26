@@ -478,6 +478,7 @@ class Prediction extends React.Component {
       placeHolder: 'Your email address',
       buttonText: 'Claim',
       buttonClasses: 'btn btn-primary',
+      statusSubscribe: this.props.statusSubscribe,
       handleSubmit: this.handleEmailSubscriber
     };
     return (
