@@ -467,7 +467,12 @@
 }
 
 .modal.EmailSubscriberModal {
+  text-align: center;
+  .modal-dialog-content {
+    border-radius: 10px;
+  }
   .modal-custom-body {
+    border-radius: 10px;
     padding: 30px 15px;
   }
   .close {
@@ -475,6 +480,9 @@
     font-size: 20px;
     width: 25px;
     height: 25px;
+  }
+  .SubscriberImage {
+    margin: 0 auto 30px auto;
   }
   .SubscriberTitle {
     text-align: center;
@@ -485,13 +493,20 @@
   .SubscriberDescription {
     font-size: rem-calc(14px);
     margin-bottom: 15px;
+    text-align: center;
+    .highlight {
+      color: #04C695;
+      font-weight: 500;
+    }
   }
   form {
     display: flex;
     flex-direction: column;
     input {
+      outline: none;
+      text-align: center;
       color: #000;
-      border-radius: 4px;
+      border-radius: 30px;
       border: 1px solid #dcdcdc;
       font-size: rem-calc(14px);
       padding: 12px 10px;
@@ -500,7 +515,10 @@
       appearance: none;
     }
     button {
+      outline: none;
       height: 49px;
+      font-weight: 500;
+      border-radius: 30px;
     }
     .ErrMsg {
       font-size: rem-calc(14px);

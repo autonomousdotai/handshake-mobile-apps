@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="205px" height="89px" viewBox="0 0 205 89" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.1 (67048) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 19</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Pop-up" transform="translate(-105.000000, -216.000000)">
+            <g id="Group-17" transform="translate(30.000000, 129.000000)">
+                <g id="Group-16" transform="translate(25.000000, 88.000000)">
+                    <g id="Group-19" transform="translate(50.000000, -0.000000)">
+                        <g id="Group-13">
+                            <path d="M38.3548387,8.04602437 C49.4945325,-4.7852897 96.6325861,-1.70343224 105.806452,13.2664342" id="Path-5" stroke="#748599" stroke-width="2" opacity="0.488304501" stroke-dasharray="2"></path>
+                            <circle id="Oval-Copy" fill="#04C695" opacity="0.179710751" cx="169.951613" cy="52.2419355" r="35.0483871"></circle>
+                            <text id="" font-family="FontAwesome5ProSolid, Font Awesome 5 Pro" font-size="40" font-weight="normal" fill="#04C695">
+                                <tspan x="129.451613" y="58.6451613"></tspan>
+                            </text>
+                            <circle id="Oval" fill="#EAF2FC" cx="21.1612903" cy="29.0967742" r="21.1612903"></circle>
+                            <path d="M29.75803,35.1465676 L16.0156233,26.7383846 L29.75803,3.1412256 L43.5004368,26.7383846 L29.75803,35.1465676 Z M29.75803,37.7684742 L43.5004368,29.4507017 L29.75803,49.4314378 L16.0156233,29.4507017 L29.75803,37.7684742 Z" id="" fill="#2989FF"></path>
+                            <path d="M108.179563,4.77121328 L109.862847,16.409923 L100.604783,19.3196004" id="Path-6" fill="#748599" transform="translate(105.233815, 12.045407) rotate(12.000000) translate(-105.233815, -12.045407) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
