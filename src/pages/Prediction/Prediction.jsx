@@ -28,7 +28,18 @@ import qs from 'querystring';
 import { updateLoading } from '@/guru/stores/action';
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
-import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkRedeemCodeSelector, checkExistSubcribeEmailSelector, totalBetsSelector, relevantEventSelector } from './selector';
+import {
+  eventSelector,
+  isLoading,
+  showedLuckyPoolSelector,
+  isSharePage,
+  countReportSelector,
+  checkRedeemCodeSelector,
+  checkExistSubcribeEmailSelector,
+  totalBetsSelector,
+  relevantEventSelector,
+  referParamSelector
+} from './selector';
 import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, checkExistSubcribeEmail, loadRelevantEvents, emailSubscriber } from './action';
 import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
@@ -81,10 +92,10 @@ class Prediction extends React.Component {
     this.props.dispatch(checkRedeemCode());
     // this.props.dispatch(checkExistSubcribeEmail());
     window.addEventListener('scroll', this.handleScroll);
-    const eventId = this.getEventId(this.props);
-    if (eventId) {
-      this.props.dispatch(loadRelevantEvents({eventId}));
-    }
+    // const eventId = this.getEventId(this.props);
+    // if (eventId) {
+    //   this.props.dispatch(loadRelevantEvents({eventId}));
+    // }
   }
 
   componentDidUpdate() {
@@ -281,6 +292,16 @@ class Prediction extends React.Component {
     });
   }
 
+  handleEmailSubscriber = ({ values }) => {
+    const { props } = this;
+    const { dispatch, referParam } = props;
+    dispatch(updateLoading(true));
+    if (referParam) {
+      return dispatch(emailSubscriber({ ...values, referral_code: referParam }));
+    }
+    return dispatch(emailSubscriber(values));
+  }
+
   renderEventList = (props) => {
     if (props.isLoading) return null;
     if (!props.eventList || !props.eventList.length) {
@@ -467,11 +488,6 @@ class Prediction extends React.Component {
     );
   }
 
-  handleEmailSubscriber = (values) => {
-    this.props.dispatch(updateLoading(true));
-    this.props.dispatch(emailSubscriber(values));
-  }
-
   renderEmailSubscriber = () => {
     const subscriberProps = {
       isSubmitting: this.props.isLoader,
@@ -536,6 +552,7 @@ export default injectIntl(connect(
       isExistEmail: checkExistSubcribeEmailSelector(state),
       shareEvent: shareEventSelector(state),
       totalBets: totalBetsSelector(state),
+      referParam: referParamSelector(state),
       isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),
       isRedeem: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem),
       statusSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.status)

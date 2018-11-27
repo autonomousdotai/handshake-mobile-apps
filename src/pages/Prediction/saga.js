@@ -128,7 +128,7 @@ export function* handleCheckExistEmail() {
   }
 }
 
-export function* handleEmailSubscriber({ values }) {
+export function* handleEmailSubscriber(values) {
   try {
     const { status } = yield call(apiPost, {
       PATH_URL: API_URL.CRYPTOSIGN.SUBCRIBE_EMAIL_PREDICTION,

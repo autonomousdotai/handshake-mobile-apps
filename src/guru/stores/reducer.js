@@ -13,6 +13,9 @@ import {
   shareEvent,
   resetShareEvent
 } from '@/guru/pages/CreateEvent/action';
+import {
+  putReferralCheck
+} from '@/pages/Me/action';
 import { updateLoading } from './action';
 
 const initialState = {
@@ -79,6 +82,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case resetShareEvent().type:
         draft.ui.shareEvent = undefined;
+        break;
+      case putReferralCheck().type:
+        draft.ui.referralCheck = action.payload;
         break;
       default:
         break;

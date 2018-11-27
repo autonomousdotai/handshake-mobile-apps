@@ -232,7 +232,9 @@ export const API_URL = {
     GET_REPUTATION_USER: 'cryptosign/reputation',
     SUBSCRIBE_NOTIFICATION: 'cryptosign/subscribe-notification',
     COMPARE_REDEEM_CODE: 'cryptosign/redeem/check',
-    USER_HABIT: 'cryptosign/user/habit'
+    USER_HABIT: 'cryptosign/user/habit',
+    REFERRAL_CHECK: 'cryptosign/referral/check',
+    REFERRAL_JOIN: 'cryptosign/referral/join'
   },
   DISCOVER: {
     INDEX: 'handshake/discover',

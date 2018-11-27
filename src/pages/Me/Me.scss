@@ -180,3 +180,23 @@
     margin: 15px 0;
   }
 }
+
+/** ReferralLink **/
+.ReferralLink {
+  font-size: rem-calc(14px);
+  margin-bottom: 15px;
+  > span, > strong {
+    display: block;
+  }
+  .Link {
+    display: block;
+    padding: 6px;
+    margin: 5px 0;
+    background-color: #FAFAFA;
+    border-radius: 4px;
+    border: 1px solid #f1f1f1;
+  }
+}
+.btnReferral {
+  margin-bottom: 15px;
+}
