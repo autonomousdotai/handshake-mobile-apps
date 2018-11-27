@@ -81,7 +81,7 @@ const BetFormControls = ({
         }
       />
       <ErrMsg name="amount" />
-      <button type="submit" disabled={isSubmitting || !isValid} className={buttonClasses}>
+      <button type="submit" disabled={isSubmitting || values.amount === ''} className={buttonClasses}>
         {buttonText}
       </button>
     </Form>
