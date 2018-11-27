@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '@/guru/components/Icon/Icon';
-import { URL } from '@/constants';
+import { URL, SOCIAL } from '@/constants';
+import Subscriber from '@/guru/components/Subscriber/';
 
 // Icons
 import LogoWhite from '@/assets/images/pex/extension/logo-white.svg';
+import LogoBlack from '@/assets/images/pex/extension/logo-black.svg';
 import MacSVG from '@/assets/images/pex/extension/mac.svg';
 import ethToWallet from '@/assets/images/pex/extension/eth-to-wallet.svg';
 import chooseMarket from '@/assets/images/pex/extension/choose-market.svg';
@@ -151,9 +153,9 @@ function addExtension() {
 
 function footer() {
   return (
-    <footer className="Footer">
+    <footer>
       <div className="MainInfo">
-        <div className="Logo" />
+        <Icon path={LogoBlack} />
         <p>
           Ninja is open-source, decentralized software that never holds user
           data, or user funds. As such, Ninja does not have the power to alter
@@ -168,22 +170,55 @@ function footer() {
           than you are willing to lose. Play safe!
         </p>
         <p>
-          Need more information? check out our FAQ and instructions on how to
-          play. <br />
+          Need more information? check out our{' '}
+          <Link to={`${URL.HANDSHAKE_PREDICTION}#faq`}>FAQ</Link> and{' '}
+          <Link to={URL.PEX_INSTRUCTION_URL}>instructions</Link> on how to play.{' '}
+          <br />
           Copyright &#9400; 2018. All Rights Reserved. Legal.
         </p>
       </div>
-      <div className="SocialLinks">
-        <h2>JOIN US ON</h2>
+      <div className="SocialBlock">
+        <h5>JOIN US ON</h5>
         <ul>
-          <li>Facebook</li>
-          <li>Twitter</li>
-          <li>Linkedin</li>
-          <li>Github</li>
-          <li>telegram</li>
+          <li>
+            <a href={SOCIAL.FACEBOOK} target="_blank">
+              <i className="fab fa-facebook" />
+              Facebook
+            </a>
+          </li>
+          <li>
+            <a href={SOCIAL.TWITTER}>
+              <i className="fab fa-twitter" />
+              Twitter
+            </a>
+          </li>
+          <li>
+            <a href={SOCIAL.LINKEDIN}>
+              <i className="fab fa-linkedin" />
+              Linkedin
+            </a>
+          </li>
+          <li>
+            <a href={SOCIAL.GITHUB}>
+              <i className="fab fa-github" />
+              Github
+            </a>
+          </li>
+          <li>
+            <Link to={SOCIAL.TELEGRAM}>
+              <i className="fab fa-telegram" />
+              Telegram
+            </Link>
+          </li>
         </ul>
+        <div className="SubScribeEmail">
+          <span>Sign up for our newsletter</span>
+          <Subscriber
+            placeHolder="Your email address"
+            buttonText="Count me in"
+          />
+        </div>
       </div>
-      <div className="SubScribeEmail" />
     </footer>
   );
 }

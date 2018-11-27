@@ -638,6 +638,14 @@ export const BASE_API = {
 
 export const API_ENDPOINT = process.env.PUBLIC_URL;
 
+export const SOCIAL = {
+  FACEBOOK: 'https://www.facebook.com/ninjadotorg',
+  TWITTER: 'https://twitter.com/ninjadotorg',
+  LINKEDIN: 'https://linkedin.com/company/ninjadotorg',
+  GITHUB: 'https://github.com/ninjadotorg/handshake-app',
+  TELEGRAM: 'https://t.me/ninja_org'
+};
+
 export const URL = {
   INDEX: '/',
 

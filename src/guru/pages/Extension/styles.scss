@@ -167,4 +167,96 @@
       padding: 20px 0 30px;
     }
   }
+
+  footer {
+    display: flex;
+    border-top: 1px solid #d8d8d8;
+    margin: 0 100px;
+    padding: 50px 0;
+
+    svg,
+    h5 {
+      margin-bottom: 30px;
+    }
+
+    h5 {
+      font-weight: bold;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      line-height: 30px;
+      a {
+        i {
+          padding-right: 10px;
+        }
+      }
+    }
+
+    .MainInfo {
+      width: 70%;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      padding-right: 200px;
+
+      a {
+        color: $primary-color;
+      }
+    }
+
+    .SocialBlock {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .SubScribeEmail {
+      margin-top: 20px;
+
+      span {
+        font-weight: 400;
+        font-size: 14px;
+      }
+
+      form {
+        height: 40px;
+        font-size: 14px;
+
+        input {
+          height: 100%;
+          background: #ffffff;
+          outline: none;
+          width: 250px;
+          padding: 0 15px;
+          // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+
+          &::placeholder {
+            color: #a7a7a7;
+          }
+        }
+
+        button {
+          height: 100%;
+          background-color: $primary-color;
+          color: #fff;
+          padding: 0 15px;
+          margin-left: -1px;
+          border: none;
+          outline: none;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+
+        .ErrMsg {
+          color: red;
+          font-style: italic;
+        }
+      }
+    }
+  }
 }

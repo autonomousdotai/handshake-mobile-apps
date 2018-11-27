@@ -28,16 +28,18 @@ const SubscriberForm = ({
         onChange={handleChange}
         onBlur={handleBlur}
         className={
-          errors.email && touched.email
-            ? 'TextInput Error'
-            : 'TextInput'
+          errors.email && touched.email ? 'TextInput Error' : 'TextInput'
         }
       />
-      {status && status.msg && <div className="ErrMsg">{status.msg}</div>}
-      <ErrMsg name="email" />
-      <button type="submit" disabled={isSubmitting || !isValid} className={buttonClasses}>
+      <button
+        type="submit"
+        disabled={isSubmitting || !isValid}
+        className={buttonClasses}
+      >
         {isSubmitting ? 'Loading...' : buttonText}
       </button>
+      {status && status.msg && <div className="ErrMsg">{status.msg}</div>}
+      <ErrMsg name="email" />
     </Form>
   );
 };
