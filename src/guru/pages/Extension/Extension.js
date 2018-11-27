@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '@/guru/components/Icon/Icon';
-import { URL, SOCIAL } from '@/constants';
+import { URL, SOCIAL, EXT } from '@/constants';
 import Subscriber from '@/guru/components/Subscriber/';
 
 // Icons
@@ -30,13 +30,15 @@ function header() {
           Predict the future of politics, technology, <br />
           money, sports and anything else you can think of!
         </p>
-        <button className="btn AddChromeBtn">
+        <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
           <i className="fab fa-chrome" />
-          Add to Chrome
-        </button>
+          <span>Add to Chrome</span>
+        </a>
         <p className="OrOpen">
           or open{' '}
-          <Link to={URL.HANDSHAKE_PREDICTION}>ninja.org/prediction</Link>
+          <a href={URL.HANDSHAKE_PREDICTION} target="_blank">
+            ninja.org/prediction
+          </a>
         </p>
       </div>
       <div className="RightBlock">
@@ -52,6 +54,7 @@ function howToPlay() {
       <div className="TitleWrapper">
         <h4 className="NavTitle">How to play</h4>
         <h2 className="Title">As EASY AS 1-2-3</h2>
+        <div className="SmallLine" />
       </div>
       <div className="BlockContent">
         <div className="Item">
@@ -103,6 +106,7 @@ function aboutUs() {
         <h2 className="Title">
           A DECENTRALIZED, SECURED <br /> & PRIVATE PREDICTION PLATFORM
         </h2>
+        <div className="SmallLine" />
       </div>
       <p className="Desc">
         Ninja is a constantly evolving project built by a team of mobile
@@ -112,7 +116,7 @@ function aboutUs() {
       <div className="BtnAction">
         <button className="Join btn btn-primary">
           <i className="fab fa-telegram" />
-          Join our telegram
+          <span>Join our telegram</span>
           <i className="far fa-arrow-right" />
         </button>
         <button className="Goto btn btn-white">Go to Ninja app</button>
@@ -142,10 +146,10 @@ function addExtension() {
           Do not wait any longer. Download this extension now and start
           predicting and creating on any events you could imagine.
         </p>
-        <button className="btn AddChromeBtn">
+        <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
           <i className="fab fa-chrome" />
-          Add to Chrome now
-        </button>
+          <span>Add to Chrome now</span>
+        </a>
       </div>
     </section>
   );
@@ -187,25 +191,25 @@ function footer() {
             </a>
           </li>
           <li>
-            <a href={SOCIAL.TWITTER}>
+            <a href={SOCIAL.TWITTER} target="_blank">
               <i className="fab fa-twitter" />
               Twitter
             </a>
           </li>
           <li>
-            <a href={SOCIAL.LINKEDIN}>
+            <a href={SOCIAL.LINKEDIN} target="_blank">
               <i className="fab fa-linkedin" />
               Linkedin
             </a>
           </li>
           <li>
-            <a href={SOCIAL.GITHUB}>
+            <a href={SOCIAL.GITHUB} target="_blank">
               <i className="fab fa-github" />
               Github
             </a>
           </li>
           <li>
-            <Link to={SOCIAL.TELEGRAM}>
+            <Link to={SOCIAL.TELEGRAM} target="_blank">
               <i className="fab fa-telegram" />
               Telegram
             </Link>

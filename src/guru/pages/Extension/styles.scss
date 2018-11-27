@@ -7,9 +7,12 @@
     min-width: 300px;
     font-size: 20px;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
 
     i {
-      padding: 0 15px;
       font-size: 25px;
     }
   }
@@ -21,10 +24,18 @@
   }
 
   .AddChromeBtn {
-    display: flex;
     background-color: $primary-color;
     border: 3px solid #ffa632;
     color: #fff;
+    width: 300px;
+
+    span {
+      margin-left: 10px;
+    }
+
+    &:hover {
+      background-color: #ea913c;
+    }
   }
 
   section {
@@ -45,6 +56,14 @@
     .Title {
       font-weight: 800;
       font-size: 30px;
+    }
+
+    .SmallLine {
+      height: 2px;
+      background-color: $primary-color; // #FFE6CE
+      width: 50px;
+      align-self: center;
+      margin: 30px 0 70px;
     }
   }
 
@@ -124,6 +143,14 @@
     .BtnAction {
       padding: 30px 0;
       display: flex;
+
+      .Join span {
+        padding: 0 10px;
+      }
+
+      .Goto:hover {
+        background-color: #f7f4f4;
+      }
     }
 
     .Desc {
@@ -146,21 +173,18 @@
   .AddExtension {
     display: flex;
     background-color: #190e03;
-    justify-content: space-between;
     padding: 50px 0 0;
 
     .BlockLeft {
-      width: 150%;
-      img {
-        width: 100%;
-      }
+      width: 700px;
     }
 
     .BlockRight {
       display: flex;
-      flex-direction: column;
-      padding: 30px 130px;
       color: #fff;
+      flex-direction: column;
+      width: 300px;
+      margin: 0 auto;
     }
 
     .Desc {
@@ -249,6 +273,7 @@
 
           &:hover {
             cursor: pointer;
+            background-color: #ea913c;
           }
         }
 
