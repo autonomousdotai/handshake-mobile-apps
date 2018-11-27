@@ -123,7 +123,13 @@ function aboutUs() {
           <span>Join our telegram</span>
           <i className="far fa-arrow-right" />
         </a>
-        <button className="Goto btn btn-white">Go to Ninja app</button>
+        <a
+          className="Goto btn btn-white"
+          href={URL.HANDSHAKE_PREDICTION}
+          target="_blank"
+        >
+          Go to Ninja app
+        </a>
       </div>
       <Icon path={ninjas} className="NinjaSVG" />
       <p className="Desc">
