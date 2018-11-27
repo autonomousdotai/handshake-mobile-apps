@@ -1,13 +1,34 @@
 .ChromeExtension {
   $primary-color: #fe8f25;
+  $desc: #1c1a18;
   background-color: #fafafa;
 
   .btn {
-    padding: 10px 60px;
+    min-width: 300px;
+    font-size: 20px;
+    padding: 10px;
 
     i {
-      padding-right: 15px;
+      padding: 0 15px;
+      font-size: 25px;
     }
+  }
+
+  .btn-white {
+    background: #ffffff;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.1);
+    color: #28221c;
+  }
+
+  .AddChromeBtn {
+    display: flex;
+    background-color: $primary-color;
+    border: 3px solid #ffa632;
+    color: #fff;
+  }
+
+  section {
+    margin: 100px 0;
   }
 
   .TitleWrapper {
@@ -22,8 +43,8 @@
     }
 
     .Title {
-      font-weight: bold;
-      font-size: 40px;
+      font-weight: 800;
+      font-size: 30px;
     }
   }
 
@@ -60,12 +81,6 @@
       font-weight: bold;
     }
 
-    button {
-      background-color: $primary-color;
-      border: 3px solid #ffa632;
-      font-weight: bold;
-    }
-
     .OrOpen {
       padding-top: 20px;
       font-weight: bold;
@@ -77,8 +92,6 @@
   }
 
   .HowToPlay {
-    padding: 100px 0;
-
     .BlockContent {
       display: flex;
       justify-content: space-around;
@@ -98,6 +111,60 @@
         font-weight: bold;
         font-size: 20px;
       }
+    }
+  }
+
+  .AboutUs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+
+    .BtnAction {
+      padding: 30px 0;
+      display: flex;
+    }
+
+    .Desc {
+      width: 50%;
+      color: $desc;
+      line-height: 30px;
+    }
+
+    .NinjaSVG {
+      width: 100%;
+      margin-bottom: -40px;
+    }
+
+    .Goto {
+      text-align: center;
+      margin-left: 30px;
+    }
+  }
+
+  .AddExtension {
+    display: flex;
+    background-color: #190e03;
+    justify-content: space-between;
+    padding: 50px 0 0;
+
+    .BlockLeft {
+      width: 150%;
+      img {
+        width: 100%;
+      }
+    }
+
+    .BlockRight {
+      display: flex;
+      flex-direction: column;
+      padding: 30px 130px;
+      color: #fff;
+    }
+
+    .Desc {
+      padding: 20px 0 30px;
     }
   }
 }

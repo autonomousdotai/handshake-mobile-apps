@@ -9,12 +9,14 @@ import MacSVG from '@/assets/images/pex/extension/mac.svg';
 import ethToWallet from '@/assets/images/pex/extension/eth-to-wallet.svg';
 import chooseMarket from '@/assets/images/pex/extension/choose-market.svg';
 import makePrediction from '@/assets/images/pex/extension/make-prediction.svg';
+import ninjas from '@/assets/images/pex/extension/2ninjas.svg';
+import screens from '@/assets/images/pex/extension/screens.png';
 
 import './styles.scss';
 
 function header() {
   return (
-    <div className="Header">
+    <header className="Header">
       <Icon className="Logo" path={LogoWhite} />
       <div className="LeftBlock">
         <h1 className="HeadLine">
@@ -26,7 +28,7 @@ function header() {
           Predict the future of politics, technology, <br />
           money, sports and anything else you can think of!
         </p>
-        <button className="btn btn-primary">
+        <button className="btn AddChromeBtn">
           <i className="fab fa-chrome" />
           Add to Chrome
         </button>
@@ -38,13 +40,13 @@ function header() {
       <div className="RightBlock">
         <Icon className="Macbook" path={MacSVG} />
       </div>
-    </div>
+    </header>
   );
 }
 
 function howToPlay() {
   return (
-    <div className="HowToPlay">
+    <section className="HowToPlay">
       <div className="TitleWrapper">
         <h4 className="NavTitle">How to play</h4>
         <h2 className="Title">As EASY AS 1-2-3</h2>
@@ -87,13 +89,13 @@ function howToPlay() {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
 function aboutUs() {
   return (
-    <div className="AboutUs">
+    <section className="AboutUs">
       <div className="TitleWrapper">
         <h4 className="NavTitle">About us</h4>
         <h2 className="Title">
@@ -106,10 +108,14 @@ function aboutUs() {
         side a growing community of users from all around the world.
       </p>
       <div className="BtnAction">
-        <button className="Join">Join our telegram</button>
-        <button className="Goto">Go to Ninja app</button>
+        <button className="Join btn btn-primary">
+          <i className="fab fa-telegram" />
+          Join our telegram
+          <i className="far fa-arrow-right" />
+        </button>
+        <button className="Goto btn btn-white">Go to Ninja app</button>
       </div>
-      <div>Image...</div>
+      <Icon path={ninjas} className="NinjaSVG" />
       <p className="Desc">
         Ninja runs on top of the Ethereum blockchain. It matches users that
         support the outcome directly with users that predict otherwise. Their
@@ -118,26 +124,34 @@ function aboutUs() {
         holds funds, that transactions are unstoppable, and payouts are
         guaranteed.
       </p>
-    </div>
+    </section>
   );
 }
 
 function addExtension() {
   return (
-    <div className="AddExtension">
-      <h2 className="AddTitle">Let&#39;s start predicting today</h2>
-      <p className="Desc">
-        Do not wait any longer. Download this extension now and start predicting
-        and creating on any events you could imagine.
-      </p>
-      <button>Add to Chrome now</button>
-    </div>
+    <section className="AddExtension">
+      <div className="BlockLeft">
+        <img src={screens} alt="Add to Chrome" />
+      </div>
+      <div className="BlockRight">
+        <h2 className="AddTitle">Let&#39;s start predicting today</h2>
+        <p className="Desc">
+          Do not wait any longer. Download this extension now and start
+          predicting and creating on any events you could imagine.
+        </p>
+        <button className="btn AddChromeBtn">
+          <i className="fab fa-chrome" />
+          Add to Chrome now
+        </button>
+      </div>
+    </section>
   );
 }
 
 function footer() {
   return (
-    <div className="Footer">
+    <footer className="Footer">
       <div className="MainInfo">
         <div className="Logo" />
         <p>
@@ -170,7 +184,7 @@ function footer() {
         </ul>
       </div>
       <div className="SubScribeEmail" />
-    </div>
+    </footer>
   );
 }
 
