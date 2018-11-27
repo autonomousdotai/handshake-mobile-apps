@@ -57,6 +57,7 @@
     .Title {
       font-weight: 800;
       font-size: 30px;
+      padding: 20px 0;
     }
 
     .SmallLine {
@@ -64,7 +65,7 @@
       background-color: $primary-color;
       width: 50px;
       align-self: center;
-      margin: 30px 0 70px;
+      margin: 0 0 70px;
       position: relative;
 
       &::after {
