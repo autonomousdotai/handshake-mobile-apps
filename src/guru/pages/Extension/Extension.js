@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Icon from '@/guru/components/Icon/Icon';
 import { URL, SOCIAL, EXT } from '@/constants';
-import Subscriber from '@/guru/components/Subscriber/';
+import { Link } from 'react-router-dom';
 
 // Icons
 import LogoWhite from '@/assets/images/pex/extension/logo-white.svg';
@@ -14,6 +13,7 @@ import makePrediction from '@/assets/images/pex/extension/make-prediction.svg';
 import ninjas from '@/assets/images/pex/extension/2ninjas.svg';
 import screens from '@/assets/images/pex/extension/screens.png';
 
+import SubscribeEmail from './subscribeEmail';
 import './styles.scss';
 
 function header() {
@@ -215,13 +215,7 @@ function footer() {
             </Link>
           </li>
         </ul>
-        <div className="SubScribeEmail">
-          <span>Sign up for our newsletter</span>
-          <Subscriber
-            placeHolder="Your email address"
-            buttonText="Count me in"
-          />
-        </div>
+        <SubscribeEmail />
       </div>
     </footer>
   );

@@ -10,7 +10,7 @@ class Subscriber extends React.Component {
   };
 
   handleOnSubmit = (values, { setErrors }) => {
-    this.props.handleSubmit({ values });
+    this.props.handleSubmit({ values, setErrors });
     if (!this.props.statusSubscribe) {
       setErrors({ email: 'Your email is already registered' });
     }
