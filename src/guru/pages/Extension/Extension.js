@@ -114,11 +114,15 @@ function aboutUs() {
         side a growing community of users from all around the world.
       </p>
       <div className="BtnAction">
-        <button className="Join btn btn-primary">
+        <a
+          className="Join btn btn-primary"
+          href={SOCIAL.TELEGRAM}
+          target="_blank"
+        >
           <i className="fab fa-telegram" />
           <span>Join our telegram</span>
           <i className="far fa-arrow-right" />
-        </button>
+        </a>
         <button className="Goto btn btn-white">Go to Ninja app</button>
       </div>
       <Icon path={ninjas} className="NinjaSVG" />
@@ -209,10 +213,10 @@ function footer() {
             </a>
           </li>
           <li>
-            <Link to={SOCIAL.TELEGRAM} target="_blank">
+            <a href={SOCIAL.TELEGRAM} target="_blank">
               <i className="fab fa-telegram" />
               Telegram
-            </Link>
+            </a>
           </li>
         </ul>
         <SubscribeEmail />
