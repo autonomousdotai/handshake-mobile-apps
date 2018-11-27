@@ -18,7 +18,7 @@ import './styles.scss';
 
 function header() {
   return (
-    <header className="Header">
+    <header>
       <Icon className="Logo" path={LogoWhite} />
       <div className="LeftBlock">
         <h1 className="HeadLine">

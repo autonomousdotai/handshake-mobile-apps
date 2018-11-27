@@ -1,5 +1,6 @@
 .ChromeExtension {
   $primary-color: #fe8f25;
+  $block-bg: #190e03;
   $desc: #1c1a18;
   background-color: #fafafa;
 
@@ -76,15 +77,39 @@
     }
   }
 
-  .Header {
+  header {
     display: flex;
     position: relative;
-    padding: 120px 0 100px 100px;
-    background-color: #190e03;
+    padding: 150px 0 150px 100px;
     color: #fff;
+    overflow: hidden;
+
+    svg,
+    .LeftBlock,
+    .BlockRight {
+      z-index: 1;
+    }
+
+    &::after {
+      content: '';
+      background-color: $block-bg;
+      position: absolute;
+      height: 100%;
+      width: 2000px;
+      border-radius: 0 0 80% 0;
+      bottom: 0;
+      left: 0;
+      margin-bottom: 70px;
+    }
 
     .LeftBlock {
-      flex-basis: 40%;
+      flex-basis: 30%;
+    }
+
+    .RightBlock {
+      svg {
+        width: 70%;
+      }
     }
 
     .Logo {
@@ -96,7 +121,12 @@
     .Macbook {
       position: absolute;
       right: 0;
-      top: 120px;
+      bottom: 0;
+    }
+
+    .HeadLine {
+      font-size: 35px;
+      font-weight: 900;
     }
 
     .SubHeadLine {
@@ -105,7 +135,7 @@
     }
 
     .DescHeadline {
-      padding-top: 30px;
+      padding-top: 40px 0 20px 0;
       font-weight: bold;
     }
 
@@ -181,8 +211,25 @@
 
   .AddExtension {
     display: flex;
-    background-color: #190e03;
-    padding: 50px 0 0;
+    padding: 70px 0 0;
+    position: relative;
+    overflow-x: hidden;
+
+    &::after {
+      content: '';
+      background-color: $block-bg;
+      position: absolute;
+      height: 100%;
+      width: 2000px;
+      border-radius: 0 70% 0 0;
+      top: 0;
+      left: 0;
+    }
+
+    .BlockLeft,
+    .BlockRight {
+      z-index: 1;
+    }
 
     .BlockLeft {
       width: 700px;
@@ -194,6 +241,11 @@
       flex-direction: column;
       width: 300px;
       margin: 0 auto;
+      padding-top: 50px;
+    }
+
+    .AddTitle {
+      font-weight: 700;
     }
 
     .Desc {
