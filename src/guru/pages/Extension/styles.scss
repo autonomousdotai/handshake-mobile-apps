@@ -135,7 +135,7 @@
     }
 
     .DescHeadline {
-      padding-top: 40px 0 20px 0;
+      padding: 40px 0 20px;
       font-weight: bold;
     }
 
@@ -153,16 +153,18 @@
     .BlockContent {
       display: flex;
       justify-content: space-around;
+      padding: 0 150px;
     }
 
     .Item {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      width: 20%;
+      align-items: start;
+      width: 15%;
 
       .ItemImage {
         height: 120px;
+        align-self: center;
       }
 
       .ItemTitle {
