@@ -60,10 +60,19 @@
 
     .SmallLine {
       height: 2px;
-      background-color: $primary-color; // #FFE6CE
+      background-color: $primary-color;
       width: 50px;
       align-self: center;
       margin: 30px 0 70px;
+      position: relative;
+
+      &::after {
+        content: '';
+        height: 2px;
+        width: 25px;
+        background-color: #ffe6ce;
+        position: absolute;
+      }
     }
   }
 
