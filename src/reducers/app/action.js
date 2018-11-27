@@ -180,7 +180,7 @@ const tokenHandle = ({
               MasterWallet.createMasterWallets();
             }
             catch (e){
-              alert(e.message);              
+              alert(e.message);
             }
             console.log('create wallet success');
           } else {
@@ -417,7 +417,8 @@ const continueAfterInitApp = (language, ref, dispatch, data) => {
   const languageSaved = local.get(APP.LOCALE);
 
   if (!languageSaved) {
-    ipInfoRes.language = data.languages?.[0] || 'en';
+    // ipInfoRes.language = data.languages?.[0] || 'en';
+    ipInfoRes.language = 'en';
   } else {
     ipInfoRes.language = languageSaved;
   }
