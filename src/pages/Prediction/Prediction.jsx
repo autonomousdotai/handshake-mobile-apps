@@ -14,7 +14,9 @@ import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/Lucky
 import FreeBetLose from '@/components/handshakes/betting/LuckyPool/FreeBetLose';
 import FreeBetWin from '@/components/handshakes/betting/LuckyPool/FreeBetWin';
 import EmailPopup from '@/components/handshakes/betting/Feed/EmailPopup';
+import Icon from '@/guru/components/Icon/Icon';
 import Subscriber from '@/guru/components/Subscriber';
+import SubscribeSVG from '@/assets/images/modal/subscribe.svg';
 import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import Modal from '@/components/core/controls/Modal';
 import * as gtag from '@/services/ga-utils';
@@ -90,7 +92,7 @@ class Prediction extends React.Component {
   componentDidUpdate() {
     const { props, modalEmaiSubscriber } = this;
     const { isRedeem, isSubscribe, statusSubscribe } = props;
-    if ((isRedeem && !isSubscribe)) {
+    if ((isRedeem && !isSubscribe) || true) {
       if (!this.isShowSubscriber) {
         modalEmaiSubscriber.open();
         this.isShowSubscriber = true;
@@ -475,19 +477,20 @@ class Prediction extends React.Component {
   renderEmailSubscriber = () => {
     const subscriberProps = {
       isSubmitting: this.props.isLoader,
-      placeHolder: 'Your email address',
-      buttonText: 'Claim',
+      placeHolder: 'Your email',
+      buttonText: 'I want FREE 0.03 ETH',
       buttonClasses: 'btn btn-primary',
       statusSubscribe: this.props.statusSubscribe,
       handleSubmit: this.handleEmailSubscriber
     };
     return (
       <ModalDialog className="EmailSubscriberModal" close onRef={(modal) => { this.modalEmaiSubscriber = modal; }}>
+        <Icon path={SubscribeSVG} className="SubscriberImage" />
         <div className="SubscriberTitle">
           Claim your free bets
         </div>
         <div className="SubscriberDescription">
-          To claim 2x FREE 0.03ETH bets please enter your email address below:
+          To claim 2x <span className="highlight">FREE 0.03ETH</span> bets please enter your email address below:
         </div>
         <Subscriber {...subscriberProps} />
       </ModalDialog>
