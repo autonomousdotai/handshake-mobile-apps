@@ -13,6 +13,10 @@ import ethToWallet from '@/assets/images/pex/extension/eth-to-wallet.svg';
 import chooseMarket from '@/assets/images/pex/extension/choose-market.svg';
 import makePrediction from '@/assets/images/pex/extension/make-prediction.svg';
 import ninjas from '@/assets/images/pex/extension/2ninjas.svg';
+import iphone from '@/assets/images/pex/extension/iphone.svg';
+import whyMode from '@/assets/images/pex/extension/why-mode.svg';
+import whyPayout from '@/assets/images/pex/extension/why-payout.svg';
+import whyP2p from '@/assets/images/pex/extension/why-p2p.svg';
 import screens from '@/assets/images/pex/extension/screens.png';
 
 import SubscribeEmail from './subscribeEmail';
@@ -30,7 +34,7 @@ function clipOnMac() {
     },
     pathFrame: MacSVG
   };
-  return (<YtbFrame {...ytbFrameProps} />);
+  return <YtbFrame {...ytbFrameProps} />;
 }
 
 function header() {
@@ -67,6 +71,49 @@ function header() {
   );
 }
 
+function whyNinja() {
+  return (
+    <section className="WhyNinja">
+      <div className="TitleWrapper">
+        <h4 className="NavTitle">Why Ninja</h4>
+        <h2 className="Title">A BETTER WAY TO PLAY</h2>
+        <div className="SmallLine" />
+      </div>
+      <div className="BlockContent">
+        <div className="BlockLeft">
+          <Icon path={iphone} />
+        </div>
+        <div className="BlockRight">
+          <div className="Item">
+            <p className="ItemTitle">Ninja stealth mode</p>
+            <p className="ItemDesc">
+              No sign-ups. You hold your own private key, and have full control
+              over your privacy. You are undetectable and 100% anonymous. We
+              don't hold your data and never will.{' '}
+            </p>
+          </div>
+          <div className="Item">
+            <p className="ItemTitle">Guaranteed payouts</p>
+            <p className="ItemDesc">
+              All user funds are held in Escrow, powered by smart contract
+              technology. Winnings are automatically distributed without the
+              need for a middleman.
+            </p>
+          </div>
+          <div className="Item">
+            <p className="ItemTitle">Decentralized, P2P</p>
+            <p className="ItemDesc">
+              No bookies and no books. Ninja is a platform that directly
+              connects users with different opinions, without holding funds or
+              taking bets. There is no house, just other ninjas to outsmart.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function howToPlay() {
   return (
     <section className="HowToPlay">
@@ -84,7 +131,7 @@ function howToPlay() {
           <p className="ItemDesc">
             Click the Top Up button (on desktop) or wallet icon (on mobile) to
             get your Ninja wallet address. Transfer funds from an external
-            wallet. Remember to back it up! [Learn more]
+            wallet. Remember to back it up!
           </p>
         </div>
         <div className="Item">
@@ -95,7 +142,7 @@ function howToPlay() {
           <p className="ItemDesc">
             Scroll to see what people are talking about. What will you predict
             on today? If you can't find anything interesting, start a new
-            debate. [Read user-guide]
+            debate.
           </p>
         </div>
         <div className="Item">
@@ -106,7 +153,7 @@ function howToPlay() {
           <p className="ItemDesc">
             Tap Yes or No to any question. Enter the amount you'd like to wager.
             You'll see your possible winnings reflected below, and any fees
-            involved. [More on fees]
+            involved.
           </p>
         </div>
       </div>
@@ -253,6 +300,7 @@ function Extension() {
   return (
     <div className="ChromeExtension">
       {header()}
+      {whyNinja()}
       {howToPlay()}
       {aboutUs()}
       {addExtension()}

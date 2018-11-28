@@ -150,6 +150,38 @@
     }
   }
 
+  .WhyNinja {
+    display: flex;
+    flex-direction: column;
+
+    .BlockContent {
+      display: flex;
+      justify-content: center;
+      height: 650px;
+
+      .BlockLeft {
+        margin-right: 50px;
+
+        svg {
+          height: 100%;
+        }
+      }
+
+      .BlockRight {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        margin-left: 50px;
+        justify-content: space-between;
+      }
+
+      .ItemTitle {
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
+
   .HowToPlay {
     .BlockContent {
       display: flex;
@@ -278,7 +310,7 @@
       line-height: 30px;
       a {
         i {
-          padding-right: 10px;
+          width: 30px;
         }
       }
     }
