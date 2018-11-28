@@ -73,7 +73,8 @@ class HeaderBar extends React.Component {
     const { pathname } = window.location;
 
     const wallets = MasterWallet.getMasterWallet();
-    const walletProps = wallets[1];
+    const walletDefault = MasterWallet.getWalletDefault('ETH');
+    const walletProps = wallets.filter(w => w.network === walletDefault.network)[0];
 
     return (
       <div className={className}>
