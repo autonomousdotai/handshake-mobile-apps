@@ -92,7 +92,7 @@ class Prediction extends React.Component {
   componentDidUpdate() {
     const { props, modalEmaiSubscriber } = this;
     const { isRedeem, isSubscribe, statusSubscribe } = props;
-    if ((isRedeem && !isSubscribe) || true) {
+    if ((isRedeem && !isSubscribe)) {
       if (!this.isShowSubscriber) {
         modalEmaiSubscriber.open();
         this.isShowSubscriber = true;
