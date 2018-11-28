@@ -113,7 +113,6 @@ class Reputation extends React.Component {
   renderMarketList(props) {
     const { reputation } = props;
     const { loadMore, page } = reputation;
-    console.log('Reputation:', reputation);
     return (
       <div className="wrapperMarketList">
         <div className="mediumText">Hosted Debates</div>

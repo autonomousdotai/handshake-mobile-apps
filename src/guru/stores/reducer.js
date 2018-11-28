@@ -60,8 +60,7 @@ const guruReducer = (state = initialState, action) => {
         draft.ui.redeem = null;
         break;
       case 'GURU:UPDATE_USER_EVENTS':
-        const newList = action.page > 1 ? [...draft.userEvents, ...action.userEvents] : action.userEvents;
-        console.log('New List:', newList);
+        const newList = [...draft.userEvents, ...action.userEvents];
         draft.userEvents = newList;
         draft.reputation = {
           ...draft.reputation,
