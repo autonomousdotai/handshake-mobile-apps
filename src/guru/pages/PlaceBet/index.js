@@ -229,7 +229,7 @@ class PlaceBet extends Component {
       <div className="Redeem">
         {`You've already requested a redeem code. `}
         <span className="UseRedeem" onClick={this.redeemInput}>
-          Use it
+          Use a redeem code
         </span>
       </div>
     );
