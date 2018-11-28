@@ -51,6 +51,10 @@ import NoDataImage from '@/assets/images/pages/Prediction/nodata.svg';
 
 import NinjaCoinTransaction from '@/components/handshakes/exchange/BuyCoinTransaction/Transaction';
 
+import { updateLoading } from '@/guru/stores/action';
+import { referralCheck, referralJoin } from './action';
+import { referralCheckSelector } from './selector';
+
 const TAG = 'Me';
 const maps = {
   [HANDSHAKE_ID.PROMISE]: FeedPromise,
@@ -316,6 +320,10 @@ class Me extends React.Component {
       /* eslint-enable */
     }, 6000);
     this.attachScrollListener();
+
+    // referral check
+    this.props.dispatch(updateLoading(true));
+    this.props.dispatch(referralCheck());
   }
 
   componentWillUnmount() {
@@ -498,6 +506,32 @@ class Me extends React.Component {
     this.setState({ modalFillContent: '' });
   }
 
+  handleReferralProgram = () => {
+    this.props.dispatch(referralJoin());
+  }
+
+  renderReferralLink = (refer) => {
+    const { referral_link } = refer;
+    return (
+      <div className="ReferralLink">
+        <strong>Share this link to refer a friend:</strong>
+        <span className="Link"><a href={referral_link}>{referral_link}</a></span>
+        <span>You will receive 1 free prediction for every new user you refer to Ninja. Get sharing!</span>
+      </div>
+    );
+  }
+
+  renderReferralProgram = () => (<button className="btn btn-primary btn-block btnReferral" onClick={this.handleReferralProgram}>Join referral program</button>);
+
+  renderReferral = (props) => {
+    const { referralCheckInfo, isLoading } = props;
+    if (isLoading) return null;
+    if (referralCheckInfo) {
+      return this.renderReferralLink(referralCheckInfo);
+    }
+    return this.renderReferralProgram();
+  }
+
   render() {
     const { handshakeIdActive, cashTab, offerStores, propsModal, modalContent, modalFillContent } = this.state;
     const { list, listDashboard } = this.props.me;
@@ -547,6 +581,7 @@ class Me extends React.Component {
                     </Link>
                   </Col>
                 </Row>
+
                 {/*<Row onClick={!haveOffer ? this.handleCreateExchange : undefined}>*/}
                   {/*<Col md={12}>*/}
                     {/*<div className="update-profile pt-2">*/}
@@ -566,10 +601,10 @@ class Me extends React.Component {
                   {/*</Col>*/}
                 {/*</Row>*/}
 
-                <div className="mt-2 mb-1">
+                {/* <div className="mt-2 mb-1">
                   <FormFilterFeeds>
                     <div className="d-table w-100">
-                      {/*<div className="d-table-cell"><label className="label-filter-by">{messages.me.feed.filterBy}</label></div>*/}
+                      {//<div className="d-table-cell"><label className="label-filter-by">{messages.me.feed.filterBy}</label></div>//}
                       <div className="d-table-cell">
                         <Field
                           name="feedType"
@@ -601,10 +636,11 @@ class Me extends React.Component {
                       )
                     }
                   </FormFilterFeeds>
-                </div>
+                </div> */}
               </div>
             )
           }
+          { this.renderReferral(this.props) }
           <Row>
             <Col md={12} className="me-main-container">
               {
@@ -636,7 +672,7 @@ class Me extends React.Component {
                   </div>) : this.state.handshakeIdActive === HANDSHAKE_ID.NINJA_COIN ? (
                   <div className="dashboard">
                     <div className="content">
-                      <NinjaCoinTransaction />
+                      {/* <NinjaCoinTransaction /> */}
                     </div>
                   </div>) : listFeed && listFeed.length > 0 ? (
                     listFeed.map((handshake) => {
@@ -665,7 +701,7 @@ class Me extends React.Component {
                     }
                     return null;
                   })
-                ) : this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD ? (
+                ) : this.state.handshakeIdActive !== HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD ? (
                   <div className="text-center">
                     <p>{messages.me.feed.cash.stationExplain}</p>
                     <p>{messages.me.feed.cash.stationCreateSuggest}</p>
@@ -731,6 +767,8 @@ const mapState = state => ({
   exchange: state.exchange,
   authProfile: state.auth.profile,
   offerStores: state.exchange.offerStores,
+  isLoading: state.guru.ui.isLoading,
+  referralCheckInfo: referralCheckSelector(state)
 });
 
 const mapDispatch = dispatch => ({
