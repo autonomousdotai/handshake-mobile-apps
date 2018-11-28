@@ -3,6 +3,8 @@ import Icon from '@/guru/components/Icon/Icon';
 import { URL, SOCIAL, EXT } from '@/constants';
 import { Link } from 'react-router-dom';
 
+import YtbFrame from '@/guru/components/YtbFrame/YtbFrame';
+
 // Icons
 import LogoWhite from '@/assets/images/pex/extension/logo-white.svg';
 import LogoBlack from '@/assets/images/pex/extension/logo-black.svg';
@@ -15,6 +17,21 @@ import screens from '@/assets/images/pex/extension/screens.png';
 
 import SubscribeEmail from './subscribeEmail';
 import './styles.scss';
+
+function clipOnMac() {
+  const ytbFrameProps = {
+    config: {
+      title: 'Chrome Extension Instruction',
+      src: EXT.CLIP_SOURCE,
+      frameBorder: '0',
+      allow: 'autoplay; encrypted-media',
+      allowFullScreen: true,
+      className: 'videoClip'
+    },
+    pathFrame: MacSVG
+  };
+  return (<YtbFrame {...ytbFrameProps} />);
+}
 
 function header() {
   return (
@@ -43,7 +60,8 @@ function header() {
         </p>
       </div>
       <div className="RightBlock">
-        <Icon className="Macbook" path={MacSVG} />
+        {/* <Icon className="Macbook" path={MacSVG} /> */}
+        {clipOnMac()}
       </div>
     </header>
   );
