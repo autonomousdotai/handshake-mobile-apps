@@ -184,10 +184,10 @@ function footer() {
           than you are willing to lose. Play safe!
         </p>
         <p>
-          Need more information? check out our{' '}
-          <Link to={`${URL.HANDSHAKE_PREDICTION}#faq`}>FAQ</Link> and{' '}
-          <Link to={URL.PEX_INSTRUCTION_URL}>instructions</Link> on how to play.{' '}
-          <br />
+          {/*Need more information? check out our{' '}*/}
+          {/*<Link to={`${URL.HANDSHAKE_PREDICTION}#faq`}>FAQ</Link> and{' '}*/}
+          {/*<Link to={URL.PEX_INSTRUCTION_URL}>instructions</Link> on how to play.{' '}*/}
+          {/*<br />*/}
           Copyright &#9400; 2018. All Rights Reserved. Legal.
         </p>
       </div>
