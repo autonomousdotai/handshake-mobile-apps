@@ -582,8 +582,6 @@ class Me extends React.Component {
                   </Col>
                 </Row>
 
-                { this.renderReferral(this.props) }
-
                 {/*<Row onClick={!haveOffer ? this.handleCreateExchange : undefined}>*/}
                   {/*<Col md={12}>*/}
                     {/*<div className="update-profile pt-2">*/}
@@ -642,6 +640,7 @@ class Me extends React.Component {
               </div>
             )
           }
+          { this.renderReferral(this.props) }
           <Row>
             <Col md={12} className="me-main-container">
               {
@@ -673,7 +672,7 @@ class Me extends React.Component {
                   </div>) : this.state.handshakeIdActive === HANDSHAKE_ID.NINJA_COIN ? (
                   <div className="dashboard">
                     <div className="content">
-                      <NinjaCoinTransaction />
+                      {/* <NinjaCoinTransaction /> */}
                     </div>
                   </div>) : listFeed && listFeed.length > 0 ? (
                     listFeed.map((handshake) => {
@@ -702,7 +701,7 @@ class Me extends React.Component {
                     }
                     return null;
                   })
-                ) : this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD ? (
+                ) : this.state.handshakeIdActive !== HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD ? (
                   <div className="text-center">
                     <p>{messages.me.feed.cash.stationExplain}</p>
                     <p>{messages.me.feed.cash.stationCreateSuggest}</p>
