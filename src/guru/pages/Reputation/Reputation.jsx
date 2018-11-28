@@ -11,6 +11,7 @@ import DefaultAvatar from '@/assets/images/icon/extension_logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { shortAddress } from '@/utils/string';
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 import './Reputation.scss';
@@ -24,20 +25,21 @@ class Reputation extends React.Component {
 
   static defaultProps = {
     eventList: [],
-    reputation: {},
+    reputation: {}
   };
+
   componentDidMount() {
-    this.getData(this.props);
+    this.getData(this.props, 0);
   }
-  getQueryString=()=> {
+  getQueryString=() => {
     const querystring = window.location.search.replace('?', '');
     const querystringParsed = qs.parse(querystring);
     return querystringParsed;
   }
-  getData = (props) => {
+  getData = (props, page) => {
     const query = this.getQueryString();
     const userId = query.id;
-    props.dispatch(loadUserReputation({ userId }));
+    props.dispatch(loadUserReputation({ userId, page }));
   }
 
   backAction = () => {
@@ -109,18 +111,28 @@ class Reputation extends React.Component {
     );
   }
   renderMarketList(props) {
+    const { reputation } = props;
+    const { loadMore, page } = reputation;
     return (
       <div className="wrapperMarketList">
         <div className="mediumText">Hosted Debates</div>
-        {props.eventList.map((event) => {
-          return (
-            <EventItem
-              key={event.id}
-              event={event}
-              onClickEvent={this.handleClickEvent}
-            />
-          );
-        })}
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => this.getData(props, page)}
+          hasMore={loadMore}
+          loader={<div className="loaderRepu">Loading ...</div>}
+        >
+          {props.eventList.map((event) => {
+            return (
+              <EventItem
+                key={event.id}
+                event={event}
+                onClickEvent={this.handleClickEvent}
+              />
+            );
+          })}
+        </InfiniteScroll>
+
       </div>
     );
   }

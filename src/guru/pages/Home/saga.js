@@ -34,11 +34,11 @@ export function* handleLoadMatches({ isDetail, source }) {
   }
 }
 
-export function* handleLoadReputation({ userId }) {
+export function* handleLoadReputation({ userId, page }) {
   try {
     yield put(updateLoading(true));
 
-    const PATH_URL = `${API_URL.CRYPTOSIGN.GET_REPUTATION_USER}/${userId}`;
+    const PATH_URL = `${API_URL.CRYPTOSIGN.GET_REPUTATION_USER}/${userId}/${page}`;
     const { data } = yield call(apiGet, {
       PATH_URL,
       type: 'LOAD_USER_REPUTATION',
@@ -46,7 +46,9 @@ export function* handleLoadReputation({ userId }) {
 
     if (data) {
       const { matches } = data;
-      yield put(updateUserEvents(matches));
+      const loadMore = matches.length < 10 ? false : true;
+      const newPage = loadMore ? page + 1 : 0;
+      yield put(updateUserEvents(matches, loadMore, newPage));
       yield put(updateUserReputation(data));
     }
     yield put(updateLoading(false));
