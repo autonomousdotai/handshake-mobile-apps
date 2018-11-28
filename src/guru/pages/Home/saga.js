@@ -2,7 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
 import { updateLoading } from '@/guru/stores/action';
-import { loadMatches, updateEvents, updateUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, loginMetaMask, updateAuthMetaMask } from './action';
+import { loadMatches, updateEvents, updateUserEvents, updateNewUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, loginMetaMask, updateAuthMetaMask } from './action';
 
 
 export function* handleLoadMatches({ isDetail, source }) {
@@ -48,7 +48,11 @@ export function* handleLoadReputation({ userId, page }) {
       const { matches } = data;
       const loadMore = matches.length < 10 ? false : true;
       const newPage = loadMore ? page + 1 : 0;
-      yield put(updateUserEvents(matches, loadMore, newPage));
+      if (page === 0) {
+        yield put(updateNewUserEvents(matches, loadMore, newPage));
+      } else {
+        yield put(updateUserEvents(matches, loadMore, newPage));
+      }
       yield put(updateUserReputation(data));
     }
     yield put(updateLoading(false));

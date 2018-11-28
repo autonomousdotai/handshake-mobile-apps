@@ -68,6 +68,15 @@ const guruReducer = (state = initialState, action) => {
           page: action.page
         };
         break;
+
+      case 'GURU:UPDATE_NEW_USER_EVENTS':
+        draft.userEvents = action.userEvents;
+        draft.reputation = {
+          ...draft.reputation,
+          loadMore: action.loadMore,
+          page: action.page
+        };
+        break;
       case 'GURU:UPDATE_USER_REPUTATION':
         draft.reputation = {
           ...draft.reputation,

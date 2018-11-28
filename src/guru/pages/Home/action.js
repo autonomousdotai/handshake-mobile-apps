@@ -21,6 +21,15 @@ export const updateUserEvents = (events, loadMore, page) => {
   };
 };
 
+export const updateNewUserEvents = (events, loadMore, page) => {
+  return {
+    type: 'GURU:UPDATE_NEW_USER_EVENTS',
+    userEvents: events,
+    loadMore,
+    page
+  };
+};
+
 export const loadUserReputation = (payload = {}) => {
   return {
     type: 'GURU:LOAD_USER_REPUTATION',
