@@ -334,6 +334,9 @@ class Me extends React.Component {
       firstTime: true,
     });
     this.detachScrollListener();
+
+    //remove loading
+    this.props.dispatch(updateLoading(false));
   }
 
   setLoading = (loadingState) => {
@@ -525,8 +528,9 @@ class Me extends React.Component {
 
   renderReferral = (props) => {
     const { referralCheckInfo, isLoading } = props;
+    const { status } = referralCheckInfo || 0;
     if (isLoading) return null;
-    if (referralCheckInfo) {
+    if (status) {
       return this.renderReferralLink(referralCheckInfo);
     }
     return this.renderReferralProgram();

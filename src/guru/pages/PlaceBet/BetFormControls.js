@@ -39,6 +39,7 @@ const BetFormControls = ({
   handleBlur,
   handleSubmit,
   isSubmitting,
+  isLoading,
   isValid,
   touched,
   errors,
@@ -81,7 +82,7 @@ const BetFormControls = ({
         }
       />
       <ErrMsg name="amount" />
-      <button type="submit" disabled={isSubmitting || values.amount === ''} className={buttonClasses}>
+      <button type="submit" disabled={isLoading || values.amount === ''} className={buttonClasses}>
         {buttonText}
       </button>
     </Form>

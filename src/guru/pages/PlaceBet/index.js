@@ -197,6 +197,7 @@ class PlaceBet extends Component {
       props.dispatch(updateLoading(false));
       return modalOuttaMoney.open();
     }
+    props.dispatch(updateLoading(false));
     return alertBox({ message, type: 'danger' });
   };
 
@@ -227,7 +228,7 @@ class PlaceBet extends Component {
     if (!isRedeem || isUseRedeem) return null;
     return (
       <div className="Redeem">
-        {`You've already requested a redeem code. `}
+        {/* {`You've already requested a redeem code. `} */}
         <span className="UseRedeem" onClick={this.redeemInput}>
           Use a redeem code
         </span>
@@ -243,7 +244,7 @@ class PlaceBet extends Component {
       amount: props.redeem ? props.redeem.amount || '' : '',
       redeem: props.redeem ? props.redeem.code || '' : '',
       side: getSide(props),
-      isSubmitting: props.isLoading,
+      isLoading: props.isLoading,
       buttonText: props.isLoading ? 'Loading...' : 'Predict',
       buttonClasses: classNames('btn btn-block', {
         'btn-primary': getSide(props) === 1,
