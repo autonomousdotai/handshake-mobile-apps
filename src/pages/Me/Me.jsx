@@ -528,7 +528,7 @@ class Me extends React.Component {
 
   renderReferral = (props) => {
     const { referralCheckInfo, isLoading } = props;
-    const { status = 0 } = referralCheckInfo;
+    const { status } = referralCheckInfo || 0;
     if (isLoading) return null;
     if (status) {
       return this.renderReferralLink(referralCheckInfo);
