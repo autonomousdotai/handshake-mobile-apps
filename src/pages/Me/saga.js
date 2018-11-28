@@ -11,7 +11,10 @@ export function* handleReferralCheck() {
       type: 'REFERRAL_CHECK'
     });
     if (response) {
-      const referralInfo = { ...response.data, status: response.status };
+      const referralInfo = response.status ? {
+        ...response.data,
+        status: response.status
+      } : response.status;
       yield put(putReferralCheck(referralInfo));
       yield put(updateLoading(false));
     }
