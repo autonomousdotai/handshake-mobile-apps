@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150px" height="60px" viewBox="0 0 150 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.1 (67048) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 19</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-225.000000, -988.000000)">
+            <g id="Group-24" transform="translate(203.000000, 965.000000)">
+                <g id="Group-19" transform="translate(22.000000, 24.000000)">
+                    <g id="Group-13">
+                        <path d="M29,6.0835794 C37.4226953,-3.61814587 73.0636627,-1.28796096 80,10.0307185" id="Path-5" stroke="#573311" stroke-width="2" opacity="0.488304501" stroke-dasharray="2"></path>
+                        <circle id="Oval-Copy" fill="#FFDEBF" cx="123.5" cy="32.5" r="26.5"></circle>
+                        <text id="" font-family="FontAwesome5ProSolid, Font Awesome 5 Pro" font-size="40" font-weight="700" fill="#FE8F25">
+                            <tspan x="88" y="41"></tspan>
+                        </text>
+                        <circle id="Oval" fill="#FFE6CE" cx="16" cy="22" r="16"></circle>
+                        <text id="" font-family="FontAwesome5BrandsRegular, Font Awesome 5 Brands" font-size="35" font-weight="normal" fill="#F09640">
+                            <tspan x="11.5625" y="33"></tspan>
+                        </text>
+                        <path d="M81.7272727,2 L83,10.8 L76,13" id="Path-6" fill="#845529"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

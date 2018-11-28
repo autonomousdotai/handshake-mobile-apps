@@ -4,14 +4,19 @@ import * as Yup from 'yup';
 import SubscriberForm from './Form';
 
 class Subscriber extends React.Component {
+  static defaultProps = {
+    buttonText: 'Submit',
+    placeHolder: ''
+  };
+
   handleOnSubmit = (values, { setErrors }) => {
-    this.props.handleSubmit({ values });
+    this.props.handleSubmit({ values, setErrors });
     if (!this.props.statusSubscribe) {
       setErrors({ email: 'Your email is already registered' });
     }
   };
 
-  renderForm = (formProps) => {
+  renderForm = formProps => {
     const { props } = this;
     const subscriberFromProps = {
       ...formProps,
@@ -20,8 +25,8 @@ class Subscriber extends React.Component {
       buttonText: props.buttonText,
       buttonClasses: props.buttonClasses
     };
-    return (<SubscriberForm {...subscriberFromProps} />);
-  }
+    return <SubscriberForm {...subscriberFromProps} />;
+  };
 
   render() {
     const initialValues = { email: '' };

@@ -26,12 +26,13 @@ module.exports = function webpackConfig(env, argv = {}) {
     modules: false,
     children: false,
     chunks: false,
+    assets: false
   };
 
   let appEnvConfig = {
     NODE_ENV: argv.mode,
     isProduction,
-    ...envConfig,
+    ...envConfig
   };
 
   const development = {
@@ -41,10 +42,10 @@ module.exports = function webpackConfig(env, argv = {}) {
       stats,
       publicPath: '/',
       historyApiFallback: {
-        disableDotRule: true,
+        disableDotRule: true
       },
       hot: true,
-      host: '0.0.0.0',
+      host: '0.0.0.0'
     },
     module: {
       rules: [
@@ -57,10 +58,10 @@ module.exports = function webpackConfig(env, argv = {}) {
             {
               loader: 'resolve-url-loader',
               options: {
-                keepQuery: true,
-              },
-            },
-          ],
+                keepQuery: true
+              }
+            }
+          ]
         },
         {
           test: /\.scss$/,
@@ -71,14 +72,14 @@ module.exports = function webpackConfig(env, argv = {}) {
             {
               loader: 'resolve-url-loader',
               options: {
-                keepQuery: true,
-              },
+                keepQuery: true
+              }
             },
-            { loader: 'sass-loader', options: { sourceMap: true } },
-          ],
-        },
-      ],
-    },
+            { loader: 'sass-loader', options: { sourceMap: true } }
+          ]
+        }
+      ]
+    }
   };
 
   const production = {
@@ -89,15 +90,15 @@ module.exports = function webpackConfig(env, argv = {}) {
           sourceMap: true,
           uglifyOptions: {
             compress: {
-              drop_console: appEnvConfig.dropConsole,
-            },
-          },
-        }),
+              drop_console: appEnvConfig.dropConsole
+            }
+          }
+        })
       ],
       splitChunks: {
-        chunks: 'all',
+        chunks: 'all'
       },
-      noEmitOnErrors: true,
+      noEmitOnErrors: true
     },
     module: {
       rules: [
@@ -111,10 +112,10 @@ module.exports = function webpackConfig(env, argv = {}) {
             {
               loader: 'resolve-url-loader',
               options: {
-                keepQuery: true,
-              },
-            },
-          ],
+                keepQuery: true
+              }
+            }
+          ]
         },
         {
           test: /\.scss$/,
@@ -126,20 +127,20 @@ module.exports = function webpackConfig(env, argv = {}) {
             {
               loader: 'resolve-url-loader',
               options: {
-                keepQuery: true,
-              },
+                keepQuery: true
+              }
             },
-            'sass-loader',
-          ],
-        },
-      ],
+            'sass-loader'
+          ]
+        }
+      ]
     },
     plugins: [
       new CleanWebpackPlugin(['dist']),
       new OptimizeCSSAssetsPlugin(),
       new MiniCssExtractPlugin({
         filename: 'css/[name].css',
-        chunkFilename: 'css/[hash].[name].css',
+        chunkFilename: 'css/[hash].[name].css'
       }),
       new PwaManifestPlugin({
         name: appEnvConfig.title,
@@ -153,20 +154,20 @@ module.exports = function webpackConfig(env, argv = {}) {
           {
             src: xPath('src/assets/images/logo.png'),
             sizes: [192, 256, 384, 512],
-            destination: path.join('assets', 'icons'),
-          },
-        ],
+            destination: path.join('assets', 'icons')
+          }
+        ]
       }),
       new CopyWebpackPlugin([
         { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
         { from: 'src/assets/images/template/og_image.jpg', to: 'images' },
-        { from: 'src/robots.txt', to: '.' },
+        { from: 'src/robots.txt', to: '.' }
         // { from: 'src/google59d0f1640e2aac21.html', to: '.' },
         // { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },
-      ]),
+      ])
     ],
     performance: { hints: false },
-    devtool: false,
+    devtool: false
   };
 
   if (isProduction && fs.existsSync(xPath('.env.production.js'))) {
@@ -180,26 +181,26 @@ module.exports = function webpackConfig(env, argv = {}) {
         main: xPath('src/index.js'),
         'app-sw': xPath('src/sw.js'),
         'firebase-messaging-sw': xPath('src/sw-fcm.js'),
-        'serviceWorker.min': xPath('src/serviceWorker.js'),
+        'serviceWorker.min': xPath('src/serviceWorker.js')
       },
       output: {
         filename: `[name].js?v=[hash]`,
         chunkFilename: `[name].chunk.js?v=[hash]`,
         publicPath: '/',
-        globalObject: 'this',
+        globalObject: 'this'
       },
       resolve: {
         alias: { '@': xPath('src') },
         extensions: ['.js', '.jsx', '.scss', '.css'],
-        modules: [xPath('node_modules')],
+        modules: [xPath('node_modules')]
       },
       plugins: [
         new webpack.DefinePlugin({
-          'process.env': JSON.stringify(appEnvConfig),
+          'process.env': JSON.stringify(appEnvConfig)
         }),
         new webpack.ProvidePlugin({
           $: 'jquery',
-          jQuery: 'jquery',
+          jQuery: 'jquery'
         }),
         new HtmlWebpackPlugin({
           chunks: ['main', 'vendors~main'],
@@ -207,15 +208,15 @@ module.exports = function webpackConfig(env, argv = {}) {
             ? {
               collapseWhitespace: true,
               preserveLineBreaks: true,
-              removeComments: true,
+              removeComments: true
             }
             : null,
           filename: 'index.html',
           template: xPath('src/templates/index.hbs'),
           favicon: xPath('src/assets/favicon.png'),
-          env: appEnvConfig,
+          env: appEnvConfig
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
       ],
       module: {
         rules: [
@@ -224,30 +225,30 @@ module.exports = function webpackConfig(env, argv = {}) {
             exclude: /node_modules/,
             use: [
               {
-                loader: 'babel-loader',
-              },
-            ],
+                loader: 'babel-loader'
+              }
+            ]
           },
           {
             test: /\.html$/,
             use: [
               {
                 loader: 'html-loader',
-                options: { minimize: isProduction },
-              },
-            ],
+                options: { minimize: isProduction }
+              }
+            ]
           },
           {
             test: /\.hbs$/,
             use: [
               {
-                loader: 'handlebars-loader',
-              },
-            ],
+                loader: 'handlebars-loader'
+              }
+            ]
           },
           {
             test: /\.(raw)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            use: 'raw-loader',
+            use: 'raw-loader'
           },
           {
             test: /\.(png|gif|jpe?g|svg|webp)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -258,10 +259,10 @@ module.exports = function webpackConfig(env, argv = {}) {
                 options: {
                   name: '[hash].[ext]',
                   outputPath: 'images/',
-                  verbose: false,
-                },
-              },
-            ],
+                  verbose: false
+                }
+              }
+            ]
           },
           {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -271,17 +272,17 @@ module.exports = function webpackConfig(env, argv = {}) {
                 options: {
                   name: '[hash].[ext]',
                   outputPath: 'fonts/',
-                  verbose: false,
-                },
-              },
-            ],
-          },
-        ],
+                  verbose: false
+                }
+              }
+            ]
+          }
+        ]
       },
       stats,
-      devtool: 'source-map',
+      devtool: 'source-map'
     },
-    isProduction ? production : development,
+    isProduction ? production : development
   );
 
   return finalConfig;
