@@ -227,7 +227,7 @@ class PlaceBet extends Component {
     if (!isRedeem || isUseRedeem) return null;
     return (
       <div className="Redeem">
-        {`You've already requested a redeem code. `}
+        {/* {`You've already requested a redeem code. `} */}
         <span className="UseRedeem" onClick={this.redeemInput}>
           Use a redeem code
         </span>
