@@ -334,6 +334,9 @@ class Me extends React.Component {
       firstTime: true,
     });
     this.detachScrollListener();
+
+    //remove loading
+    this.props.dispatch(updateLoading(false));
   }
 
   setLoading = (loadingState) => {

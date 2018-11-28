@@ -10,7 +10,7 @@ export function* handleReferralCheck() {
       PATH_URL: `${API_URL.CRYPTOSIGN.REFERRAL_CHECK}`,
       type: 'REFERRAL_CHECK'
     });
-    if (response.status) {
+    if (response) {
       const referralInfo = { ...response.data, status: response.status };
       yield put(putReferralCheck(referralInfo));
       yield put(updateLoading(false));
