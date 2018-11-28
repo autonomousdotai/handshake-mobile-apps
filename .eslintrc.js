@@ -31,6 +31,7 @@ module.exports = {
     'react/forbid-prop-types': 'off',
     'react/jsx-no-target-blank': 'off',
     'react/no-danger': 'off',
+    'react/no-unescaped-entities': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',

@@ -27,8 +27,8 @@ function header() {
         </h1>
         <h3 className="SubHeadLine">Outsmart the Internet</h3>
         <p className="DescHeadline">
-          Predict the future of politics, technology, <br />
-          money, sports and anything else you can think of!
+          Predict tomorrow's news. <br />
+          Win crypto for being right - about anything.
         </p>
         <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
           <i className="fab fa-chrome" />
@@ -38,7 +38,8 @@ function header() {
           or open{' '}
           <a href={URL.HANDSHAKE_PREDICTION} target="_blank">
             ninja.org/prediction
-          </a>
+          </a>{' '}
+          on your mobile browser
         </p>
       </div>
       <div className="RightBlock">
@@ -53,7 +54,7 @@ function howToPlay() {
     <section className="HowToPlay">
       <div className="TitleWrapper">
         <h4 className="NavTitle">How to play</h4>
-        <h2 className="Title">As EASY AS 1-2-3</h2>
+        <h2 className="Title">READY, SET, PREDICT</h2>
         <div className="SmallLine" />
       </div>
       <div className="BlockContent">
@@ -63,22 +64,20 @@ function howToPlay() {
           </div>
           <p className="ItemTitle">Add ETH to wallet</p>
           <p className="ItemDesc">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-            ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas
-            accumsan lacus vel facilisis.
+            Click the Top Up button (on desktop) or wallet icon (on mobile) to
+            get your Ninja wallet address. Transfer funds from an external
+            wallet. Remember to back it up! [Learn more]
           </p>
         </div>
         <div className="Item">
           <div className="ItemImage">
             <Icon path={chooseMarket} />
           </div>
-          <p className="ItemTitle">Choose a market</p>
+          <p className="ItemTitle">Choose a debate</p>
           <p className="ItemDesc">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-            ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas
-            accumsan lacus vel facilisis.
+            Scroll to see what people are talking about. What will you predict
+            on today? If you can't find anything interesting, start a new
+            debate. [Read user-guide]
           </p>
         </div>
         <div className="Item">
@@ -87,10 +86,9 @@ function howToPlay() {
           </div>
           <p className="ItemTitle">Make your prediction</p>
           <p className="ItemDesc">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
-            ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas
-            accumsan lacus vel facilisis.
+            Tap Yes or No to any question. Enter the amount you'd like to wager.
+            You'll see your possible winnings reflected below, and any fees
+            involved. [More on fees]
           </p>
         </div>
       </div>
@@ -123,13 +121,13 @@ function aboutUs() {
           <span>Join our telegram</span>
           <i className="far fa-arrow-right" />
         </a>
-        <a
+        {/* <a
           className="Goto btn btn-white"
           href={URL.HANDSHAKE_PREDICTION}
           target="_blank"
         >
-          Go to Ninja app
-        </a>
+          See what's behind the mask
+        </a> */}
       </div>
       <Icon path={ninjas} className="NinjaSVG" />
       <p className="Desc">
@@ -151,14 +149,16 @@ function addExtension() {
         <img src={screens} alt="Add to Chrome" />
       </div>
       <div className="BlockRight">
-        <h2 className="AddTitle">Let&#39;s start predicting today</h2>
+        <h2 className="AddTitle">Ready to start a debate?</h2>
         <p className="Desc">
-          Do not wait any longer. Download this extension now and start
-          predicting and creating on any events you could imagine.
+          Predict the future of money, politics, sports and more. Join the
+          hundreds of ninjas already playing on the world's top rated crypto
+          dApp. Ninja is available on desktop as a chrome extension, or on the
+          original mobile web app. Make crypto for being right.
         </p>
         <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
           <i className="fab fa-chrome" />
-          <span>Add to Chrome now</span>
+          <span>Add to Chrome</span>
         </a>
       </div>
     </section>
