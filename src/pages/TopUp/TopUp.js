@@ -68,7 +68,8 @@ class TopUp extends React.Component {
 
   render() {
     const wallets = MasterWallet.getMasterWallet();
-    const walletProps = wallets[1];
+    const walletDefault = MasterWallet.getWalletDefault('ETH');
+    const walletProps = wallets.filter(w => w.network === walletDefault.network)[0];
     return (
       <div className="TopUpContainer">
         { this.balance(walletProps) }
