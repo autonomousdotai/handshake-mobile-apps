@@ -510,6 +510,7 @@ class Me extends React.Component {
   }
 
   handleReferralProgram = () => {
+    this.props.dispatch(updateLoading(true));
     this.props.dispatch(referralJoin());
   }
 
@@ -524,16 +525,23 @@ class Me extends React.Component {
     );
   }
 
-  renderReferralProgram = () => (<button className="btn btn-primary btn-block btnReferral" onClick={this.handleReferralProgram}>Join referral program</button>);
+  renderReferralProgram = (props) => (
+    <button
+      className="btn btn-primary btn-block btnReferral"
+      onClick={this.handleReferralProgram}
+    >
+      {props.isLoading ? 'Joining...' : 'Join referral program'}
+    </button>
+  );
 
   renderReferral = (props) => {
-    const { referralCheckInfo, isLoading } = props;
+    const { referralCheckInfo } = props;
     const { status } = referralCheckInfo || 0;
-    if (isLoading) return null;
+    if (!referralCheckInfo) return null;
     if (status) {
       return this.renderReferralLink(referralCheckInfo);
     }
-    return this.renderReferralProgram();
+    return this.renderReferralProgram(props);
   }
 
   render() {
@@ -670,14 +678,14 @@ class Me extends React.Component {
                         </div>
                       </div>
                     </div>*/}
-                    <div className="content">
+                    {/* <div className="content">
                       {<Component history={this.props.history} setLoading={this.setLoading}></Component>}
-                    </div>
+                    </div> */}
                   </div>) : this.state.handshakeIdActive === HANDSHAKE_ID.NINJA_COIN ? (
                   <div className="dashboard">
-                    <div className="content">
-                      {/* <NinjaCoinTransaction /> */}
-                    </div>
+                    {/* <div className="content">
+                      <NinjaCoinTransaction />
+                    </div> */}
                   </div>) : listFeed && listFeed.length > 0 ? (
                     listFeed.map((handshake) => {
                     const FeedComponent = maps[handshake.type];
@@ -705,7 +713,7 @@ class Me extends React.Component {
                     }
                     return null;
                   })
-                ) : this.state.handshakeIdActive !== HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD ? (
+                ) : this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD ? (
                   <div className="text-center">
                     <p>{messages.me.feed.cash.stationExplain}</p>
                     <p>{messages.me.feed.cash.stationCreateSuggest}</p>
@@ -716,8 +724,7 @@ class Me extends React.Component {
                 (
                   <NoData>
                     <div className="NoDataContainer">
-                      {/*<div className="NoDataTitle">Nothing here</div>*/}
-                      <img src={NoDataImage} alt="Nothing herer" />
+                      <img src={NoDataImage} alt="Nothing here" />
                       <div className="ShortDescription">
                         Oops! <br />
                         Looks like you’re a bit lost… <br />
