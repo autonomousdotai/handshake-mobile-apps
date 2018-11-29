@@ -57,13 +57,14 @@ export function* handleGetGasPrice() {
 
 export function* handleInitHandShake({ payload }) {
   try {
-    const { data } = yield call(apiPost, {
+    const response = yield call(apiPost, {
       PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE}`,
       type: 'INIT_HANDSHAKE',
       data: payload
     });
-    if (data) {
-      yield put(putHandShake(data));
+    if (response) {
+      const { data, status } = response;
+      yield put(putHandShake({ ...data, status }));
       yield put(updateLoading(false));
     }
   } catch (e) {
@@ -73,13 +74,14 @@ export function* handleInitHandShake({ payload }) {
 
 export function* handleInitHandShakeFree({ payload }) {
   try {
-    const { data } = yield call(apiPost, {
+    const response = yield call(apiPost, {
       PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE_FREE}`,
       type: 'INIT_HANDSHAKE_FREE',
       data: payload
     });
-    if (data) {
-      yield put(putHandShake(data));
+    if (response) {
+      const { data, message, status } = response;
+      yield put(putHandShake({ ...data, message, status }));
       yield put(updateLoading(false));
     }
   } catch (e) {
