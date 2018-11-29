@@ -79,7 +79,6 @@ export function* handleInitHandShakeFree({ payload }) {
       data: payload
     });
     if (data) {
-      console.log(data);
       yield put(putHandShake(data));
       yield put(updateLoading(false));
     }

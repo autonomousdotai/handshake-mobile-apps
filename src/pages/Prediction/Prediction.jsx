@@ -14,7 +14,9 @@ import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/Lucky
 import FreeBetLose from '@/components/handshakes/betting/LuckyPool/FreeBetLose';
 import FreeBetWin from '@/components/handshakes/betting/LuckyPool/FreeBetWin';
 import EmailPopup from '@/components/handshakes/betting/Feed/EmailPopup';
+import Icon from '@/guru/components/Icon/Icon';
 import Subscriber from '@/guru/components/Subscriber';
+import SubscribeSVG from '@/assets/images/modal/subscribe.svg';
 import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import Modal from '@/components/core/controls/Modal';
 import * as gtag from '@/services/ga-utils';
@@ -25,9 +27,21 @@ import { predictionStatistics } from '@/components/handshakes/betting/Feed/Order
 import { isJSON } from '@/utils/object';
 import qs from 'querystring';
 
+import { updateLoading } from '@/guru/stores/action';
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
-import { eventSelector, isLoading, showedLuckyPoolSelector, isSharePage, countReportSelector, checkRedeemCodeSelector, checkExistSubcribeEmailSelector, totalBetsSelector, relevantEventSelector } from './selector';
+import {
+  eventSelector,
+  isLoading,
+  showedLuckyPoolSelector,
+  isSharePage,
+  countReportSelector,
+  checkRedeemCodeSelector,
+  checkExistSubcribeEmailSelector,
+  totalBetsSelector,
+  relevantEventSelector,
+  referParamSelector
+} from './selector';
 import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, checkExistSubcribeEmail, loadRelevantEvents, emailSubscriber } from './action';
 import { removeShareEvent } from '../CreateMarket/action';
 import { shareEventSelector } from '../CreateMarket/selector';
@@ -51,7 +65,7 @@ class Prediction extends React.Component {
     isRedeemAvailable: PropTypes.number,
     isExistEmail: PropTypes.any,
     totalBets: PropTypes.number,
-    isSubscriber: PropTypes.number
+    isSubscribe: PropTypes.number
   };
 
   static defaultProps = {
@@ -59,7 +73,7 @@ class Prediction extends React.Component {
     relevantEvents: [],
     shareEvent: null,
     isExistEmail: 0,
-    isSubscriber: 0
+    isSubscribe: 0
   };
 
   constructor(props) {
@@ -78,71 +92,36 @@ class Prediction extends React.Component {
     this.receiverMessage(this.props); // @TODO: Extensions
     this.props.dispatch(getReportCount());
     this.props.dispatch(checkRedeemCode());
-    this.props.dispatch(checkExistSubcribeEmail());
+    // this.props.dispatch(checkExistSubcribeEmail());
     window.addEventListener('scroll', this.handleScroll);
-    const eventId = this.getEventId(this.props);
-    if (eventId) {
-      this.props.dispatch(loadRelevantEvents({eventId}));
-    }
-
-    /*
-    setTimeout(() => {
-      window?.$zopim?.livechat?.window?.onShow(() => {
-        this.isShow = true;
-        console.log('onShow', this.isShow);
-      });
-      window?.$zopim?.livechat?.window?.onHide(() => {
-        this.isShow = false;
-        console.log('onHide', this.isShow);
-      });
-      this.scrollListener();
-    }, 6000);*/
-    //this.attachScrollListener();
+    // const eventId = this.getEventId(this.props);
+    // if (eventId) {
+    //   this.props.dispatch(loadRelevantEvents({eventId}));
+    // }
   }
 
   componentDidUpdate() {
     const { props, modalEmaiSubscriber } = this;
-    if (props.isRedeemAvailable) {
-      props.isSubscriber ? modalEmaiSubscriber.close() : modalEmaiSubscriber.open();
+    const { isRedeem, isSubscribe, statusSubscribe } = props;
+    if ((isRedeem && !isSubscribe)) {
+      if (!this.isShowSubscriber) {
+        modalEmaiSubscriber.open();
+        this.isShowSubscriber = true;
+      }
+    }
+    if (statusSubscribe) {
+      modalEmaiSubscriber.close();
+      this.isShowSubscriber = false;
     }
   }
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
-    this.detachScrollListener();
-  }
-
-  scrollListener = async () => {
-    /*eslint-disable */
-    if (!this.isShow) {
-      window?.$zopim && window?.$zopim(() => {
-        window?.$zopim?.livechat.button.hide();
-        window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
-        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
-        window?.$zopim?.livechat.button.show();
-      });
-    }
-    /* eslint-enable */
-  }
-
-  attachScrollListener() {
-    window.addEventListener('scroll', this.scrollListener);
-    window.addEventListener('resize', this.scrollListener);
-    this.scrollListener();
-  }
-
-  detachScrollListener() {
-    this.isShow = true;
-    /*eslint-disable */
-    window?.$zopim?.livechat.button.hide();
-    window.removeEventListener('scroll', this.scrollListener);
-    window.removeEventListener('resize', this.scrollListener);
-    /* eslint-enable */
   }
 
   onCountdownComplete = (eventId) => {
     this.props.dispatch(removeExpiredEvent({ eventId }));
-    this.closeOrderPlace();
+    // this.closeOrderPlace();
     this.props.dispatch(getReportCount());
   }
   getEventId = () => {
@@ -212,7 +191,7 @@ class Prediction extends React.Component {
     const showedLuckyPool = this.checkLuckyPool();
     if (showedLuckyPool) return;
     setTimeout(() => {
-      this.modalLuckyPoolRef.open();
+      // this.modalLuckyPoolRef.open();
       localStorage.setItem('showedLuckyPool', true);
     }, 2 * 1000);
   }
@@ -227,52 +206,52 @@ class Prediction extends React.Component {
     this.props.history.push(
       `${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&outcome_id=${itemData.id}&side=${itemProps.side}`
     );
-
+   
     // TODO: remove later
-    const { event } = itemProps;
-    const { shareEvent } = this.props;
-    if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
-      if (shareEvent) {
-        this.props.dispatch(removeShareEvent(['shareEvent']));
-      }
-      const redirectURL = `${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`;
-      this.props.dispatch(push(redirectURL));
-      this.props.history.push(redirectURL);
-    } else {
-      const selectedOutcome = {
-        hid: itemData.hid,
-        id: itemData.id,
-        marketOdds: itemData.market_odds,
-        value: itemData.name,
-      };
-      const selectedMatch = {
-        date: event.date,
-        id: event.id,
-        marketFee: event.market_fee,
-        reportTime: event.reportTime,
-        value: event.name,
-      };
-      this.props.dispatch(checkRedeemCode());
-      this.openOrderPlace(selectedOutcome);
-      this.modalOrderPlace.open();
-      this.setState({
-        selectedOutcome,
-        selectedMatch,
-        isOrderOpening: true,
-      });
+    // const { event } = itemProps;
+    // const { shareEvent } = this.props;
+    // if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
+    //   if (shareEvent) {
+    //     this.props.dispatch(removeShareEvent(['shareEvent']));
+    //   }
+    //   const redirectURL = `${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`;
+    //   this.props.dispatch(push(redirectURL));
+    //   this.props.history.push(redirectURL);
+    // } else {
+    //   const selectedOutcome = {
+    //     hid: itemData.hid,
+    //     id: itemData.id,
+    //     marketOdds: itemData.market_odds,
+    //     value: itemData.name,
+    //   };
+    //   const selectedMatch = {
+    //     date: event.date,
+    //     id: event.id,
+    //     marketFee: event.market_fee,
+    //     reportTime: event.reportTime,
+    //     value: event.name,
+    //   };
+    //   this.props.dispatch(checkRedeemCode());
+    //   this.openOrderPlace(selectedOutcome);
+    //   this.modalOrderPlace.open();
+    //   this.setState({
+    //     selectedOutcome,
+    //     selectedMatch,
+    //     isOrderOpening: true,
+    //   });
 
-      if (selectedOutcome) {
-        const outcomeId = { outcome_id: selectedOutcome.id };
-        this.props.dispatch(predictionStatistics({ outcomeId }));
-      }
+    //   if (selectedOutcome) {
+    //     const outcomeId = { outcome_id: selectedOutcome.id };
+    //     this.props.dispatch(predictionStatistics({ outcomeId }));
+    //   }
 
       // send event tracking
-      try {
-        GA.clickChooseAnOutcome(event.name, itemData.name);
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    //   try {
+    //     GA.clickChooseAnOutcome(event.name, itemData.name);
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // }
   };
 
   handleBetFail = (value) => {
@@ -313,6 +292,16 @@ class Prediction extends React.Component {
         action: taggingConfig.creditCard.action.showPopupPrediction,
       });
     });
+  }
+
+  handleEmailSubscriber = ({ values }) => {
+    const { props } = this;
+    const { dispatch, referParam } = props;
+    dispatch(updateLoading(true));
+    if (referParam) {
+      return dispatch(emailSubscriber({ ...values, referral_code: referParam }));
+    }
+    return dispatch(emailSubscriber(values));
   }
 
   renderEventList = (props) => {
@@ -501,24 +490,23 @@ class Prediction extends React.Component {
     );
   }
 
-  handleEmailSubscriber = (values) => {
-    this.props.dispatch(emailSubscriber(values));
-  }
-
   renderEmailSubscriber = () => {
     const subscriberProps = {
-      placeHolder: 'Your email address',
-      buttonText: 'Claim',
-      buttonClasses: 'btn-primary',
+      isSubmitting: this.props.isLoader,
+      placeHolder: 'Your email',
+      buttonText: 'I want FREE 0.03 ETH',
+      buttonClasses: 'btn btn-primary',
+      statusSubscribe: this.props.statusSubscribe,
       handleSubmit: this.handleEmailSubscriber
     };
     return (
-      <ModalDialog className="EmailSubscriberModal" close onRef={(modal) => { this.modalEmaiSubscriber = modal; return null; }}>
+      <ModalDialog className="EmailSubscriberModal" close onRef={(modal) => { this.modalEmaiSubscriber = modal; }}>
+        <Icon path={SubscribeSVG} className="SubscriberImage" />
         <div className="SubscriberTitle">
           Claim your free bets
         </div>
         <div className="SubscriberDescription">
-          To claim 2x FREE 0.03ETH bets please enter your email address below:
+          To claim 2x <span className="highlight">FREE 0.03ETH</span> bets please enter your email address below:
         </div>
         <Subscriber {...subscriberProps} />
       </ModalDialog>
@@ -537,11 +525,11 @@ class Prediction extends React.Component {
         {this.renderRelevantEventList(props)}
         {this.renderViewAllEvent(props, state)}
         {!props.isLoading && this.renderDislaimer()}
-        {this.renderBetMode(props, state)}
+        {/* {this.renderBetMode(props, state)}
         {this.renderLuckyLanding()}
         {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
-        {this.renderCreditCard()}
+        {this.renderCreditCard()} */}
         {!props.isLoading && this.renderPlusButton()}
         {this.renderEmailSubscriber()}
       </div>
@@ -560,13 +548,17 @@ export default injectIntl(connect(
       eventList: eventSelector(state),
       relevantEvents: relevantEventSelector(state),
       isSharePage: isSharePage(state),
+      isLoader: state.guru.ui.isLoading,
       isLoading: isLoading(state),
       showedLuckyPool: showedLuckyPoolSelector(state),
       isRedeemAvailable: checkRedeemCodeSelector(state),
       isExistEmail: checkExistSubcribeEmailSelector(state),
       shareEvent: shareEventSelector(state),
       totalBets: totalBetsSelector(state),
-      isSubscriber: state.ui.isSubscriber
+      referParam: referParamSelector(state),
+      isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),
+      isRedeem: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem),
+      statusSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.status)
     };
   },
 )(Prediction));

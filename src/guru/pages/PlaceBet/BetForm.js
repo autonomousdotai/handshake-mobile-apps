@@ -4,26 +4,21 @@ import { validationSchema } from './validation';
 import BetFormControls from './BetFormControls';
 
 class BetForm extends React.Component {
-  handleOnSubmit = (values, { resetForm }) => {
+  handleOnSubmit = (values) => {
     this.props.handleBet({ values });
-    resetForm({ amount: '' });
   };
 
   handleOnChange = (e) => {
-    this.props.handleChange(e.currentTarget.value);
-  };
-
-  handleOnBlur = (e) => {
-    this.props.handleBlur(e.currentTarget.value);
+    this.props.handleChange(e.target);
   };
 
   renderForm = (formProps) => {
-    const { props, handleOnChange, handleOnBlur } = this;
+    const { props, handleOnChange } = this;
     const betFormControlsProps = {
       ...formProps,
+      buttonText: props.buttonText,
       buttonClasses: props.buttonClasses,
       customOnChange: handleOnChange,
-      customOnBlur: handleOnBlur,
       isUseRedeem: props.isUseRedeem,
       statusRedeem: props.statusRedeem
     };
@@ -40,6 +35,7 @@ class BetForm extends React.Component {
           enableReinitialize
           onSubmit={this.handleOnSubmit}
           validationSchema={validationSchema}
+          validateOnChange
           render={this.renderForm}
         />
       </div>

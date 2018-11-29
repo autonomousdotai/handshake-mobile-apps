@@ -54,7 +54,7 @@ class TopUp extends React.Component {
     return (
       <div className="TopUpCard HowToCard">
         <div className="Quest">How to top up?</div>
-        <div className="Describe">Send ETH to your ninja prediction wallet address</div>
+        <div className="Describe">Send ETH to your Ninja wallet address</div>
         <div className="WalletAddress">
           <span className="Address">{address}</span>
           <span className="HelpIcon" title="Copy to clipboard" onClick={this.copyToClipboard(address)}>
@@ -93,7 +93,8 @@ class TopUp extends React.Component {
 
   render() {
     const wallets = MasterWallet.getMasterWallet();
-    const walletProps = wallets[1];
+    const walletDefault = MasterWallet.getWalletDefault('ETH');
+    const walletProps = wallets.filter(w => w.network === walletDefault.network)[0];
     console.log('Wallet Props:', walletProps);
     return (
       <div className="TopUpContainer">

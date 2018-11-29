@@ -15,50 +15,47 @@ class Notification extends Component {
     getEmailCode: PropTypes.func.isRequired,
     fetchProfile: PropTypes.func.isRequired,
     email: PropTypes.string.isRequired,
-    isEmailVerified: PropTypes.bool.isRequired,
+    isEmailVerified: PropTypes.bool.isRequired
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      isEmailSent: false
+      isEmailSent: false,
+      isLoadingEmail: false,
+      isLoadingCode: false
     };
   }
 
   sendEmail = (email, setFieldError) => {
-    this.props.getEmailCode({
-      METHOD: 'POST',
-      PATH_URL: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION,
-      data: { email },
-      successFn: () => {
+    this.setState({ isLoadingEmail: true });
+    this.props.getEmailCode({ data: { email } })
+      .then(() => {
         this.setState({ isEmailSent: true });
-      },
-      errorFn: (e) => {
-        console.error(e);
+      }).catch(e => {
         setFieldError('email', e.message);
-      }
-    });
+      }).finally(() => {
+        this.setState({ isLoadingEmail: false });
+      });
   };
 
   isValidCodeRegex = code => /^[0-9]{4}/g.exec(code);
 
   verifyCode = (email, code) => {
+    this.setState({ isLoadingCode: true });
     if (this.isValidCodeRegex(code)) {
       const { setFieldError } = this.props.formProps;
-      this.props.verifyEmailCode({
-        METHOD: 'POST',
-        headers: { 'Content-Type': 'multipart/form-data' },
-        PATH_URL: `user/verification/email/check?email=${email}&code=${code}`,
-        successFn: () => {
+      this.props.verifyEmailCode({ url: `user/verification/email/check?email=${email}&code=${code}` })
+        .then(() => {
           this.props.fetchProfile({
-            PATH_URL: API_URL.USER.PROFILE,
+            PATH_URL: API_URL.USER.PROFILE
           });
-        },
-        errorFn: (e) => {
-          console.error(e);
+        })
+        .catch(() => {
           setFieldError('emailCode', 'incorrect Code');
-        }
-      });
+        }).finally(() => {
+          this.setState({ isLoadingCode: false });
+        });
     }
   };
 
@@ -80,7 +77,7 @@ class Notification extends Component {
             className="btn btn-primary"
             onClick={() => this.sendEmail(values.email, setFieldError)}
           >
-            Get code
+            {(state.isLoadingEmail) ? 'loading...' : 'Get code'}
           </button>
         </div>
         <ErrMsg name="email" />
@@ -106,7 +103,7 @@ class Notification extends Component {
             onClick={() => this.verifyCode(values.email, values.emailCode)}
             disabled={!this.isValidCodeRegex(values.emailCode)}
           >
-            Verify
+            {(state.isLoadingCode) ? 'loading...' : 'Verify'}
           </button>
         </div>
         <ErrMsg name="emailCode" />

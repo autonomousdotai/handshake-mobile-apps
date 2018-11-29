@@ -26,10 +26,13 @@
   .Redeem {
     position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
     padding: 15px 50px;
     text-align: center;
     font-size: 0.875rem;
     .UseRedeem {
+      display: block;
       color: #003fff;
       text-decoration: underline;
     }
@@ -40,6 +43,7 @@
     flex-direction: column;
   }
   .ErrMsg {
+    color: #ff0000;
     font-size: 0.75rem;
     padding: 5px 0;
   }

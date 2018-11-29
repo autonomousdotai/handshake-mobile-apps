@@ -3,21 +3,24 @@ import PropTypes from 'prop-types';
 import { Form, Field } from 'formik';
 import { ErrMsg } from '@/guru/components/Form';
 
-const RedeemCodeInput = ({ values, touched, errors, status, handleChange, handleOnBlur }) => {
-  const validate = () => {
-    if (status) return null;
-    return 'Invalid Redeem code.';
+const RedeemCodeInput = ({ values, touched, errors, status, handleOnChange }) => {
+  const validate = (value) => {
+    return new Promise(resolve => {
+      setTimeout(resolve(status), 3000);
+    }).then(err => {
+      if (value === '' || err) return null;
+      return 'Invalid Redeem code.';
+    });
   };
   return (
     <React.Fragment>
       <Field
         name="redeem"
-        placeholder="Redeem code"
+        placeholder="Enter redeem code here."
         type="text"
         autoComplete="off"
         value={values.redeem}
-        onBlur={handleOnBlur}
-        onChange={handleChange}
+        onChange={handleOnChange}
         validate={validate}
         className={
           errors.redeem && touched.redeem
@@ -36,22 +39,19 @@ const BetFormControls = ({
   handleBlur,
   handleSubmit,
   isSubmitting,
-  disabled,
+  isLoading,
+  isValid,
   touched,
   errors,
+  buttonText,
   buttonClasses,
   customOnChange,
-  customOnBlur,
   statusRedeem,
   isUseRedeem
 }) => {
   const handleOnChange = (e) => {
     handleChange(e);
     customOnChange(e);
-  };
-  const handleOnBlur = (e) => {
-    handleBlur(e);
-    customOnBlur(e);
   };
   return (
     <Form onSubmit={handleSubmit} noValidate>
@@ -63,7 +63,7 @@ const BetFormControls = ({
           errors={errors}
           status={statusRedeem}
           handleChange={handleChange}
-          handleOnBlur={handleOnBlur}
+          handleOnChange={handleOnChange}
         />
       }
       <input
@@ -82,7 +82,9 @@ const BetFormControls = ({
         }
       />
       <ErrMsg name="amount" />
-      <button type="submit" disabled={isSubmitting || disabled} className={buttonClasses}>Bet</button>
+      <button type="submit" disabled={isLoading || values.amount === ''} className={buttonClasses}>
+        {buttonText}
+      </button>
     </Form>
   );
 };
@@ -92,25 +94,24 @@ BetFormControls.propTypes = {
   handleChange: PropTypes.func.isRequired,
   handleBlur: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  buttonText: PropTypes.string.isRequired,
   isSubmitting: PropTypes.bool,
-  disabled: PropTypes.bool,
+  isValid: PropTypes.bool,
   touched: PropTypes.object,
   errors: PropTypes.object,
   buttonClasses: PropTypes.string,
   customOnChange: PropTypes.func,
-  customOnBlur: PropTypes.func,
   statusRedeem: PropTypes.bool,
   isUseRedeem: PropTypes.bool
 };
 
 BetFormControls.defaultProps = {
   isSubmitting: false,
-  disabled: false,
+  isValid: false,
   touched: {},
   errors: {},
   buttonClasses: undefined,
   customOnChange: undefined,
-  customOnBlur: undefined,
   statusRedeem: true,
   isUseRedeem: false
 };

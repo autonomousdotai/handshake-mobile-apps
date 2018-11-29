@@ -244,14 +244,13 @@
       letter-spacing: 0;
       line-height: rem-calc(24px);
       font-weight: $medium;
-      margin-bottom: rem-calc(2px);
-      margin-top: rem-calc(10px);
-      flex-basis: 65%;
+      margin: 0 rem-calc(5px) rem-calc(2px) 0;
     }
 
     .EventImage {
       position: relative;
       overflow: hidden;
+      min-width: 35%;
       flex-basis: 35%;
       img {
         position: relative;
@@ -259,6 +258,7 @@
         left: 0;
         right: 0;
         bottom: 0;
+        border-radius: 4px;
       }
     }
 
@@ -458,11 +458,21 @@
   color: #ffffff;
   border-radius: 50%;
   background-color: #2989FF;
+  text-decoration: none;
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  &:hover, &:active {
+    color: #ffffff;
+    text-decoration: none;
+  }
 }
 
 .modal.EmailSubscriberModal {
+  text-align: center;
+  .modal-dialog-content {
+    border-radius: 10px;
+  }
   .modal-custom-body {
+    border-radius: 10px;
     padding: 30px 15px;
   }
   .close {
@@ -470,6 +480,9 @@
     font-size: 20px;
     width: 25px;
     height: 25px;
+  }
+  .SubscriberImage {
+    margin: 0 auto 30px auto;
   }
   .SubscriberTitle {
     text-align: center;
@@ -480,12 +493,20 @@
   .SubscriberDescription {
     font-size: rem-calc(14px);
     margin-bottom: 15px;
+    text-align: center;
+    .highlight {
+      color: #04C695;
+      font-weight: 500;
+    }
   }
   form {
     display: flex;
     flex-direction: column;
     input {
+      outline: none;
+      text-align: center;
       color: #000;
+      border-radius: 30px;
       border: 1px solid #dcdcdc;
       font-size: rem-calc(14px);
       padding: 12px 10px;
@@ -494,7 +515,10 @@
       appearance: none;
     }
     button {
+      outline: none;
       height: 49px;
+      font-weight: 500;
+      border-radius: 30px;
     }
     .ErrMsg {
       font-size: rem-calc(14px);

@@ -18,6 +18,12 @@ export default {
       invest: 'Invest'
     },
   },
+  coinbowl: {
+    name: 'Coinbowl',
+    fullname: 'Coinbowl：购买和出售大量比特币',
+    description: '大量购买和出售比特币和其他加密货币。 支持银行转账，现金和信用卡。 所有交易都有保险',
+    keywords: '区块链技术，以太坊，比特币，加密货币，加密，交换平台，用现金购买比特币，购买大量比特币',
+  },
   buy: 'Buy',
   sell: 'Sell',
   amount: 'amount',
@@ -283,10 +289,12 @@ export default {
   'ex.landing.tryTelegram.btn': 'Join Telegram',
 
   'ex.about.label.about': 'About',
-  'ex.about.description': `Ninja Cash is a peer to peer decentralized cryptocurrency exchange - where you remain anonymous. We got rid of extensive KYC practices, and then we put it on the blockchain. We welcome into our dojo anyone interested in disruption, games of stealth, and decentralized tech.<br/><br/>Ninjas create blockchain powered solutions that are both practical and playful, and apply them to industries plagued by rampant fraud, greedy middlemen and pointless bureaucracy.<br/><br/>Our team of ninjas is based in California, United States.`,
-  'ex.about.label.connectWith': 'Connect with the team',
-  'ex.about.label.website': 'Website',
-  'ex.about.label.telegram': 'Telegram',
+  'ex.about.description': `Shanzhai Limited is a technology company founded in 2015 based in Hong Kong. Working in e-commerce field, we aimed at providing customers satisfying experience in purchasing online. To follow growing trend towards crypto, Shanzhai has made a leap into crypto area by launching a new crypto online exchange named CoinBowl.<br/><br/>Coinbowl.com is a new crypto exchange specifically designed for people living in Asia, who have had limited access to crypto markets. CoinBowl enables users to trade large amounts of crypto at great prices. Users can buy or sell an uncapped quantity of crypto with 1 price for 1 order.<br/><br/>This movement is expected to continue our run of success in other fields and transform Shanzhai into a diversified investment company. We also have offices in New York, California, Jakarta, Manila and Phnom Penh.`,
+  'ex.about.label.connectWith': 'COMPANY INFO:',
+  'ex.about.label.website': 'Name',
+  'ex.about.label.website.value': 'Shanzhai Limited',
+  'ex.about.label.telegram': 'Mailing Address',
+  'ex.about.label.telegram.value': 'Flat A, 18/F, 88 Commercial Building, 28-34 Wing Lok Street, Sheung Wan, Hong Kong',
   'ex.about.label.medium': 'Medium',
   'ex.about.label.github': 'Github',
   'ex.about.label.twitter': 'Twitter',
@@ -632,7 +640,7 @@ export default {
   ],
 
   //
-  'landing_page.coin.breadcrumb': 'Ninja Coin',
+  'landing_page.coin.breadcrumb': 'CoinBowl',
   'landing_page.coin.heading': 'Frequently asked questions',
   'landing_page.coin.subHeading': ' ',
 
@@ -884,126 +892,49 @@ export default {
 
   'landing_page.coin.faq': [
     {
-      question: 'About Ninja Coin',
-      answer: 'Ninja Coin is a product of Shanzhai Limited - a Hong Kong-based company with offices in Ho Chi Minh City, New York and California. We provide a platform where people can buy crypto more conveniently, safely and with the most attractive price',
+      question: 'What is CoinBowl?',
+      answer: `<p>Coinbowl.com is an online exchange developed by Shanzhai Limited, a Hong Kong based company, offering bulk crypto purchasing at competitive prices with full delivery service.</p>`,
     },
     {
-      question: 'How do I buy coin on Ninja?',
-      answer: `Step 1: Visit <strong><a href="https://ninja.org/coin">https://ninja.org/coin</a></strong><br/>
-              Step 2: Verify your identity<br/>
-              Step 3: Select/Scan your crypto wallet<br/>
-              Step 4: Enter the amount of coin you want to buy (or the amount of fiat money you want to use to buy coin)<br/>
-              Step 5: Choose your buying method: Bank Transfer/COD<br/>
-              Step 6: Click Buy<br/>
-              Step 7: Make payment according to your buying method:<br/>
-              <ul>
-                <li>If you choose Bank Transfer: make a bank transfer</li>
-                <li>If you choose COD: Enter your address, time and phone number. Wait for Ninja to come and pay with bank account/credit card/cash</li>
-              </ul>
-`,
-    },
-    {
-      question: 'How to create account on Ninja?',
-      answer: `Ninja Coin will create an account for you immediately the first time you visit us at <strong><a href="https://ninja.org/coin">https://ninja.org/coin</a></strong> instead of traditional login with email/username and password. However, you can only purchase after you’ve done the verification process
-<br/><br/>
-<table class="landing-table">
-         <thead>
-            <tr>
-              <th>Transaction Value</th>
-              <th>Verification Information Required</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <td><$500</td>
-                <td>Photo of your ID (both sides)</td>
-              </tr>
-              <tr>
-                <td><$5000</td>
-                <td>Photo of your ID (both sides)<br/>
-                    Selfie with your ID and a paper written “Ninja Coin”
-                    </td>
-              </tr>
-          </tbody>
-      </table>
-`,
+      question: 'How to sign up a CoinBowl account?',
+      answer: `<p>Simply visiting <a href="https://coinbowl.com">https://coinbowl.com</a>, verifying your ID by email or phone number then you are ready to trade on CoinBowl platform. <br />Indeed, your purchase limit is approximately proportional to the level of ID verification.</p>`,
     },
     {
       question: 'Why do I need to verify my identity?',
-      answer: 'Your account must be verified to comply with relevant anti-money laundering (AML) and counter-terrorism financing (CTF) laws and regulations. We do not and will never sell or rent your personal information to any third parties',
+      answer: `<p>Your account must be verified to comply with relevant anti-money laundering (AML) and counter-terrorism financing (CTF) laws and regulations. We will not, in any circumstances, share your personal information with other individuals or organizations without your permission except when applicable by law.</p>`,
     },
     {
-      question: 'Is buying coin on Ninja secure?',
-      answer: 'Every transaction on Ninja is covered 100% by a warranty with value up to $1000 each',
+      question: 'What is the maximum limit on purchasing?',
+      answer: `<p>When you fully verify your ID, you can purchase crypto unlimited on CoinBowl. <br /> Level 1 Verification: email required. Purchase limit: 500$/day. <br /> Level 2 Verification: phone number required. Purchase limit: 2,000$/day. <br /> Level 3 Verification: a picture of ID required. Purchase limit: 5,000$/day. <br /> Level 4 Verification: a selfie of user and his/her ID. Purchase limit: unlimited.</p>`,
     },
     {
-      question: 'What is the maximum amount can I purchase?',
-      answer: `The maximum amount depends on user verification level and is up to <strong>$5000/day/user</strong> by now. We are working on expanding it in the near future
-<br/><br/>
-<table class="landing-table">
-         <thead>
-            <tr>
-              <th>Verification Level</th>
-              <th>Maximum amount</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <td>Photo of your ID (both sides)</td>
-                <td>$500/user/day</td>
-              </tr>
-              <tr>
-                <td>Photo of your ID (both sides)<br/>
-                    Selfie with your ID and a paper written “Ninja Coin”
-                </td>
-                <td>$5000/user/day</td>
-              </tr>
-          </tbody>
-      </table>
-`,
+      question: 'How to buy crypto on CoinBowl?',
+      answer: `<p>Step 1: Scan or fill in the address of your crypto wallet. <br /> Step 2: Choose the type of crypto and fill in the number you want to buy. <br /> Step 3: Choose a suitable payment method between COD and bank transfer. <br /> Step 4: Finish the transaction accordingly to the payment method.</p>
+<ul style="list-style-type: disc;">
+<li>COD: make a direct payment at specified public place and time. Coinbowl accepts both cash and credit card payment.</li>
+<li>Bank transfer: make a bank transfer to CoinBowl&rsquo;s local bank account.</li>
+</ul>
+<p>Step 5: You will receive your coin as soon as your payment is successfully processed.</p>`,
+    },
+    {
+      question: 'How to sell crypto on CoinBowl?',
+      answer: `<p>Step 1: Choose the type and fill in the number of crypto you want to sell.<br /> Step 2: Fill in the information of your bank account.<br /> Step 3: Transfer coin to the CoinBowl&rsquo;s wallet.<br /> Step 4: You will get your money in your bank account as the coin is successfully transferred to our wallet.</p>`,
     },
     {
       question: 'What payment method can I use?',
-      answer: `<table class="landing-table">
-         <thead>
-            <tr>
-              <th>Buying method</th>
-              <th>Payment method</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <td>Bank Transfer (Buying online)</td>
-                <td>Bank transfer</td>
-              </tr>
-              <tr>
-                <td>COD (Buying offline)</td>
-                <td>Bank transfer<br/>
-                    Credit card<br/>
-                    Cash
-                    </td>
-              </tr>
-          </tbody>
-      </table><br/><ul>
-                <li>For buying online, you conduct the payment separately from the platform. We will transfer the coin to your wallet once we have received your payment</li>
-                <li>For buying offline, we will arrange a meetup with the time and address you provide. You can pay with your bank account, credit card or cash after you have received your coin from Ninja</li>
-              </ul>`
+      answer: `<p>You can pay via various payment method including bank transfer, cash and credit card payment.</p>`
     },
     {
-      question: 'How long should I wait to receive my coin?',
-      answer: 'It depends on the time for the bank to process transactions (for buying online) and for the blockchain network to do the confirmations, which usually only takes a few minutes',
+      question: 'How much are the fees?',
+      answer: `<p>Only 2% value of transaction is charged when paying by credit card. Other payment options are free.</p>`,
     },
     {
-      question: 'What happens if the price changes during my transaction?',
-      answer: 'Your price is fixed at the time you place a buy order. Therefore, all the later changes in price will not affect your transaction',
+      question: 'How long does it take to finish a transaction?',
+      answer: '<p>It depends on the situation of blockchain and banking network at that time, but normally around 3-5 minutes.</p>',
     },
     {
-      question: 'What are the fees?',
-      answer: 'We only takes 2% fee when you pay with credit card. Other payment options remain free',
-    },
-    {
-      question: 'How can I contact for support?',
-      answer: 'Feel free to contact us via live chat if you need any support for buying coin on Ninja',
+      question: 'How to contact CoinBowl support?',
+      answer: `<p>If you encounter any problem, feel free to contact us via live chat box or email <a class="landing-link" href="mailto:support@coinbowl.com" target="_top">support@coinbowl.com</a>.</p>`,
     },
   ],
   COIN_EXCHANGE_LP_TRADE_EASY_TRADE_SAFE: {
@@ -1096,6 +1027,9 @@ export default {
             idVerification: 'Can\'t submit your documents, please try again',
             idVerification2: 'Can\'t submit your documents.',
           },
+          exist: {
+            email: 'Your email already exists.',
+          },
         },
       },
       text: {
@@ -1154,6 +1088,11 @@ export default {
             level1: 'Level 1',
             finished: 'Finished',
             rejected: 'Rejected',
+          },
+          documents: {
+            passport: 'Passport',
+            driverLicense: 'Driver License',
+            idCard: 'Government ID Card',
           },
         },
       },
@@ -1256,7 +1195,7 @@ export default {
     cod_form: {
       cod: 'Cash on Delivery',
       buy_btn: 'Buy',
-      your_address: 'Only available in Ho Chi Minh City for now',
+      your_address: 'Only available in Hongkong for now',
       your_phone: 'Phone number',
       time: 'Time to delivery & Note',
       default_time: 'As soon as possible',
@@ -2078,8 +2017,8 @@ export default {
     },
     contact: {
       faq: 'FAQs',
-      chat_with_us: 'Chat with us Online Support',
-      phone_cs: '097 550 4082',
+      chat_with_us: 'About us',
+      phone_cs: ' ',
     },
   },
   'coin_tabs.sell': 'SELL COIN',

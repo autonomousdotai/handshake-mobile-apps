@@ -5,20 +5,28 @@ export const queryStringSelector = (state) => {
   return state.router.location.search;
 };
 
-export const eventSelector = (state) => {
+export const urlParamsSelector = (state) => {
   const queryString = queryStringSelector(state);
-  const urlParams = qs.parse(queryString.slice(1));
-  const { match } = urlParams;
+  return qs.parse(queryString.slice(1));
+};
+
+export const matchParamSelector = (state) => (urlParamsSelector(state).match);
+
+export const referParamSelector = (state) => (urlParamsSelector(state).refer);
+
+export const eventSelector = (state) => {
+  const { match, refer } = urlParamsSelector(state);
   const { events } = state.prediction;
   if (!events || !events.length) return [];
-  if (isEmpty(urlParams) || isEmpty(events)) {
+  if (isEmpty(urlParamsSelector(state)) || isEmpty(events) || refer) {
     return state.prediction.events;
   }
   return events.filter(event => (event.id === parseInt(match, 10)));
 };
+
 export const relevantEventSelector = (state) => {
   return state.prediction.relevantEvents;
-}
+};
 
 export const countReportSelector = (state) => {
   const { countReport } = state.ui;

@@ -12,6 +12,7 @@ import IconCoin from '@/assets/images/icon/icon-coin.svg';
 
 // TODO: [Begin: Will be moving to another place]
 import { URL, HANDSHAKE_ID } from '@/constants';
+import { UserHabit } from '@/guru/stores/constant';
 import { showAlert } from '@/reducers/app/action';
 import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import ModalDialog from '@/components/core/controls/ModalDialog';
@@ -19,7 +20,7 @@ import { MESSAGE } from '@/components/handshakes/betting/message';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 // TODO: [End: Will be moving to another place]
 
-import { updateLoading } from '@/guru/stores/action';
+import { updateLoading, userHabit } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
   checkRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
 import {
@@ -55,7 +56,7 @@ class PlaceBet extends Component {
   };
 
   state = {
-    betAmount: 0,
+    betAmount: '',
     isUseRedeem: false
   };
 
@@ -65,10 +66,15 @@ class PlaceBet extends Component {
 
   componentDidMount() {
     const { props, getParams } = this;
+    const eventId = parseInt(getParams(props).event_id, 10);
     const { dispatch } = props;
-    dispatch(getMatchDetail({ eventId: getParams(props).event_id }));
+    dispatch(getMatchDetail({ eventId }));
     dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
     dispatch(getGasPrice());
+    dispatch(userHabit({ data: {
+      ids: [eventId],
+      view_type: UserHabit.DETAIL
+    } }));
   }
 
   componentDidUpdate(prevProps) {
@@ -76,8 +82,14 @@ class PlaceBet extends Component {
     if (handShakes && prevProps.handShakes !== handShakes) {
       const { match } = handShakes;
       if (match !== undefined) {
-        const message = match ? MESSAGE.CREATE_BET_MATCH : MESSAGE.CREATE_BET_NOT_MATCH;
-        this.alertBox({ message, type: 'success', callBack: this.redirectIndex() });
+        const message = match
+          ? MESSAGE.CREATE_BET_MATCH
+          : MESSAGE.CREATE_BET_NOT_MATCH;
+        this.alertBox({
+          message,
+          type: 'success',
+          callBack: this.redirectIndex()
+        });
       } else {
         this.handShakeHandler(handShakes);
       }
@@ -88,34 +100,36 @@ class PlaceBet extends Component {
     this.props.dispatch(removeRedeemCode());
   }
 
-  getParams = ({ queryStringURL }) => (qs.parse(queryStringURL.slice(1)))
+  getParams = ({ queryStringURL }) => qs.parse(queryStringURL.slice(1));
 
-  getSide = (props) => (parseInt(this.getParams(props).side, 10));
+  getSide = props => parseInt(this.getParams(props).side, 10);
 
   getOdds = () => {
     const { props, getSide } = this;
     const { matchOdds } = props;
     return (
-      matchOdds && matchOdds[this.props.sideOdds[`${getSide(props) - 1}`]][0].odds
-    ) || 0;
-  }
+      (matchOdds &&
+        matchOdds[this.props.sideOdds[`${getSide(props) - 1}`]][0].odds) ||
+      0
+    );
+  };
 
   redirectIndex = () => {
     const redirectURL = `${URL.HANDSHAKE_PREDICTION}`;
     this.props.history.push(redirectURL);
-  }
+  };
 
   crossIndex = () => {
     const { eventList } = this.props;
     if (isEmpty(eventList)) {
       this.redirectIndex();
     }
-  }
+  };
 
   validate = async ({ amount }) => {
     const validate = await validationBet({ amount });
     return validate;
-  }
+  };
 
   alertBox = ({ message, type, timeOut = 3000, callBack = () => {} }) => {
     const { dispatch } = this.props;
@@ -126,7 +140,7 @@ class PlaceBet extends Component {
       message: <div className="text-center">{message}</div>
     };
     dispatch(showAlert(alertProps));
-  }
+  };
 
   handShakeData = ({ amount, redeem }) => {
     const { getSide } = this;
@@ -146,22 +160,27 @@ class PlaceBet extends Component {
       side: getSide({ queryStringURL }),
       chain_id: getChainIdDefaultWallet()
     };
-  }
+  };
 
-  handShakeSuccess = (data) => {
+  handShakeSuccess = data => {
     const { handshakes } = data;
     if (!handshakes) return null;
-    const message = isExistMatchBet(handshakes) ?
-      MESSAGE.CREATE_BET_MATCH : MESSAGE.CREATE_BET_NOT_MATCH;
-    return this.alertBox({ message, type: 'success', callBack: this.redirectIndex() });
-  }
+    const message = isExistMatchBet(handshakes)
+      ? MESSAGE.CREATE_BET_MATCH
+      : MESSAGE.CREATE_BET_NOT_MATCH;
+    return this.alertBox({
+      message,
+      type: 'success',
+      callBack: this.redirectIndex()
+    });
+  };
 
-  handShakeHandler = (data) => {
+  handShakeHandler = data => {
     this.handShakeSuccess(data);
     const handler = BetHandshakeHandler.getShareManager();
     const { handshakes } = data;
     return handler.controlShake(handshakes);
-  }
+  };
 
   handleBet = async ({ values }) => {
     const { validate, alertBox, modalOuttaMoney, handShakeData, props } = this;
@@ -175,14 +194,19 @@ class PlaceBet extends Component {
       return props.dispatch(initHandShake(handShakeData(values)));
     }
     if (message && code === VALIDATE_CODE.NOT_ENOUGH_BALANCE) {
+      props.dispatch(updateLoading(false));
       return modalOuttaMoney.open();
     }
+    props.dispatch(updateLoading(false));
     return alertBox({ message, type: 'danger' });
-  }
+  };
 
-  handleChange = (value) => {
-    this.setState({ betAmount: value });
-  }
+  handleChange = ({ value, name }) => {
+    if (name === 'amount') {
+      return this.setState({ betAmount: value });
+    }
+    return this.props.dispatch(checkRedeemCode({ redeem: value }));
+  };
 
   calculatePosWinning = () => {
     const { state, getOdds } = this;
@@ -192,44 +216,45 @@ class PlaceBet extends Component {
       amountNo = this.props.redeem.amount;
     }
     return formatAmount(possibleWinning(amountNo, betOdds));
-  }
-
-  handleBlur = (value) => {
-    this.props.dispatch(checkRedeemCode({ redeem: value }));
-  }
+  };
 
   redeemInput = () => {
     this.setState({ isUseRedeem: true });
-  }
+  };
 
-  redeemNotice = () => {
+  redeemNotice = (props, state) => {
+    const { isRedeem } = props;
+    const { isUseRedeem } = state;
+    if (!isRedeem || isUseRedeem) return null;
     return (
       <div className="Redeem">
-        You have already redeemed a code for betting. <span className="UseRedeem" onClick={this.redeemInput}>Use it</span>
+        {/* {`You've already requested a redeem code. `} */}
+        <span className="UseRedeem" onClick={this.redeemInput}>
+          Use a redeem code
+        </span>
       </div>
     );
-  }
+  };
 
   betFormProps = (props, state) => {
-    const { handleBet, handleChange, handleBlur, getSide } = this;
+    const { handleBet, handleChange, getSide } = this;
     return {
       handleBet,
       handleChange,
-      handleBlur,
-      amount: props.redeem ? props.redeem.amount : '',
-      redeem: props.redeem ? props.redeem.code : '',
+      amount: props.redeem ? props.redeem.amount || '' : '',
+      redeem: props.redeem ? props.redeem.code || '' : '',
       side: getSide(props),
-      disabled: state.betAmount === 0,
-      isSubmitting: props.isLoading,
+      isLoading: props.isLoading,
+      buttonText: props.isLoading ? 'Loading...' : 'Predict',
       buttonClasses: classNames('btn btn-block', {
         'btn-primary': getSide(props) === 1,
         'btn-secondary': getSide(props) === 2
       }),
       isUseRedeem: state.isUseRedeem,
       statusRedeem: props.redeem ? !!props.redeem.status : undefined,
-      redeemNotice: (!!props.isSubscriber && this.redeemNotice())
+      redeemNotice: this.redeemNotice(props, state)
     };
-  }
+  };
 
   betParamsProps = ({ matchDetail, gasPrice }) => ({
     iconCoin: IconCoin,
@@ -241,10 +266,16 @@ class PlaceBet extends Component {
 
   renderOuttaMoney = () => {
     return (
-      <ModalDialog onRef={(modal) => { this.modalOuttaMoney = modal; }} className="outtaMoneyModal" close>
+      <ModalDialog
+        onRef={modal => {
+          this.modalOuttaMoney = modal;
+        }}
+        className="outtaMoneyModal"
+        close
+      >
         <div className="outtaMoneyContainer">
           <img src={OuttaMoney} alt="" />
-          <div className="outtaMoneyTitle">{'You\'re outta… money!'}</div>
+          <div className="outtaMoneyTitle">You're outta… money!</div>
           <div className="outtaMoneyMsg">
             To keep forecasting, you’ll need to top-up your wallet.
           </div>
@@ -264,7 +295,7 @@ class PlaceBet extends Component {
         {this.renderOuttaMoney()}
       </div>
     );
-  }
+  };
 
   render() {
     return this.renderComponent(this.props, this.state);
@@ -276,7 +307,8 @@ export default injectIntl(connect(
     return {
       eventList: state.prediction.events,
       isLoading: state.guru.ui.isLoading,
-      isSubscriber: state.ui.isSubscriber,
+      isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),
+      isRedeem: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem),
       redeem: state.guru.ui.redeem,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),

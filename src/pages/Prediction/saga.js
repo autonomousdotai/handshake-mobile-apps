@@ -2,12 +2,13 @@ import { takeLatest, call, select, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/stores/api-saga';
 import { REMOVE_DATA } from '@/stores/data-action';
 import { API_URL } from '@/constants';
+import { updateLoading } from '@/guru/stores/action';
 import {
   loadMatches, getReportCount, removeExpiredEvent,
   checkRedeemCode, updateFreeBet, checkExistSubcribeEmail,
   updateCountReport, updateExistEmail,
   loadRelevantEvents, updateRelevantEvents, updateEvents,
-  emailSubscriber, putStatusSubscriber
+  emailSubscriber, putUserSubscribe, putStatusEmailSubscribe
 } from './action';
 import { eventSelector, relevantEventSelector } from './selector';
 
@@ -105,7 +106,7 @@ export function* handleCheckRedeem() {
       type: 'CHECK_REDEEM_CODE'
     });
     yield put(updateFreeBet(response.status));
-    yield put(putStatusSubscriber(response.data.is_subscribe));
+    yield put(putUserSubscribe(response.data));
   } catch (e) {
     console.error('handleCheckRedeem', e);
   }
@@ -127,16 +128,15 @@ export function* handleCheckExistEmail() {
   }
 }
 
-export function* handleEmailSubscriber({ values }) {
+export function* handleEmailSubscriber(values) {
   try {
-    const response = yield call(apiPost, {
+    const { status } = yield call(apiPost, {
       PATH_URL: API_URL.CRYPTOSIGN.SUBCRIBE_EMAIL_PREDICTION,
       type: 'SUBCRIBE_EMAIL_PREDICTION',
       data: values
     });
-    if (response) {
-      yield put(putStatusSubscriber(response.status));
-    }
+    yield put(putStatusEmailSubscribe(status));
+    yield put(updateLoading(false));
   } catch (e) {
     console.error('handleEmailSubscriber', e);
   }

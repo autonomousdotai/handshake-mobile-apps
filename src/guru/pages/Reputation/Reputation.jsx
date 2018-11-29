@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
-import DefaultAvatar from '@/assets/images/icon/logo.svg';
+import DefaultAvatar from '@/assets/images/icon/extension_logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
 import { shortAddress } from '@/utils/string';
