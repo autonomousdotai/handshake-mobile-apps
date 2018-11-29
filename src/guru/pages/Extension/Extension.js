@@ -10,7 +10,7 @@ import LogoWhite from '@/assets/images/pex/extension/logo-white.svg';
 import LogoBlack from '@/assets/images/pex/extension/logo-black.svg';
 import MacSVG from '@/assets/images/pex/extension/mac.svg';
 import ethToWallet from '@/assets/images/pex/extension/eth-to-wallet.svg';
-import chooseMarket from '@/assets/images/pex/extension/choose-market.svg';
+import chooseDebate from '@/assets/images/pex/extension/choose-debate.svg';
 import makePrediction from '@/assets/images/pex/extension/make-prediction.svg';
 import ninjas from '@/assets/images/pex/extension/2ninjas.svg';
 import iphone from '@/assets/images/pex/extension/iphone.svg';
@@ -20,7 +20,7 @@ import whyP2p from '@/assets/images/pex/extension/why-p2p.svg';
 import screens from '@/assets/images/pex/extension/screens.png';
 
 import SubscribeEmail from './subscribeEmail';
-import './styles.scss';
+import './Extension.scss';
 
 function clipOnMac() {
   const ytbFrameProps = {
@@ -85,7 +85,10 @@ function whyNinja() {
         </div>
         <div className="BlockRight">
           <div className="Item">
-            <p className="ItemTitle">Ninja stealth mode</p>
+            <p className="ItemTitle">
+              <Icon path={whyMode} />
+              Ninja stealth mode
+            </p>
             <p className="ItemDesc">
               No sign-ups. You hold your own private key, and have full control
               over your privacy. You are undetectable and 100% anonymous. We
@@ -93,7 +96,10 @@ function whyNinja() {
             </p>
           </div>
           <div className="Item">
-            <p className="ItemTitle">Guaranteed payouts</p>
+            <p className="ItemTitle">
+              <Icon path={whyPayout} />
+              Guaranteed payouts
+            </p>
             <p className="ItemDesc">
               All user funds are held in Escrow, powered by smart contract
               technology. Winnings are automatically distributed without the
@@ -101,7 +107,10 @@ function whyNinja() {
             </p>
           </div>
           <div className="Item">
-            <p className="ItemTitle">Decentralized, P2P</p>
+            <p className="ItemTitle">
+              <Icon path={whyP2p} />
+              Decentralized, P2P
+            </p>
             <p className="ItemDesc">
               No bookies and no books. Ninja is a platform that directly
               connects users with different opinions, without holding funds or
@@ -136,7 +145,7 @@ function howToPlay() {
         </div>
         <div className="Item">
           <div className="ItemImage">
-            <Icon path={chooseMarket} />
+            <Icon path={chooseDebate} />
           </div>
           <p className="ItemTitle">Choose a debate</p>
           <p className="ItemDesc">
