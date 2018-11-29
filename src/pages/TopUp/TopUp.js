@@ -1,8 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
+import Modal from '@/components/core/controls/Modal';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
+import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
+import Button from '@/components/core/controls/Button';
 
 import './TopUp.scss';
 
@@ -65,14 +68,39 @@ class TopUp extends React.Component {
       </div>
     );
   };
+  restoreWallet=(props) => {
+    return (
+      <Button onClick={() => {
+        this.modalRestoreRef.open();
+        }}
+      >I had a wallet. Restore my wallet.
+      </Button>
+    );
+  }
+  renderModalRestor = () => {
+    return (
+      <Modal
+        // customBackIcon={BackChevronSVGWhite}
+        // modalHeaderStyle={this.modalHeaderStyle}
+        // title={messages.wallet.action.restore.header}
+        onRef={modal => this.modalRestoreRef = modal}
+        onClose={this.closeRestoreWalletAccount}
+      >
+        <RestoreWallet />
+      </Modal>
+    );
+  }
 
   render() {
     const wallets = MasterWallet.getMasterWallet();
     const walletProps = wallets[1];
+    console.log('Wallet Props:', walletProps);
     return (
       <div className="TopUpContainer">
         { this.balance(walletProps) }
         { this.howTo(walletProps) }
+        { this.restoreWallet(walletProps) }
+        { this.renderModalRestor()}
       </div>
     );
   }
