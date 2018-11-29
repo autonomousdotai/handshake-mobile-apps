@@ -3,6 +3,8 @@
   $block-bg: #190e03;
   $desc: #1c1a18;
   background-color: #fafafa;
+  font-weight: 400;
+  line-height: 1.6;
 
   .btn {
     min-width: 300px;
@@ -49,7 +51,7 @@
   }
 
   section {
-    margin: 100px 0;
+    margin: 110px 0;
   }
 
   .TitleWrapper {
@@ -146,7 +148,7 @@
 
     .DescHeadline {
       padding: 40px 0 20px;
-      font-weight: bold;
+      font-weight: 500;
     }
   }
 
@@ -183,6 +185,7 @@
         width: 400px;
         margin-left: 70px;
         justify-content: space-between;
+        padding: 50px 0;
       }
 
       .ItemTitle {
@@ -230,8 +233,17 @@
       padding: 30px 0;
       display: flex;
 
-      .Join span {
-        padding: 0 10px;
+      .Join {
+        color: #fff;
+        background-color: #2A8DD3;
+        border-color: #49AEF6;
+        span {
+          padding: 0 10px;
+        }
+
+        .fa-arrow-right {
+          font-size: 20px;
+        }
       }
 
       .Goto:hover {
@@ -343,6 +355,10 @@
       flex-direction: column;
       text-align: left;
       min-width: 360px;
+
+      a {
+        color: #190E03;
+      }
     }
 
     .SubScribeEmail {
@@ -364,6 +380,9 @@
       form {
         height: 40px;
         font-size: 14px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        border-radius: 4px 0 0 4px;
 
         input {
           height: 100%;
@@ -371,7 +390,8 @@
           outline: none;
           width: 200px;
           padding: 0 15px;
-          // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+          border: none;
+          border-radius: 4px 0 0 4px;
 
           &::placeholder {
             color: #a7a7a7;
@@ -383,9 +403,9 @@
           background-color: $primary-color;
           color: #fff;
           padding: 0 15px;
-          margin-left: -1px;
           border: none;
           outline: none;
+          margin-top: 1px;
 
           &:hover {
             cursor: pointer;

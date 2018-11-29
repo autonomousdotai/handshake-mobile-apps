@@ -194,7 +194,7 @@ function aboutUs() {
       </p>
       <div className="BtnAction">
         <a
-          className="Join btn btn-primary"
+          className="Join btn"
           href={SOCIAL.TELEGRAM}
           target="_blank"
         >
