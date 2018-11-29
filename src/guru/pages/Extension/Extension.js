@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '@/guru/components/Icon/Icon';
 import { URL, SOCIAL, EXT } from '@/constants';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 import YtbFrame from '@/guru/components/YtbFrame/YtbFrame';
 
@@ -10,7 +10,7 @@ import LogoWhite from '@/assets/images/pex/extension/logo-white.svg';
 import LogoBlack from '@/assets/images/pex/extension/logo-black.svg';
 import MacSVG from '@/assets/images/pex/extension/mac.svg';
 import ethToWallet from '@/assets/images/pex/extension/eth-to-wallet.svg';
-import chooseDebate from '@/assets/images/pex/extension/choose-debate.svg';
+import yesNo from '@/assets/images/pex/extension/yes-no.svg';
 import makePrediction from '@/assets/images/pex/extension/make-prediction.svg';
 import ninjas from '@/assets/images/pex/extension/2ninjas.svg';
 import iphone from '@/assets/images/pex/extension/iphone.svg';
@@ -145,7 +145,7 @@ function howToPlay() {
         </div>
         <div className="Item">
           <div className="ItemImage">
-            <Icon path={chooseDebate} />
+            <Icon path={yesNo} />
           </div>
           <p className="ItemTitle">Choose a debate</p>
           <p className="ItemDesc">
