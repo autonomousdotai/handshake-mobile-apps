@@ -76,7 +76,7 @@ export const MESSAGE = {
   ROLLBACK: `Something did not go according to plan. Please try again.`,
   WITHDRAW_SUCCESS: 'Success! Your winnings have been withdrawn to your wallet.',
   DIFFERENCE_ADDRESS: `Current address isn't same as which you used to create bet`,
-  DISPUTE_CONFIRM: 'Results will be reviewed if over 50% of players dispute it.',
+  DISPUTE_CONFIRM: 'Results will be reviewed if over 80% of players dispute it.',
   ODDS_TOOLTIP: 'Enter the odds you want to bet on. Example, the odds 4.0 means you could win 3 ETH for every 1 ETH you put down.',
 };
 
