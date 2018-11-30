@@ -588,12 +588,7 @@ class Profile extends React.Component {
               value={email}
               />
               <Button
-              className="submit-btn"
-              style={{
-                height: '53px',
-                marginTop: 0,
-                marginLeft: '10px',
-              }}
+              className="okBtn"
               >
               {messages.me.profile.text.email.button.send}
               </Button>

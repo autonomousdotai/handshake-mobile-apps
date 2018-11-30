@@ -68,8 +68,15 @@
         font-size: 1rem;
       }
       .submit-btn {
-        //width: 100%;
         margin-top: rem-calc(17px);
+      }
+      .okBtn {
+        width: rem-calc(120px);
+        height: 53px;
+        margin-left: 10px;
+        width: 25%;
+        display: flex;
+        justify-content: center;
       }
       .phone-block {
         display: flex;
@@ -152,6 +159,7 @@
     border-radius: rem-calc(5px);
     font-size: rem-calc(16px);
     text-align: center;
+    width: 75%;
   }
   .wrapperInput {
     display: flex;
