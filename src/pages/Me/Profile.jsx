@@ -96,7 +96,6 @@ class Profile extends React.Component {
     this.selectPhoneRegionCode = :: this.selectPhoneRegionCode;
     this.filterCountries = :: this.filterCountries;
     this.onTextFieldChange = :: this.onTextFieldChange;
-    this.addUsername = :: this.addUsername;
 
     this.idVerificationDocumentTypes = ['Passport', 'Driver License', 'Government ID Card'];
     if (this.state.idVerificationLevel === 1) {
@@ -429,7 +428,7 @@ class Profile extends React.Component {
                 this.showSuccess(messages.me.profile.verify.alert.success.email);
               },
               errorFn: () => {
-                this.showError(messages.me.profile.verify.alert.require.email);
+                //this.showError(messages.me.profile.verify.alert.require.email);
               },
             });
           },
