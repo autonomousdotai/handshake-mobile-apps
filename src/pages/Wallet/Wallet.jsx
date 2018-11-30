@@ -13,6 +13,7 @@ import Button from '@/components/core/controls/Button';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import Input from '@/components/core/forms/Input/Input';
 import { StringHelper } from '@/services/helper';
+import * as Metamask from '@/guru/services/metamask/connect';
 
 import {
   fieldCleave,
@@ -29,6 +30,7 @@ import Dropdown from '@/components/core/controls/Dropdown';
 import createForm from '@/components/core/form/createForm';
 
 import Header from './Header';
+import HeaderMetamask from './HeaderMetamask';
 import HeaderMore from './HeaderMore';
 import WalletItem from './WalletItem';
 import WalletProtect from './WalletProtect';
@@ -315,6 +317,14 @@ class Wallet extends React.Component {
   //   /* eslint-enable */
   // }
 
+  onChangeMetamaskStatus = (status) => {
+    Metamask.changeMetamaskStatus(status);
+    if (!status) {
+      return;
+    }
+    Metamask.loginMetaMask();
+  };
+
   async getSetting(){
     let setting = local.get(APP.SETTING), alternateCurrency = "USD";
 
@@ -538,18 +548,18 @@ class Wallet extends React.Component {
     listSortable.collectitble = !this.state.listSortable.collectitble;
     this.setState({listSortable: listSortable});
   }
-  showModalAddToken = () =>{
-      this.setState({formAddTokenIsActive: true}, () => {
-        this.modalAddNewTokenRef.open();
+  showModalAddToken = () => {
+    this.setState({ formAddTokenIsActive: true }, () => {
+      this.modalAddNewTokenRef.open();
     });
   }
-  showModalAddCollectible = () =>{
-    this.setState({formAddCollectibleIsActive: true}, () => {
+  showModalAddCollectible = () => {
+    this.setState({ formAddCollectibleIsActive: true }, () => {
       this.modalAddNewCollectibleRef.open();
     });
   }
 
-  showTransfer(wallet){
+  showTransfer(wallet) {
     this.props.requestWalletPasscode({
       onSuccess: () => {
           this.setState({ walletSelected: wallet,
@@ -1172,6 +1182,14 @@ class Wallet extends React.Component {
               { this.state.listCollectibleWalletBalance.length > 0 ?
                   <SortableComponent onSortableSuccess={items => this.onSortableCollectibleSuccess(items)} onMoreClick={item => this.onMoreClick(item)} onAddressClick={item => this.onAddressClick(item)} onItemClick={item => this.onWalletItemClick(item)} isSortable={this.state.listSortable.collectitble}  items={this.state.listCollectibleWalletBalance}/>
               : ''}
+            </Row>
+          </Row>
+
+          {/* 2.4 Metamask */}
+          <Row className="wallet-box">
+            <Row className="list">
+                <HeaderMetamask icon={iconAddPlus} title={"Metamask"} status={Metamask.getMetamaskStatus()} 
+                onChangeStatus={this.onChangeMetamaskStatus} />
             </Row>
           </Row>
 

@@ -1,10 +1,44 @@
 
 import Web3 from 'web3';
 import { sendMsgToExtension } from './events';
+import { isExtension } from './util';
 
-const ethUtil = require('ethereumjs-util');
 const sigUtil = require('eth-sig-util');
 
+
+const msg = 'Welcome to Ninja! To avoid digital ninja burglars, sign below to authenticate with Ninja.';
+
+const changeMetamaskStatus = (status) => {
+  localStorage.setItem('metamask', status ? 1 : 0);
+};
+
+const getMetamaskStatus = () => {
+  console.log(window.ethereum);
+  console.log(isExtension());
+  if (typeof window.ethereum === 'undefined' && !isExtension()) {
+    return undefined;
+  }
+  return localStorage.getItem('metamask') === '1';
+};
+
+
+const checkAccountExist = (address) => {
+  const signedTokens = JSON.parse(localStorage.getItem('sign_tokens') || '[]');
+  const index = signedTokens.findIndex(i => { return i.address.toUpperCase() === address.toUpperCase(); });
+  if (index === -1) {
+    return undefined;
+  }
+  return signedTokens[index];
+};
+
+const listenMetamaskEvent = () => {
+  if (typeof window.ethereum !== 'undefined') {
+    window.web3.currentProvider.publicConfigStore.on('update', (e) => {
+      console.log(e);
+      window.location.reload();
+    });
+  }
+};
 
 /*
   Show popup connect to Matamask
@@ -60,9 +94,6 @@ const personalSign = (signText, fromAccount) => {
         });
       }
 
-      // Store signed to localStorage
-      localStorage.setItem('sign_token', result.result);
-
       return resolve({
         signedToken: result.result,
         accountAddr: fromAccount
@@ -71,38 +102,56 @@ const personalSign = (signText, fromAccount) => {
   });
 };
 
-const loginMetaMask = async (msg) => {
-  try {
-    await connectMetamask();
-    const signedToken = localStorage.getItem('sign_token');
-    const signText = ethUtil.bufferToHex(msg);
+const storeAccount = (account) => {
+  let signedTokens = JSON.parse(localStorage.getItem('sign_tokens') || '[]');
+  const index = signedTokens.findIndex(i => { return i.address.toUpperCase() === account.address.toUpperCase(); });
+  if (index !== -1) {
+    signedTokens.splice(index, 1);
+  }
+  signedTokens = signedTokens.map(i => { const item = i; item.isActive = false; return item; });
+  signedTokens.push(account);
+  localStorage.setItem('sign_tokens', JSON.stringify(signedTokens));
+};
 
-    if (!window.web3) {
-      return false;
+const loginMetaMask = async () => {
+  try {
+    if (!getMetamaskStatus()) {
+      console.error('Web3 provider not found!');
+      return Promise.reject(new Error('Web3 provider not found!'));
     }
 
     const web3Provider = new Web3(window.web3);
+
+    const signText = web3Provider.utils.toHex(msg);
     const accounts = await web3Provider.eth.getAccounts();
 
-    if (signedToken) {
-      const recovered = recovertSign({ signedToken, signText });
+    if (!accounts || accounts.length === 0) {
+      return Promise.reject(new Error('Not found account'));
+    }
+
+    const account = checkAccountExist(accounts[0]);
+    if (account) {
+      const recovered = recovertSign({ signedToken: account.signedToken, signText });
       if (recovered.toUpperCase() === accounts[0].toUpperCase()) {
-        return accounts[0];
+        return Promise.resolve(account);
       }
     }
-    const resultSign = await personalSign(signText, accounts[0]);
-    if (resultSign.isErr) {
-      if (resultSign.isCancel) {
-        console.log('User reject sign.');
-      }
-      return false;
-    }
-    localStorage.setItem('sign_token', JSON.stringify({ token: resultSign.signedToken, is_active: true }));
-    return true;
+
+    const newAccount = await personalSign(signText, accounts[0]);
+    storeAccount(newAccount);
+    return Promise.resolve(newAccount);
   } catch (e) {
-    console.log(e);
-    return false;
+    console.dir(`Extension error: `, e);
+    throw e;
   }
 };
 
-export { loginMetaMask, connectMetamask, recovertSign, personalSign };
+export {
+  loginMetaMask,
+  connectMetamask,
+  recovertSign,
+  personalSign,
+  changeMetamaskStatus,
+  getMetamaskStatus,
+  listenMetamaskEvent
+};

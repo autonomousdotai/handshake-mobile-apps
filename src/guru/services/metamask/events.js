@@ -1,4 +1,3 @@
-import { connectMetamask } from './connect';
 
 const storeAccount = (account) => {
   let signedTokens = JSON.parse(localStorage.getItem('sign_tokens') || '[]');
@@ -12,7 +11,6 @@ const storeAccount = (account) => {
 };
 
 export const sendMsgToExtension = (data) => {
-  console.log('BEGEN SEND: ', data);
   window.parent.postMessage(data, '*');
 };
 
@@ -24,16 +22,11 @@ window.addEventListener('message', async (value) => {
       return;
     }
     switch (value.data.action_key) {
-      case 'enable_request':
-        connectMetamask();
-        break;
       case 'personal_sign':
-        console.log('User signed at extension!');
-        storeAccount(value.data);
+        storeAccount(value.data.data);
         break;
-      case 'sync_local_storage':
-        console.log('Send sync storage!');
-        sendMsgToExtension(JSON.parse(localStorage.getItem('sign_token')));
+      case 'request_sync_local_storage':
+        sendMsgToExtension(JSON.parse(localStorage.getItem('sign_tokens')));
         break;
       default:
         break;

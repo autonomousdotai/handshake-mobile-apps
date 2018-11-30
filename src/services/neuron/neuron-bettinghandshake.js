@@ -1,6 +1,9 @@
 import Web3 from 'web3';
-import BaseHandshake from './BaseHandshake';
+import { getMetamaskStatus } from '@/guru/services/metamask/connect';
+import { handleTnx } from '@/guru/services/metamask/transaction';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
+import BaseHandshake from './BaseHandshake';
+
 
 const TAG = 'NEURON-BETTING';
 export default class BettingHandshake extends BaseHandshake {
@@ -70,6 +73,20 @@ export default class BettingHandshake extends BaseHandshake {
       .encodeABI();
     console.log('Payload Data:', payloadData);
     console.log('Gas Price:', this.gasPrice);
+
+    if (getMetamaskStatus()) {
+      return handleTnx({
+        action_key: 'transaction',
+        data: {
+          methodName: 'init',
+          contractName: this.contractFileName,
+          contractAddress: this.contractAddress,
+          amount: stake,
+          params: [hid, side, oddsValue, bytesOffchain]
+        }
+      });
+    }
+
     const dataBlockChain = await this.neuron.sendRawTransaction(
       this.address,
       this.privateKey,
@@ -112,6 +129,20 @@ export default class BettingHandshake extends BaseHandshake {
       oddsMakerValue,
     );
     console.log('Gas Price:', this.gasPrice);
+
+    console.log('11111: ', getMetamaskStatus());
+    if (getMetamaskStatus()) {
+      return handleTnx({
+        action_key: 'transaction',
+        data: {
+          methodName: 'shake',
+          contractName: this.contractFileName,
+          contractAddress: this.contractAddress,
+          amount: stake,
+          params: [hid, side, oddsTakerValue, maker, oddsMakerValue, bytesOffchain]
+        }
+      });
+    }
 
     const payloadData = this.handshakeInstance.methods
       .shake(hid, side, oddsTakerValue, maker, oddsMakerValue, bytesOffchain)
