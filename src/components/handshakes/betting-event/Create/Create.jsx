@@ -105,7 +105,6 @@ class CreateBettingEvent extends React.Component {
        headers: { 'Content-Type': 'application/json' },
        data: [{ name: values.outcome, public: 0 }],
        successFn: async (response) => {
-         console.log('OUTCOME SUCCESS', response.data);
          this.fetchShareUrl(response.data[0].id);
          this.props.showAlert({
            message: <div className="text-center">Outcome added successfully.</div>,
