@@ -7,13 +7,6 @@ import { injectIntl } from 'react-intl';
 
 import { URL } from '@/constants';
 import { clearHeaderBack } from '@/reducers/app/action';
-import meIcon from '@/assets/images/navigation/ic_me.svg.raw';
-import creditIcon from '@/assets/images/navigation/ic_credit.svg.raw';
-import discoverIcon from '@/assets/images/navigation/ic_atm.svg.raw';
-import chatIcon from '@/assets/images/navigation/ic_prediction.svg.raw';
-import walletIcon from '@/assets/images/navigation/ic_wallet.svg.raw';
-import shopIcon from '@/assets/images/navigation/ic_shop.svg.raw';
-import investIcon from '@/assets/images/navigation/ic_invest.svg.raw';
 
 class Navigation extends React.Component {
   static propTypes = {
@@ -46,53 +39,45 @@ class Navigation extends React.Component {
   checkSelected(URLs) {
     let _URLs = URLs;
     if (!Array.isArray(URLs)) { _URLs = [URLs]; }
-    return _URLs.indexOf(this.state.currentPath) >= 0 && !this.state.isNotFound ? 'selected' : '';
+    return (_URLs.indexOf(this.state.currentPath) >= 0 && !this.state.isNotFound) && 'selected';
+  }
+
+  modeIcon(URLs) {
+    const selected = this.checkSelected(URLs);
+    return selected ? 'fas' : 'fal';
   }
 
   render() {
     return (
       <footer className="footer">
         <ul>
-          <li className={cn(this.checkSelected(URL.BUY_COIN_URL))}>
-            <Link to={URL.BUY_COIN_URL} onClick={this.props.clearHeaderBack}>
-              <div dangerouslySetInnerHTML={{ __html: creditIcon }} />
-              <span>{this.props.intl.messages.app.navigation.ninjaCoin.toUpperCase()}</span>
-            </Link>
-          </li>
-          {/*<li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.CASH_STORE_URL]))}>*/}
-            {/*<Link to={URL.HANDSHAKE_ATM} onClick={this.props.clearHeaderBack}>*/}
-              {/*<div dangerouslySetInnerHTML={{ __html: discoverIcon }} />*/}
-              {/*<span>{this.props.intl.messages.app.navigation.atm.toUpperCase()}</span>*/}
-            {/*</Link>*/}
-          {/*</li>*/}
           <li className={cn(this.checkSelected(URL.PRODUCT_PREDICTION_URL))}>
             <Link to={URL.PRODUCT_PREDICTION_URL} onClick={this.props.clearHeaderBack}>
-              <div className="chat-icon 123" dangerouslySetInnerHTML={{ __html: chatIcon }} />
-              <span>PREDICT</span>
+              <span className={cn(this.modeIcon(URL.PRODUCT_PREDICTION_URL), 'fa-list-alt')} />
+              <span className="TextIcon">{this.props.intl.messages.app.navigation.feed.toUpperCase()}</span>
             </Link>
           </li>
           <li className={cn(this.checkSelected(URL.HANDSHAKE_WALLET_INDEX))}>
             <Link to={URL.HANDSHAKE_WALLET_INDEX} onClick={this.props.clearHeaderBack}>
-              <div dangerouslySetInnerHTML={{ __html: walletIcon }} />
-              <span>{this.props.intl.messages.app.navigation.wallet.toUpperCase()}</span>
+              <span className={cn(this.modeIcon(URL.HANDSHAKE_WALLET_INDEX), 'fa-wallet')} />
+              <span className="TextIcon">{this.props.intl.messages.app.navigation.wallet.toUpperCase()}</span>
+            </Link>
+          </li>
+          <li className={cn(this.checkSelected(URL.GURU_CREATE_EVENT), 'PlusButton')}>
+            <Link to={URL.GURU_CREATE_EVENT} className="CreateEvent">
+              <span className="fal fa-plus" />
             </Link>
           </li>
           <li className={cn(this.checkSelected(URL.SHOP_URL_INDEX))}>
             <Link to={URL.SHOP_URL_INDEX} onClick={this.props.clearHeaderBack}>
-              <div dangerouslySetInnerHTML={{ __html: shopIcon }} />
-              <span>{this.props.intl.messages.app.navigation.shop.toUpperCase()}</span>
+              <span className={cn(this.modeIcon(URL.SHOP_URL_INDEX), 'fa-shopping-cart')} />
+              <span className="TextIcon">{this.props.intl.messages.app.navigation.shop.toUpperCase()}</span>
             </Link>
           </li>
-          {/* <li className={cn(this.checkSelected(URL.INVEST_URL))}>
-            <Link to={URL.INVEST_URL} onClick={this.props.clearHeaderBack}>
-              <div className="chat-icon" dangerouslySetInnerHTML={{ __html: investIcon }} />
-              <span>{this.props.intl.messages.app.navigation.bet.toUpperCase()}</span>
-            </Link>
-          </li> */}
           <li className={cn(this.checkSelected([URL.HANDSHAKE_ME_INDEX]))}>
             <Link to={URL.HANDSHAKE_ME_INDEX} onClick={this.props.clearHeaderBack}>
-              <div className="me-icon" dangerouslySetInnerHTML={{ __html: meIcon }} />
-              <span>{this.props.intl.messages.app.navigation.me.toUpperCase()}</span>
+              <span className={cn(this.modeIcon([URL.HANDSHAKE_ME_INDEX]), 'fa-user')} />
+              <span className="TextIcon">{this.props.intl.messages.app.navigation.me.toUpperCase()}</span>
             </Link>
           </li>
         </ul>
