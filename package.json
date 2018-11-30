@@ -119,6 +119,7 @@
     "react-slick": "^0.23.1",
     "react-sortable-hoc": "^0.8.3",
     "react-star-ratings": "^2.3.0",
+    "react-typeform-embed": "^0.1.6",
     "react-youtube": "^7.6.0",
     "reactstrap": "^6.0.1",
     "redux": "^4.0.0",

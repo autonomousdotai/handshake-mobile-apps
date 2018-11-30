@@ -667,6 +667,7 @@ export const URL = {
 
   // Refactor
   CHROME_EXTENSION: '/chrome-extension',
+  FEEDBACK: '/feedback',
 
   // Guru
   HANDSHAKE_GURU: '/guru',

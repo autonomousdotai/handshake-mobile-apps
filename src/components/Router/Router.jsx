@@ -45,6 +45,7 @@ const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), L
 const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
 const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
 const Extension = createDynamicImport(() => import('@/guru/pages/Extension'), Loading);
+const FeedBack = createDynamicImport(() => import('@/guru/pages/FeedBack'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
@@ -130,6 +131,7 @@ if (BrowserDetect.isDesktop) {
   const configRoutesUsingDesktopLayout = [
     { path: URL.LUCKY_POOL, component: RouterLuckyPool },
     { path: URL.CHROME_EXTENSION, component: Extension },
+    { path: URL.FEEDBACK, component: FeedBack },
     { path: URL.GURU_CREATE_EVENT, component: PageMobileOnly },
     { path: URL.PRODUCT_CASH_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} />, exact: true },
     { path: URL.PRODUCT_ATM_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
