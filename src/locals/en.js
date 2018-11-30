@@ -15,7 +15,8 @@ export default {
       credit: 'CC',
       shop: 'Shop',
       ninjaCoin: 'Coin',
-      invest: 'Invest'
+      invest: 'Invest',
+      feed: 'Feed',
     },
   },
   coinbowl: {
