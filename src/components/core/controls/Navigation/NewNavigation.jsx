@@ -21,7 +21,7 @@ class Navigation extends React.Component {
 
     this.state = {
       currentPath: this.props.location.pathname,
-      isNotFound: this.props.app.isNotFound,
+      isNotFound: this.props.app.isNotFound
     };
   }
 
