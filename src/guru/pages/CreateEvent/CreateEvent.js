@@ -335,7 +335,7 @@ class CreateEvent extends React.Component {
                 <button
                   className="SubmitBtn btn-primary"
                   type="submit"
-                  disabled={isSubmitting || !dirty}
+                  disabled={isSubmitting || !dirty || !verified}
                 >
                   Create
                 </button>

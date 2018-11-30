@@ -1,6 +1,13 @@
 @import './src/styles/style';
 
 .me {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #EBF1F7;
+  padding: 15px 15px 60px 15px;
+  overflow: hidden;
   .update-profile {
     display: flex;
     padding-bottom: rem-calc(11px);
@@ -169,6 +176,7 @@
 /** NoData Component **/
 .NoDataContainer {
   text-align: center;
+  padding: 20px 0;
   .NoDataTitle {
     font-size: rem-calc(18px);
     font-weight: 400;

@@ -11,11 +11,8 @@ export function* handleReferralCheck() {
       type: 'REFERRAL_CHECK'
     });
     if (response) {
-      const referralInfo = response.status ? {
-        ...response.data,
-        status: response.status
-      } : response.status;
-      yield put(putReferralCheck(referralInfo));
+      const { data, status } = response;
+      yield put(putReferralCheck({ ...data, status }));
       yield put(updateLoading(false));
     }
   } catch (e) {
@@ -25,12 +22,14 @@ export function* handleReferralCheck() {
 
 export function* handleReferralJoin() {
   try {
-    const data = yield call(apiGet, {
+    const response = yield call(apiGet, {
       PATH_URL: `${API_URL.CRYPTOSIGN.REFERRAL_JOIN}`,
       type: 'REFERRAL_JOIN'
     });
-    if (data) {
-      console.log(data);
+    if (response) {
+      const { data, status } = response;
+      yield put(putReferralCheck({ ...data, status }));
+      yield put(updateLoading(false));
     }
   } catch (e) {
     console.error(e);
