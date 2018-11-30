@@ -483,6 +483,8 @@ class Prediction extends React.Component {
   }
 
   renderPlusButton = () => {
+    // TODO: chrome-ext
+    if (window.self === window.top) return null;
     return (
       <Link to={URL.GURU_CREATE_EVENT} className="CreateEventButton">
         <i className="fal fa-plus" />
