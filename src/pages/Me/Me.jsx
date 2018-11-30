@@ -25,11 +25,10 @@ import FeedSeed from '@/components/handshakes/seed/Feed';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Image from '@/components/core/presentation/Image';
 // style
-import AvatarSVG from '@/assets/images/icon/avatar.svg';
+import meIcon from '@/assets/images/icon/extension_logo.svg';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { setOfflineStatus } from '@/reducers/auth/action';
 import local from '@/services/localStore';
-import { fieldRadioButton } from '@/components/core/form/customField';
 import createForm from '@/components/core/form/createForm';
 
 import Helper from '@/services/helper';
@@ -48,8 +47,6 @@ import ManageAssets from './Tabs/ManageAssets';
 import Transaction from './Tabs/Transaction';
 
 import NoDataImage from '@/assets/images/pages/Prediction/nodata.svg';
-
-import NinjaCoinTransaction from '@/components/handshakes/exchange/BuyCoinTransaction/Transaction';
 
 import { updateLoading } from '@/guru/stores/action';
 import { referralCheck, referralJoin } from './action';
@@ -195,24 +192,24 @@ class Me extends React.Component {
     if (nextProps.firebaseUser) {
       console.log(TAG, ' getDerivedStateFromProps begin 01');
       if (JSON.stringify(nextProps.firebaseUser) !== JSON.stringify(prevState.firebaseUser)) {
-        const nextUser = nextProps.firebaseUser.users?.[nextProps.auth.profile.id];
-        const prevUser = prevState.firebaseUser.users?.[prevState.auth.profile.id];
+        const nextUser = nextProps.firebaseUser.users ?.[nextProps.auth.profile.id];
+        const prevUser = prevState.firebaseUser.users ?.[prevState.auth.profile.id];
         console.log(TAG, ' getDerivedStateFromProps begin 02');
         if (nextUser) {
           console.log(TAG, ' getDerivedStateFromProps begin 03');
-          if (JSON.stringify(nextUser?.offers) !== JSON.stringify(prevUser?.offers)) {
-            nextProps.fireBaseExchangeDataChange(nextUser?.offers);
+          if (JSON.stringify(nextUser ?.offers) !== JSON.stringify(prevUser ?.offers)) {
+            nextProps.fireBaseExchangeDataChange(nextUser ?.offers);
             nextProps.firebase.remove(`/users/${nextProps.auth.profile.id}/offers`);
           }
           console.log(TAG, ' getDerivedStateFromProps begin 04');
-          if (JSON.stringify(nextUser?.betting) !== JSON.stringify(prevUser?.betting)) {
-            console.log(TAG, ' getDerivedStateFromProps betting ', nextUser?.betting);
-            nextProps.fireBaseBettingChange(nextUser?.betting);
+          if (JSON.stringify(nextUser ?.betting) !== JSON.stringify(prevUser ?.betting)) {
+            console.log(TAG, ' getDerivedStateFromProps betting ', nextUser ?.betting);
+            nextProps.fireBaseBettingChange(nextUser ?.betting);
             nextProps.firebase.remove(`/users/${nextProps.auth.profile.id}/betting`);
           }
-          if (JSON.stringify(nextUser?.credits) !== JSON.stringify(prevUser?.credits)) {
-            console.log(TAG, ' getDerivedStateFromProps credits ', nextUser?.credits);
-            nextProps.fireBaseCreditsDataChange(nextUser?.credits);
+          if (JSON.stringify(nextUser ?.credits) !== JSON.stringify(prevUser ?.credits)) {
+            console.log(TAG, ' getDerivedStateFromProps credits ', nextUser ?.credits);
+            nextProps.fireBaseCreditsDataChange(nextUser ?.credits);
             nextProps.firebase.remove(`/users/${nextProps.auth.profile.id}/credits`);
           }
         }
@@ -253,34 +250,6 @@ class Me extends React.Component {
     nextProps.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE, qs });
   }
 
-  scrollListener = async () => {
-    /*eslint-disable */
-    if (!this.isShow) {
-      window?.$zopim && window?.$zopim(() => {
-        window?.$zopim?.livechat.button.hide();
-        window?.$zopim?.livechat.button.setOffsetVerticalMobile(70);
-        window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
-        window?.$zopim?.livechat.button.show();
-      });
-    }
-    /* eslint-enable */
-  }
-
-  attachScrollListener() {
-    window.addEventListener('scroll', this.scrollListener);
-    window.addEventListener('resize', this.scrollListener);
-    this.scrollListener();
-  }
-
-  detachScrollListener() {
-    this.isShow = true;
-    /*eslint-disable */
-    window?.$zopim?.livechat.button.hide();
-    window.removeEventListener('scroll', this.scrollListener);
-    window.removeEventListener('resize', this.scrollListener);
-    /* eslint-enable */
-  }
-
   componentDidMount() {
     const {
       initUserId, offerId, handshakeIdActive, cashTab, activeId,
@@ -306,20 +275,6 @@ class Me extends React.Component {
     this.loadMyHandshakeList();
     this.getOfferStore();
     // this.getDashboardInfo();
-    setTimeout(() => {
-      /*eslint-disable */
-      window?.$zopim?.livechat?.window?.onShow(() => {
-        this.isShow = true;
-        console.log('onShow', this.isShow);
-      });
-      window?.$zopim?.livechat?.window?.onHide(() => {
-        this.isShow = false;
-        console.log('onHide', this.isShow);
-      });
-      this.scrollListener();
-      /* eslint-enable */
-    }, 6000);
-    this.attachScrollListener();
 
     // referral check
     this.props.dispatch(updateLoading(true));
@@ -333,7 +288,6 @@ class Me extends React.Component {
       handshakeIdActive: handshakeDefault,
       firstTime: true,
     });
-    this.detachScrollListener();
 
     //remove loading
     this.props.dispatch(updateLoading(false));
@@ -375,7 +329,7 @@ class Me extends React.Component {
   }
 
   loadMyHandshakeList = () => {
-    const qs = { };
+    const qs = {};
     const {
       handshakeIdActive,
     } = this.state;
@@ -432,37 +386,6 @@ class Me extends React.Component {
         this.modalRef.open();
       } else {
         this.modalRef.close();
-      }
-    });
-  }
-
-  onCategoryChange = (e, newValue) => {
-    const { rfChange } = this.props;
-    console.log('onCategoryChange', newValue);
-    this.setState({ handshakeIdActive: newValue }, () => {
-      if (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE ||
-        this.state.handshakeIdActive === HANDSHAKE_ID.CREDIT) {
-        this.setState({ cashTab: CASH_TAB.DASHBOARD }, () => {
-          rfChange(nameFormFilterFeeds, 'cash-show-type', CASH_TAB.DASHBOARD);
-          if (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
-            this.getOfferStore();
-            this.getDashboardInfo();
-          }
-        });
-      }
-      this.loadMyHandshakeList();
-    });
-  }
-
-  onCashTabChange = (e, newValue) => {
-    console.log('onTypeChange', newValue);
-    this.setState({ cashTab: newValue }, () => {
-      this.loadMyHandshakeList();
-      if (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE) {
-        if (newValue === CASH_TAB.DASHBOARD) {
-          this.getOfferStore();
-          this.getDashboardInfo();
-        }
       }
     });
   }
@@ -544,6 +467,46 @@ class Me extends React.Component {
     return this.renderReferralProgram(props);
   }
 
+  renderNoData = () => {
+    return (
+      <NoData>
+        <div className="NoDataContainer">
+          <img src={NoDataImage} alt="Nothing here" />
+          <div className="ShortDescription">
+            Oops! <br />
+            Looks like you’re a bit lost… <br />
+            Go back and win big ninja!
+          </div>
+          <div className="PlayNow">
+            <Link to="/prediction" className="btn btn-primary">Play now</Link>
+          </div>
+        </div>
+      </NoData>
+    );
+  }
+
+  renderFaceBehind = (props) => {
+    // @TODO: chrome-ext
+    if (window.self !== window.top) return null;
+    const { messages } = props.intl;
+    return (
+      <Row>
+        <Col md={12}>
+          <Link className="update-profile" to={URL.HANDSHAKE_ME_PROFILE} title="profile">
+            <Image className="avatar" src={meIcon} alt="avatar" />
+            <div className="text">
+              <strong>{messages.me.feed.profileTitle}</strong>
+              <p>{messages.me.feed.profileDescription}</p>
+            </div>
+            <div className="arrow">
+              <Image src={ExpandArrowSVG} alt="arrow" />
+            </div>
+          </Link>
+        </Col>
+      </Row>
+    );
+  }
+
   render() {
     const { handshakeIdActive, cashTab, offerStores, propsModal, modalContent, modalFillContent } = this.state;
     const { list, listDashboard } = this.props.me;
@@ -566,142 +529,27 @@ class Me extends React.Component {
       }
     }
 
-    const { component: Component } = tabs.find(i => i.id === cashTab);
-
     return (
       <React.Fragment>
         <div className={`discover-overlay ${this.state.isLoading ? 'show' : ''}`}>
           <Image src={loadingSVG} alt="loading" width="100" />
         </div>
         <Grid className="me">
-          {
-            // @TODO: chrome-ext
-            (window.self === window.top) &&
-            (
-              <div>
-                <Row>
-                  <Col md={12}>
-                    <Link className="update-profile" to={URL.HANDSHAKE_ME_PROFILE} title="profile">
-                      <Image className="avatar" src={AvatarSVG} alt="avatar" />
-                      <div className="text">
-                        <strong>{messages.me.feed.profileTitle}</strong>
-                        <p>{messages.me.feed.profileDescription}</p>
-                      </div>
-                      <div className="arrow">
-                        <Image src={ExpandArrowSVG} alt="arrow" />
-                      </div>
-                    </Link>
-                  </Col>
-                </Row>
-
-                {/*<Row onClick={!haveOffer ? this.handleCreateExchange : undefined}>*/}
-                  {/*<Col md={12}>*/}
-                    {/*<div className="update-profile pt-2">*/}
-                      {/*<Image className="avatar" src={ShopSVG} alt="shop" />*/}
-                      {/*<div className="text" style={{ width: '69%' }}>*/}
-                        {/*<strong>{messages.me.feed.shopTitle}</strong>*/}
-                        {/*{haveOffer ?*/}
-                          {/*(<p>{messages.me.feed.shopDescription}</p>) :*/}
-                          {/*(<p>{messages.me.feed.shopNoDataDescription}</p>)*/}
-                        {/*}*/}
-                      {/*</div>*/}
-                      {/*{haveOffer && (<div className="arrow">*/}
-                        {/*<ToggleSwitch defaultChecked={online} onChange={flag => this.setOfflineStatus(flag)} />*/}
-                      {/*</div>)*/}
-                      {/*}*/}
-                    {/*</div>*/}
-                  {/*</Col>*/}
-                {/*</Row>*/}
-
-                {/* <div className="mt-2 mb-1">
-                  <FormFilterFeeds>
-                    <div className="d-table w-100">
-                      {//<div className="d-table-cell"><label className="label-filter-by">{messages.me.feed.filterBy}</label></div>//}
-                      <div className="d-table-cell">
-                        <Field
-                          name="feedType"
-                          component={fieldRadioButton}
-                          type="tab-5"
-                          list={CATEGORIES}
-                          // validate={[required]}
-                          onChange={this.onCategoryChange}
-                        />
-                      </div>
-                    </div>
-                    { (this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE || this.state.handshakeIdActive === HANDSHAKE_ID.CREDIT) && (
-                      <div>
-                        <hr style={{ margin: '10px 0 5px' }} />
-                        <div>
-                          <Field
-                            name="cash-show-type"
-                            component={fieldRadioButton}
-                            type="tab-6"
-                            list={[
-                              { value: CASH_TAB.DASHBOARD, text: messages.me.feed.cash.dashboard, icon: <span className="icon-dashboard align-middle" /> },
-                              { value: CASH_TAB.TRANSACTION, text: messages.me.feed.cash.transactions, icon: <span className="icon-transactions align-middle" /> },
-                            ]}
-                            // validate={[required]}
-                            onChange={this.onCashTabChange}
-                          />
-                        </div>
-                      </div>
-                      )
-                    }
-                  </FormFilterFeeds>
-                </div> */}
-              </div>
-            )
-          }
+          { this.renderFaceBehind(this.props) }
           { this.renderReferral(this.props) }
           <Row>
             <Col md={12} className="me-main-container">
               {
-                this.state.handshakeIdActive === HANDSHAKE_ID.CREDIT ? (
-                  <div className="dashboard">
-                    {/*<div className="bg-white">
-                      <div className="wrapper">
-                        <div className="tabs mt-3">
-                          {
-                            tabs.map(tab => {
-                              const { id, text } = tab;
-                              return (
-                                <div
-                                  key={id}
-                                  onClick={() => this.setState({ activeTab: id })}
-                                  className={cx('tab text-normal', { active: activeTab === id })}
-                                >
-                                  {text}
-                                </div>
-                              )
-                            })
-                          }
-                        </div>
-                      </div>
-                    </div>*/}
-                    {/* <div className="content">
-                      {<Component history={this.props.history} setLoading={this.setLoading}></Component>}
-                    </div> */}
-                  </div>) : this.state.handshakeIdActive === HANDSHAKE_ID.NINJA_COIN ? (
-                  <div className="dashboard">
-                    {/* <div className="content">
-                      <NinjaCoinTransaction />
-                    </div> */}
-                  </div>) : listFeed && listFeed.length > 0 ? (
-                    listFeed.map((handshake) => {
+                listFeed && listFeed.length > 0 ? (
+                  listFeed.map((handshake) => {
                     const FeedComponent = maps[handshake.type];
                     if (FeedComponent) {
-                      // if (handshake.offerFeedType === EXCHANGE_FEED_TYPE.OFFER_STORE_SHAKE &&
-                      //   handshake.status === HANDSHAKE_EXCHANGE_SHOP_OFFER_SHAKE_STATUS.PRE_SHAKING &&
-                      //   handshake.initUserId === authProfile?.id
-                      // ) {
-                      //   return null;
-                      // }
                       return (
                         <Col key={handshake.id} className="feed-wrapper" id={handshake.id}>
                           <FeedComponent
                             {...handshake}
                             history={this.props.history}
-                            onFeedClick={() => {}}
+                            onFeedClick={() => { }}
                             onShowModalDialog={this.handleShowModalDialog}
                             mode="me"
                             refreshPage={this.loadMyHandshakeList}
@@ -718,30 +566,13 @@ class Me extends React.Component {
                     <p>{messages.me.feed.cash.stationExplain}</p>
                     <p>{messages.me.feed.cash.stationCreateSuggest}</p>
                     <button className="btn btn-primary btn-block" onClick={this.showRestoreWallet}>{messages.me.feed.cash.restoreStation}</button>
-                    {/*<button className="btn btn-primary btn-block" onClick={this.showPopupBuyByCreditCard}>{messages.me.feed.cash.buyMoreCoin}</button>*/}
                   </div>
-                ) :
-                (
-                  <NoData>
-                    <div className="NoDataContainer">
-                      <img src={NoDataImage} alt="Nothing here" />
-                      <div className="ShortDescription">
-                        Oops! <br />
-                        Looks like you’re a bit lost… <br />
-                        Go back and win big ninja!
-                      </div>
-                      <div className="PlayNow">
-                        <Link to="/prediction" className="btn btn-primary">Play now</Link>
-                      </div>
-                    </div>
-                  </NoData>
-                )
+                ) : this.renderNoData()
               }
               {
                 listFeed && listFeed.length > 0 && this.state.handshakeIdActive === HANDSHAKE_ID.EXCHANGE && this.state.cashTab === CASH_TAB.DASHBOARD && (
                   <div className="text-center">
                     <button className="btn btn-primary btn-block" onClick={this.showBackupWallet}>{messages.me.feed.cash.backupStation}</button>
-                    {/*<button className="btn btn-primary btn-block" onClick={this.showPopupBuyByCreditCard}>{messages.me.feed.cash.buyMoreCoin}</button>*/}
                     {haveOffer && (<button className="btn btn-link text-underline" onClick={this.handleUpdateExchange}><FormattedMessage id="ex.shop.dashboard.button.updateInventory" /></button>)}
                   </div>
                 )
