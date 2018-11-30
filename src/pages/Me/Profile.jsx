@@ -634,7 +634,7 @@ class Profile extends React.Component {
     return (
       <div className="profile">
         {this.renderAppBar()}
-        {this.renderIntroduce()}
+        {/*this.renderIntroduce()*/}
         {this.renderEmailVerify()}
 
         <ModalDialog onRef={(modal) => { this.modalRef = modal; return null; }}>
