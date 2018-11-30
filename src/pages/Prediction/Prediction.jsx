@@ -530,7 +530,7 @@ class Prediction extends React.Component {
         {this.renderEmailPopup()}
         {this.renderOuttaMoney()}
         {this.renderCreditCard()} */}
-        {/* {!props.isLoading && this.renderPlusButton()} */}
+        {!props.isLoading && this.renderPlusButton()}
         {this.renderEmailSubscriber()}
       </div>
     );
