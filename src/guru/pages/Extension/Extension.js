@@ -37,31 +37,38 @@ function clipOnMac() {
   return <YtbFrame {...ytbFrameProps} />;
 }
 
+function addChromeBtn() {
+  return (
+    <div className="AddChromeSection">
+      <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
+        <i className="fab fa-chrome" />
+        <span>Add to Chrome</span>
+      </a>
+      <p className="OrOpen">
+        or open{' '}
+        <a href={URL.HANDSHAKE_PREDICTION} target="_blank">
+          ninja.org
+        </a>{' '}
+        on your mobile browser
+      </p>
+    </div>
+  );
+}
+
 function header() {
   return (
     <header>
       <Icon className="Logo" path={LogoWhite} />
       <div className="LeftBlock">
         <h1 className="HeadLine">
-          NINJA <br />
-          CHROME EXTENSION
+          NINJA
         </h1>
         <h3 className="SubHeadLine">Outsmart the Internet</h3>
         <p className="DescHeadline">
           Predict tomorrow's news. <br />
           Win crypto for being right - about anything.
         </p>
-        <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
-          <i className="fab fa-chrome" />
-          <span>Add to Chrome</span>
-        </a>
-        <p className="OrOpen">
-          or open{' '}
-          <a href={URL.HANDSHAKE_PREDICTION} target="_blank">
-            ninja.org/prediction
-          </a>{' '}
-          on your mobile browser
-        </p>
+        {addChromeBtn()}
       </div>
       <div className="RightBlock">
         {/* <Icon className="Macbook" path={MacSVG} /> */}
@@ -86,13 +93,13 @@ function whyNinja() {
         <div className="BlockRight">
           <div className="Item">
             <p className="ItemTitle">
-              <Icon path={whyMode} />
-              Ninja stealth mode
+              <Icon path={whyP2p} />
+              Decentralized, P2P
             </p>
             <p className="ItemDesc">
-              No sign-ups. You hold your own private key, and have full control
-              over your privacy. You are undetectable and 100% anonymous. We
-              don't hold your data and never will.{' '}
+              No bookies and no books. Ninja is a platform that directly
+              connects users with different opinions, without holding funds or
+              taking bets. There is no house, just other ninjas to outsmart.
             </p>
           </div>
           <div className="Item">
@@ -108,13 +115,13 @@ function whyNinja() {
           </div>
           <div className="Item">
             <p className="ItemTitle">
-              <Icon path={whyP2p} />
-              Decentralized, P2P
+              <Icon path={whyMode} />
+              Ninja stealth mode
             </p>
             <p className="ItemDesc">
-              No bookies and no books. Ninja is a platform that directly
-              connects users with different opinions, without holding funds or
-              taking bets. There is no house, just other ninjas to outsmart.
+              No sign-ups. You hold your own private key, and have full control
+              over your privacy. You are undetectable and 100% anonymous. We
+              don't hold your data and never will.{' '}
             </p>
           </div>
         </div>
@@ -187,7 +194,7 @@ function aboutUs() {
       </p>
       <div className="BtnAction">
         <a
-          className="Join btn btn-primary"
+          className="Join btn"
           href={SOCIAL.TELEGRAM}
           target="_blank"
         >
@@ -230,10 +237,7 @@ function addExtension() {
           dApp. Ninja is available on desktop as a chrome extension, or on the
           original mobile web app. Make crypto for being right.
         </p>
-        <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
-          <i className="fab fa-chrome" />
-          <span>Add to Chrome</span>
-        </a>
+        {addChromeBtn()}
       </div>
     </section>
   );
@@ -262,7 +266,7 @@ function footer() {
           {/*<Link to={`${URL.HANDSHAKE_PREDICTION}#faq`}>FAQ</Link> and{' '}*/}
           {/*<Link to={URL.PEX_INSTRUCTION_URL}>instructions</Link> on how to play.{' '}*/}
           {/*<br />*/}
-          Copyright &#9400; 2018. All Rights Reserved. Legal.
+          Copyright &#9400; 2018. All Rights Reserved.
         </p>
       </div>
       <div className="SocialBlock">

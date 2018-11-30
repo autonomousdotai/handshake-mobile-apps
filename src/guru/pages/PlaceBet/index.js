@@ -162,9 +162,7 @@ class PlaceBet extends Component {
     };
   };
 
-  handShakeSuccess = data => {
-    const { handshakes } = data;
-    if (!handshakes) return null;
+  handShakeSuccess = handshakes => {
     const message = isExistMatchBet(handshakes)
       ? MESSAGE.CREATE_BET_MATCH
       : MESSAGE.CREATE_BET_NOT_MATCH;
@@ -175,11 +173,23 @@ class PlaceBet extends Component {
     });
   };
 
+  handleShakeFail = data => {
+    const { message } = data;
+    return this.alertBox({
+      message,
+      type: 'danger'
+    });
+  };
+
   handShakeHandler = data => {
-    this.handShakeSuccess(data);
-    const handler = BetHandshakeHandler.getShareManager();
-    const { handshakes } = data;
-    return handler.controlShake(handshakes);
+    const { status } = data;
+    if (status) {
+      const { handshakes } = data;
+      const handler = BetHandshakeHandler.getShareManager();
+      this.handShakeSuccess(handshakes);
+      return handler.controlShake(handshakes);
+    }
+    return this.handleShakeFail(data);
   };
 
   handleBet = async ({ values }) => {
