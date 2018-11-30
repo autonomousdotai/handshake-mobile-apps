@@ -45,7 +45,7 @@ const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), L
 const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
 const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
 const Extension = createDynamicImport(() => import('@/guru/pages/Extension'), Loading);
-const FeedBack = createDynamicImport(() => import('@/guru/pages/FeedBack'), Loading);
+const FeedBack = createDynamicImport(() => import('@/guru/pages/FeedBack/FeedBack'), Loading);
 
 const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
 const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
