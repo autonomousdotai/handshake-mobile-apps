@@ -518,7 +518,7 @@ class Profile extends React.Component {
         >
           <i className="far fa-angle-left" />
         </span>
-        <span className="Title">Ninja Profile</span>
+        <span className="Title">Me</span>
       </AppBar>
     );
   }
