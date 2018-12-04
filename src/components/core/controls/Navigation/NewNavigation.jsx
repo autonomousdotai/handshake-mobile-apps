@@ -51,9 +51,9 @@ class Navigation extends React.Component {
     return (
       <footer className="footer">
         <ul>
-          <li className={cn(this.checkSelected(URL.PRODUCT_PREDICTION_URL))}>
-            <Link to={URL.PRODUCT_PREDICTION_URL} onClick={this.props.clearHeaderBack}>
-              <span className={cn(this.modeIcon(URL.PRODUCT_PREDICTION_URL), 'fa-list-alt')} />
+          <li className={cn(this.checkSelected(URL.PREDICTION))}>
+            <Link to={URL.PREDICTION} onClick={this.props.clearHeaderBack}>
+              <span className={cn(this.modeIcon(URL.PREDICTION), 'fa-list-alt')} />
               <span className="TextIcon">{this.props.intl.messages.app.navigation.feed.toUpperCase()}</span>
             </Link>
           </li>
@@ -66,12 +66,6 @@ class Navigation extends React.Component {
           <li className={cn(this.checkSelected(URL.GURU_CREATE_EVENT), 'PlusButton')}>
             <Link to={URL.GURU_CREATE_EVENT} className="CreateEvent">
               <span className="fal fa-plus" />
-            </Link>
-          </li>
-          <li className={cn(this.checkSelected(URL.SHOP_URL_INDEX))}>
-            <Link to={URL.SHOP_URL_INDEX} onClick={this.props.clearHeaderBack}>
-              <span className={cn(this.modeIcon(URL.SHOP_URL_INDEX), 'fa-shopping-cart')} />
-              <span className="TextIcon">{this.props.intl.messages.app.navigation.shop.toUpperCase()}</span>
             </Link>
           </li>
           <li className={cn(this.checkSelected([URL.HANDSHAKE_ME_INDEX]))}>

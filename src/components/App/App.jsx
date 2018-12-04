@@ -1,6 +1,7 @@
 import React from 'react';
 // redux
 import { Provider } from 'react-redux';
+import { hot } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
 
 // app
@@ -21,4 +22,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default hot(module)(App);

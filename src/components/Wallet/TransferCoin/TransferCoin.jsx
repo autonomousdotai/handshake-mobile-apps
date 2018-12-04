@@ -14,7 +14,7 @@ import {APP} from '@/constants';
 import {required} from '@/components/core/form/validation'
 import {MasterWallet} from "@/services/Wallets/MasterWallet";
 import { bindActionCreators } from "redux";
-import {getFiatCurrency} from '@/reducers/exchange/action';
+import {getFiatCurrency} from '@/reducers/wallet/action';
 import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
 import { StringHelper } from '@/services/helper';
@@ -526,13 +526,13 @@ calcMaxAmount = () => {
 
 onChooseFromContact =()=>{
   this.setState({addressBookContent: <AddressBook needChoice={true} onSelected = {(item)=> {this.onSelectAddressBook(item);}} onRef={ref => (this.child = ref)}  modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} customBackIcon={customBackIcon} />}, ()=>{
-    this.modalAddressBookRef.open();        
-  })    
-  
+    this.modalAddressBookRef.open();
+  })
+
 }
 
 onCloseAddressBook=()=>{
-this.setState({addressBookContent: ""});        
+this.setState({addressBookContent: ""});
 }
 
 openAddNewContact=()=>{
@@ -544,7 +544,7 @@ onSelectAddressBook=(address)=>{
   console.log(address);
   this.setState({
     inputAddressAmountValue: address
-  });  
+  });
   this.props.rfChange(nameFormSendWallet, 'to_address', address);
   this.modalAddressBookRef.close();
 }
@@ -597,7 +597,7 @@ render() {
           <p className="labelText block-hidden">{messages.wallet.action.transfer.label.to_address}
             <span onClick={()=> {this.onChooseFromContact();}} className="fromContact">{messages.wallet.action.transfer.label.from_contact}</span>
           </p>
-          
+
           <div className="div-address-qr-code">
             <Field
               name="to_address"

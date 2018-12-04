@@ -12,8 +12,8 @@ import '@/styles/custom-icons/styles.css';
 class Root extends React.Component {
   static propTypes = {
     app: PropTypes.object.isRequired,
-    initApp: PropTypes.func.isRequired,
-  }
+    initApp: PropTypes.func.isRequired
+  };
 
   componentDidMount() {
     const querystring = window.location.search.replace('?', '');
@@ -23,7 +23,6 @@ class Root extends React.Component {
   }
 
   render() {
-    if (this.props.app.rootLoading) return null;
     return (
       <I18n>
         <div className="root">
@@ -34,7 +33,10 @@ class Root extends React.Component {
   }
 }
 
-export default connect(state => ({
-  app: state.app,
-  router: state.router,
-}), { initApp })(Root);
+export default connect(
+  state => ({
+    app: state.app,
+    router: state.router
+  }),
+  { initApp }
+)(Root);

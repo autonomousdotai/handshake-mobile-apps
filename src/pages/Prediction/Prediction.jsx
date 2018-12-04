@@ -2,28 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { push } from 'connected-react-router';
 import AppBar from '@/guru/components/AppBar/AppBar';
-import BetMode from '@/components/handshakes/betting/Feed/OrderPlace/BetMode';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Loading from '@/components/Loading';
-import LuckyReal from '@/components/handshakes/betting/LuckyPool/LuckyReal/LuckyReal';
-import LuckyLanding from '@/pages/LuckyLanding/LuckyLanding';
 import GA from '@/services/googleAnalytics';
-import LuckyFree from '@/components/handshakes/betting/LuckyPool/LuckyFree/LuckyFree';
-import FreeBetLose from '@/components/handshakes/betting/LuckyPool/FreeBetLose';
-import FreeBetWin from '@/components/handshakes/betting/LuckyPool/FreeBetWin';
-import EmailPopup from '@/components/handshakes/betting/Feed/EmailPopup';
 import Icon from '@/guru/components/Icon/Icon';
 import Subscriber from '@/guru/components/Subscriber';
 import SubscribeSVG from '@/assets/images/modal/subscribe.svg';
-import OuttaMoney from '@/assets/images/modal/outtamoney.png';
-import Modal from '@/components/core/controls/Modal';
-import * as gtag from '@/services/ga-utils';
-import taggingConfig from '@/services/tagging-config';
-import FeedCreditCard from '@/components/handshakes/exchange/Feed/FeedCreditCard';
 import ReportPopup from '@/components/handshakes/betting/Feed/ReportPopup';
-import { predictionStatistics } from '@/components/handshakes/betting/Feed/OrderPlace/action';
 import { isJSON } from '@/utils/object';
 import qs from 'querystring';
 
@@ -42,9 +28,7 @@ import {
   relevantEventSelector,
   referParamSelector
 } from './selector';
-import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, checkExistSubcribeEmail, loadRelevantEvents, emailSubscriber } from './action';
-import { removeShareEvent } from '../CreateMarket/action';
-import { shareEventSelector } from '../CreateMarket/selector';
+import { loadMatches, getReportCount, removeExpiredEvent, checkRedeemCode, emailSubscriber } from './action';
 
 import EventItem from './EventItem';
 import Disclaimer from './Disclaimer';
@@ -206,52 +190,6 @@ class Prediction extends React.Component {
     this.props.history.push(
       `${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&outcome_id=${itemData.id}&side=${itemProps.side}`
     );
-   
-    // TODO: remove later
-    // const { event } = itemProps;
-    // const { shareEvent } = this.props;
-    // if (itemData.id === URL.HANDSHAKE_PEX_CREATOR) {
-    //   if (shareEvent) {
-    //     this.props.dispatch(removeShareEvent(['shareEvent']));
-    //   }
-    //   const redirectURL = `${URL.HANDSHAKE_PEX_CREATOR}/${event.id}`;
-    //   this.props.dispatch(push(redirectURL));
-    //   this.props.history.push(redirectURL);
-    // } else {
-    //   const selectedOutcome = {
-    //     hid: itemData.hid,
-    //     id: itemData.id,
-    //     marketOdds: itemData.market_odds,
-    //     value: itemData.name,
-    //   };
-    //   const selectedMatch = {
-    //     date: event.date,
-    //     id: event.id,
-    //     marketFee: event.market_fee,
-    //     reportTime: event.reportTime,
-    //     value: event.name,
-    //   };
-    //   this.props.dispatch(checkRedeemCode());
-    //   this.openOrderPlace(selectedOutcome);
-    //   this.modalOrderPlace.open();
-    //   this.setState({
-    //     selectedOutcome,
-    //     selectedMatch,
-    //     isOrderOpening: true,
-    //   });
-
-    //   if (selectedOutcome) {
-    //     const outcomeId = { outcome_id: selectedOutcome.id };
-    //     this.props.dispatch(predictionStatistics({ outcomeId }));
-    //   }
-
-      // send event tracking
-    //   try {
-    //     GA.clickChooseAnOutcome(event.name, itemData.name);
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-    // }
   };
 
   handleBetFail = (value) => {
@@ -268,30 +206,6 @@ class Prediction extends React.Component {
   afterWalletFill = () => {
     GA.didFillUpMoney();
     this.modalFillRef.close();
-  }
-
-  showPopupCreditCard = async () => {
-    const { failedResult } = this.state;
-    GA.clickTopupWallet(failedResult);
-    this.modalOuttaMoney.close();
-    const { messages } = this.props.intl;
-    this.setState({
-      modalFillContent:
-        (
-          <FeedCreditCard
-            buttonTitle={messages.create.cash.credit.title}
-            callbackSuccess={this.afterWalletFill}
-            isPopup
-          />
-        ),
-    }, () => {
-      this.modalFillRef.open();
-
-      gtag.event({
-        category: taggingConfig.creditCard.category,
-        action: taggingConfig.creditCard.action.showPopupPrediction,
-      });
-    });
   }
 
   handleEmailSubscriber = ({ values }) => {
@@ -351,117 +265,12 @@ class Prediction extends React.Component {
     );
   };
 
-
-  renderBetMode = (props, state) => {
-    const isRedeemAvailable = this.checkRedeemAvailabe(props);
-    return (
-      <ModalDialog className="BetSlipContainer" close onRef={(modal) => { this.modalOrderPlace = modal; }}>
-        <BetMode
-          selectedOutcome={state.selectedOutcome}
-          selectedMatch={state.selectedMatch}
-          openPopup={(click) => { this.openOrderPlace = click; }}
-          onCancelClick={this.closeOrderPlace}
-          handleBetFail={this.handleBetFail}
-          freeAvailable={isRedeemAvailable}
-          onSubmitClick={(isFree) => {
-            this.didPlaceOrder(isFree);
-          }}
-        />
-      </ModalDialog>
-    );
-  }
-
   renderViewAllEvent = (props) => {
     if (!props.isSharePage) return null;
     return (
       <a href={URL.HANDSHAKE_PREDICTION} className="ViewAllEvent">
         View All Events
       </a>
-    );
-  }
-
-  renderLuckyReal = () => (
-    <ModalDialog onRef={(modal) => { this.modalLuckyReal = modal; }}>
-      <LuckyReal
-        totalBets={this.props.totalBets}
-        isExistEmail={this.props.isExistEmail}
-        onButtonClick={() => {
-          this.modalLuckyReal.close();
-        }}
-      />
-
-    </ModalDialog>
-  )
-
-  renderLuckyFree = () => (
-    <ModalDialog onRef={(modal) => { this.modalLuckyFree = modal; }}>
-      <LuckyFree onButtonClick={() => {
-        this.modalLuckyFree.close();
-      }}
-        totalBets={this.props.totalBets}
-
-      />
-    </ModalDialog>
-  )
-
-  renderLuckyLanding = () => (
-    <ModalDialog className="modal" onRef={(modal) => { this.modalLuckyPoolRef = modal; return null; }}>
-      <LuckyLanding onButtonClick={() => {
-          this.modalLuckyPoolRef.close();
-        }}
-      />
-    </ModalDialog>
-  )
-
-  renderFreeBetLose = () => (
-    <ModalDialog className="modal" onRef={(modal) => { this.modalFreeBetLoseRef = modal; return null; }}>
-      <FreeBetLose onButtonClick={() => {
-          this.modalFreeBetLoseRef.close();
-      }}
-      />
-    </ModalDialog>
-  )
-
-  renderFreeBetWin = () => (
-    <ModalDialog className="modal" onRef={(modal) => { this.modalFreeBetWinRef = modal; return null; }}>
-      <FreeBetWin onButtonClick={() => {
-          this.modalFreeBetWinRef.close();
-      }}
-      />
-    </ModalDialog>
-  )
-  renderEmailPopup = () => (
-    <ModalDialog className="modal" onRef={(modal) => { this.modalEmailPopupRef = modal; return null; }}>
-      <EmailPopup onButtonClick={() => {
-          this.modalEmailPopupRef.close();
-          this.props.dispatch(checkExistSubcribeEmail());
-        }}
-      />
-    </ModalDialog>
-  )
-
-  renderOuttaMoney = () => {
-    return (
-      <ModalDialog className="outtaMoneyModal" close onRef={(modal) => { this.modalOuttaMoney = modal; }}>
-        <div className="outtaMoneyContainer">
-          <img src={OuttaMoney} alt="" />
-          <div className="outtaMoneyTitle">You're outta… money!</div>
-          <div className="outtaMoneyMsg">
-            To keep forecasting, you’ll need to top-up your wallet.
-          </div>
-          {/*<button className="btn btn-block btn-primary" onClick={this.showPopupCreditCard}>Top up my wallet</button>*/}
-        </div>
-      </ModalDialog>
-    );
-  };
-
-  renderCreditCard = () => {
-    const { messages } = this.props.intl;
-    const { modalFillContent } = this.state;
-    return (
-      <Modal title={messages.create.cash.credit.title} onRef={modal => this.modalFillRef = modal} onClose={this.closeFillCoin}>
-        {modalFillContent}
-      </Modal>
     );
   }
 
@@ -519,19 +328,12 @@ class Prediction extends React.Component {
     return (
       <div className={Prediction.displayName}>
         <Loading isLoading={props.isLoading} />
-        {/*<Banner />*/}
-        {/* <PexCreateBtn dispatch={props.dispatch} /> */}
         {this.renderAppBar(props)}
         {this.renderReport(props)}
         {this.renderEventList(props)}
         {this.renderRelevantEventList(props)}
         {this.renderViewAllEvent(props, state)}
         {!props.isLoading && this.renderDislaimer()}
-        {/* {this.renderBetMode(props, state)}
-        {this.renderLuckyLanding()}
-        {this.renderEmailPopup()}
-        {this.renderOuttaMoney()}
-        {this.renderCreditCard()} */}
         {!props.isLoading && this.renderPlusButton()}
         {this.renderEmailSubscriber()}
       </div>
@@ -555,7 +357,7 @@ export default injectIntl(connect(
       showedLuckyPool: showedLuckyPoolSelector(state),
       isRedeemAvailable: checkRedeemCodeSelector(state),
       isExistEmail: checkExistSubcribeEmailSelector(state),
-      shareEvent: shareEventSelector(state),
+      shareEvent: state.ui.shareEvent,
       totalBets: totalBetsSelector(state),
       referParam: referParamSelector(state),
       isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),

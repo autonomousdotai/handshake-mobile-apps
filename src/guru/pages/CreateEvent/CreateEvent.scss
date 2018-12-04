@@ -6,33 +6,34 @@
 }
 
 .CreateEvent {
-  background-color: #EBF1F7;
+  background-color: #ebf1f7;
   padding: 0 20px 20px;
-  textarea:focus, input:focus{
+  textarea:focus,
+  input:focus {
     outline: none;
   }
 
   .FormBlock {
-    background-color: #FFFFFF;
+    background-color: #ffffff;
     margin: 15px 0;
     padding: 20px;
     border-radius: 5px;
 
     .BlankLine {
-      background-color: #EBF1F7;
+      background-color: #ebf1f7;
       height: 2px;
       width: 100%;
       margin: 20px 0;
     }
 
     .GroupTitle {
-      color: #0A2240;
+      color: #0a2240;
       font-weight: 400;
       padding-bottom: 5px;
     }
 
     .GroupNote {
-      color: #889EB5;
+      color: #889eb5;
       font-size: 13px;
       font-weight: 400;
     }
@@ -65,29 +66,29 @@
     border-radius: 5px;
 
     &:disabled {
-      background-color: #A5BED4;
-      border-color: #A5BED4;
+      background-color: #a5bed4;
+      border-color: #a5bed4;
     }
   }
 
   /* FIELDS */
   .EventTitle {
     label {
-      color: #2989FF;
+      color: #2989ff;
       width: 45px;
       margin-top: 3px;
     }
 
     textarea {
       width: 100%;
-      color: #0A2240;
+      color: #0a2240;
       border: none;
       resize: none;
       font-weight: bold;
       padding-right: 10px;
 
       &::placeholder {
-        color: #C5D8E8;
+        color: #c5d8e8;
       }
     }
 
@@ -116,7 +117,7 @@
       &:before {
         content: '';
         height: 2px;
-        border: 1px dashed #C5D8E8;
+        border: 1px dashed #c5d8e8;
         position: absolute;
         bottom: 2px;
         left: 40px;
@@ -125,7 +126,7 @@
 
       &:after {
         content: '?';
-        color: #2989FF;
+        color: #2989ff;
         bottom: 0;
         right: 0;
         position: absolute;
@@ -135,7 +136,7 @@
     #TitleTT {
       padding-left: 5px;
       width: 20px;
-      color: #2989FF;
+      color: #2989ff;
     }
   }
 
@@ -152,17 +153,18 @@
       width: 110px;
       height: 28px;
 
-      .on, .off {
+      .on,
+      .off {
         font-size: 15px;
         font-weight: 400;
       }
 
       .slider {
-        background-color: #14447F;
+        background-color: #14447f;
       }
 
       input:checked + .slider {
-        background-color: #2989FF;
+        background-color: #2989ff;
       }
 
       input:checked + .slider:before {
@@ -188,14 +190,14 @@
       position: absolute;
       top: 0;
       right: 0;
-      color: #2989FF;
+      color: #2989ff;
 
       input {
         text-align: right;
         padding: 0;
         margin: 0;
         border: none;
-        color: #2989FF;
+        color: #2989ff;
         background-color: transparent;
         -webkit-appearance: none;
         -webkit-user-select: none;
@@ -211,7 +213,8 @@
       height: 5px;
     }
 
-    .rangeslider, .rangeslider .rangeslider__fill {
+    .rangeslider,
+    .rangeslider .rangeslider__fill {
       box-shadow: none;
     }
 
@@ -219,13 +222,13 @@
       width: 25px;
       height: 25px;
       border-radius: 25px;
-      background: #2989FF;
-      border: 2px solid #FFFFFF;
-      box-shadow: 0 2px 4px 0 rgba(181,181,181,0.50);
+      background: #2989ff;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 4px 0 rgba(181, 181, 181, 0.5);
     }
 
     .rangeslider-horizontal .rangeslider__fill {
-      background-color: #2989FF;
+      background-color: #2989ff;
     }
 
     .rangeslider-horizontal .rangeslider__handle:after {
@@ -321,7 +324,7 @@
       justify-content: space-around;
       text-align: center;
       padding: 10px;
-      background-color: #EBF1F7;
+      background-color: #ebf1f7;
       border-radius: 5px;
       font-weight: 400;
       width: 100%;
@@ -333,7 +336,7 @@
       }
 
       .HM {
-        color: #2989FF;
+        color: #2989ff;
       }
     }
   }
@@ -344,18 +347,18 @@
       height: 38px;
       border-radius: 5px;
       padding: 5px 10px;
-      border: 1px solid hsl(0,0%,80%);
+      border: 1px solid hsl(0, 0%, 80%);
       font-size: 15px;
       outline: none;
-      color: #889EB5 !important;
+      color: #889eb5 !important;
 
       &:disabled {
-        background-color: #F5F8FC;
+        background-color: #f5f8fc;
       }
     }
 
     p {
-      color: #2989FF;
+      color: #2989ff;
       padding: 5px 0 0;
       margin-bottom: 0;
     }
@@ -383,11 +386,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #F5F8FC;
+  background-color: #f5f8fc;
   padding-top: 100px;
 
   .checkmark {
-    display:inline-block;
+    display: inline-block;
     width: 48px;
     height: 48px;
     -ms-transform: rotate(45deg); /* IE 9 */
@@ -400,18 +403,18 @@
     position: absolute;
     width: 48px;
     height: 48px;
-    background-color: #E0FFE1;
+    background-color: #e0ffe1;
     border-radius: 50%;
     left: 0;
     top: 0;
-    border: 2px solid #C1F9C7;
+    border: 2px solid #c1f9c7;
   }
 
   .checkmark_stem {
     position: absolute;
     width: 3px;
     height: 24px;
-    background-color: #4CDB52;
+    background-color: #4cdb52;
     left: 26px;
     top: 8px;
   }
@@ -420,7 +423,7 @@
     position: absolute;
     width: 12px;
     height: 3px;
-    background-color: #4CDB52;
+    background-color: #4cdb52;
     left: 15px;
     top: 29px;
   }
@@ -433,14 +436,13 @@
       content: '';
       display: inline-block;
       height: 1px;
-      background-color: #E4E4E4;
+      background-color: #e4e4e4;
       width: 100px;
       position: absolute;
       bottom: 30px;
       left: 50%;
       margin-left: -50px;
     }
-
   }
 
   .ViewSharedEvent {
@@ -464,7 +466,6 @@
       }
     }
   }
-
 }
 
 .tooltip {

@@ -18,7 +18,6 @@ import {
 import COUNTRIES from '@/data/country-dial-codes';
 // components
 import { Col, Grid, ProgressBar, Row } from 'react-bootstrap';
-import Image from '@/components/core/presentation/Image';
 import Button from '@/components/core/controls/Button';
 import Dropdown from '@/components/core/controls/Dropdown';
 import UploadZone from '@/components/core/controls/UploadZone';
@@ -29,9 +28,6 @@ import ModalDialog from '@/components/core/controls/ModalDialog';
 import local from '@/services/localStore';
 import { API_URL, APP } from '@/constants';
 // style
-import IDVerificationFrontImageExample from '@/assets/images/id-verification/front-example.svg';
-import IDVerificationBackImageExample from '@/assets/images/id-verification/back-example.svg';
-import IDVerificationSelfieImageExample from '@/assets/images/id-verification/selfie-example.svg';
 // import { chatInstance } from '@/pages/Chat/Chat';
 import valid from '@/services/validate';
 import { ICON } from '@/styles/images';
@@ -894,7 +890,6 @@ class Profile extends React.Component {
                             <Row>
                               <div className="col-12">
                                 <p />
-                                <Image src={this.state.idVerificationFrontImage ? this.state.idVerificationFrontImage.preview : IDVerificationFrontImageExample} />
                               </div>
                             </Row>
                           </div>
@@ -923,7 +918,6 @@ class Profile extends React.Component {
                               <Row>
                                 <div className="col-12">
                                   <p />
-                                  <Image src={this.state.idVerificationBackImage ? this.state.idVerificationBackImage.preview : IDVerificationBackImageExample} />
                                 </div>
                               </Row>
                             </div>
@@ -954,7 +948,6 @@ class Profile extends React.Component {
                               <Row>
                                 <div className="col-12">
                                   <p />
-                                  <Image src={this.state.idVerificationSelfieImage ? this.state.idVerificationSelfieImage.preview : IDVerificationSelfieImageExample} />
                                 </div>
                               </Row>
                             </div>

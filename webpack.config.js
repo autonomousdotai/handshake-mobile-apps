@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-// const packageConfig = require('./package.json');
-
+// const UnusedWebpackPlugin = require('unused-webpack-plugin');
 const xPath = filepath => path.resolve(__dirname, filepath);
 
 // Webpack
@@ -14,7 +13,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PwaManifestPlugin = require('webpack-pwa-manifest');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const OfflinePlugin = require('offline-plugin');
 
 // configs
 const envConfig = require('./.env.js');
@@ -36,7 +34,17 @@ module.exports = function webpackConfig(env, argv = {}) {
   };
 
   const development = {
-    plugins: [new webpack.HotModuleReplacementPlugin()],
+    plugins: [
+      new webpack.HotModuleReplacementPlugin(),
+      // new UnusedWebpackPlugin({
+      //   // Source directories
+      //   directories: [path.join(__dirname, 'src')],
+      //   // Exclude patterns
+      //   exclude: ['*.test.js'],
+      //   // Root directory (optional)
+      //   root: __dirname,
+      // }),
+    ],
     devServer: {
       watchContentBase: true,
       stats,
@@ -159,11 +167,8 @@ module.exports = function webpackConfig(env, argv = {}) {
         ]
       }),
       new CopyWebpackPlugin([
-        { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
         { from: 'src/assets/images/template/og_image.jpg', to: 'images' },
         { from: 'src/robots.txt', to: '.' }
-        // { from: 'src/google59d0f1640e2aac21.html', to: '.' },
-        // { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },
       ])
     ],
     performance: { hints: false },

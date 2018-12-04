@@ -1,4 +1,0 @@
-const COUNTRIES_BLACKLIST = [
-];
-
-export default COUNTRIES_BLACKLIST;

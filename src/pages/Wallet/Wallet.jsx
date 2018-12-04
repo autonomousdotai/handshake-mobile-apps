@@ -65,13 +65,11 @@ import floatButtonScanQRCode from '@/assets/images/wallet/icons/float-button-sca
 import WalletPreferences from '@/components/Wallet/WalletPreferences';
 import { requestWalletPasscode, showScanQRCode, showQRCodeContent  } from '@/reducers/app/action';
 import QRCodeContent from '@/components/Wallet/QRCodeContent';
-import Redeem from '@/components/Wallet/Redeem';
 import RemindPayment from '@/components/Payment/Remind';
 import { ICON } from '@/styles/images';
 
 const QRCode = require('qrcode.react');
 
-import { Ethereum } from '@/services/Wallets/Ethereum.js';
 
 window.Clipboard = (function (window, document, navigator) {
   let textArea,
@@ -150,7 +148,6 @@ class Wallet extends React.Component {
       backupWalletContent: "",
       exportPrivateContent: "",
       restoreWalletContent: "",
-      redeemContent: "",
 
       // sortable:
       listSortable: {coin: false, token: false, collectitble: false},
@@ -924,11 +921,6 @@ class Wallet extends React.Component {
 
   getETHFree=()=> {
     window.open('https://www.rinkeby.io/#faucet', '_blank');
-    // let data="ninja-redeem:NINJA-1C1QN0r5SItfzGqp06graZPLZR2?value=234";
-    // let result = MasterWallet.getQRCodeDetail(data);
-    // this.props.showQRCodeContent({
-    //   data: result
-    // });
   }
 
   onQRCodeScaned=(data)=>{
@@ -936,28 +928,6 @@ class Wallet extends React.Component {
     this.props.showQRCodeContent({
       data: result
     });
-  }
-
-  // redeem:
-  showRedeemModal=(data)=>{
-    this.setState({
-      redeemContent:
-        (
-          <Redeem
-            data={data}
-            onFinish={(result) => {
-              this.modalRedeemRef.close();
-              this.setState({redeemContent: ''});
-             }}
-          />
-        ),
-      }, ()=>{
-      this.modalRedeemRef.open();
-    });
-  }
-
-  closeModalRedeem=(data)=>{
-    this.setState({redeemContent: ''});
   }
 
   render = () => {
@@ -985,11 +955,7 @@ class Wallet extends React.Component {
         </Modal>
 
         {/* qrcode result detected modal popup*/}
-        <QRCodeContent onRedeemClick={(data)=> {this.showRedeemModal(data);}}  onTransferClick={(data)=> {this.showTransferFromQRCode(data);}} />
-
-        <Modal title={messages.wallet.action.redeem.title} onRef={modal => this.modalRedeemRef = modal} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} modalBodyStyle={this.modalBodyStyle} onClose={this.closeModalRedeem}>
-          {this.state.redeemContent}
-        </Modal>
+        <QRCodeContent  onTransferClick={(data)=> {this.showTransferFromQRCode(data);}} />
 
         {/* add new token modal */}
         <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
@@ -1194,25 +1160,11 @@ class Wallet extends React.Component {
             </Row>
             : ''}
             </Row>
-
-          {/* <Row className="list">
-            <Header title="Reward wallets" hasLink={false} />
-          </Row>
-          <Row className="list">
-            {this.listRewardWalletBalance}
-          </Row> */}
-
         </Grid>
       </div>
     );
   }
 }
-
-const mapState = (state) => ({
-  cryptoPrice: state.exchange.cryptoPrice,
-  userCcLimit: state.exchange.userCcLimit,
-  ccLimits: state.exchange.ccLimits,
-});
 
 const mapDispatch = ({
   setHeaderRight,
@@ -1228,4 +1180,4 @@ const mapDispatch = ({
 });
 
 
-export default injectIntl(connect(mapState, mapDispatch)(Wallet));
+export default injectIntl(connect(null, mapDispatch)(Wallet));
