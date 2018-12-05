@@ -1,6 +1,10 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 import {
+  updateEvents,
+  updateCountReport
+} from '@/guru/pages/Home/action';
+import {
   putMatchDetail,
   putMatchOdd,
   putGasPrice,
@@ -35,9 +39,12 @@ const guruReducer = (state = initialState, action) => {
       case updateLoading().type:
         draft.ui.isLoading = action.payload;
         break;
-      case 'GURU:UPDATE_EVENTS':
-        draft.events = action.events;
+      case updateEvents().type:
+        draft.events = action.payload;
         break;
+      // case updateCountReport().type:
+      //   draft.ui.countReport = action.payload;
+      //   break;
       case putMatchDetail().type:
         draft.matchDetail = {
           ...draft.matchDetail,

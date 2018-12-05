@@ -33,11 +33,7 @@ function buildList(props) {
 }
 
 function Statistics(props) {
-  return (
-    <div className="ComponentStatistics">
-      {buildList(props)}
-    </div>
-  );
+  return buildList(props);
 }
 
 Statistics.propTypes = {

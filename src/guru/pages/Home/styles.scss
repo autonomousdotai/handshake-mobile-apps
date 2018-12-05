@@ -1,0 +1,163 @@
+@import './src/styles/style';
+
+.HomeGuruContainer {
+  background-color: #F5F8FC;
+}
+
+/** Card Item **/
+.CardItem {
+  color: #0a2240;
+  background-color: #ffffff;
+  padding: rem-calc(20px);
+  font-family: $font-family-base;
+  font-weight: 400;
+  margin-top: rem-calc(10px);
+}
+.CardHeading {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 15px;
+}
+.CardTitle {
+  font-size: rem-calc(20px);
+  color: #000000;
+  letter-spacing: 0;
+  line-height: rem-calc(24px);
+  font-weight: $medium;
+  margin: 0 rem-calc(5px) rem-calc(2px) 0;
+}
+.CardImage {
+  position: relative;
+  overflow: hidden;
+  min-width: 35%;
+  flex-basis: 35%;
+  img {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 4px;
+  }
+}
+.CardCreator {
+  .CreatorComponent {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    svg {
+      width: 28px;
+      height: 28px;
+    }
+    .CreatorAlias {
+      margin-left: 10px;
+      color: #000;
+    }
+  }
+}
+.CardParameters {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  .Icon {
+    margin-right: 10px;
+    color: #9caec2;
+    font-size: rem-calc(16px);
+  }
+  .Countdown {
+    display: inline-block;
+  }
+}
+.HasStatistics {
+  .CardParameters {
+    display: inline-flex;
+    flex-direction: column;
+    > div {
+      margin-bottom: 3px;
+    }
+    .Icon {
+      display: inline-block;
+      min-width: 16px;
+      margin: 0 16px 0 6px;
+    }
+  }
+  .CardStatistics {
+    display: inline-flex;
+    float: right;
+    margin-top: -40px;
+    clear: right;
+  }
+}
+.CardStatistics {
+  .Statistics {
+    display: flex;
+    flex-basis: 50%;
+    .Item {
+      display: flex;
+      flex-direction: column;
+      flex-basis: 50%;
+      text-align: center;
+    }
+    .Name {
+      font-size: rem-calc(14px);
+    }
+    .Percent {
+      font-size: rem-calc(15px);
+      font-weight: 600;
+    }
+  }
+}
+.CardActions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  button {
+    text-transform: capitalize;
+    font-weight: 700;
+    min-width: 48%;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+  .btn-secondary {
+    background-color: #748599;
+  }
+}
+.CardShares {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  margin-bottom: -6px;
+  border-top: 1px solid #EFEFEF;
+  .Comment > i {
+    margin-right: 5px;
+  }
+  .Comment a {
+    color: #748599;
+  }
+  .share-social {
+    margin-right: -5px;
+  }
+  .share-social img {
+    width: 32px;
+    margin-right: 8px;
+  }
+}
+
+/** Disclaimer **/
+.Disclaimer {
+  font-size: 11px;
+  padding: rem-calc(10px);
+
+  span {
+    font-weight: bold;
+    font-size: 12px;
+    padding-bottom: 5px;
+    display: block;
+  }
+}

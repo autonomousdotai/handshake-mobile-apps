@@ -1,38 +1,76 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, select, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
 import { API_URL } from '@/constants';
 import { updateLoading } from '@/guru/stores/action';
-import { loadMatches, updateEvents, updateUserEvents, updateNewUserEvents, loadUserReputation, updateUserReputation, loginCoinbase, updateAuthCoinbase, loginMetaMask, updateAuthMetaMask } from './action';
-
+import {
+  loadMatches,
+  updateEvents,
+  getReportCount,
+  removeExpiredEvent,
+  updateCountReport,
+  updateUserEvents,
+  updateNewUserEvents,
+  loadUserReputation,
+  updateUserReputation,
+  loginCoinbase,
+  updateAuthCoinbase,
+  loginMetaMask,
+  updateAuthMetaMask
+} from './action';
+import { eventSelector } from './selector';
 
 export function* handleLoadMatches({ isDetail, source }) {
   try {
     if (isDetail) {
       const { data } = yield call(apiGet, {
         PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${isDetail}`,
-        type: 'LOAD_MATCH_DETAIL_SHARE',
-        // _key: 'events',
-        _path: 'guru',
+        type: 'LOAD_MATCH_DETAIL_SHARE'
       });
       if (data) {
-        //yield put(updateEvents([data]));
+        yield put(updateEvents([data]));
+        yield put(updateLoading(false));
       }
     } else {
       const PATH_URL = source ? `${API_URL.CRYPTOSIGN.LOAD_MATCHES}?source=${source}` : API_URL.CRYPTOSIGN.LOAD_MATCHES;
       const { data } = yield call(apiGet, {
         PATH_URL,
-        type: 'LOAD_MATCHES',
-        // _key: 'events',
-        // _path: 'guru',
+        type: 'LOAD_MATCHES'
       });
       if (data) {
         yield put(updateEvents(data));
+        yield put(updateLoading(false));
       }
     }
   } catch (e) {
     console.error('handleLoadMachesSaga', e);
   }
 }
+
+export function* handleRemoveEvent({ eventId }) {
+  try {
+    const events = yield select(eventSelector);
+    if (events && events.length) {
+      const data = events.map((item) => item.id !== eventId);
+      if (data) {
+        yield put(updateEvents(data));
+      }
+    }
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// export function* handleCountReport() {
+//   try {
+//     const response = yield call(apiGet, {
+//       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
+//       type: 'COUNT_REPORT'
+//     });
+//     yield put(updateCountReport(response.data.length));
+//   } catch (e) {
+//     console.error(e);
+//   }
+// }
 
 export function* handleLoadReputation({ userId, page }) {
   try {
@@ -102,6 +140,8 @@ export function* handleAuthorizeMetaMask({ web3Provider }) {
 
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
+  // yield takeLatest(getReportCount().type, handleCountReport);
+  yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
   yield takeLatest(loadUserReputation().type, handleLoadReputation);
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);
   yield takeLatest(loginMetaMask().type, handleAuthorizeMetaMask);

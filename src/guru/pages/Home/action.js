@@ -1,16 +1,37 @@
 export const loadMatches = (payload = {}) => {
   return {
     type: 'GURU:LOAD_MATCHES',
-    ...payload,
+    ...payload
   };
 };
 
-export const updateEvents = (events) => {
+export const updateEvents = (payload = {}) => {
   return {
     type: 'GURU:UPDATE_EVENTS',
-    events,
+    payload
   };
 };
+
+// export const getReportCount = (payload = {}) => {
+//   return {
+//     type: 'GURU:COUNT_REPORT',
+//     ...payload
+//   };
+// };
+
+export const removeExpiredEvent = (payload = {}) => {
+  return {
+    type: 'GURU:REMOVE_EXPIRED_EVENT',
+    ...payload
+  };
+};
+
+// export const updateCountReport = (payload) => {
+//   return {
+//     type: 'GURU:CHECK_REPORT',
+//     payload
+//   };
+// };
 
 export const updateUserEvents = (events, loadMore, page) => {
   return {

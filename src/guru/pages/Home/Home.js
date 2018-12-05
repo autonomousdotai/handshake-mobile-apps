@@ -2,30 +2,37 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import Card from '@/guru/components/Card/Card';
 import { isJSON } from '@/utils/object';
+import Loading from '@/components/Loading';
+import { updateLoading } from '@/guru/stores/action';
 import { loadMatches } from './action';
 import { eventSelector, isSharePage } from './selector';
+import View from './View';
+
+import './styles.scss';
 
 class Home extends Component {
   static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
     eventList: PropTypes.array,
-    isSharePage: PropTypes.any,
+    isSharePage: PropTypes.any
   };
 
   static defaultProps = {
     eventList: [],
-    isSharePage: false,
+    isSharePage: false
   };
 
   componentDidMount() {
-    this.receiverMessage(this.props); // @TODO: Extensions
+    this.receiverMessage(this.props);
   }
 
   // @TODO: Extensions
   /* eslint no-useless-escape: 0 */
   receiverMessage = (props) => {
-    const windowInfo = isJSON(window.name) ? JSON.parse(window.name) : null;
+    props.dispatch(updateLoading(true));
+    const windowInfo = (isJSON(window.name) && JSON.parse(window.name)) || null;
     if (windowInfo) {
       const { message } = windowInfo;
       if (window.self !== window.top && message) {
@@ -40,36 +47,13 @@ class Home extends Component {
     }
   }
 
-  renderCardItem = (itemProps) => {
-    const cardProps = {
-      key: itemProps.id,
-      className: 'CardItem',
-      title: itemProps.name,
-      imageUrl: itemProps.image_url,
-    };
-    return (
-      <Card {...cardProps}>
-        This is a Card!
-      </Card>
-    );
-  }
-
-  renderCardList = (props) => {
-    const { eventList } = props;
-    return (
-      <div className="CardList">
-        { eventList.map(eventItem => this.renderCardItem(eventItem)) }
-      </div>
-    );
-  }
-
   renderHome = (props) => {
-    return (
-      <div className="HomeGuruContainer">
-        { this.renderCardList(props) }
-      </div>
-    );
+    if (props.isLoading) {
+      return (<Loading isLoading={props.isLoading} />);
+    }
+    return (<View {...props} />);
   }
+
   render() {
     return this.renderHome(this.props);
   }
@@ -80,6 +64,7 @@ export default injectIntl(connect(
     return {
       eventList: eventSelector(state),
       isSharePage: isSharePage(state),
+      isLoading: state.guru.ui.isLoading
     };
   },
 )(Home));
