@@ -416,21 +416,8 @@ class Profile extends React.Component {
           headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',
           successFn: () => {
-            const params = new URLSearchParams();
-            params.append('email', email);
-            this.props.authUpdate({
-              PATH_URL: 'user/profile',
-              data: params,
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              METHOD: 'POST',
-              successFn: () => {
-                this.setState({ isShowVerificationEmailCode: false, idVerificationEmail: email });
-                this.showSuccess(messages.me.profile.verify.alert.success.email);
-              },
-              errorFn: () => {
-                //this.showError(messages.me.profile.verify.alert.require.email);
-              },
-            });
+            this.setState({ isShowVerificationEmailCode: false, idVerificationEmail: email });
+            this.showSuccess(messages.me.profile.verify.alert.success.email);
           },
           errorFn: () => {
             this.showError(messages.me.profile.verify.alert.cannot.email);
