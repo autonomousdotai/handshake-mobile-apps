@@ -57,12 +57,12 @@ class Navigation extends React.Component {
               <span className="TextIcon">{this.props.intl.messages.app.navigation.feed.toUpperCase()}</span>
             </Link>
           </li>
-          <li className={cn(this.checkSelected(URL.HANDSHAKE_WALLET_INDEX))}>
+          {/* <li className={cn(this.checkSelected(URL.HANDSHAKE_WALLET_INDEX))}>
             <Link to={URL.HANDSHAKE_WALLET_INDEX} onClick={this.props.clearHeaderBack}>
               <span className={cn(this.modeIcon(URL.HANDSHAKE_WALLET_INDEX), 'fa-wallet')} />
               <span className="TextIcon">{this.props.intl.messages.app.navigation.wallet.toUpperCase()}</span>
             </Link>
-          </li>
+          </li> */}
           <li className={cn(this.checkSelected(URL.GURU_CREATE_EVENT), 'PlusButton')}>
             <Link to={URL.GURU_CREATE_EVENT} className="CreateEvent">
               <span className="fal fa-plus" />

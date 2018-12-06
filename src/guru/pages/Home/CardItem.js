@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Card from '@/guru/components/Card/Card';
 import BetCreator from './Creator';
@@ -12,17 +11,17 @@ import ShareSocial from './ShareSocial';
 import Comment from './Comment';
 
 function createItemChildren(itemProps) {
-  const { eventItem, onClickCreator, onClickBetSide } = itemProps;
+  const { eventItem, onClickCreator, onClickBetSide, onCountdownComplete } = itemProps;
   return (
     <React.Fragment>
       <BetCreator walletAddress={eventItem.creator_wallet_address} onClick={onClickCreator} />
       <div className="CardParameters">
-        <TimeLeft date={eventItem.date} onCountdownComplete={() => {}} />
+        <TimeLeft date={eventItem.date} onComplete={onCountdownComplete} />
         <TotalPredict totalBets={eventItem.total_bets} />
         <CountPlayer totalUsers={eventItem.total_users} />
       </div>
       <Statistics betSides={eventItem.bets_side} totalBets={eventItem.total_bets} />
-      <Options event={eventItem} onClickOutcome={onClickBetSide} />
+      <Options event={eventItem} onClick={onClickBetSide} />
       <div className="CardShares">
         <Comment event={eventItem} />
         <ShareSocial event={eventItem} />

@@ -13,7 +13,7 @@ import {
   initHandShake,
   initHandShakeFree,
   putHandShake,
-  checkRedeemCode,
+  checkCompareRedeemCode,
   putRedeemCode
 } from './action';
 
@@ -89,11 +89,11 @@ export function* handleInitHandShakeFree({ payload }) {
   }
 }
 
-export function* handleCheckRedeemCode({ payload }) {
+export function* handleCompareRedeemCode({ payload }) {
   try {
     const response = yield call(apiPost, {
       PATH_URL: `${API_URL.CRYPTOSIGN.COMPARE_REDEEM_CODE}`,
-      type: 'CHECK_REDEEM_CODE',
+      type: 'COMPARE_REDEEM_CODE',
       data: payload
     });
     if (response) {
@@ -110,6 +110,6 @@ export default function* placeBetSaga() {
   yield takeLatest(getGasPrice().type, handleGetGasPrice);
   yield takeLatest(getMatchOdd().type, handleGetMatchOdd);
   yield takeLatest(initHandShake().type, handleInitHandShake);
-  yield takeLatest(checkRedeemCode().type, handleCheckRedeemCode);
+  yield takeLatest(checkCompareRedeemCode().type, handleCompareRedeemCode);
   yield takeLatest(initHandShakeFree().type, handleInitHandShakeFree);
 }

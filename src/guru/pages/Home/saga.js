@@ -8,6 +8,10 @@ import {
   getReportCount,
   removeExpiredEvent,
   updateCountReport,
+  checkRedeemCode,
+  emailSubscriber,
+  putUserSubscribe,
+  putStatusEmailSubscribe,
   updateUserEvents,
   updateNewUserEvents,
   loadUserReputation,
@@ -50,7 +54,7 @@ export function* handleRemoveEvent({ eventId }) {
   try {
     const events = yield select(eventSelector);
     if (events && events.length) {
-      const data = events.map((item) => item.id !== eventId);
+      const data = events.filter((item) => item.id !== eventId);
       if (data) {
         yield put(updateEvents(data));
       }
@@ -60,18 +64,45 @@ export function* handleRemoveEvent({ eventId }) {
   }
 }
 
-// export function* handleCountReport() {
-//   try {
-//     const response = yield call(apiGet, {
-//       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
-//       type: 'COUNT_REPORT'
-//     });
-//     yield put(updateCountReport(response.data.length));
-//   } catch (e) {
-//     console.error(e);
-//   }
-// }
+export function* handleCountReport() {
+  try {
+    const response = yield call(apiGet, {
+      PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
+      type: 'COUNT_REPORT'
+    });
+    yield put(updateCountReport(response.data.length));
+  } catch (e) {
+    console.error(e);
+  }
+}
 
+export function* handleCheckRedeem() {
+  try {
+    const response = yield call(apiGet, {
+      PATH_URL: API_URL.CRYPTOSIGN.CHECK_REDEEM_CODE,
+      type: 'CHECK_REDEEM_CODE'
+    });
+    yield put(putUserSubscribe(response.data));
+  } catch (e) {
+    console.error('handleCheckRedeem', e);
+  }
+}
+
+export function* handleEmailSubscriber(values) {
+  try {
+    const { status } = yield call(apiPost, {
+      PATH_URL: API_URL.CRYPTOSIGN.SUBCRIBE_EMAIL_PREDICTION,
+      type: 'SUBCRIBE_EMAIL_PREDICTION',
+      data: values
+    });
+    yield put(putStatusEmailSubscribe(status));
+    yield put(updateLoading(false));
+  } catch (e) {
+    console.error('handleEmailSubscriber', e);
+  }
+}
+
+// Moving to Reputation
 export function* handleLoadReputation({ userId, page }) {
   try {
     yield put(updateLoading(true));
@@ -140,8 +171,10 @@ export function* handleAuthorizeMetaMask({ web3Provider }) {
 
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
-  // yield takeLatest(getReportCount().type, handleCountReport);
+  yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
+  yield takeLatest(checkRedeemCode().type, handleCheckRedeem);
+  yield takeLatest(emailSubscriber().type, handleEmailSubscriber);
   yield takeLatest(loadUserReputation().type, handleLoadReputation);
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);
   yield takeLatest(loginMetaMask().type, handleAuthorizeMetaMask);

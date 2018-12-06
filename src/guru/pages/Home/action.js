@@ -12,12 +12,12 @@ export const updateEvents = (payload = {}) => {
   };
 };
 
-// export const getReportCount = (payload = {}) => {
-//   return {
-//     type: 'GURU:COUNT_REPORT',
-//     ...payload
-//   };
-// };
+export const getReportCount = (payload = {}) => {
+  return {
+    type: 'GURU:COUNT_REPORT',
+    ...payload
+  };
+};
 
 export const removeExpiredEvent = (payload = {}) => {
   return {
@@ -26,13 +26,42 @@ export const removeExpiredEvent = (payload = {}) => {
   };
 };
 
-// export const updateCountReport = (payload) => {
-//   return {
-//     type: 'GURU:CHECK_REPORT',
-//     payload
-//   };
-// };
+export const updateCountReport = (payload) => {
+  return {
+    type: 'GURU:CHECK_REPORT',
+    payload
+  };
+};
 
+export const checkRedeemCode = (payload = {}) => {
+  return {
+    type: 'GURU:CHECK_REDEEM_CODE',
+    ...payload
+  };
+};
+
+export const emailSubscriber = (payload = {}) => {
+  return {
+    type: 'GURU:SUBCRIBE_EMAIL_PREDICTION',
+    ...payload
+  };
+};
+
+export const putUserSubscribe = (payload) => {
+  return {
+    type: 'GURU:PUT_USER_SUBSCRIBE',
+    payload
+  };
+};
+
+export const putStatusEmailSubscribe = (payload) => {
+  return {
+    type: 'GURU:PUT_STATUS_EMAIL_SUBSCRIBE',
+    payload
+  };
+};
+
+// Move to Reputation
 export const updateUserEvents = (events, loadMore, page) => {
   return {
     type: 'GURU:UPDATE_USER_EVENTS',

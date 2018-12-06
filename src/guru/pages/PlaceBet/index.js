@@ -22,7 +22,7 @@ import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHan
 
 import { updateLoading, userHabit } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
-  checkRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
+  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
 import {
   queryStringSelector,
   matchDetailSelector,
@@ -215,7 +215,7 @@ class PlaceBet extends Component {
     if (name === 'amount') {
       return this.setState({ betAmount: value });
     }
-    return this.props.dispatch(checkRedeemCode({ redeem: value }));
+    return this.props.dispatch(checkCompareRedeemCode({ redeem: value }));
   };
 
   calculatePosWinning = () => {
