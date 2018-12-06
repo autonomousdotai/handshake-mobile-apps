@@ -36,14 +36,11 @@ import { UnicornGO } from '@/services/Wallets/Collectibles/UnicornGO';
 import { WarToken } from '@/services/Wallets/Collectibles/WarToken';
 
 import { APP, BASE_API } from '@/constants';
-import Helper, { StringHelper } from '@/services/helper';
+import Helper from '@/services/helper';
 import Neuron from '@/services/neuron/Neutron';
 import axios from 'axios';
-import { isEqual } from '@/utils/array.js';
 
 const bip39 = require('bip39');
-import qs from 'qs';
-import { Ripple } from '@/services/Wallets/Ripple.js';
 
 const CryptoJS = require('crypto-js');
 const SHA256 = require('crypto-js/sha256');
@@ -51,11 +48,11 @@ const SHA256 = require('crypto-js/sha256');
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash,Ripple, BitcoinCashTestnet
+      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet
     };
 
     static ListCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, Ripple, BitcoinCashTestnet, TokenERC20, TokenERC721,
+      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet, TokenERC20, TokenERC721,
       CryptoStrikers, CryptoPunks, CryptoKitties, Axie, BlockchainCuties,
       ChibiFighters, CryptoClown, CryptoCrystal, Cryptogs, CryptoHorse,
       CryptoSoccr, CryptoZodiacs, CSCPreSaleFactory, DopeRaider, Etherbots,
@@ -86,7 +83,7 @@ export class MasterWallet {
 
       let defaultWallet = [1, 3];// eth main, eth test, btc main, btc test => local web
       if (process.env.isLive) { // // eth main, eth test, btc main, btc test => live web
-        defaultWallet = [0, 1, 2, 3];
+        defaultWallet = [0, 1, 2];
       }
       if (process.env.isDojo) { // eth test, shuri test, btc test => dojo web
         defaultWallet = [0, 2];
@@ -229,7 +226,7 @@ export class MasterWallet {
 
         const defaultHeaders = {
           'Content-Type': 'application/json', Payload: token
-        };                        
+        };
 
         let data = new FormData();
         data.append ("wallet_addresses", listAddresses);
@@ -269,8 +266,8 @@ export class MasterWallet {
 
       const defaultHeaders = {
         'Content-Type': 'application/json', Payload: token
-      };                        
-      
+      };
+
       let endpoint = "user/notification";
 
       let response = axios.post(
@@ -778,14 +775,14 @@ export class MasterWallet {
     * Get coin type from its wallet address
     * @param {String} address
     */
-    static getCoinSymbolFromAddress(address){            
+    static getCoinSymbolFromAddress(address){
       for (const i in MasterWallet.ListDefaultCoin){
         let wallet = new MasterWallet.ListDefaultCoin[i]();
         if (wallet.checkAddressValid(address) === true){
           return {"symbol": wallet.name, "name": wallet.title, "address": address, "amount": ""};
         }
       }
-      return false;       
+      return false;
     }
 
     static getQRCodeDetail(text){
@@ -794,17 +791,17 @@ export class MasterWallet {
       // 2: ninja-redeem:code?value=25
       // 3: <coin-title>:<address>?amount=<number>
       // 4: <address-only>
-      
+
       let keyRedem = "ninja-redeem";
 
-      function url(text) {        
+      function url(text) {
         var urlRegex = /(https?:\/\/[^\s]+)/g;
-        if(!urlRegex.test(text)) {          
+        if(!urlRegex.test(text)) {
           return false;
         } else {
           let match = text.match(urlRegex);
           return match[0];
-        }        
+        }
       }
       function redeem(text){
         if (text.includes(keyRedem)){
@@ -812,43 +809,43 @@ export class MasterWallet {
           let code = dataSplit[0].split(':')[1];
           let param = Helper.getQueryStrings("?"+dataSplit[1]);
           return {"code": code, "value" : param['value']};
-        }               
-        return false; 
+        }
+        return false;
       }
-      function transfer(text){         
-        let dataSplit = text.split('?');        
+      function transfer(text){
+        let dataSplit = text.split('?');
         for (const i in MasterWallet.ListDefaultCoin){
           let wallet = new MasterWallet.ListDefaultCoin[i]();
           if (dataSplit[0].toLowerCase().includes((wallet.title.replace(/\s/g,'')).toLowerCase())){
             let listData = dataSplit[0].split(':');
             if(listData.length > 0){
               let address = listData[1];
-              let param = Helper.getQueryStrings("?"+dataSplit[1]);              
-              return {"symbol": wallet.name, "address": address, "amount" : param['amount']};  
+              let param = Helper.getQueryStrings("?"+dataSplit[1]);
+              return {"symbol": wallet.name, "address": address, "amount" : param['amount']};
             }
             else{
               return false;
-            }            
+            }
           }
-        }          
+        }
         return false;
       }
       function address(text){
         return MasterWallet.getCoinSymbolFromAddress(text);
       }
       // let check:
-      // web:      
+      // web:
       let result = {"type": MasterWallet.QRCODE_TYPE.UNKNOW, "data": {}, text: text};
-      
-      let tmpResult = url(text);      
+
+      let tmpResult = url(text);
       if (tmpResult != false){
         result.type = MasterWallet.QRCODE_TYPE.URL;
         result.data = tmpResult;
         return result;
       }
-            
+
       tmpResult = redeem(text);
-      
+
       if (tmpResult != false){
         result.type = MasterWallet.QRCODE_TYPE.REDEEM;
         result.data = tmpResult;
@@ -866,20 +863,20 @@ export class MasterWallet {
         result.type = MasterWallet.QRCODE_TYPE.CRYPTO_ADDRESS;
         result.data = tmpResult;
         return result;
-      }      
+      }
       return result;
     }
 
     static readContacts(){
-      let listContact = localStore.get("contacts");            
+      let listContact = localStore.get("contacts");
       if (listContact == false) return [];
       return listContact;
     }
     static removeContact(contact){
-      let listContact = localStore.get("contacts"); 
-      let listTemp = [];           
+      let listContact = localStore.get("contacts");
+      let listTemp = [];
       if (listContact.length > 0){
-        listContact.forEach((cont) => {          
+        listContact.forEach((cont) => {
           if (cont.name != contact.name){
             listTemp.push(cont);
           }
@@ -894,15 +891,15 @@ export class MasterWallet {
       let listContact = MasterWallet.readContacts();
       if (listContact.length > 0){
         for (var i = 0; i < listContact.length; i ++){
-          let cont = listContact[i];          
-          if ((contact.email !== "" && cont.email === contact.email) || cont.name === contact.name){            
+          let cont = listContact[i];
+          if ((contact.email !== "" && cont.email === contact.email) || cont.name === contact.name){
             flag = true;
-            break;            
+            break;
           }
           else {
             for (var j = 0; j < listContact[i].addresses.length; j ++){
               if (contact.addresses.filter(item => item.address === listContact[i].addresses[j].address).length > 0){
-                flag = true;                
+                flag = true;
                 break;
                 break;
               }
@@ -914,9 +911,9 @@ export class MasterWallet {
         listContact = [];
       }
       if (flag){
-        return "Entry already exist";            
+        return "Entry already exist";
       }
-            
+
       listContact.push(contact);
 
       localStore.save("contacts", listContact);
@@ -928,7 +925,7 @@ export class MasterWallet {
       let flag = false;
       let listContact = MasterWallet.readContacts();
       let listContactTmp = [];
-      
+
       for (var i = 0; i < listContact.length; i ++){
         let cont = listContact[i];
         if (listContact[i].name === oldName ){

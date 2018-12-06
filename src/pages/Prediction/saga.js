@@ -91,9 +91,11 @@ export function* handleCountReport() {
   try {
     const response = yield call(apiGet, {
       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
-      type: 'COUNT_REPORT',
+      type: 'COUNT_REPORT'
     });
-    yield put(updateCountReport(response.data.length));
+    if (response.data) {
+      yield put(updateCountReport(response.data.length));
+    }
   } catch (e) {
     console.error(e);
   }
@@ -116,7 +118,7 @@ export function* handleCheckExistEmail() {
   try {
     const response = yield call(apiGet, {
       PATH_URL: API_URL.USER.CHECK_EXIST_EMAIL,
-      type: 'CHECK_EXIST_EMAIL',
+      type: 'CHECK_EXIST_EMAIL'
     });
     if (response.data) {
       const { email_existed: emailExist } = response.data;

@@ -1,9 +1,8 @@
 import React from 'react';
 import $http from '@/services/api';
-import IpInfo from '@/models/IpInfo';
 import { API_URL, APP, Country, LOCATION_METHODS } from '@/constants';
 import local from '@/services/localStore';
-import COUNTRIES_BLACKLIST_PREDICTION from '@/data/country-blacklist-betting';
+import COUNTRIES_BLACKLIST from '@/app/blocked-countries';
 import {
   authUpdate,
   fetchProfile,
@@ -151,14 +150,7 @@ export const clearNotFound = () => ({ type: APP_ACTION.NOT_FOUND_REMOVE });
 // IP
 export const setIpInfo = data => ({ type: APP_ACTION.IP_INFO, payload: data });
 
-export const setBannedCash = () => ({ type: APP_ACTION.BAN_CASH });
 export const setBannedPrediction = () => ({ type: APP_ACTION.BAN_PREDICTION });
-
-// Chat
-export const setFirebaseUser = payload => ({
-  type: APP_ACTION.SET_FIREBASE_USER,
-  payload
-});
 
 // App
 // |-- language
@@ -310,7 +302,7 @@ const auth = ({ ref, dispatch, ipInfo }) =>
   });
 
 // show popup to get GPS permission
-const continueAfterInitApp = (language, ref, dispatch, data) => {
+export const continueAfterInitApp = (language, ref, dispatch, data) => {
   const ipInfoRes = {
     language: 'en',
     bannedPrediction: false,
@@ -333,7 +325,7 @@ const continueAfterInitApp = (language, ref, dispatch, data) => {
   if (process.env.isProduction) {
     // should use country code: .country ISO 3166-1 alpha-2
     // https://ipapi.co/api/#complete-location
-    if (COUNTRIES_BLACKLIST_PREDICTION.indexOf(data.country_name) !== -1) {
+    if (COUNTRIES_BLACKLIST.indexOf(data.country_name) !== -1) {
       ipInfoRes.bannedPrediction = true;
       dispatch(setBannedPrediction());
     }

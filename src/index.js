@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { AppContainer } from 'react-hot-loader';
 import { ConnectedRouter } from 'connected-react-router';
 
-import App from '@/components/App/App';
+import App from '@/app/App';
 import store from '@/stores';
 import history from '@/services/history';
 
@@ -30,7 +30,7 @@ render(App);
 
 // webpack Hot Module Replacement API
 if (module.hot) {
-  module.hot.accept('@/components/App/App', () => {
+  module.hot.accept('@/app/App', () => {
     render(App);
   });
 }

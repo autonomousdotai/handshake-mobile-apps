@@ -1,6 +1,7 @@
 import local from '@/services/localStore';
 import { APP } from '@/constants';
-import { APP_ACTION } from './action';
+import { APP_ACTION } from '@/reducers/app/action';
+import { APP_ACTIONS } from './action';
 
 const close = {
   isError: false,
@@ -16,8 +17,6 @@ local.save(APP.VERSION, '0.0.2');
 
 function appReducter(state = {
   version: local.get(APP.VERSION),
-
-  rootLoading: true,
 
   locale: local.get(APP.LOCALE) || 'en',
 
@@ -47,12 +46,9 @@ function appReducter(state = {
   headerLeftContent: null,
   showHeader: false,
 
-  ipInfo: local.get(APP.IP_INFO),
-
-  isBannedCash: false,
-  isBannedPrediction: false,
-  isBannedChecked: false,
-  isBannedIp: false,
+  ipInfo: {
+    isBlock: false
+  },
 
   isNerworkError: false,
 
@@ -65,6 +61,15 @@ function appReducter(state = {
   }
 }, action) {
   switch (action.type) {
+
+    case APP_ACTIONS.IP_INFO: {
+      return {
+        ...state,
+        ipInfo: action.payload
+      };
+    }
+
+    // @TODO: Recheck and Remove
     case APP_ACTION.SHOW_CONFIRM:
       return {
         ...state,
@@ -94,12 +99,6 @@ function appReducter(state = {
       return {
         ...state,
         qRCodeContentData: action.payload,
-      };
-
-    case APP_ACTION.SET_ROOT_LOADING:
-      return {
-        ...state,
-        rootLoading: action.payload,
       };
 
     case APP_ACTION.SET_LANGUAGE: {
@@ -177,8 +176,6 @@ function appReducter(state = {
         ...state,
         ...close,
       };
-
-
     case APP_ACTION.MODAL:
       return {
         ...state,
@@ -262,37 +259,6 @@ function appReducter(state = {
         ...state,
         configAlert: { ...action.payload },
       };
-
-    case APP_ACTION.IP_INFO: {
-      local.save(APP.IP_INFO, action.payload);
-      const bannedCountries = ['US'];
-      return {
-        ...state,
-        ipInfo: action.payload,
-        isBannedIp: bannedCountries.includes(action.payload.country),
-      };
-    }
-
-    case APP_ACTION.BAN_CASH: {
-      return {
-        ...state,
-        isBannedCash: true,
-      };
-    }
-
-    case APP_ACTION.BAN_PREDICTION: {
-      return {
-        ...state,
-        isBannedPrediction: true,
-      };
-    }
-
-    case APP_ACTION.BAN_CHECKED: {
-      return {
-        ...state,
-        isBannedChecked: true,
-      };
-    }
 
     case APP_ACTION.SET_FIREBASE_USER: {
       return {

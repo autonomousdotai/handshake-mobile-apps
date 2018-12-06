@@ -218,16 +218,6 @@ class Me extends React.Component {
     this.setState({ isLoading: loadingState });
   }
 
-  setOfflineStatus = (online) => {
-    const offlineValue = online ? 0 : 1;
-    this.props.setOfflineStatus({
-      PATH_URL: `${API_URL.ME.SET_OFFLINE_STATUS}/${offlineValue}`,
-      METHOD: 'POST',
-      successFn: this.handleSetOfflineStatusSuccess,
-      errorFn: this.handleSetOfflineStatusFailed,
-    });
-  }
-
   getOfferStore = () => {
   }
 
@@ -247,11 +237,6 @@ class Me extends React.Component {
       qs.type = handshakeIdActive;
     }
     this.props.loadMyHandshakeList({ PATH_URL: API_URL.ME.BASE, qs });
-  }
-
-  handleSetOfflineStatusSuccess = () => {
-    const { offline } = this.props.auth;
-    local.save(APP.OFFLINE_STATUS, offline ? 1 : 0);
   }
 
   handleSetOfflineStatusFailed = (e) => {
@@ -297,19 +282,6 @@ class Me extends React.Component {
 
   buyCoinsUsingCreditCard = () => {
     const { messages } = this.props.intl;
-  }
-
-  showPopupBuyByCreditCard = () => {
-    this.buyCoinsUsingCreditCard();
-
-    gtag.event({
-      category: taggingConfig.creditCard.category,
-      action: taggingConfig.creditCard.action.showPopupDashboard,
-    });
-  }
-
-  afterWalletFill = () => {
-    this.modalFillRef.close();
   }
 
   closeFillCoin = () => {

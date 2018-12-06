@@ -1,5 +1,5 @@
 const COUNTRIES_BLACKLIST = [
-  /*
+  'Vietnam',
   'Belarus',
   'Netherlands',
   'Norway',
@@ -64,9 +64,7 @@ const COUNTRIES_BLACKLIST = [
   'Brazil',
   'Chile',
   'HongKong',
-  'Japan',
-  process.env.isStaging ? '' : 'Vietnam',
-  */
+  'Japan'
 ];
 
 export default COUNTRIES_BLACKLIST;

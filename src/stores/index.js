@@ -12,7 +12,7 @@ import 'firebase/messaging';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
 import history from '@/services/history';
-import appReducer from '@/reducers/app';
+import appReducer from '@/app/reducer';
 import authReducer from '@/reducers/auth';
 import reducers from '@/reducers';
 import rootSaga from '@/stores/root-saga';
