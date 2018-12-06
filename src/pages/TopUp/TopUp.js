@@ -80,11 +80,11 @@ class TopUp extends React.Component {
       return;
     }
     Metamask.connectMetamask();
-    // const account = await Metamask.loginMetaMask();
-    // console.log('Account MetaMask:', account);
-    // this.setState({
-    //   installedMetaMask: Metamask.getMetamaskStatus()
-    // });
+    const account = await Metamask.loginMetaMask();
+    console.log('Account MetaMask:', account);
+    this.setState({
+      installedMetaMask: Metamask.getMetamaskStatus()
+    });
   };
 
   metaMask = (props) => {
