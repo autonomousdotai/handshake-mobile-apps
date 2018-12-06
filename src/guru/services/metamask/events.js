@@ -28,6 +28,10 @@ window.addEventListener('message', async (value) => {
       case 'request_sync_local_storage':
         sendMsgToExtension(JSON.parse(localStorage.getItem('sign_tokens')));
         break;
+      case 'amount':
+        console.log('===== AMOUNT =====');
+        console.log(value.data.data);
+        break;
       default:
         break;
     }
