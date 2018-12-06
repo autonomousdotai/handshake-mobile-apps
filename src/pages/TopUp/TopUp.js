@@ -4,6 +4,7 @@ import QRCode from 'qrcode.react';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import Button from '@/components/core/controls/Button';
 import Web3 from 'web3';
+import * as Metamask from '@/guru/services/metamask/connect';
 
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 
@@ -35,11 +36,14 @@ class TopUp extends React.Component {
     };
   }
   componentDidMount() {
+    const metaMaskStatus = this.getStatusMetaMask();
+    console.log('Status MetaMask:', metaMaskStatus);
     if (typeof window.ethereum !== 'undefined') {
       this.setState({
-        installedMetaMask: true
+        installedMetaMask: metaMaskStatus
       });
     }
+
   }
 
   copyToClipboard = (str) => {
@@ -66,6 +70,22 @@ class TopUp extends React.Component {
     console.log('Account:', accounts);
     console.log("new web3");
   }
+  getStatusMetaMask = () => {
+    return Metamask.getMetamaskStatus();
+  }
+
+  onChangeMetamaskStatus = async (status) => {
+    Metamask.changeMetamaskStatus(status);
+    if (!status) {
+      return;
+    }
+    Metamask.connectMetamask();
+    // const account = await Metamask.loginMetaMask();
+    // console.log('Account MetaMask:', account);
+    // this.setState({
+    //   installedMetaMask: Metamask.getMetamaskStatus()
+    // });
+  };
 
   metaMask = (props) => {
     const { installedMetaMask } = this.state;
@@ -75,9 +95,9 @@ class TopUp extends React.Component {
     return (
       <Button
         className="metaMaskButton"
-        onClick={() => this.connect()}
+        onClick={() => this.onChangeMetamaskStatus(!installedMetaMask)}
       >
-        Connect MetaMask
+        {installedMetaMask ? 'Active MetaMask Wallet' : 'Install MetaMask to active MetaMask wallet'}
       </Button>
     );
   }
