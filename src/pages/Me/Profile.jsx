@@ -14,6 +14,7 @@ import {
   verifyEmail,
   verifyID,
   verifyPhone,
+  fetchProfile
 } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
 // components
@@ -44,6 +45,7 @@ class Profile extends React.Component {
     checkUsernameExist: PropTypes.func.isRequired,
     authUpdate: PropTypes.func.isRequired,
     submitPhone: PropTypes.func.isRequired,
+    fetchProfile: PropTypes.func.isRequired,
     verifyPhone: PropTypes.func.isRequired,
     verifyEmail: PropTypes.func.isRequired,
     verifyID: PropTypes.func.isRequired,
@@ -135,7 +137,7 @@ class Profile extends React.Component {
     if (!props.auth.profile.email) {
       if (this.localEmail) {
         this.state.emailStart = this.localEmail;
-        this.state.isShowVerificationEmailCode = true;
+        //this.state.isShowVerificationEmailCode = true;
         this.state.emailCollapse = true;
       }
     }
@@ -412,8 +414,13 @@ class Profile extends React.Component {
           headers: { 'Content-Type': 'multipart/form-data' },
           METHOD: 'POST',
           successFn: () => {
+
             this.setState({ isShowVerificationEmailCode: false, idVerificationEmail: email });
             this.showSuccess(messages.me.profile.verify.alert.success.email);
+
+            // this.props.fetchProfile({
+            //   PATH_URL: API_URL.USER.PROFILE
+            // });
           },
           errorFn: () => {
             this.showError(messages.me.profile.verify.alert.cannot.email);
@@ -545,6 +552,7 @@ class Profile extends React.Component {
       default:
     }
     const { EmailForm } = this;
+    console.log('Auth Profile:', this.props.auth.profile);
     return (
       <div className="collapse-custom">
         <div className="head">
