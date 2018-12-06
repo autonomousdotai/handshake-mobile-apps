@@ -161,3 +161,103 @@
     display: block;
   }
 }
+
+/** EmailSubscribe **/
+.modal.EmailSubscriberModal {
+  text-align: center;
+  .modal-dialog-content {
+    position: relative;
+    border-radius: 10px;
+  }
+  .modal-custom-body {
+    border-radius: 10px;
+    padding: 30px 15px;
+  }
+  .close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 20;
+    opacity: 1;
+    color: #000;
+    font-size: 20px;
+    font-weight: 100;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+  }
+  .SubscriberImage {
+    margin: 0 auto 30px auto;
+  }
+  .SubscriberTitle {
+    text-align: center;
+    font-size: rem-calc(18px);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+  .SubscriberDescription {
+    font-size: rem-calc(14px);
+    margin-bottom: 15px;
+    text-align: center;
+    .highlight {
+      color: #04C695;
+      font-weight: 500;
+    }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    input {
+      outline: none;
+      text-align: center;
+      color: #000;
+      border-radius: 30px;
+      border: 1px solid #dcdcdc;
+      font-size: rem-calc(14px);
+      padding: 12px 10px;
+      margin-bottom: 10px;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    button {
+      outline: none;
+      height: 49px;
+      font-weight: 500;
+      border-radius: 30px;
+    }
+    .ErrMsg {
+      font-size: rem-calc(14px);
+      margin-bottom: 10px;
+      color: #ff0000;
+    }
+  }
+}
+
+/** Report Notice **/
+.ReportNotice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 60px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 14px;
+  text-align: center;
+  color: #ffffff;
+  background-color: #000000;
+  padding: 10px;
+  .btn-report {
+    width: 50%;
+    color: #ffffff;
+    text-transform: uppercase;
+    background: #000000;
+    margin-top: 10px;
+    border: 1px solid #ffffff;
+  }
+}

@@ -60,9 +60,9 @@ export const putHandShake = (payload) => {
   };
 };
 
-export const checkRedeemCode = (payload = {}) => {
+export const checkCompareRedeemCode = (payload = {}) => {
   return {
-    type: 'GURU:CHECK_REDEEM_CODE',
+    type: 'GURU:COMPARE_REDEEM_CODE',
     payload
   };
 };

@@ -30,6 +30,23 @@ export const isSharePage = (state) => {
   return urlParams.match || false;
 };
 
+export const statusSubscribeSelector = (state) => {
+  return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.status);
+};
+
+export const isRedeemSelector = (state) => {
+  return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem);
+};
+
+export const isSubscribeSelector = (state) => {
+  return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe);
+};
+
+export const countReportSelector = (state) => {
+  return state.guru.ui.countReport || 0;
+};
+
+// Move to Reputation
 export const userEventsSelector = (state) => {
   return state.guru.userEvents;
 };
