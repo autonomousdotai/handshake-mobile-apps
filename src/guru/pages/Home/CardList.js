@@ -28,7 +28,7 @@ class CardList extends React.Component {
 
   handleCountdownComplete = (eventId) => {
     this.props.dispatch(removeExpiredEvent({ eventId }));
-    // this.props.dispatch(getReportCount());
+    this.props.dispatch(getReportCount());
   }
 
   createCardItem = (eventItem) => {

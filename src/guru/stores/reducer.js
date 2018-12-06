@@ -2,7 +2,9 @@
 import produce from 'immer';
 import {
   updateEvents,
-  updateCountReport
+  updateCountReport,
+  putUserSubscribe,
+  putStatusEmailSubscribe
 } from '@/guru/pages/Home/action';
 import {
   putMatchDetail,
@@ -42,9 +44,15 @@ const guruReducer = (state = initialState, action) => {
       case updateEvents().type:
         draft.events = action.payload;
         break;
-      // case updateCountReport().type:
-      //   draft.ui.countReport = action.payload;
-      //   break;
+      case updateCountReport().type:
+        draft.ui.countReport = action.payload;
+        break;
+      case putUserSubscribe().type:
+        draft.ui.userSubscribe = action.payload;
+        break;
+      case putStatusEmailSubscribe().type:
+        draft.ui.userSubscribe.status = action.payload;
+        break;
       case putMatchDetail().type:
         draft.matchDetail = {
           ...draft.matchDetail,

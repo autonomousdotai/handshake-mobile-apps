@@ -2,7 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 
 const Options = (props) => {
-  const { opts, event, onClickOutcome } = props;
+  const { opts, event, onClick } = props;
   return (
     <div className="CardActions">
       {
@@ -10,7 +10,7 @@ const Options = (props) => {
           <button
             key={o.side}
             className={`btn ${o.className}`}
-            onClick={() => onClickOutcome({ ...props, side: o.side }, event.outcomes[0])}
+            onClick={() => onClick({ ...props, side: o.side }, event.outcomes[0])}
           >
             {o.label}
           </button>
@@ -29,7 +29,7 @@ Options.propTypes = {
     })
   ),
   event: PropTypes.object,
-  onClickOutcome: PropTypes.func
+  onClick: PropTypes.func
 };
 
 Options.defaultProps = {
@@ -44,7 +44,7 @@ Options.defaultProps = {
     className: 'btn-secondary'
   }],
   event: undefined,
-  onClickOutcome: undefined
+  onClick: undefined
 };
 
 export default Options;

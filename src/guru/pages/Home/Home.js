@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
+import { URL } from '@/constants';
 import { isJSON } from '@/utils/object';
 import Loading from '@/components/Loading';
+import AppBar from '@/guru/components/AppBar/AppBar';
 import { updateLoading } from '@/guru/stores/action';
-import { loadMatches } from './action';
-import { eventSelector, isSharePage } from './selector';
+import { loadMatches, getReportCount, checkRedeemCode } from './action';
+import {
+  eventSelector,
+  isSharePage,
+  referParamSelector,
+  countReportSelector,
+  isRedeemSelector,
+  isSubscribeSelector,
+  statusSubscribeSelector
+} from './selector';
 import View from './View';
 
 import './styles.scss';
@@ -26,6 +37,25 @@ class Home extends Component {
 
   componentDidMount() {
     this.receiverMessage(this.props);
+    this.props.dispatch(getReportCount());
+    this.props.dispatch(checkRedeemCode());
+  }
+
+  componentDidUpdate() {
+    const { props, emailSubscribe } = this;
+    if (emailSubscribe) {
+      const { isRedeem, isSubscribe, statusSubscribe } = props;
+      if ((isRedeem && !isSubscribe)) {
+        if (!this.isShowSubscriber) {
+          emailSubscribe.open();
+          this.isShowSubscriber = true;
+        }
+      }
+      if (statusSubscribe) {
+        emailSubscribe.close();
+        this.isShowSubscriber = false;
+      }
+    }
   }
 
   // @TODO: Extensions
@@ -47,11 +77,32 @@ class Home extends Component {
     }
   }
 
+  modalEmailSubscribe = (modal) => { this.emailSubscribe = modal; };
+
+  renderAppBar = (props) => {
+    return (
+      <AppBar>
+        {/* <span className="IconLeft Account">
+          <i className="fal fa-user" />
+        </span> */}
+        <span className="Title">Prediction</span>
+        <Link to={URL.HANDSHAKE_WALLET_INDEX} className="IconRight Wallet">
+          <i className="fal fa-wallet" />
+        </Link>
+      </AppBar>
+    );
+  }
+
   renderHome = (props) => {
     if (props.isLoading) {
       return (<Loading isLoading={props.isLoading} />);
     }
-    return (<View {...props} />);
+    return (
+      <React.Fragment>
+        {this.renderAppBar(props)}
+        <View {...props} modalEmailSubscribe={this.modalEmailSubscribe} />
+      </React.Fragment>
+    );
   }
 
   render() {
@@ -64,7 +115,12 @@ export default injectIntl(connect(
     return {
       eventList: eventSelector(state),
       isSharePage: isSharePage(state),
-      isLoading: state.guru.ui.isLoading
+      referParam: referParamSelector(state),
+      countReport: countReportSelector(state),
+      isLoading: state.guru.ui.isLoading,
+      isRedeem: isRedeemSelector(state),
+      isSubscribe: isSubscribeSelector(state),
+      statusSubscribe: statusSubscribeSelector(state)
     };
   },
 )(Home));

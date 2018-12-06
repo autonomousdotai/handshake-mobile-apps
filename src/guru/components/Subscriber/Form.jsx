@@ -31,6 +31,8 @@ const SubscriberForm = ({
           errors.email && touched.email ? 'TextInput Error' : 'TextInput'
         }
       />
+      {status && status.msg && <div className="ErrMsg">{status.msg}</div>}
+      <ErrMsg name="email" />
       <button
         type="submit"
         disabled={isSubmitting || !isValid}
@@ -38,8 +40,6 @@ const SubscriberForm = ({
       >
         {isSubmitting ? 'Loading...' : buttonText}
       </button>
-      {status && status.msg && <div className="ErrMsg">{status.msg}</div>}
-      <ErrMsg name="email" />
     </Form>
   );
 };
