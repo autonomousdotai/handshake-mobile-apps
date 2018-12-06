@@ -14,7 +14,6 @@ import {
   verifyEmail,
   verifyID,
   verifyPhone,
-  fetchProfile
 } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
 // components
@@ -45,7 +44,6 @@ class Profile extends React.Component {
     checkUsernameExist: PropTypes.func.isRequired,
     authUpdate: PropTypes.func.isRequired,
     submitPhone: PropTypes.func.isRequired,
-    fetchProfile: PropTypes.func.isRequired,
     verifyPhone: PropTypes.func.isRequired,
     verifyEmail: PropTypes.func.isRequired,
     verifyID: PropTypes.func.isRequired,
@@ -417,10 +415,17 @@ class Profile extends React.Component {
 
             this.setState({ isShowVerificationEmailCode: false, idVerificationEmail: email });
             this.showSuccess(messages.me.profile.verify.alert.success.email);
+            this.props.authUpdate({
+              PATH_URL: 'user/profile',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              METHOD: 'POST',
+              successFn: () => {
 
-            // this.props.fetchProfile({
-            //   PATH_URL: API_URL.USER.PROFILE
-            // });
+              },
+              errorFn: () => {
+              },
+            });
+
           },
           errorFn: () => {
             this.showError(messages.me.profile.verify.alert.cannot.email);
