@@ -130,7 +130,7 @@ const loginMetaMask = async () => {
     }
 
     const account = checkAccountExist(accounts[0]);
-    if (account) {
+    if (account && account.signedToken) {
       const recovered = recovertSign({ signedToken: account.signedToken, signText });
       if (recovered.toUpperCase() === accounts[0].toUpperCase()) {
         return Promise.resolve(account);
