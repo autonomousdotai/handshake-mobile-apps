@@ -24,11 +24,7 @@ export const eventSelector = (state) => {
   return events.filter(event => (event.id === parseInt(match, 10)));
 };
 
-export const isSharePage = (state) => {
-  const queryString = queryStringSelector(state);
-  const urlParams = qs.parse(queryString.slice(1));
-  return urlParams.match || false;
-};
+export const relatedMatchesSelector = (state) => (state.guru.relatedMatches);
 
 export const statusSubscribeSelector = (state) => {
   return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.status);

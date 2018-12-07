@@ -8,10 +8,16 @@ import { isJSON } from '@/utils/object';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { updateLoading } from '@/guru/stores/action';
-import { loadMatches, getReportCount, checkRedeemCode } from './action';
+import {
+  loadMatches,
+  loadRelatedMatches,
+  getReportCount,
+  checkRedeemCode
+} from './action';
 import {
   eventSelector,
-  isSharePage,
+  relatedMatchesSelector,
+  matchParamSelector,
   referParamSelector,
   countReportSelector,
   isRedeemSelector,
@@ -70,11 +76,13 @@ class Home extends Component {
         const { url } = message;
         const matches = url.match(urlPattern);
         const source = matches && matches[0];
-        props.dispatch(loadMatches({ source }));
+        return props.dispatch(loadMatches({ source }));
       }
-    } else {
-      props.dispatch(loadMatches({ isDetail: props.isSharePage }));
     }
+    if (props.matchParam) {
+      props.dispatch(loadRelatedMatches({ matchId: props.matchParam }));
+    }
+    return props.dispatch(loadMatches({ isDetail: props.matchParam }));
   }
 
   modalEmailSubscribe = (modal) => { this.emailSubscribe = modal; };
@@ -114,7 +122,8 @@ export default injectIntl(connect(
   (state) => {
     return {
       eventList: eventSelector(state),
-      isSharePage: isSharePage(state),
+      relatedMatches: relatedMatchesSelector(state),
+      matchParam: matchParamSelector(state),
       referParam: referParamSelector(state),
       countReport: countReportSelector(state),
       isLoading: state.guru.ui.isLoading,

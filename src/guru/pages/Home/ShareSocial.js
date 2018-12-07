@@ -40,15 +40,17 @@ BetShare.defaultProps = {
     //   icon: 'fas fa-copy'
     // }
     {
+      id: 1,
       img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/facebook.svg',
-      title: 'facebook'
+      title: 'FACEBOOK'
     }, {
+      id: 2,
       img: 'https://d2q7nqismduvva.cloudfront.net/static/images/icon-svg/common/share/twitter.svg',
-      title: 'twitter'
-    },
-    {
+      title: 'TWITTER'
+    }, {
+      id: 3,
       img: CopyLink,
-      title: 'copy'
+      title: 'COPY'
     }
   ],
   shareMessages: [

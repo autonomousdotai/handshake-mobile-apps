@@ -5,6 +5,8 @@ import { updateLoading } from '@/guru/stores/action';
 import {
   loadMatches,
   updateEvents,
+  loadRelatedMatches,
+  putRelatedMatches,
   getReportCount,
   removeExpiredEvent,
   updateCountReport,
@@ -47,6 +49,20 @@ export function* handleLoadMatches({ isDetail, source }) {
     }
   } catch (e) {
     console.error('handleLoadMachesSaga', e);
+  }
+}
+
+export function* handleLoadRelatedMaches({ matchId }) {
+  try {
+    const { data } = yield call(apiGet, {
+      PATH_URL: `${API_URL.CRYPTOSIGN.RELEVANT_EVENTS}?match=${matchId}`,
+      type: 'LOAD_RELATED_MATCHES'
+    });
+    if (data) {
+      yield put(putRelatedMatches(data));
+    }
+  } catch (e) {
+    console.error('handleLoadRelatedMachesSaga', e);
   }
 }
 
@@ -171,6 +187,7 @@ export function* handleAuthorizeMetaMask({ web3Provider }) {
 
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
+  yield takeLatest(loadRelatedMatches().type, handleLoadRelatedMaches);
   yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
   yield takeLatest(checkRedeemCode().type, handleCheckRedeem);
