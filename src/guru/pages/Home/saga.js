@@ -96,7 +96,7 @@ export function* handleEmailSubscriber(values) {
       data: values
     });
     yield put(putStatusEmailSubscribe(status));
-    yield put(updateLoading(false));
+    // yield put(updateLoading(false));
   } catch (e) {
     console.error('handleEmailSubscriber', e);
   }

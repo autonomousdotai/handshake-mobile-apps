@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Icon from '@/guru/components/Icon/Icon';
 import Subscriber from '@/guru/components/Subscriber';
 import ModalDialog from '@/components/core/controls/ModalDialog';
@@ -7,10 +8,10 @@ import { updateLoading } from '@/guru/stores/action';
 import { emailSubscriber } from './action';
 
 class EmailSubscribe extends React.Component {
-  handleEmailSubscriber({ values }) {
+  handleEmailSubscriber = ({ values }) => {
     const { props } = this;
     const { dispatch, referParam } = props;
-    dispatch(updateLoading(true));
+    // dispatch(updateLoading(true));
     if (referParam) {
       return dispatch(emailSubscriber({ ...values, referral_code: referParam }));
     }
@@ -19,7 +20,7 @@ class EmailSubscribe extends React.Component {
 
   renderEmailSubcribe = (props) => {
     const subscriberProps = {
-      isSubmitting: props.isLoading,
+      isSubmitting: props.isLoader,
       placeHolder: 'Your email',
       buttonText: 'I want FREE 0.03 ETH',
       buttonClasses: 'btn btn-primary',
@@ -49,4 +50,10 @@ class EmailSubscribe extends React.Component {
   }
 }
 
-export default EmailSubscribe;
+export default connect(
+  (state) => {
+    return {
+      isLoader: state.guru.ui.isLoading
+    };
+  },
+)(EmailSubscribe);

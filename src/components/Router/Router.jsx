@@ -24,13 +24,13 @@ const RouterAdmin = createDynamicImport(() => import('@/components/Router/Admin'
 const RouterAdminIDVerification = createDynamicImport(() => import('@/components/Router/AdminIDVerification'), Loading);
 const RouterReport = createDynamicImport(() => import('@/components/Router/Report'), Loading);
 const RouterLuckyPool = createDynamicImport(() => import('@/pages/LuckyLanding/LuckyLanding'), Loading);
-const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
+const RouterGuru = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
 const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
 const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
 const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/WalletCoin/AuthCallback'), Loading);
 
 // Guru's Routes
-const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
+const RouterPrediction = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
 const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
 const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
 const Extension = createDynamicImport(() => import('@/guru/pages/Extension'), Loading);

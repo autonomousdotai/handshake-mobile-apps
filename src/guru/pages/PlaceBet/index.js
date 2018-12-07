@@ -7,7 +7,7 @@ import { injectIntl } from 'react-intl';
 import { isEmpty } from '@/utils/is';
 import { formatAmount } from '@/utils/number';
 import { possibleWinning } from '@/utils/calculate';
-import { getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
+import { getBalance, getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
 import IconCoin from '@/assets/images/icon/icon-coin.svg';
 
 // TODO: [Begin: Will be moving to another place]
@@ -25,6 +25,9 @@ import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
   checkCompareRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
 import {
   queryStringSelector,
+  eventSelector,
+  isRedeemSelector,
+  isSubscribeSelector,
   matchDetailSelector,
   gasPriceSelector,
   matchOddsSelector,
@@ -185,13 +188,14 @@ class PlaceBet extends Component {
     });
   };
 
-  handShakeHandler = data => {
+  handShakeHandler = async (data) => {
     const { status } = data;
     if (status) {
       const { handshakes } = data;
+      const balance = await getBalance();
       const handler = BetHandshakeHandler.getShareManager();
       this.handShakeSuccess(handshakes);
-      return handler.controlShake(handshakes);
+      return handler.controlShake(handshakes, balance);
     }
     return this.handleShakeFail(data);
   };
@@ -224,11 +228,11 @@ class PlaceBet extends Component {
   };
 
   calculatePosWinning = () => {
-    const { state, getOdds } = this;
+    const { state, props, getOdds } = this;
     let amountNo = state.betAmount;
     const betOdds = getOdds();
-    if (this.props.redeem) {
-      amountNo = this.props.redeem.amount;
+    if (props.redeem) {
+      amountNo = props.redeem.amount;
     }
     return formatAmount(possibleWinning(amountNo, betOdds));
   };
@@ -238,9 +242,8 @@ class PlaceBet extends Component {
   };
 
   redeemNotice = (props, state) => {
-    const { isRedeem } = props;
     const { isUseRedeem } = state;
-    if (!isRedeem || isUseRedeem) return null;
+    if (!props.isRedeem || !props.isSubscribe || isUseRedeem) return null;
     return (
       <div className="Redeem">
         {/* {`You've already requested a redeem code. `} */}
@@ -320,10 +323,10 @@ class PlaceBet extends Component {
 export default injectIntl(connect(
   (state) => {
     return {
-      eventList: state.prediction.events,
+      eventList: eventSelector(state),
       isLoading: state.guru.ui.isLoading,
-      isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),
-      isRedeem: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem),
+      isSubscribe: isSubscribeSelector(state),
+      isRedeem: isRedeemSelector(state),
       redeem: state.guru.ui.redeem,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),
