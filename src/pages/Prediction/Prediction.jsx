@@ -295,7 +295,7 @@ class Prediction extends React.Component {
     // TODO: chrome-ext
     if (window.self === window.top) return null;
     return (
-      <Link to={URL.GURU_CREATE_EVENT} className="CreateEventButton">
+      <Link to={URL.CREATE_EVENT} className="CreateEventButton">
         <i className="fal fa-plus" />
       </Link>
     );

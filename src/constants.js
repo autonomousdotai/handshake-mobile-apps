@@ -274,7 +274,7 @@ export const URL = {
 
   // Guru
   HANDSHAKE_GURU: '/guru',
-  GURU_CREATE_EVENT: '/create-event',
+  CREATE_EVENT: '/create-event',
   GURU_PLACE_BET: '/place-bet',
   HANDSHAKE_REPUTATION: '/reputation',
   HANDSHAKE_COINBASE_WALLET: '/wallet-coin',
@@ -290,9 +290,6 @@ export const URL = {
   HANDSHAKE_WALLET: '/wallet',
   HANDSHAKE_WALLET_INDEX: '/wallet',
 
-  HANDSHAKE_PAYMENT_TRANSFER: '/payment/transfer',
-  HANDSHAKE_PAYMENT_TRANSFER_INDEX: '/payment/transfer',
-
   HANDSHAKE_PAYMENT: '/payment',
   HANDSHAKE_PAYMENT_INDEX: '/payment',
 
@@ -305,18 +302,14 @@ export const URL = {
   TRANSACTION_LIST: '/transactions',
   TRANSACTION_LIST_INDEX: '/transactions',
 
-  COMMENTS_BY_SHAKE: '/comments',
-  COMMENTS_BY_SHAKE_INDEX: '/comments',
+  COMMENTS: '/comments',
 
   WHITE_PAPER: '/whitepaper',
   WHITE_PAPER_INDEX: '/whitepaper',
 
   PREDICTION: '/prediction',
   PEX_INSTRUCTION_URL: '/pex/instructions',
-  PEX_LUCKY_DRAW_MECHANIC_URL: '/pex/luckydraw',
-  PRODUCT_WALLET_URL: '/wallet',
-
-  INTERNAL_ADMIN_DASHBOARD_URL: '/internal-admin-dashboard'
+  PRODUCT_WALLET_URL: '/wallet'
 };
 
 export const LANDING_PAGE_TYPE = {

@@ -7,7 +7,7 @@ import { updateModal } from '@/reducers/app/action';
 // components
 import HeaderBar from '@/modules/HeaderBar/HeaderBar';
 import MainHeader from '@/components/Header/MainHeader';
-import Navigation from '@/components/core/controls/Navigation/NewNavigation';
+import Navigation from '@/components/core/controls/Navigation/Navigation';
 import Alert from '@/components/core/presentation/Alert';
 import Loading from '@/components/core/controls/Loading';
 import WalletPasscode from '@/components/Wallet/WalletPasscode'

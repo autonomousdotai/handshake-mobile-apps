@@ -5,9 +5,11 @@ import { connect } from 'react-redux';
 import { initApp } from '@/app/action';
 import Router from '@/components/Router/Router';
 import I18n from '@/components/App/I18n';
+import Navigation from '@/components/core/controls/Navigation/Navigation';
 
 import '@/styles/main';
 import '@/styles/custom-icons/styles.css';
+import BrowserDetect from '@/services/browser-detect';
 
 class App extends React.Component {
   static propTypes = {
@@ -25,6 +27,11 @@ class App extends React.Component {
     });
   }
 
+  renderNavigationBar = () => {
+    if (BrowserDetect.isDesktop) return null;
+    return <Navigation />;
+  }
+
   render() {
     if (this.props.isBlockedIP) {
       return 'Sorry, but your country ip isn\'t supported at the moment';
@@ -34,6 +41,7 @@ class App extends React.Component {
       <I18n>
         <div className="root">
           <Router />
+          {this.renderNavigationBar()}
         </div>
       </I18n>
     );

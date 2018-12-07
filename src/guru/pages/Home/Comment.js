@@ -6,7 +6,7 @@ import { URL } from '@/constants';
 const Comment = (props) => {
   const htmlClassName = 'Comment';
   const { event } = props;
-  const commentLink = `${URL.COMMENTS_BY_SHAKE_INDEX}?objectId=${event.id}`;
+  const commentLink = `${URL.COMMENTS}?objectId=${event.id}`;
   return (
     <div className={htmlClassName}>
       <i className="far fa-comment" />

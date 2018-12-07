@@ -1,6 +1,5 @@
-import React from 'react';
 import $http from '@/services/api';
-import { API_URL, APP, Country, LOCATION_METHODS } from '@/constants';
+import { APP } from '@/constants';
 import local from '@/services/localStore';
 import COUNTRIES_BLACKLIST from '@/app/blocked-countries';
 import {

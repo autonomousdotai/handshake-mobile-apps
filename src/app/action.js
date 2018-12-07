@@ -21,7 +21,7 @@ export const userSignUp = APIPostCreator({
 });
 
 // Will use this in the near future
-async function isBlockedIP(dispatch) {
+async function isBlockedIP(dispatch) { // eslint-disable-line
   const { data } = await $http({
     url: 'https://ipfind.co/me',
     qs: { auth: process.env.ipfindKey },

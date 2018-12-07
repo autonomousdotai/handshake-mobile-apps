@@ -1,8 +1,8 @@
 import { APP } from '@/constants';
 import local from '@/services/localStore';
 import Auth from '@/models/Auth';
-import { ACTIONS } from './action';
 import { APP_ACTIONS } from '@/app/action';
+import { ACTIONS } from './action';
 
 const authReducter = (state = {
   token: local.get(APP.AUTH_TOKEN),
