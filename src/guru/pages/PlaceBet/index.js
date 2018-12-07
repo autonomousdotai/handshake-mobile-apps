@@ -71,10 +71,7 @@ class PlaceBet extends Component {
     dispatch(getMatchDetail({ eventId }));
     dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
     dispatch(getGasPrice());
-    dispatch(userHabit({ data: {
-      ids: [eventId],
-      view_type: UserHabit.DETAIL
-    } }));
+    this.userHabit(dispatch, eventId);
   }
 
   componentDidUpdate(prevProps) {
@@ -142,6 +139,13 @@ class PlaceBet extends Component {
     dispatch(showAlert(alertProps));
   };
 
+  userHabit = (dispatch, eventId) => {
+    dispatch(userHabit({ data: [{
+      ids: [eventId],
+      view_type: UserHabit.DETAIL
+    }] }));
+  };
+
   handShakeData = ({ amount, redeem }) => {
     const { getSide } = this;
     const { matchDetail, queryStringURL } = this.props;
@@ -201,6 +205,7 @@ class PlaceBet extends Component {
     }
     const { status, message, code } = await validate(values);
     if (status) {
+      this.userHabit(props.dispatch, handShakeData(values).match_id);
       return props.dispatch(initHandShake(handShakeData(values)));
     }
     if (message && code === VALIDATE_CODE.NOT_ENOUGH_BALANCE) {
