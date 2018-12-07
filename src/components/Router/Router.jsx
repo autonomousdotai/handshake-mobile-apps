@@ -26,6 +26,7 @@ import Maintain from '@/components/Router/Maintain';
 import PexExtension from '@/pages/PexExtension/PexExtension';
 import TopUp from '@/pages/TopUp/TopUp';
 
+const TypeFormFeedBack = createDynamicImport(() => import('@/pages/TypeFormFeedBack'), Loading);
 const RouterMe = createDynamicImport(() => import('@/components/Router/Me'), Loading);
 const RouterWallet = createDynamicImport(() => import('@/components/Router/Wallet'), Loading);
 const RouterPaymentTransfer = createDynamicImport(() => import('@/components/Router/PaymentTransfer'), Loading);
@@ -129,6 +130,7 @@ let routesUsingDesktopLayout = null;
 if (BrowserDetect.isDesktop) {
   const configRoutesUsingDesktopLayout = [
     { path: URL.LUCKY_POOL, component: RouterLuckyPool },
+    { path: URL.FEEDBACK, component: TypeFormFeedBack },
     { path: URL.CHROME_EXTENSION, component: Extension },
     { path: URL.GURU_CREATE_EVENT, component: PageMobileOnly },
     { path: URL.PRODUCT_CASH_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} />, exact: true },
