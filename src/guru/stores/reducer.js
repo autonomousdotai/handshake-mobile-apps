@@ -4,7 +4,8 @@ import {
   updateEvents,
   updateCountReport,
   putUserSubscribe,
-  putStatusEmailSubscribe
+  putStatusEmailSubscribe,
+  putRelatedMatches
 } from '@/guru/pages/Home/action';
 import {
   putMatchDetail,
@@ -52,6 +53,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case putStatusEmailSubscribe().type:
         draft.ui.userSubscribe.status = action.payload;
+        break;
+      case putRelatedMatches().type:
+        draft.relatedMatches = action.payload;
         break;
       case putMatchDetail().type:
         draft.matchDetail = {

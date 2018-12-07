@@ -12,6 +12,20 @@ export const updateEvents = (payload = {}) => {
   };
 };
 
+export const loadRelatedMatches = (payload = {}) => {
+  return {
+    type: 'GURU:LOAD_RELATED_MATCHES',
+    ...payload
+  };
+};
+
+export const putRelatedMatches = (payload) => {
+  return {
+    type: 'GURU:PUT_RELATED_MATCHES',
+    payload
+  };
+};
+
 export const getReportCount = (payload = {}) => {
   return {
     type: 'GURU:COUNT_REPORT',
