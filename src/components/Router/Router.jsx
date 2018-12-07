@@ -89,7 +89,7 @@ const routeList = [
   return <Route exact key={r.path} path={r.path} component={r.component} />;
 });
 
-class Router extends React.Component {
+export default class Router extends React.Component {
   render() {
     return (
       <Switch>
@@ -99,7 +99,3 @@ class Router extends React.Component {
     );
   }
 }
-
-export default connect(state => ({
-  router: state.router
-}))(Router);
