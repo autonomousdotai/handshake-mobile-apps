@@ -75,7 +75,7 @@ export const getStatusLabel = (item) => {
       || (matched && result === BETTING_RESULT.INITED && isExpiredDate(reportTime)) // Over report time but there is no result
       || status === BET_BLOCKCHAIN_STATUS.STATUS_REFUNDED) {
         //REFUND ACTION
-      return refundAction(status, reportTime);
+      return refundAction(status, reportTime, result);
   }
 
   if (matched
@@ -220,7 +220,7 @@ const cancelAction = (blockchainStatus, disputeTime) => {
   return { title: label, isAction, status: strStatus };
 };
 
-const refundAction = (blockchainStatus, reportTime) => {
+const refundAction = (blockchainStatus, reportTime, result) => {
   console.log(TAG, 'refundAction');
 
   let label = null;
@@ -236,8 +236,13 @@ const refundAction = (blockchainStatus, reportTime) => {
       if (!isExpiredDate(reportTime)) {
         strStatus = BETTING_STATUS_LABEL.REFUNDING + BETTING_STATUS_LABEL.REFUND_WAIT;
       } else {
+        if (result === BETTING_RESULT.INITED) {
+          strStatus = BETTING_STATUS_LABEL.NO_REPORT + BETTING_STATUS_LABEL.REFUNDING;
+        } else {
+          strStatus = BETTING_STATUS_LABEL.REFUNDING;
+        }
         label = BETTING_STATUS_LABEL.REFUND;
-        strStatus = BETTING_STATUS_LABEL.REFUNDING;
+
         isAction = true;
       }
 
