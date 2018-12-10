@@ -67,13 +67,11 @@ class CreateMarket extends React.Component {
       selectedEvent: item,
     });
     this.props.dispatch(push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id || ''}`));
-    // this.props.history.push(`${URL.HANDSHAKE_PEX_CREATOR}/${item.id || ''}`); // eslint-disable-line
   }
 
   renderCreateEventForm = (props, state) => {
     const { selectedEvent } = state;
     const selectedReport = props.reportList.find(i => i.id === selectedEvent.source_id);
-    // const selectedEvent = state.eventId ? props.eventList.find(item => item.id.toString() === state.eventId.toString()) : props.eventDetail;
     const initialValues = (!selectedEvent || !selectedEvent.id) ? {
       outcomes: [{}],
       creatorFee: 0,

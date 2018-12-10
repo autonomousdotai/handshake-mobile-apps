@@ -1,0 +1,423 @@
+.ChromeExtension {
+  $primary-color: #fe8f25;
+  $block-bg: #190e03;
+  $desc: #1c1a18;
+  background-color: #fafafa;
+  font-weight: 400;
+  line-height: 1.6;
+
+  .btn {
+    min-width: 300px;
+    font-size: 20px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+
+    i {
+      font-size: 25px;
+    }
+  }
+
+  .btn-white {
+    background: #ffffff;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.1);
+    color: #28221c;
+  }
+
+  .AddChromeBtn {
+    background-color: $primary-color;
+    border: 3px solid #ffa632;
+    color: #fff;
+    width: 300px;
+
+    span {
+      margin-left: 10px;
+    }
+
+    &:hover {
+      background-color: #ea913c;
+    }
+  }
+
+  .OrOpen {
+    padding-top: 20px;
+    font-weight: bold;
+
+    a {
+      color: $primary-color;
+    }
+  }
+
+  section {
+    margin: 110px 0;
+  }
+
+  .TitleWrapper {
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+
+    .NavTitle {
+      color: $primary-color;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .Title {
+      font-weight: 800;
+      font-size: 30px;
+      padding: 20px 0;
+    }
+
+    .SmallLine {
+      height: 2px;
+      background-color: $primary-color;
+      width: 50px;
+      align-self: center;
+      margin: 0 0 70px;
+      position: relative;
+
+      &::after {
+        content: '';
+        height: 2px;
+        width: 25px;
+        background-color: #ffe6ce;
+        position: absolute;
+      }
+    }
+  }
+
+  header {
+    display: flex;
+    position: relative;
+    padding: 150px 0 150px 100px;
+    color: #fff;
+    overflow: hidden;
+
+    svg,
+    .LeftBlock,
+    .BlockRight {
+      z-index: 1;
+    }
+
+    &::after {
+      content: '';
+      background-color: $block-bg;
+      position: absolute;
+      height: 100%;
+      width: 2000px;
+      border-radius: 0 0 80% 0;
+      bottom: 0;
+      left: 0;
+      margin-bottom: 70px;
+    }
+
+    .LeftBlock {
+      flex-basis: 30%;
+    }
+
+    .RightBlock {
+      svg.Macbook {
+        width: 70%;
+      }
+    }
+
+    .Logo {
+      position: absolute;
+      top: 50px;
+      left: 100px;
+    }
+
+    .Macbook {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+    .HeadLine {
+      font-size: 35px;
+      font-weight: 900;
+    }
+
+    .SubHeadLine {
+      color: $primary-color;
+      font-weight: bold;
+    }
+
+    .DescHeadline {
+      padding: 40px 0 20px;
+      font-weight: 500;
+    }
+  }
+
+  .WhyNinja {
+    display: flex;
+    flex-direction: column;
+
+    .ItemTitle {
+      position: relative;
+
+      svg {
+        position: absolute;
+        top: -15px;
+        left: -100px;
+      }
+    }
+
+    .BlockContent {
+      display: flex;
+      justify-content: center;
+      height: 650px;
+
+      .BlockLeft {
+        margin-right: 70px;
+
+        svg {
+          height: 100%;
+        }
+      }
+
+      .BlockRight {
+        display: flex;
+        flex-direction: column;
+        width: 400px;
+        margin-left: 70px;
+        justify-content: space-between;
+        padding: 50px 0;
+      }
+
+      .ItemTitle {
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .HowToPlay {
+    .BlockContent {
+      display: flex;
+      justify-content: space-around;
+      padding: 0 150px;
+    }
+
+    .Item {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+      width: 20%;
+
+      .ItemImage {
+        height: 120px;
+        align-self: center;
+        display: flex;
+        align-items: center;
+      }
+
+      .ItemTitle {
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .AboutUs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+
+    .BtnAction {
+      padding: 30px 0;
+      display: flex;
+
+      .Join {
+        color: #fff;
+        background-color: #2A8DD3;
+        border-color: #49AEF6;
+        span {
+          padding: 0 10px;
+        }
+
+        .fa-arrow-right {
+          font-size: 20px;
+        }
+      }
+
+      .Goto:hover {
+        background-color: #f7f4f4;
+      }
+    }
+
+    .Desc {
+      width: 50%;
+      color: $desc;
+      line-height: 30px;
+    }
+
+    .NinjaSVG {
+      width: 100%;
+      margin-bottom: -40px;
+    }
+
+    .Goto {
+      text-align: center;
+      margin-left: 30px;
+    }
+  }
+
+  .AddExtension {
+    display: flex;
+    padding: 70px 0 0;
+    position: relative;
+    overflow-x: hidden;
+
+    &::after {
+      content: '';
+      background-color: $block-bg;
+      position: absolute;
+      height: 100%;
+      width: 2000px;
+      border-radius: 0 70% 0 0;
+      top: 0;
+      left: 0;
+    }
+
+    .BlockLeft,
+    .BlockRight {
+      z-index: 1;
+    }
+
+    .BlockLeft {
+      width: 700px;
+    }
+
+    .BlockRight {
+      display: flex;
+      color: #fff;
+      flex-direction: column;
+      width: 350px;
+      margin: 0 auto;
+      padding-top: 50px;
+    }
+
+    .AddTitle {
+      font-weight: 700;
+    }
+
+    .Desc {
+      padding: 20px 0 30px;
+    }
+  }
+
+  footer {
+    display: flex;
+    border-top: 1px solid #d8d8d8;
+    margin: 0 100px;
+    padding: 50px 0;
+
+    svg,
+    h5 {
+      margin-bottom: 30px;
+    }
+
+    h5 {
+      font-weight: bold;
+    }
+
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      line-height: 30px;
+      a {
+        i {
+          width: 30px;
+        }
+      }
+    }
+
+    .MainInfo {
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 20px;
+      padding-right: 200px;
+
+      a {
+        color: $primary-color;
+      }
+    }
+
+    .SocialBlock {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      min-width: 360px;
+
+      a {
+        color: #190E03;
+      }
+    }
+
+    .SubScribeEmail {
+      margin-top: 20px;
+
+      span {
+        font-weight: 400;
+        font-size: 14px;
+        margin-bottom: 7px;
+        display: inline-block;
+      }
+
+      .Subscribed {
+        font-style: italic;
+        font-weight: 400;
+        color: $primary-color;
+      }
+
+      form {
+        height: 40px;
+        font-size: 14px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        border-radius: 4px 0 0 4px;
+
+        input {
+          height: 100%;
+          background: #ffffff;
+          outline: none;
+          width: 200px;
+          padding: 0 15px;
+          border: none;
+          border-radius: 4px 0 0 4px;
+
+          &::placeholder {
+            color: #a7a7a7;
+          }
+        }
+
+        button {
+          height: 100%;
+          background-color: $primary-color;
+          color: #fff;
+          padding: 0 15px;
+          border: none;
+          outline: none;
+          margin-top: 1px;
+
+          &:hover {
+            cursor: pointer;
+            background-color: #ea913c;
+          }
+        }
+
+        .ErrMsg {
+          color: red;
+          font-style: italic;
+        }
+      }
+    }
+  }
+}

@@ -370,7 +370,7 @@ class SettingWallet extends React.Component {
 
                 </div>
             </div>
-            <div className="item" onClick={()=> {this.openVk();}}>
+            {/* <div className="item" onClick={()=> {this.openVk();}}>
                 <img className="icon" src={iconVk} />
                 <div className="name">
                     <label>Vkontakte</label>
@@ -378,7 +378,7 @@ class SettingWallet extends React.Component {
                 <div className="value">
 
                 </div>
-            </div>
+            </div> */}
 
 
         </div>

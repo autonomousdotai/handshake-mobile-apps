@@ -53,9 +53,7 @@ class WalletCoin extends React.Component {
     const web3Provider = new Web3(currentProvider);
     const accounts = await web3Provider.eth.getAccounts();
     const fromAccount = accounts[0];
-    console.log('From:', fromAccount);
-    //if (!fromAccount) return connect();
-
+    if (!fromAccount) return connect();
     console.log('CLICKED, SENDING PERSONAL SIGN REQ');
     const params = [msg, fromAccount];
     const method = 'personal_sign';

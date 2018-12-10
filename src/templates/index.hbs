@@ -14,7 +14,7 @@
   <meta property="og:description" content="{{ htmlWebpackPlugin.options.env.description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="" />
-  <meta property="og:image" content="/images/og_image.png" />
+  <meta property="og:image" content="/images/og_image.jpg" />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:site_name" content="{{ htmlWebpackPlugin.options.env.title }}" />
   <meta property="fb:app_id" content="{{ htmlWebpackPlugin.options.env.social.facebookAppId }}" />
@@ -114,7 +114,7 @@
   </script>
   <!--Start of Zendesk Chat Script-->
   <script type="text/javascript">
-    function initZendesk() {
+    {{!-- function initZendesk() {
       console.log('initZendesk',);
       window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
         d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
@@ -125,8 +125,7 @@
 
     setTimeout(function () {
       initZendesk();
-    }, 5000);
-
+    }, 5000); --}}
   </script>
   <!--End of Zendesk Chat Script-->
   <!--<script src="https://js.stripe.com/v3/"></script>-->

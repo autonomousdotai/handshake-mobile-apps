@@ -7,7 +7,7 @@ import DefaultEvent from '@/assets/images/pex/create/default-event.svg';
 class ImageUpload extends Component {
   static displayName = 'ImageUpload';
   static propTypes = {
-    form: PropTypes.object.isRequired,
+    form: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -22,11 +22,9 @@ class ImageUpload extends Component {
     return (
       <div className="ImageUpload">
         <div className="BlockLeft">
-          <label htmlFor="image" className="GroupTitle">
-            Image
-          </label>
+          <div className="GroupTitle">Image</div>
           <div className="GroupNote">
-            Upload an image for your debates (optional)
+            Upload an image for this debate (optional)
           </div>
         </div>
         <div className="BlockRight">
@@ -39,10 +37,7 @@ class ImageUpload extends Component {
             }}
             onBlur={() => setFieldTouched('image')}
           />
-          <Thumbnail
-            file={values.image}
-            defaultImage={DefaultEvent}
-          />
+          <Thumbnail file={values.image} defaultImage={DefaultEvent} />
         </div>
         <ErrMsg name="image" />
       </div>
@@ -53,6 +48,5 @@ class ImageUpload extends Component {
     return this.renderComponent(this.props, this.state);
   }
 }
-
 
 export default ImageUpload;

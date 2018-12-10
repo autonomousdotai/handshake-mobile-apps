@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Prompt } from 'react-router';
 import PropTypes from 'prop-types';
 import { Formik, Form, Field } from 'formik';
 import moment from 'moment';
 import * as Yup from 'yup';
+import { Tooltip } from 'reactstrap';
 import { CustomField, ErrMsg, Switch } from '@/guru/components/Form';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
+import { isURL } from '@/utils/string';
+import { getAddress } from '@/components/handshakes/betting/utils';
 
-import { createEvent } from './action';
+import { apiCreateEvent } from './action';
 import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
@@ -19,21 +23,76 @@ import './CreateEvent.scss';
 class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
-    createEvent: PropTypes.func.isRequired,
+    apiCreateEvent: PropTypes.func.isRequired,
     email: PropTypes.string,
-    verified: PropTypes.number,
-    shareEvent: PropTypes.object
+    verified: PropTypes.number
   };
 
   static defaultProps = {
     email: '',
-    verified: 0,
-    shareEvent: undefined
+    verified: 0
+  };
+
+  state = {
+    titleToolTip: false,
+    createSuccess: false
+  };
+
+  onKeyDownEventName = e => {
+    /* eslint-disable no-param-reassign */
+    e.target.style.height = 'inherit';
+    e.target.style.height = `${e.target.scrollHeight}px`;
+    /* eslint-enable no-param-reassign */
+  };
+
+  setFieldToState = (fieldName, value) => {
+    this.setState({
+      [fieldName]: value
+    });
+  };
+
+  handleName = str => {
+    const l = str.length - 1;
+    return str.charAt(l) === '?' ? str.substring(0, l - 1) : str;
   };
 
   handleOnSubmit = values => {
     // values, actions
-    this.props.createEvent({ values });
+    const { id, value } = values.source;
+    const reportSource = id
+      ? { source_id: id }
+      : {
+        source: { name: value, url: value }
+      };
+    const event_name = values.eventName.trim();
+
+    const newEventData = {
+      // outcome_name: values.outcomeName,
+      event_name,
+      name: `Will ${this.handleName(event_name)}?`,
+      public: values.public,
+      date: values.closingTime,
+      reportTime: values.closingTime + 86400, // 24h
+      disputeTime: values.closingTime + 90000, // 25h
+      market_fee: values.marketFee,
+      grant_permission: true,
+      category_id: 7,
+      creator_wallet_address: getAddress(),
+      ...reportSource
+    };
+    console.log('newEventData', newEventData);
+    const formData = new FormData();
+    formData.set('data', JSON.stringify(newEventData));
+    formData.set('image', values.image);
+    this.props
+      .apiCreateEvent({ data: formData })
+      .then(res => {
+        console.log('created Event', res);
+        this.setState({ createSuccess: true });
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   buildErrorCls = (errors, touched) => {
@@ -41,28 +100,44 @@ class CreateEvent extends React.Component {
     return errFields.length ? errFields.join(' ') : '';
   };
 
-  renderEventTitle = () => {
+  renderEventTitle = state => {
     return (
       <div className="EventTitle">
-        <p className="GroupTitle">Ninjas will predict YES or NO?</p>
-        <div className="OutcomeName">
-          <label htmlFor="outcomeName">Will</label>
-          <Field
-            name="outcomeName"
-            component="textarea"
-            placeholder="[Outcome] Manchester United beat Juventus"
-          />
+        <div className="GroupTitle">
+          Ninjas will predict YES or NO
+          <i className="far fa-question-circle" id="TitleTT" />
         </div>
-        <ErrMsg name="outcomeName" />
+        <Tooltip
+          isOpen={state.titleToolTip}
+          target="TitleTT"
+          toggle={() =>
+            this.setFieldToState('titleToolTip', !state.titleToolTip)
+          }
+        >
+          Start the debate with a yes/no question. Your question should clearly
+          state the date and situation where the proposed outcome will happen.
+          <br />
+          Eg:
+          <br />
+          - Will BTC price go above $6000 by the end of 2018?
+          <br />- Will Manchester United beat Crystal Palace in Premier League
+          Nov 24 2018?
+        </Tooltip>
         <div className="EventName">
-          <label htmlFor="eventName">in</label>
+          <label htmlFor="eventName">Will</label>
           <Field
+            rows={1}
+            onKeyDown={this.onKeyDownEventName}
             name="eventName"
             component="textarea"
-            placeholder="[Event] Champions League table stage"
+            // placeholder="A win B in C tomorrow"
           />
         </div>
         <ErrMsg name="eventName" />
+        <div className="GroupNote">
+          E.g. <b>Will</b> Manchester United beat Juventus <b>in</b> Champions
+          League table stage?
+        </div>
       </div>
     );
   };
@@ -87,9 +162,7 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="HostFee">
-        <label htmlFor="marketFee" className="GroupTitle">
-          Host fee
-        </label>
+        <div className="GroupTitle">Host fee</div>
         <Field
           name="marketFee"
           type="rangeSlider"
@@ -99,8 +172,9 @@ class CreateEvent extends React.Component {
           component={CustomField}
         />
         <div className="GroupNote">
-          As a host of this debate, you'll receive this % of the all matched predictions.
-          Friendly advice: no one wants to play with a greedy guts!
+          As a host of this debate, you&apos;ll receive this % of the all
+          matched predictions. Friendly advice: no one wants to play with a
+          greedy guts!
         </div>
       </div>
     );
@@ -109,13 +183,16 @@ class CreateEvent extends React.Component {
   renderReportSource = () => {
     return (
       <div className="ReportSource">
-        <label htmlFor="source" className="GroupTitle">
-          Report
-        </label>
+        <div className="GroupTitle">Report</div>
         <div className="GroupNote">
-          You must provide the reference link to the report
+          You must report the result using the link sent to your email within
+          24hrs of the closing time. Which website will you use to verify the
+          result?
         </div>
         <ReportSource />
+        <div className="GroupNote">
+          There will be a 1hr dispute window after the reporting time.
+        </div>
       </div>
     );
   };
@@ -124,10 +201,9 @@ class CreateEvent extends React.Component {
     const val = moment.unix(props.value || startDate);
     return (
       <div className="ClosingTime">
-        <span className="Month">{val.format('MMM')}</span>
-        <span className="Day">{val.format('DD')}</span>
-        <span className="Year">{val.format('YYYY')}</span>
-        <span className="Hour">{val.format('HH:mm')}</span>
+        <span className="DMY">{val.format('MMMM Do, YYYY')}</span>
+        <span className="Separator" />
+        <span className="HM">{val.format('HH:mm')}</span>
       </div>
     );
   };
@@ -135,32 +211,23 @@ class CreateEvent extends React.Component {
   renderDateTime = startDate => {
     return (
       <div className="DateTime">
-        <div className="BlockLeft">
-          <label htmlFor="source" className="GroupTitle">
-            Add a closing time
-          </label>
-          <div className="GroupNote">
-            As the host, you will submit the closing time. The quicker the
-            better!
-          </div>
-        </div>
-        <div className="BlockRight">
-          <Field
-            name="closingTime"
-            type="datetime"
-            component={CustomField}
-            title="Event closing time"
-            placeholder="Event closing time"
-            startDate={startDate}
-            renderTrigger={props => this.renderPicker(props, startDate)}
-          />
-        </div>
+        <div className="GroupTitle">Add a closing time</div>
+        <div className="GroupNote">When will the event close?</div>
+        <Field
+          name="closingTime"
+          type="datetime"
+          component={CustomField}
+          title="Event closing time"
+          placeholder="Event closing time"
+          startDate={startDate}
+          renderTrigger={props => this.renderPicker(props, startDate)}
+        />
         <ErrMsg name="closingTime" />
       </div>
     );
   };
 
-  renderAppBar = (props) => {
+  renderAppBar = props => {
     return (
       <AppBar>
         <span
@@ -177,9 +244,9 @@ class CreateEvent extends React.Component {
   };
 
   render() {
-    const { email, verified, shareEvent } = this.props;
-    if (shareEvent) {
-      return <ShareMarket shareEvent={shareEvent} />;
+    const { email, verified } = this.props;
+    if (this.state.createSuccess) {
+      return <ShareMarket />;
     }
 
     const initialClosingTime = moment()
@@ -187,7 +254,7 @@ class CreateEvent extends React.Component {
       .unix();
 
     const initialValues = {
-      outcomeName: '',
+      // outcomeName: '',
       eventName: '',
       public: true,
       marketFee: 0,
@@ -198,25 +265,38 @@ class CreateEvent extends React.Component {
       source: ''
     };
 
-    const validateEmail = (email && verified) ? {}
-      : {
-        email: Yup.string().required('Required').email('invalid email address'),
-        emailCode: Yup.string().required('Required').matches(/^[0-9]{4}/, 'invalid Code')
-      };
+    const validateEmail =
+      email && verified
+        ? {}
+        : {
+          email: Yup.string()
+            .required('Required')
+            .email('invalid email address'),
+          emailCode: Yup.string()
+            .required('Required')
+            .matches(/^[0-9]{4}/, 'invalid Code')
+        };
 
     const eventSchema = Yup.object().shape({
-      eventName: Yup.string().trim().required('Required'),
-      outcomeName: Yup.string().trim().required('Required'),
+      eventName: Yup.string()
+        .trim()
+        .required('Required'),
+      // outcomeName: Yup.string().trim().required('Required'),
       closingTime: Yup.string().required('Required'), // validate at least 24 hours
       image: Yup.mixed()
         .test('image', 'invalid file type', f => {
           return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
         })
         .test('image', 'Exceeding maximum upload file size (5MB)', f => {
-          return !f ? true : (f.size < (5 * 1024 * 1024));
+          return !f ? true : f.size < 5 * 1024 * 1024;
         }),
       source: Yup.object({
-        label: Yup.string().trim().required('Required').url('invalid URL')
+        label: Yup.string()
+          .trim()
+          .required('Required')
+          .test('source', 'invalid URL', l => {
+            return !l ? true : isURL(l);
+          })
       }),
       ...validateEmail
     });
@@ -235,9 +315,14 @@ class CreateEvent extends React.Component {
                 {this.renderAppBar(this.props)}
                 <Loading isLoading={isSubmitting} />
                 <div className="FormBlock">
-                  {this.renderEventTitle(formProps)}
+                  {this.renderEventTitle(this.state)}
                   <div className="BlankLine" />
                   {this.renderPublicSwitcher(formProps)}
+                </div>
+                <div className="FormBlock">
+                  {this.renderDateTime(initialClosingTime)}
+                  <div className="BlankLine" />
+                  {this.renderReportSource()}
                 </div>
                 <div className="FormBlock">
                   {this.renderHostFee()}
@@ -245,21 +330,20 @@ class CreateEvent extends React.Component {
                   <ImageUpload form={formProps} />
                 </div>
                 <div className="FormBlock">
-                  {this.renderReportSource()}
-                  <div className="BlankLine" />
-                  {this.renderDateTime(initialClosingTime)}
-                </div>
-                <div className="FormBlock">
                   <Notification formProps={formProps} />
                 </div>
                 <button
                   className="SubmitBtn btn-primary"
                   type="submit"
-                  disabled={isSubmitting || !dirty}
+                  disabled={isSubmitting || !dirty || !verified}
                 >
                   Create
                 </button>
                 <Debug props={formProps} />
+                <Prompt
+                  when={dirty}
+                  message="Are you sure you want to leave?"
+                />
               </Form>
             );
           }}
@@ -269,10 +353,12 @@ class CreateEvent extends React.Component {
   }
 }
 
-export default connect((state) => {
-  return {
-    email: state.auth.profile.email,
-    verified: state.auth.profile.verified,
-    shareEvent: state.guru.ui.shareEvent
-  };
-}, { createEvent })(CreateEvent);
+export default connect(
+  state => {
+    return {
+      email: state.auth.profile.email,
+      verified: state.auth.profile.verified
+    };
+  },
+  { apiCreateEvent }
+)(CreateEvent);

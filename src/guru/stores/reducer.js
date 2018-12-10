@@ -4,13 +4,18 @@ import {
   putMatchDetail,
   putMatchOdd,
   putGasPrice,
-  putHandShake
+  putHandShake,
+  putRedeemCode,
+  removeRedeemCode
 } from '@/guru/pages/PlaceBet/action';
 import {
   updateReports,
   shareEvent,
   resetShareEvent
 } from '@/guru/pages/CreateEvent/action';
+import {
+  putReferralCheck
+} from '@/pages/Me/action';
 import { updateLoading } from './action';
 
 const initialState = {
@@ -51,11 +56,35 @@ const guruReducer = (state = initialState, action) => {
       case putHandShake().type:
         draft.handShakes = action.payload;
         break;
+      case putRedeemCode().type:
+        draft.ui.redeem = action.payload;
+        break;
+      case removeRedeemCode().type:
+        draft.ui.redeem = null;
+        break;
       case 'GURU:UPDATE_USER_EVENTS':
+        const newList = [...draft.userEvents, ...action.userEvents];
+        draft.userEvents = newList;
+        draft.reputation = {
+          ...draft.reputation,
+          loadMore: action.loadMore,
+          page: action.page
+        };
+        break;
+
+      case 'GURU:UPDATE_NEW_USER_EVENTS':
         draft.userEvents = action.userEvents;
+        draft.reputation = {
+          ...draft.reputation,
+          loadMore: action.loadMore,
+          page: action.page
+        };
         break;
       case 'GURU:UPDATE_USER_REPUTATION':
-        draft.reputation = action.reputation;
+        draft.reputation = {
+          ...draft.reputation,
+          ...action.reputation
+        };
         break;
       case 'GURU:UPDATE_AUTH_COINBASE':
         draft.authCoinBase = action.authCoinBase;
@@ -71,6 +100,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case resetShareEvent().type:
         draft.ui.shareEvent = undefined;
+        break;
+      case putReferralCheck().type:
+        draft.ui.referralCheck = action.payload;
         break;
       default:
         break;

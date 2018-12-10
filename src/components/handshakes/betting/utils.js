@@ -4,7 +4,8 @@ import Handshake from '@/models/Handshake.js';
 import local from '@/services/localStore';
 import { APP } from '@/constants';
 import { MESSAGE_SERVER } from '@/components/handshakes/betting/message.js';
-import { BET_TYPE, ROLE } from '@/components/handshakes/betting/constants.js';
+import { BET_TYPE, ROLE, BET_BLOCKCHAIN_STATUS } from '@/components/handshakes/betting/constants.js';
+
 import moment from 'moment';
 
 import { BigNumber } from 'bignumber.js';
@@ -72,7 +73,6 @@ export const getEstimateGas = async () => {
   chainId === 4 ? MasterWallet.neutronTestNet : MasterWallet.neutronMainNet;
   const gasPrice = getGasPrice();
   const estimateGas = await neuron.caculateLimitGasWithEthUnit(gasPrice);
-  console.log(TAG, 'Estimate Gas:', estimateGas);
   return estimateGas;
   // const bettinghandshake = new BettingHandshake(chainId);
   // const result = await bettinghandshake.getEstimateGas();
@@ -183,9 +183,14 @@ export const isMakerShakerSameUser = (initUserId, shakeIds) => {
   return false;
 };
 
-export const isMatch = (shakeUserIds) => {
-  if (shakeUserIds) {
-    return shakeUserIds.length > 0;
+export const isMatch = (shakers) => {
+  let count = 0;
+  if (shakers) {
+    shakers.forEach(item => {
+      const { status } = item;
+      count = status > BET_BLOCKCHAIN_STATUS.STATUS_INIT_PENDING ? (count + 1) : count;
+    });
+    return count > 0;
   }
   return false;
 };
@@ -211,12 +216,12 @@ export const findUserBet = (handshake) => {
   const {
     result, shakeUserIds, closingTime,
     reportTime, disputeTime, initUserId, side, hid, type,
-    totalAmount, totalDisputeAmount, contractName, contractAddress,
+    totalAmount, totalDisputeAmount, shakers
   } = handshake;
 
   let findItem = handshake;
   let isUserShake = isShakeUser(shakeUserIds);
-  const matched = isMatch(shakeUserIds);
+  const matched = isMatch(parseJsonString(shakers));
 
   //Maker and shaker is same user
   const isSameUser = isMakerShakerSameUser(initUserId, shakeUserIds);

@@ -20,6 +20,8 @@ function* callApi({ _path, _key, type, method, data, headers, BASE_URL = BASE_AP
   if (!type) throw new Error('Action type is required');
   if (_path) yield put(apiAction.preFetch({ _path, type }));
 
+  console.error('This method is deprecated, switch to /guru/stores/api', PATH_URL);
+
   const url = `${BASE_URL}/${PATH_URL}`;
 
   let respondedData = {};

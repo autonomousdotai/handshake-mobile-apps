@@ -12,10 +12,21 @@ export const updateEvents = (events) => {
   };
 };
 
-export const updateUserEvents = (events) => {
+export const updateUserEvents = (events, loadMore, page) => {
   return {
     type: 'GURU:UPDATE_USER_EVENTS',
     userEvents: events,
+    loadMore,
+    page
+  };
+};
+
+export const updateNewUserEvents = (events, loadMore, page) => {
+  return {
+    type: 'GURU:UPDATE_NEW_USER_EVENTS',
+    userEvents: events,
+    loadMore,
+    page
   };
 };
 

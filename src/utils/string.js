@@ -42,5 +42,5 @@ export function shortAddress(str, padChars) {
 
 export function isURL(url) {
 // eslint-disable-next-line no-useless-escape
-  return (/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/i).test(url);
+  return (/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/i).test(url);
 }

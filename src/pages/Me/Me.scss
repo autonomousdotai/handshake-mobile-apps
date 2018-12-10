@@ -1,6 +1,13 @@
 @import './src/styles/style';
 
 .me {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #EBF1F7;
+  padding: 15px 15px 60px 15px;
+  overflow: hidden;
   .update-profile {
     display: flex;
     padding-bottom: rem-calc(11px);
@@ -169,6 +176,7 @@
 /** NoData Component **/
 .NoDataContainer {
   text-align: center;
+  padding: 20px 0;
   .NoDataTitle {
     font-size: rem-calc(18px);
     font-weight: 400;
@@ -178,5 +186,60 @@
     font-size: rem-calc(14px);
     color: #8A8A8F;
     margin: 15px 0;
+  }
+}
+
+/** ReferralLink **/
+.ReferralLink {
+  font-size: rem-calc(14px);
+  margin: 15px 0;
+  > span, > strong {
+    display: block;
+  }
+  .Link {
+    display: block;
+    padding: 6px;
+    margin: 5px 0;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    border: 1px solid #f1f1f1;
+  }
+}
+.btnReferral {
+  margin-bottom: 15px;
+}
+
+/** ReferralUsers **/
+.ReferralUsers {
+  font-size: rem-calc(14px);
+  background-color: #FFFFFF;
+  border-radius: 4px;
+  border: 1px solid #f1f1f1;
+  margin-bottom: 15px;
+  overflow: hidden;
+  &Head, .ReferralUser {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
+    > span:nth-child(1) {
+      width: 75%;
+    }
+    > span:nth-child(2) {
+      width: 25%;
+    }
+    > span {
+      display: inline-block;
+      align-content: flex-start
+    }
+  }
+  &Head {
+    background-color: #FAFAFA;
+    span {
+      font-weight: 600;
+    }
+  }
+  .ReferralUser {
+    color: #8a8a8f;
   }
 }

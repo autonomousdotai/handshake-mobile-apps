@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 import Image from '@/components/core/presentation/Image';
 import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
-import DefaultAvatar from '@/assets/images/icon/logo.svg';
+import DefaultAvatar from '@/assets/images/icon/extension_logo.svg';
 import { loadUserReputation } from '@/guru/pages/Home/action';
 import { userEventsSelector, userReputationSelector } from '@/guru/pages/Home/selector';
-import { formatAmount } from '@/components/handshakes/betting/utils';
 import { shortAddress } from '@/utils/string';
+import InfiniteScroll from 'react-infinite-scroller';
 
 
 import './Reputation.scss';
@@ -25,20 +25,21 @@ class Reputation extends React.Component {
 
   static defaultProps = {
     eventList: [],
-    reputation: {},
+    reputation: {}
   };
+
   componentDidMount() {
-    this.getData(this.props);
+    this.getData(this.props, 0);
   }
-  getQueryString=()=> {
+  getQueryString=() => {
     const querystring = window.location.search.replace('?', '');
     const querystringParsed = qs.parse(querystring);
     return querystringParsed;
   }
-  getData = (props) => {
+  getData = (props, page) => {
     const query = this.getQueryString();
     const userId = query.id;
-    props.dispatch(loadUserReputation({ userId }));
+    props.dispatch(loadUserReputation({ userId, page }));
   }
 
   backAction = () => {
@@ -46,9 +47,13 @@ class Reputation extends React.Component {
   }
 
   handleClickEvent = (event)=> {
-    const url = `${URL.HANDSHAKE_PEX}?match=${event.id}`;
+    const url = `${URL.HANDSHAKE_PREDICTION}?match=${event.id}`;
     this.props.history.push(url);
   }
+
+  formatAmount = (amount) => {
+    return Math.floor(amount * 10000) / 10000;
+  };
 
   renderProfile(props) {
     const query = this.getQueryString();
@@ -81,7 +86,7 @@ class Reputation extends React.Component {
     const { total_amount: totalAmount = 0 } = reputation;
     return (
       <div className="wrapperGroupBlock">
-        <div className="boldText">{formatAmount(totalAmount)}</div>
+        <div className="boldText">{this.formatAmount(totalAmount)}</div>
         <div className="disableText mediumText">ETH</div>
       </div>
     );
@@ -106,18 +111,28 @@ class Reputation extends React.Component {
     );
   }
   renderMarketList(props) {
+    const { reputation } = props;
+    const { loadMore, page } = reputation;
     return (
       <div className="wrapperMarketList">
         <div className="mediumText">Hosted Debates</div>
-        {props.eventList.map((event) => {
-          return (
-            <EventItem
-              key={event.id}
-              event={event}
-              onClickEvent={this.handleClickEvent}
-            />
-          );
-        })}
+        <InfiniteScroll
+          pageStart={0}
+          loadMore={() => this.getData(props, page)}
+          hasMore={loadMore}
+          loader={<div className="loaderRepu">Loading ...</div>}
+        >
+          {props.eventList.map((event) => {
+            return (
+              <EventItem
+                key={event.id}
+                event={event}
+                onClickEvent={this.handleClickEvent}
+              />
+            );
+          })}
+        </InfiniteScroll>
+
       </div>
     );
   }

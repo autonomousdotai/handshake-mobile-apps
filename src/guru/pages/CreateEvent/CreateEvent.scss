@@ -7,16 +7,14 @@
 
 .CreateEvent {
   background-color: #EBF1F7;
-  padding-bottom: 60px;
-  margin-top: -15px;
-  padding-top: 15px;
+  padding: 0 20px 20px;
   textarea:focus, input:focus{
     outline: none;
   }
 
   .FormBlock {
     background-color: #FFFFFF;
-    margin: 15px 20px;
+    margin: 15px 0;
     padding: 20px;
     border-radius: 5px;
 
@@ -30,6 +28,7 @@
     .GroupTitle {
       color: #0A2240;
       font-weight: 400;
+      padding-bottom: 5px;
     }
 
     .GroupNote {
@@ -60,11 +59,10 @@
   }
 
   .SubmitBtn {
-    position: fixed;
     width: 100%;
-    bottom: 60px;
     height: 50px;
     font-size: 18px;
+    border-radius: 5px;
 
     &:disabled {
       background-color: #A5BED4;
@@ -76,7 +74,7 @@
   .EventTitle {
     label {
       color: #2989FF;
-      width: 60px;
+      width: 45px;
       margin-top: 3px;
     }
 
@@ -84,6 +82,9 @@
       width: 100%;
       color: #0A2240;
       border: none;
+      resize: none;
+      font-weight: bold;
+      padding-right: 10px;
 
       &::placeholder {
         color: #C5D8E8;
@@ -93,24 +94,48 @@
     .ErrMsg {
       font-weight: unset;
       text-align: right;
-      padding-top: 0;
+      padding: 5px 0 0;
     }
 
     .BlankLine {
       margin-bottom: 0;
     }
 
-    .OutcomeName, .EventName {
+    .GroupNote {
+      padding-top: 20px;
+      font-style: italic;
+    }
+
+    .EventName {
       font-weight: bold;
-      textarea {
-        font-weight: bold;
+      display: flex;
+      align-items: flex-start;
+      font-size: 18px;
+      position: relative;
+
+      &:before {
+        content: '';
+        height: 2px;
+        border: 1px dashed #C5D8E8;
+        position: absolute;
+        bottom: 2px;
+        left: 40px;
+        right: 20px;
+      }
+
+      &:after {
+        content: '?';
+        color: #2989FF;
+        bottom: 0;
+        right: 0;
+        position: absolute;
       }
     }
 
-    .OutcomeName, .EventName {
-      display: flex;
-      align-items: flex-start;
-      font-size: 22px;
+    #TitleTT {
+      padding-left: 5px;
+      width: 20px;
+      color: #2989FF;
     }
   }
 
@@ -150,6 +175,10 @@
 
   .HostFee {
     position: relative;
+
+    .GroupTitle {
+      margin-bottom: -10px;
+    }
 
     .rangeLimit {
       display: none;
@@ -259,54 +288,52 @@
 
   .ReportSource {
     .GroupNote {
-      padding: 5px 0 10px;
       font-weight: 400;
     }
 
     .ErrMsg {
       text-align: right;
     }
+
+    .CreatableSelectSource {
+      padding: 10px 0;
+    }
+
+    .react-select__placeholder {
+      white-space: nowrap;
+    }
   }
 
   .DateTime {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-
     .ErrMsg {
       text-align: right;
       display: block;
       width: 100%;
     }
 
-    .BlockLeft {
-      flex: 1;
+    > span {
+      display: block;
+      width: 100%;
     }
 
-    .BlockRight {
-      width: 80px;
-      background-color: #F5F8FC;
+    .ClosingTime {
+      display: flex;
+      justify-content: space-around;
+      text-align: center;
+      padding: 10px;
+      background-color: #EBF1F7;
       border-radius: 5px;
+      font-weight: 400;
+      width: 100%;
+      margin-top: 10px;
 
-      .ClosingTime {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-        padding: 10px;
+      .Separator {
+        width: 2px;
+        background-color: #d9dee4;
+      }
 
-        .Day {
-          font-size: 17px;
-          font-weight: 400;
-        }
-
-        .Month, .Year {
-          color: #748599;
-          font-size: 13px;
-        }
-
-        .Hour {
-          font-size: 13px;
-        }
+      .HM {
+        color: #2989FF;
       }
     }
   }
@@ -320,12 +347,17 @@
       border: 1px solid hsl(0,0%,80%);
       font-size: 15px;
       outline: none;
-      //color: #626467;
       color: #889EB5 !important;
 
       &:disabled {
         background-color: #F5F8FC;
       }
+    }
+
+    p {
+      color: #2989FF;
+      padding: 5px 0 0;
+      margin-bottom: 0;
     }
 
     .btn {
@@ -395,7 +427,7 @@
 
   .ShareEventMessage {
     position: relative;
-    padding-bottom: 60px;
+    padding: 40px 30px;
     font-size: 15px;
     &:after {
       content: '';
@@ -433,4 +465,15 @@
     }
   }
 
+}
+
+.tooltip {
+  .tooltip-inner {
+    text-align: left;
+    font-size: 12px;
+    background-color: #1b2025;
+    .arrow {
+      background-color: #1b2025;
+    }
+  }
 }

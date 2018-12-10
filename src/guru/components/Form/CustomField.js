@@ -12,6 +12,7 @@ function renderReselect(props) {
       onChange={option => props.form.setFieldValue(props.field.name, option)}
       onBlur={() => props.form.setFieldTouched(props.field.name)}
       isClearable
+      className={props.className}
       placeholder={props.placeholder}
       options={props.options}
       isDisabled={props.disabled}

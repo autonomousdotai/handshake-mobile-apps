@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
+import { injectIntl } from 'react-intl';
+import Modal from '@/components/core/controls/Modal';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import Button from '@/components/core/controls/Button';
 import Web3 from 'web3';
 import * as Metamask from '@/guru/services/metamask/connect';
-
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
+import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
+import Button from '@/components/core/controls/Button';
+import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
 
 const ethUtil = require('ethereumjs-util');
 const sigUtil = require('eth-sig-util');
@@ -120,7 +124,7 @@ class TopUp extends React.Component {
     return (
       <div className="TopUpCard HowToCard">
         <div className="Quest">How to top up?</div>
-        <div className="Describe">Send ETH to your ninja prediction wallet address</div>
+        <div className="Describe">Send ETH to your Ninja wallet address</div>
         <div className="WalletAddress">
           <span className="Address">{address}</span>
           <span className="HelpIcon" title="Copy to clipboard" onClick={this.copyToClipboard(address)}>
@@ -134,19 +138,48 @@ class TopUp extends React.Component {
       </div>
     );
   };
+  restoreWallet=(props) => {
+    return (
+      <div className="RestoreButton">
+      <Button onClick={() => {
+        this.modalRestoreRef.open();
+        }}
+      >I have a wallet. Restore my wallet.
+      </Button>
+      </div>
+    );
+  }
+  renderModalRestor = () => {
+    const { messages } = this.props.intl;
+    const modalHeaderStyle = {color: "#fff", background: "#546FF7"};
+    return (
+      <Modal
+        customBackIcon={BackChevronSVGWhite}
+        modalHeaderStyle={modalHeaderStyle}
+        title={messages.wallet.action.restore.header}
+        onRef={modal => this.modalRestoreRef = modal}
+        onClose={this.closeRestoreWalletAccount}
+      >
+        <RestoreWallet />
+      </Modal>
+    );
+  }
 
   render() {
     const wallets = MasterWallet.getMasterWallet();
-    const walletProps = wallets[1];
+    const walletDefault = MasterWallet.getWalletDefault('ETH');
+    const walletProps = wallets.filter(w => w.network === walletDefault.network)[0];
+    console.log('Wallet Props:', walletProps);
     return (
       <div className="TopUpContainer">
         { this.metaMask(walletProps) }
         { this.balance(walletProps) }
         { this.howTo(walletProps) }
-
+        { this.restoreWallet(walletProps) }
+        { this.renderModalRestor()}
       </div>
     );
   }
 }
 
-export default TopUp;
+export default injectIntl(TopUp);

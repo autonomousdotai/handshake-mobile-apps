@@ -1,7 +1,24 @@
-import { createAPI } from '@/reducers/action';
+import { APIGetCreator, APIPostCreator, APIFormCreator } from '@/guru/stores/api';
+import { API_URL } from '@/constants';
 
-export const verifyEmailCode = createAPI('API:VERIFY_EMAIL_CODE');
-export const getEmailCode = createAPI('API:GET_EMAIL_CODE');
+export const verifyEmailCode = APIPostCreator({
+  type: 'API:VERIFY_EMAIL_CODE'
+});
+
+export const getEmailCode = APIPostCreator({
+  type: 'API:GET_EMAIL_CODE',
+  url: API_URL.CRYPTOSIGN.SUBSCRIBE_NOTIFICATION
+});
+
+export const apiLoadReports = APIGetCreator({
+  type: 'API:LOAD_REPORT',
+  url: API_URL.CRYPTOSIGN.LOAD_REPORTS
+});
+
+export const apiCreateEvent = APIFormCreator({
+  type: 'API:ADD_EVENT_API',
+  url: API_URL.CRYPTOSIGN.ADD_MATCH
+});
 
 export const loadReports = (payload = {}) => {
   return {
@@ -13,20 +30,6 @@ export const loadReports = (payload = {}) => {
 export const updateReports = (payload = {}) => {
   return {
     type: 'PEX:UPDATE_REPORTS',
-    payload
-  };
-}
-
-export const createEvent = (payload = {}) => {
-  return {
-    type: 'PEX:CREATE_EVENT',
-    ...payload
-  };
-};
-
-export const sendEmailCode = (payload = {}) => {
-  return {
-    type: 'PEX:SEND_EMAIL_CODE',
     payload
   };
 };

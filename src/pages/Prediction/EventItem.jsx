@@ -15,7 +15,7 @@ import { randomArrayItem } from '@/utils/array';
 import NumberPlayersSVG from '@/assets/images/pex/number-players.svg';
 import TimeSVG from '@/assets/images/pex/time.svg';
 import CoinSVG from '@/assets/images/pex/coin.svg';
-import MeIcon from '@/assets/images/navigation/ic_ninja_logo.svg';
+import MeIcon from '@/assets/images/icon/extension_logo.svg';
 
 import { formatAmount, calcPercent } from '@/utils/number';
 import { shortAddress } from '@/utils/string';
@@ -170,7 +170,7 @@ function renderShareSocial(props) {
     },
   ];
   const title = randomArrayItem(socialSharedMsg);
-  const shareURL = `${window.location.origin}${URL.HANDSHAKE_PEX}?match=${id}`;
+  const shareURL = `${window.location.origin}${URL.HANDSHAKE_PREDICTION}?match=${id}`;
   return (<ShareSocial title={title} shareUrl={shareURL} socialList={socialList} />);
 }
 

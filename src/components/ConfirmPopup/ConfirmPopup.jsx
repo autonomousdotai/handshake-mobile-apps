@@ -18,16 +18,16 @@ class ConfirmPopup extends Component {
     return (
       <div className="wrapperConfirm">
         <div className="title">{title}</div>
-        <div className="content">{content}</div>
+        <div className="contentConfirm">{content}</div>
         <div className="wrapperButton">
           <button
-            className="btn okButton"
+            className="btnConfirm okButton"
             onClick={() => this.props.okButtonClick()}
           >
             {okButtonTitle}
           </button>
           <button
-            className="btn cancelButton"
+            className="btnConfirm cancelButton"
             onClick={() => this.props.cancelButtonClick()}
           >
             {cancelButtonTitle}

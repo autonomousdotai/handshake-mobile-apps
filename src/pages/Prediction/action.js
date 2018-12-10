@@ -56,6 +56,28 @@ export const checkRedeemCode = (payload = {}) => {
   };
 };
 
+export const emailSubscriber = (payload = {}) => {
+  return {
+    type: 'PREDICTION:SUBCRIBE_EMAIL_PREDICTION',
+    ...payload
+  };
+};
+
+export const putUserSubscribe = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:PUT_USER_SUBSCRIBE',
+    _path: 'guru.ui.userSubscribe',
+    _value: value
+  });
+};
+
+export const putStatusEmailSubscribe = (value) => {
+  return SET_DATA({
+    type: 'PREDICTION:PUT_STATUS_EMAIL_SUBSCRIBE',
+    _path: 'guru.ui.userSubscribe.status',
+    _value: value
+  });
+};
 
 export const updateShowedLuckyPool = () => {
   return SET_DATA({

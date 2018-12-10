@@ -8,16 +8,18 @@
   .wrapperEventDetail {
     display: flex;
     justify-content: space-between;
-
+    margin-top: 5px;
     .eventDetailBlock {
       width: 50%;
       display: flex;
       flex-direction: row;
     }
     .eventDetailText {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       margin-left: 4px;
-      margin-top: 1px;
-      font-size: calc(2vw + 1vh + .5vmin);
+      font-size: calc(1.2vw + 1vh + .5vmin);
     }
   }
   .wrapperEventContent {

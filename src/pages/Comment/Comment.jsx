@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 // services, constants
 import { loadCommentList } from '@/reducers/comment/action';
-import { API_URL } from '@/constants';
+import { API_URL, URL } from '@/constants';
 import qs from 'qs';
 import Helper from '@/services/helper';
 
@@ -47,6 +47,12 @@ class Comment extends React.PureComponent {
     }
   }
 
+  handleClickCreator = (item) => {
+    const userId = item.userId || 0;
+    const address = item.address || '0x3D0...fEd';
+    this.props.history.push(`${URL.HANDSHAKE_REPUTATION}?id=${userId}&address=${address}`);
+  }
+
   render() {
     const { list, isFetching } = this.props.comment;
     const queryObject = qs.parse(this.props.location.search.slice(1));
@@ -57,7 +63,7 @@ class Comment extends React.PureComponent {
             {
               list.length > 0 ? (
                 <div className="comments" ref={element => this.commentsRef = element} id="listComments">
-                  {list.map((item) => <CommentItem key={item.id} {...item} />)}
+                  {list.map((item) => <CommentItem key={item.id} {...item} onClickCreator={this.handleClickCreator} />)}
                 </div>
               ) : !isFetching ? (
                 <div className="noData">
