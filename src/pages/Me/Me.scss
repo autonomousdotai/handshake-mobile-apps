@@ -200,11 +200,46 @@
     display: block;
     padding: 6px;
     margin: 5px 0;
-    background-color: #FAFAFA;
+    background-color: #FFFFFF;
     border-radius: 4px;
     border: 1px solid #f1f1f1;
   }
 }
 .btnReferral {
   margin-bottom: 15px;
+}
+
+/** ReferralUsers **/
+.ReferralUsers {
+  font-size: rem-calc(14px);
+  background-color: #FFFFFF;
+  border-radius: 4px;
+  border: 1px solid #f1f1f1;
+  margin-bottom: 15px;
+  overflow: hidden;
+  &Head, .ReferralUser {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
+    > span:nth-child(1) {
+      width: 75%;
+    }
+    > span:nth-child(2) {
+      width: 25%;
+    }
+    > span {
+      display: inline-block;
+      align-content: flex-start
+    }
+  }
+  &Head {
+    background-color: #FAFAFA;
+    span {
+      font-weight: 600;
+    }
+  }
+  .ReferralUser {
+    color: #8a8a8f;
+  }
 }

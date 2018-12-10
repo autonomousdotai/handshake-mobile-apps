@@ -437,6 +437,34 @@ class Me extends React.Component {
     this.props.dispatch(referralJoin());
   }
 
+  renderReferralUser = (userData) => {
+    return userData.map(ru => {
+      if (!ru.email) return null;
+      return (
+        <div key={ru.email} className="ReferralUser">
+          <span>{ru.email}</span>
+          <span>{ru.redeem ? 'Used' : 'Pending'}</span>
+        </div>
+      );
+    });
+  }
+
+  renderReferralUsers = (refer) => {
+    const { referred_users } = refer;
+    if (!referred_users || !referred_users.length) return null;
+    return (
+      <div className="ReferralUsers">
+        <div className="ReferralUsersHead">
+          <span>Referral</span>
+          <span>Status</span>
+        </div>
+        <div className="ReferralUsersBody">
+          {this.renderReferralUser(referred_users)}
+        </div>
+      </div>
+    );
+  }
+
   renderReferralLink = (refer) => {
     const { referral_link } = refer;
     return (
@@ -462,7 +490,12 @@ class Me extends React.Component {
     const { status } = referralCheckInfo || 0;
     if (!referralCheckInfo) return null;
     if (status) {
-      return this.renderReferralLink(referralCheckInfo);
+      return (
+        <React.Fragment>
+          {this.renderReferralLink(referralCheckInfo)}
+          {this.renderReferralUsers(referralCheckInfo)}
+        </React.Fragment>
+      );
     }
     return this.renderReferralProgram(props);
   }
