@@ -1,43 +1,39 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { lazy } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 // constants
 import { URL } from '@/constants';
 // services
 import BrowserDetect from '@/services/browser-detect';
-import { createDynamicImport } from '@/services/app';
-// components
-import Loading from '@/components/core/presentation/Loading';
 import { SEOPrediction, SEOWallet } from '@/components/SEO';
 
-import PexExtension from '@/pages/PexExtension/PexExtension';
-import TopUp from '@/pages/TopUp/TopUp';
 
-const TypeFormFeedBack = createDynamicImport(() => import('@/pages/TypeFormFeedBack'), Loading);
-const RouterMe = createDynamicImport(() => import('@/components/Router/Me'), Loading);
-const RouterWallet = createDynamicImport(() => import('@/components/Router/Wallet'), Loading);
-const RouterComment = createDynamicImport(() => import('@/components/Router/Comment'), Loading);
-const RouterAdmin = createDynamicImport(() => import('@/components/Router/Admin'), Loading);
-const RouterReport = createDynamicImport(() => import('@/components/Router/Report'), Loading);
-const RouterLuckyPool = createDynamicImport(() => import('@/pages/LuckyLanding/LuckyLanding'), Loading);
-const RouterPrediction = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
-const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
-const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
-const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/WalletCoin/AuthCallback'), Loading);
+const PexExtension = lazy(() => import('@/pages/PexExtension/PexExtension'));
+const TopUp = lazy(() => import('@/pages/TopUp/TopUp'));
+const TypeFormFeedBack = lazy(() => import('@/pages/TypeFormFeedBack'));
+const RouterMe = lazy(() => import('@/components/Router/Me'));
+const RouterWallet = lazy(() => import('@/components/Router/Wallet'));
+const RouterComment = lazy(() => import('@/components/Router/Comment'));
+const RouterAdmin = lazy(() => import('@/components/Router/Admin'));
+const RouterReport = lazy(() => import('@/components/Router/Report'));
+const RouterLuckyPool = lazy(() => import('@/pages/LuckyLanding/LuckyLanding'));
+const RouterPrediction = lazy(() => import('@/guru/pages/Home/Home'));
+const RouterReputation = lazy(() => import('@/guru/pages/Reputation/Reputation'));
+const RouterWalletCoin = lazy(() => import('@/guru/pages/WalletCoin/WalletCoin'));
+const RouterAuthCallback = lazy(() => import('@/guru/pages/WalletCoin/AuthCallback'));
 
 // Guru's Routes
-const CreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
-const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
-const Extension = createDynamicImport(() => import('@/guru/pages/Extension'), Loading);
+const CreateEvent = lazy(() => import('@/guru/pages/CreateEvent/CreateEvent'));
+const GuruPlaceBet = lazy(() => import('@/guru/pages/PlaceBet'));
+const Extension = lazy(() => import('@/guru/pages/Extension'));
 
-const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
-const ProjectDetail = createDynamicImport(() => import('@/components/ProjectDetail'), Loading);
-const ContentForWallet = createDynamicImport(() => import('@/pages/LandingPage/ContentForWallet'), Loading);
-const ContentForPrediction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPrediction'), Loading);
-const ContentForPexInstruction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPexInstruction'), Loading);
+const RouterResolve = lazy(() => import('@/pages/Resolve/Resolve'));
+const ProjectDetail = lazy(() => import('@/components/ProjectDetail'));
+const ContentForWallet = lazy(() => import('@/pages/LandingPage/ContentForWallet'));
+const ContentForPrediction = lazy(() => import('@/pages/LandingPage/ContentForPrediction'));
+const ContentForPexInstruction = lazy(() => import('@/pages/LandingPage/ContentForPexInstruction'));
 
-const Page404 = createDynamicImport(() => import('@/pages/Error/Page404'), Loading, true);
-const PageMobileOnly = createDynamicImport(() => import('@/pages/Error/MobileOnly'), Loading, true);
+const Page404 = lazy(() => import('@/pages/Error/Page404'));
+const PageMobileOnly = lazy(() => import('@/pages/Error/MobileOnly'));
 
 /**
  * ======================== ROUTE LIST ========================

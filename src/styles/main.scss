@@ -16,17 +16,9 @@ body {
   background-color: $bg-gray;
 }
 
-img {
-  max-width: 100%;
+.root {
+  margin-top: 55px;
 }
 
-button {
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-@import "app/splash";
 @import "app";
 @import "forms/dropdown-input";
-
-@import "pages/recruiting";

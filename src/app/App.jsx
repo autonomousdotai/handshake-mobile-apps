@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -10,6 +10,7 @@ import Navigation from '@/components/core/controls/Navigation/Navigation';
 import '@/styles/main';
 import '@/styles/custom-icons/styles.css';
 import BrowserDetect from '@/services/browser-detect';
+import Loading from '@/components/Loading';
 
 class App extends React.Component {
   static propTypes = {
@@ -38,12 +39,14 @@ class App extends React.Component {
     }
     if (!this.state.loaded) return null;
     return (
-      <I18n>
-        <div className="root">
-          <Router />
-          {this.renderNavigationBar()}
-        </div>
-      </I18n>
+      <Suspense fallback={<Loading isLoading />}>
+        <I18n>
+          <div className="root">
+            <Router />
+            {this.renderNavigationBar()}
+          </div>
+        </I18n>
+      </Suspense>
     );
   }
 }
