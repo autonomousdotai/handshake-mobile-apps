@@ -219,12 +219,12 @@ class PlaceBet extends Component {
     return this.props.dispatch(checkRedeemCode({ redeem: value }));
   };
 
-  calculatePosWinning = () => {
+  calculatePosWinning = (props) => {
     const { state, getOdds } = this;
     let amountNo = state.betAmount;
     const betOdds = getOdds();
-    if (this.props.redeem) {
-      amountNo = this.props.redeem.amount;
+    if (props.redeem) {
+      amountNo = props.redeem.amount;
     }
     return formatAmount(possibleWinning(amountNo, betOdds));
   };
@@ -234,9 +234,8 @@ class PlaceBet extends Component {
   };
 
   redeemNotice = (props, state) => {
-    const { isRedeem } = props;
     const { isUseRedeem } = state;
-    if (!isRedeem || isUseRedeem) return null;
+    if (!props.isRedeem || isUseRedeem) return null;
     return (
       <div className="Redeem">
         {/* {`You've already requested a redeem code. `} */}
@@ -269,7 +268,7 @@ class PlaceBet extends Component {
 
   betParamsProps = ({ matchDetail, gasPrice }) => ({
     iconCoin: IconCoin,
-    possibleWinning: `${this.calculatePosWinning()} ETH`,
+    possibleWinning: `${this.calculatePosWinning(this.props)} ETH`,
     gasPrice: `${formatAmount(gasPrice)} ETH`,
     marketFee: `${matchDetail.market_fee}%`,
     className: classNames('BetParamsComponent')
