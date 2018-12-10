@@ -20,7 +20,6 @@ import Image from '@/components/core/presentation/Image';
 import meIcon from '@/assets/images/icon/extension_logo.svg';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { setOfflineStatus } from '@/reducers/auth/action';
-import local from '@/services/localStore';
 
 import Helper from '@/services/helper';
 import Rate from '@/components/core/controls/Rate/Rate';
@@ -31,8 +30,6 @@ import Modal from '@/components/core/controls/Modal/Modal';
 import BackupWallet from '@/components/Wallet/BackupWallet/BackupWallet';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
 import loadingSVG from '@/assets/images/icon/loading.gif';
-import * as gtag from '@/services/ga-utils';
-import taggingConfig from '@/services/tagging-config';
 
 import NoDataImage from '@/assets/images/pages/Prediction/nodata.svg';
 

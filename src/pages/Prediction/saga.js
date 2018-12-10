@@ -12,19 +12,6 @@ import {
 } from './action';
 import { eventSelector, relevantEventSelector } from './selector';
 
-export function* handleLoadMatchDetail({ eventId }) {
-  try {
-    yield call(apiGet, {
-      PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${eventId}`,
-      type: 'LOAD_MATCH_DETAIL',
-      _key: eventId,
-      _path: 'predictionDetail',
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
-
 export function* handleLoadMatches({ isDetail, source }) {
   try {
     if (isDetail) {

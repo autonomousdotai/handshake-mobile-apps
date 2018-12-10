@@ -19,7 +19,7 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationOptions = {
     body: payload.body,
     icon: logo,
-  };  
+  };
   return self.registration.showNotification(
     notificationTitle,
     notificationOptions,
