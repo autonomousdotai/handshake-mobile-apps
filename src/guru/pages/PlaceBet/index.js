@@ -7,7 +7,7 @@ import { injectIntl } from 'react-intl';
 import { isEmpty } from '@/utils/is';
 import { formatAmount } from '@/utils/number';
 import { possibleWinning } from '@/utils/calculate';
-import { getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
+import { getBalance, getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
 import IconCoin from '@/assets/images/icon/icon-coin.svg';
 
 // TODO: [Begin: Will be moving to another place]
@@ -181,13 +181,14 @@ class PlaceBet extends Component {
     });
   };
 
-  handShakeHandler = data => {
+  handShakeHandler = async (data) => {
     const { status } = data;
     if (status) {
       const { handshakes } = data;
+      const balance = await getBalance();
       const handler = BetHandshakeHandler.getShareManager();
       this.handShakeSuccess(handshakes);
-      return handler.controlShake(handshakes);
+      return handler.controlShake(handshakes, balance);
     }
     return this.handleShakeFail(data);
   };
