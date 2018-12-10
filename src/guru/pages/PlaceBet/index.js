@@ -227,8 +227,8 @@ class PlaceBet extends Component {
     return this.props.dispatch(checkCompareRedeemCode({ redeem: value }));
   };
 
-  calculatePosWinning = () => {
-    const { state, props, getOdds } = this;
+  calculatePosWinning = (props) => {
+    const { state, getOdds } = this;
     let amountNo = state.betAmount;
     const betOdds = getOdds();
     if (props.redeem) {
@@ -276,7 +276,7 @@ class PlaceBet extends Component {
 
   betParamsProps = ({ matchDetail, gasPrice }) => ({
     iconCoin: IconCoin,
-    possibleWinning: `${this.calculatePosWinning()} ETH`,
+    possibleWinning: `${this.calculatePosWinning(this.props)} ETH`,
     gasPrice: `${formatAmount(gasPrice)} ETH`,
     marketFee: `${matchDetail.market_fee}%`,
     className: classNames('BetParamsComponent')
