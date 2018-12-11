@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import {injectIntl} from 'react-intl';
 import {connect} from "react-redux";
@@ -15,14 +14,11 @@ import Dropdown from '@/components/core/controls/Dropdown';
 import '../WalletPreferences/WalletPreferences.scss';
 
 import Switch from '@/components/core/controls/Switch';
-import { newPasscode, requestWalletPasscode, updatePasscode } from '@/reducers/app/action';
 
-import iconLock from '@/assets/images/wallet/icons/icon-lock.svg';
 import iconCurrentcy from '@/assets/images/wallet/icons/icon-currency.svg';
 import iconNotifications from '@/assets/images/wallet/icons/icon-notifications.svg';
 import iconTwitter from '@/assets/images/wallet/icons/icon-twitter.svg';
 import iconFacebook from '@/assets/images/wallet/icons/icon-facebook.svg';
-import iconVk from '@/assets/images/wallet/icons/icon-vk.svg';
 import iconTelegram from '@/assets/images/wallet/icons/icon-telegram.svg';
 import iconBackupWallet from '@/assets/images/wallet/icons/icon-backup.svg';
 import iconRestoreWallet from '@/assets/images/wallet/icons/icon-restore.svg';
@@ -49,31 +45,24 @@ class SettingWallet extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
 
     let settings = local.get(APP.SETTING);
 
     let currencies = this.state.currencies;
-    if(!currencies || currencies.length < 1){
+    if (!currencies || currencies.length < 1) {
       currencies = this.listCurrencies();
     }
 
-    if(!(settings && settings.wallet)){
+    if (!(settings && settings.wallet)) {
       settings = this.state.settings;
-    }
-    else{
-      if (!settings.wallet.passcode){
+    } else {
+      if (!settings.wallet.passcode) {
         settings.wallet.passcode = this.state.settings.wallet.passcode;
       }
     }
 
-    this.setState({settings: settings, currencies: currencies, switchContent: this.genSwitchContent(settings)});
-  }
-
-  genSwitchContent(settings){
-    if (!settings)
-      settings = this.state.settings;
-    return <Switch isChecked={settings.wallet.passcode.enable} onChange={(isChecked)=> {this.onEnablePasscode(isChecked)}} />
+    this.setState({ settings: settings, currencies: currencies });
   }
 
 
@@ -103,88 +92,12 @@ class SettingWallet extends React.Component {
     });
   }
 
-  getCountryName(locale) {
-    const hasSupportLanguage = LANGUAGES.find(language => language.code === locale);
-    return hasSupportLanguage || LANGUAGES[0];
-  }
-
-  changeCountry(countryCode) {
-    this.props.setLanguage(countryCode, false);
-    this.modalLanguageRef.close();
-  }
-
-  onClickPasscode=()=>{
-    // case update or set new:
-    // if passcode is on enable, show update, else nothing.
-    if (this.state.settings.wallet.passcode.enable){
-      // ask old passcode first + set new passcode:
-      this.props.updatePasscode({
-        onSuccess: (md5Passcode) => {
-          settings.wallet.passcode = {"enable": true, "value": md5Passcode};
-          this.setState({settings: settings}, () => {
-            this.updateSettings(settings);
-          });
-        },
-        onCancel: () => {
-          this.setState({switchContent: ""}, () => {
-            this.setState({switchContent: this.genSwitchContent()});
-          });
-        }
-      });
-    }
-  }
-
   updateSettings(settings){
     if(settings){
         local.save(APP.SETTING, settings);
         return true;
     }
     return false;
-  }
-
-  onEnablePasscode=(isChecked)=>{
-
-    let settings = this.state.settings;
-
-    // from off => on:
-    if (isChecked){
-      // if dont set pascode value yet, show new set passcode:
-      // if(!this.state.settings.wallet.passcode.value)
-      {
-        this.props.newPasscode({
-          onSuccess: (md5Passcode) => {
-            settings.wallet.passcode = {"enable": true, "value": md5Passcode};
-            this.setState({settings: settings}, () => {
-              this.updateSettings(settings);
-            });
-          },
-          onCancel: () => {
-            this.setState({switchContent: ""}, () => {
-              this.setState({switchContent: this.genSwitchContent()});
-            });
-          }
-
-        });
-      }
-
-    }
-    else{
-      // from on -> off:
-      this.props.requestWalletPasscode({
-        onSuccess: () => {
-          settings.wallet.passcode.enable = false;
-          this.setState({settings: settings}, () => {
-            this.updateSettings(settings);
-          });
-        },
-        onCancel: () => {
-          this.setState({switchContent: ""}, () => {
-            this.setState({switchContent: this.genSwitchContent()});
-          });
-        }
-      });
-    }
-
   }
 
   onClickCurrency=()=>{
@@ -203,18 +116,12 @@ class SettingWallet extends React.Component {
             })
   }
 
-
-
   onClickNotification=(isChecked)=>{
     let settings = this.state.settings;
     settings.wallet.notification = isChecked;
     this.setState({settings: settings}, () => {
       this.updateSettings(settings);
     });
-  }
-
-  openVk=()=>{
-    window.open('https://vk.com/ninjadotorg', '_blank');
   }
   openTelegram=()=>{
     window.open('https://t.me/ninja_org?ref=ninja-wallet', '_blank');
@@ -229,14 +136,14 @@ class SettingWallet extends React.Component {
     $zopim.livechat.window.show();
   }
 
-  openAddressBook=()=>{    
+  openAddressBook=()=>{
       this.setState({addressBookContent: <AddressBook onRef={ref => (this.child = ref)}  modalHeaderStyle={this.props.modalHeaderStyle} modalBodyStyle={this.props.modalBodyStyle} customBackIcon={this.props.customBackIcon} />}, ()=>{
-        this.modalAddressBookRef.open();        
-      })    
-      
-  }  
+        this.modalAddressBookRef.open();
+      })
+
+  }
   onCloseAddressBook=()=>{
-    this.setState({addressBookContent: ""});        
+    this.setState({addressBookContent: ""});
   }
 
   openAddNewContact=()=>{
@@ -258,21 +165,11 @@ class SettingWallet extends React.Component {
                   {this.state.listCurrenciesContent}
               </div>
             </Modal>
-             
+
 
             <Modal onClose={()=>{this.onCloseAddressBook();}} title={messages.wallet.action.setting.label.address_book} onRef={modal => this.modalAddressBookRef = modal} customBackIcon={this.props.customBackIcon} modalHeaderStyle={this.props.modalHeaderStyle} modalBodyStyle={this.props.modalBodyStyle} customRightIcon={iconAddContact} customRightIconClick={()=>{this.openAddNewContact()}}>
               {this.state.addressBookContent}
-            </Modal>                        
-
-            <div className="item">
-                <img className="icon" src={iconLock} />
-                <div className="name" onClick={()=> {this.onClickPasscode();}}>
-                    <label>{messages.wallet.action.setting.label.passcode}</label>
-                </div>
-                <div className="value">
-                  {this.state.switchContent}
-                </div>
-            </div>
+            </Modal>
 
             <div className="item">
                 <img className="icon" src={iconNotifications} />
@@ -303,7 +200,7 @@ class SettingWallet extends React.Component {
 
                 </div>
             </div>
-            
+
             <div className="item" onClick={this.openSupport}>
                 <img className="icon" src={iconSupport} />
                 <div className="name">
@@ -370,17 +267,6 @@ class SettingWallet extends React.Component {
 
                 </div>
             </div>
-            {/* <div className="item" onClick={()=> {this.openVk();}}>
-                <img className="icon" src={iconVk} />
-                <div className="name">
-                    <label>Vkontakte</label>
-                </div>
-                <div className="value">
-
-                </div>
-            </div> */}
-
-
         </div>
 
     )
@@ -398,7 +284,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatch = ({
-  newPasscode, requestWalletPasscode, updatePasscode,
   setLanguage,
   showAlert,
   showLoading,

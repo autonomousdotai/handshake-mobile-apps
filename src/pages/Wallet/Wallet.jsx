@@ -63,7 +63,7 @@ import customRightIcon from '@/assets/images/wallet/icons/icon-options.svg';
 import floatButtonScanQRCode from '@/assets/images/wallet/icons/float-button-scan.svg';
 
 import WalletPreferences from '@/components/Wallet/WalletPreferences';
-import { requestWalletPasscode, showScanQRCode, showQRCodeContent  } from '@/reducers/app/action';
+import { showScanQRCode, showQRCodeContent  } from '@/reducers/app/action';
 import QRCodeContent from '@/components/Wallet/QRCodeContent';
 import RemindPayment from '@/components/Payment/Remind';
 import { ICON } from '@/styles/images';
@@ -547,45 +547,36 @@ class Wallet extends React.Component {
   }
 
   showTransfer(wallet){
-    this.props.requestWalletPasscode({
-      onSuccess: () => {
-          this.setState({ walletSelected: wallet,
-            modalTransferCoin:
-              (
-                <TransferCoin
-                  wallet={wallet}
-                  onFinish={(result) => { this.successTransfer(result) }}
-                  currency={this.state.alternateCurrency}
-                />
-              ),
-            }, ()=>{
-            this.modalSendRef.open();
-          });
-      }
-
+    this.setState({ walletSelected: wallet,
+      modalTransferCoin:
+        (
+          <TransferCoin
+            wallet={wallet}
+            onFinish={(result) => { this.successTransfer(result) }}
+            currency={this.state.alternateCurrency}
+          />
+        ),
+    }, ()=>{
+      this.modalSendRef.open();
     });
   }
   showTransferFromQRCode=(dataAddress)=>{
-    this.props.requestWalletPasscode({
-      onSuccess: () => {
-          this.setState({
-            modalTransferCoin:
-              (
-                <TransferCoin
-                  onFinish={(result) => {
-                    this.modalSendRef.close();
-                    // this.autoCheckBalance(dataAddress.address, amount);
-                   }}
-                  currency={this.state.alternateCurrency}
-                  coinName={dataAddress.symbol}
-                  toAddress={dataAddress.address}
-                  amount={dataAddress.amount}
-                />
-              ),
-            }, ()=>{
-            this.modalSendRef.open();
-          });
-      }
+    this.setState({
+      modalTransferCoin:
+        (
+          <TransferCoin
+            onFinish={(result) => {
+              this.modalSendRef.close();
+              // this.autoCheckBalance(dataAddress.address, amount);
+            }}
+            currency={this.state.alternateCurrency}
+            coinName={dataAddress.symbol}
+            toAddress={dataAddress.address}
+            amount={dataAddress.amount}
+          />
+        ),
+    }, ()=>{
+      this.modalSendRef.open();
     });
   }
 
@@ -605,26 +596,17 @@ class Wallet extends React.Component {
   }
 
   showBackupWalletAccount=()=>{
-
-    this.props.requestWalletPasscode({
-      onSuccess: () => {
-        this.setState({backupWalletContent: <BackupWallet />}, ()=>{
-          this.modalBackupRef.open();
-        })
-      }
-    });
+    this.setState({backupWalletContent: <BackupWallet />}, ()=>{
+      this.modalBackupRef.open();
+    })
   }
   closeBackupWalletAccount=()=>{
     this.setState({backupWalletContent: ""});
   }
 
   showRestoreWalletAccount=()=>{
-    this.props.requestWalletPasscode({
-      onSuccess: () => {
-        this.setState({restoreWalletContent: <RestoreWallet />}, ()=>{
-          this.modalRestoreRef.open();
-        })
-      }
+    this.setState({restoreWalletContent: <RestoreWallet />}, ()=>{
+      this.modalRestoreRef.open();
     })
   }
   closeRestoreWalletAccount=()=>{
@@ -718,44 +700,31 @@ class Wallet extends React.Component {
   }
 
   onWarningClick = (wallet) => {
-    // if (!wallet.protected) {
-      this.props.requestWalletPasscode({
-        onSuccess: () => {
-          this.setState({ walletSelected: wallet,
-            modalSecure: <WalletProtect onCopy={this.onCopyProtected}
-              step={1}
-              wallet={wallet}
-              callbackSuccess={() => { this.successWalletProtect(wallet); }}
-              />
-            }, ()=> {
-              this.modalProtectRef.open();
-            }
-          );
-        }
-      })
-
-    // } else {
-
-    // }
+    this.setState({ walletSelected: wallet,
+        modalSecure: <WalletProtect onCopy={this.onCopyProtected}
+                                    step={1}
+                                    wallet={wallet}
+                                    callbackSuccess={() => { this.successWalletProtect(wallet); }}
+        />
+      }, ()=> {
+        this.modalProtectRef.open();
+      }
+    );
   }
   onExportPrivateKeyClick = (wallet) => {
     const { messages } = this.props.intl;
 
-    this.props.requestWalletPasscode({
-      onSuccess: () => {
-        this.setState({
-          exportPrivateContent: (
-              <div className="export-private-key">
-                <div className="ex-title">{messages.wallet.action.export_private_key.title}</div>
-                <QRCode size={230} value={this.state.walletSelected.privateKey} onClick={() => { Clipboard.copy(this.state.walletSelected.privateKey); this.showToast(messages.wallet.action.copy.success);}} />
-                <div className="ex-desc">{messages.wallet.action.export_private_key.desc} </div>
-                <Button onClick={()=> {Clipboard.copy(this.state.walletSelected.privateKey); this.showToast(messages.wallet.action.copy.success);}}>Copy</Button>
-              </div>
-          )
-        }, ()=>{
-          this.modalExportPrivateKeyRef.open();
-        })
-      }
+    this.setState({
+      exportPrivateContent: (
+        <div className="export-private-key">
+          <div className="ex-title">{messages.wallet.action.export_private_key.title}</div>
+          <QRCode size={230} value={this.state.walletSelected.privateKey} onClick={() => { Clipboard.copy(this.state.walletSelected.privateKey); this.showToast(messages.wallet.action.copy.success);}} />
+          <div className="ex-desc">{messages.wallet.action.export_private_key.desc} </div>
+          <Button onClick={()=> {Clipboard.copy(this.state.walletSelected.privateKey); this.showToast(messages.wallet.action.copy.success);}}>Copy</Button>
+        </div>
+      )
+    }, ()=>{
+      this.modalExportPrivateKeyRef.open();
     })
   }
   onCloseExportPrivateKey =()=>{
@@ -788,7 +757,7 @@ class Wallet extends React.Component {
 
   onOpenWalletPreferences = (wallet) =>{
     this.setState({
-      modalWalletPreferences: (<WalletPreferences onDeleteWalletClick={()=>{this.props.requestWalletPasscode({onSuccess: () => { this.modalRemoveRef.open();}});}} onWarningClick={()=>{this.onWarningClick(wallet);}} onExportPrivateKeyClick={()=>{this.onExportPrivateKeyClick(wallet);}}  onUpdateWalletName={(wallet)=> {this.onUpdateWalletName(wallet);}} wallet={wallet} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
+      modalWalletPreferences: (<WalletPreferences onDeleteWalletClick={() => { this.modalRemoveRef.open();}} onWarningClick={()=>{this.onWarningClick(wallet);}} onExportPrivateKeyClick={()=>{this.onExportPrivateKeyClick(wallet);}}  onUpdateWalletName={(wallet)=> {this.onUpdateWalletName(wallet);}} wallet={wallet} customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle} />)
     }, ()=>{
       this.modalWalletReferencesRef.open();
     });
@@ -813,42 +782,8 @@ class Wallet extends React.Component {
     });
   }
 
-  get listMainWalletBalance() {
-    let setting = local.get(APP.SETTING);
-    setting = setting ? setting.wallet : false;
-
-    return this.state.listMainWalletBalance.map(wallet => <WalletItem key={Math.random()} settingWallet={setting} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
-  }
-
-  get listTokenWalletBalance() {
-    let setting = local.get(APP.SETTING);
-    setting = setting ? setting.wallet : false;
-
-    return this.state.listTokenWalletBalance.map(wallet => <WalletItem key={Math.random()} settingWallet={setting} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
-  }
-  get listCollectibleWalletBalance() {
-    let setting = local.get(APP.SETTING);
-    setting = setting ? setting.wallet : false;
-
-    return this.state.listCollectibleWalletBalance.map(wallet => <WalletItem key={Math.random()} settingWallet={setting} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
-  }
-
-  get listTestWalletBalance() {
-    let setting = local.get(APP.SETTING);
-    setting = setting ? setting.wallet : false;
-    return this.state.listTestWalletBalance.map(wallet => <WalletItem key={Math.random()} settingWallet={setting} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
-  }
-
-  get listRewardWalletBalance() {
-    return this.state.listRewardWalletBalance.map(wallet => <WalletItem key={Math.random()} wallet={wallet} onMoreClick={() => this.onMoreClick(wallet)} onWarningClick={() => this.onWarningClick(wallet)} onAddressClick={() => this.onAddressClick(wallet)} />);
-  }
-
   get getListCoinTempForCreate() {
     return this.state.listCoinTempToCreate.map(walletTemp => <CoinTemp key={Math.random()} wallet={walletTemp} onClick={() => this.onSelectCoinClick(walletTemp)} />);
-  }
-
-  afterWalletFill = () => {
-    this.modalBuyCoin.close();
   }
 
   closeTransfer = () => {
@@ -1174,7 +1109,6 @@ const mapDispatch = ({
   change,
   clearFields,
   hideHeader,
-  requestWalletPasscode,
   showScanQRCode,
   showQRCodeContent
 });
