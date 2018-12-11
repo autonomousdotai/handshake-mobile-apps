@@ -196,6 +196,8 @@ class PlaceBet extends Component {
   handleBet = async ({ values }) => {
     const { validate, alertBox, modalOuttaMoney, handShakeData, props } = this;
     const { redeem } = values;
+    // TODO: update gasPrice
+    await getGasPrice();
     props.dispatch(updateLoading(true));
     if (redeem) {
       return props.dispatch(initHandShakeFree(handShakeData(values)));
