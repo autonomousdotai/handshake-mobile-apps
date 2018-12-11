@@ -339,7 +339,7 @@ class CreateEvent extends React.Component {
                 >
                   Create
                 </button>
-                <Debug props={formProps} />
+                <Debug props={formProps} hide />
                 <Prompt
                   when={dirty}
                   message="Are you sure you want to leave?"
