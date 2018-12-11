@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 
 // service, constant
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row } from 'react-bootstrap';
 
 // components
 import Button from '@/components/core/controls/Button';
@@ -14,23 +14,13 @@ import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import Input from '@/components/core/forms/Input/Input';
 import { StringHelper } from '@/services/helper';
 
-import {
-  fieldCleave,
-  fieldDropdown,
-  fieldInput,
-  fieldNumericInput,
-  fieldPhoneInput,
-  fieldRadioButton
-} from '@/components/core/form/customField';
-import {change, Field, formValueSelector, clearFields} from 'redux-form';
+import {change, clearFields} from 'redux-form';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import Modal from '@/components/core/controls/Modal';
 import Dropdown from '@/components/core/controls/Dropdown';
-import createForm from '@/components/core/form/createForm';
 
 import Header from './Header';
 import HeaderMore from './HeaderMore';
-import WalletItem from './WalletItem';
 import WalletProtect from './WalletProtect';
 import WalletHistory from './WalletHistory';
 import TransferCoin from '@/components/Wallet/TransferCoin';
@@ -39,9 +29,6 @@ import ReactBottomsheet from 'react-bottomsheet';
 import { showLoading, hideLoading, showAlert, setHeaderRight } from '@/reducers/app/action';
 import local from '@/services/localStore';
 import {APP} from '@/constants';
-
-import AddToken from '@/components/Wallet/AddToken/AddToken';
-import AddCollectible from '@/components/Wallet/AddCollectible/AddCollectible';
 
 // style
 import './Wallet.scss';
@@ -60,7 +47,6 @@ import iconAlignJust from '@/assets/images/wallet/icons/icon-align-just.svg';
 import { hideHeader } from '@/reducers/app/action';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
 import customRightIcon from '@/assets/images/wallet/icons/icon-options.svg';
-import floatButtonScanQRCode from '@/assets/images/wallet/icons/float-button-scan.svg';
 
 import WalletPreferences from '@/components/Wallet/WalletPreferences';
 import { showScanQRCode, showQRCodeContent  } from '@/reducers/app/action';
@@ -79,8 +65,6 @@ window.Clipboard = (function (window, document, navigator) {
   } function copyToClipboard() { document.execCommand('copy'); document.body.removeChild(textArea); } copy = function (text) { createTextArea(text); selectText(); copyToClipboard(); }; return { copy };
 }(window, document, navigator));
 
-const nameFormSendWallet = 'sendWallet';
-const nameFormCreditCard = 'creditCard';
 const defaultOffset = 500;
 
 var topOfElement = function(element) {
@@ -255,7 +239,11 @@ class Wallet extends React.Component {
 
   async componentDidMount() {
 
-    try{document.querySelector(".app").style.backgroundColor = '#f4f4fb';} catch (e){};
+    try {
+      document.querySelector(".app").style.backgroundColor = '#f4f4fb';
+    } catch (e) {
+    }
+    ;
     this.getSetting();
     // this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
@@ -267,50 +255,7 @@ class Wallet extends React.Component {
       this.splitWalletData(listWallet);
       await this.getListBalace(listWallet);
     }
-
-  //   setTimeout(() => {
-  //     /*eslint-disable */
-  //     window?.$zopim?.livechat?.window?.onShow(() => {
-  //       this.isShow = true;
-  //       console.log('onShow', this.isShow);
-  //     });
-  //     window?.$zopim?.livechat?.window?.onHide(() => {
-  //       this.isShow = false;
-  //       console.log('onHide', this.isShow);
-  //     });
-  //     this.scrollListener();
-  //     /* eslint-enable */
-  //   }, 6000);
-  //   this.attachScrollListener();
   }
-
-  // scrollListener = async () => {
-  //   /*eslint-disable */
-  //   if (!this.isShow) {
-  //     window?.$zopim && window?.$zopim(() => {
-  //       window?.$zopim?.livechat.button.hide();
-  //       window?.$zopim?.livechat.button.setOffsetVerticalMobile(120);
-  //       window?.$zopim?.livechat.button.setOffsetHorizontalMobile(10);
-  //       window?.$zopim?.livechat.button.show();
-  //     });
-  //   }
-  //   /* eslint-enable */
-  // }
-
-  // attachScrollListener() {
-  //   window.addEventListener('scroll', this.scrollListener);
-  //   window.addEventListener('resize', this.scrollListener);
-  //   this.scrollListener();
-  // }
-
-  // detachScrollListener() {
-  //   this.isShow = true;
-  //   /*eslint-disable */
-  //   window?.$zopim?.livechat.button.hide();
-  //   window.removeEventListener('scroll', this.scrollListener);
-  //   window.removeEventListener('resize', this.scrollListener);
-  //   /* eslint-enable */
-  // }
 
   async getSetting(){
     let setting = local.get(APP.SETTING), alternateCurrency = "USD";
@@ -351,15 +296,6 @@ class Wallet extends React.Component {
   toggleBottomSheet() {
     const obj = (this.state.bottomSheet) ? { bottomSheet: false } : { bottomSheet: true };
     this.setState(obj);
-  }
-
-  copyToClipboard =(text) => {
-    const textField = document.createElement('textarea');
-    textField.innerText = text;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand('copy');
-    textField.remove();
   }
 
   // create list menu of wallet item when click Show more ...
@@ -499,22 +435,6 @@ class Wallet extends React.Component {
 
   }
 
-  invalidateTransferCoins = (value) => {
-    const { messages } = this.props.intl;
-    let errors = {};
-
-    if (this.state.walletSelected){
-      // check address:
-      let result = this.state.walletSelected.checkAddressValid(value['to_address']);
-      if (result !== true)
-          errors.to_address = result;
-      // check amount:
-      if (parseFloat(this.state.walletSelected.balance) <= parseFloat(value['amount']))
-        errors.amount = messages.wallet.action.transfer.error + ` ${this.state.walletSelected.balance} ${this.state.walletSelected.name}`
-    }
-    return errors
-  }
-
   // Menu for Right header bar
   showModalAddCoin = () =>{
     this.setState({ isRestoreLoading: false, countCheckCoinToCreate: 1, listCoinTempToCreate: MasterWallet.getListCoinTemp() });
@@ -524,26 +444,6 @@ class Wallet extends React.Component {
     let listSortable = this.state.listSortable;
     listSortable.coin = !this.state.listSortable.coin;
     this.setState({listSortable: listSortable});
-  }
-  updateSortableForToken = () => {
-    let listSortable = this.state.listSortable;
-    listSortable.token = !this.state.listSortable.token;
-    this.setState({listSortable: listSortable});
-  }
-  updateSortableForCollectible = () => {
-    let listSortable = this.state.listSortable;
-    listSortable.collectitble = !this.state.listSortable.collectitble;
-    this.setState({listSortable: listSortable});
-  }
-  showModalAddToken = () =>{
-      this.setState({formAddTokenIsActive: true}, () => {
-        this.modalAddNewTokenRef.open();
-    });
-  }
-  showModalAddCollectible = () =>{
-    this.setState({formAddCollectibleIsActive: true}, () => {
-      this.modalAddNewCollectibleRef.open();
-    });
   }
 
   showTransfer(wallet){
@@ -621,26 +521,6 @@ class Wallet extends React.Component {
     });
   }
 
-  // add custom token:
-  addedCustomToken = () =>{
-    let masterWallet = MasterWallet.getMasterWallet();
-    this.getListBalace(masterWallet);
-
-    this.splitWalletData(masterWallet);
-    this.modalAddNewTokenRef.close();
-    this.setState({formAddTokenIsActive: false});
-  }
-
-  //add Collectible
-  addedCollectible = () =>{
-    let masterWallet = MasterWallet.getMasterWallet();
-    this.getListBalace(masterWallet);
-
-    this.splitWalletData(masterWallet);
-    this.modalAddNewCollectibleRef.close();
-    this.setState({formAddCollectibleIsActive: false});
-  }
-
   // on select type of wallet to create:
   onSelectCoinClick = (wallet) => {
     const listCoinTemp = this.state.listCoinTempToCreate;
@@ -685,9 +565,6 @@ class Wallet extends React.Component {
     });
   }
 
-  handleToggleNewCC = () => {
-    this.setState({ isNewCCOpen: !this.state.isNewCCOpen });
-  }
 
   onIconRightHeaderClick = () => {
     // now show settings
@@ -771,16 +648,6 @@ class Wallet extends React.Component {
       MasterWallet.UpdateLocalStore(this.getAllWallet());
     });
   }
-  onSortableTokenSuccess = (items)=>{
-    this.setState({listTokenWalletBalance: items}, ()=> {
-      MasterWallet.UpdateLocalStore(this.getAllWallet());
-    });
-  }
-  onSortableCollectibleSuccess = (items)=>{
-    this.setState({listCollectibleWalletBalance: items}, ()=> {
-      MasterWallet.UpdateLocalStore(this.getAllWallet());
-    });
-  }
 
   get getListCoinTempForCreate() {
     return this.state.listCoinTempToCreate.map(walletTemp => <CoinTemp key={Math.random()} wallet={walletTemp} onClick={() => this.onSelectCoinClick(walletTemp)} />);
@@ -819,10 +686,6 @@ class Wallet extends React.Component {
     }
   }
 
-  closeQrCode=() => {
-    this.setState({ qrCodeOpen: false });
-  }
-
   closeSetting = ()  => {
     this.setState({modalSetting: ''});
     this.getSetting();
@@ -858,24 +721,13 @@ class Wallet extends React.Component {
     window.open('https://www.rinkeby.io/#faucet', '_blank');
   }
 
-  onQRCodeScaned=(data)=>{
-    let result = MasterWallet.getQRCodeDetail(data);
-    this.props.showQRCodeContent({
-      data: result
-    });
-  }
-
   render = () => {
     const { messages } = this.props.intl;
-    const { formAddTokenIsActive, formAddCollectibleIsActive, modalBuyCoin, modalTransferCoin, modalSetting,
-      modalHistory, modalSecure, modalWalletPreferences, modalReceiveCoin, walletSelected, walletsData, backupWalletContent, restoreWalletContent, exportPrivateContent} = this.state;
+    const { modalBuyCoin, modalTransferCoin, modalSetting,
+      modalHistory, modalSecure, modalWalletPreferences, modalReceiveCoin, backupWalletContent, restoreWalletContent, exportPrivateContent} = this.state;
 
     return (
       <div className="wallet-page">
-
-        {/* float button qrcode */}
-        <img onClick={()=> {this.props.showScanQRCode({onFinish: (data) => {this.onQRCodeScaned(data);}});}} className="float-button-scan-qrcode" src={floatButtonScanQRCode} />
-
         {/* remind checkout */}
         <RemindPayment />
 
@@ -891,16 +743,6 @@ class Wallet extends React.Component {
 
         {/* qrcode result detected modal popup*/}
         <QRCodeContent  onTransferClick={(data)=> {this.showTransferFromQRCode(data);}} />
-
-        {/* add new token modal */}
-        <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddTokenIsActive: false})} title="Add Custom Token" onRef={modal => this.modalAddNewTokenRef = modal}>
-            <AddToken formAddTokenIsActive={formAddTokenIsActive} onFinish={() => {this.addedCustomToken()}}/>
-        </Modal>
-
-        {/* add collectible modal */}
-        <Modal customBackIcon={BackChevronSVGWhite} modalHeaderStyle={this.modalHeaderStyle}  onClose={() => this.setState({formAddCollectibleIsActive: false})} title="Add Collectible" onRef={modal => this.modalAddNewCollectibleRef = modal}>
-            <AddCollectible formAddCollectibleIsActive={formAddCollectibleIsActive} onFinish={() => {this.addedCollectible()}}/>
-        </Modal>
 
           {/* Tooltim menu Bottom */ }
           <ReactBottomsheet
@@ -1033,45 +875,6 @@ class Wallet extends React.Component {
               {/* {this.listMainWalletBalance} */}
               { this.state.listMainWalletBalance.length > 0 ?
                 <SortableComponent onSortableSuccess={items => this.onSortableCoinSuccess(items)} onMoreClick={item => this.onMoreClick(item)} onAddressClick={item => this.onAddressClick(item)} onItemClick={item => this.onWalletItemClick(item)}  isSortable={this.state.listSortable.coin} items={this.state.listMainWalletBalance} />
-              : ''}
-            </Row>
-          </Row>
-
-          {/* 2.2 List Tokens */}
-          <Row className="wallet-box">
-            {!process.env.isDojo ?
-            <Row className="list">
-              {!this.state.listSortable.token ?
-                <Header icon2={this.state.listTokenWalletBalance.length > 1 ? iconAlignJust : null} onIcon2Click={this.updateSortableForToken} icon={iconAddPlus} title={messages.wallet.action.create.label.header_tokens} hasLink={true} linkTitle={messages.wallet.action.create.button.header_tokens} onLinkClick={this.showModalAddToken} />
-                :<Header title={messages.wallet.action.create.label.header_tokens} hasLink={true} linkTitle={messages.wallet.action.create.button.done} onLinkClick={this.updateSortableForToken} />
-              }
-
-            </Row>
-            : ""}
-            <Row className="list">
-              {/* {this.listTokenWalletBalance} */}
-              { this.state.listTokenWalletBalance.length > 0 ?
-                  <SortableComponent onSortableSuccess={items => this.onSortableTokenSuccess(items)} onMoreClick={item => this.onMoreClick(item)} onAddressClick={item => this.onAddressClick(item)} onItemClick={item => this.onWalletItemClick(item)} isSortable={this.state.listSortable.token}  items={this.state.listTokenWalletBalance}/>
-              : ''}
-            </Row>
-          </Row>
-
-          {/* 2.3 Collectible */}
-          <Row className="wallet-box">
-            {!process.env.isDojo ?
-            <Row className="list">
-
-               {!this.state.listSortable.collectitble ?
-                <Header icon2={this.state.listCollectibleWalletBalance.length > 1 ? iconAlignJust : null} onIcon2Click={this.updateSortableForCollectible} icon={iconAddPlus} title={messages.wallet.action.create.label.header_collectibles} hasLink={true} linkTitle={messages.wallet.action.create.button.header_collectibles} onLinkClick={this.showModalAddCollectible} />
-                :<Header title={messages.wallet.action.create.label.header_collectibles} hasLink={true} linkTitle={messages.wallet.action.create.button.done} onLinkClick={this.updateSortableForCollectible} />
-              }
-
-            </Row>
-            :""}
-            <Row className="list">
-              {/* {this.listCollectibleWalletBalance} */}
-              { this.state.listCollectibleWalletBalance.length > 0 ?
-                  <SortableComponent onSortableSuccess={items => this.onSortableCollectibleSuccess(items)} onMoreClick={item => this.onMoreClick(item)} onAddressClick={item => this.onAddressClick(item)} onItemClick={item => this.onWalletItemClick(item)} isSortable={this.state.listSortable.collectitble}  items={this.state.listCollectibleWalletBalance}/>
               : ''}
             </Row>
           </Row>

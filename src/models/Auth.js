@@ -21,7 +21,6 @@ class Auth {
       id: rawData.id || -1,
       name: rawData.name || '',
       phone: rawData.phone || '',
-      rewardWalletAddresses: rawData.reward_wallet_addresses || '',
       status: rawData.status || '',
       username: rawData.username || '',
       address: rawData.address || '',

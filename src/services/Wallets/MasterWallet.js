@@ -2,38 +2,8 @@
 import localStore from '@/services/localStore';
 import { Bitcoin } from '@/services/Wallets/Bitcoin.js';
 import { BitcoinCash } from '@/services/Wallets/BitcoinCash.js';
-import { BitcoinCashTestnet } from '@/services/Wallets/BitcoinCashTestnet.js';
 import { BitcoinTestnet } from '@/services/Wallets/BitcoinTestnet.js';
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
-import { Wallet } from '@/services/Wallets/Wallet.js';
-import { TokenERC20 } from '@/services/Wallets/Tokens/TokenERC20';
-import { Shuriken } from '@/services/Wallets/Tokens/Shuriken.js';
-import { TokenERC721 } from '@/services/Wallets/Collectibles/TokenERC721';
-import { CryptoPunks } from '@/services/Wallets/Collectibles/CryptoPunks';
-import { CryptoStrikers } from '@/services/Wallets/Collectibles/CryptoStrikers';
-import { CryptoKitties } from '@/services/Wallets/Collectibles/CryptoKitties';
-import { Axie } from '@/services/Wallets/Collectibles/Axie';
-import { BlockchainCuties } from '@/services/Wallets/Collectibles/BlockchainCuties';
-import { ChibiFighters } from '@/services/Wallets/Collectibles/ChibiFighters';
-import { CryptoClown } from '@/services/Wallets/Collectibles/CryptoClown';
-import { CryptoCrystal } from '@/services/Wallets/Collectibles/CryptoCrystal';
-import { Cryptogs } from '@/services/Wallets/Collectibles/Cryptogs';
-import { CryptoHorse } from '@/services/Wallets/Collectibles/CryptoHorse';
-import { CryptoSoccr } from '@/services/Wallets/Collectibles/CryptoSoccr';
-import { CryptoZodiacs } from '@/services/Wallets/Collectibles/CryptoZodiacs';
-import { CSCPreSaleFactory } from '@/services/Wallets/Collectibles/CSCPreSaleFactory';
-import { DopeRaider } from '@/services/Wallets/Collectibles/DopeRaider';
-import { Etherbots } from '@/services/Wallets/Collectibles/Etherbots';
-import { EtheremonAsset } from '@/services/Wallets/Collectibles/EtheremonAsset';
-import { EtherLambos } from '@/services/Wallets/Collectibles/EtherLambos';
-import { ExoPlanets } from '@/services/Wallets/Collectibles/ExoPlanets';
-import { Giftomon } from '@/services/Wallets/Collectibles/Giftomon';
-import { HelloDog } from '@/services/Wallets/Collectibles/HelloDog';
-import { OxcertKYC } from '@/services/Wallets/Collectibles/OxcertKYC';
-import { PandaEarth } from '@/services/Wallets/Collectibles/PandaEarth';
-import { PirateKittyToken } from '@/services/Wallets/Collectibles/PirateKittyToken';
-import { UnicornGO } from '@/services/Wallets/Collectibles/UnicornGO';
-import { WarToken } from '@/services/Wallets/Collectibles/WarToken';
 
 import { APP, BASE_API } from '@/constants';
 import Helper from '@/services/helper';
@@ -43,24 +13,16 @@ import axios from 'axios';
 const bip39 = require('bip39');
 
 const CryptoJS = require('crypto-js');
-const SHA256 = require('crypto-js/sha256');
 
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet
+      Ethereum, Bitcoin, BitcoinTestnet
     };
 
     static ListCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet, BitcoinCash, BitcoinCashTestnet, TokenERC20, TokenERC721,
-      CryptoStrikers, CryptoPunks, CryptoKitties, Axie, BlockchainCuties,
-      ChibiFighters, CryptoClown, CryptoCrystal, Cryptogs, CryptoHorse,
-      CryptoSoccr, CryptoZodiacs, CSCPreSaleFactory, DopeRaider, Etherbots,
-      EtheremonAsset, EtherLambos, ExoPlanets,
-      Giftomon, HelloDog, OxcertKYC, PandaEarth, PirateKittyToken, UnicornGO, WarToken
+      Ethereum, Bitcoin, BitcoinTestnet
     };
-
-    static ListCoinReward = { Ethereum, Bitcoin };
 
     static neutronMainNet = new Neuron(1);
     static neutronTestNet = new Neuron(4);
@@ -289,103 +251,6 @@ export class MasterWallet {
       MasterWallet.UpdateLocalStore(wallets);
     }
 
-    // Restore wallets:
-    static RestoreMasterWallet(masterWalletDataString) {
-      // todo: need verify invalid data:
-      localStore.save(MasterWallet.KEY, masterWalletDataString);
-      const masterWallet = JSON.parse(masterWalletDataString);
-      localStore.save(MasterWallet.KEY, masterWallet);
-      return masterWallet;
-    }
-
-    // create shuriken if not exists:
-    static createShuriWallet() {
-      const wallets = MasterWallet.getMasterWallet();
-
-      let hasUpdateMain = false;
-      let shuriWalletMain = false;
-      let hasUpdateTest = false;
-      let shuriWalletTest = false;
-
-      wallets.forEach((wallet) => {
-        if (wallet.name == 'ETH' && !hasUpdateMain) {
-          shuriWalletMain = JSON.parse(JSON.stringify(wallet));
-          const shuriTemp = new Shuriken();
-          shuriWalletMain.name = shuriTemp.name;
-          shuriWalletMain.className = shuriTemp.className;
-          shuriWalletMain.title = shuriTemp.title;
-          shuriWalletMain.network = shuriTemp.constructor.Network.Mainnet;
-          shuriWalletMain.chainId = 1;
-          shuriWalletMain.default = false;
-          shuriWalletMain = MasterWallet.convertObject(shuriWalletMain);
-          hasUpdateMain = true;
-        }
-        if (!process.env.isLive && wallet.name == 'ETH' && !hasUpdateTest) {
-          shuriWalletTest = JSON.parse(JSON.stringify(wallet));
-          const shuriTemp = new Shuriken();
-          shuriWalletTest.name = shuriTemp.name;
-          shuriWalletTest.className = shuriTemp.className;
-          shuriWalletTest.title = shuriTemp.title;
-          shuriWalletTest.network = shuriTemp.constructor.Network.Rinkeby;
-          shuriWalletTest.chainId = 4;
-          shuriWalletTest.default = false;
-          shuriWalletTest = MasterWallet.convertObject(shuriWalletTest);
-          hasUpdateTest = true;
-        }
-      });
-      if (hasUpdateMain && shuriWalletMain) {
-        wallets.push(shuriWalletMain);
-        MasterWallet.UpdateLocalStore(wallets);
-      }
-      if (hasUpdateTest && shuriWalletTest) {
-        wallets.push(shuriWalletTest);
-        MasterWallet.UpdateLocalStore(wallets);
-      }
-
-      return wallets;
-    }
-
-    // for force set default mainnet:
-    static forceSetDefaultMainnet(wallets) {
-      const listWallet = [];
-      let isDefaultBTC = false;
-      let isDefaultETH = false;
-      if (process.env.isLive) {
-        wallets.forEach((wallet) => {
-          if (wallet.getNetworkName() == 'Mainnet') {
-            if (wallet.default) {
-              if (wallet.name == 'ETH') {
-                isDefaultETH = true;
-              }
-              if (wallet.name == 'BTC') {
-                isDefaultBTC = true;
-              }
-            }
-            listWallet.push(wallet);
-          }
-        });
-        if (!isDefaultBTC || !isDefaultETH) {
-          listWallet.forEach((wallet) => {
-            if (wallet.name == 'BTC' && !wallet.isReward) {
-              if (!isDefaultBTC) {
-                wallet.default = true;
-                isDefaultBTC = true;
-              }
-            }
-            if (wallet.name == 'ETH' && !wallet.isReward) {
-              if (!isDefaultETH) {
-                wallet.default = true;
-                isDefaultETH = true;
-              }
-            }
-          });
-        }
-        MasterWallet.UpdateLocalStore(listWallet);
-        return listWallet;
-      }
-      return wallets;
-    }
-
     // get wallet data string local store:
     static getWalletDataLocalString(){
 
@@ -426,52 +291,9 @@ export class MasterWallet {
           if (wallet.getNetworkName() !== 'Mainnet') {
             hasTestnet = true;
           }
-          //remove shuri:
-          if (wallet.name != "SHURI"){
-            listWallet.push(wallet);
-          }
         }
       });
-
-      if (hasTestnet) {
-        return MasterWallet.forceSetDefaultMainnet(listWallet);
-      }
-
-      return MasterWallet.fixBitcoinCashTestnet(listWallet);
-    }
-
-    static fixBitcoinCashTestnet(wallets){
-      let walletTemps = [];
-      if (process.env.isLive)
-      {
-        wallets.forEach((wallet) => {
-          if (wallet.name =='BCH'){
-            try {
-              // console.log("fix bch testnet");
-              let newBCHWallet = new BitcoinCash();
-              newBCHWallet.mnemonic = wallet.mnemonic;
-              newBCHWallet.network = BitcoinCash.Network.Mainnet;
-              newBCHWallet.protected = wallet.protected;
-              newBCHWallet.title = wallet.title;
-              newBCHWallet.balance = wallet.balance;
-              // create address, private-key ...
-              newBCHWallet.createAddressPrivatekey();
-
-              walletTemps.push(newBCHWallet);
-              // console.log("success fix bch testnet");
-            }
-            catch (e){
-              console.log(e);
-              walletTemps.push(wallet);
-            }
-          }
-          else{
-            walletTemps.push(wallet);
-          }
-        });
-        return walletTemps;
-      }
-      return wallets;
+      return listWallet;
     }
 
     static getWallets(coinName = '') {
@@ -538,39 +360,6 @@ export class MasterWallet {
                 lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);
               }
             } else { lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson); }
-          }
-        });
-        return lstDefault;
-      } catch (e) {
-        if (e !== BreakException) throw e;
-      }
-      return false;
-    }
-
-  // Get list reward wallet from store local:
-    static getRewardWalletDefault(coinName = '') {
-      const wallets = MasterWallet.getWalletDataLocalString();
-
-      if (wallets === false) return false;
-
-      const BreakException = {};
-      try {
-        if (coinName !== '') {
-          let wallet = false;
-          wallets.forEach((walletJson) => {
-            if (walletJson.isReward && coinName === walletJson.name) {
-              wallet = MasterWallet.convertObject(walletJson);
-            }
-          });
-          return wallet;
-        }
-
-        const lstDefault = {};
-
-        wallets.forEach((walletJson) => {
-          if (!lstDefault.hasOwnProperty(walletJson.name)) { lstDefault[walletJson.name] = null; }
-          if (walletJson.isReward) {
-            lstDefault[walletJson.name] = MasterWallet.convertObject(walletJson);
           }
         });
         return lstDefault;
@@ -670,79 +459,6 @@ export class MasterWallet {
         //console.log('Wallet is invaild', e);
       }
       return false;
-    }
-
-    static getShuriWallet(){
-      let wallets = MasterWallet.getMasterWallet();
-      if (wallets !== false){
-        let shuries = wallets.filter(wallet => wallet.name === 'SHURI' && !wallet.customToken);
-        if (shuries.length > 0){
-            return shuries[0];
-        }
-      }
-      return false;
-    }
-
-    static convertToJsonETH(wallet){
-      if (wallet !== false) {
-        const {
-          address, name, chainId,
-        } = wallet;
-        return JSON.stringify({
-          ETH: {
-            address, name, chainId,
-          },
-        });
-      }
-      return false;
-    }
-
-    static getShurikenWalletJson() {
-      let shuries = MasterWallet.getShuriWallet();
-      if (shuries !== false) {
-        const {
-          address, name, chainId,
-        } = shuries;
-        return JSON.stringify({
-          ETH: {
-            address, name, chainId,
-          },
-        });
-      }
-      return false;
-    }
-
-    static getRewardWalletJson() {
-      const walletReward = MasterWallet.getMasterWallet();
-      const reward_wallet_string = {};
-      walletReward.forEach((reward_wallet) => {
-        if (reward_wallet.isReward) {
-          reward_wallet_string[reward_wallet.name] = {
-            address: reward_wallet.address, name: reward_wallet.name, network: reward_wallet.network, chainId: reward_wallet.chainId,
-          };
-        }
-      });
-      return JSON.stringify(reward_wallet_string);
-    }
-
-    static encryptWalletsByPassword(password) {
-      try {
-        const wallets = MasterWallet.getWalletDataLocalString();
-        const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(wallets), password);
-        return ciphertext.toString();
-      } catch (err) {
-        return false;
-      }
-    }
-    static decryptWalletsByPassword(ciphertext, password) {
-      try {
-        const bytes = CryptoJS.AES.decrypt(ciphertext, password);
-        const plaintext = bytes.toString(CryptoJS.enc.Utf8);
-        const walletsObject = MasterWallet.IsJsonString(plaintext);
-        return walletsObject;
-      } catch (err) {
-        return false;
-      }
     }
 
     static log(data, key = MasterWallet.KEY) {
