@@ -341,21 +341,21 @@ export const continueAfterInitApp = (language, ref, dispatch, data) => {
 };
 
 // |-- init
-export const initApp = (language, ref) => dispatch => {
-  $http({
-    url: 'https://ipfind.co/me',
-    qs: { auth: process.env.ipfindKey },
-    headers: { 'Content-Type': 'text/plain' }
-  })
-    .then(res => {
-      const { data } = res;
-      const ipInfo = IpInfo.ipFind(data);
-      dispatch(setIpInfo(ipInfo));
-      continueAfterInitApp(language, ref, dispatch, data);
-    })
-    .catch(e => {
-      // TO-DO: handle error
-      continueAfterInitApp(language, ref, dispatch, {});
-      console.error(e);
-    });
-};
+// export const initApp = (language, ref) => dispatch => {
+//   $http({
+//     url: 'https://ipfind.co/me',
+//     qs: { auth: process.env.ipfindKey },
+//     headers: { 'Content-Type': 'text/plain' }
+//   })
+//     .then(res => {
+//       const { data } = res;
+//       const ipInfo = IpInfo.ipFind(data);
+//       dispatch(setIpInfo(ipInfo));
+//       continueAfterInitApp(language, ref, dispatch, data);
+//     })
+//     .catch(e => {
+//       // TO-DO: handle error
+//       continueAfterInitApp(language, ref, dispatch, {});
+//       console.error(e);
+//     });
+// };

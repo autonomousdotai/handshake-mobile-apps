@@ -247,8 +247,7 @@ class Wallet extends React.Component {
     this.getSetting();
     // this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
-
-    if (listWallet == false) {
+    if (listWallet === false) {
       listWallet = await MasterWallet.createMasterWallets();
       await this.splitWalletData(listWallet);
     } else {

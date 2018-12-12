@@ -283,14 +283,10 @@ export class MasterWallet {
       if (wallets == false) return false;
 
       const listWallet = [];
-      let hasTestnet = false;
-
       wallets.forEach((walletJson) => {
         const wallet = MasterWallet.convertObject(walletJson);
         if (wallet != false) {
-          if (wallet.getNetworkName() !== 'Mainnet') {
-            hasTestnet = true;
-          }
+          listWallet.push(wallet);
         }
       });
       return listWallet;

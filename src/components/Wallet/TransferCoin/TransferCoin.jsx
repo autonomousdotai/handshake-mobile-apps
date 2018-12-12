@@ -18,18 +18,14 @@ import {getFiatCurrency} from '@/reducers/wallet/action';
 import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
 import QrReader from 'react-qr-reader';
 import { StringHelper } from '@/services/helper';
-import './TransferCoin.scss';
 import { ICON } from '@/styles/images';
 import BrowserDetect from '@/services/browser-detect';
 import WalletSelected from '@/components/Wallet/WalletSelected';
-import Slider from 'react-rangeslider'
-
-import AddressBook from "../AddressBook";
+import Slider from 'react-rangeslider';
 import iconAddContact from '@/assets/images/wallet/icons/icon-add-user.svg';
 import customBackIcon from '@/assets/images/icon/back-chevron-white.svg';
-
-
-const isIOs = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+import AddressBook from '../AddressBook';
+import './TransferCoin.scss';
 
 const amountValid = value => (value && isNaN(value) ? 'Invalid amount' : undefined);
 
