@@ -108,8 +108,8 @@ class PlaceBet extends Component {
     const { props, getSide } = this;
     const { matchOdds } = props;
     return (
-      (matchOdds &&
-        matchOdds[this.props.sideOdds[`${getSide(props) - 1}`]][0].odds) ||
+      ((matchOdds && props.sideOdds[`${getSide(props) - 1}`]) &&
+        matchOdds[props.sideOdds[`${getSide(props) - 1}`]][0].odds) ||
       0
     );
   };
