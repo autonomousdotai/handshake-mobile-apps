@@ -9,8 +9,7 @@
     "build": "yarn i18n && webpack --mode production",
     "lint": "eslint --fix src/**",
     "test": "__tests__/fake_test.sh",
-    "serve": "cd dist && ws --spa index.html --port 8080",
-    "serve-heroku": "node ./serve.js",
+    "serve": "node ./serve.js",
     "ngrok": "ngrok http 8080 -host-header=localhost:8080"
   },
   "dependencies": {
