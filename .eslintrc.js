@@ -16,6 +16,7 @@ module.exports = {
         allowTemplateLiterals: true
       }
     ],
+    'global-require': 0,
     'no-console': 'off',
     'no-nested-ternary': 'off',
     'class-methods-use-this': 'off',

@@ -6,7 +6,6 @@ import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { injectIntl } from 'react-intl';
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
-import Button from '@/components/core/controls/Button';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
 
 import './TopUp.scss';
@@ -73,23 +72,27 @@ class TopUp extends React.Component {
   restoreWallet=(props) => {
     return (
       <div className="RestoreButton">
-      <Button onClick={() => {
-        this.modalRestoreRef.open();
-        }}
-      >I have a wallet. Restore my wallet.
-      </Button>
+        <span
+          className="btn btn-primary"
+          onClick={() => { this.modalRestoreRef.open(); }}
+        >
+          I have a wallet. Restore my wallet.
+        </span>
       </div>
     );
   }
   renderModalRestor = () => {
     const { messages } = this.props.intl;
-    const modalHeaderStyle = {color: "#fff", background: "#546FF7"};
+    const modalHeaderStyle = {
+      color: '#fff',
+      background: '#546FF7'
+    };
     return (
       <Modal
         customBackIcon={BackChevronSVGWhite}
         modalHeaderStyle={modalHeaderStyle}
         title={messages.wallet.action.restore.header}
-        onRef={modal => this.modalRestoreRef = modal}
+        onRef={(modal) => { this.modalRestoreRef = modal; return null; }}
         onClose={this.closeRestoreWalletAccount}
       >
         <RestoreWallet />

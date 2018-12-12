@@ -422,9 +422,6 @@ export class MasterWallet {
           if (jsonData.hasOwnProperty('auth_token')) {
             auth_token = jsonData.auth_token;
           }
-          if (jsonData.hasOwnProperty('chat_encryption_keypair')) {
-            chat_encryption_keypair = jsonData.chat_encryption_keypair;
-          }
           if (jsonData.hasOwnProperty('wallets')) {
             wallets = jsonData.wallets;
           } else {
@@ -462,7 +459,7 @@ export class MasterWallet {
     }
     static encrypt(message) {
       try{
-        let WALLET_SECRET_KEY = process.env.WALLET_SECRET_KEY;
+        let WALLET_SECRET_KEY = process.env.NINJA_WALLET_KEY;
         let ciphertext = CryptoJS.AES.encrypt(message, WALLET_SECRET_KEY);
         return ciphertext.toString();
       }
@@ -473,7 +470,7 @@ export class MasterWallet {
     }
     static decrypt(ciphertext) {
       try{
-        let WALLET_SECRET_KEY = process.env.WALLET_SECRET_KEY;
+        let WALLET_SECRET_KEY = process.env.NINJA_WALLET_KEY;
         let bytes = CryptoJS.AES.decrypt(ciphertext, WALLET_SECRET_KEY);
         let plaintext = bytes.toString(CryptoJS.enc.Utf8);
         return plaintext;

@@ -344,7 +344,7 @@ export const continueAfterInitApp = (language, ref, dispatch, data) => {
 // export const initApp = (language, ref) => dispatch => {
 //   $http({
 //     url: 'https://ipfind.co/me',
-//     qs: { auth: process.env.ipfindKey },
+//     qs: { auth: process.env.NINJA_IP_FIND },
 //     headers: { 'Content-Type': 'text/plain' }
 //   })
 //     .then(res => {

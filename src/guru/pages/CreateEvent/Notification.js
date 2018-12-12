@@ -27,16 +27,20 @@ class Notification extends Component {
     };
   }
 
-  sendEmail = (email, setFieldError) => {
+  sendEmail = (email, verified, setFieldError) => {
     this.setState({ isLoadingEmail: true });
-    this.props.getEmailCode({ data: { email } })
-      .then(() => {
-        this.setState({ isEmailSent: true });
-      }).catch(e => {
-        setFieldError('email', e.message);
-      }).finally(() => {
-        this.setState({ isLoadingEmail: false });
-      });
+    this.props.getEmailCode({
+      data: {
+        email,
+        need_send_verification_code: (email && !verified) ? 1 : 0
+      }
+    }).then(() => {
+      this.setState({ isEmailSent: true });
+    }).catch(e => {
+      setFieldError('email', e.message);
+    }).finally(() => {
+      this.setState({ isLoadingEmail: false });
+    });
   };
 
   isValidCodeRegex = code => /^[0-9]{4}/g.exec(code);
@@ -69,13 +73,13 @@ class Notification extends Component {
             name="email"
             placeholder="e.g. ninja@gmail.com"
             onChange={(e) => setFieldValue('email', e.target.value.toLowerCase())}
-            disabled={state.isEmailSent}
+            disabled={state.isEmailSent || props.email}
           />
           <button
             type="button"
             disabled={disabled}
             className="btn btn-primary"
-            onClick={() => this.sendEmail(values.email, setFieldError)}
+            onClick={() => this.sendEmail(values.email, props.isEmailVerified, setFieldError)}
           >
             {(state.isLoadingEmail) ? 'loading...' : 'Get code'}
           </button>

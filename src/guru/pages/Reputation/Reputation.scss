@@ -5,7 +5,7 @@
 }
 .wrapperContentReputation {
   font-family: $font-family-base;
-  padding: 10px;
+  padding: rem-calc(59px) 10px 10px 10px;
   .wrapperProfile {
     background-color: white;
     border-radius: rem-calc(5px);

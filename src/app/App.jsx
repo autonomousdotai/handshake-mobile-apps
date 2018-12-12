@@ -5,7 +5,11 @@ import { connect } from 'react-redux';
 import { initApp } from '@/app/action';
 import Router from '@/components/Router/Router';
 import I18n from '@/components/App/I18n';
+import Alert from '@/components/Alert/Alert';
 import Navigation from '@/components/core/controls/Navigation/Navigation';
+
+// TODO: For Extension [will be combined with the main header of website]
+import HeaderBar from '@/modules/HeaderBar/HeaderBar';
 
 import '@/styles/main';
 // import '@/styles/custom-icons/styles.css';
@@ -28,6 +32,12 @@ class App extends React.Component {
     });
   }
 
+  // TODO: For Extension
+  renderHeaderBar = () => {
+    if (window.top === window.self) return null;
+    return (<HeaderBar titleBar="Prediction" className="HeaderBarContainer" />);
+  }
+
   renderNavigationBar = () => {
     if (BrowserDetect.isDesktop) return null;
     return <Navigation />;
@@ -42,6 +52,8 @@ class App extends React.Component {
       <Suspense fallback={<Loading isLoading />}>
         <I18n>
           <div className="root">
+            <Alert />
+            {this.renderHeaderBar()}
             <Router />
             {this.renderNavigationBar()}
           </div>

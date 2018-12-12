@@ -18,7 +18,14 @@ import reducers from '@/reducers';
 import rootSaga from '@/stores/root-saga';
 import defaultStore from '@/stores/default-store';
 
-firebase.initializeApp(process.env.firebase);
+firebase.initializeApp({
+  apiKey: process.env.NINJA_FIREBASE_KEY,
+  authDomain: process.env.NINJA_FIREBASE_DOMAIN,
+  databaseURL: process.env.NINJA_FIREBASE_DB,
+  projectId: process.env.NINJA_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NINJA_FIREBASE_BUCKET,
+  messagingSenderId: process.env.NINJA_FIREBASE_SENDER_ID
+});
 
 export function reduceReducers(...reducersList) {
   return (store, action) => {
@@ -44,7 +51,7 @@ const AppReducers = combineReducers(
 const sagaMiddleware = createSagaMiddleware();
 
 const createStoreWithFirebase = compose(
-  reactReduxFirebase(firebase, process.env.firebase),
+  reactReduxFirebase(firebase, {}),
   composeWithDevTools(applyMiddleware(routerMiddleware(history), thunk, sagaMiddleware)),
 )(createStore);
 

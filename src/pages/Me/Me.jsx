@@ -11,6 +11,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Col, Grid, Row } from 'react-bootstrap';
 import NoData from '@/components/core/presentation/NoData';
+import { showAlert } from '@/reducers/app/action';
 import FeedPromise from '@/components/handshakes/promise/Feed';
 import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedSeed from '@/components/handshakes/seed/Feed';
@@ -20,7 +21,7 @@ import Image from '@/components/core/presentation/Image';
 import meIcon from '@/assets/images/icon/extension_logo.svg';
 import ExpandArrowSVG from '@/assets/images/icon/expand-arrow.svg';
 import { setOfflineStatus } from '@/reducers/auth/action';
-
+import { showAlert } from '@/reducers/app/action';
 import Helper from '@/services/helper';
 import Rate from '@/components/core/controls/Rate/Rate';
 
@@ -285,9 +286,34 @@ class Me extends React.Component {
     this.setState({ modalFillContent: '' });
   }
 
+  alertBox = ({ message, type, timeOut = 3000, callBack = () => {} }) => {
+    const { dispatch } = this.props;
+    const alertProps = {
+      timeOut,
+      type,
+      callBack,
+      message: <div className="text-center">{message}</div>
+    };
+    dispatch(showAlert(alertProps));
+  };
+
   handleReferralProgram = () => {
     this.props.dispatch(updateLoading(true));
     this.props.dispatch(referralJoin());
+  }
+
+  copyToClipboard = (str) => {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style = {
+      position: 'absolute',
+      left: '-9999px'
+    };
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
   renderReferralUser = (userData) => {
@@ -323,7 +349,17 @@ class Me extends React.Component {
     return (
       <div className="ReferralLink">
         <strong>Share this link to refer a friend:</strong>
-        <span className="Link"><a href={referral_link}>{referral_link}</a></span>
+        <span className="Link">
+          <a href={referral_link}>{referral_link}</a>
+          <span
+            className="fal fa-copy"
+            title="Copy to clipboard"
+            onClick={() => {
+              this.copyToClipboard(referral_link);
+              this.alertBox({ message: 'Copied to clipboard!', type: 'success' });
+            }}
+          />
+        </span>
         <span>You will receive 1 free prediction for every new user you refer to Ninja. Get sharing!</span>
       </div>
     );

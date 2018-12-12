@@ -277,7 +277,7 @@ export const APP_USER_NAME = 'Ninja';
 
 // API
 export const BASE_API = {
-  BASE_URL: process.env.BASE_API_URL,
+  BASE_URL: process.env.NINJA_BASE_URL,
   TIMEOUT: 10000
 };
 
