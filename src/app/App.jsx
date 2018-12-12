@@ -8,7 +8,7 @@ import I18n from '@/components/App/I18n';
 import Navigation from '@/components/core/controls/Navigation/Navigation';
 
 import '@/styles/main';
-import '@/styles/custom-icons/styles.css';
+// import '@/styles/custom-icons/styles.css';
 import BrowserDetect from '@/services/browser-detect';
 import Loading from '@/components/Loading';
 
