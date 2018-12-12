@@ -8,7 +8,7 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 // style
 import imgNinja from '@/assets/images/ninja/ninja-header-black.svg';
-import imgLogo from '@/assets/images/logo.png';
+import imgLogo from '@/assets/images/app/logo.svg';
 import { SEOHome } from '@/components/SEO';
 import './styles.scss';
 

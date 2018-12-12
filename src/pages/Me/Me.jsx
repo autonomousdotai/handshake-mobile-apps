@@ -29,7 +29,7 @@ import { change, Field } from 'redux-form';
 import Modal from '@/components/core/controls/Modal/Modal';
 import BackupWallet from '@/components/Wallet/BackupWallet/BackupWallet';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
-import loadingSVG from '@/assets/images/icon/loading.gif';
+import loadingSVG from '@/assets/images/app/loading.gif';
 
 import NoDataImage from '@/assets/images/pages/Prediction/nodata.svg';
 

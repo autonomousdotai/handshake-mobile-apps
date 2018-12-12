@@ -160,7 +160,7 @@ module.exports = function webpackConfig(env, argv = {}) {
         start_url: '/',
         icons: [
           {
-            src: xPath('src/assets/images/logo.png'),
+            src: xPath('src/assets/images/app/logo.svg'),
             sizes: [192, 256, 384, 512],
             destination: path.join('assets', 'icons')
           }
