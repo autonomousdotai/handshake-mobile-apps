@@ -7,9 +7,8 @@
     "i18n": "yarn add github:ninjadotorg/handshake-i18n",
     "start": "yarn i18n && webpack-dev-server --mode development",
     "build": "yarn i18n && webpack --mode production",
-    "lint": "eslint --fix src/**",
-    "test": "__tests__/fake_test.sh",
-    "serve": "node ./serve.js",
+    "serve": "cd dist && ws --spa index.html --port 8080",
+    "serve-heroku": "node ./serve.js",
     "ngrok": "ngrok http 8080 -host-header=localhost:8080"
   },
   "dependencies": {
