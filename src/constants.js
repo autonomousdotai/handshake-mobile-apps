@@ -46,9 +46,6 @@ export const HANDSHAKE_ID = {
 
 export const HANDSHAKE_ID_DEFAULT = HANDSHAKE_ID.BETTING;
 
-export const PRICE_DECIMAL = 0;
-export const AMOUNT_DECIMAL = 6;
-
 // path
 export const API_URL = {
   CRYPTOSIGN: {
@@ -228,11 +225,6 @@ export const HANDSHAKE_EXCHANGE_CC_STATUS_VALUE = {
   cancelled: HANDSHAKE_EXCHANGE_CC_STATUS.CANCELLED
 };
 
-export const HANDSHAKE_USER = {
-  NORMAL: 0,
-  OWNER: 1,
-  SHAKED: 2
-};
 export const HANDSHAKE_EXCHANGE_SHOP_OFFER_STATUS = {
   CREATED: 0,
   ACTIVE: 1,

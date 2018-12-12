@@ -17,13 +17,9 @@ import {
 } from '@/reducers/auth/action';
 import COUNTRIES from '@/data/country-dial-codes';
 // components
-import { Col, Grid, ProgressBar, Row } from 'react-bootstrap';
 import Button from '@/components/core/controls/Button';
-import Dropdown from '@/components/core/controls/Dropdown';
-import UploadZone from '@/components/core/controls/UploadZone';
 import { Field } from 'redux-form';
 import { fieldCleave, fieldInput } from '@/components/core/form/customField';
-import { required } from '@/components/core/form/validation';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import local from '@/services/localStore';
 import { API_URL, APP } from '@/constants';

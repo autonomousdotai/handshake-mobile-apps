@@ -21,10 +21,10 @@ const RouterReputation = lazy(() => import('@/guru/pages/Reputation/Reputation')
 const RouterWalletCoin = lazy(() => import('@/guru/pages/WalletCoin/WalletCoin'));
 const RouterAuthCallback = lazy(() => import('@/guru/pages/WalletCoin/AuthCallback'));
 
-// Guru's Routes
 const CreateEvent = lazy(() => import('@/guru/pages/CreateEvent/CreateEvent'));
 const GuruPlaceBet = lazy(() => import('@/guru/pages/PlaceBet'));
 const Extension = lazy(() => import('@/guru/pages/Extension'));
+const MeProfile = lazy(() => import('@/pages/Me/Profile'));
 
 const RouterResolve = lazy(() => import('@/pages/Resolve/Resolve'));
 const ProjectDetail = lazy(() => import('@/components/ProjectDetail'));
@@ -58,7 +58,6 @@ const routeList = [
   { path: URL.PRODUCT_WALLET_URL, isDesktop: true, render: () => <ProjectDetail type="product" name="wallet" reactHelmetElement={SEOWallet} entireContentComponent={<ContentForWallet />} /> },
   { path: URL.PEX_EXTENSION, isDesktop: true, render: () => <PexExtension reactHelmetElement={SEOPrediction} /> },
 
-
   // Only MOBILE
   { path: URL.PREDICTION, component: RouterPrediction, isDesktop: false },
   { path: URL.CREATE_EVENT, component: CreateEvent, isDesktop: false },
@@ -73,6 +72,7 @@ const routeList = [
   { path: URL.REPORT, component: RouterReport, isDesktop: false },
   { path: URL.RESOLVE, component: RouterResolve, isDesktop: false },
   { path: URL.WALLET_EXTENSION, component: TopUp, isDesktop: false },
+  { path: URL.HANDSHAKE_ME_PROFILE, component: MeProfile, isDesktop: false },
   { path: URL.INDEX, isDesktop: false, redirectTo: URL.PREDICTION },
   { path: URL.HANDSHAKE_PEX, redirectTo: URL.PREDICTION, isDesktop: false }
 ].filter((r) => [isDesktop, undefined].includes(r.isDesktop)).map(r => {
