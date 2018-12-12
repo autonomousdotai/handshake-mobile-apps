@@ -117,12 +117,7 @@ module.exports = function webpackConfig(env, argv = {}) {
             // 'style-loader',
             'css-loader',
             'postcss-loader',
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            }
+            'file-loader'
           ]
         },
         {
@@ -132,12 +127,7 @@ module.exports = function webpackConfig(env, argv = {}) {
             // 'style-loader',
             'css-loader',
             'postcss-loader',
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            },
+            'file-loader',
             'sass-loader'
           ]
         }

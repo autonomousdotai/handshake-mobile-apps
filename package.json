@@ -115,7 +115,7 @@
     "redux-form": "^7.4.2",
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.2.0",
-    "resolve-url-loader": "^2.3.0",
+    "resolve-url-loader": "^3.0.0",
     "rmc-date-picker": "^6.0.8",
     "rmc-tabs": "^1.2.27",
     "sass-loader": "^7.0.3",
