@@ -111,9 +111,25 @@ module.exports = function webpackConfig(env, argv = {}) {
     module: {
       rules: [
         {
-          test: /\.(sc|c)ss$/,
+          test: /\.css$/,
           use: [
             MiniCssExtractPlugin.loader,
+            // 'style-loader',
+            'css-loader',
+            'postcss-loader',
+            {
+              loader: 'resolve-url-loader',
+              options: {
+                keepQuery: true
+              }
+            }
+          ]
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            // 'style-loader',
             'css-loader',
             'postcss-loader',
             {
