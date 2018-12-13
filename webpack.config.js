@@ -229,7 +229,7 @@ module.exports = function webpackConfig(env, argv = {}) {
           {
             test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [{
-              loader: 'url-loader'
+              loader: 'url-loader',
               options: {
                 limit: 100000,
                 mimetype: 'application/font-woff'
