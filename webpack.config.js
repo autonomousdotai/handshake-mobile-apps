@@ -227,8 +227,15 @@ module.exports = function webpackConfig(env, argv = {}) {
             ]
           },
           {
-            // test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            test: /\.(eot|tiff|woff2|woff|ttf|otf)$/,
+            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            use: [{
+              loader: 'url-loader',
+              limit: 100000,
+              mimetype: 'application/font-woff'
+            }]
+          },
+          {
+            test: /\.(eot|tiff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
                 loader: require.resolve('file-loader'),
