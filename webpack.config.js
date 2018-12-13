@@ -79,9 +79,7 @@ module.exports = function webpackConfig(env, argv = {}) {
             { loader: 'postcss-loader', options: { sourceMap: true } },
             {
               loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
+              options: { keepQuery: true }
             },
             { loader: 'sass-loader', options: { sourceMap: true } }
           ]
@@ -117,7 +115,10 @@ module.exports = function webpackConfig(env, argv = {}) {
             // 'style-loader',
             'css-loader',
             'postcss-loader',
-            'resolve-url-loader'
+            {
+              loader: 'resolve-url-loader',
+              options: { keepQuery: true }
+            }
           ]
         },
         {
@@ -127,8 +128,16 @@ module.exports = function webpackConfig(env, argv = {}) {
             // 'style-loader',
             'css-loader',
             'postcss-loader',
-            'resolve-url-loader',
-            'sass-loader'
+            {
+              loader: 'resolve-url-loader',
+              options: { keepQuery: true }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            }
           ]
         }
       ]
@@ -262,6 +271,10 @@ module.exports = function webpackConfig(env, argv = {}) {
           {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
+              {
+                loader: 'resolve-url-loader',
+                options: { keepQuery: true }
+              },
               {
                 loader: 'file-loader',
                 options: {
