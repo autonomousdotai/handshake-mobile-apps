@@ -205,10 +205,10 @@ module.exports = function webpackConfig(env, argv = {}) {
             test: /\.css$/,
             use: [
               isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-              { loader: require.resolve('css-loader'), options: { sourceMap: true, importLoaders: 2 } },
-              { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
+              { loader: 'css-loader', options: { sourceMap: true } },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
               {
-                loader: require.resolve('resolve-url-loader'),
+                loader: 'resolve-url-loader',
                 options: { keepQuery: true }
               }
             ]
@@ -217,20 +217,20 @@ module.exports = function webpackConfig(env, argv = {}) {
             test: /\.scss$/,
             use: [
               isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-              { loader: require.resolve('css-loader'), options: { sourceMap: true, importLoaders: 3 } },
-              { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
+              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 3 } },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
               {
-                loader: require.resolve('resolve-url-loader'),
+                loader: 'resolve-url-loader',
                 options: { keepQuery: true }
               },
-              { loader: require.resolve('sass-loader'), options: { sourceMap: true } }
+              { loader: 'sass-loader', options: { sourceMap: true } }
             ]
           },
           {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
-                loader: require.resolve('file-loader'),
+                loader: 'file-loader',
                 options: {
                   name: '[name].[ext]',
                   outputPath: 'fonts/'
