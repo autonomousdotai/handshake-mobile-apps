@@ -113,8 +113,14 @@ module.exports = function webpackConfig(env, argv = {}) {
           use: [
             MiniCssExtractPlugin.loader,
             // 'style-loader',
-            'css-loader',
-            'postcss-loader',
+            {
+              loader: 'css-loader',
+              options: { sourceMap: true }
+            },
+            {
+              loader: 'postcss-loader',
+              options: { sourceMap: true }
+            },
             {
               loader: 'resolve-url-loader',
               options: { keepQuery: true }
@@ -126,8 +132,14 @@ module.exports = function webpackConfig(env, argv = {}) {
           use: [
             MiniCssExtractPlugin.loader,
             // 'style-loader',
-            'css-loader',
-            'postcss-loader',
+            {
+              loader: 'css-loader',
+              options: { sourceMap: true }
+            },
+            {
+              loader: 'postcss-loader',
+              options: { sourceMap: true }
+            },
             {
               loader: 'resolve-url-loader',
               options: { keepQuery: true }
