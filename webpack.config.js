@@ -286,7 +286,8 @@ module.exports = function webpackConfig(env, argv = {}) {
               {
                 loader: 'file-loader',
                 options: {
-                  name: 'webfonts/[name].[ext]'
+                  name: 'webfonts/[name].[ext]',
+                  useRelativePath: process.env.NODE_ENV === 'production'
                 }
               }
             ]
