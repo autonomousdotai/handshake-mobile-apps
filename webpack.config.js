@@ -221,7 +221,7 @@ module.exports = function webpackConfig(env, argv = {}) {
               { loader: 'postcss-loader', options: { sourceMap: true } },
               {
                 loader: 'resolve-url-loader',
-                options: { keepQuery: true }
+                options: { keepQuery: true, debug: true }
               },
               { loader: 'sass-loader', options: { sourceMap: true } }
             ]
