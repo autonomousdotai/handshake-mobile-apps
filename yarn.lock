@@ -3198,9 +3198,10 @@ clean-css@4.2.x:
   dependencies:
     source-map "~0.6.0"
 
-clean-webpack-plugin@^0.1.19:
-  version "0.1.19"
-  resolved "http://registry.npmjs.org/clean-webpack-plugin/-/clean-webpack-plugin-0.1.19.tgz#ceda8bb96b00fe168e9b080272960d20fdcadd6d"
+clean-webpack-plugin@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/clean-webpack-plugin/-/clean-webpack-plugin-1.0.0.tgz#f184b9c26d12983d639828e0548ae2080e84b6a7"
+  integrity sha512-+f96f52UIET4tOFBbCqezx7KH+w7lz/p4fA1FEjf0hC6ugxqwZedBtENzekN2FnmoTF/bn1LrlkvebOsDZuXKw==
   dependencies:
     rimraf "^2.6.1"
 
@@ -6361,7 +6362,7 @@ handlebars@^4.0.11, handlebars@^4.0.3:
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
   version "0.0.1544671328"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/325fe32872580193fb1c21b826ac9b578dfcfe77"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/d1c5372d955b9fdfd5c644f3e3d49d109ce72c07"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"

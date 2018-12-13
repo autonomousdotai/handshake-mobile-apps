@@ -272,15 +272,9 @@ module.exports = function webpackConfig(env, argv = {}) {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
-                loader: 'resolve-url-loader',
-                options: { keepQuery: true }
-              },
-              {
                 loader: 'file-loader',
                 options: {
-                  name: '[hash].[ext]',
-                  outputPath: 'fonts/',
-                  verbose: false
+                  name: '[path][name].[ext]'
                 }
               }
             ]
