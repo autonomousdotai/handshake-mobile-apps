@@ -274,7 +274,7 @@ module.exports = function webpackConfig(env, argv = {}) {
               {
                 loader: 'file-loader',
                 options: {
-                  name: '[path][name].[ext]'
+                  name: 'webfonts/[name].[ext]'
                 }
               }
             ]
