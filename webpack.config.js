@@ -227,7 +227,8 @@ module.exports = function webpackConfig(env, argv = {}) {
             ]
           },
           {
-            test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            // test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            test: /\.(eot|tiff|woff2|woff|ttf|otf)$/,
             use: [
               {
                 loader: require.resolve('file-loader'),
