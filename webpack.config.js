@@ -54,37 +54,6 @@ module.exports = function webpackConfig(env, argv = {}) {
       },
       hot: true,
       host: '0.0.0.0'
-    },
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [
-            'style-loader',
-            'css-loader',
-            'postcss-loader',
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            }
-          ]
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            'style-loader',
-            { loader: 'css-loader', options: { sourceMap: true } },
-            { loader: 'postcss-loader', options: { sourceMap: true } },
-            {
-              loader: 'resolve-url-loader',
-              options: { keepQuery: true }
-            },
-            { loader: 'sass-loader', options: { sourceMap: true } }
-          ]
-        }
-      ]
     }
   };
 
@@ -105,54 +74,6 @@ module.exports = function webpackConfig(env, argv = {}) {
         chunks: 'all'
       },
       noEmitOnErrors: true
-    },
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            // 'style-loader',
-            {
-              loader: 'css-loader',
-              options: { sourceMap: true }
-            },
-            {
-              loader: 'postcss-loader',
-              options: { sourceMap: true }
-            },
-            {
-              loader: 'resolve-url-loader',
-              options: { keepQuery: true }
-            }
-          ]
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            MiniCssExtractPlugin.loader,
-            // 'style-loader',
-            {
-              loader: 'css-loader',
-              options: { sourceMap: true }
-            },
-            {
-              loader: 'postcss-loader',
-              options: { sourceMap: true }
-            },
-            {
-              loader: 'resolve-url-loader',
-              options: { keepQuery: true }
-            },
-            {
-              loader: 'sass-loader',
-              options: {
-                sourceMap: true
-              }
-            }
-          ]
-        }
-      ]
     },
     plugins: [
       new CleanWebpackPlugin(['dist']),
@@ -281,13 +202,38 @@ module.exports = function webpackConfig(env, argv = {}) {
             ]
           },
           {
+            test: /\.css$/,
+            use: [
+              isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 3 } },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
+              {
+                loader: 'resolve-url-loader',
+                options: { keepQuery: true }
+              }
+            ]
+          },
+          {
+            test: /\.scss$/,
+            use: [
+              isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 3 } },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
+              {
+                loader: 'resolve-url-loader',
+                options: { keepQuery: true }
+              },
+              { loader: 'sass-loader', options: { sourceMap: true } }
+            ]
+          },
+          {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
                 loader: 'file-loader',
                 options: {
-                  name: 'webfonts/[name].[ext]',
-                  useRelativePath: process.env.NODE_ENV === 'production'
+                  name: '[name].[ext]',
+                  outputPath: 'fonts/'
                 }
               }
             ]

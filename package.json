@@ -7,7 +7,7 @@
     "i18n": "yarn add github:ninjadotorg/handshake-i18n",
     "start": "webpack-dev-server --mode development",
     "build": "yarn i18n && webpack --mode production",
-    "serve": "cd dist && ws --spa index.html --port 8080",
+    "serve": "node ./serve.js",
     "serve-heroku": "node ./serve.js",
     "ngrok": "ngrok http 8080 -host-header=localhost:8080"
   },
