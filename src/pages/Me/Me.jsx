@@ -18,6 +18,7 @@ import {
   getOfferStores,
   reviewOffer,
 } from '@/reducers/exchange/action';
+import { showAlert } from '@/reducers/app/action';
 import FeedPromise from '@/components/handshakes/promise/Feed';
 import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedExchange from '@/components/handshakes/exchange/Feed/FeedMe';
@@ -432,9 +433,34 @@ class Me extends React.Component {
     this.setState({ modalFillContent: '' });
   }
 
+  alertBox = ({ message, type, timeOut = 3000, callBack = () => {} }) => {
+    const { dispatch } = this.props;
+    const alertProps = {
+      timeOut,
+      type,
+      callBack,
+      message: <div className="text-center">{message}</div>
+    };
+    dispatch(showAlert(alertProps));
+  };
+
   handleReferralProgram = () => {
     this.props.dispatch(updateLoading(true));
     this.props.dispatch(referralJoin());
+  }
+
+  copyToClipboard = (str) => {
+    const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style = {
+      position: 'absolute',
+      left: '-9999px'
+    };
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
   renderReferralUser = (userData) => {
@@ -470,7 +496,17 @@ class Me extends React.Component {
     return (
       <div className="ReferralLink">
         <strong>Share this link to refer a friend:</strong>
-        <span className="Link"><a href={referral_link}>{referral_link}</a></span>
+        <span className="Link">
+          <a href={referral_link}>{referral_link}</a>
+          <span
+            className="fal fa-copy"
+            title="Copy to clipboard"
+            onClick={() => {
+              this.copyToClipboard(referral_link);
+              this.alertBox({ message: 'Copied to clipboard!', type: 'success' });
+            }}
+          />
+        </span>
         <span>You will receive 1 free prediction for every new user you refer to Ninja. Get sharing!</span>
       </div>
     );
