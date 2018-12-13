@@ -205,7 +205,7 @@ module.exports = function webpackConfig(env, argv = {}) {
             test: /\.css$/,
             use: [
               isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 3 } },
+              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 2 } },
               { loader: 'postcss-loader', options: { sourceMap: true } },
               {
                 loader: 'resolve-url-loader',
