@@ -209,7 +209,7 @@ module.exports = function webpackConfig(env, argv = {}) {
               { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
               {
                 loader: require.resolve('resolve-url-loader'),
-                options: { keepQuery: true, root: path.join(__dirname, 'src') }
+                options: { keepQuery: true }
               }
             ]
           },
@@ -221,23 +221,13 @@ module.exports = function webpackConfig(env, argv = {}) {
               { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
               {
                 loader: require.resolve('resolve-url-loader'),
-                options: { keepQuery: true, root: path.join(__dirname, 'src') }
+                options: { keepQuery: true }
               },
               { loader: require.resolve('sass-loader'), options: { sourceMap: true } }
             ]
           },
           {
-            test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            use: [{
-              loader: 'url-loader',
-              options: {
-                limit: 100000,
-                mimetype: 'application/font-woff'
-              }
-            }]
-          },
-          {
-            test: /\.(eot|tiff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
                 loader: require.resolve('file-loader'),
