@@ -209,7 +209,7 @@ module.exports = function webpackConfig(env, argv = {}) {
               { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
               {
                 loader: require.resolve('resolve-url-loader'),
-                options: { keepQuery: true }
+                options: { keepQuery: true, root: path.join(__dirname, 'src') }
               }
             ]
           },
@@ -221,7 +221,7 @@ module.exports = function webpackConfig(env, argv = {}) {
               { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
               {
                 loader: require.resolve('resolve-url-loader'),
-                options: { keepQuery: true }
+                options: { keepQuery: true, root: path.join(__dirname, 'src') }
               },
               { loader: require.resolve('sass-loader'), options: { sourceMap: true } }
             ]
