@@ -205,10 +205,10 @@ module.exports = function webpackConfig(env, argv = {}) {
             test: /\.css$/,
             use: [
               isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 2 } },
-              { loader: 'postcss-loader', options: { sourceMap: true } },
+              { loader: require.resolve('css-loader'), options: { sourceMap: true, importLoaders: 2 } },
+              { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
               {
-                loader: 'resolve-url-loader',
+                loader: require.resolve('resolve-url-loader'),
                 options: { keepQuery: true }
               }
             ]
@@ -217,20 +217,20 @@ module.exports = function webpackConfig(env, argv = {}) {
             test: /\.scss$/,
             use: [
               isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
-              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 3 } },
-              { loader: 'postcss-loader', options: { sourceMap: true } },
+              { loader: require.resolve('css-loader'), options: { sourceMap: true, importLoaders: 3 } },
+              { loader: require.resolve('postcss-loader'), options: { sourceMap: true } },
               {
-                loader: 'resolve-url-loader',
+                loader: require.resolve('resolve-url-loader'),
                 options: { keepQuery: true, debug: true }
               },
-              { loader: 'sass-loader', options: { sourceMap: true } }
+              { loader: require.resolve('sass-loader'), options: { sourceMap: true } }
             ]
           },
           {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
-                loader: 'file-loader',
+                loader: require.resolve('file-loader'),
                 options: {
                   name: '[name].[ext]',
                   outputPath: 'fonts/'
