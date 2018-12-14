@@ -1,4 +1,3 @@
-
 const storeAccount = (account) => {
   let signedTokens = JSON.parse(localStorage.getItem('sign_tokens') || '[]');
   const index = signedTokens.findIndex(i => { return i.address.toUpperCase() === account.address.toUpperCase(); });

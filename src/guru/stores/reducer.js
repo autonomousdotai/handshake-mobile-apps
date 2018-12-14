@@ -17,6 +17,7 @@ import {
   putReferralCheck
 } from '@/pages/Me/action';
 import { updateLoading } from './action';
+import { putMetaMaskInfo } from '@/pages/TopUp/action';
 
 const initialState = {
   events: [],
@@ -25,6 +26,7 @@ const initialState = {
   userEvents: [],
   reputation: {},
   ui: {},
+  extension: {},
   authCoinBase: {},
   authMetaMask: []
 };
@@ -103,6 +105,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case putReferralCheck().type:
         draft.ui.referralCheck = action.payload;
+        break;
+      case putMetaMaskInfo().type:
+        draft.extension.metaMaskWallet = action.payload;
         break;
       default:
         break;

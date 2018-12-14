@@ -1,53 +1,80 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
 import Modal from '@/components/core/controls/Modal';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import Button from '@/components/core/controls/Button';
-import Web3 from 'web3';
-import * as Metamask from '@/guru/services/metamask/connect';
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
-import Button from '@/components/core/controls/Button';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
-
-const ethUtil = require('ethereumjs-util');
-const sigUtil = require('eth-sig-util');
-
+import { putMetaMaskInfo } from './action';
 import './TopUp.scss';
 
 
-
 class TopUp extends React.Component {
-  static propTypes = {
-    address: PropTypes.string,
-    balance: PropTypes.number,
-    name: PropTypes.string
-  };
+  static displayName = 'TopUp';
 
-  static defaultProps = {
-    address: null,
-    balance: null,
-    name: null
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      installedMetaMask: false
+      installedMetaMask: undefined,
+      metaMaskWallet: undefined
     };
   }
-  componentDidMount() {
-    const metaMaskStatus = this.getStatusMetaMask();
-    console.log('Status MetaMask:', metaMaskStatus);
-    if (typeof window.ethereum !== 'undefined') {
-      this.setState({
-        installedMetaMask: metaMaskStatus
-      });
-    }
 
+  componentWillMount() {
+    window.addEventListener('message', (event) => {
+      console.log(event.data.action_key);
+      if ((event.data.action_key === 'installedMetaMask' && event.data) && !this.updateMessage) {
+        console.log('installed', event.data.data);
+        this.setState({ installedMetaMask: true });
+        this.updateMessage = true;
+        window.parent.postMessage({
+          action_key: 'metaMaskReady'
+        }, '*');
+      }
+    });
+  }
+
+  componentDidMount() {
+    window.addEventListener('message', (event) => {
+      console.log(event.data.action_key);
+      if (event.data.action_key === 'amount' && !this.componentUpdated) {
+        console.log('amount', event.data.data);
+        window.parent.postMessage({
+          action_key: 'gotAmountMetaMask'
+        }, '*');
+        this.props.dispatch(putMetaMaskInfo(event.data.data));
+        this.componentUpdated = true;
+      }
+    });
+  }
+
+  onChangeMetamaskStatus = () => {
+    window.parent.postMessage({
+      action_key: 'activeMetaMask',
+      data: {}
+    }, '*');
+  };
+
+  metaMask = (state) => {
+    const { installedMetaMask } = state;
+    if (installedMetaMask === undefined) return null;
+    return (
+      <Button
+        className="metaMaskButton"
+        onClick={this.onChangeMetamaskStatus}
+      >
+        {installedMetaMask ? 'Login With MetaMask' : 'Get MetaMask Extension'}
+      </Button>
+    );
   }
 
   copyToClipboard = (str) => {
@@ -64,54 +91,16 @@ class TopUp extends React.Component {
     document.body.removeChild(el);
   };
 
-  connect = async () => {
-    const web3Provider = new Web3.providers.HttpProvider('http://localhost:8080');
-    const web3 = new Web3(web3Provider);
-    //const accounts = web3.eth.accounts;
-    const accounts = await web3.eth.getAccounts();
-
-    console.log('Web3:', web3);
-    console.log('Account:', accounts);
-    console.log("new web3");
-  }
-  getStatusMetaMask = () => {
-    return Metamask.getMetamaskStatus();
-  }
-
-  onChangeMetamaskStatus = async (status) => {
-    Metamask.changeMetamaskStatus(status);
-    if (!status) {
-      return;
-    }
-    Metamask.connectMetamask();
-    const account = await Metamask.loginMetaMask();
-    console.log('Account MetaMask:', account);
-    this.setState({
-      installedMetaMask: Metamask.getMetamaskStatus()
-    });
-  };
-
-  metaMask = (props) => {
-    const { installedMetaMask } = this.state;
-    console.log('Install Meta Mask:', this.state.installedMetaMask);
-
-    //if (!installedMetaMask) return null;
-    return (
-      <Button
-        className="metaMaskButton"
-        onClick={() => this.onChangeMetamaskStatus(!installedMetaMask)}
-      >
-        {installedMetaMask ? 'Active MetaMask Wallet' : 'Install MetaMask to active MetaMask wallet'}
-      </Button>
-    );
-  }
-
   balance = (props) => {
-    const { balance, name } = props || { balance: 0, name: 'ETH' };
+    const { ninjaWallet } = props;
+    const { balance, name } = ninjaWallet || { balance: 0, name: 'ETH' };
+    const amount = (props.metaMaskWallet && props.metaMaskWallet.amount) || 0;
+    console.log(amount, props.metaMaskExtension);
     return (
       <div className="TopUpCard BalanceCard">
         <div className="Label">Your balance</div>
         <div className="Value">
+          <span className="Number">{Number((parseFloat(amount)).toFixed(8))}</span>
           <span className="Number">{Number((parseFloat(balance)).toFixed(8))}</span>
           <span className="Unit">{name}</span>
         </div>
@@ -120,7 +109,7 @@ class TopUp extends React.Component {
   };
 
   howTo = (props) => {
-    const { address } = props || { address: ''};
+    const { address } = props || { address: '' };
     return (
       <div className="TopUpCard HowToCard">
         <div className="Quest">How to top up?</div>
@@ -138,26 +127,29 @@ class TopUp extends React.Component {
       </div>
     );
   };
-  restoreWallet=(props) => {
+
+  restoreWallet = () => {
     return (
       <div className="RestoreButton">
-      <Button onClick={() => {
-        this.modalRestoreRef.open();
+        <Button onClick={() => {
+          this.modalRestoreRef.open();
         }}
-      >I have a wallet. Restore my wallet.
-      </Button>
+        >
+          I have a wallet. Restore my wallet.
+        </Button>
       </div>
     );
   }
+
   renderModalRestor = () => {
     const { messages } = this.props.intl;
-    const modalHeaderStyle = {color: "#fff", background: "#546FF7"};
+    const modalHeaderStyle = { color: "#fff", background: "#546FF7" };
     return (
       <Modal
         customBackIcon={BackChevronSVGWhite}
         modalHeaderStyle={modalHeaderStyle}
         title={messages.wallet.action.restore.header}
-        onRef={modal => this.modalRestoreRef = modal}
+        onRef={modal => { this.modalRestoreRef = modal; return null; }}
         onClose={this.closeRestoreWalletAccount}
       >
         <RestoreWallet />
@@ -168,18 +160,25 @@ class TopUp extends React.Component {
   render() {
     const wallets = MasterWallet.getMasterWallet();
     const walletDefault = MasterWallet.getWalletDefault('ETH');
-    const walletProps = wallets.filter(w => w.network === walletDefault.network)[0];
-    console.log('Wallet Props:', walletProps);
+    const ninjaWallet = wallets.filter(w => w.network === walletDefault.network)[0];
     return (
       <div className="TopUpContainer">
-        { this.metaMask(walletProps) }
-        { this.balance(walletProps) }
-        { this.howTo(walletProps) }
-        { this.restoreWallet(walletProps) }
-        { this.renderModalRestor()}
+        {this.metaMask(this.state)}
+        {this.balance({ ...this.props, ninjaWallet })}
+        {this.howTo(ninjaWallet)}
+        {this.restoreWallet()}
+        {this.renderModalRestor()}
       </div>
     );
   }
 }
 
-export default injectIntl(TopUp);
+export default injectIntl(connect(
+  (state) => {
+    return {
+      // installedMetaMask: state.guru.extension.installedMetaMask,
+      metaMaskExtension: state.guru.extension,
+      metaMaskWallet: state.guru.extension.metaMaskWallet
+    };
+  }
+)(TopUp));
