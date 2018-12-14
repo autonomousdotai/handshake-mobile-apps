@@ -1,8 +1,10 @@
+@import './src/styles/style';
+
 .TopUpContainer {
   font-family:"motiva-sans";
   height: 100%;
   background-color: #EBF1F7;
-  padding: 15px 10px;
+  padding: rem-calc(59px) 10px 15px 10px;
 
   .TopUpCard {
     font-size: 1rem;
