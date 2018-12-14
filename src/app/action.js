@@ -4,11 +4,11 @@ import local from '@/services/localStore';
 import { APP, API_URL } from '@/constants';
 import { APIPostCreator, APIFormCreator } from '@/guru/stores/api';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
+import { ACTIONS } from '@/reducers/auth/action';
 
 export const APP_ACTIONS = {
   IP_INFO: 'APP:IP_INFO',
   SIGN_UP: 'APP:SIGN_UP',
-  WALLET_TO_PROFILE: 'APP:UPDATE_WALLET_TO_PROFILE'
 };
 
 export const saveIpInfo = (payload = {}) => ({
@@ -22,7 +22,7 @@ export const userSignUp = APIPostCreator({
 });
 
 export const updateWalletProfile = APIFormCreator({
-  type: APP_ACTIONS.WALLET_TO_PROFILE,
+  type: ACTIONS.AUTH_UPDATE,
   url: API_URL.USER.PROFILE
 });
 
@@ -44,11 +44,10 @@ async function signUp(dispatch) {
   local.save(APP.AUTH_TOKEN, data.passpharse);
 }
 
-async function updateWalletToProfile(dispatch) {
+function updateWalletToProfile(dispatch) {
   const data = new FormData();
   data.append('wallet_addresses', MasterWallet.getListWalletAddressJson());
-  const { data: profile } = await dispatch(updateWalletProfile({ data }));
-  local.save(APP.AUTH_PROFILE, profile);
+  dispatch(updateWalletProfile({ data }));
 }
 
 export const initApp = () => async dispatch => {
@@ -61,7 +60,7 @@ export const initApp = () => async dispatch => {
       MasterWallet.createMasterWallets();
 
       // update wallet to profile
-      await updateWalletToProfile(dispatch);
+      updateWalletToProfile(dispatch);
     }
   } catch (e) {
     console.error('initApp: ', e);
