@@ -2,12 +2,13 @@ import COUNTRIES_BLACKLIST from '@/app/blocked-countries';
 import $http from '@/services/api';
 import local from '@/services/localStore';
 import { APP, API_URL } from '@/constants';
-import { APIPostCreator } from '@/guru/stores/api';
+import { APIPostCreator, APIFormCreator } from '@/guru/stores/api';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 
 export const APP_ACTIONS = {
   IP_INFO: 'APP:IP_INFO',
-  SIGN_UP: 'AUTH:SIGN_UP'
+  SIGN_UP: 'APP:SIGN_UP',
+  WALLET_TO_PROFILE: 'APP:UPDATE_WALLET_TO_PROFILE'
 };
 
 export const saveIpInfo = (payload = {}) => ({
@@ -18,6 +19,11 @@ export const saveIpInfo = (payload = {}) => ({
 export const userSignUp = APIPostCreator({
   type: APP_ACTIONS.SIGN_UP,
   url: API_URL.USER.SIGNUP
+});
+
+export const updateWalletProfile = APIFormCreator({
+  type: APP_ACTIONS.WALLET_TO_PROFILE,
+  url: API_URL.USER.PROFILE
 });
 
 // Will use this in the near future
@@ -32,14 +38,30 @@ async function isBlockedIP(dispatch) { // eslint-disable-line
   return isBlock;
 }
 
+async function signUp(dispatch) {
+  const { data, status } = await dispatch(userSignUp({}));
+  if (!status) throw new Error('Failed to SignUp');
+  local.save(APP.AUTH_TOKEN, data.passpharse);
+}
+
+async function updateWalletToProfile(dispatch) {
+  const data = new FormData();
+  data.append('wallet_addresses', MasterWallet.getListWalletAddressJson());
+  const { data: profile } = await dispatch(updateWalletProfile({ data }));
+  local.save(APP.AUTH_PROFILE, profile);
+}
+
 export const initApp = () => async dispatch => {
   try {
-    // const isBlock = await isBlockedIP(dispatch);
-    // if (isBlock) { return; }
     if (!local.get(APP.AUTH_TOKEN)) {
-      const { data } = await dispatch(userSignUp({}));
-      local.save(APP.AUTH_TOKEN, data.passpharse);
+      // create user token
+      await signUp(dispatch);
+
+      // create user wallet
       MasterWallet.createMasterWallets();
+
+      // update wallet to profile
+      await updateWalletToProfile(dispatch);
     }
   } catch (e) {
     console.error('initApp: ', e);
