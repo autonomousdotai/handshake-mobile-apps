@@ -69,7 +69,7 @@ class Notification extends Component {
             name="email"
             placeholder="e.g. ninja@gmail.com"
             onChange={(e) => setFieldValue('email', e.target.value.toLowerCase())}
-            disabled={state.isEmailSent}
+            disabled={state.isEmailSent || props.email}
           />
           <button
             type="button"

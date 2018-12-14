@@ -2,7 +2,7 @@ import COUNTRIES_BLACKLIST from '@/app/blocked-countries';
 import $http from '@/services/api';
 import local from '@/services/localStore';
 import { APP, API_URL } from '@/constants';
-import { APIPostCreator, APIFormCreator } from '@/guru/stores/api';
+import { APIPostCreator, APIGetCreator, APIFormCreator } from '@/guru/stores/api';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { ACTIONS } from '@/reducers/auth/action';
 
@@ -23,6 +23,11 @@ export const userSignUp = APIPostCreator({
 
 export const updateWalletProfile = APIFormCreator({
   type: ACTIONS.AUTH_UPDATE,
+  url: API_URL.USER.PROFILE
+});
+
+export const getProfile = APIGetCreator({
+  type: ACTIONS.AUTH_FETCH,
   url: API_URL.USER.PROFILE
 });
 
@@ -61,6 +66,8 @@ export const initApp = () => async dispatch => {
 
       // update wallet to profile
       updateWalletToProfile(dispatch);
+    } else {
+      dispatch(getProfile());
     }
   } catch (e) {
     console.error('initApp: ', e);

@@ -258,7 +258,7 @@ class CreateEvent extends React.Component {
       eventName: '',
       public: true,
       marketFee: 0,
-      email: verified ? email : '',
+      email,
       emailCode: '',
       closingTime: initialClosingTime, // TODO: Set to current
       image: '',

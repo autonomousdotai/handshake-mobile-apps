@@ -422,9 +422,6 @@ export class MasterWallet {
           if (jsonData.hasOwnProperty('auth_token')) {
             auth_token = jsonData.auth_token;
           }
-          if (jsonData.hasOwnProperty('chat_encryption_keypair')) {
-            chat_encryption_keypair = jsonData.chat_encryption_keypair;
-          }
           if (jsonData.hasOwnProperty('wallets')) {
             wallets = jsonData.wallets;
           } else {
