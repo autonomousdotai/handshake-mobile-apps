@@ -321,7 +321,7 @@ class Me extends React.Component {
       return (
         <div key={ru.email} className="ReferralUser">
           <span>{ru.email}</span>
-          <span>{ru.redeem ? 'Used' : 'Pending'}</span>
+          <span>{['Pending', 'Available'][ru.redeemed]}</span>
         </div>
       );
     });
