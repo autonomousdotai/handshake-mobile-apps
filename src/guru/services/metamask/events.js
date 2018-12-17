@@ -29,7 +29,7 @@ window.addEventListener('message', async (value) => {
         break;
       case 'amount':
         console.log('===== AMOUNT =====');
-        console.log(value.data.data);
+        console.log(value.data.send_data);
         break;
       default:
         break;

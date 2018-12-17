@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
 import Modal from '@/components/core/controls/Modal';
@@ -9,71 +7,75 @@ import Button from '@/components/core/controls/Button';
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
-import { putMetaMaskInfo } from './action';
-import './TopUp.scss';
+import { isEmpty } from '@/utils/is';
+import { EXT } from '@/constants';
 
+import './TopUp.scss';
 
 class TopUp extends React.Component {
   static displayName = 'TopUp';
-
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired
-  };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      installedMetaMask: undefined,
-      metaMaskWallet: undefined
+      isMetaMaskReady: false,
+      isMetaMaskLoggedIn: false,
+      metaMaskExtension: {}
     };
-  }
-
-  componentWillMount() {
-    window.addEventListener('message', (event) => {
-      console.log(event.data.action_key);
-      if ((event.data.action_key === 'installedMetaMask' && event.data) && !this.updateMessage) {
-        console.log('installed', event.data.data);
-        this.setState({ installedMetaMask: true });
-        this.updateMessage = true;
-        window.parent.postMessage({
-          action_key: 'metaMaskReady'
-        }, '*');
-      }
-    });
   }
 
   componentDidMount() {
     window.addEventListener('message', (event) => {
-      console.log(event.data.action_key);
-      if (event.data.action_key === 'amount' && !this.componentUpdated) {
-        console.log('amount', event.data.data);
-        window.parent.postMessage({
-          action_key: 'gotAmountMetaMask'
-        }, '*');
-        this.props.dispatch(putMetaMaskInfo(event.data.data));
-        this.componentUpdated = true;
+      const { data } = event;
+      const { action_key, send_data } = data;
+      console.log('ACTION_KEY', action_key, send_data, this.state.isMetaMaskLoggedIn);
+      if (action_key === 'isMetaMaskReady') {
+        this.setState({ isMetaMaskReady: !!send_data });
+        // window.parent.postMessage({ action_key: 'receivedMetaMaskInfo' }, '*');
+      }
+      if (action_key === 'isMetaMaskLoggedIn') {
+        this.setState({ isMetaMaskLoggedIn: send_data });
+        // window.parent.postMessage({ action_key: 'receivedMetaMaskLoggedIn' }, '*');
+      }
+
+      if (this.state.isMetaMaskLoggedIn) {
+        if (action_key === 'amount') {
+          this.setState({ metaMaskExtension: JSON.parse(send_data) });
+          // window.parent.postMessage({ action_key: 'receivedMetaMaskAccount' }, '*');
+        }
+      } else {
+        this.setState({ metaMaskExtension: {} });
       }
     });
   }
 
-  onChangeMetamaskStatus = () => {
-    window.parent.postMessage({
-      action_key: 'activeMetaMask',
-      data: {}
-    }, '*');
-  };
+  handleLoginMetaMask = () => {
+    window.parent.postMessage({ action_key: 'loginMetaMask' }, '*');
+  }
 
-  metaMask = (state) => {
-    const { installedMetaMask } = state;
-    if (installedMetaMask === undefined) return null;
+  handleGetMetaMask = () => {
+    window.open(EXT.METAMASK_URL);
+  }
+
+  metaMaskStatus = (state) => {
+    const { isMetaMaskReady, isMetaMaskLoggedIn, metaMaskExtension } = state;
+    if (!isMetaMaskReady) {
+      return (
+        <button title="Get MetaMask Extension" className="btn btn-primary" onClick={this.handleGetMetaMask}>
+          Get MetaMask Extension
+        </button>
+      );
+    }
+
+    if (isEmpty(metaMaskExtension) || !isMetaMaskLoggedIn) {
+      return (
+        <button className="btn btn-primary" onClick={this.handleLoginMetaMask}>Login With MetaMask</button>
+      );
+    }
+
     return (
-      <Button
-        className="metaMaskButton"
-        onClick={this.onChangeMetamaskStatus}
-      >
-        {installedMetaMask ? 'Login With MetaMask' : 'Get MetaMask Extension'}
-      </Button>
+      <span className="btn btn-link">MetaMask is ready!</span>
     );
   }
 
@@ -92,16 +94,13 @@ class TopUp extends React.Component {
   };
 
   balance = (props) => {
-    const { ninjaWallet } = props;
-    const { balance, name } = ninjaWallet || { balance: 0, name: 'ETH' };
-    const amount = (props.metaMaskWallet && props.metaMaskWallet.amount) || 0;
-    console.log(amount, props.metaMaskExtension);
+    const { balance, name } = props.ninjaWallet || { balance: 0, name: 'ETH' };
+    const value = this.state.metaMaskExtension.amount || balance;
     return (
       <div className="TopUpCard BalanceCard">
         <div className="Label">Your balance</div>
         <div className="Value">
-          <span className="Number">{Number((parseFloat(amount)).toFixed(8))}</span>
-          <span className="Number">{Number((parseFloat(balance)).toFixed(8))}</span>
+          <span className="Number">{Number((parseFloat(value)).toFixed(8))}</span>
           <span className="Unit">{name}</span>
         </div>
       </div>
@@ -109,20 +108,21 @@ class TopUp extends React.Component {
   };
 
   howTo = (props) => {
-    const { address } = props || { address: '' };
+    const { address } = props.ninjaWallet || { address: '' };
+    const addressValue = this.state.metaMaskExtension.selectedAddress || address;
     return (
       <div className="TopUpCard HowToCard">
         <div className="Quest">How to top up?</div>
         <div className="Describe">Send ETH to your Ninja wallet address</div>
         <div className="WalletAddress">
-          <span className="Address">{address}</span>
-          <span className="HelpIcon" title="Copy to clipboard" onClick={this.copyToClipboard(address)}>
+          <span className="Address">{addressValue}</span>
+          <span className="HelpIcon" title="Copy to clipboard" onClick={this.copyToClipboard(addressValue)}>
             <img src={CopyIcon} alt="Copy to clipboard" />
           </span>
         </div>
         <span className="Separate">Or</span>
         <div className="QRCodeAddress">
-          <QRCode value={address} />
+          <QRCode value={addressValue} />
         </div>
       </div>
     );
@@ -158,14 +158,15 @@ class TopUp extends React.Component {
   }
 
   render() {
+    console.log('top up', this.props);
     const wallets = MasterWallet.getMasterWallet();
     const walletDefault = MasterWallet.getWalletDefault('ETH');
     const ninjaWallet = wallets.filter(w => w.network === walletDefault.network)[0];
     return (
       <div className="TopUpContainer">
-        {this.metaMask(this.state)}
+        {this.metaMaskStatus(this.state)}
         {this.balance({ ...this.props, ninjaWallet })}
-        {this.howTo(ninjaWallet)}
+        {this.howTo({ ...this.props, ninjaWallet })}
         {this.restoreWallet()}
         {this.renderModalRestor()}
       </div>
@@ -173,12 +174,4 @@ class TopUp extends React.Component {
   }
 }
 
-export default injectIntl(connect(
-  (state) => {
-    return {
-      // installedMetaMask: state.guru.extension.installedMetaMask,
-      metaMaskExtension: state.guru.extension,
-      metaMaskWallet: state.guru.extension.metaMaskWallet
-    };
-  }
-)(TopUp));
+export default injectIntl(TopUp);
