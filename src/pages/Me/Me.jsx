@@ -11,7 +11,6 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Col, Grid, Row } from 'react-bootstrap';
 import NoData from '@/components/core/presentation/NoData';
-import { showAlert } from '@/reducers/app/action';
 import FeedPromise from '@/components/handshakes/promise/Feed';
 import FeedBetting from '@/components/handshakes/betting/Feed';
 import FeedSeed from '@/components/handshakes/seed/Feed';
