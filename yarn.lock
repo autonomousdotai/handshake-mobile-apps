@@ -3201,6 +3201,7 @@ clean-css@4.2.x:
 clean-webpack-plugin@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/clean-webpack-plugin/-/clean-webpack-plugin-1.0.0.tgz#f184b9c26d12983d639828e0548ae2080e84b6a7"
+  integrity sha512-+f96f52UIET4tOFBbCqezx7KH+w7lz/p4fA1FEjf0hC6ugxqwZedBtENzekN2FnmoTF/bn1LrlkvebOsDZuXKw==
   dependencies:
     rimraf "^2.6.1"
 
@@ -6360,8 +6361,8 @@ handlebars@^4.0.11, handlebars@^4.0.3:
     uglify-js "^3.1.4"
 
 "handshake-i18n@github:ninjadotorg/handshake-i18n":
-  version "0.0.1544718096"
-  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/3fcd4db5106a170659e5d2b297d5cb0928e0bc82"
+  version "0.0.1544692987"
+  resolved "https://codeload.github.com/ninjadotorg/handshake-i18n/tar.gz/24775b19019475c36cfe6b551addbcda144b414a"
   dependencies:
     "@babel/core" "^7.1.2"
     "@babel/node" "^7.0.0"
@@ -8567,6 +8568,7 @@ mime@^1.3.4, mime@^1.5.0, mime@^1.6.0:
 mime@^2.0.3:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-2.4.0.tgz#e051fd881358585f3279df333fe694da0bcffdd6"
+  integrity sha512-ikBcWwyqXQSHKtciCcctu9YfPbFYZ4+gbHEmE0Q8jzcTYQg5dHCr3g2wwAZjPoJfQVXZq6KXAjpXOTf5/cjT7w==
 
 mime@^2.3.1:
   version "2.3.1"
@@ -13234,6 +13236,7 @@ url-loader@0.5.9:
 url-loader@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/url-loader/-/url-loader-1.1.2.tgz#b971d191b83af693c5e3fea4064be9e1f2d7f8d8"
+  integrity sha512-dXHkKmw8FhPqu8asTc1puBfe3TehOCo2+RmOOev5suNCIYBcT626kxiWg1NBVkwc4rO8BGa7gP70W7VXuqHrjg==
   dependencies:
     loader-utils "^1.1.0"
     mime "^2.0.3"
