@@ -309,7 +309,7 @@ class CreateEvent extends React.Component {
           validationSchema={eventSchema}
         >
           {formProps => {
-            const { isSubmitting, errors, touched, dirty } = formProps;
+            const { isSubmitting, errors, touched, dirty, values } = formProps;
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
                 {this.renderAppBar(this.props)}
@@ -321,8 +321,8 @@ class CreateEvent extends React.Component {
                 </div>
                 <div className="FormBlock">
                   {this.renderDateTime(initialClosingTime)}
-                  <div className="BlankLine" />
-                  {this.renderReportSource()}
+                  {values.public && <div className="BlankLine" />}
+                  {values.public && this.renderReportSource()}
                 </div>
                 <div className="FormBlock">
                   {this.renderHostFee()}
