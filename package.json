@@ -9,7 +9,8 @@
     "build": "yarn i18n && webpack --mode production",
     "serve": "node ./serve.js",
     "serve-heroku": "node ./serve.js",
-    "ngrok": "ngrok http 8080 -host-header=localhost:8080"
+    "ngrok": "ngrok http 8080 -host-header=localhost:8080",
+    "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
     "@babel/core": "^7.1.2",
