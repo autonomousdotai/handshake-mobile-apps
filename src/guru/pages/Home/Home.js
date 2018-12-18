@@ -82,17 +82,15 @@ class Home extends Component {
     if (props.matchParam) {
       props.dispatch(loadRelatedMatches({ matchId: props.matchParam }));
     }
-    return props.dispatch(loadMatches({ isDetail: props.matchParam }));
+    props.dispatch(loadMatches({ isDetail: props.matchParam }));
+    return props.dispatch(updateLoading(false));
   }
 
   modalEmailSubscribe = (modal) => { this.emailSubscribe = modal; };
 
-  renderAppBar = (props) => {
+  renderAppBar = () => {
     return (
       <AppBar>
-        {/* <span className="IconLeft Account">
-          <i className="fal fa-user" />
-        </span> */}
         <span className="Title">Prediction</span>
         <Link to={URL.HANDSHAKE_WALLET_INDEX} className="IconRight Wallet">
           <i className="fal fa-wallet" />
