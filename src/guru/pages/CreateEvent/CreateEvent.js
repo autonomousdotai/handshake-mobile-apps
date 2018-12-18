@@ -254,11 +254,10 @@ class CreateEvent extends React.Component {
       .unix();
 
     const initialValues = {
-      // outcomeName: '',
       eventName: '',
       public: true,
       marketFee: 0,
-      email: verified ? email : '',
+      email,
       emailCode: '',
       closingTime: initialClosingTime, // TODO: Set to current
       image: '',
@@ -277,12 +276,17 @@ class CreateEvent extends React.Component {
             .matches(/^[0-9]{4}/, 'invalid Code')
         };
 
-    const eventSchema = Yup.object().shape({
+    const eventSchema = Yup.object({
+      public: Yup.boolean(),
       eventName: Yup.string()
         .trim()
         .required('Required'),
-      // outcomeName: Yup.string().trim().required('Required'),
-      closingTime: Yup.string().required('Required'), // validate at least 24 hours
+      closingTime: Yup.lazy(value => {
+        if (+value < moment().unix()) {
+          return Yup.number().min(moment().unix(), 'invalid closing time');
+        }
+        return Yup.string().required('Required');
+      }),
       image: Yup.mixed()
         .test('image', 'invalid file type', f => {
           return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
@@ -290,13 +294,16 @@ class CreateEvent extends React.Component {
         .test('image', 'Exceeding maximum upload file size (5MB)', f => {
           return !f ? true : f.size < 5 * 1024 * 1024;
         }),
-      source: Yup.object({
-        label: Yup.string()
-          .trim()
-          .required('Required')
-          .test('source', 'invalid URL', l => {
-            return !l ? true : isURL(l);
-          })
+      source: Yup.object().when('public', {
+        is: true,
+        then: Yup.object({
+          label: Yup.string()
+            .trim()
+            .required('Required')
+            .test('source', 'invalid URL', l => {
+              return !l ? true : isURL(l);
+            })
+        })
       }),
       ...validateEmail
     });
@@ -309,7 +316,7 @@ class CreateEvent extends React.Component {
           validationSchema={eventSchema}
         >
           {formProps => {
-            const { isSubmitting, errors, touched, dirty } = formProps;
+            const { isSubmitting, errors, touched, dirty, values } = formProps;
             return (
               <Form className={this.buildErrorCls(errors, touched)}>
                 {this.renderAppBar(this.props)}
@@ -321,8 +328,8 @@ class CreateEvent extends React.Component {
                 </div>
                 <div className="FormBlock">
                   {this.renderDateTime(initialClosingTime)}
-                  <div className="BlankLine" />
-                  {this.renderReportSource()}
+                  {values.public && <div className="BlankLine" />}
+                  {values.public && this.renderReportSource()}
                 </div>
                 <div className="FormBlock">
                   {this.renderHostFee()}
@@ -339,7 +346,7 @@ class CreateEvent extends React.Component {
                 >
                   Create
                 </button>
-                <Debug props={formProps} />
+                <Debug props={formProps} hide />
                 <Prompt
                   when={dirty}
                   message="Are you sure you want to leave?"

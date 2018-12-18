@@ -1,24 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, FormattedHTMLMessage, injectIntl } from 'react-intl'
 
 import { setLanguage, updateModal } from '@/reducers/app/action';
-// import VideoYoutube from '@/components/core/controls/VideoYoutube';
 import { Link } from 'react-router-dom';
-import { LANDING_PAGE_TYPE, URL } from '@/constants';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 // style
 import imgNinja from '@/assets/images/ninja/ninja-header-black.svg';
-import imgLogo from '@/assets/images/logo.png';
+import imgLogo from '@/assets/images/app/logo.svg';
 import { SEOHome } from '@/components/SEO';
 import './styles.scss';
 
 class Index extends React.PureComponent {
   static propTypes = {
     setLanguage: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
   }
   constructor(props) {
     super(props);
@@ -39,18 +35,10 @@ class Index extends React.PureComponent {
   }
 
   render() {
-    const { messages, locale } = this.props.intl;
     const { name, children, type, btnToggleLeftMenu, fullWidthContent,
       modal: { className, show, body, title, centered },
     } = this.props;
     const logo = <Link to="/" className="d-inline-block mt-1"><img src={imgNinja} width="100" /></Link>;
-    const navLinks = (
-      <span>
-        <span><Link className={`${type === 'product' ? 'active' : ''} landing-nav-link`} to={LANDING_PAGE_TYPE.product.url}>Product</Link></span>
-        <span><Link className={`${type === 'research' ? 'active' : ''} landing-nav-link`} to={LANDING_PAGE_TYPE.research.url}>Research</Link></span>
-      </span>
-    )
-    const btnJoin = <Link className="btn btn-primary-landing" to={URL.RECRUITING}><FormattedMessage id="landing_page.btn.joinOurTeam" /></Link>
 
     return (
       <div className={"landing-page ct-" + name}>
@@ -64,14 +52,10 @@ class Index extends React.PureComponent {
                   {logo}
                 </div>
                 <div className="col-7">
-                  <div className="text-right">
-                    {btnJoin}
-                  </div>
                 </div>
               </div>
               <div className="row d-md-none">
                 <div className="col">{btnToggleLeftMenu}</div>
-                <div className="col text-right">{navLinks}</div>
               </div>
 
               {/* desktop */}
@@ -80,10 +64,6 @@ class Index extends React.PureComponent {
                   {logo}
                 </div>
                 <div className="col-10">
-                  <div className="text-right">
-                    <span className="mr-4">{navLinks}</span>
-                    {btnJoin}
-                  </div>
                 </div>
               </div>
             </div>
@@ -105,31 +85,19 @@ class Index extends React.PureComponent {
                 </div>
                 <div className="col-12 col-md-7">
                   <div className="align-middle px-1 pt-1">
-                    <div><FormattedHTMLMessage id="landing_page.label.footer" /></div>
+                    <div>Building blockchain powered apps, tools and solutions for the new wild west world web.<br />Join the dojo: <a href="https://t.me/ninja_org" className="landing-link">t.me/ninja_org</a><br />Contact us: <a href="mailto:support@ninja.org" className="landing-link" target="_top">support@ninja.org</a>/div>
                   </div>
                 </div>
-                {
-                  name && (
-                    <div className="col-12 col-md-4 text-left text-md-right">
-                      <div className="pl-1 pt-1">
-                        {
-                          messages[`landing_page.${name}.joinTelegram`] && (
-                            <div>
-                              <FormattedHTMLMessage id={`landing_page.${name}.joinTelegram`} />
-                            </div>
-                          )
-                        }
-                        {
-                          messages[`landing_page.${name}.whitepaper`] && (
-                            <div>
-                              <FormattedHTMLMessage id={`landing_page.${name}.whitepaper`} />
-                            </div>
-                          )
-                        }
-                      </div>
+                <div className="col-12 col-md-4 text-left text-md-right">
+                  <div className="pl-1 pt-1">
+                    <div>
+                      Join the dojo on <a href="https://t.me/ninja_org" className="landing-link">Telegram</a>
                     </div>
-                  )
-                }
+                    <div>
+                      Read our <a href="https://medium.com/@ninja_org/shakeninja-bex-1c938f18b3e8" className="landing-link">whitepaper</a> | Find us on <a href="https://github.com/ninjadotorg" className="landing-link">Github</a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -142,6 +110,7 @@ class Index extends React.PureComponent {
               {body}
             </ModalBody>
           </Modal>
+        </div>
         </div>
       </div>
     );
@@ -156,4 +125,4 @@ const mapDispatch = ({
   updateModal
 });
 
-export default injectIntl(connect(mapState, mapDispatch)(Index));
+export default connect(mapState, mapDispatch)(Index);

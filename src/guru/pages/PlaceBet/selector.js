@@ -1,19 +1,6 @@
-import qs from 'querystring';
-import { isEmpty } from '@/utils/is';
-
 export const queryStringSelector = (state) => (state.router.location.search);
 
-export const eventSelector = (state) => {
-  const queryString = queryStringSelector(state);
-  const urlParams = qs.parse(queryString.slice(1));
-  const { match } = urlParams;
-  const { events } = state.prediction;
-  if (!events || !events.length) return [];
-  if (isEmpty(urlParams) || isEmpty(events)) {
-    return state.prediction.events;
-  }
-  return events.filter(event => (event.id === parseInt(match, 10)));
-};
+export const eventSelector = (state) => (state.guru.events);
 
 export const matchDetailSelector = (state) => (state.guru.matchDetail);
 
@@ -23,3 +10,10 @@ export const matchOddsSelector = (state) => (state.guru.matchDetail.odds);
 
 export const handShakesSelector = (state) => (state.guru.handShakes);
 
+export const isRedeemSelector = (state) => {
+  return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem);
+};
+
+export const isSubscribeSelector = (state) => {
+  return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe);
+};

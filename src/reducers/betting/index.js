@@ -1,9 +1,4 @@
-
-import Handshake from '@/models/Handshake';
 import { BETTING_ACTIONS } from './action';
-import Match from '@/models/Match';
-
-const handleMatchListPayload = payload => payload.map(item => Match.match(item));
 
 const bettingReducter = (state = {
   matches: [],

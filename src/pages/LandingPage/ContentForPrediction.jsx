@@ -247,7 +247,7 @@ class ContentForPrediction extends React.Component {
               <div className="pexHeadLine">Make your market</div>
               <div className="pexContent">Prediction allows anyone to create a prediction market about any future event — be it in sports, politics, science, or literally any other aspect of modern life. You, as the market creator, can set the market fee, the market closing time, the reporter of the outcome, and the reporting deadline.</div>
               <div className="pexContent">Create your own market, please open {' '}
-              <Link to={URL.GURU_CREATE_EVENT}>
+              <Link to={URL.CREATE_EVENT}>
               https://ninja.org/create-event
               </Link>
               {' '}on your mobile browser.

@@ -1,5 +1,3 @@
-const handleListPayload = payload => payload.map(handshake => Handshake.handshake(handshake));
-
 class Handshake {
   static handshake(data) {
     return {

@@ -13,7 +13,6 @@ import './Refers.scss';
 import local from '@/services/localStore';
 import { APP } from '@/constants';
 import { getReferalInfo } from '@/reducers/exchange/action';
-import { shortenUser } from '@/services/offer-util';
 
 
 window.Clipboard = (function (window, document, navigator) {
@@ -142,6 +141,13 @@ class Refers extends React.Component {
     });
   }
 
+  shortenUser = (userName) => {
+    if (userName.length > 12) {
+      return `${userName.substr(0, 4)}...${userName.substr(userName.length - 4)}`;
+    }
+    return userName;
+  }
+
   render() {
     const { messages } = this.props.intl;
     const { referalInfo } = this.props;
@@ -193,7 +199,7 @@ class Refers extends React.Component {
                   return (
                     <tr key={item.toUid}>
                       {/* <th scope="row">1</th> */}
-                      <td>{shortenUser(item.toUsername)}</td>
+                      <td>{this.shortenUser(item.toUsername)}</td>
                       <td>
                         <FormattedDate
                           value={new Date(item.referralCreatedAt)}

@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-// const packageConfig = require('./package.json');
-
+// const UnusedWebpackPlugin = require('unused-webpack-plugin');
 const xPath = filepath => path.resolve(__dirname, filepath);
 
 // Webpack
@@ -14,7 +13,6 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const PwaManifestPlugin = require('webpack-pwa-manifest');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const OfflinePlugin = require('offline-plugin');
 
 // configs
 const envConfig = require('./.env.js');
@@ -36,7 +34,17 @@ module.exports = function webpackConfig(env, argv = {}) {
   };
 
   const development = {
-    plugins: [new webpack.HotModuleReplacementPlugin()],
+    plugins: [
+      new webpack.HotModuleReplacementPlugin(),
+      // new UnusedWebpackPlugin({
+      //   // Source directories
+      //   directories: [path.join(__dirname, 'src')],
+      //   // Exclude patterns
+      //   exclude: ['*.test.js'],
+      //   // Root directory (optional)
+      //   root: __dirname,
+      // }),
+    ],
     devServer: {
       watchContentBase: true,
       stats,
@@ -46,39 +54,6 @@ module.exports = function webpackConfig(env, argv = {}) {
       },
       hot: true,
       host: '0.0.0.0'
-    },
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [
-            'style-loader',
-            'css-loader',
-            'postcss-loader',
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            }
-          ]
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            'style-loader',
-            { loader: 'css-loader', options: { sourceMap: true } },
-            { loader: 'postcss-loader', options: { sourceMap: true } },
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            },
-            { loader: 'sass-loader', options: { sourceMap: true } }
-          ]
-        }
-      ]
     }
   };
 
@@ -100,41 +75,6 @@ module.exports = function webpackConfig(env, argv = {}) {
       },
       noEmitOnErrors: true
     },
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: [
-            // MiniCssExtractPlugin.loader, TO-DO
-            'style-loader',
-            'css-loader',
-            'postcss-loader',
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            }
-          ]
-        },
-        {
-          test: /\.scss$/,
-          use: [
-            // MiniCssExtractPlugin.loader, TO-DO
-            'style-loader',
-            'css-loader',
-            'postcss-loader',
-            {
-              loader: 'resolve-url-loader',
-              options: {
-                keepQuery: true
-              }
-            },
-            'sass-loader'
-          ]
-        }
-      ]
-    },
     plugins: [
       new CleanWebpackPlugin(['dist']),
       new OptimizeCSSAssetsPlugin(),
@@ -152,18 +92,15 @@ module.exports = function webpackConfig(env, argv = {}) {
         start_url: '/',
         icons: [
           {
-            src: xPath('src/assets/images/logo.png'),
+            src: xPath('src/assets/images/app/logo.svg'),
             sizes: [192, 256, 384, 512],
             destination: path.join('assets', 'icons')
           }
         ]
       }),
       new CopyWebpackPlugin([
-        { from: 'src/assets/images/ninja-star', to: 'ninja-star' },
         { from: 'src/assets/images/template/og_image.jpg', to: 'images' },
         { from: 'src/robots.txt', to: '.' }
-        // { from: 'src/google59d0f1640e2aac21.html', to: '.' },
-        // { from: 'src/jvigd6c7cfuubxogy2yu32dnm1g1at.html', to: '.' },
       ])
     ],
     performance: { hints: false },
@@ -265,14 +202,38 @@ module.exports = function webpackConfig(env, argv = {}) {
             ]
           },
           {
+            test: /\.css$/,
+            use: [
+              isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+              { loader: 'css-loader', options: { sourceMap: true } },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
+              {
+                loader: 'resolve-url-loader',
+                options: { keepQuery: true }
+              }
+            ]
+          },
+          {
+            test: /\.scss$/,
+            use: [
+              isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
+              { loader: 'css-loader', options: { sourceMap: true, importLoaders: 3 } },
+              { loader: 'postcss-loader', options: { sourceMap: true } },
+              {
+                loader: 'resolve-url-loader',
+                options: { keepQuery: true }
+              },
+              { loader: 'sass-loader', options: { sourceMap: true } }
+            ]
+          },
+          {
             test: /\.(eot|tiff|woff2|woff|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
             use: [
               {
                 loader: 'file-loader',
                 options: {
-                  name: '[hash].[ext]',
-                  outputPath: 'fonts/',
-                  verbose: false
+                  name: '[name].[ext]',
+                  outputPath: 'fonts/'
                 }
               }
             ]

@@ -1,244 +1,97 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import React, { lazy } from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 // constants
-import { URL, LANDING_PAGE_TYPE } from '@/constants';
+import { URL } from '@/constants';
 // services
 import BrowserDetect from '@/services/browser-detect';
-import { createDynamicImport } from '@/services/app';
-// components
-import Loading from '@/components/core/presentation/Loading';
-import ScrollToTop from '@/components/App/ScrollToTop';
-import Layout from '@/components/Layout/Main';
-import ExternalRedirect from '@/components/App/Redirect';
+import { SEOPrediction, SEOWallet } from '@/components/SEO';
 
-import { SEOPrediction, SEODad, SEOWallet, SEOPayForDevs, SEOPayForStores, SEOBecomeAtm } from '@/components/SEO';
 
-import imgDadContent from '@/assets/images/landing/dad/fake-content.jpg';
-import imgDad from '@/assets/images/landing/home/dad.jpg';
-import imgInternetCash from '@/assets/images/landing/home/internet-cash.jpg';
-import imgPrediction from '@/assets/images/landing/home/prediction.jpg';
-import imgWallet from '@/assets/images/landing/home/wallet.jpg';
-import imgHivepayOffline from '@/assets/images/landing/home/hivepay-offline.jpg';
+const PexExtension = lazy(() => import('@/pages/PexExtension/PexExtension'));
+const TopUp = lazy(() => import('@/pages/TopUp/TopUp'));
+const TypeFormFeedBack = lazy(() => import('@/pages/TypeFormFeedBack'));
+const RouterMe = lazy(() => import('@/components/Router/Me'));
+const RouterWallet = lazy(() => import('@/components/Router/Wallet'));
+const RouterComment = lazy(() => import('@/components/Router/Comment'));
+const RouterAdmin = lazy(() => import('@/components/Router/Admin'));
+const RouterReport = lazy(() => import('@/components/Router/Report'));
+const RouterLuckyPool = lazy(() => import('@/pages/LuckyLanding/LuckyLanding'));
+const RouterPrediction = lazy(() => import('@/guru/pages/Home/Home'));
+const RouterReputation = lazy(() => import('@/guru/pages/Reputation/Reputation'));
+const RouterWalletCoin = lazy(() => import('@/guru/pages/WalletCoin/WalletCoin'));
+const RouterAuthCallback = lazy(() => import('@/guru/pages/WalletCoin/AuthCallback'));
 
-import Maintain from '@/components/Router/Maintain';
-import PexExtension from '@/pages/PexExtension/PexExtension';
-import TopUp from '@/pages/TopUp/TopUp';
+const CreateEvent = lazy(() => import('@/guru/pages/CreateEvent/CreateEvent'));
+const GuruPlaceBet = lazy(() => import('@/guru/pages/PlaceBet'));
+const Extension = lazy(() => import('@/guru/pages/Extension'));
+const MeProfile = lazy(() => import('@/pages/Me/Profile'));
 
-const TypeFormFeedBack = createDynamicImport(() => import('@/pages/TypeFormFeedBack'), Loading);
-const RouterMe = createDynamicImport(() => import('@/components/Router/Me'), Loading);
-const RouterWallet = createDynamicImport(() => import('@/components/Router/Wallet'), Loading);
-const RouterPaymentTransfer = createDynamicImport(() => import('@/components/Router/PaymentTransfer'), Loading);
-const RouterPayment = createDynamicImport(() => import('@/components/Router/Payment'), Loading);
-const RouterComment = createDynamicImport(() => import('@/components/Router/Comment'), Loading);
-const RouterAdmin = createDynamicImport(() => import('@/components/Router/Admin'), Loading);
-const RouterAdminIDVerification = createDynamicImport(() => import('@/components/Router/AdminIDVerification'), Loading);
-const RouterReport = createDynamicImport(() => import('@/components/Router/Report'), Loading);
-const RouterLuckyPool = createDynamicImport(() => import('@/pages/LuckyLanding/LuckyLanding'), Loading);
-const RouterPrediction = createDynamicImport(() => import('@/pages/Prediction/Prediction'), Loading);
-const RouterReputation = createDynamicImport(() => import('@/guru/pages/Reputation/Reputation'), Loading);
-const RouterWalletCoin = createDynamicImport(() => import('@/guru/pages/WalletCoin/WalletCoin'), Loading);
-const RouterAuthCallback = createDynamicImport(() => import('@/guru/pages/WalletCoin/AuthCallback'), Loading);
+const RouterResolve = lazy(() => import('@/pages/Resolve/Resolve'));
+const ProjectDetail = lazy(() => import('@/components/ProjectDetail'));
+const ContentForWallet = lazy(() => import('@/pages/LandingPage/ContentForWallet'));
+const ContentForPrediction = lazy(() => import('@/pages/LandingPage/ContentForPrediction'));
+const ContentForPexInstruction = lazy(() => import('@/pages/LandingPage/ContentForPexInstruction'));
 
-// Guru's Routes
-const RouterGuru = createDynamicImport(() => import('@/guru/pages/Home/Home'), Loading);
-const GuruCreateEvent = createDynamicImport(() => import('@/guru/pages/CreateEvent/CreateEvent'), Loading);
-const GuruPlaceBet = createDynamicImport(() => import('@/guru/pages/PlaceBet'), Loading);
-const Extension = createDynamicImport(() => import('@/guru/pages/Extension'), Loading);
+const Page404 = lazy(() => import('@/pages/Error/Page404'));
+const PageMobileOnly = lazy(() => import('@/pages/Error/MobileOnly'));
 
-const RouterResolve = createDynamicImport(() => import('@/pages/Resolve/Resolve'), Loading);
-const RouterLandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
-const LandingPageMain = createDynamicImport(() => import('@/pages/LandingPage/Main'), Loading);
-const ProjectDetail = createDynamicImport(() => import('@/components/ProjectDetail'), Loading);
-const Recruiting = createDynamicImport(() => import('@/pages/Recruiting'), Loading);
-const JobDetail = createDynamicImport(() => import('@/pages/Recruiting/JobDetail'), Loading);
-const ContentForPayForDevs = createDynamicImport(() => import('@/pages/LandingPage/ContentForPayForDevs'), Loading);
-const ContentForPayForDevsGetStarted = createDynamicImport(() => import('@/pages/LandingPage/ContentForPayForDevsGetStarted'), Loading);
-const ContentForWallet = createDynamicImport(() => import('@/pages/LandingPage/ContentForWallet'), Loading);
-const ContentForPrediction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPrediction'), Loading);
-const ContentForPexInstruction = createDynamicImport(() => import('@/pages/LandingPage/ContentForPexInstruction'), Loading);
-const LuckyDrawMechanic = createDynamicImport(() => import('@/pages/LuckyDrawMechanic/LuckyDrawMechanic'), Loading);
-const RouterCryptoCoin = createDynamicImport(() => import('@/components/Router/CryptoCoin'), Loading);
-const RouterEscrowWithdrawSuccess = createDynamicImport(() => import('@/pages/Escrow/WithdrawSuccess'), Loading);
-const RouterShop = createDynamicImport(() => import('@/components/Router/Shop'), Loading);
-const RouterInternalAdmin = createDynamicImport(() => import('@/components/Router/InternalAdmin'), Loading);
-const RouterCreateCashStore = createDynamicImport(() => import('@/components/handshakes/exchange/Create/CreateStoreATM'), Loading);
-const LandingBecomeAtm = createDynamicImport(() => import('@/pages/LandingPage/BecomeAtm'), Loading);
-// const RouterInvest = createDynamicImport(() => import('@/components/Router/Invest'), Loading);
-const InternalAdminDashboard = createDynamicImport(() => import('@/pages/InternalAdminDashboard'), Loading);
+/**
+ * ======================== ROUTE LIST ========================
+ */
 
-/* ======================== FOR MOBILE ======================== */
-const configRoutesUsingMobileLayout = [
-  // Guru
-  { path: URL.GURU_CREATE_EVENT, component: GuruCreateEvent },
-  { path: URL.GURU_PLACE_BET, component: GuruPlaceBet },
-  { path: URL.HANDSHAKE_GURU, component: RouterGuru },
-  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation },
-  { path: URL.HANDSHAKE_COINBASE_WALLET, component: RouterWalletCoin },
-  { path: URL.HANDSHAKE_COINBASE_AUTH, component: RouterAuthCallback },
+const { isDesktop } = BrowserDetect;
 
-  { path: URL.HANDSHAKE_PREDICTION, component: RouterPrediction },
+const routeList = [
+  // DESKTOP & MOBILE
+  { path: URL.FEEDBACK, component: TypeFormFeedBack },
   { path: URL.PEX_INSTRUCTION_URL, component: ContentForPexInstruction },
 
-  { path: URL.HANDSHAKE_ME, component: RouterMe },
-  { path: URL.HANDSHAKE_CASH, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
-  { path: URL.HANDSHAKE_ATM, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
-  { path: URL.HANDSHAKE_PEX, render: () => <Redirect to={{ pathname: URL.HANDSHAKE_PREDICTION }} /> },
-  { path: URL.HANDSHAKE_WALLET, component: RouterWallet },
-  { path: URL.HANDSHAKE_PAYMENT_TRANSFER, component: RouterPaymentTransfer },
-  { path: URL.HANDSHAKE_PAYMENT, component: RouterPayment },
-  // { path: URL.HANDSHAKE_CREATE, component: RouterCreate },
-  { path: URL.COMMENTS_BY_SHAKE, component: RouterComment },
-  { path: URL.ADMIN, component: RouterAdmin },
-  { path: URL.REPORT, component: RouterReport },
-  // { path: URL.CC_PAYMENT_URL, component: RouterCCConfirm },
-  // { path: URL.BUY_BY_CC_URL, component: RouterBuyCC },
-  { path: URL.CRYPTO_COIN_URL, component: RouterCryptoCoin },
-  { path: URL.ESCROW_WITHDRAW_SUCCESS, component: RouterEscrowWithdrawSuccess },
-  {
-    path: URL.PRODUCT_DAD_URL,
-    render: () => {
-      window.location.href = URL.PRODUCT_DAD_URL_SUBDOMAIN;
-      return null;
-    },
-  },
-  { path: URL.RESOLVE, component: RouterResolve },
-  { path: URL.SHOP_URL, component: RouterShop },
-  { path: URL.CASH_STORE_URL, component: RouterCreateCashStore },
 
-  { path: URL.LANDING_BECOME_ATM, render: () => <LandingBecomeAtm reactHelmetElement={SEOBecomeAtm} /> },
-  // { path: URL.INVEST_URL, component: RouterInvest },
+  // Only DESKTOP
+  { path: URL.INDEX, component: Extension, isDesktop: true },
+  { path: URL.CHROME_EXTENSION, component: Extension, isDesktop: true },
+  { path: URL.LUCKY_POOL, component: RouterLuckyPool, isDesktop: true },
+  { path: URL.CREATE_EVENT, component: PageMobileOnly, isDesktop: true },
 
-  { path: URL.LANDING_PAGE_CONSTANT, render: () => <ExternalRedirect url="https://constant.money" /> },
-  { path: URL.LANDING_PAGE_SHURIKEN, render: () => <Redirect to={URL.LANDING_PAGE_CONSTANT} /> },
-  { path: URL.PEX_EXTENSION, component: PexExtension },
-  { path: URL.WALLET_EXTENSION, component: TopUp },
-];
-const routesUsingMobileLayout = configRoutesUsingMobileLayout.map(route => (
-  <Route
-    key={Date.now()}
-    {...route}
-  />
-));
+  // WARNING: Please do not use ProjectDetail anymore
+  { path: URL.PREDICTION, isDesktop: true, render: () => <ProjectDetail type="product" name="prediction" entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
+  { path: URL.PRODUCT_WALLET_URL, isDesktop: true, render: () => <ProjectDetail type="product" name="wallet" reactHelmetElement={SEOWallet} entireContentComponent={<ContentForWallet />} /> },
+  { path: URL.PEX_EXTENSION, isDesktop: true, render: () => <PexExtension reactHelmetElement={SEOPrediction} /> },
 
-
-/* ======================== FOR DESKTOP ======================== */
-const PageMobileOnly = createDynamicImport(() => import('@/pages/Error/MobileOnly'), Loading, true);
-
-let routesUsingDesktopLayout = null;
-if (BrowserDetect.isDesktop) {
-  const configRoutesUsingDesktopLayout = [
-    { path: URL.LUCKY_POOL, component: RouterLuckyPool },
-    { path: URL.FEEDBACK, component: TypeFormFeedBack },
-    { path: URL.CHROME_EXTENSION, component: Extension },
-    { path: URL.GURU_CREATE_EVENT, component: PageMobileOnly },
-    { path: URL.PRODUCT_CASH_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} />, exact: true },
-    { path: URL.PRODUCT_ATM_URL, render: () => <Redirect to={{ pathname: URL.BUY_COIN_URL }} /> },
-    { path: URL.PRODUCT_PREDICTION_URL, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
-    { path: URL.PRODUCT_WALLET_URL, render: () => <ProjectDetail type="product" name="wallet" img={imgWallet} reactHelmetElement={SEOWallet} entireContentComponent={<ContentForWallet />} /> },
-    { path: URL.PEX_EXTENSION, render: () => <PexExtension reactHelmetElement={SEOPrediction} /> },
-    { path: URL.HANDSHAKE_EXCHANGE, render: () => <ProjectDetail type="product" name="prediction" img={imgPrediction} entireContentComponent={<ContentForPrediction />} reactHelmetElement={SEOPrediction} /> },
-    { path: URL.PRODUCT_PAYFORSTORES_URL, render: () => <ProjectDetail type="product" name="pay-for-stores" img={imgHivepayOffline} reactHelmetElement={SEOPayForStores} /> },
-    { path: URL.PRODUCT_PAYFORDEVS_URL, render: () => <ProjectDetail type="product" name="pay-for-devs" reactHelmetElement={SEOPayForDevs} entireContentComponent={<ContentForPayForDevs />} /> },
-    { path: URL.PRODUCT_PAYFORDEVS_GETSTARTED_URL, render: () => <ProjectDetail type="product" name="pay-for-devs-get-started" reactHelmetElement={SEOPayForDevs} fullWidthContent={true} entireContentComponent={<ContentForPayForDevsGetStarted />} /> },
-    { path: URL.RESEARCH_INTERNET_CASH_URL, render: () => <ProjectDetail type="research" name="internet-cash" img={imgInternetCash} /> },
-    { path: URL.PRODUCT_DAD_URL, render: () => <ProjectDetail type="product" name="dad" img={imgDad} imgContent={imgDadContent} reactHelmetElement={SEODad} /> },
-    { path: URL.INTERNAL_ADMIN_URL, component: RouterInternalAdmin },
-    { path: URL.ADMIN_ID_VERIFICATION, component: RouterAdminIDVerification },
-    { path: URL.PEX_LUCKY_DRAW_MECHANIC_URL, component: LuckyDrawMechanic },
-    { path: URL.INTERNAL_ADMIN_DASHBOARD_URL, component: InternalAdminDashboard },
-  ];
-
-  routesUsingDesktopLayout = configRoutesUsingDesktopLayout.map(route => (
-    <Route
-      key={Date.now()}
-      {...route}
-    />
-  ));
-}
-
-const Page404 = createDynamicImport(() => import('@/pages/Error/Page404'), Loading, true);
-
-class Router extends React.Component {
-  static propTypes = {
-    firebaseApp: PropTypes.object.isRequired,
+  // Only MOBILE
+  { path: URL.PREDICTION, component: RouterPrediction, isDesktop: false },
+  { path: URL.CREATE_EVENT, component: CreateEvent, isDesktop: false },
+  { path: URL.GURU_PLACE_BET, component: GuruPlaceBet, isDesktop: false },
+  { path: URL.HANDSHAKE_REPUTATION, component: RouterReputation, isDesktop: false },
+  { path: URL.HANDSHAKE_COINBASE_WALLET, component: RouterWalletCoin, isDesktop: false },
+  { path: URL.HANDSHAKE_COINBASE_AUTH, component: RouterAuthCallback, isDesktop: false },
+  { path: URL.HANDSHAKE_ME, component: RouterMe, isDesktop: false },
+  { path: URL.HANDSHAKE_WALLET, component: RouterWallet, isDesktop: false },
+  { path: URL.COMMENTS, component: RouterComment, isDesktop: false },
+  { path: URL.ADMIN, component: RouterAdmin, isDesktop: false },
+  { path: URL.REPORT, component: RouterReport, isDesktop: false },
+  { path: URL.RESOLVE, component: RouterResolve, isDesktop: false },
+  { path: URL.WALLET_EXTENSION, component: TopUp, isDesktop: false },
+  { path: URL.HANDSHAKE_ME_PROFILE, component: MeProfile, isDesktop: false },
+  { path: URL.INDEX, isDesktop: false, redirectTo: URL.PREDICTION },
+  { path: URL.HANDSHAKE_PEX, redirectTo: URL.PREDICTION, isDesktop: false }
+].filter((r) => [isDesktop, undefined].includes(r.isDesktop)).map(r => {
+  if (r.redirectTo) {
+    return <Redirect exact key={r.path} from={r.path} to={r.redirectTo} />;
   }
-  constructor(props) {
-    super(props);
-
-    const initFirebaseApp = this.props.firebaseApp;
-    if (!initFirebaseApp.config) initFirebaseApp.config = {};
-
-    this.state = {
-      firebaseApp: initFirebaseApp,
-    };
-
+  if (r.render) {
+    return <Route exact key={r.path} path={r.path} render={r.render} />;
   }
-  componentDidMount() {
-  }
+  return <Route exact key={r.path} path={r.path} component={r.component} />;
+});
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.firebaseApp.config) {
-      if (nextProps.firebaseApp.config.isMaintain !== prevState.firebaseApp.config.isMaintain) {
-        return { firebaseApp: nextProps.firebaseApp };
-      }
-      if (nextProps.firebaseApp.config.version !== prevState.firebaseApp.config.version) {
-        window.location.reload();
-      }
-    }
-    return null;
-  }
-
+export default class Router extends React.Component {
   render() {
     return (
       <Switch>
-        {
-          BrowserDetect.isDesktop && <Route exact path={URL.INDEX} component={Extension} />
-        }
-
-        <Route path={LANDING_PAGE_TYPE.product.url} render={() => <LandingPageMain type="product" />} />
-        <Route path={LANDING_PAGE_TYPE.research.url} render={() => <LandingPageMain type="research" />} />
-        <Route exact path={URL.RECRUITING} component={Recruiting} />
-        <Route path={URL.RECRUITING_JOB_DETAIL} component={JobDetail} />
-        <Route path={URL.PEX_INSTRUCTION_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<ContentForPexInstruction />} />} />
-        <Route path={URL.PEX_LUCKY_DRAW_MECHANIC_URL} render={() => <ProjectDetail type="landing" name="pex-instruction" entireContentComponent={<LuckyDrawMechanic />} />} />
-        <Route path={URL.BUY_COIN_FAQ_URL} render={() => <ProjectDetail type="product" name="coin" />} />
-        {routesUsingDesktopLayout}
-
-        {/* Cash on mobile uses a completely different layout! */}
-        {/* <Route path={URL.HANDSHAKE_CASH} component={Discover} /> */}
-        <Route
-          path={URL.INDEX}
-          render={props => {
-            return (
-              <Layout {...props}>
-                {
-                  this.state.firebaseApp.config.isMaintain
-                    ? <Maintain />
-                    : (
-                      <ScrollToTop>
-                        <Switch>
-                          <Route exact path={URL.INDEX} render={() => {
-                            return <Redirect to={{ pathname: URL.PRODUCT_PREDICTION_URL }} />
-                          }}
-                          />
-                          {routesUsingMobileLayout}
-                          <Route component={Page404} />
-                        </Switch>
-                      </ScrollToTop>
-                    )
-                }
-              </Layout>
-            );
-          }}
-        />
+        {routeList}
+        <Route component={Page404} />
       </Switch>
     );
   }
 }
-
-export default connect(state => ({
-  firebaseApp: state.firebase.data,
-  router: state.router,
-}))(Router);

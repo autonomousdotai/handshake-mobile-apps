@@ -12,19 +12,6 @@ import {
 } from './action';
 import { eventSelector, relevantEventSelector } from './selector';
 
-export function* handleLoadMatchDetail({ eventId }) {
-  try {
-    yield call(apiGet, {
-      PATH_URL: `${API_URL.CRYPTOSIGN.LOAD_MATCHES_DETAIL}/${eventId}`,
-      type: 'LOAD_MATCH_DETAIL',
-      _key: eventId,
-      _path: 'predictionDetail',
-    });
-  } catch (e) {
-    console.error(e);
-  }
-}
-
 export function* handleLoadMatches({ isDetail, source }) {
   try {
     if (isDetail) {
@@ -91,9 +78,11 @@ export function* handleCountReport() {
   try {
     const response = yield call(apiGet, {
       PATH_URL: API_URL.CRYPTOSIGN.COUNT_REPORT,
-      type: 'COUNT_REPORT',
+      type: 'COUNT_REPORT'
     });
-    yield put(updateCountReport(response.data.length));
+    if (response.data) {
+      yield put(updateCountReport(response.data.length));
+    }
   } catch (e) {
     console.error(e);
   }
@@ -116,7 +105,7 @@ export function* handleCheckExistEmail() {
   try {
     const response = yield call(apiGet, {
       PATH_URL: API_URL.USER.CHECK_EXIST_EMAIL,
-      type: 'CHECK_EXIST_EMAIL',
+      type: 'CHECK_EXIST_EMAIL'
     });
     if (response.data) {
       const { email_existed: emailExist } = response.data;

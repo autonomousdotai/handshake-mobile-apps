@@ -111,11 +111,11 @@ class FeedBetting extends React.Component {
     const statusResult = getStatusLabel(itemInfo);
     const { title, isAction } = statusResult;
     const matchDone = status === BET_BLOCKCHAIN_STATUS.STATUS_DONE;
-
     const { extraData } = props;
-    const { event_name, event_predict } = parseJsonString(extraData);
+    const { event_name, event_predict} = parseJsonString(extraData);
     const eventName = event_name;
-    const predictName = (event_predict.toUpperCase() === 'YES' || event_predict.toUpperCase() === 'NO') ? side === ROLE.INITER ? 'Yes' : 'No' : event_predict;
+    const eventPredict = (event_predict || '').toUpperCase();
+    const predictName = (eventPredict === 'YES' || eventPredict === 'NO') ? side === ROLE.INITER ? 'Yes' : 'No' : event_predict;
 
     this.setState({
       actionTitle: title,
@@ -142,14 +142,6 @@ class FeedBetting extends React.Component {
 
     const { itemInfo, estimatedGas } = this.state;
     const { id, freeBet, fromAddress } = itemInfo;
-
-    console.log(TAG, 'clickActionButton',
-      ' idCryptosign:', id,
-      ' isFreeBet:', freeBet,
-      ' fromAddress: ', fromAddress,
-    );
-
-    console.log(TAG, 'ESTIMATE:', estimatedGas);
     if (!isRightNetwork()) {
       message = MESSAGE.RIGHT_NETWORK;
     } else if (!isSameAddress(fromAddress)) {
@@ -640,7 +632,7 @@ class FeedBetting extends React.Component {
 
     );
   }
-  renderOutcome(predictName, colorBySide, side) {
+  renderOutcome(predictName = '', colorBySide, side) {
 
     if (predictName.toUpperCase() === 'YES' || predictName.toUpperCase() === 'NO') {
       return (

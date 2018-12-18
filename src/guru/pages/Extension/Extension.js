@@ -1,7 +1,6 @@
 import React from 'react';
 import Icon from '@/guru/components/Icon/Icon';
 import { URL, SOCIAL, EXT } from '@/constants';
-// import { Link } from 'react-router-dom';
 
 import YtbFrame from '@/guru/components/YtbFrame/YtbFrame';
 
@@ -71,7 +70,6 @@ function header() {
         {addChromeBtn()}
       </div>
       <div className="RightBlock">
-        {/* <Icon className="Macbook" path={MacSVG} /> */}
         {clipOnMac()}
       </div>
     </header>
