@@ -85,8 +85,6 @@ class Me extends React.Component {
       numStars: 0,
       modalContent: <div />, // type is node
       propsModal: {
-        // className: "discover-popup",
-        // isDismiss: false
       },
       cashTab: cashTabDefault,
       handshakeIdActive: handshakeDefault,
