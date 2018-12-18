@@ -15,7 +15,7 @@ class CardList extends React.Component {
   };
 
   handleClickCreator = (eventItem) => {
-    const userId = eventItem.create_user_id || 0;
+    const userId = eventItem.created_user_id || 0;
     const address = eventItem.creator_wallet_address || '0x3D0...fEd';
     this.props.history.push(`${URL.HANDSHAKE_REPUTATION}?id=${userId}&address=${address}`);
   }
