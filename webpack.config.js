@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-// const UnusedWebpackPlugin = require('unused-webpack-plugin');
+
 const xPath = filepath => path.resolve(__dirname, filepath);
 
 // Webpack
@@ -15,7 +15,18 @@ const PwaManifestPlugin = require('webpack-pwa-manifest');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 // configs
-const envConfig = require('./.env.js');
+const NINJA_ENV = /^NINJA_/i;
+let envConfig = {};
+if (fs.existsSync('./.env.js')) {
+  envConfig = require('./.env.js');
+} else {
+  envConfig = Object.keys(process.env)
+    .filter(k => NINJA_ENV.test(k))
+    .reduce((env, key) => {
+      env[key] = process.env[key]; // eslint-disable-line
+      return env;
+    }, {});
+}
 
 module.exports = function webpackConfig(env, argv = {}) {
   const isProduction = argv.mode === 'production';
@@ -35,15 +46,7 @@ module.exports = function webpackConfig(env, argv = {}) {
 
   const development = {
     plugins: [
-      new webpack.HotModuleReplacementPlugin(),
-      // new UnusedWebpackPlugin({
-      //   // Source directories
-      //   directories: [path.join(__dirname, 'src')],
-      //   // Exclude patterns
-      //   exclude: ['*.test.js'],
-      //   // Root directory (optional)
-      //   root: __dirname,
-      // }),
+      new webpack.HotModuleReplacementPlugin()
     ],
     devServer: {
       watchContentBase: true,
@@ -83,7 +86,7 @@ module.exports = function webpackConfig(env, argv = {}) {
         chunkFilename: 'css/[hash].[name].css'
       }),
       new PwaManifestPlugin({
-        name: appEnvConfig.title,
+        name: appEnvConfig.NINJA_TITLE,
         short_name: 'Ninja',
         description: '',
         background_color: '#1A1919',

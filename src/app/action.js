@@ -35,7 +35,7 @@ export const getProfile = APIGetCreator({
 async function isBlockedIP(dispatch) { // eslint-disable-line
   const { data } = await $http({
     url: 'https://ipfind.co/me',
-    qs: { auth: process.env.ipfindKey },
+    qs: { auth: process.env.NINJA_IP_FIND },
     headers: { 'Content-Type': 'text/plain' }
   });
   const isBlock = process.env.isProduction && COUNTRIES_BLACKLIST.includes(data.country);

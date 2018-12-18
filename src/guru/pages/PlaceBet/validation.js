@@ -15,7 +15,7 @@ export const validationSchema = Yup.object().shape({
 export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
-  if (process.env.isStaging) return true;
+  if (process.env.NINJA_IS_STAGING) return true;
   if (process.env.isProduction) {
     return (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet);
   }

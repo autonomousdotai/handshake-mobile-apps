@@ -60,7 +60,7 @@ class ShareSocial extends PureComponent {
   }
 
   converToShortLink(longUrl) {
-    const url = `https://www.googleapis.com/urlshortener/v1/url?key=${process.env.GOOGLE_API_KEY}`;
+    const url = `https://www.googleapis.com/urlshortener/v1/url?key=${process.env.NINJA_GOOGLE_KEY}`;
     const data = {
       longUrl,
     };

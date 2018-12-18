@@ -11,7 +11,7 @@ export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
 
-  if (process.env.isStaging) {
+  if (process.env.NINJA_IS_STAGING) {
     return true;
   }
   if (process.env.isProduction) {

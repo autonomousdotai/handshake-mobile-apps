@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>{{ htmlWebpackPlugin.options.env.title }}</title>
+  <title>{{ htmlWebpackPlugin.options.env.NINJA_TITLE }}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <meta name="mobile-web-app-capable" content="yes">
@@ -15,12 +15,12 @@
   <meta property="og:url" content="" />
   <meta property="og:image" content="/images/og_image.jpg" />
   <meta property="og:image:type" content="image/png" />
-  <meta property="og:site_name" content="{{ htmlWebpackPlugin.options.env.title }}" />
-  <meta property="fb:app_id" content="{{ htmlWebpackPlugin.options.env.social.facebookAppId }}" />
+  <meta property="og:site_name" content="{{ htmlWebpackPlugin.options.env.NINJA_TITLE }}" />
+  <meta property="fb:app_id" content="{{ htmlWebpackPlugin.options.env.NINJA_FB_APP_ID }}" />
   <!-- twitter  -->
   <meta name="twitter:card" content="" />
   <meta name="twitter:site" content="" />
-  <meta name="twitter:title" content="{{ htmlWebpackPlugin.options.env.title }}" />
+  <meta name="twitter:title" content="{{ htmlWebpackPlugin.options.env.NINJA_TITLE }}" />
   <meta name="twitter:description" content="" />
   <meta name="twitter:image" content="" />
   
@@ -29,12 +29,12 @@
   <link rel="stylesheet" href="https://use.typekit.net/nfr2whb.css">
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{htmlWebpackPlugin.options.env.social.googleAnalyticId}}"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{htmlWebpackPlugin.options.env.NINJA_GOOGLE_ANALYTIC_ID}}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', '{{htmlWebpackPlugin.options.env.social.googleAnalyticId}}');
+    gtag('config', '{{htmlWebpackPlugin.options.env.NINJA_GOOGLE_ANALYTIC_ID}}');
   </script>
   <!-- End Google Analytics -->
 
@@ -62,7 +62,7 @@
   <script>
     window.fbAsyncInit = function () {
       FB.init({
-        appId: '{{ htmlWebpackPlugin.options.env.social.facebookAppId }}',
+        appId: '{{ htmlWebpackPlugin.options.env.NINJA_FB_APP_ID }}',
         xfbml: true,
         version: 'v2.12'
       });
