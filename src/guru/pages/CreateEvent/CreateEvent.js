@@ -286,7 +286,7 @@ class CreateEvent extends React.Component {
           return Yup.number().min(moment().unix(), 'invalid closing time');
         }
         return Yup.string().required('Required');
-      }), // Yup.string().required('Required'),
+      }),
       image: Yup.mixed()
         .test('image', 'invalid file type', f => {
           return !f ? true : /(gif|jpe?g|png)$/i.test(f.type);
