@@ -1,6 +1,4 @@
 import Web3 from 'web3';
-import { getMetamaskStatus } from '@/guru/services/metamask/connect';
-import { handleTnx } from '@/guru/services/metamask/transaction';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import BaseHandshake from './BaseHandshake';
 
@@ -73,18 +71,23 @@ export default class BettingHandshake extends BaseHandshake {
       .encodeABI();
     console.log('Payload Data:', payloadData);
     console.log('Gas Price:', this.gasPrice);
-
-    if (getMetamaskStatus()) {
-      return handleTnx({
-        action_key: 'transaction',
-        data: {
-          methodName: 'init',
-          contractName: this.contractFileName,
-          contractAddress: this.contractAddress,
-          amount: stake,
-          params: [hid, side, oddsValue, bytesOffchain]
-        }
-      });
+       
+    // Use MetaMask Wallet
+    if (window.self !== window.top) {
+      if (localStorage.getItem('metaMaskTokens')) {
+        const metaMaskTokens = JSON.parse(localStorage.getItem('metaMaskTokens'));
+        return window.parent.postMessage({
+          action_key: 'transaction',
+          send_data: {
+            methodName: 'init',
+            contractName: this.contractFileName,
+            contractAddress: this.contractAddress,
+            amount: stake,
+            params: [hid, side, oddsValue, bytesOffchain],
+            metaMaskAddress: metaMaskTokens.accountAddr
+          }
+        }, '*');
+      }
     }
 
     const dataBlockChain = await this.neuron.sendRawTransaction(
@@ -130,18 +133,22 @@ export default class BettingHandshake extends BaseHandshake {
     );
     console.log('Gas Price:', this.gasPrice);
 
-    console.log('11111: ', getMetamaskStatus());
-    if (getMetamaskStatus()) {
-      return handleTnx({
-        action_key: 'transaction',
-        data: {
-          methodName: 'shake',
-          contractName: this.contractFileName,
-          contractAddress: this.contractAddress,
-          amount: stake,
-          params: [hid, side, oddsTakerValue, maker, oddsMakerValue, bytesOffchain]
-        }
-      });
+    // Use MetaMask Wallet
+    if (window.self !== window.top) {
+      if (localStorage.getItem('metaMaskTokens')) {
+        const metaMaskTokens = JSON.parse(localStorage.getItem('metaMaskTokens'));
+        return window.parent.postMessage({
+          action_key: 'transaction',
+          send_data: {
+            methodName: 'shake',
+            contractName: this.contractFileName,
+            contractAddress: this.contractAddress,
+            amount: stake,
+            params: [hid, side, oddsTakerValue, maker, oddsMakerValue, bytesOffchain],
+            metaMaskAddress: metaMaskTokens.accountAddr
+          }
+        }, '*');
+      }
     }
 
     const payloadData = this.handshakeInstance.methods

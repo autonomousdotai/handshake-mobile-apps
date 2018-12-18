@@ -30,24 +30,26 @@ class TopUp extends React.Component {
       const { data } = event;
       const { action_key, send_data } = data;
       console.log('ACTION_KEY', action_key, send_data, this.state.isMetaMaskLoggedIn);
-      if (action_key === 'isMetaMaskReady') {
-        this.setState({ isMetaMaskReady: !!send_data });
-        // window.parent.postMessage({ action_key: 'receivedMetaMaskInfo' }, '*');
-      }
-      if (action_key === 'isMetaMaskLoggedIn') {
-        this.setState({ isMetaMaskLoggedIn: send_data });
-        // window.parent.postMessage({ action_key: 'receivedMetaMaskLoggedIn' }, '*');
-      }
-
-      if (this.state.isMetaMaskLoggedIn) {
-        if (action_key === 'amount') {
-          this.setState({ metaMaskExtension: JSON.parse(send_data) });
+      // alert(action_key + JSON.stringify(send_data));
+      switch (action_key) {
+        case 'isMetaMaskReady':
+          this.setState({ isMetaMaskReady: !!send_data });
+          // window.parent.postMessage({ action_key: 'receivedMetaMaskInfo' }, '*');
+          break;
+        case 'isMetaMaskLoggedIn':
+          this.setState({ isMetaMaskLoggedIn: send_data });
+          // window.parent.postMessage({ action_key: 'receivedMetaMaskLoggedIn' }, '*');
+          break;
+        case 'metaMaskAccount':
+          this.setState({
+            metaMaskExtension: this.state.isMetaMaskLoggedIn ? JSON.parse(send_data) : {}
+          });
           // window.parent.postMessage({ action_key: 'receivedMetaMaskAccount' }, '*');
-        }
-      } else {
-        this.setState({ metaMaskExtension: {} });
+          break;
+        default:
+          break;
       }
-    });
+    }, false);
   }
 
   handleLoginMetaMask = () => {
@@ -158,13 +160,14 @@ class TopUp extends React.Component {
   }
 
   render() {
-    console.log('top up', this.props);
     const wallets = MasterWallet.getMasterWallet();
     const walletDefault = MasterWallet.getWalletDefault('ETH');
     const ninjaWallet = wallets.filter(w => w.network === walletDefault.network)[0];
     return (
       <div className="TopUpContainer">
-        {this.metaMaskStatus(this.state)}
+        <div className="MetaMaskStatus">
+          {this.metaMaskStatus(this.state)}
+        </div>
         {this.balance({ ...this.props, ninjaWallet })}
         {this.howTo({ ...this.props, ninjaWallet })}
         {this.restoreWallet()}

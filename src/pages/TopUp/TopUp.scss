@@ -4,6 +4,11 @@
   background-color: #EBF1F7;
   padding: 15px 10px;
 
+  .MetaMaskStatus {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
   .TopUpCard {
     font-size: 1rem;
     padding: 15px 20px;
@@ -102,5 +107,6 @@
   .RestoreButton {
     display: flex;
     justify-content: center;
+    margin-bottom: 10px;
   }
 }

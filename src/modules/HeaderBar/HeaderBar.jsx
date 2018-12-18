@@ -31,7 +31,9 @@ class HeaderBar extends React.Component {
 
   wallet = (walletProps) => {
     if (!walletProps || !parseFloat(walletProps.balance)) return this.topUp();
-    const { balance } = walletProps;
+    const metaMaskAccount = localStorage.getItem('metaMaskAccount');
+    const balance = (metaMaskAccount && JSON.parse(metaMaskAccount).amount) || walletProps.balance;
+    console.log('HEADERBAR', metaMaskAccount);
     return (
       <Link to={URL.WALLET_EXTENSION} className="wallet">
         <span className="balance">{Number((parseFloat(balance)).toFixed(6))}</span>
