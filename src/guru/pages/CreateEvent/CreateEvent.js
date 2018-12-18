@@ -67,7 +67,6 @@ class CreateEvent extends React.Component {
     const event_name = values.eventName.trim();
 
     const newEventData = {
-      // outcome_name: values.outcomeName,
       event_name,
       name: `Will ${this.handleName(event_name)}?`,
       public: values.public,
