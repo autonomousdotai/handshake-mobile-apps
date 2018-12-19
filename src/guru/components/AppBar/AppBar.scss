@@ -12,15 +12,20 @@
   background-color: #ffffff;
   padding: 12px 10px;
   border-bottom: 1px solid #EBF1F7;
-  .IconLeft {
+  .IconLeft, .IconRight {
     position: absolute;
     top: 50%;
-    left: 10px;
     transform: translateY(-50%);
     color: #748599;
     font-size: 1.2rem;
     display: block;
     width: 25px;
+  }
+  .IconLeft {
+    left: 10px;
+  }
+  .IconRight {
+    right: 10px;
   }
   .Title {
     text-transform: uppercase;

@@ -3,7 +3,6 @@ import QRCode from 'qrcode.react';
 import { injectIntl } from 'react-intl';
 import Modal from '@/components/core/controls/Modal';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
-import Button from '@/components/core/controls/Button';
 import CopyIcon from '@/assets/images/icon/icon-copy.svg';
 import RestoreWallet from '@/components/Wallet/RestoreWallet/RestoreWallet';
 import BackChevronSVGWhite from '@/assets/images/icon/back-chevron-white.svg';
@@ -133,25 +132,28 @@ class TopUp extends React.Component {
   restoreWallet = () => {
     return (
       <div className="RestoreButton">
-        <Button onClick={() => {
-          this.modalRestoreRef.open();
-        }}
+        <span
+          className="btn btn-primary"
+          onClick={() => { this.modalRestoreRef.open(); }}
         >
           I have a wallet. Restore my wallet.
-        </Button>
+        </span>
       </div>
     );
   }
 
   renderModalRestor = () => {
     const { messages } = this.props.intl;
-    const modalHeaderStyle = { color: "#fff", background: "#546FF7" };
+    const modalHeaderStyle = {
+      color: '#fff',
+      background: '#546FF7'
+    };
     return (
       <Modal
         customBackIcon={BackChevronSVGWhite}
         modalHeaderStyle={modalHeaderStyle}
         title={messages.wallet.action.restore.header}
-        onRef={modal => { this.modalRestoreRef = modal; return null; }}
+        onRef={(modal) => { this.modalRestoreRef = modal; return null; }}
         onClose={this.closeRestoreWalletAccount}
       >
         <RestoreWallet />

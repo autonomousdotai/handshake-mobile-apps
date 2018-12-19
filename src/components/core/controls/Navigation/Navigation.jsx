@@ -7,18 +7,12 @@ import { injectIntl } from 'react-intl';
 
 import { URL } from '@/constants';
 import { clearHeaderBack } from '@/reducers/app/action';
-import meIcon from '@/assets/images/navigation/ic_private.svg.raw';
-import discoverIcon from '@/assets/images/navigation/ic_discover.svg.raw';
-import chatIcon from '@/assets/images/navigation/ic_chat.svg.raw';
-import walletIcon from '@/assets/images/navigation/ic_wallet.svg.raw';
-import createIcon from '@/assets/images/navigation/ic_add.svg.raw';
 
 class Navigation extends React.Component {
   static propTypes = {
     clearHeaderBack: PropTypes.func.isRequired,
     location: PropTypes.object.isRequired,
     app: PropTypes.object.isRequired,
-    intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -26,7 +20,7 @@ class Navigation extends React.Component {
 
     this.state = {
       currentPath: this.props.location.pathname,
-      isNotFound: this.props.app.isNotFound,
+      isNotFound: this.props.app.isNotFound
     };
   }
 
@@ -44,50 +38,39 @@ class Navigation extends React.Component {
   checkSelected(URLs) {
     let _URLs = URLs;
     if (!Array.isArray(URLs)) { _URLs = [URLs]; }
-    return _URLs.indexOf(this.state.currentPath) >= 0 && !this.state.isNotFound ? 'selected' : '';
+    return (_URLs.indexOf(this.state.currentPath) >= 0 && !this.state.isNotFound) && 'selected';
+  }
+
+  modeIcon(URLs) {
+    const selected = this.checkSelected(URLs);
+    return selected ? 'fas' : 'fal';
   }
 
   render() {
     return (
       <footer className="footer">
         <ul>
-          <li className={cn(this.checkSelected(URL.HANDSHAKE_ME_INDEX))}>
-            <Link to={URL.HANDSHAKE_ME_INDEX} onClick={this.props.clearHeaderBack}>
-              <div className="me-icon" dangerouslySetInnerHTML={{ __html: meIcon }} />
-              <span>{this.props.intl.messages.app.navigation.me}</span>
+          <li className={cn(this.checkSelected(URL.PREDICTION))}>
+            <Link to={URL.PREDICTION} onClick={this.props.clearHeaderBack}>
+              <span className={cn(this.modeIcon(URL.PREDICTION), 'fa-list-alt')} />
+              <span className="TextIcon">FEED</span>
             </Link>
           </li>
-          <li className={cn(this.checkSelected([URL.HANDSHAKE_EXCHANGE, URL.HANDSHAKE_CASH, URL.HANDSHAKE_ATM, URL.HANDSHAKE_PREDICTION]))}>
-            <Link to={URL.HANDSHAKE_EXCHANGE} onClick={this.props.clearHeaderBack}>
-              <div dangerouslySetInnerHTML={{ __html: discoverIcon }} />
-              <span>{this.props.intl.messages.app.navigation.exchanges}</span>
-            </Link>
-          </li>
-          <li>
-            {
-              this.props.location.pathname === URL.HANDSHAKE_CREATE_INDEX
-              ? (
-                <a>
-                  <div className="create" dangerouslySetInnerHTML={{ __html: createIcon }} />
-                </a>
-              )
-              : (
-                <Link to={URL.HANDSHAKE_CREATE_INDEX}>
-                  <div className="create" dangerouslySetInnerHTML={{ __html: createIcon }} />
-                </Link>
-              )
-            }
-          </li>
-          <li className={cn(this.checkSelected(URL.HANDSHAKE_CHAT_INDEX))}>
-            <Link to={URL.HANDSHAKE_CHAT_INDEX} onClick={this.props.clearHeaderBack}>
-              <div className="chat-icon" dangerouslySetInnerHTML={{ __html: chatIcon }} />
-              <span>{this.props.intl.messages.app.navigation.whisper}</span>
-            </Link>
-          </li>
-          <li className={cn((this.state.currentPath.startsWith(URL.HANDSHAKE_WALLET_INDEX) && !this.state.isNotFound ? 'selected' : ''))}>
+          {/* <li className={cn(this.checkSelected(URL.HANDSHAKE_WALLET_INDEX))}>
             <Link to={URL.HANDSHAKE_WALLET_INDEX} onClick={this.props.clearHeaderBack}>
-              <div dangerouslySetInnerHTML={{ __html: walletIcon }} />
-              <span>{this.props.intl.messages.app.navigation.wallet}</span>
+              <span className={cn(this.modeIcon(URL.HANDSHAKE_WALLET_INDEX), 'fa-wallet')} />
+              <span className="TextIcon">{this.props.intl.messages.app.navigation.wallet.toUpperCase()}</span>
+            </Link>
+          </li> */}
+          <li className={cn(this.checkSelected(URL.CREATE_EVENT), 'PlusButton')}>
+            <Link to={URL.CREATE_EVENT} className="CreateEvent">
+              <span className="fal fa-plus" />
+            </Link>
+          </li>
+          <li className={cn(this.checkSelected([URL.HANDSHAKE_ME_INDEX]))}>
+            <Link to={URL.HANDSHAKE_ME_INDEX} onClick={this.props.clearHeaderBack}>
+              <span className={cn(this.modeIcon([URL.HANDSHAKE_ME_INDEX]), 'fa-user')} />
+              <span className="TextIcon">ME</span>
             </Link>
           </li>
         </ul>
@@ -96,4 +79,7 @@ class Navigation extends React.Component {
   }
 }
 
-export default injectIntl(connect(state => ({ app: state.app }), { clearHeaderBack })(Navigation));
+export default connect(
+  state => ({ app: state.app, location: state.router.location }),
+  { clearHeaderBack }
+)(Navigation);

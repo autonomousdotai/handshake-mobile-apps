@@ -1,5 +1,6 @@
 @import './src/styles/style';
 .profile {
+  font-family: $font-family-base;
   background-color: #ffffff;
   .head_text {
     padding: 15px;
@@ -9,8 +10,10 @@
     font-size: 12px;
   }
   .collapse-custom {
-    border-bottom: 1px solid #f0f0f0;
+    //border-bottom: 1px solid #f0f0f0;
     font-weight: $normal;
+    background-color: white;
+    padding: 0px 20px;
     .head {
       padding: rem-calc(12px 0);
       display: flex;
@@ -49,7 +52,7 @@
         }
       }
     }
-    .content {
+    .contentProfile {
       margin-bottom: rem-calc(22px);
       input[type="text"] {
         height: rem-calc(54px);
@@ -65,8 +68,16 @@
         font-size: 1rem;
       }
       .submit-btn {
-        //width: 100%;
         margin-top: rem-calc(17px);
+      }
+      .okBtn {
+        width: rem-calc(120px);
+        height: 53px;
+        margin-left: 10px;
+        width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
       .phone-block {
         display: flex;
@@ -140,5 +151,18 @@
       font-size: rem-calc(18px);
       color: #2a2a2a;
     }
+  }
+  .emailInput {
+    background: white;
+    color: #828AA8;
+    border: 1px solid #828AA8;
+    height: rem-calc(50px);
+    border-radius: rem-calc(5px);
+    font-size: rem-calc(16px);
+    text-align: center;
+    width: 75%;
+  }
+  .wrapperInput {
+    display: flex;
   }
 }

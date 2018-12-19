@@ -2,8 +2,6 @@
 /* eslint no-restricted-globals: 1 */
 /* global firebase */
 
-import logo from '@/assets/images/app/logo.png';
-
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
@@ -18,8 +16,7 @@ messaging.setBackgroundMessageHandler((payload) => {
   const notificationTitle = payload.title;
   const notificationOptions = {
     body: payload.body,
-    icon: logo,
-  };  
+  };
   return self.registration.showNotification(
     notificationTitle,
     notificationOptions,

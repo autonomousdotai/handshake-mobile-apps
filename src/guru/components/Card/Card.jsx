@@ -1,18 +1,18 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { PropTypes } from 'prop-types';
 
-class Card extends PureComponent {
+class Card extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     title: PropTypes.string.isRequired,
     imageUrl: PropTypes.string,
-    children: PropTypes.node,
+    children: PropTypes.node
   };
 
   static defaultProps = {
     className: 'CardGuru',
     imageUrl: null,
-    children: null,
+    children: null
   }
 
   renderTitle = (title) => {
@@ -21,9 +21,10 @@ class Card extends PureComponent {
   }
 
   renderImage = (imageUrl) => {
+    if (!imageUrl) return null;
     return (
       <div className="CardImage">
-        { imageUrl && (<image src={imageUrl} alt="" />) }
+        { imageUrl && (<img src={imageUrl} alt="" />) }
       </div>
     );
   }
@@ -32,8 +33,10 @@ class Card extends PureComponent {
     const { className, title, imageUrl, children } = props;
     return (
       <div className={className}>
-        { this.renderTitle(title) }
-        { this.renderImage(imageUrl) }
+        <div className="CardHeading">
+          { this.renderTitle(title) }
+          { this.renderImage(imageUrl) }
+        </div>
         { children }
       </div>
     );

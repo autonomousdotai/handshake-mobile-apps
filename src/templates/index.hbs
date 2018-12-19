@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <meta name="mobile-web-app-capable" content="yes">
-  {{!-- todo: https://developer.chrome.com/multidevice/android/installtohomescreen#icon --}}
   <!-- SEO -->
   <meta name="description" content="{{ htmlWebpackPlugin.options.env.description }}" data-react-helmet="true" />
   <meta name="keywords" content="{{ htmlWebpackPlugin.options.env.keywords }}" data-react-helmet="true" />
@@ -24,31 +23,10 @@
   <meta name="twitter:title" content="{{ htmlWebpackPlugin.options.env.title }}" />
   <meta name="twitter:description" content="" />
   <meta name="twitter:image" content="" />
-  <!--/ SEO -->
+  
   <link rel="stylesheet" href="https://use.typekit.net/bro5hwc.css">
   <link rel="stylesheet" href="https://use.typekit.net/qow3iea.css">
   <link rel="stylesheet" href="https://use.typekit.net/nfr2whb.css">
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-j8y0ITrvFafF4EkV1mPW0BKm6dp3c+J9Fky22Man50Ofxo2wNe5pT1oZejDH9/Dt" crossorigin="anonymous">
-  {{#if htmlWebpackPlugin.options.env.social.isUseSocial }}
-  <script>
-    console.log(navigator.userAgent);var userAgent=navigator.userAgent,speed_insight=userAgent.indexOf("Speed Insights");!speed_insight>=0&&(console.log("not Speed Insights"),console.log("start load analytics script"),function(e,n,t,o,s,a,c){e.GoogleAnalyticsObject=s,e.ga=e.ga||function(){(e.ga.q=e.ga.q||[]).push(arguments)},e.ga.l=1*new Date,a=n.createElement(t),c=n.getElementsByTagName(t)[0],a.async=1,a.src="//www.google-analytics.com/analytics.js",c.parentNode.insertBefore(a,c)}(window,document,"script",0,"ga"),function(e,n,t,o,s,a,c){e.fbq||(s=e.fbq=function(){s.callMethod?s.callMethod.apply(s,arguments):s.queue.push(arguments)},e._fbq||(e._fbq=s),s.push=s,s.loaded=!0,s.version="2.0",s.queue=[],(a=n.createElement(t)).async=!0,a.src="//connect.facebook.net/en_US/fbevents.js",(c=n.getElementsByTagName(t)[0]).parentNode.insertBefore(a,c))}(window,document,"script"),console.log("end load analytics script"));
-  </script>
-  <script>
-    fbq('init', '{{ htmlWebpackPlugin.options.env.social.facebookPixelId }}');
-    fbq('track', 'PageView');
-    ga('create', '{{ htmlWebpackPlugin.options.env.social.googleAnalyticId }}', 'auto');
-    ga('send', 'pageview');
-  </script>
-
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','{{ htmlWebpackPlugin.options.env.social.googleTagmanagerId }}');</script>
-  <!-- End Google Tag Manager -->
-
-  {{/if}}
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{htmlWebpackPlugin.options.env.social.googleAnalyticId}}"></script>
@@ -56,7 +34,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', '{{htmlWebpackPlugin.options.env.social.googleAnalyticId}}');
   </script>
   <!-- End Google Analytics -->
@@ -83,57 +60,27 @@
 </head>
 <body>
   <script>
-    function initSocial() {
-      // Facebook sdk
-      // -- setup facebook app
-      window.fbAsyncInit = function () {
-        FB.init({
-          appId: '{{ htmlWebpackPlugin.options.env.social.facebookAppId }}',
-          xfbml: true,
-          version: 'v2.12'
-        });
-      };
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '{{ htmlWebpackPlugin.options.env.social.facebookAppId }}',
+        xfbml: true,
+        version: 'v2.12'
+      });
+    };
 
-      (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {
-          return;
-        }
-        js = d.createElement(s);
-        js.id = id;
-        js.async = true;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-      // End Facebook sdk
-    }
-
-    setTimeout(function () {
-      initSocial();
-    }, 2000);
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.async = true;
+      js.src = "//connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   </script>
-  <!--Start of Zendesk Chat Script-->
-  <script type="text/javascript">
-    {{!-- function initZendesk() {
-      console.log('initZendesk',);
-      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-        d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-        $.src="https://v2.zopim.com/?65ZUCjjecRCrh62mTkRnytF5ZLvPMfg0";z.t=+new Date;$.
-          type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-    }
-
-    setTimeout(function () {
-      initZendesk();
-    }, 5000); --}}
-  </script>
-  <!--End of Zendesk Chat Script-->
-  <!--<script src="https://js.stripe.com/v3/"></script>-->
   <script type="text/javascript" src="//script.crazyegg.com/pages/scripts/0068/4833.js" async="async"></script>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ htmlWebpackPlugin.options.env.social.googleTagmanagerId }}"
-  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
   <div id="app"></div>
   <noscript>Your browser does not support JavaScript!</noscript>
 

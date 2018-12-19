@@ -1,17 +1,81 @@
 export const loadMatches = (payload = {}) => {
   return {
     type: 'GURU:LOAD_MATCHES',
-    ...payload,
+    ...payload
   };
 };
 
-export const updateEvents = (events) => {
+export const updateEvents = (payload = {}) => {
   return {
     type: 'GURU:UPDATE_EVENTS',
-    events,
+    payload
   };
 };
 
+export const loadRelatedMatches = (payload = {}) => {
+  return {
+    type: 'GURU:LOAD_RELATED_MATCHES',
+    ...payload
+  };
+};
+
+export const putRelatedMatches = (payload) => {
+  return {
+    type: 'GURU:PUT_RELATED_MATCHES',
+    payload
+  };
+};
+
+export const getReportCount = (payload = {}) => {
+  return {
+    type: 'GURU:COUNT_REPORT',
+    ...payload
+  };
+};
+
+export const removeExpiredEvent = (payload = {}) => {
+  return {
+    type: 'GURU:REMOVE_EXPIRED_EVENT',
+    ...payload
+  };
+};
+
+export const updateCountReport = (payload) => {
+  return {
+    type: 'GURU:CHECK_REPORT',
+    payload
+  };
+};
+
+export const checkRedeemCode = (payload = {}) => {
+  return {
+    type: 'GURU:CHECK_REDEEM_CODE',
+    ...payload
+  };
+};
+
+export const emailSubscriber = (payload = {}) => {
+  return {
+    type: 'GURU:SUBCRIBE_EMAIL_PREDICTION',
+    ...payload
+  };
+};
+
+export const putUserSubscribe = (payload) => {
+  return {
+    type: 'GURU:PUT_USER_SUBSCRIBE',
+    payload
+  };
+};
+
+export const putStatusEmailSubscribe = (payload) => {
+  return {
+    type: 'GURU:PUT_STATUS_EMAIL_SUBSCRIBE',
+    payload
+  };
+};
+
+// Move to Reputation
 export const updateUserEvents = (events, loadMore, page) => {
   return {
     type: 'GURU:UPDATE_USER_EVENTS',

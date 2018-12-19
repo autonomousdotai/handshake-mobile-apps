@@ -22,9 +22,12 @@ import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHan
 
 import { updateLoading, userHabit } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
-  checkRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
+  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
 import {
   queryStringSelector,
+  eventSelector,
+  isRedeemSelector,
+  isSubscribeSelector,
   matchDetailSelector,
   gasPriceSelector,
   matchOddsSelector,
@@ -71,10 +74,7 @@ class PlaceBet extends Component {
     dispatch(getMatchDetail({ eventId }));
     dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
     dispatch(getGasPrice());
-    dispatch(userHabit({ data: {
-      ids: [eventId],
-      view_type: UserHabit.DETAIL
-    } }));
+    this.userHabit(dispatch, eventId);
   }
 
   componentDidUpdate(prevProps) {
@@ -108,8 +108,8 @@ class PlaceBet extends Component {
     const { props, getSide } = this;
     const { matchOdds } = props;
     return (
-      (matchOdds &&
-        matchOdds[this.props.sideOdds[`${getSide(props) - 1}`]][0].odds) ||
+      ((matchOdds && props.sideOdds[`${getSide(props) - 1}`]) &&
+        matchOdds[props.sideOdds[`${getSide(props) - 1}`]][0].odds) ||
       0
     );
   };
@@ -140,6 +140,13 @@ class PlaceBet extends Component {
       message: <div className="text-center">{message}</div>
     };
     dispatch(showAlert(alertProps));
+  };
+
+  userHabit = (dispatch, eventId) => {
+    dispatch(userHabit({ data: [{
+      ids: [eventId],
+      view_type: UserHabit.DETAIL
+    }] }));
   };
 
   handShakeData = ({ amount, redeem }) => {
@@ -204,6 +211,7 @@ class PlaceBet extends Component {
     }
     const { status, message, code } = await validate(values);
     if (status) {
+      this.userHabit(props.dispatch, handShakeData(values).match_id);
       return props.dispatch(initHandShake(handShakeData(values)));
     }
     if (message && code === VALIDATE_CODE.NOT_ENOUGH_BALANCE) {
@@ -218,7 +226,7 @@ class PlaceBet extends Component {
     if (name === 'amount') {
       return this.setState({ betAmount: value });
     }
-    return this.props.dispatch(checkRedeemCode({ redeem: value }));
+    return this.props.dispatch(checkCompareRedeemCode({ redeem: value }));
   };
 
   calculatePosWinning = (props) => {
@@ -237,7 +245,7 @@ class PlaceBet extends Component {
 
   redeemNotice = (props, state) => {
     const { isUseRedeem } = state;
-    if (!props.isRedeem || isUseRedeem) return null;
+    if (!props.isRedeem || !props.isSubscribe || isUseRedeem) return null;
     return (
       <div className="Redeem">
         {/* {`You've already requested a redeem code. `} */}
@@ -317,10 +325,10 @@ class PlaceBet extends Component {
 export default injectIntl(connect(
   (state) => {
     return {
-      eventList: state.prediction.events,
+      eventList: eventSelector(state),
       isLoading: state.guru.ui.isLoading,
-      isSubscribe: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe),
-      isRedeem: (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.redeem),
+      isSubscribe: isSubscribeSelector(state),
+      isRedeem: isRedeemSelector(state),
       redeem: state.guru.ui.redeem,
       matchDetail: matchDetailSelector(state),
       queryStringURL: queryStringSelector(state),

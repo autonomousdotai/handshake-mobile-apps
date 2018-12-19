@@ -6,9 +6,8 @@ import {Field, change, clearFields} from "redux-form";
 import {fieldDropdown, fieldInput} from '@/components/core/form/customField'
 import {connect} from "react-redux";
 import { bindActionCreators } from "redux";
-import Button from '@/components/core/controls/Button';
 import { API_URL } from "@/constants";
-import {getFiatCurrency} from '@/reducers/exchange/action';
+import {getFiatCurrency} from '@/reducers/wallet/action';
 import {MasterWallet} from "@/services/Wallets/MasterWallet";
 
 import { showLoading, hideLoading, showAlert } from '@/reducers/app/action';
@@ -368,7 +367,7 @@ class ReceiveCoin extends React.Component {
                 {messages.wallet.action.receive.link.download_qrcode}
               </a>
             </div>
-            
+
             {/* Don't support for Collectibles */}
             { !this.state.walletSelected.isCollectibles ?
             <ReceiveWalletForm className="receivewallet-wrapper">

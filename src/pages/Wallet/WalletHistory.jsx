@@ -16,7 +16,7 @@ import {Tabs} from 'rmc-tabs';
 import 'rmc-tabs/assets/index.css';
 
 import imgNoTrans from '@/assets/images/wallet/images/no-transaction.svg';
-import iconLoadding from '@/assets/images/icon/loading.gif';
+import iconLoadding from '@/assets/images/app/loading.gif';
 import needBackupWhite from '@/assets/images/wallet/icons/icon-need-backup-white.svg';
 
 const TAB = {

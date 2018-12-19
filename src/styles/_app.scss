@@ -1,8 +1,6 @@
-
 .app {
   padding: 56px 0 60px 0;
   margin: 0 auto;
-  // min-height: 100vh;
   max-width: $app-width;
   overflow: hidden;
   background-color: $white;
@@ -85,22 +83,6 @@
       position: relative;
       height: 100%;
       width: 20%;
-      &.PlusButton:after {
-        // content: '';
-        // position: absolute;
-        // z-index: 1;
-        // border-bottom-left-radius: 50%;
-        // border-bottom-right-radius: 50%;
-        // border-top-left-radius: 44%;
-        // border-top-right-radius: 44%;
-        // padding: 5px;
-        // margin: -14px 6px 0;
-        // top: 0;
-        // left: -4px;
-        // right: -4px;
-        // bottom: 11px;
-        // box-shadow: inset 0px -32px 8px -1px #dcdcdc;
-      }
       a {
         cursor: pointer;
         position: relative;
@@ -198,34 +180,5 @@
   &:first-child:nth-last-child(2) ~ & {
     width: 50%;
     padding-left: 4px;
-  }
-}
-
-.text-underline {
-  text-decoration: underline !important;
-}
-
-.discover-overlay {
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1100;
-  background-color: rgba($color: $black, $alpha: 0.3);
-  display: none;
-  &.show {
-    display: block;
-  }
-  img {
-    display: block;
-    position: absolute;
-    width:  rem-calc(50px);
-    height: rem-calc(50px);
-    background: $white;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
 }
