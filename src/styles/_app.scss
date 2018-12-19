@@ -86,7 +86,10 @@
     li {
       position: relative;
       height: 100%;
-      width: 20%;
+      width: 40%;
+      &.PlusButton {
+        width: 20%;
+      }
       a {
         cursor: pointer;
         position: relative;
