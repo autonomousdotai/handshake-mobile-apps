@@ -13,7 +13,6 @@ import Button from '@/components/core/controls/Button';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import Input from '@/components/core/forms/Input/Input';
 import { StringHelper } from '@/services/helper';
-import * as Metamask from '@/guru/services/metamask/connect';
 
 import {change, clearFields} from 'redux-form';
 import ModalDialog from '@/components/core/controls/ModalDialog';
