@@ -60,6 +60,7 @@ export function* handleLoadRelatedMaches({ matchId }) {
     });
     if (data) {
       yield put(putRelatedMatches(data));
+      yield put(updateLoading(false));
     }
   } catch (e) {
     console.error('handleLoadRelatedMachesSaga', e);

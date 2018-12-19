@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { injectIntl } from 'react-intl';
 import { URL } from '@/constants';
 import { isJSON } from '@/utils/object';
-import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { updateLoading } from '@/guru/stores/action';
 import {
@@ -82,34 +81,26 @@ class Home extends Component {
     if (props.matchParam) {
       props.dispatch(loadRelatedMatches({ matchId: props.matchParam }));
     }
-    props.dispatch(loadMatches({ isDetail: props.matchParam }));
-    return props.dispatch(updateLoading(false));
+    return props.dispatch(loadMatches({ isDetail: props.matchParam }));
   }
 
   modalEmailSubscribe = (modal) => { this.emailSubscribe = modal; };
 
-  renderAppBar = () => {
-    return (
-      <AppBar>
-        <span className="Title">Prediction</span>
-        <Link to={URL.HANDSHAKE_WALLET_INDEX} className="IconRight Wallet">
-          <i className="fal fa-wallet" />
-        </Link>
-      </AppBar>
-    );
-  }
+  renderAppBar = () => (
+    <AppBar>
+      <span className="Title">Prediction</span>
+      <Link to={URL.HANDSHAKE_WALLET_INDEX} className="IconRight Wallet">
+        <i className="fal fa-wallet" />
+      </Link>
+    </AppBar>
+  )
 
-  renderHome = (props) => {
-    if (props.isLoading) {
-      return (<Loading isLoading={props.isLoading} />);
-    }
-    return (
-      <React.Fragment>
-        {this.renderAppBar(props)}
-        <View {...props} modalEmailSubscribe={this.modalEmailSubscribe} />
-      </React.Fragment>
-    );
-  }
+  renderHome = (props) => (
+    <React.Fragment>
+      {this.renderAppBar(props)}
+      <View {...props} modalEmailSubscribe={this.modalEmailSubscribe} />
+    </React.Fragment>
+  )
 
   render() {
     return this.renderHome(this.props);
