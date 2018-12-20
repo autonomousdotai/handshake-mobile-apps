@@ -27,13 +27,18 @@
   }
 
   .AddChromeBtn {
-    background-color: $primary-color;
-    border: 3px solid #ffa632;
+    pointer-events: none;
+    // background-color: $primary-color;
+    // border: 3px solid #ffa632;
     color: #fff;
-    width: 300px;
+    font-weight: 500;
 
     span {
-      margin-left: 10px;
+      // margin-left: 10px;
+    }
+
+    a {
+      color: $primary-color;
     }
 
     &:hover {
@@ -42,6 +47,7 @@
   }
 
   .OrOpen {
+    visibility: hidden;
     padding-top: 20px;
     font-weight: bold;
 
