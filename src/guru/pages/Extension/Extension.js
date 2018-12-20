@@ -39,10 +39,10 @@ function clipOnMac() {
 function addChromeBtn() {
   return (
     <div className="AddChromeSection">
-      <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
-        <i className="fab fa-chrome" />
+      <span className="btn AddChromeBtn">
+        {/* <i className="fab fa-chrome" /> */}
         <span>Play on mobile</span>
-      </a>
+      </span>
       <p className="OrOpen">
         or open{' '}
         <a href={URL.HANDSHAKE_PREDICTION} target="_blank">
