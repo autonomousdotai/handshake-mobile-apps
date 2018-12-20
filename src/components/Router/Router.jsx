@@ -50,6 +50,7 @@ const routeList = [
   // Only DESKTOP
   { path: URL.INDEX, component: Extension, isDesktop: true },
   { path: URL.CHROME_EXTENSION, component: Extension, isDesktop: true },
+  { path: URL.PREDICTION, component: Extension, redirectTo: URL.INDEX, isDesktop: true },
   { path: URL.LUCKY_POOL, component: RouterLuckyPool, isDesktop: true },
   { path: URL.CREATE_EVENT, component: PageMobileOnly, isDesktop: true },
 
@@ -76,6 +77,7 @@ const routeList = [
   { path: URL.INDEX, isDesktop: false, redirectTo: URL.PREDICTION },
   { path: URL.HANDSHAKE_PEX, redirectTo: URL.PREDICTION, isDesktop: false }
 ].filter((r) => [isDesktop, undefined].includes(r.isDesktop)).map(r => {
+  console.log('router', r);
   if (r.redirectTo) {
     return <Redirect exact key={r.path} from={r.path} to={r.redirectTo} />;
   }
@@ -90,7 +92,9 @@ export default class Router extends React.Component {
     return (
       <Switch>
         {routeList}
-        <Route component={Page404} />
+        <Route component={Page404}>
+          <Redirect to={URL.INDEX} />
+        </Route>
       </Switch>
     );
   }

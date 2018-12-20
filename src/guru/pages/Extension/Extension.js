@@ -41,7 +41,7 @@ function addChromeBtn() {
     <div className="AddChromeSection">
       <a href={EXT.URL} className="btn AddChromeBtn" target="_blank">
         <i className="fab fa-chrome" />
-        <span>Add to Chrome</span>
+        <span>Play on mobile</span>
       </a>
       <p className="OrOpen">
         or open{' '}
