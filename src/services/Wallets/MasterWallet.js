@@ -1,7 +1,6 @@
 
 import localStore from '@/services/localStore';
 import { Bitcoin } from '@/services/Wallets/Bitcoin.js';
-import { BitcoinCash } from '@/services/Wallets/BitcoinCash.js';
 import { BitcoinTestnet } from '@/services/Wallets/BitcoinTestnet.js';
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
 
@@ -45,7 +44,7 @@ export class MasterWallet {
 
       let defaultWallet = [1, 3];// eth main, eth test, btc main, btc test => local web
       if (process.env.isLive) { // // eth main, eth test, btc main, btc test => live web
-        defaultWallet = [0, 1, 2];
+        defaultWallet = [0, 1];
       }
       if (process.env.isDojo) { // eth test, shuri test, btc test => dojo web
         defaultWallet = [0, 2];
