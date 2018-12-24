@@ -77,7 +77,6 @@ const routeList = [
   { path: URL.INDEX, isDesktop: false, redirectTo: URL.PREDICTION },
   { path: URL.HANDSHAKE_PEX, redirectTo: URL.PREDICTION, isDesktop: false }
 ].filter((r) => [isDesktop, undefined].includes(r.isDesktop)).map(r => {
-  console.log('router', r);
   if (r.redirectTo) {
     return <Redirect exact key={r.path} from={r.path} to={r.redirectTo} />;
   }
