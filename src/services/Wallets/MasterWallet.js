@@ -72,21 +72,11 @@ export class MasterWallet {
       }
 
       // set default item:
+      console.log('defaultWallet', defaultWallet, masterWallet);
       for(let i = 0; i < defaultWallet.length; i++){
+        console.log('defaultWallet[i]', defaultWallet[i], masterWallet);
         masterWallet[defaultWallet[i]].default = true;
       }
-
-      // For Reward wallet:
-      // todo: now need hide
-      // mnemonic = bip39.generateMnemonic();
-      // for (const k in MasterWallet.ListCoinReward) {
-      //   const wallet = new MasterWallet.ListCoinReward[k]();
-      //   wallet.mnemonic = mnemonic;
-      //   wallet.network = MasterWallet.ListCoinReward[k].Network.Mainnet;
-      //   wallet.createAddressPrivatekey();
-      //   wallet.isReward = true;
-      //   masterWallet.push(wallet);
-      // }
 
       // Save to local store:
       MasterWallet.UpdateLocalStore(masterWallet);
