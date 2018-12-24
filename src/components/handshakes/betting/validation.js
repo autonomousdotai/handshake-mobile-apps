@@ -3,7 +3,12 @@ import { MESSAGE } from '@/components/handshakes/betting/message.js';
 
 import moment from 'moment';
 
-import {getAddress, getEstimateGas, parseBigNumber, getBalance } from '@/components/handshakes/betting/utils.js';
+import {
+  getAddress,
+  getEstimateGas,
+  parseBigNumber,
+  getBalance
+} from '@/components/handshakes/betting/utils.js';
 import { VALIDATE_CODE } from '@/components/handshakes/betting/constants.js';
 
 const TAG = 'VALIDATION';
@@ -11,11 +16,13 @@ export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
 
-  if (process.env.isStaging) {
+  if (!process.env.isLive) {
     return true;
   }
   if (process.env.isProduction) {
-    if (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet) {
+    if (
+      wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet
+    ) {
       return true;
     }
     return false;
@@ -23,7 +30,7 @@ export const isRightNetwork = () => {
   return true;
 };
 
-export const isExpiredDate = (reportTime) => {
+export const isExpiredDate = reportTime => {
   const newClosingDate = moment.unix(reportTime);
   const dayUnit = newClosingDate.utc();
   const today = moment();
@@ -35,7 +42,7 @@ export const isExpiredDate = (reportTime) => {
   return false;
 };
 
-export const isSameAddress = (address) => {
+export const isSameAddress = address => {
   const currentAddress = getAddress();
   if (address !== currentAddress) {
     return false;
@@ -43,13 +50,20 @@ export const isSameAddress = (address) => {
   return true;
 };
 
-export const validateBet = async (amount = 0, odds = 0, closingDate, matchName = '', matchOutcome = '', freeBet=false) => {
+export const validateBet = async (
+  amount = 0,
+  odds = 0,
+  closingDate,
+  matchName = '',
+  matchOutcome = '',
+  freeBet = false
+) => {
   const balance = await getBalance();
 
   const estimateGas = await getEstimateGas();
-  const estimatedGasBN = parseBigNumber(estimateGas.toString()||0);
-  const total = amount.plus(estimatedGasBN).toNumber()||0;
-  let result = { status: true, message: '', code: -1, value: null, balance };
+  const estimatedGasBN = parseBigNumber(estimateGas.toString() || 0);
+  const total = amount.plus(estimatedGasBN).toNumber() || 0;
+  const result = { status: true, message: '', code: -1, value: null, balance };
   if (!isRightNetwork()) {
     result.message = MESSAGE.RIGHT_NETWORK;
     result.status = false;
@@ -96,6 +110,4 @@ export const validateBet = async (amount = 0, odds = 0, closingDate, matchName =
   }
 
   return result;
-
-
 };

@@ -2,7 +2,10 @@ import * as Yup from 'yup';
 import moment from 'moment';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { MESSAGE } from '@/components/handshakes/betting/message.js';
-import { BET_TYPE, VALIDATE_CODE } from '@/components/handshakes/betting/constants.js';
+import {
+  BET_TYPE,
+  VALIDATE_CODE
+} from '@/components/handshakes/betting/constants.js';
 import { getBalance, getEstimateGas, getAddress } from '@/utils/helpers';
 import { parseBigNumber } from '@/utils/number';
 
@@ -15,33 +18,36 @@ export const validationSchema = Yup.object().shape({
 export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
   MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
-  if (process.env.isStaging) return true;
+  if (!process.env.isLive) return true;
   if (process.env.isProduction) {
-    return (wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet);
+    return (
+      wallet.network === MasterWallet.ListCoin[wallet.className].Network.Mainnet
+    );
   }
   return true;
 };
 
-export const isSameAddress = (address) => (address !== getAddress());
+export const isSameAddress = address => address !== getAddress();
 
-export const isExpiredDate = (reportTime) => {
+export const isExpiredDate = reportTime => {
   const newClosingDate = moment.unix(reportTime);
   const dayUnit = newClosingDate.utc();
   const today = moment();
   const todayUnit = today.utc();
-  return (!todayUnit.isSameOrBefore(dayUnit, 'miliseconds') && today);
+  return !todayUnit.isSameOrBefore(dayUnit, 'miliseconds') && today;
 };
 
-export const isExistMatchBet = (list) => (list.find(item => item.type === BET_TYPE.SHAKE));
+export const isExistMatchBet = list =>
+  list.find(item => item.type === BET_TYPE.SHAKE);
 
-export const validationBet = async ({
-  amount = 0,
-  freeBet = false
-}) => {
+export const validationBet = async ({ amount = 0, freeBet = false }) => {
   const balance = await getBalance();
   const estimateGas = await getEstimateGas();
   const estimatedGasBN = parseBigNumber(estimateGas.toString() || 0);
-  const total = parseBigNumber(amount).plus(estimatedGasBN).toNumber() || 0;
+  const total =
+    parseBigNumber(amount)
+      .plus(estimatedGasBN)
+      .toNumber() || 0;
   const result = {
     status: true,
     message: undefined,
