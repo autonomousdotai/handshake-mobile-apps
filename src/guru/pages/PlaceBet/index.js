@@ -5,7 +5,7 @@ import qs from 'querystring';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { isEmpty } from '@/utils/is';
-import { formatAmount } from '@/utils/number';
+import { formatAmount, parseBigNumber } from '@/utils/number';
 import { possibleWinning } from '@/utils/calculate';
 import { getBalance, getAddress, getChainIdDefaultWallet } from '@/utils/helpers';
 import IconCoin from '@/assets/images/icon/icon-coin.svg';
@@ -155,7 +155,7 @@ class PlaceBet extends Component {
     if (!matchDetail) return null;
     return {
       redeem,
-      amount,
+      amount: parseBigNumber(amount),
       currency: 'ETH',
       type: HANDSHAKE_ID.BETTING,
       match_id: matchDetail.id,
