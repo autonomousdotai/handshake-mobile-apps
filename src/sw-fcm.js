@@ -5,9 +5,7 @@
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
-firebase.initializeApp({
-  messagingSenderId: process.env.firebase.messagingSenderId,
-});
+firebase.initializeApp(process.env.firebase);
 
 const messaging = firebase.messaging();
 
@@ -22,3 +20,4 @@ messaging.setBackgroundMessageHandler((payload) => {
     notificationOptions,
   );
 });
+
