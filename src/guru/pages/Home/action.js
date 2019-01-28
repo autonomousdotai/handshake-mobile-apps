@@ -47,9 +47,9 @@ export const updateCountReport = (payload) => {
   };
 };
 
-export const checkRedeemCode = (payload = {}) => {
+export const checkSubcribeEmail = (payload = {}) => {
   return {
-    type: 'GURU:CHECK_REDEEM_CODE',
+    type: 'GURU:CHECK_SUBCRIBE_EMAIL',
     ...payload
   };
 };

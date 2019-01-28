@@ -10,7 +10,7 @@ import {
   getReportCount,
   removeExpiredEvent,
   updateCountReport,
-  checkRedeemCode,
+  checkSubcribeEmail,
   emailSubscriber,
   putUserSubscribe,
   putStatusEmailSubscribe,
@@ -93,15 +93,15 @@ export function* handleCountReport() {
   }
 }
 
-export function* handleCheckRedeem() {
+export function* handleCheckSubcribeEmail() {
   try {
     const response = yield call(apiGet, {
       PATH_URL: API_URL.CRYPTOSIGN.CHECK_REDEEM_CODE,
-      type: 'CHECK_REDEEM_CODE'
+      type: 'CHECK_SUBCRIBE_EMAIL'
     });
     yield put(putUserSubscribe(response.data));
   } catch (e) {
-    console.error('handleCheckRedeem', e);
+    console.error('handleCheckSubcribeEmail', e);
   }
 }
 
@@ -191,7 +191,7 @@ export default function* homeSaga() {
   yield takeLatest(loadRelatedMatches().type, handleLoadRelatedMaches);
   yield takeLatest(getReportCount().type, handleCountReport);
   yield takeLatest(removeExpiredEvent().type, handleRemoveEvent);
-  yield takeLatest(checkRedeemCode().type, handleCheckRedeem);
+  yield takeLatest(checkSubcribeEmail().type, handleCheckSubcribeEmail);
   yield takeLatest(emailSubscriber().type, handleEmailSubscriber);
   yield takeLatest(loadUserReputation().type, handleLoadReputation);
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);

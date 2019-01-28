@@ -22,7 +22,7 @@ import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHan
 
 import { updateLoading, userHabit } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
-  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
+  checkCompareRedeemCode, removeRedeemCode } from './action';
 import {
   queryStringSelector,
   eventSelector,
@@ -202,13 +202,10 @@ class PlaceBet extends Component {
 
   handleBet = async ({ values }) => {
     const { validate, alertBox, modalOuttaMoney, handShakeData, props } = this;
-    const { redeem } = values;
     // TODO: update gasPrice
     await getGasPrice();
     props.dispatch(updateLoading(true));
-    if (redeem) {
-      return props.dispatch(initHandShakeFree(handShakeData(values)));
-    }
+    
     const { status, message, code } = await validate(values);
     if (status) {
       this.userHabit(props.dispatch, handShakeData(values).match_id);
@@ -270,9 +267,6 @@ class PlaceBet extends Component {
         'btn-primary': getSide(props) === 1,
         'btn-secondary': getSide(props) === 2
       }),
-      isUseRedeem: state.isUseRedeem,
-      statusRedeem: props.redeem ? !!props.redeem.status : undefined,
-      redeemNotice: this.redeemNotice(props, state)
     };
   };
 

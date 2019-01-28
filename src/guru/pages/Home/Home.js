@@ -12,7 +12,7 @@ import {
   loadMatches,
   loadRelatedMatches,
   getReportCount,
-  checkRedeemCode
+  checkSubcribeEmail
 } from './action';
 import {
   eventSelector,
@@ -44,7 +44,7 @@ class Home extends Component {
   componentDidMount() {
     this.receiverMessage(this.props);
     this.props.dispatch(getReportCount());
-    this.props.dispatch(checkRedeemCode());
+    this.props.dispatch(checkSubcribeEmail());
   }
 
   componentDidUpdate() {
