@@ -18192,7 +18192,7 @@ html:not([dir='rtl']) .noUi-horizontal .noUi-handle
                 <Slide bottom>
                 <div className="pr-md-5">
                   <h3>Hold multiple cryptocurrencies with a decentralized wallet </h3>
-                  <p>Ninja Wallet - free, no downloads, no sign ups, and no KYC. Allowing users to remain 100% anonymous, with all transactions secured on the blockchain.</p>
+                  <p>Ninja Wallet, no downloads, no sign ups, and no KYC. Allowing users to remain 100% anonymous, with all transactions secured on the blockchain.</p>
                   <p>It currently supports BTC, ETH, BCH, ERC20 tokens, and ERC721 collectibles such as CryptoKitties, CryptoStrikers, CryptoPunks. The currencies XRP, ZEC, LTC… and more will be added soon.</p>
                 </div>
                 </Slide>

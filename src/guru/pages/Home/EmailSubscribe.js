@@ -18,6 +18,7 @@ class EmailSubscribe extends React.Component {
     return dispatch(emailSubscriber(values));
   }
 
+  /***TO DO: remove free bet Text but keep collect Email */
   renderEmailSubcribe = (props) => {
     const subscriberProps = {
       isSubmitting: props.isLoader,
