@@ -25,6 +25,7 @@ import {
 } from '@/pages/Me/action';
 import { updateLoading } from './action';
 
+/*
 const initialState = {
   events: [],
   matchDetail: {},
@@ -127,6 +128,180 @@ const guruReducer = (state = initialState, action) => {
         break;
     }
   });
+};
+*/
+
+const guruReducer = (state = {
+  events: [],
+  matchDetail: {},
+  gasPrice: '',
+  userEvents: [],
+  reputation: {},
+  ui: {},
+  authCoinBase: {},
+  authMetaMask: []
+}, action) => {
+  switch (action.type) {
+    case updateLoading().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          isLoading: action.payload
+        }
+      };
+    case updateEvents().type:
+      return {
+        ...state,
+        events: action.payload
+      };
+    case updateCountReport().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          countReport: action.payload
+        }
+      };
+    case putUserSubscribe().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          userSubscribe: action.payload
+        }
+      };
+    case putStatusEmailSubscribe().type:
+      
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          userSubscribe: {
+            status: action.payload
+          }
+        }
+      };
+    case putRelatedMatches().type:
+      return {
+        ...state,
+        relatedMatches: action.payload
+      };
+    case putMatchDetail().type:
+      return {
+        ...state,
+        matchDetail: {
+          ...state.matchDetail,
+          ...action.data
+        }
+      };
+    case putMatchOdd().type:
+      return {
+        ...state,
+        matchDetail: {
+          ...state.matchDetail,
+          odds: action.payload
+        }
+      };
+    case putGasPrice().type:
+      return {
+        ...state,
+        gasPrice: action.payload
+      };
+    case putHandShake().type:
+      return {
+        ...state,
+        handShakes: action.payload
+      };
+    case putRedeemCode().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          redeem: action.payload
+        }
+      };
+    case removeRedeemCode().type:
+      return {
+        ...state,
+        ui: {
+          ...state,
+          redeem: null
+        }
+      };
+    case 'GURU:UPDATE_USER_EVENTS': {
+      const newList = [...state.userEvents, ...action.userEvents];
+      return {
+        ...state,
+        userEvents: newList,
+        reputation: {
+          ...state.reputation,
+          loadMore: action.loadMore,
+          page: action.page
+        }
+      };
+    }
+
+    case 'GURU:UPDATE_NEW_USER_EVENTS':
+      return {
+        ...state,
+        userEvent: action.userEvents,
+        reputation: {
+          ...state.reputation,
+          loadMore: action.loadMore,
+          page: action.page
+        }
+      };
+    case 'GURU:UPDATE_USER_REPUTATION':
+      return {
+        ...state,
+        reputation: {
+          ...state.reputation,
+          ...action.reputation
+        }
+      };
+    case 'GURU:UPDATE_AUTH_COINBASE':
+      return {
+        ...state,
+        authCoinBase: action.authCoinBase
+      };
+    case 'GURU:UPDATE_AUTH_META_MASK':
+      return {
+        ...state,
+        authMetaMask: action.authMetaMask
+      };
+    case updateReports().type:
+      return {
+        ...state,
+        reports: action.payload.data
+      };
+    case shareEvent().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          shareEvent: action.payload
+        }
+      };
+    case resetShareEvent().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          shareEvent: undefined
+        }
+      };
+    case putReferralCheck().type:
+      return {
+        ...state,
+        ui: {
+          ...state.ui,
+          referralCheck: action.payload
+        }
+      };
+    default:
+      return state;
+  }
 };
 
 export default guruReducer;
