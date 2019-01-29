@@ -69,7 +69,7 @@ class TopUp extends React.Component {
       </div>
     );
   };
-  restoreWallet=(props) => {
+  restoreWallet=() => {
     return (
       <div className="RestoreButton">
         <span
