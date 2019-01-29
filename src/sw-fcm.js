@@ -5,7 +5,9 @@
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
 
-firebase.initializeApp(process.env.firebase);
+firebase.initializeApp({
+  messagingSenderId: process.env.firebase.messagingSenderId,
+});
 
 const messaging = firebase.messaging();
 

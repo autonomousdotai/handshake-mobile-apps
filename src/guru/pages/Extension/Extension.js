@@ -259,7 +259,7 @@ function footer() {
           responsible for policing it.
         </p>
         <p>
-          By freely choosing to use Ninja, the user accepts sole responsibility
+          By choosing to use Ninja, the user accepts sole responsibility
           for their behavior and agrees to abide by the legalities of their
           governing jurisdiction. Ninja cannot be liable for legal, monetary or
           psychological damages should you do something stupid. Never stake more
