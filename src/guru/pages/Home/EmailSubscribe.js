@@ -22,7 +22,7 @@ class EmailSubscribe extends React.Component {
     const subscriberProps = {
       isSubmitting: props.isLoader,
       placeHolder: 'Your email',
-      buttonText: 'I want FREE 0.03 ETH',
+      buttonText: 'Submit',
       buttonClasses: 'btn btn-primary',
       statusSubscribe: props.statusSubscribe,
       handleSubmit: this.handleEmailSubscriber
@@ -35,10 +35,10 @@ class EmailSubscribe extends React.Component {
       >
         <Icon path={SubscribeSVG} className="SubscriberImage" />
         <div className="SubscriberTitle">
-          Claim your free bets
+          Claim your bets
         </div>
         <div className="SubscriberDescription">
-          To claim 2x <span className="highlight">FREE 0.03ETH</span> bets please enter your email address below:
+          Want to receive updates and ninja freebies? No spam, ever.
         </div>
         <Subscriber {...subscriberProps} />
       </ModalDialog>
