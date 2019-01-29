@@ -22,3 +22,4 @@ messaging.setBackgroundMessageHandler((payload) => {
     notificationOptions,
   );
 });
+
