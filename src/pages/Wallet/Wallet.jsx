@@ -170,6 +170,7 @@ class Wallet extends React.Component {
     let listCollectibleWallet = [];
 
     listWallet.forEach((wallet) => {
+      console.log('Wallet:', wallet);
       // is reward wallet:
       if (wallet.isReward) {
         // listRewardWallet.push(wallet);
@@ -247,6 +248,8 @@ class Wallet extends React.Component {
     this.getSetting();
     // this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
+    console.log('List Wallet:', listWallet);
+
     if (listWallet === false) {
       listWallet = await MasterWallet.createMasterWallets();
       await this.splitWalletData(listWallet);

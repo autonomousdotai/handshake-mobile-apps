@@ -3,6 +3,7 @@ import localStore from '@/services/localStore';
 import { Bitcoin } from '@/services/Wallets/Bitcoin.js';
 import { BitcoinTestnet } from '@/services/Wallets/BitcoinTestnet.js';
 import { Ethereum } from '@/services/Wallets/Ethereum.js';
+import { Constant } from '@/services/Wallets/Constant';
 
 import { APP, BASE_API } from '@/constants';
 import Helper from '@/services/helper';
@@ -16,11 +17,11 @@ const CryptoJS = require('crypto-js');
 export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet
+      Ethereum, Bitcoin, BitcoinTestnet, Constant
     };
 
     static ListCoin = {
-      Ethereum, Bitcoin, BitcoinTestnet
+      Ethereum, Bitcoin, BitcoinTestnet, Constant
     };
 
     static neutronMainNet = new Neuron(1);

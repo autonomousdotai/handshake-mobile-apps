@@ -15,7 +15,7 @@ const config = {
       creditAtmAddress: '0xf2ef1a4f0da895efab6f4f882ab3448871f7d741',
       blockchainNetwork: 'https://mainnet.infura.io/',
       apikeyEtherscan: 'AVBIHJUF3G4ZY2CHZI6F4RVBFWC3A3EIVB',
-      shurikenTokenAddress: '0xca0fed76b5807557ce38e65cab83be3373cc2e7d',
+      constantTokenAddress: '0x4983f767b1bc44328e434729ddabea0a064ca1ac', //TO DO: change address constant
     },
     4: {
       multiSigAuthAddress: '',
@@ -34,7 +34,7 @@ const config = {
       cryptosignOwnerPrivateKey: '',
       blockchainNetwork: 'https://rinkeby.infura.io/LLJy74SjotuIMxZJMUvf',
       apikeyEtherscan: 'AVBIHJUF3G4ZY2CHZI6F4RVBFWC3A3EIVB',
-      shurikenTokenAddress: '0xc2f227834af7b44a11a9286f1771cade7ecd316c',
+      constantTokenAddress: '0xa8829b240c212b82279353207b48073155911553', //TO DO: change address constant
     },
   },
 
