@@ -170,7 +170,6 @@ class Wallet extends React.Component {
     let listCollectibleWallet = [];
 
     listWallet.forEach((wallet) => {
-      console.log('Wallet:', wallet);
       // is reward wallet:
       if (wallet.isReward) {
         // listRewardWallet.push(wallet);
@@ -248,10 +247,8 @@ class Wallet extends React.Component {
     this.getSetting();
     // this.attachScrollListener();
     let listWallet = await MasterWallet.getMasterWallet();
-    console.log('List Wallet:', listWallet);
-
-    if (listWallet === false) {
-      listWallet = await MasterWallet.createMasterWallets();
+    if ((listWallet.length - 1) < Object.keys(MasterWallet.ListDefaultCoin).length) {
+      listWallet = await MasterWallet.createMasterWallets(listWallet);
       await this.splitWalletData(listWallet);
     } else {
       this.splitWalletData(listWallet);
@@ -282,6 +279,7 @@ class Wallet extends React.Component {
     listWallet.forEach((wallet) => {
       pros.push(new Promise((resolve, reject) => {
         wallet.getBalance().then((balance) => {
+          console.log('Wallet Balance:', balance);
           wallet.balance = balance;
           resolve(wallet);
         });
@@ -727,7 +725,6 @@ class Wallet extends React.Component {
     const { messages } = this.props.intl;
     const { modalBuyCoin, modalTransferCoin, modalSetting,
       modalHistory, modalSecure, modalWalletPreferences, modalReceiveCoin, backupWalletContent, restoreWalletContent, exportPrivateContent} = this.state;
-
     return (
       <div className="wallet-page">
         {/* remind checkout */}

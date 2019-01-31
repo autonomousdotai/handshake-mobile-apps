@@ -59,8 +59,11 @@ class WalletItem extends React.Component {
       //const iconProtected = !wallet.protected ? iconWarning : iconSafe;
       let logo = require("@/assets/images/wallet/icons/coins/" + wallet.icon);
       try{ logo = require("@/assets/images/wallet/icons/coins/" + wallet.getCoinLogo());} catch (e){};
-
       // const itemSelected = wallet.default ? "feed feed-selected" : "feed";
+      const { balance, name } = wallet;
+      console.log('Balance in Wallet Item:', wallet.balance);
+      console.log('Props Balance in Wallet Item:', balance);
+      console.log('Props name in wallet item:', name);
       return  (
 
         <div>

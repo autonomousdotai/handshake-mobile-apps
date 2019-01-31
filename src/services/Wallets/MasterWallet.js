@@ -18,10 +18,14 @@ export class MasterWallet {
     // list coin is supported, can add some more Ripple ...
     static ListDefaultCoin = {
       Ethereum, Bitcoin, BitcoinTestnet, Constant
+      //Ethereum, Bitcoin, BitcoinTestnet
+
     };
 
     static ListCoin = {
       Ethereum, Bitcoin, BitcoinTestnet, Constant
+      //Ethereum, Bitcoin, BitcoinTestnet
+
     };
 
     static neutronMainNet = new Neuron(1);
@@ -33,7 +37,7 @@ export class MasterWallet {
 
     // Create an autonomous wallet:
 
-    static createMasterWallets() {
+    static async createMasterWallets(oldWalletList) {
       const t0 = performance.now();
 
       // let mnemonic = 'canal marble trend ordinary rookie until combine hire rescue cousin issue that';
@@ -41,7 +45,7 @@ export class MasterWallet {
 
       const mnemonic = bip39.generateMnemonic(); // generates string
 
-      const masterWallet = [];
+      const masterWallet = [...oldWalletList];
 
       let defaultWallet = [1, 3];// eth main, eth test, btc main, btc test => local web
       if (process.env.isLive) { // // eth main, eth test, btc main, btc test => live web
@@ -51,28 +55,37 @@ export class MasterWallet {
         defaultWallet = [0, 2];
       }
 
-      for (const k1 in MasterWallet.ListDefaultCoin) {
-        for (const k2 in MasterWallet.ListDefaultCoin[k1].Network) {
-          // check production, only get mainnet:
-          if (process.env.isLive && k2 != 'Mainnet') {
-            break;
-          }
-          if (!process.env.isLive && process.env.isDojo && k2 == 'Mainnet') {
-            continue;
-          }
-          // init a wallet:
-          const wallet = new MasterWallet.ListDefaultCoin[k1]();
-          // set mnemonic, if not set then auto gen.
-          wallet.mnemonic = mnemonic;
-          wallet.network = MasterWallet.ListDefaultCoin[k1].Network[k2];
-          // create address, private-key ...
-          wallet.createAddressPrivatekey();
 
-          masterWallet.push(wallet);
+
+      for (const k1 in MasterWallet.ListDefaultCoin) {
+        const existWallet = oldWalletList.filter(item => item.className === k1);
+        console.log('Exist Wallet:', existWallet);
+        if(existWallet.length === 0){
+          console.log('Create Wallet:', k1);
+          for (const k2 in MasterWallet.ListDefaultCoin[k1].Network) {
+            // check production, only get mainnet:
+            if (process.env.isLive && k2 != 'Mainnet') {
+              break;
+            }
+            if (!process.env.isLive && process.env.isDojo && k2 == 'Mainnet') {
+              continue;
+            }
+            // init a wallet:
+            const wallet = new MasterWallet.ListDefaultCoin[k1]();
+            // set mnemonic, if not set then auto gen.
+            wallet.mnemonic = mnemonic;
+            wallet.network = MasterWallet.ListDefaultCoin[k1].Network[k2];
+            // create address, private-key ...
+            wallet.createAddressPrivatekey();
+  
+            masterWallet.push(wallet);
+          }
         }
+        
       }
 
       // set default item:
+
       console.log('defaultWallet', defaultWallet, masterWallet);
       for(let i = 0; i < defaultWallet.length; i++){
         console.log('defaultWallet[i]', defaultWallet[i], masterWallet);
@@ -270,7 +283,7 @@ export class MasterWallet {
 
       let wallets = MasterWallet.getWalletDataLocalString();
 
-      if (wallets == false) return false;
+      if (wallets == false) return [];
 
       const listWallet = [];
       wallets.forEach((walletJson) => {

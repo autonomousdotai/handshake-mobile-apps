@@ -44,6 +44,7 @@ export class Wallet {
     return this.title;
   }
   getShortBalance() {
+    console.log('This Balance:', this.balance);
     return Number((parseFloat(this.balance)).toFixed(8));
   }
 
