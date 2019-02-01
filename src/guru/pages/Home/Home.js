@@ -7,7 +7,6 @@ import { URL } from '@/constants';
 import { isJSON } from '@/utils/object';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { updateLoading } from '@/guru/stores/action';
-import FirebaseHandle from '@/services/Firebase/FirebaseHandle';
 
 import {
   loadMatches,
@@ -101,7 +100,6 @@ class Home extends Component {
     <React.Fragment>
       {this.renderAppBar(props)}
       <View {...props} modalEmailSubscribe={this.modalEmailSubscribe} />
-      <FirebaseHandle />
     </React.Fragment>
   )
 

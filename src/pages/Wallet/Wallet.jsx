@@ -279,7 +279,6 @@ class Wallet extends React.Component {
     listWallet.forEach((wallet) => {
       pros.push(new Promise((resolve, reject) => {
         wallet.getBalance().then((balance) => {
-          console.log('Wallet Balance:', balance);
           wallet.balance = balance;
           resolve(wallet);
         });
@@ -356,7 +355,9 @@ class Wallet extends React.Component {
     });
 
 
-    let canSetDefault = !wallet.isToken && !wallet.isReward;
+    //let canSetDefault = !wallet.isToken && !wallet.isReward;
+    let canSetDefault = true;
+
     if (canSetDefault && !wallet.default) {
       obj.push({
         title: StringHelper.format(messages.wallet.action.default.title, wallet.name) + (wallet.default ? "✓ " : ""),
@@ -365,7 +366,13 @@ class Wallet extends React.Component {
           this.toggleBottomSheet();
           // reset all wallet default:
           let lstWalletTemp = this.getAllWallet();
-          if (wallet.default) lstWalletTemp.forEach(wal => {if (wal != wallet && wal.name == wallet.name){wal.default = false;}})
+          if (wallet.default) lstWalletTemp.forEach(wal => {
+            //if (wal != wallet && wal.name == wallet.name){
+            if (wal != wallet){
+              wal.default = false;
+              }
+            }
+          )
           // Update wallet master from local store:
           MasterWallet.UpdateLocalStore(lstWalletTemp);
         }

@@ -14,7 +14,6 @@ import { VALIDATE_CODE } from '@/components/handshakes/betting/constants.js';
 const TAG = 'VALIDATION';
 export const isRightNetwork = () => {
   const wallet = MasterWallet.getWalletDefault('ETH');
-  MasterWallet.log(MasterWallet.getWalletDefault('ETH'));
 
   if (!process.env.isLive) {
     return true;

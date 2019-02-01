@@ -52,6 +52,7 @@ export class MasterWallet {
         defaultWallet = [0, 1];
       }
       if (process.env.isDojo) { // eth test, shuri test, btc test => dojo web
+        //defaultWallet = [0, 2];
         defaultWallet = [0, 2];
       }
 
@@ -349,6 +350,8 @@ export class MasterWallet {
           return wallet;
         }
 
+        // Return list wallet. Old 
+        /*
         const lstDefault = {};
 
         wallets.forEach((walletJson) => {
@@ -362,6 +365,20 @@ export class MasterWallet {
           }
         });
         return lstDefault;
+        */
+
+        //Return default wallet. New
+        let wallet = false;
+        wallets.forEach((walletJson) => {
+          if (walletJson.default) {
+            if (process.env.isLive) {
+              if (walletJson.network === MasterWallet.ListCoin[walletJson.className].Network.Mainnet) {
+                wallet = MasterWallet.convertObject(walletJson);
+              }
+            } else { wallet = MasterWallet.convertObject(walletJson);}
+          }
+        });
+        return wallet;
       } catch (e) {
         if (e !== BreakException) throw e;
       }

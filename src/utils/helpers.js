@@ -8,6 +8,7 @@ export const getAddress = () => (getWalletDefault('ETH').address);
 
 export const getBalance = async () => {
   const balance = await getWalletDefault('ETH').getBalance();
+  const balance = await wallet.getBalance();
   return balance;
 };
 

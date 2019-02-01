@@ -33,7 +33,6 @@ export class Constant extends TokenERC20 {
 
     const balanceOf = await contract.methods.balanceOf(this.address).call();
     const tokenBalance = new BigNumber(balanceOf) / Math.pow(10, this.decimals);
-    console.log('tokenBalance', tokenBalance);
     return tokenBalance;
   }
 
