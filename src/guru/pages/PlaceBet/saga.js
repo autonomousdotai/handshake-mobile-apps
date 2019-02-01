@@ -1,5 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { apiGet, apiPost } from '@/guru/stores/api';
+import { MasterWallet } from '@/services/Wallets/MasterWallet';
 import { API_URL } from '@/constants';
 import { getEstimateGas } from '@/components/handshakes/betting/utils.js';
 import { updateLoading } from '@/guru/stores/action';
@@ -57,8 +58,18 @@ export function* handleGetGasPrice() {
 
 export function* handleInitHandShake({ payload }) {
   try {
+    const wallet = MasterWallet.getWalletDefault('');
+    let pathUrl = '';
+    switch (wallet.classname) {
+      case MasterWallet.ListDefaultCoin.Constant:
+        pathUrl = API_URL.CRYPTOSIGN.INIT_HANDSHAKE_CONST;
+        break;
+      default: // Etherum, Bitcoin, BitcoinTestnet
+        pathUrl = API_URL.CRYPTOSIGN.INIT_HANDSHAKE; 
+        break;
+    }
     const response = yield call(apiPost, {
-      PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE}`,
+      PATH_URL: pathUrl,
       type: 'INIT_HANDSHAKE',
       data: payload
     });
@@ -74,8 +85,18 @@ export function* handleInitHandShake({ payload }) {
 
 export function* handleInitHandShakeFree({ payload }) {
   try {
+    const wallet = MasterWallet.getWalletDefault('');
+    let pathUrl = '';
+    switch (wallet.classname) {
+      case MasterWallet.ListDefaultCoin.Constant:
+        pathUrl = API_URL.CRYPTOSIGN.INIT_HANDSHAKE_FREE_CONST;
+        break;
+      default: // Etherum, Bitcoin, BitcoinTestnet
+        pathUrl = API_URL.CRYPTOSIGN.INIT_HANDSHAKE_FREE; 
+        break;
+    }
     const response = yield call(apiPost, {
-      PATH_URL: `${API_URL.CRYPTOSIGN.INIT_HANDSHAKE_FREE}`,
+      PATH_URL: pathUrl,
       type: 'INIT_HANDSHAKE_FREE',
       data: payload
     });

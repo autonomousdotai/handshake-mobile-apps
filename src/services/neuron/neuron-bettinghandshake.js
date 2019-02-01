@@ -8,11 +8,6 @@ export default class BettingHandshake extends BaseHandshake {
     super(chainId);
     this.contractFileName = null;
     this.contractFileAddress = null;
-
-    // / test
-    // this.getEstimateGas().then((gas) => {
-    //   console.log(TAG, ' contructor -- gas = ', gas.toString());
-    // });
   }
   get contractFileNameWithoutExtension() {
     if (this.contractFileName) {
@@ -33,10 +28,7 @@ export default class BettingHandshake extends BaseHandshake {
     return wallet.privateKey;
   }
   get gasPrice() {
-    // const wallet = MasterWallet.getWalletDefault('ETH');
-    // return this.chainId === 4 ? window.gasPrice || 20 : window.gasPrice || 20;
     return this.chainId === 4 ? window.gasPrice || 20 : window.gasPrice || 20;
-    // return this.chainId === 4 ? 64 : 64;
   }
   updateContract(contractAddress, contractName) {
     this.contractFileAddress = contractAddress;
@@ -44,11 +36,7 @@ export default class BettingHandshake extends BaseHandshake {
     console.log(TAG, 'updateContract', 'contractFileAddress:', this.contractFileAddress, 'contractFileName:', contractName);
     this.combine();
   }
-  // async getEstimateGas() {
-
-  //   const estimateGas = await this.neuron.caculateLimitGasWithEthUnit(this.gasPrice);
-  //   return estimateGas;
-  // }
+  
   initBet = async (hid, side, stake, odds, offchain) => {
     console.log(
       TAG,
