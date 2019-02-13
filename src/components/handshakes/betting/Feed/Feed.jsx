@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ProgressBar } from 'react-bootstrap';
 import { isExpiredDate } from '@/components/handshakes/betting/validation';
@@ -8,9 +7,10 @@ import { isExpiredDate } from '@/components/handshakes/betting/validation';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
 import { BET_BLOCKCHAIN_STATUS, ROLE } from '@/components/handshakes/betting/constants.js';
 import GA from '@/services/googleAnalytics';
+import { MasterWallet } from '@/services/Wallets/MasterWallet';
 
 import { API_URL } from '@/constants';
-import { uninitItem, collect, collectFree, uninitItemFree, refundFree, refund, dispute } from '@/reducers/handshake/action';
+import { uninitItem, collect, collectFree, uninitItemFree, refundFree, refund, dispute, uninitItemConstant, collectConstant, refundConstant } from '@/reducers/handshake/action';
 import { loadMyHandshakeList, updateBettingChange } from '@/reducers/me/action';
 import { MESSAGE, BETTING_STATUS_LABEL } from '@/components/handshakes/betting/message.js';
 import { getStatusLabel } from '@/components/handshakes/betting/StatusAction.js';
@@ -139,6 +139,7 @@ class FeedBetting extends React.Component {
     const {
       hid,
     } = this.props; // new state
+    const wallet = MasterWallet.getWalletDefault('');
 
     const { itemInfo, estimatedGas } = this.state;
     const { id, freeBet, fromAddress } = itemInfo;
@@ -146,6 +147,8 @@ class FeedBetting extends React.Component {
       message = MESSAGE.RIGHT_NETWORK;
     } else if (!isSameAddress(fromAddress)) {
       message = MESSAGE.DIFFERENCE_ADDRESS;
+    } else if (wallet.classname === MasterWallet.ListDefaultCoin.Constant) {
+      this.handleActionConstant(title, id, hid);
     } else if (freeBet && title !== BETTING_STATUS_LABEL.DISPUTE) {
       this.handleActionFree(title, id, hid);
     } else if (estimatedGas > balance) {
@@ -180,7 +183,6 @@ class FeedBetting extends React.Component {
         this.refundFree(offchain);
         break;
       case BETTING_STATUS_LABEL.DISPUTE:
-        //this.disputeOnChain(offchain, hid);
         this.handleClickDispute(offchain, hid);
 
         break;
@@ -207,6 +209,27 @@ class FeedBetting extends React.Component {
       case BETTING_STATUS_LABEL.DISPUTE:
         //this.disputeOnChain(offchain, hid);
         this.handleClickDispute(offchain, hid);
+        break;
+      default:
+        break;
+    }
+  }
+
+  handleActionConstant(title, offchain, hid) {
+    const realId = getId(offchain);
+    switch (title) {
+      case BETTING_STATUS_LABEL.CANCEL:
+        this.uninitItemConstant(realId);
+        break;
+      case BETTING_STATUS_LABEL.WITHDRAW:
+        this.collectConstant(offchain);
+        break;
+      case BETTING_STATUS_LABEL.REFUND:
+        this.refundConstant(offchain);
+        break;
+      case BETTING_STATUS_LABEL.DISPUTE:
+        this.handleClickDispute(offchain, hid);
+
         break;
       default:
         break;
@@ -476,6 +499,78 @@ class FeedBetting extends React.Component {
     });
   }
 
+  /*** API Constant BET */
+  async uninitItemConstant(id) {
+    const url = API_URL.CRYPTOSIGN.UNINIT_HANDSHAKE_CONSTANT.concat(`/${id}`);
+    const { itemInfo, predictName } = this.state;
+
+    const updateInfo = Object.assign({}, itemInfo);
+    updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_MAKER_UNINIT_PENDING;
+    betHandshakeHandler.setItemOnChain(id, updateInfo);
+    this.props.updateBettingChange(updateInfo);
+
+    this.props.uninitItemConstant({
+      PATH_URL: url,
+      METHOD: 'POST',
+      successFn: (() => {
+        console.log('uninitItemConstantSuccessfully');
+      }),
+      errorFn: (() => {
+        console.log('uninitItemConstantFailed');
+      })
+    });
+  }
+
+  collectConstant(id) {
+    const params = {
+      offchain: id,
+    };
+
+    const { itemInfo, predictName } = this.state;
+
+    const updateInfo = Object.assign({}, itemInfo);
+    updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_COLLECT_PENDING;
+    betHandshakeHandler.setItemOnChain(id, updateInfo);
+    this.props.updateBettingChange(updateInfo);
+
+    this.props.collectConstant({
+      PATH_URL: API_URL.CRYPTOSIGN.COLLECT_CONSTANT,
+      METHOD: 'POST',
+      data: params,
+      successFn: (() => {
+        console.log('collectConstantSuccessfully');
+      }),
+      errorFn: (() => {
+        console.log('collectConstantFailed');
+      })
+    });
+  }
+
+  refundConstant(id) {
+    const params = {
+      offchain: id
+    };
+
+    const { itemInfo, predictName } = this.state;
+    const updateInfo = Object.assign({}, itemInfo);
+    updateInfo.status = BET_BLOCKCHAIN_STATUS.STATUS_REFUND_PENDING;
+    betHandshakeHandler.setItemOnChain(id, updateInfo);
+    this.props.updateBettingChange(updateInfo);
+
+    this.props.refundConstant({
+      PATH_URL: API_URL.CRYPTOSIGN.REFUND_CONSTANT,
+      METHOD: 'POST',
+      data: params,
+      successFn: (() => {
+        console.log('refundConstantSuccessfully');
+      }),
+      errorFn: (() => {
+        console.log('refundConstantFailed');
+      })
+    });
+  }
+
+
   handleClickDispute = (offchain, hid) => {
     console.log(TAG, 'handleClickDispute');
     const {
@@ -699,5 +794,8 @@ const mapDispatch = ({
   refund,
   refundFree,
   dispute,
+  uninitItemConstant,
+  collectConstant,
+  refundConstant
 });
 export default connect(mapState, mapDispatch)(FeedBetting);
