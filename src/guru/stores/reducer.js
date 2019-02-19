@@ -13,7 +13,8 @@ import {
   putGasPrice,
   putHandShake,
   putRedeemCode,
-  removeRedeemCode
+  removeRedeemCode,
+  updatePermissionConstant
 } from '@/guru/pages/PlaceBet/action';
 import {
   updateReports,
@@ -122,6 +123,9 @@ const guruReducer = (state = initialState, action) => {
         break;
       case putReferralCheck().type:
         draft.ui.referralCheck = action.payload;
+        break;
+      case updatePermissionConstant().type:
+        draft.ui.permissionConst = action.payload;
         break;
       default:
         break;

@@ -309,6 +309,31 @@ export class BetHandshakeHandler {
     return result;
   }
 
+  async allowConstant(hid, offchain,outcome, contractName, contractAddress) {
+
+    const chainId = getChainIdDefaultWallet();
+
+    const bettinghandshake = new BettingHandshake(chainId);
+    bettinghandshake.updateContract(contractAddress, contractName);
+
+    let logJson = '';
+    let realBlockHash = '';
+    let result = null;
+    try {
+      result = await bettinghandshake.allowConstant(hid, offchain);
+      const {
+        hash, payload,
+      } = result;
+      logJson = payload;
+      realBlockHash = hash;
+    } catch (err) {
+      realBlockHash = '-1';
+      logJson = err.message;
+    }
+
+    return result;
+  }
+
 
   /*** API */
   saveTransaction(offchain, contractMethod, chainId, hash, contractAddress, payload) {

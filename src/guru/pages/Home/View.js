@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { URL } from '@/constants';
 import Loading from '@/components/Loading';
+
 import CardList from './CardList';
 import Disclaimer from './Disclaimer';
 import EmailSubscribe from './EmailSubscribe';
 import ReportNotice from './ReportNotice';
-
 const relatedMatchesTitle = (props) => {
   if (!props.matchParam) return null;
   return (

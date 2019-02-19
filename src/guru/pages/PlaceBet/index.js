@@ -18,6 +18,8 @@ import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import { MESSAGE } from '@/components/handshakes/betting/message';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
+import NotifyConstant from '@/guru/components/NofifyConstant/NotifyConstant';
+
 // TODO: [End: Will be moving to another place]
 
 import { updateLoading, userHabit } from '@/guru/stores/action';
@@ -31,7 +33,8 @@ import {
   matchDetailSelector,
   gasPriceSelector,
   matchOddsSelector,
-  handShakesSelector
+  handShakesSelector,
+  isPermissionConstSelector
 } from './selector';
 import { VALIDATE_CODE } from './constants';
 import { validationBet, isExistMatchBet } from './validation';
@@ -47,7 +50,8 @@ class PlaceBet extends Component {
     eventList: PropTypes.array,
     matchDetail: PropTypes.object,
     sideOdds: PropTypes.arrayOf(PropTypes.string),
-    handShakes: PropTypes.object
+    handShakes: PropTypes.object,
+    isAllowConst: PropTypes.bool
   };
 
   static defaultProps = {
@@ -55,7 +59,8 @@ class PlaceBet extends Component {
     queryStringURL: undefined,
     matchDetail: {},
     sideOdds: ['support', 'against'],
-    handShakes: undefined
+    handShakes: undefined,
+    isAllowConst: false
   };
 
   state = {
@@ -78,7 +83,8 @@ class PlaceBet extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { handShakes } = this.props;
+    const { handShakes, isAllowConst } = this.props;
+
     if (handShakes && prevProps.handShakes !== handShakes) {
       const { match } = handShakes;
       if (match !== undefined) {
@@ -92,6 +98,11 @@ class PlaceBet extends Component {
         });
       } else {
         this.handShakeHandler(handShakes);
+      }
+    }
+    if (this.modalConstantNotify) {
+      if (!isAllowConst) {
+        this.modalConstantNotify.open();
       }
     }
   }
@@ -284,6 +295,25 @@ class PlaceBet extends Component {
     className: classNames('BetParamsComponent')
   });
 
+  handleAgreeConstantClick = (validate) => {
+    const { modalOuttaMoney } = this;
+
+    if(!validate){
+      modalOuttaMoney.open();
+    }else {
+      const message = "Your transaction will appear on etherscan.io in about 30 seconds.";
+      this.alertBox({ message, type: 'success' });
+    }
+    this.modalConstantNotify.close();
+  }
+
+  handleCancelConstantClick = () => {
+    this.modalConstantNotify.close();
+  }
+
+  modalConstantNotify = (modal) => { this.modalConstantNotify = modal; };
+
+
   renderOuttaMoney = () => {
     return (
       <ModalDialog
@@ -304,6 +334,17 @@ class PlaceBet extends Component {
     );
   };
 
+  renderNofifyConstant = () => {
+    return (
+      <NotifyConstant
+        modalNotifyConstant={this.modalConstantNotify}
+        onAgreeClick={this.handleAgreeConstantClick}
+        onCancelClick={this.handleCancelConstantClick}
+
+      />
+    );
+  }
+
   renderComponent = (props, state) => {
     return (
       <div className="PlaceBetContainer">
@@ -313,6 +354,7 @@ class PlaceBet extends Component {
           betParamsProps={this.betParamsProps(props)}
         />
         {this.renderOuttaMoney()}
+        {this.renderNofifyConstant()}
       </div>
     );
   };
@@ -334,7 +376,8 @@ export default injectIntl(connect(
       queryStringURL: queryStringSelector(state),
       gasPrice: gasPriceSelector(state),
       matchOdds: matchOddsSelector(state),
-      handShakes: handShakesSelector(state)
+      handShakes: handShakesSelector(state),
+      isAllowConst: isPermissionConstSelector(state)
     };
   }
 )(PlaceBet));

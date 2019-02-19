@@ -11,8 +11,13 @@ import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { isURL } from '@/utils/string';
 import { getAddress } from '@/components/handshakes/betting/utils';
+import { MasterWallet } from '@/services/Wallets/MasterWallet';
+import {
+  isPermissionConstSelector
+} from '@/guru/pages/PlaceBet/selector';
+import NotifyConstant from '@/guru/components/NofifyConstant/NotifyConstant';
 
-import { apiCreateEvent } from './action';
+import { apiCreateEvent, apiCreateEventConstant } from './action';
 import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
@@ -24,19 +29,34 @@ class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
     apiCreateEvent: PropTypes.func.isRequired,
+    apiCreateEventConstant: PropTypes.func.isRequired,
     email: PropTypes.string,
-    verified: PropTypes.number
+    verified: PropTypes.number,
+    isAllowConst: PropTypes.bool
+
   };
 
   static defaultProps = {
     email: '',
-    verified: 0
+    verified: 0,
+    isAllowConst: false
+
   };
 
   state = {
     titleToolTip: false,
     createSuccess: false
   };
+  componentDidMount() {
+    const { isAllowConst } = this.props;
+    console.log('isAllowConst',isAllowConst);
+    if (this.constantNotify) {
+      console.log('this.constantNotify:', this.constantNotify);
+      if (!isAllowConst) {
+        this.constantNotify.open();
+      }
+    }
+  }
 
   onKeyDownEventName = e => {
     /* eslint-disable no-param-reassign */
@@ -83,15 +103,32 @@ class CreateEvent extends React.Component {
     const formData = new FormData();
     formData.set('data', JSON.stringify(newEventData));
     formData.set('image', values.image);
-    this.props
-      .apiCreateEvent({ data: formData })
-      .then(res => {
-        console.log('created Event', res);
-        this.setState({ createSuccess: true });
-      })
-      .catch(e => {
-        console.error(e);
-      });
+    const wallet = MasterWallet.getWalletDefault('');
+    switch (wallet.classname) {
+      case MasterWallet.ListDefaultCoin.Constant:
+        this.props
+          .apiCreateEventConstant({ data: formData })
+          .then(res => {
+            console.log('created Event', res);
+            this.setState({ createSuccess: true });
+          })
+          .catch(e => {
+            console.error(e);
+          });
+        break;
+      default:
+        this.props
+          .apiCreateEvent({ data: formData })
+          .then(res => {
+            console.log('created Event', res);
+            this.setState({ createSuccess: true });
+          })
+          .catch(e => {
+            console.error(e);
+          });
+        break;
+    }
+   
   };
 
   buildErrorCls = (errors, touched) => {
@@ -99,9 +136,31 @@ class CreateEvent extends React.Component {
     return errFields.length ? errFields.join(' ') : '';
   };
 
+  modalConstantNotify = (modal) => { this.constantNotify = modal; };
+
+  handleAgreeConstantClick = (validate) => {
+    const { modalOuttaMoney } = this;
+
+    if(!validate){
+    }else {
+      const message = "Your transaction will appear on etherscan.io in about 30 seconds.";
+      //this.alertBox({ message, type: 'success' });
+    }
+    this.constantNotify.close();
+
+  }
+
+  handleCancelConstantClick = () => {
+    this.constantNotify.close();
+  }
+
   renderEventTitle = state => {
+    const wallet = MasterWallet.getWalletDefault('');
+    console.log('Wallet:', wallet);
     return (
       <div className="EventTitle">
+        <div className="Noti">*The event will be created in <b>{wallet.name}</b></div>
+
         <div className="GroupTitle">
           Ninjas will predict YES or NO
           <i className="far fa-question-circle" id="TitleTT" />
@@ -242,6 +301,16 @@ class CreateEvent extends React.Component {
     );
   };
 
+  renderNofifyConstant = () => {
+    return (
+      <NotifyConstant
+        modalNotifyConstant={this.modalConstantNotify}
+        onAgreeClick={this.handleAgreeConstantClick}
+        onCancelClick={this.handleCancelConstantClick}
+      />
+    );
+  }
+
   render() {
     const { email, verified } = this.props;
     if (this.state.createSuccess) {
@@ -307,6 +376,7 @@ class CreateEvent extends React.Component {
       ...validateEmail
     });
 
+
     return (
       <div className={CreateEvent.displayName}>
         <Formik
@@ -350,6 +420,7 @@ class CreateEvent extends React.Component {
                   when={dirty}
                   message="Are you sure you want to leave?"
                 />
+                {this.renderNofifyConstant()}
               </Form>
             );
           }}
@@ -363,7 +434,9 @@ export default connect(
   state => {
     return {
       email: state.auth.profile.email,
-      verified: state.auth.profile.verified
+      verified: state.auth.profile.verified,
+      isAllowConst: isPermissionConstSelector(state)
+
     };
   },
   { apiCreateEvent }

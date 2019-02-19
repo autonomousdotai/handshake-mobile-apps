@@ -80,6 +80,7 @@ export const API_URL = {
     DISPUTE: 'cryptosign/handshake/dispute',
     DISPUTE_FREE: 'cryptosign/handshake/dispute_free_bet',
     ADD_MATCH: 'cryptosign/match/add',
+    ADD_MATCH_CONSTANT: 'cryptosign/match/add',
     ADD_OUTCOME: 'cryptosign/outcome/add',
     SAVE_TRANSACTION: 'cryptosign/tx/add',
     GENERATE_LINK: 'cryptosign/outcome/generate-link',

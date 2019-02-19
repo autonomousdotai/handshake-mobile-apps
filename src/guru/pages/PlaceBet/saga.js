@@ -15,7 +15,9 @@ import {
   initHandShakeFree,
   putHandShake,
   checkCompareRedeemCode,
-  putRedeemCode
+  putRedeemCode,
+  checkPermissionConstant
+
 } from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
@@ -126,6 +128,21 @@ export function* handleCompareRedeemCode({ payload }) {
   }
 }
 
+export function* handlePermissionConstant({ }) {
+
+  try {
+    // const { data } = yield call(apiGet, {
+    //   PATH_URL: `${API_URL.CRYPTOSIGN.RELEVANT_EVENTS}?match=${matchId}`,
+    //   type: 'CHECK_PERMISSION_CONSTANT'
+    // });
+    // if (data) {
+    //   yield put(putRelatedMatches(data));
+    // }
+  } catch (e) {
+    console.error('handlePermissionConstant', e);
+  }
+}
+
 export default function* placeBetSaga() {
   yield takeLatest(getMatchDetail().type, handleGetMatchDetail);
   yield takeLatest(getGasPrice().type, handleGetGasPrice);
@@ -133,4 +150,6 @@ export default function* placeBetSaga() {
   yield takeLatest(initHandShake().type, handleInitHandShake);
   yield takeLatest(checkCompareRedeemCode().type, handleCompareRedeemCode);
   yield takeLatest(initHandShakeFree().type, handleInitHandShakeFree);
+  yield takeLatest(checkPermissionConstant().type, handlePermissionConstant);
+
 }

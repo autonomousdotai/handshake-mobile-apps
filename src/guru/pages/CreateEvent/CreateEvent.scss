@@ -480,3 +480,33 @@
     }
   }
 }
+
+/** EmailSubscribe **/
+.modal.EmailSubscriberModal {
+  text-align: center;
+  .modal-dialog-content {
+    position: relative;
+    border-radius: 10px;
+  }
+  .modal-custom-body {
+    border-radius: 10px;
+    padding: 30px 15px;
+  }
+  .close {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 20;
+    opacity: 1;
+    color: #000;
+    font-size: 20px;
+    font-weight: 100;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+  }
+  
+}

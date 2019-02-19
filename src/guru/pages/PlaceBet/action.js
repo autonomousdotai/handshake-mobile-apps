@@ -79,3 +79,17 @@ export const removeRedeemCode = () => {
     type: 'GURU:REMOVE_REDEEM_CODE'
   };
 };
+
+export const checkPermissionConstant = (payload) => {
+  return {
+    type: 'GURU:CHECK_PERMISSION_CONSTANT',
+    payload
+  };
+};
+
+export const updatePermissionConstant = (payload) => {
+  return {
+    type: 'GURU:UPDATE_PERMISSION_CONSTANT',
+    payload
+  };
+};

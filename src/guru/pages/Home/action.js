@@ -75,6 +75,7 @@ export const putStatusEmailSubscribe = (payload) => {
   };
 };
 
+
 // Move to Reputation
 export const updateUserEvents = (events, loadMore, page) => {
   return {

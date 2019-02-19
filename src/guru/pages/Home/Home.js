@@ -86,7 +86,6 @@ class Home extends Component {
   }
 
   modalEmailSubscribe = (modal) => { this.emailSubscribe = modal; };
-
   renderAppBar = () => (
     <AppBar>
       <span className="Title">Prediction</span>
@@ -99,7 +98,9 @@ class Home extends Component {
   renderHome = (props) => (
     <React.Fragment>
       {this.renderAppBar(props)}
-      <View {...props} modalEmailSubscribe={this.modalEmailSubscribe} />
+      <View {...props} 
+        modalEmailSubscribe={this.modalEmailSubscribe}
+      />
     </React.Fragment>
   )
 

@@ -17,3 +17,7 @@ export const isRedeemSelector = (state) => {
 export const isSubscribeSelector = (state) => {
   return (state.guru.ui.userSubscribe && state.guru.ui.userSubscribe.is_subscribe);
 };
+
+export const isPermissionConstSelector = (state) => {
+  return (state.guru.ui.permissionConst);
+};

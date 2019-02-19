@@ -21,7 +21,7 @@ import {
   loginCoinbase,
   updateAuthCoinbase,
   loginMetaMask,
-  updateAuthMetaMask
+  updateAuthMetaMask,
 } from './action';
 import { eventSelector } from './selector';
 
@@ -185,7 +185,6 @@ export function* handleAuthorizeMetaMask({ web3Provider }) {
   }
 }
 
-
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
   yield takeLatest(loadRelatedMatches().type, handleLoadRelatedMaches);
@@ -196,4 +195,5 @@ export default function* homeSaga() {
   yield takeLatest(loadUserReputation().type, handleLoadReputation);
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);
   yield takeLatest(loginMetaMask().type, handleAuthorizeMetaMask);
+
 }
