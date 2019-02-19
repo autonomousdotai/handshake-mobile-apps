@@ -12,7 +12,8 @@ import {
   loadMatches,
   loadRelatedMatches,
   getReportCount,
-  checkRedeemCode
+  checkRedeemCode,
+  loadTokenList
 } from './action';
 import {
   eventSelector,
@@ -45,6 +46,7 @@ class Home extends Component {
     this.receiverMessage(this.props);
     this.props.dispatch(getReportCount());
     this.props.dispatch(checkRedeemCode());
+    this.props.dispatch(loadTokenList());
   }
 
   componentDidUpdate() {

@@ -21,3 +21,7 @@ export const isSubscribeSelector = (state) => {
 export const isPermissionConstSelector = (state) => {
   return (state.guru.ui.permissionConst);
 };
+
+export const currentContractSelector = (state) => {
+  return (state.guru.currentContract);
+};

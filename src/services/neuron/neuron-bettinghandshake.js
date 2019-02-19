@@ -277,4 +277,14 @@ export default class BettingHandshake extends BaseHandshake {
     return dataBlockChain;
   }
 
+  approveConstant = async ({ constantAddress, predictionAddress }) => {
+    const { status } = await this.neuron.approveTransaction({
+      constantAddress,
+      privateKey: this.privateKey,
+      predictionAddress,
+      fromAddress: this.address
+    });
+    console.log('approveConstant Status:', status);
+    return status;
+  }
 }

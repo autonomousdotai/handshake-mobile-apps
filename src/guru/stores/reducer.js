@@ -5,7 +5,8 @@ import {
   updateCountReport,
   putUserSubscribe,
   putStatusEmailSubscribe,
-  putRelatedMatches
+  putRelatedMatches,
+  putTokenList
 } from '@/guru/pages/Home/action';
 import {
   putMatchDetail,
@@ -14,7 +15,8 @@ import {
   putHandShake,
   putRedeemCode,
   removeRedeemCode,
-  updatePermissionConstant
+  updatePermissionConstant,
+  updateCurrentContract
 } from '@/guru/pages/PlaceBet/action';
 import {
   updateReports,
@@ -34,7 +36,8 @@ const initialState = {
   reputation: {},
   ui: {},
   authCoinBase: {},
-  authMetaMask: []
+  authMetaMask: [],
+  constantToken: {}
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -126,6 +129,13 @@ const guruReducer = (state = initialState, action) => {
         break;
       case updatePermissionConstant().type:
         draft.ui.permissionConst = action.payload;
+        break;
+      case putTokenList().type:
+        draft.constantToken = action.payload;
+        break;
+
+      case updateCurrentContract().type:
+        draft.currentContract = action.payload;
         break;
       default:
         break;

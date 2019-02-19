@@ -21,10 +21,11 @@ import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHan
 import NotifyConstant from '@/guru/components/NofifyConstant/NotifyConstant';
 
 // TODO: [End: Will be moving to another place]
+import { constantTokenSelector } from '@/guru/pages/Home/selector';
 
 import { updateLoading, userHabit } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
-  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
+  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree, checkPermissionConstant, updateApproveConstant } from './action';
 import {
   queryStringSelector,
   eventSelector,
@@ -34,8 +35,10 @@ import {
   gasPriceSelector,
   matchOddsSelector,
   handShakesSelector,
-  isPermissionConstSelector
+  isPermissionConstSelector,
+  currentContractSelector
 } from './selector';
+
 import { VALIDATE_CODE } from './constants';
 import { validationBet, isExistMatchBet } from './validation';
 import View from './View';
@@ -51,7 +54,9 @@ class PlaceBet extends Component {
     matchDetail: PropTypes.object,
     sideOdds: PropTypes.arrayOf(PropTypes.string),
     handShakes: PropTypes.object,
-    isAllowConst: PropTypes.bool
+    isAllowConst: PropTypes.bool,
+    constantToken: PropTypes.object,
+    currentContract: PropTypes.object
   };
 
   static defaultProps = {
@@ -60,7 +65,9 @@ class PlaceBet extends Component {
     matchDetail: {},
     sideOdds: ['support', 'against'],
     handShakes: undefined,
-    isAllowConst: false
+    isAllowConst: false,
+    constantToken: undefined,
+    currentContract: undefined
   };
 
   state = {
@@ -79,6 +86,7 @@ class PlaceBet extends Component {
     dispatch(getMatchDetail({ eventId }));
     dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
     dispatch(getGasPrice());
+    dispatch(checkPermissionConstant());
     this.userHabit(dispatch, eventId);
   }
 
@@ -298,9 +306,26 @@ class PlaceBet extends Component {
   handleAgreeConstantClick = (validate) => {
     const { modalOuttaMoney } = this;
 
-    if(!validate){
+    if (!validate) {
       modalOuttaMoney.open();
-    }else {
+    } else {
+
+      const { constantToken, currentContract } = this.props;
+      const handler = BetHandshakeHandler.getShareManager();
+      console.log('Current Contract:', currentContract, 'constantToken:', constantToken);
+      const contractName = currentContract.json_name;
+      const contractAddress = currentContract.contract_name;
+      const constantContractAddress = constantToken.contract_address;
+      console.log('Contract Name:', contractName, 'contractAddress:', contractAddress, 'constantContractAddress:', constantContractAddress);
+      handler.allowConstant(contractName, contractAddress, constantContractAddress);
+      /*
+      const payload = {
+        address: getAddress(),
+        hash: '0x987',
+        token_id: '1'
+      };
+      this.props.dispatch(updateApproveConstant(payload));
+      */
       const message = "Your transaction will appear on etherscan.io in about 30 seconds.";
       this.alertBox({ message, type: 'success' });
     }
@@ -377,7 +402,9 @@ export default injectIntl(connect(
       gasPrice: gasPriceSelector(state),
       matchOdds: matchOddsSelector(state),
       handShakes: handShakesSelector(state),
-      isAllowConst: isPermissionConstSelector(state)
+      isAllowConst: isPermissionConstSelector(state),
+      constantToken: constantTokenSelector(state),
+      currentContract: currentContractSelector(state)
     };
   }
 )(PlaceBet));

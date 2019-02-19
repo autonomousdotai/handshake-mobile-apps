@@ -93,7 +93,11 @@ export const API_URL = {
     COMPARE_REDEEM_CODE: 'cryptosign/redeem/check',
     USER_HABIT: 'cryptosign/user/habit',
     REFERRAL_CHECK: 'cryptosign/referral/check',
-    REFERRAL_JOIN: 'cryptosign/referral/join'
+    REFERRAL_JOIN: 'cryptosign/referral/join',
+    APPROVE_TOKENS: 'cryptosign/user-token',
+    UPDATE_APPROVE_TOKEN: 'cryptosign/user-token/add',
+    TOKEN_LIST: 'cryptosign/token'
+
   },
   DISCOVER: {
     INDEX: 'handshake/discover'

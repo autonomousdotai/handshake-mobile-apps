@@ -57,3 +57,7 @@ export const isLoading = (state) => {
   if (!state.guru) return false;
   return state.guru.isFetching;
 };
+
+export const constantTokenSelector = (state) => {
+  return state.guru.constantToken;
+};

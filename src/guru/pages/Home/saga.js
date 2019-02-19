@@ -22,6 +22,8 @@ import {
   updateAuthCoinbase,
   loginMetaMask,
   updateAuthMetaMask,
+  loadTokenList,
+  putTokenList
 } from './action';
 import { eventSelector } from './selector';
 
@@ -185,6 +187,27 @@ export function* handleAuthorizeMetaMask({ web3Provider }) {
   }
 }
 
+export function* handleLoadTokens() {
+  try {
+
+    const PATH_URL = `${API_URL.CRYPTOSIGN.TOKEN_LIST}`;
+    const { data } = yield call(apiGet, {
+      PATH_URL,
+      type: 'LOAD_TOKEN_LIST'
+    });
+    console.log('Token List:', data);
+    if (data) {
+      const { token } = data;
+      const constToken = token.filter(item => item.id === 1);
+      if (constToken.length > 0) {
+        yield put(putTokenList(constToken[0]));
+      }
+    }
+  } catch (e) {
+    console.error('handleLoadTokens', e);
+  }
+}
+
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
   yield takeLatest(loadRelatedMatches().type, handleLoadRelatedMaches);
@@ -195,5 +218,6 @@ export default function* homeSaga() {
   yield takeLatest(loadUserReputation().type, handleLoadReputation);
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);
   yield takeLatest(loginMetaMask().type, handleAuthorizeMetaMask);
+  yield takeLatest(loadTokenList().type, handleLoadTokens);
 
 }

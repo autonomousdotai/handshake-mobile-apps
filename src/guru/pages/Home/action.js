@@ -136,3 +136,16 @@ export const updateAuthMetaMask = (authMetaMask) => {
     authMetaMask
   };
 };
+
+export const loadTokenList = (payload = []) => {
+  return {
+    type: 'GURU:LOAD_TOKEN_LIST',
+    payload
+  };
+};
+export const putTokenList = (payload = {}) => {
+  return {
+    type: 'GURU:PUT_TOKEN_LIST',
+    payload
+  };
+};

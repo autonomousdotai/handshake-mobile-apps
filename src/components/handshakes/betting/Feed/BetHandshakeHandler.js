@@ -309,26 +309,22 @@ export class BetHandshakeHandler {
     return result;
   }
 
-  async allowConstant(hid, offchain,outcome, contractName, contractAddress) {
-
+  async allowConstant(contractName, contractAddress, constantContractAdd) {
     const chainId = getChainIdDefaultWallet();
 
     const bettinghandshake = new BettingHandshake(chainId);
     bettinghandshake.updateContract(contractAddress, contractName);
 
-    let logJson = '';
-    let realBlockHash = '';
+    const payload = {
+      constantAddress: constantContractAdd,
+      predictionAddress: contractAddress
+    };
     let result = null;
     try {
-      result = await bettinghandshake.allowConstant(hid, offchain);
-      const {
-        hash, payload,
-      } = result;
-      logJson = payload;
-      realBlockHash = hash;
+      result = await bettinghandshake.approveConstant(payload);
+      console.log('allowConstant Result:', result);
     } catch (err) {
-      realBlockHash = '-1';
-      logJson = err.message;
+      console.log('allowConstant:', err);
     }
 
     return result;

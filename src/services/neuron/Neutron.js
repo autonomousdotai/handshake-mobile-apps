@@ -327,6 +327,37 @@ class Neuron {
     console.log(`getTransactionReceipt ${JSON.stringify(receipt)}`);
     return receipt;
   };
+  approveTransaction = async ({ constantAddress, privateKey, predictionAddress, fromAddress }) => {
+    try {
+      const web3 = this.getWeb3();
+      const privKey = Buffer.from(privateKey, 'hex');
+      const nonce = await web3.eth.getTransactionCount(fromAddress);
+      const gasPriceWei = web3.utils.toWei('10', 'gwei');
+
+      const compiled = require('@/contracts/Wallet/Constant.json');
+
+      const erc20Abi = compiled.abi;
+      const contract = new web3.eth.Contract(erc20Abi(), constantAddress, {
+        from: fromAddress
+      });
+
+      const rawTransaction = {
+        from: fromAddress,
+        nonce: `0x${nonce.toString(16)}`,
+        gasPrice: web3.utils.toHex(gasPriceWei),
+        gasLimit: web3.utils.toHex(3000000),
+        to: constantAddress,
+        data: contract.methods.approve(predictionAddress, 10000000000000).encodeABI()
+      };
+      const tx = new Tx(rawTransaction);
+      tx.sign(privKey);
+      return { status: 1, message: 'Your transaction will appear on etherscan.io in about 30 seconds.' };
+
+    } catch (err) {
+      console.log('approveTransaction:', err);
+      return { status: 0, message: '' };
+    }
+  }
 }
 
 export default Neuron;
