@@ -55,6 +55,11 @@ class Neuron {
     return compiled;
   };
 
+  getCompiledConstant = () => {
+    const compiled = require('@/contracts/Wallet/Constant.json');
+    return compiled;
+  }
+
   getGasPriceDefaultWithEthUnit = async () =>
     Web3.utils.fromWei(await this.web3.eth.getGasPrice());
 
@@ -334,10 +339,9 @@ class Neuron {
       const nonce = await web3.eth.getTransactionCount(fromAddress);
       const gasPriceWei = web3.utils.toWei('10', 'gwei');
 
-      const compiled = require('@/contracts/Wallet/Constant.json');
-
+      const compiled = this.getCompiledConstant();
       const erc20Abi = compiled.abi;
-      const contract = new web3.eth.Contract(erc20Abi(), constantAddress, {
+      const contract = new web3.eth.Contract(erc20Abi, constantAddress, {
         from: fromAddress
       });
 
@@ -351,8 +355,28 @@ class Neuron {
       };
       const tx = new Tx(rawTransaction);
       tx.sign(privKey);
-      return { status: 1, message: 'Your transaction will appear on etherscan.io in about 30 seconds.' };
 
+      const serializedTx = tx.serialize();
+      const rawTxHex = `0x${serializedTx.toString('hex')}`;
+      return new Promise((resolve, reject) => {
+        web3.eth
+          .sendSignedTransaction(rawTxHex)
+          .on('transactionHash', (hash) => {
+            console.log(
+              TAG,
+              ' sendRawTransaction sendSignedTransaction hash = ',
+              hash,
+            );
+            resolve({
+              hash
+            });
+          })
+          .on('error', error => ({
+            hash: -1,
+            error
+          }));
+      });
+      //return { status: 1, message: 'Your transaction will appear on etherscan.io in about 30 seconds.' };
     } catch (err) {
       console.log('approveTransaction:', err);
       return { status: 0, message: '' };

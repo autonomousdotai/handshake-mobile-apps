@@ -322,6 +322,7 @@ export class BetHandshakeHandler {
     let result = null;
     try {
       result = await bettinghandshake.approveConstant(payload);
+
       console.log('allowConstant Result:', result);
     } catch (err) {
       console.log('allowConstant:', err);

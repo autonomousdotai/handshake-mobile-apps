@@ -303,31 +303,33 @@ class PlaceBet extends Component {
     className: classNames('BetParamsComponent')
   });
 
-  handleAgreeConstantClick = (validate) => {
+  handleAgreeConstantClick = async (validate) => {
     const { modalOuttaMoney } = this;
 
     if (!validate) {
       modalOuttaMoney.open();
     } else {
-
       const { constantToken, currentContract } = this.props;
       const handler = BetHandshakeHandler.getShareManager();
       console.log('Current Contract:', currentContract, 'constantToken:', constantToken);
       const contractName = currentContract.json_name;
-      const contractAddress = currentContract.contract_name;
+      const contractAddress = currentContract.contract_address;
       const constantContractAddress = constantToken.contract_address;
       console.log('Contract Name:', contractName, 'contractAddress:', contractAddress, 'constantContractAddress:', constantContractAddress);
-      handler.allowConstant(contractName, contractAddress, constantContractAddress);
-      /*
-      const payload = {
-        address: getAddress(),
-        hash: '0x987',
-        token_id: '1'
-      };
-      this.props.dispatch(updateApproveConstant(payload));
-      */
-      const message = "Your transaction will appear on etherscan.io in about 30 seconds.";
-      this.alertBox({ message, type: 'success' });
+      const result = await handler.allowConstant(contractName, contractAddress, constantContractAddress);
+      const { hash } = result;
+      if (hash !== -1) {
+        console.log('Hash:', hash);
+        const payload = {
+          address: getAddress(),
+          hash,
+          token_id: '1'
+        };
+        this.props.dispatch(updateApproveConstant(payload));
+        
+        const message = 'Your transaction will appear on etherscan.io in about 30 seconds.';
+        this.alertBox({ message, type: 'success' });
+      }
     }
     this.modalConstantNotify.close();
   }
