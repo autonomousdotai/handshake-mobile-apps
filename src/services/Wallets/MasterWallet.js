@@ -351,7 +351,7 @@ export class MasterWallet {
         }
 
         // Return list wallet. Old 
-        /*
+        
         const lstDefault = {};
 
         wallets.forEach((walletJson) => {
@@ -365,8 +365,9 @@ export class MasterWallet {
           }
         });
         return lstDefault;
-        */
+        
 
+        /*
         //Return default wallet. New
         let wallet = false;
         wallets.forEach((walletJson) => {
@@ -378,7 +379,7 @@ export class MasterWallet {
             } else { wallet = MasterWallet.convertObject(walletJson);}
           }
         });
-        return wallet;
+        return wallet;*/
       } catch (e) {
         if (e !== BreakException) throw e;
       }

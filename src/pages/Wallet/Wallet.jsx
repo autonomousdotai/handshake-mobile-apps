@@ -366,13 +366,14 @@ class Wallet extends React.Component {
           this.toggleBottomSheet();
           // reset all wallet default:
           let lstWalletTemp = this.getAllWallet();
-          if (wallet.default) lstWalletTemp.forEach(wal => {
-            //if (wal != wallet && wal.name == wallet.name){
-            if (wal != wallet){
-              wal.default = false;
-              }
-            }
-          )
+          // if (wallet.default) lstWalletTemp.forEach(wal => {
+          //   if (wal != wallet){
+          //     wal.default = false;
+          //     }
+          //   }
+          // )
+
+          if (wallet.default) lstWalletTemp.forEach(wal => {if (wal != wallet && wal.name == wallet.name){wal.default = false;}})
           // Update wallet master from local store:
           MasterWallet.UpdateLocalStore(lstWalletTemp);
         }

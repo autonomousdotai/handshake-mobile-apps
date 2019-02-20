@@ -11,19 +11,15 @@ import Loading from '@/components/Loading';
 import AppBar from '@/guru/components/AppBar/AppBar';
 import { isURL } from '@/utils/string';
 import { getAddress } from '@/components/handshakes/betting/utils';
-import { MasterWallet } from '@/services/Wallets/MasterWallet';
-import {
-  isPermissionConstSelector
-} from '@/guru/pages/PlaceBet/selector';
-import NotifyConstant from '@/guru/components/NofifyConstant/NotifyConstant';
 
-import { apiCreateEvent, apiCreateEventConstant } from './action';
+import { apiCreateEvent } from './action';
 import ShareMarket from './ShareMarket';
 import ReportSource from './ReportSource';
 import Notification from './Notification';
 import ImageUpload from './ImageUpload';
 import Debug from './Debug';
 import './CreateEvent.scss';
+import TokenOptions from './TokenOptions';
 
 class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
@@ -32,31 +28,19 @@ class CreateEvent extends React.Component {
     apiCreateEventConstant: PropTypes.func.isRequired,
     email: PropTypes.string,
     verified: PropTypes.number,
-    isAllowConst: PropTypes.bool
 
   };
 
   static defaultProps = {
     email: '',
     verified: 0,
-    isAllowConst: false
-
   };
 
   state = {
     titleToolTip: false,
-    createSuccess: false
+    createSuccess: false,
+    selectedToken: undefined
   };
-  componentDidMount() {
-    const { isAllowConst } = this.props;
-    console.log('isAllowConst',isAllowConst);
-    if (this.constantNotify) {
-      console.log('this.constantNotify:', this.constantNotify);
-      if (!isAllowConst) {
-        this.constantNotify.open();
-      }
-    }
-  }
 
   onKeyDownEventName = e => {
     /* eslint-disable no-param-reassign */
@@ -84,8 +68,10 @@ class CreateEvent extends React.Component {
       : {
         source: { name: value, url: value }
       };
-    const event_name = values.eventName.trim();
 
+    const { selectedToken } = this.state;
+    const event_name = values.eventName.trim();
+    const tokenId = selectedToken.symbol === 'CST' ? 1 : null;
     const newEventData = {
       event_name,
       name: `Will ${this.handleName(event_name)}?`,
@@ -99,36 +85,20 @@ class CreateEvent extends React.Component {
       creator_wallet_address: getAddress(),
       ...reportSource
     };
+    if (tokenId) newEventData.token_id = tokenId;
     console.log('newEventData', newEventData);
     const formData = new FormData();
     formData.set('data', JSON.stringify(newEventData));
     formData.set('image', values.image);
-    const wallet = MasterWallet.getWalletDefault('');
-    switch (wallet.classname) {
-      case MasterWallet.ListDefaultCoin.Constant:
-        this.props
-          .apiCreateEventConstant({ data: formData })
-          .then(res => {
-            console.log('created Event', res);
-            this.setState({ createSuccess: true });
-          })
-          .catch(e => {
-            console.error(e);
-          });
-        break;
-      default:
-        this.props
-          .apiCreateEvent({ data: formData })
-          .then(res => {
-            console.log('created Event', res);
-            this.setState({ createSuccess: true });
-          })
-          .catch(e => {
-            console.error(e);
-          });
-        break;
-    }
-   
+    this.props
+      .apiCreateEvent({ data: formData })
+      .then(res => {
+        console.log('created Event', res);
+        this.setState({ createSuccess: true });
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   buildErrorCls = (errors, touched) => {
@@ -136,31 +106,15 @@ class CreateEvent extends React.Component {
     return errFields.length ? errFields.join(' ') : '';
   };
 
-  modalConstantNotify = (modal) => { this.constantNotify = modal; };
-
-  handleAgreeConstantClick = (validate) => {
-    const { modalOuttaMoney } = this;
-
-    if(!validate){
-    }else {
-      const message = "Your transaction will appear on etherscan.io in about 30 seconds.";
-      //this.alertBox({ message, type: 'success' });
-    }
-    this.constantNotify.close();
-
-  }
-
-  handleCancelConstantClick = () => {
-    this.constantNotify.close();
+  handleChangeToken = (token) => {
+    this.setState({
+      selectedToken: token
+    });
   }
 
   renderEventTitle = state => {
-    const wallet = MasterWallet.getWalletDefault('');
-    console.log('Wallet:', wallet);
     return (
       <div className="EventTitle">
-        <div className="Noti">*The event will be created in <b>{wallet.name}</b></div>
-
         <div className="GroupTitle">
           Ninjas will predict YES or NO
           <i className="far fa-question-circle" id="TitleTT" />
@@ -301,16 +255,6 @@ class CreateEvent extends React.Component {
     );
   };
 
-  renderNofifyConstant = () => {
-    return (
-      <NotifyConstant
-        modalNotifyConstant={this.modalConstantNotify}
-        onAgreeClick={this.handleAgreeConstantClick}
-        onCancelClick={this.handleCancelConstantClick}
-      />
-    );
-  }
-
   render() {
     const { email, verified } = this.props;
     if (this.state.createSuccess) {
@@ -408,6 +352,9 @@ class CreateEvent extends React.Component {
                 <div className="FormBlock">
                   <Notification formProps={formProps} />
                 </div>
+                <div className="FormBlock">
+                  <TokenOptions onChangeToken={this.handleChangeToken} />
+                </div>
                 <button
                   className="SubmitBtn btn-primary"
                   type="submit"
@@ -420,7 +367,6 @@ class CreateEvent extends React.Component {
                   when={dirty}
                   message="Are you sure you want to leave?"
                 />
-                {this.renderNofifyConstant()}
               </Form>
             );
           }}
@@ -434,9 +380,7 @@ export default connect(
   state => {
     return {
       email: state.auth.profile.email,
-      verified: state.auth.profile.verified,
-      isAllowConst: isPermissionConstSelector(state)
-
+      verified: state.auth.profile.verified
     };
   },
   { apiCreateEvent }

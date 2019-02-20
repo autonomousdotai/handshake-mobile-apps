@@ -20,11 +20,6 @@ export const apiCreateEvent = APIFormCreator({
   url: API_URL.CRYPTOSIGN.ADD_MATCH
 });
 
-export const apiCreateEventConstant = APIFormCreator({
-  type: 'API:ADD_EVENT_CONSTANT_API',
-  url: API_URL.CRYPTOSIGN.ADD_MATCH_CONSTANT
-});
-
 export const loadReports = (payload = {}) => {
   return {
     type: 'PEX:GET_REPORTS',
