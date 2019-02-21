@@ -139,15 +139,14 @@ class FeedBetting extends React.Component {
     const {
       hid,
     } = this.props; // new state
-    const wallet = MasterWallet.getWalletDefault('');
 
     const { itemInfo, estimatedGas } = this.state;
-    const { id, freeBet, fromAddress } = itemInfo;
+    const { id, freeBet, fromAddress, contractType } = itemInfo;
     if (!isRightNetwork()) {
       message = MESSAGE.RIGHT_NETWORK;
     } else if (!isSameAddress(fromAddress)) {
       message = MESSAGE.DIFFERENCE_ADDRESS;
-    } else if (wallet.classname === MasterWallet.ListDefaultCoin.Constant) {
+    } else if (contractType === 'ERC20') {
       this.handleActionConstant(title, id, hid);
     } else if (freeBet && title !== BETTING_STATUS_LABEL.DISPUTE) {
       this.handleActionFree(title, id, hid);
@@ -171,6 +170,8 @@ class FeedBetting extends React.Component {
   }
 
   handleActionFree(title, offchain, hid) {
+    console.log('handleActionFree');
+
     const realId = getId(offchain);
     switch (title) {
       case BETTING_STATUS_LABEL.CANCEL:
@@ -192,6 +193,7 @@ class FeedBetting extends React.Component {
   }
   async handleActionReal(title, offchain, hid) {
 
+    console.log('handleActionReal');
     switch (title) {
       case BETTING_STATUS_LABEL.CANCEL:
         // TO DO: CLOSE BET
@@ -216,6 +218,8 @@ class FeedBetting extends React.Component {
   }
 
   handleActionConstant(title, offchain, hid) {
+    console.log('handleActionConstant');
+
     const realId = getId(offchain);
     switch (title) {
       case BETTING_STATUS_LABEL.CANCEL:

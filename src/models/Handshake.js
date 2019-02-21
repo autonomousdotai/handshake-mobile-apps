@@ -39,6 +39,7 @@ class Handshake {
       fiatCurrency: data.fiat_currency,
       contractAddress: data.contract_address,
       contractName: data.contract_json,
+      contractType: data.contract_type
     };
   }
 }
