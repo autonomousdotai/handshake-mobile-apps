@@ -58,6 +58,6 @@ export const isLoading = (state) => {
   return state.guru.isFetching;
 };
 
-export const constantTokenSelector = (state) => {
-  return state.guru.constantToken;
+export const isPermissionConstSelector = (state) => {
+  return (state.guru.ui.permissionConst);
 };

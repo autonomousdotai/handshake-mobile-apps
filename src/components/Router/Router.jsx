@@ -31,6 +31,7 @@ const ProjectDetail = lazy(() => import('@/components/ProjectDetail'));
 const ContentForWallet = lazy(() => import('@/pages/LandingPage/ContentForWallet'));
 const ContentForPrediction = lazy(() => import('@/pages/LandingPage/ContentForPrediction'));
 const ContentForPexInstruction = lazy(() => import('@/pages/LandingPage/ContentForPexInstruction'));
+const ConstantTerm = lazy(() => import('@/guru/pages/ConstantTerm/ConstantTerm'));
 
 const Page404 = lazy(() => import('@/pages/Error/Page404'));
 const PageMobileOnly = lazy(() => import('@/pages/Error/MobileOnly'));
@@ -75,7 +76,9 @@ const routeList = [
   { path: URL.WALLET_EXTENSION, component: TopUp, isDesktop: false },
   { path: URL.HANDSHAKE_ME_PROFILE, component: MeProfile, isDesktop: false },
   { path: URL.INDEX, isDesktop: false, redirectTo: URL.PREDICTION },
-  { path: URL.HANDSHAKE_PEX, redirectTo: URL.PREDICTION, isDesktop: false }
+  { path: URL.HANDSHAKE_PEX, redirectTo: URL.PREDICTION, isDesktop: false },
+  { path: URL.CONSTANT_TERM_URL, component: ConstantTerm, isDesktop: false }
+
 ].filter((r) => [isDesktop, undefined].includes(r.isDesktop)).map(r => {
   if (r.redirectTo) {
     return <Redirect exact key={r.path} from={r.path} to={r.redirectTo} />;

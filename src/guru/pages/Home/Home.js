@@ -13,7 +13,8 @@ import {
   loadRelatedMatches,
   getReportCount,
   checkRedeemCode,
-  loadTokenList
+  loadTokenList,
+  checkPermissionConstant
 } from './action';
 import {
   eventSelector,
@@ -23,7 +24,9 @@ import {
   countReportSelector,
   isRedeemSelector,
   isSubscribeSelector,
-  statusSubscribeSelector
+  statusSubscribeSelector,
+  isPermissionConstSelector
+
 } from './selector';
 import View from './View';
 
@@ -34,12 +37,16 @@ class Home extends Component {
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     eventList: PropTypes.array,
-    isSharePage: PropTypes.any
+    isSharePage: PropTypes.any,
+    isAllowConst: PropTypes.bool
+
   };
 
   static defaultProps = {
     eventList: [],
-    isSharePage: false
+    isSharePage: false,
+    isAllowConst: false
+
   };
 
   componentDidMount() {
@@ -47,6 +54,7 @@ class Home extends Component {
     this.props.dispatch(getReportCount());
     this.props.dispatch(checkRedeemCode());
     this.props.dispatch(loadTokenList());
+    this.props.dispatch(checkPermissionConstant());
   }
 
   componentDidUpdate() {
@@ -88,6 +96,7 @@ class Home extends Component {
   }
 
   modalEmailSubscribe = (modal) => { this.emailSubscribe = modal; };
+
   renderAppBar = () => (
     <AppBar>
       <span className="Title">Prediction</span>
@@ -122,7 +131,8 @@ export default injectIntl(connect(
       isLoading: state.guru.ui.isLoading,
       isRedeem: isRedeemSelector(state),
       isSubscribe: isSubscribeSelector(state),
-      statusSubscribe: statusSubscribeSelector(state)
+      statusSubscribe: statusSubscribeSelector(state),
+      isAllowConst: isPermissionConstSelector(state)
     };
   },
 )(Home));

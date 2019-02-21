@@ -353,7 +353,9 @@ export const URL = {
 
   PREDICTION: '/prediction',
   PEX_INSTRUCTION_URL: '/pex/instructions',
-  PRODUCT_WALLET_URL: '/wallet'
+  PRODUCT_WALLET_URL: '/wallet',
+  CONSTANT_TERM_URL: '/constant/term'
+
 };
 
 export const LANDING_PAGE_TYPE = {

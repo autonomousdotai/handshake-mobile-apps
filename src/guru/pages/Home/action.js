@@ -149,3 +149,25 @@ export const putTokenList = (payload = {}) => {
     payload
   };
 };
+
+export const checkPermissionConstant = (payload) => {
+  return {
+    type: 'GURU:CHECK_PERMISSION_CONSTANT',
+    payload
+  };
+};
+
+export const updatePermissionConstant = (payload) => {
+  return {
+    type: 'GURU:UPDATE_PERMISSION_CONSTANT',
+    payload
+  };
+};
+
+
+export const updateCurrentContract = (payload) => {
+  return {
+    type: 'GURU:UPDATE_CURRENT_CONTRACT',
+    payload
+  };
+};

@@ -18,14 +18,12 @@ import OuttaMoney from '@/assets/images/modal/outtamoney.png';
 import ModalDialog from '@/components/core/controls/ModalDialog';
 import { MESSAGE } from '@/components/handshakes/betting/message';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
-import NotifyConstant from '@/guru/components/NofifyConstant/NotifyConstant';
 
 // TODO: [End: Will be moving to another place]
-import { constantTokenSelector } from '@/guru/pages/Home/selector';
 
 import { updateLoading, userHabit } from '@/guru/stores/action';
 import { getMatchDetail, getGasPrice, getMatchOdd, initHandShake,
-  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree, checkPermissionConstant, updateApproveConstant } from './action';
+  checkCompareRedeemCode, removeRedeemCode, initHandShakeFree } from './action';
 import {
   queryStringSelector,
   eventSelector,
@@ -34,9 +32,7 @@ import {
   matchDetailSelector,
   gasPriceSelector,
   matchOddsSelector,
-  handShakesSelector,
-  isPermissionConstSelector,
-  currentContractSelector
+  handShakesSelector
 } from './selector';
 
 import { VALIDATE_CODE } from './constants';
@@ -53,10 +49,7 @@ class PlaceBet extends Component {
     eventList: PropTypes.array,
     matchDetail: PropTypes.object,
     sideOdds: PropTypes.arrayOf(PropTypes.string),
-    handShakes: PropTypes.object,
-    isAllowConst: PropTypes.bool,
-    constantToken: PropTypes.object,
-    currentContract: PropTypes.object
+    handShakes: PropTypes.object
   };
 
   static defaultProps = {
@@ -64,10 +57,8 @@ class PlaceBet extends Component {
     queryStringURL: undefined,
     matchDetail: {},
     sideOdds: ['support', 'against'],
-    handShakes: undefined,
-    isAllowConst: false,
-    constantToken: undefined,
-    currentContract: undefined
+    handShakes: undefined
+    
   };
 
   state = {
@@ -86,7 +77,6 @@ class PlaceBet extends Component {
     dispatch(getMatchDetail({ eventId }));
     dispatch(getMatchOdd({ outcomeId: getParams(props).outcome_id }));
     dispatch(getGasPrice());
-    dispatch(checkPermissionConstant());
     this.userHabit(dispatch, eventId);
   }
 
@@ -108,11 +98,7 @@ class PlaceBet extends Component {
         this.handShakeHandler(handShakes);
       }
     }
-    if (this.modalConstantNotify) {
-      if (!isAllowConst) {
-        this.modalConstantNotify.open();
-      }
-    }
+    
   }
 
   componentWillUnmount() {
@@ -303,44 +289,6 @@ class PlaceBet extends Component {
     className: classNames('BetParamsComponent')
   });
 
-  handleAgreeConstantClick = async (validate) => {
-    const { modalOuttaMoney } = this;
-
-    if (!validate) {
-      modalOuttaMoney.open();
-    } else {
-      const { constantToken, currentContract } = this.props;
-      const handler = BetHandshakeHandler.getShareManager();
-      console.log('Current Contract:', currentContract, 'constantToken:', constantToken);
-      const contractName = currentContract.json_name;
-      const contractAddress = currentContract.contract_address;
-      const constantContractAddress = constantToken.contract_address;
-      console.log('Contract Name:', contractName, 'contractAddress:', contractAddress, 'constantContractAddress:', constantContractAddress);
-      const result = await handler.allowConstant(contractName, contractAddress, constantContractAddress);
-      const { hash } = result;
-      if (hash !== -1) {
-        console.log('Hash:', hash);
-        const payload = {
-          address: getAddress(),
-          hash,
-          token_id: '1'
-        };
-        this.props.dispatch(updateApproveConstant(payload));
-        
-        const message = 'Your transaction will appear on etherscan.io in about 30 seconds.';
-        this.alertBox({ message, type: 'success' });
-      }
-    }
-    this.modalConstantNotify.close();
-  }
-
-  handleCancelConstantClick = () => {
-    this.modalConstantNotify.close();
-  }
-
-  modalConstantNotify = (modal) => { this.modalConstantNotify = modal; };
-
-
   renderOuttaMoney = () => {
     return (
       <ModalDialog
@@ -361,17 +309,6 @@ class PlaceBet extends Component {
     );
   };
 
-  renderNofifyConstant = () => {
-    return (
-      <NotifyConstant
-        modalNotifyConstant={this.modalConstantNotify}
-        onAgreeClick={this.handleAgreeConstantClick}
-        onCancelClick={this.handleCancelConstantClick}
-
-      />
-    );
-  }
-
   renderComponent = (props, state) => {
     return (
       <div className="PlaceBetContainer">
@@ -381,7 +318,6 @@ class PlaceBet extends Component {
           betParamsProps={this.betParamsProps(props)}
         />
         {this.renderOuttaMoney()}
-        {this.renderNofifyConstant()}
       </div>
     );
   };
@@ -403,10 +339,8 @@ export default injectIntl(connect(
       queryStringURL: queryStringSelector(state),
       gasPrice: gasPriceSelector(state),
       matchOdds: matchOddsSelector(state),
-      handShakes: handShakesSelector(state),
-      isAllowConst: isPermissionConstSelector(state),
-      constantToken: constantTokenSelector(state),
-      currentContract: currentContractSelector(state)
+      handShakes: handShakesSelector(state)
+
     };
   }
 )(PlaceBet));

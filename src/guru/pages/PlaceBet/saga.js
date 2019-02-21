@@ -15,11 +15,7 @@ import {
   initHandShakeFree,
   putHandShake,
   checkCompareRedeemCode,
-  putRedeemCode,
-  checkPermissionConstant,
-  updatePermissionConstant,
-  updateApproveConstant,
-  updateCurrentContract
+  putRedeemCode
 } from './action';
 
 export function* handleGetMatchDetail({ eventId }) {
@@ -130,43 +126,7 @@ export function* handleCompareRedeemCode({ payload }) {
   }
 }
 
-export function* handlePermissionConstant() {
-  try {
-    const { data } = yield call(apiGet, {
-      PATH_URL: API_URL.CRYPTOSIGN.APPROVE_TOKENS,
-      type: 'CHECK_PERMISSION_CONSTANT'
-    });
-    console.log('User Token List:', data);
-    if (data) {
-      const tokens = data.data;
-      const currentContract = data.current_contract;
-      const constantToken = tokens.filter(item => item.token_id === 1);
-      if (constantToken.length > 0) {
-        yield put(updatePermissionConstant(true));
-      }
 
-      if (currentContract) {
-        yield put(updateCurrentContract(currentContract));
-      }
-    }
-    
-  } catch (e) {
-    console.error('handlePermissionConstant', e);
-  }
-}
-
-export function* handleUpdatePermissionConstant({ payload }) {
-  try {
-    const response = yield call(apiPost, {
-      PATH_URL: `${API_URL.CRYPTOSIGN.UPDATE_APPROVE_TOKEN}`,
-      type: 'UPDATE_APPROVE_CONSTANT',
-      data: payload
-    });
-    console.log('handleUpdatePermissionConstant:', response);
-  } catch (e) {
-    console.error('handleUpdatePermissionConstant', e);
-  }
-}
 
 export default function* placeBetSaga() {
   yield takeLatest(getMatchDetail().type, handleGetMatchDetail);
@@ -175,6 +135,4 @@ export default function* placeBetSaga() {
   yield takeLatest(initHandShake().type, handleInitHandShake);
   yield takeLatest(checkCompareRedeemCode().type, handleCompareRedeemCode);
   yield takeLatest(initHandShakeFree().type, handleInitHandShakeFree);
-  yield takeLatest(checkPermissionConstant().type, handlePermissionConstant);
-  yield takeLatest(updateApproveConstant().type, handleUpdatePermissionConstant);
 }

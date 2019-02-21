@@ -1,0 +1,19 @@
+@import './src/styles/style';
+
+.ConstantTermContainer {
+    background-color: #F5F8FC;
+    padding: rem-calc(49) 0 rem-calc(65px) 0;
+    flex: 1;
+    .NotifiyWrapperButtons {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+        .cancelBtn {
+            width: 120px;
+            background-color: gray;
+        }
+        .agreeBtn {
+            width: 120px;
+        }
+    }
+}

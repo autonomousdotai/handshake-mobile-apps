@@ -23,7 +23,10 @@ import {
   loginMetaMask,
   updateAuthMetaMask,
   loadTokenList,
-  putTokenList
+  putTokenList,
+  checkPermissionConstant,
+  updatePermissionConstant,
+  updateCurrentContract
 } from './action';
 import { eventSelector } from './selector';
 
@@ -208,6 +211,33 @@ export function* handleLoadTokens() {
   }
 }
 
+export function* handlePermissionConstant() {
+  try {
+    const { data } = yield call(apiGet, {
+      PATH_URL: API_URL.CRYPTOSIGN.APPROVE_TOKENS,
+      type: 'CHECK_PERMISSION_CONSTANT'
+    });
+    console.log('User Token List:', data);
+    if (data) {
+      const tokens = data.data;
+      const currentContract = data.current_contract;
+      const constantToken = tokens.filter(item => item.token_id === 1);
+      if (constantToken.length > 0) {
+        yield put(updatePermissionConstant(true));
+      }
+
+      if (currentContract) {
+        yield put(updateCurrentContract(currentContract));
+      }
+    }
+    
+  } catch (e) {
+    console.error('handlePermissionConstant', e);
+  }
+}
+
+
+
 export default function* homeSaga() {
   yield takeLatest(loadMatches().type, handleLoadMatches);
   yield takeLatest(loadRelatedMatches().type, handleLoadRelatedMaches);
@@ -219,5 +249,5 @@ export default function* homeSaga() {
   yield takeLatest(loginCoinbase().type, handleAuthorizeCoinbase);
   yield takeLatest(loginMetaMask().type, handleAuthorizeMetaMask);
   yield takeLatest(loadTokenList().type, handleLoadTokens);
-
+  yield takeLatest(checkPermissionConstant().type, handlePermissionConstant);
 }

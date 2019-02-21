@@ -6,7 +6,9 @@ import {
   putUserSubscribe,
   putStatusEmailSubscribe,
   putRelatedMatches,
-  putTokenList
+  putTokenList,
+  updatePermissionConstant,
+  updateCurrentContract
 } from '@/guru/pages/Home/action';
 import {
   putMatchDetail,
@@ -14,9 +16,7 @@ import {
   putGasPrice,
   putHandShake,
   putRedeemCode,
-  removeRedeemCode,
-  updatePermissionConstant,
-  updateCurrentContract
+  removeRedeemCode
 } from '@/guru/pages/PlaceBet/action';
 import {
   updateReports,
