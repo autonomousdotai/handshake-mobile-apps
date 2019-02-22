@@ -38,14 +38,13 @@ class Home extends Component {
     history: PropTypes.object.isRequired,
     eventList: PropTypes.array,
     isSharePage: PropTypes.any,
-    isAllowConst: PropTypes.bool
-
+    permissionConstToken: PropTypes.object
   };
 
   static defaultProps = {
     eventList: [],
     isSharePage: false,
-    isAllowConst: false
+    permissionConstToken: undefined
 
   };
 
@@ -132,7 +131,7 @@ export default injectIntl(connect(
       isRedeem: isRedeemSelector(state),
       isSubscribe: isSubscribeSelector(state),
       statusSubscribe: statusSubscribeSelector(state),
-      isAllowConst: isPermissionConstSelector(state)
+      permissionConstToken: isPermissionConstSelector(state)
     };
   },
 )(Home));

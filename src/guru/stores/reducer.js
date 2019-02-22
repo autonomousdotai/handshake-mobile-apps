@@ -37,7 +37,8 @@ const initialState = {
   ui: {},
   authCoinBase: {},
   authMetaMask: [],
-  constantToken: {}
+  constantToken: {},
+  permissionConstToken: undefined
 };
 
 const guruReducer = (state = initialState, action) => {
@@ -128,7 +129,7 @@ const guruReducer = (state = initialState, action) => {
         draft.ui.referralCheck = action.payload;
         break;
       case updatePermissionConstant().type:
-        draft.ui.permissionConst = action.payload;
+        draft.permissionConstToken = action.payload;
         break;
       case putTokenList().type:
         draft.constantToken = action.payload;

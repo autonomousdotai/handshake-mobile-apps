@@ -221,9 +221,10 @@ export function* handlePermissionConstant() {
     if (data) {
       const tokens = data.data;
       const currentContract = data.current_contract;
-      const constantToken = tokens.filter(item => item.token_id === 1);
-      if (constantToken.length > 0) {
-        yield put(updatePermissionConstant(true));
+      const constantTokenList = tokens.filter(item => item.token_id === 1);
+      if (constantTokenList.length > 0) {
+        const permissionConstToken = constantTokenList[0];
+        yield put(updatePermissionConstant(permissionConstToken));
       }
 
       if (currentContract) {

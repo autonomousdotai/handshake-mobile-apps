@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import qs from 'querystring';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { BetHandshakeHandler } from '@/components/handshakes/betting/Feed/BetHandshakeHandler';
@@ -43,18 +44,24 @@ class ConstantTerm extends React.Component {
       super(props);
       this.state = {
         estimatedGas: 0,
-        balance: 0
+        balance: 0,
+        statusPermission: undefined
       };
     }
 
     async componentDidMount() {
       const estimatedGas = await getEstimateGas();
+      const params = this.getParams(this.props);
+      const { status } = params;
       const balance = await getBalance();
       this.setState({
         estimatedGas,
-        balance
+        balance,
+        statusPermission: status
       });
     }
+
+    getParams = ({ queryStringURL }) => qs.parse(queryStringURL.slice(1));
 
 
     handleSubmitAgree = async () => {
@@ -140,14 +147,32 @@ class ConstantTerm extends React.Component {
       );
     };
 
+    renderProgressing = (status) => {
+      if (status === undefined) return;
+      let message = null;
+      if (status === -1) message = 'Your transaction is in progressing. Please comeback later';
+      // eslint-disable-next-line consistent-return
+      return (
+        <div className="ConstantProgressing">{message}</div>
+      );
+    }
+    renderAgreeButton = (status) => {
+      if (status === -1) return;
+      // eslint-disable-next-line consistent-return
+      return (
+        <div className="NotifiyWrapperButtons">
+          <Button className="agreeBtn" onClick={this.handleAgreeClick}>Yes, I agree</Button>
+        </div>
+      );
+    }
+
     renderNotifiConstant = (props) => {
-      const { estimatedGas } = this.state;
+      const { estimatedGas, statusPermission } = this.state;
       return (
         <div className="ConstantTermContainer">
           <div className="NotifiyDescription">You can place a bet or create event free in CONSTANT. We need your permission and it may take about {estimatedGas} ETH at first time.</div>
-          <div className="NotifiyWrapperButtons">
-            <Button className="agreeBtn" onClick={this.handleAgreeClick}>Yes, I agree</Button>
-          </div>
+          {this.renderAgreeButton(statusPermission)}
+          {this.renderProgressing(statusPermission)}
         </div>
       );
     }

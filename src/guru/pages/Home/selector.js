@@ -59,5 +59,5 @@ export const isLoading = (state) => {
 };
 
 export const isPermissionConstSelector = (state) => {
-  return (state.guru.ui.permissionConst);
+  return (state.guru.permissionConstToken);
 };

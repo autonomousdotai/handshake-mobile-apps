@@ -25,9 +25,8 @@ class CreateEvent extends React.Component {
   static displayName = 'CreateEvent';
   static propTypes = {
     apiCreateEvent: PropTypes.func.isRequired,
-    apiCreateEventConstant: PropTypes.func.isRequired,
     email: PropTypes.string,
-    verified: PropTypes.number,
+    verified: PropTypes.number
 
   };
 

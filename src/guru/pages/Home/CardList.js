@@ -23,15 +23,20 @@ class CardList extends React.Component {
   handleClickBetSide = (itemProps, itemData) => {
     const { event } = itemProps;
     const { token = undefined } = event;
-    if (token) { //Constant
-      this.props.history.push(
-        `${URL.CONSTANT_TERM_URL}`
-      );
-    } else { //Etherum
-      this.props.history.push(
-        `${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&outcome_id=${itemData.id}&side=${itemProps.side}`
-      );
+    const { permissionConstToken } = this.props;
+    console.log('permissionConstToken:', permissionConstToken);
+    let url = null;
+    if (token) { // Constant
+      if (!permissionConstToken || (permissionConstToken && permissionConstToken.status !== 1)) {
+        let status = undefined;
+        if (permissionConstToken) status = permissionConstToken.status;
+        url = `${URL.CONSTANT_TERM_URL}?status=${status}`;
+      }
+    } else { // Etherum
+      url = `${URL.GURU_PLACE_BET}?event_id=${itemProps.event.id}&outcome_id=${itemData.id}&side=${itemProps.side}`;
     }
+
+    this.props.history.push(url);
   }
 
   handleCountdownComplete = (eventId) => {
