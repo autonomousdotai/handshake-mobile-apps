@@ -423,8 +423,7 @@ export const blockchainNetworks = {
 export const PAYMENT_REMIND = 'payment_remind';
 
 export const EXT = {
-  URL:
-    'https://chrome.google.com/webstore/detail/ninja-prediction/lmbfnjfjefcjgbddmaijlmkkpfipbjhb',
-  CLIP_SOURCE:
-    'https://www.youtube.com/embed/eZuN9414UOo?rel=0&amp;autoplay=1&amp;loop=1&playlist=eZuN9414UOo'
+  URL: 'https://chrome.google.com/webstore/detail/ninja-prediction/lmbfnjfjefcjgbddmaijlmkkpfipbjhb',
+  CLIP_SOURCE: 'https://www.youtube.com/embed/eZuN9414UOo?rel=0&amp;autoplay=1&amp;loop=1&playlist=eZuN9414UOo',
+  METAMASK_URL: 'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn'
 };

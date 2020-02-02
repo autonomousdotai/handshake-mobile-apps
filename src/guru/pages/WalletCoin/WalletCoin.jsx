@@ -14,12 +14,22 @@ const stateConstant = 'sa123456';
 
 
 class WalletCoin extends React.Component {
+  startDapp() {
+
+  }
   loginCoinBase = (props) => {
 
+    /*
     const clientId = 'e087d6e310d0fcac821dbbe0ed890e26ea492f380baf276d0f9fdf8150114c8e';
     const redirectUrl = encodeURIComponent('http://localhost:8080/auth/callback');
     const URL = `https://www.coinbase.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUrl}&state=${stateConstant}&scope=wallet:accounts:read`;
     window.open(URL);
+    */
+    const { currentProvider: cp } = window.web3;
+    const isToshi = !!cp.isToshi;
+    console.log('Is Toshi:', isToshi);
+    alert(`IsToshi:${isToshi}`);
+
   }
 
   connect = () => {
@@ -35,18 +45,7 @@ class WalletCoin extends React.Component {
 
     }
   }
-  loginMetaMask = async (props) => {
-
-    /*
-    if (typeof window.web3 !== 'undefined') {
-      const { currentProvider } = window.web3;
-      const web3Provider = new Web3(currentProvider);
-      this.props.dispatch(loginMetaMask({ web3Provider }));
-
-    } else {
-      alert('Please install MetaMask extension');
-    }
-    */
+  async personalSign() {
     const text = 'Sign Ninja';
     const msg = ethUtil.bufferToHex(text);
     // var msg = '0x1' // hexEncode(text)
@@ -55,7 +54,6 @@ class WalletCoin extends React.Component {
     const accounts = await web3Provider.eth.getAccounts();
     const fromAccount = accounts[0];
     if (!fromAccount) return connect();
-
     console.log('CLICKED, SENDING PERSONAL SIGN REQ');
     const params = [msg, fromAccount];
     const method = 'personal_sign';
@@ -84,6 +82,20 @@ class WalletCoin extends React.Component {
       }
 
     });
+  }
+  loginMetaMask = async (props) => {
+    this.connect();
+    /*
+    if (typeof window.web3 !== 'undefined') {
+      const { currentProvider } = window.web3;
+      const web3Provider = new Web3(currentProvider);
+      this.props.dispatch(loginMetaMask({ web3Provider }));
+
+    } else {
+      alert('Please install MetaMask extension');
+    }
+    */
+
 
   }
 

@@ -39,7 +39,7 @@ class App extends React.Component {
   }
 
   renderNavigationBar = () => {
-    if (BrowserDetect.isDesktop) return null;
+    if (BrowserDetect.isDesktop || window.top !== window.self) return null;
     return <Navigation />;
   }
 

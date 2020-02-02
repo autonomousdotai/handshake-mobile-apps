@@ -20,6 +20,7 @@ import Modal from '@/components/core/controls/Modal';
 import Dropdown from '@/components/core/controls/Dropdown';
 
 import Header from './Header';
+import HeaderMetamask from './HeaderMetamask';
 import HeaderMore from './HeaderMore';
 import WalletProtect from './WalletProtect';
 import WalletHistory from './WalletHistory';

@@ -1600,6 +1600,7 @@ export default {
           header_coins: 'Cryptocurrencies',
           header_tokens: 'ERC20 Tokens',
           header_collectibles: 'ERC721 Collectibles',
+          header_metamask: 'Metamask'
         },
         text: {
           random: 'Random',

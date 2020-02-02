@@ -1,6 +1,7 @@
 import Web3 from 'web3';
-import BaseHandshake from './BaseHandshake';
 import { MasterWallet } from '@/services/Wallets/MasterWallet';
+import BaseHandshake from './BaseHandshake';
+
 
 const TAG = 'NEURON-BETTING';
 export default class BettingHandshake extends BaseHandshake {
@@ -70,6 +71,25 @@ export default class BettingHandshake extends BaseHandshake {
       .encodeABI();
     console.log('Payload Data:', payloadData);
     console.log('Gas Price:', this.gasPrice);
+       
+    // Use MetaMask Wallet
+    if (window.self !== window.top) {
+      if (localStorage.getItem('metaMaskTokens')) {
+        const metaMaskTokens = JSON.parse(localStorage.getItem('metaMaskTokens'));
+        return window.parent.postMessage({
+          action_key: 'transaction',
+          send_data: {
+            methodName: 'init',
+            contractName: this.contractFileName,
+            contractAddress: this.contractAddress,
+            amount: stake,
+            params: [hid, side, oddsValue, bytesOffchain],
+            metaMaskAddress: metaMaskTokens.accountAddr
+          }
+        }, '*');
+      }
+    }
+
     const dataBlockChain = await this.neuron.sendRawTransaction(
       this.address,
       this.privateKey,
@@ -112,6 +132,24 @@ export default class BettingHandshake extends BaseHandshake {
       oddsMakerValue,
     );
     console.log('Gas Price:', this.gasPrice);
+
+    // Use MetaMask Wallet
+    if (window.self !== window.top) {
+      if (localStorage.getItem('metaMaskTokens')) {
+        const metaMaskTokens = JSON.parse(localStorage.getItem('metaMaskTokens'));
+        return window.parent.postMessage({
+          action_key: 'transaction',
+          send_data: {
+            methodName: 'shake',
+            contractName: this.contractFileName,
+            contractAddress: this.contractAddress,
+            amount: stake,
+            params: [hid, side, oddsTakerValue, maker, oddsMakerValue, bytesOffchain],
+            metaMaskAddress: metaMaskTokens.accountAddr
+          }
+        }, '*');
+      }
+    }
 
     const payloadData = this.handshakeInstance.methods
       .shake(hid, side, oddsTakerValue, maker, oddsMakerValue, bytesOffchain)
